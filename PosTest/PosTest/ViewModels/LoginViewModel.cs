@@ -28,12 +28,13 @@ namespace PosTest.ViewModels
             return !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
         }
 
-        public void Login(string username, string password)
+        public async void Login(string username, string password)
         {
             this.Compose();
             CheckoutViewModel toActivateViewModel = new CheckoutViewModel();
             toActivateViewModel.Parent = this.Parent;
-            toActivateViewModel.Products = new BindableCollection<Product>(productService.Products);
+            List<Product> products = await productService.getProductsREST();
+            toActivateViewModel.Products = new BindableCollection<Product>(products);
             (this.Parent as Conductor<object>).ActivateItem(toActivateViewModel);
         }
 

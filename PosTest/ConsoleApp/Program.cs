@@ -1,9 +1,12 @@
 ﻿using ServiceInterface.Interface;
+using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,8 +19,33 @@ namespace ConsoleApp
 
         [Import(typeof(IProductService))]
         IProductService service;
-        static void Main(string[] args)
+
+        static HttpClient client = new HttpClient();
+
+        static async Task<List<Product>> GetProductAsync(string path)
         {
+            List<Product> products = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                products = await response.Content.ReadAsAsync<List<Product>> ();
+            }
+            return products;
+        }
+
+
+        static void Main(string[] args)
+        {/*
+            client.BaseAddress = new Uri("http://127.0.0.1:8080/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Task<List<Product>> taskPproducts =  GetProductAsync("/Products");
+            taskPproducts.Wait();
+            List<Product> products = taskPproducts.Result;
+
+            products.ForEach(p => Console.WriteLine(p.Id + p.Name));
+
+            Console.ReadKey();*/
             Program p = new Program();
             p.Run();
         }
@@ -25,7 +53,8 @@ namespace ConsoleApp
         void Run()
         {
             Compose();
-            Console.WriteLine(message+ service.Products.Count);
+            Console.WriteLine(message+ service.getProductsREST().Count);
+            service.getProductsREST().ForEach(p => Console.WriteLine(p.Id + p.Name));
             Console.ReadKey();
             
         }

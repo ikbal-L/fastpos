@@ -9,8 +9,7 @@ namespace ServiceInterface.Interface
 {
     public interface IProductService
     {
-        List<Product> Products { get; set; }
-
-
+        List<Product> createProducts();
+        Task<List<Product>> getProductsREST();
     }
 }
