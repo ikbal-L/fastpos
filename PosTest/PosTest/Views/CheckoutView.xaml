@@ -5,14 +5,94 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d"
-             d:DataContext="{x:Type vm:CheckoutViewModel}"
-             d:DesignHeight="450" d:DesignWidth="800" Background="Green">
+             DataContext="{Binding}"
+             d:DataContext="{d:DesignData Source=/Design/Order.xaml}" d:DesignWidth="800"  Background="White" >
+
     <Grid>
-        <StackPanel>
-            <DataGrid x:Name="Products"></DataGrid>
-            <Button x:Name="Close">Close</Button>
-        </StackPanel>
-        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="240"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+                     HorizontalContentAlignment="Stretch"
+                     ItemsSource="{Binding CurrentOrderitem}"/>
+
+            <DockPanel Grid.Row="0" Grid.Column="1" Background="Black" LastChildFill="False">
+                <Button  Content="Tables" Style="{StaticResource ButtonStyle16}"  />
+                <Button  Content="+" Style="{StaticResource ButtonStyle16}"  Width="40" />
+                <Button  Content="-" Style="{StaticResource ButtonStyle16}" Width="40" FontSize="16" />
+                <Button DockPanel.Dock="Right"   
+                         VerticalContentAlignment="Top"  >SessionID</Button>
+
+                <DockPanel Height="50" Width="50" Background="#f39c12" 
+                       cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]" >
+
+                </DockPanel>
+
+            </DockPanel>
+            <Grid Grid.Row="2" Background="AliceBlue">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+
+                
+                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"></TextBox>
+                <Button Content="Client" Grid.Row="1" Grid.Column="0" FontSize="16"/>
+                <Button Content="Payment" Grid.Row="2" Grid.Column="0" Grid.RowSpan="3" FontSize="16"/>
+
+                <Button Grid.Row="1" Grid.Column="1" Content="1" Style="{StaticResource ButtonStyle22}" />
+                <Button Grid.Row="1" Grid.Column="2" Content="2" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="1" Grid.Column="3" Content="3" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="1" Grid.Column="4" Content="Qty" Style="{StaticResource ButtonStyle18}"/>
+
+
+                <Button Grid.Row="2" Grid.Column="1" Content="4" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="2" Grid.Column="2" Content="5" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="2" Grid.Column="3" Content="6" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="2" Grid.Column="4" Content="Dis" Style="{StaticResource ButtonStyle18}"/>
+
+                <Button Grid.Row="3" Grid.Column="1" Content="7" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="3" Grid.Column="2" Content="8" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="3" Grid.Column="3" Content="9" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="3" Grid.Column="4" Content="Price" Style="{StaticResource ButtonStyle18}"/>
+
+                <Button Grid.Row="4" Grid.Column="1" Content="+/-" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="4" Grid.Column="2" Content="0" Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="4" Grid.Column="3" Content="." Style="{StaticResource ButtonStyle22}"/>
+                <Button Grid.Row="4" Grid.Column="4" Content="Del" Style="{StaticResource ButtonStyle18}"/>
+
+            </Grid>
+
+            <local:ProductNavigation  Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" />
+
+        </Grid>
+
+
     </Grid>
 </UserControl>
+
+
+<!--StackPanel>
+    <DataGrid x:Name="Products"></DataGrid>
+    <Button x:Name="Close">Close</Button>
+</StackPanel-->    

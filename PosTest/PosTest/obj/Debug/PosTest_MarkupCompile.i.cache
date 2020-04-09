@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\
+D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\PosTest\obj\Debug\
 PosTest
 none
 false
 DEBUG;TRACE
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\App.xaml
-3-989035053
+D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\PosTest\App.xaml
+102078531775
 
-12618354775
-138126580127
-Views\CheckoutView.xaml;Views\LoginView.xaml;Views\MainView.xaml;
+16-1284666855
+1381189445908
+Design\Products.xaml;Design\Order.xaml;Resources\DataTemplates\OrdreItem.xaml;Resources\DataTemplates\Products.xaml;Resources\Styles\Button.xaml;Resources\Styles\Brushes.xaml;Views\CheckoutView.xaml;Views\LoginView.xaml;Views\MainView.xaml;Views\ProductNavigation.xaml;
 
-True
+False
 

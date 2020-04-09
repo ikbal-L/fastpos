@@ -19,13 +19,17 @@ namespace PosTest.ViewModels
         [Import(typeof(IProductService))]
         private IProductService productService = null;
 
+        [Import(typeof(ICategorieService))]
+        private ICategorieService categorieService = null;
+
+
         public String Username { get; set; }
         public String Password { get; set; }
 
         public bool CanLogin(string username, string password)
         {
-            logger.Info("User: " + username + "  Pass: " + password);
-            return !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
+            //logger.Info("User: " + username + "  Pass: " + password);
+            return true;// !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
         }
 
         public async void Login(string username, string password)
@@ -33,8 +37,15 @@ namespace PosTest.ViewModels
             this.Compose();
             CheckoutViewModel toActivateViewModel = new CheckoutViewModel();
             toActivateViewModel.Parent = this.Parent;
-            List<Product> products = await productService.getProductsREST();
-            toActivateViewModel.Products = new BindableCollection<Product>(products);
+
+            toActivateViewModel.Products1 = new BindableCollection<Product>(productService.GetAllProducts());
+            /*toActivateViewModel.currentOrderitem =
+                new BindableCollection<OrdreItem>(
+                    new List<OrdreItem>{
+                        new OrdreItem{ Id=0, ProductId= 1, OrderId=0, Quantity=1, UnitPrice=1, Total=1, product= 
+                        new Product{Id=1, Name="test", Price=1, Unit="ddd", },} });*/
+            
+            toActivateViewModel.Category = new BindableCollection<Categorie>(categorieService.GetAllCategory());
             (this.Parent as Conductor<object>).ActivateItem(toActivateViewModel);
         }
 

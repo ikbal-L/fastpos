@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net.Http;
+
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,15 @@ namespace ServiceLib.Service
     [Export(typeof(IProductService))]
     class ProductService : IProductService
     {
-        
+
+        public ICollection<Product> GetAllProducts()
+        {
+            return FakeServices.Products;
+
+        }
+
+
+
 
         public List<Product> createProducts()
         {
@@ -28,10 +37,12 @@ namespace ServiceLib.Service
             return products;
         }
 
+
+
         public  async Task<List<Product>> getProductsREST()
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://127.0.0.1:8080/");
+            client.BaseAddress = new Uri("http://127.0.0.1/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             List<Product> taskPproducts = await GetProductAsync(client, "/Products");
@@ -48,6 +59,11 @@ namespace ServiceLib.Service
                 products = await response.Content.ReadAsAsync<List<Product>>();
             }
             return products;
+        }
+
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
         }
     }
 }

@@ -15,10 +15,10 @@ namespace ConsoleApp
     class Program
     {
         //[Import]
-        string message;
+        //string message;
 
-        [Import(typeof(IProductService))]
-        IProductService service;
+        //[Import(typeof(ICategorieService))]
+        //ICategorieService service;
 
         static HttpClient client = new HttpClient();
 
@@ -28,7 +28,7 @@ namespace ConsoleApp
             HttpResponseMessage response = await client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
-                products = await response.Content.ReadAsAsync<List<Product>> ();
+                //products = await response.Content.ReadAsAsync<List<Product>> ();
             }
             return products;
         }
@@ -53,8 +53,9 @@ namespace ConsoleApp
         void Run()
         {
             Compose();
-            Console.WriteLine(message+ service.getProductsREST().Count);
-            service.getProductsREST().ForEach(p => Console.WriteLine(p.Id + p.Name));
+        
+            //Console.WriteLine(message+service.getProductsREST().Count);
+            //service.getProductsREST().ForEach(p => Console.WriteLine(p.Id + p.Name));
             Console.ReadKey();
             
         }

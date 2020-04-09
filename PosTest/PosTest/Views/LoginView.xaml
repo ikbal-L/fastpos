@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="Beige">
+             d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <Grid>
-        <StackPanel>
-            <TextBox x:Name="Username" />
-            <PasswordBox x:Name="Password" />
-            <Button x:Name="Login" Content="Login" />
+        <StackPanel Width="200" Height="100" >
+            <TextBox x:Name="Username" Margin="5"/>
+            <PasswordBox x:Name="Password" Margin="5" />
+            <Button x:Name="Login" Content="Login" Margin="5"/>
         </StackPanel>
     </Grid>
 </UserControl>

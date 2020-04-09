@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace ServiceInterface.Interface
 {
-    public interface IProductService
+    public interface IProductService : IDisposable
     {
+        ICollection<Product> GetAllProducts();
+
         List<Product> createProducts();
         Task<List<Product>> getProductsREST();
     }
