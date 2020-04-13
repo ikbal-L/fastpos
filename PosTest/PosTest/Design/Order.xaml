@@ -12,15 +12,15 @@
 
     
 
-    <si:OrdreItem  Id="1" OrderId="1" ProductId="1" Quantity="2" UnitPrice="5" Total="10" >
-        <si:OrdreItem.product>
+    <si:OrdreItem  Id="1" Quantity="2" UnitPrice="5"  >
+        <si:OrdreItem.Product>
             <si:Product Id="1" Name="Pizza Home" Price="5" Unit="Unit"/>
-        </si:OrdreItem.product>
+        </si:OrdreItem.Product>
     </si:OrdreItem>
-    <si:OrdreItem Id="1" OrderId="1" ProductId="2" Quantity="2" UnitPrice="4" Total="8" >
-        <si:OrdreItem.product>
-                <si:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
-            </si:OrdreItem.product>
+    <si:OrdreItem Id="1"  Quantity="2" UnitPrice="4"  >
+        <si:OrdreItem.Product>
+             <si:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
+        </si:OrdreItem.Product>
     </si:OrdreItem>
 </x:Array>
 

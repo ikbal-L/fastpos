@@ -25,6 +25,6 @@ namespace PosTest.Views
             InitializeComponent();
         }
 
-       
+        
     }
 }

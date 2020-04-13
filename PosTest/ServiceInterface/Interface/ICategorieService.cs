@@ -9,6 +9,6 @@ namespace ServiceInterface.Interface
 {
     public interface ICategorieService : IDisposable
     {
-        ICollection<Categorie> GetAllCategory();
+        ICollection<Category> GetAllCategory();
     }
 }

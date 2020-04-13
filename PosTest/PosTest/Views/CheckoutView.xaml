@@ -3,17 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PosTest.Views"
+             xmlns:subv="clr-namespace:PosTest.Views.SubViews"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d"
              DataContext="{Binding}"
-             d:DataContext="{d:DesignData Source=/Design/Order.xaml}" d:DesignWidth="800"  Background="White" >
+             d:DataContext="{d:DesignData Source=/Design/Order.xaml}" d:DesignWidth="800" d:DesignHeight="450"  Background="White" >
 
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="240"/>
             </Grid.RowDefinitions>
@@ -22,9 +24,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+            <ListBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" 
                      HorizontalContentAlignment="Stretch"
-                     ItemsSource="{Binding CurrentOrderitem}"/>
+                     ItemsSource="{Binding CurrentOrder.OrderItems}"/>
 
             <DockPanel Grid.Row="0" Grid.Column="1" Background="Black" LastChildFill="False">
                 <Button  Content="Tables" Style="{StaticResource ButtonStyle16}"  />
@@ -39,7 +41,61 @@
                 </DockPanel>
 
             </DockPanel>
-            <Grid Grid.Row="2" Background="AliceBlue">
+
+            <DockPanel Grid.Row="1" Grid.Column="1"   Margin="2 2 2 2" LastChildFill="False" Height="30">
+                <Button     DockPanel.Dock="Left"
+                        x:Name="Home"
+                        cal:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
+                        Content="Home"  
+                        Width="50"/>
+                <TextBlock  Text="{Binding CurrantCategory.Name, Mode=TwoWay}" Background="Aqua"/>
+                <TextBox    DockPanel.Dock="Left"
+                        Width="200"
+                        Background="#95a5a6"
+                        x:Name="Search" 
+                        TextWrapping="Wrap"
+                        cal:Message.Attach="[Event TextChanged] = [Action ProductFiltering($this)]"/>
+
+                <Button     DockPanel.Dock="Right" Margin="2 0 0 0"
+                        x:Name="NextPage"
+                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
+                        IsEnabled="{Binding CanExecuteMext}"
+                        Content="NextPage"  
+                        Width="50"/>
+                <Button     DockPanel.Dock="Right" 
+                        x:Name="PreviousPqge"
+                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
+                        IsEnabled="{Binding CanExecutePrevious}"
+                        Content="PreviousPqge"  
+                        Width="50"/>
+                <Button     DockPanel.Dock="Right" 
+                        x:Name="Close"
+                        cal:Message.Attach="[Event Click] = [Action Close()]"
+                        Content="Close"  
+                        Width="50"/>
+            </DockPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="2"  Orientation="Horizontal"  Background="#7f8c8d" Margin="2 0 0 0" Height="30">
+                <ItemsControl x:Name="Stack" Grid.Column="0" ItemsSource="{Binding Categories}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button MinWidth="80" Background="{Binding BackGroundColor, Mode=OneWay}"
+                                    Content="{Binding Name}" 
+                                    cal:Message.Attach="[Event Click] = [Action CategorieFiltering($this)]"
+                                    FontWeight="Bold" 
+                                    FontSize="12" Padding="10,0"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+
+            <Grid Grid.Row="4" Grid.RowSpan="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="50"/>
@@ -83,7 +139,8 @@
 
             </Grid>
 
-            <local:ProductNavigation  Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" />
+            <subv:ProductNavigation  Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Margin="5,5,-5,-5" />
+            
 
         </Grid>
 

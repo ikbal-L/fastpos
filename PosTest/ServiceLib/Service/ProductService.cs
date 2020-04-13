@@ -30,10 +30,12 @@ namespace ServiceLib.Service
             Product p1 = new Product { Id = 1, Name = "AAAA", Type = "A", Color = "blue" };
             Product p2 = new Product { Id = 2, Name = "BBBB", Type = "A", Color = "white" };
             Product p3 = new Product { Id = 3, Name = "CCCC", Type = "B", Color = "gray" };
-            var products = new List<Product>();
-            products.Add(p1);
-            products.Add(p2);
-            products.Add(p3);
+            var products = new List<Product>
+            {
+                p1,
+                p2,
+                p3
+            };
             return products;
         }
 

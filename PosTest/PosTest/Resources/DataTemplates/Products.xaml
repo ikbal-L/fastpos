@@ -2,16 +2,33 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PosTest.Resources.DataTemplates"
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:cal="http://www.caliburnproject.org"
                     >
-    <DataTemplate DataType="{x:Type src:Product}">
-        <StackPanel  Orientation="Vertical">
-            <Button    cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]" Content="Add"/>
-            <DockPanel Height="100" Width="100" Background="#f39c12" 
-                       cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]" >
-                <TextBlock Text="{Binding Path=Price,StringFormat='Price:{0}'}" DockPanel.Dock="Top" FontSize="10" TextTrimming="WordEllipsis" FontWeight="Bold"/>
-            </DockPanel>
-            <TextBlock Text="{Binding Path=Name}" FontSize="10" Width="100" Background="#bdc3c7" TextAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold"/>
+    <DataTemplate DataType="{x:Type src:Product}" >
+        <StackPanel  Orientation="Vertical" x:Name="ProductTemplate">
+            <!--cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]"-->
+            <Button x:Name="ProductClick"  >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="AddOrderItem">
+                            <cal:Parameter Value="{Binding ElementName=ProductTemplate, Path=DataContext}" />
+                        </cal:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DockPanel Height="80" Width="100" Background="{Binding Background}" >
+                    <!--cal:Message.Attach="[Event MouseLeftButtonUp] = [Action AddOrderItem($this)]"-->
+                    <Border DockPanel.Dock="Top" 
+                            Height="40"  >
+                        <TextBlock Text="{Binding Path=Name}"   FontSize="12"   TextAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold"/>
+                    </Border>
+                    <Border  DockPanel.Dock="Bottom">
+                        <TextBlock Text="{Binding Path=Price, StringFormat='Price: {0} DA'}" FontSize="12" 
+                               TextAlignment="Center" VerticalAlignment="Center"  TextTrimming="WordEllipsis" />
+                    </Border>
+                </DockPanel>
+                
+            </Button>
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

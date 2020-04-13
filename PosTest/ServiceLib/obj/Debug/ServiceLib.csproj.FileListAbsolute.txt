@@ -23,7 +23,6 @@ C:\Users\User\source\repos\PosTest\ServiceLib\bin\Debug\NLog.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceLib.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceLib.pdb
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\CommonComposition.Mef.dll
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\NLog.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceInterface.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.AttributedModel.dll
@@ -33,7 +32,6 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.TypedParts.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Net.Http.Formatting.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceInterface.pdb
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\NLog.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.AttributedModel.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.Convention.xml
@@ -82,3 +80,12 @@ D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLi
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CopyComplete
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.dll
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.pdb
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceLib.dll.config
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.Core.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceInterface.dll.config
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.xml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.xml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.Core.xml

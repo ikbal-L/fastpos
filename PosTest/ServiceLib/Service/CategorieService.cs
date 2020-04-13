@@ -20,9 +20,9 @@ namespace ServiceLib.Service
             //throw new NotImplementedException();
         }
 
-        public ICollection<Categorie> GetAllCategory()
+        public ICollection<Category> GetAllCategory()
         {
-            return FakeServices.Category;
+            return FakeServices.Categories;
         }
     }
 }

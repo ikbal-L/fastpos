@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PosTest.Views
+namespace PosTest.Views.SubViews
 {
     /// <summary>
     /// Interaction logic for ProductNavigation.xaml

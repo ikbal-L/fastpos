@@ -14,6 +14,7 @@ namespace PosTest
     {
         public ShellBootstrapper()
         {
+            
             Initialize();
         }
 

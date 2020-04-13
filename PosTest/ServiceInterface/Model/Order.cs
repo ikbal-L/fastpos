@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServiceInterface.Model
 {
-    public class Order
+    public class Order 
     {
         public Order()
         {
@@ -20,24 +21,23 @@ namespace ServiceInterface.Model
         public String Name { get; set; }
         public String Type { get; set; }
         public String Color { get; set; }
-
         
         private readonly List<OrdreItem> _items = new List<OrdreItem>();
-        public List<OrdreItem> Items => _items;
+        public BindableCollection<OrdreItem> OrderItems { get; set; }
 
         public Order(string buyerId)
         {
             BuyerId = buyerId;
         }
 
-        public void AddItem(int productId, decimal unitPrice, int quantity = 1)
+        public void AddItem(Product product, decimal unitPrice, int quantity = 1)
         {
-            if (!Items.Any(i => i.ProductId == productId))
+            if (!OrderItems.Any(p => p.Product.Equals(product)))
             {
-                _items.Add(new OrdreItem(productId, quantity, unitPrice));
+                OrderItems.Add(new OrdreItem(product, quantity, unitPrice));
                 return;
             }
-            var existingItem = Items.FirstOrDefault(i => i.ProductId == productId);
+            var existingItem = OrderItems.FirstOrDefault(p => p.Product.Equals(product));
             existingItem.AddQuantity(quantity);
         }
 

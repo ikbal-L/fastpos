@@ -51,7 +51,6 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Caliburn.
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Caliburn.Micro.Platform.Core.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Caliburn.Micro.Platform.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\CommonComposition.Mef.dll
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Newtonsoft.Json.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\NLog.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\ServiceInterface.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\ServiceLib.dll
@@ -67,7 +66,6 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\ServiceLi
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Caliburn.Micro.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Caliburn.Micro.Platform.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Caliburn.Micro.Platform.Core.xml
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Newtonsoft.Json.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\NLog.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\System.Composition.AttributedModel.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\System.Composition.Convention.xml
@@ -155,3 +153,13 @@ D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.cspr
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.csproj.CopyComplete
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.exe
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.pdb
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\ServiceInterface.dll.config
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\ServiceLib.dll.config
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Design\Products.baml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Design\Order.baml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources\Styles\Button.baml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources\Styles\Brushes.baml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources\DataTemplates\OrdreItem.baml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources\DataTemplates\Products.baml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\SubViews\ProductNavigation.g.cs
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\SubViews\ProductNavigation.baml

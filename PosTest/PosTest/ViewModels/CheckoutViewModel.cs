@@ -9,41 +9,81 @@ using ServiceInterface.Model;
 using System.Windows.Data;
 using System.Windows.Controls;
 using System.ComponentModel;
+using System.Windows.Media;
+using ServiceInterface.StaticValues;
+using System.Collections.Generic;
 
 namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen
     {
+        
+        private  ICollectionView _productsPage { get; set; }
+        private int _pageNumber=0;
+        private bool _canExecuteNext;
+        private bool _canExecutePrevious;
 
-        public ICollectionView Products { get; set; }
-
-        public BindableCollection<Product> products { get; set; }
-
-        public BindableCollection<Product> Products1
+        public bool CanExecuteMext
         {
-            get { return products; }
+            get => _canExecuteNext;
             set
             {
-                products = value;
-                Products = CollectionViewSource.GetDefaultView(value);
-                NotifyOfPropertyChange(() => Products);
+                _canExecuteNext = value;
+                NotifyOfPropertyChange(() => CanExecuteMext);
+            }
+        }
+        public bool CanExecutePrevious
+        {
+            get => _canExecutePrevious;
+            set
+            {
+                _canExecutePrevious = value;
+                NotifyOfPropertyChange(() => CanExecutePrevious);
+            }
+        }
+        public ICollectionView FilteredProducts { get; set; }
+        public ICollection<Product> AllRequestedProducts { get; set; }
+
+        private Category _currantCategory;
+
+        public Category CurrantCategory
+        {
+            get { return _currantCategory; }
+            set
+            {
+                _currantCategory = value;
+                NotifyOfPropertyChange(() => _currantCategory);
                 //NotifyOfPropertyChange(() => CanSayHello);
             }
         }
+        public int MaxProductPageSize { get; set; }
 
-        public BindableCollection<Categorie> Category { get; set; }
+        //public BindableCollection<Product> ProductsPage { get; set; }
+
+        public ICollectionView ProductsPage
+        {
+            get => _productsPage;// new BindableCollection<Product>(_productsPage.SourceCollection.Cast<Product>()); 
+            set
+            {
+                //_productsPage = value;
+                _productsPage = value;
+                NotifyOfPropertyChange(() => ProductsPage);
+            }
+        }
+
+        public BindableCollection<Category> Categories { get; set; }
 
         public BindableCollection<Order> Orders { get; set; }
 
 
 
         //BindableCollection<OrdreItem> currentOrderitem;
-        public BindableCollection<OrdreItem> CurrentOrderitem
+        /*public Order CurrentOrder
         {
             get;
             set;
-            
-        }
+
+        }*/
 
         private Order currentOrder;
 
@@ -52,11 +92,10 @@ namespace PosTest.ViewModels
             get { return currentOrder; }
             set
             {
-                currentOrder = value;
-
+                currentOrder = value;            
                 NotifyOfPropertyChange(() => currentOrder);
                 //NotifyOfPropertyChange(() => currentOrderitem);
-                //NotifyOfPropertyChange(() => CanSayHello);
+                //NotifyOfPropertyChange(() => CanSayHello);                
             }
         }
 
@@ -64,23 +103,64 @@ namespace PosTest.ViewModels
         {
             //currentOrderitem = new BindableCollection<OrdreItem>();
             Orders = new BindableCollection<Order>();
-            CurrentOrderitem = new BindableCollection<OrdreItem>();
-            Orders.Add(new Order { Id = 1, BuyerId = "1" });
-            CurrentOrder = Orders[0];
+            CurrentOrder = new Order();
+            CurrentOrder.OrderItems = new BindableCollection<OrdreItem>();
+            Orders.Add(CurrentOrder);
+            //CurrentOrder = Orders[0];
         }
 
-        Categorie currantCategorie;
-
-        public Categorie CurrantCategorie
-        {
-            get { return currantCategorie; }
-            set
+        public void PaginateProducts(NextOrPrevious nextOrprevious)
+        {          
+            if(nextOrprevious == NextOrPrevious.First)
             {
-                currantCategorie = value;
-                NotifyOfPropertyChange(() => currantCategorie);
-                //NotifyOfPropertyChange(() => CanSayHello);
+                _pageNumber = 0;
+                nextOrprevious = NextOrPrevious.Next;
+                CanExecuteMext = false;
+                CanExecutePrevious = false;
             }
+
+            if (FilteredProducts.Cast<Product>().Count() <= MaxProductPageSize)
+            {
+                ProductsPage = FilteredProducts;
+                _pageNumber = 1;
+                CanExecuteMext = false;
+                CanExecutePrevious = false;
+                return;
+            }
+
+            var listProducts = FilteredProducts.Cast<Product>().ToList();
+            int lastIndexForThisPage = (_pageNumber + 1) * MaxProductPageSize;
+            if (nextOrprevious == NextOrPrevious.Next)
+            {
+                if (listProducts.Count > lastIndexForThisPage)
+                {
+                    listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, MaxProductPageSize);
+                    CanExecuteMext = true;
+                }
+                else
+                {
+                    listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, listProducts.Count - (_pageNumber * MaxProductPageSize));
+                    CanExecuteMext = false;
+                }
+                _pageNumber++;                
+            }
+            else
+            {
+                 listProducts = listProducts.GetRange((_pageNumber - 2) * MaxProductPageSize, MaxProductPageSize);
+                _pageNumber--;
+                CanExecuteMext = true;
+
+            }
+            ProductsPage = CollectionViewSource.GetDefaultView(listProducts);
+
+            CanExecutePrevious = _pageNumber==1 ? false : true;
         }
+        internal void InitCategoryColors()
+        {
+            foreach (var category in Categories)
+                category.BackGroundColor = DefaultColors.Category_DefaultBackground;
+        }
+
 
         public void Close()
         {
@@ -89,47 +169,49 @@ namespace PosTest.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(toActivateViewModel);
         }
 
-        public void CategorieFiltering(object sender)
+        public void CategorieFiltering(object param)
         {
-            //Console.WriteLine(sender);
-            Categorie _categorie = sender as Categorie;
-            if (_categorie != null)
-            {
-                CurrantCategorie = _categorie;
-                Products.Filter = CatFilter;
+  
+            if(param is Category)
+            { 
+                Category category = param as Category;
+                category.BackGroundColor = DefaultColors.Category_SelectedBackground;
+                if(CurrantCategory != null)
+                    CurrantCategory.BackGroundColor = DefaultColors.Category_DefaultBackground;
+                CurrantCategory = category;
+                FilteredProducts.Filter = CatFilter;
+                PaginateProducts(NextOrPrevious.First);
+                
                 //Console.WriteLine(Products.Where(p => p.CategorieId == CurrantCategorie.Id).Count());
                 //Console.WriteLine(Products.Count());
                 //Products =  Products.Where(p => p.CategorieId == CurrantCategorie.Id).ToList();
-
+                
                 //Products = Products;
             }
-            Button _home = sender as Button;
-            if (_home != null && _home.Name == "Home")
-                Products.Filter =  null;
+            else  
+                if(param is string)
+                    if((param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
+                    {
+                        FilteredProducts.Filter = null;
+                        if (CurrantCategory != null)
+                            CurrantCategory.BackGroundColor = DefaultColors.Category_DefaultBackground;
+                        CurrantCategory = null;
+                    PaginateProducts(NextOrPrevious.First);
+                    }
         }
 
-        public void ProductFiltering(object sender)
+        public void ProductFiltering(string text)
         {
-            Console.WriteLine(sender);
+            Console.WriteLine("Param=" + text);
         }
 
-        public void AddOrderItem(object sender)
+        public void AddOrderItem(Product selectedproduct)
         {
-            Product selectedproduct = (Product)sender;
-            Console.WriteLine();
+            //Product selectedproduct = (Product)sender;
+            //Console.WriteLine();
 
-            CurrentOrderitem.Add(
-                new OrdreItem
-                {
-                    Id = 1,
-                    OrderId = CurrentOrder.Id,
-                    ProductId = selectedproduct.Id,
-                    product = selectedproduct,
-                    Quantity = 1,
-                    UnitPrice = selectedproduct.Price,
-                    Total = 1 * selectedproduct.Price,
-                });
-        
+            CurrentOrder.AddItem(selectedproduct, selectedproduct.Price, 1);
+
             //Console.WriteLine(CurrentOrder.Items.Count);
             //currentOrderitem = new BindableCollection<OrdreItem>(CurrentOrder.Items);
             //Console.WriteLine(selectedproduct+"  |  "+ currentOrderitem);
@@ -140,8 +222,15 @@ namespace PosTest.ViewModels
         private bool CatFilter(object item)
         {
             Product p = item as Product;
-            return p.CategorieId.Equals(currantCategorie.Id);
+            return p.CategorieId.Equals(_currantCategory.Id);
         }
 
+    }
+
+    public enum NextOrPrevious
+    {
+        Next,
+        Previous,
+        First
     }
 }

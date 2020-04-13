@@ -10,17 +10,17 @@
                 <DockPanel LastChildFill="False">
                     <TextBlock FontWeight="Bold" 
                                    FontSize="16"
-                                   Text="{Binding Path=product.Name}"
+                                   Text="{Binding Path=Product.Name}"
                                    />
                     <TextBlock DockPanel.Dock="Right" 
                                    FontWeight="Bold" 
                                    FontSize="16" 
                                    Width="Auto" 
-                                   Text="{Binding Path=Total,StringFormat=' {0}  dzd'}"/>
+                                   Text="{Binding Path=Total,StringFormat=' {0}  DA'}"/>
                 </DockPanel>
                 <TextBlock Margin="5,0,0,0" FontSize="12" FontWeight="Bold">
                                 <Run Text="{Binding Quantity, StringFormat=' {0} Unit:'}"/>
-                                <Run Text="{Binding UnitPrice , StringFormat=' {0} dzd'}"/>
+                                <Run Text="{Binding UnitPrice , StringFormat=' {0} DA'}"/>
                 </TextBlock>
                 <TextBlock Padding="0,0,0,0" Text="+Harissa"  />
             </StackPanel>

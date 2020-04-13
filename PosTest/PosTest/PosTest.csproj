@@ -118,7 +118,7 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProductNavigation.xaml.cs">
+    <Compile Include="Views\SubViews\ProductNavigation.xaml.cs">
       <DependentUpon>ProductNavigation.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -196,7 +196,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ProductNavigation.xaml">
+    <Page Include="Views\SubViews\ProductNavigation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

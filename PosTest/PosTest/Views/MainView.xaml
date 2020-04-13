@@ -4,16 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PosTest.Views"
-        xmlns:vm="clr-namespace:PosTest.ViewModels"
+        xmlns:vm="clr-namespace:PosTest.ViewModels" 
         mc:Ignorable="d"
         d:DataContext="{x:Type vm:MainViewModel}"
-        Title="{Binding WindowTitle}" Height="450" Width="800">
+        Title="{Binding WindowTitle}" Height="800" Width="1100">
     
     <Grid>
-        <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <ContentControl Grid.Row="1" Grid.Column="1" x:Name="ActiveItem"/>
+        
+        <ContentControl  x:Name="ActiveItem"/>
 
     </Grid>
 </Window>
