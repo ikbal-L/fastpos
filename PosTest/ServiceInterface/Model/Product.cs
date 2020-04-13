@@ -11,20 +11,19 @@ namespace ServiceInterface.Model
     public class Product : PropertyChangedBase
     {
         private string _backgroundString = null;
-        private int nothing;
+        private int _nothing;
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string Unit { get; set; }
-
-        
-
+        public bool IsMuchInDemand { get; set; }
+        //public List<> MyProperty { get; set; }
         public int CategorieId
         {
-            get => Category == null ? 0 : Category.Id;
-            set { nothing = value; }
+            get => Category == null ? -1 : Category.Id;
+            set { _nothing = value; }
         }
         public Category Category { get; set; }
 
@@ -36,7 +35,11 @@ namespace ServiceInterface.Model
 
         public int AvailableStock { get; set; }
 
-        public string BackgroundString { get => _backgroundString ?? "#f39c12"; }
+        public string BackgroundString 
+        { 
+            get => _backgroundString ?? "#f39c12";
+            set => _backgroundString = value;
+        }
         public Brush Background { 
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
         }

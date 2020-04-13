@@ -8,20 +8,20 @@
     xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
    
     xmlns:v4="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
-    Type="si:OrdreItem">
+    Type="si:OrderItem">
 
     
 
-    <si:OrdreItem  Id="1" Quantity="2" UnitPrice="5"  >
-        <si:OrdreItem.Product>
+    <si:OrderItem  Id="1" Quantity="2" UnitPrice="5"  >
+        <si:OrderItem.Product>
             <si:Product Id="1" Name="Pizza Home" Price="5" Unit="Unit"/>
-        </si:OrdreItem.Product>
-    </si:OrdreItem>
-    <si:OrdreItem Id="1"  Quantity="2" UnitPrice="4"  >
-        <si:OrdreItem.Product>
+        </si:OrderItem.Product>
+    </si:OrderItem>
+    <si:OrderItem Id="1"  Quantity="2" UnitPrice="4"  >
+        <si:OrderItem.Product>
              <si:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
-        </si:OrdreItem.Product>
-    </si:OrdreItem>
+        </si:OrderItem.Product>
+    </si:OrderItem>
 </x:Array>
 
 

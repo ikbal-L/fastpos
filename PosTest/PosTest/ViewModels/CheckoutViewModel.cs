@@ -104,7 +104,7 @@ namespace PosTest.ViewModels
             //currentOrderitem = new BindableCollection<OrdreItem>();
             Orders = new BindableCollection<Order>();
             CurrentOrder = new Order();
-            CurrentOrder.OrderItems = new BindableCollection<OrdreItem>();
+            CurrentOrder.OrderItems = new BindableCollection<OrderItem>();
             Orders.Add(CurrentOrder);
             //CurrentOrder = Orders[0];
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServiceInterface.Model
 {
-    public class OrdreItem : PropertyChangedBase
+    public class OrderItem : PropertyChangedBase
     {
         private int _quantity;
 
@@ -24,6 +24,7 @@ namespace ServiceInterface.Model
                 _quantity = value;
                 NotifyOfPropertyChange(() => Quantity);
                 NotifyOfPropertyChange(() => Total);
+                Order.OnTotalChanged(UnitPrice);
             } 
         }
         public decimal Total {
@@ -33,13 +34,14 @@ namespace ServiceInterface.Model
             }           
         }
 
-        public OrdreItem() { }
+        public OrderItem() { }
 
-        public OrdreItem(Product product, int quantity, decimal unitPrice)
+        public OrderItem(Product product, int quantity, decimal unitPrice, Order order)
         {
+            Order = order;
             Product = product;
-            Quantity = quantity;
             UnitPrice = unitPrice;
+            Quantity = quantity;
         }
 
         public Product Product { get; set; }

@@ -3,8 +3,8 @@
                     xmlns:local="clr-namespace:PosTest.Resources.DataTemplates"
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                    xmlns:cal="http://www.caliburnproject.org"
-                    >
+                    xmlns:cal="http://www.caliburnproject.org" >
+    
     <DataTemplate DataType="{x:Type src:Product}" >
         <StackPanel  Orientation="Vertical" x:Name="ProductTemplate">
             <!--cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]"-->
@@ -31,4 +31,5 @@
             </Button>
         </StackPanel>
     </DataTemplate>
+
 </ResourceDictionary>

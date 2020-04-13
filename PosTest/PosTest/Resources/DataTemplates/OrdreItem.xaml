@@ -4,7 +4,7 @@
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
                     xmlns:cal="http://www.caliburnproject.org"
                     >
-    <DataTemplate DataType="{x:Type src:OrdreItem}">
+    <DataTemplate DataType="{x:Type src:OrderItem}">
         <Border BorderThickness="1" BorderBrush="Black">
             <StackPanel>
                 <DockPanel LastChildFill="False">
