@@ -11,8 +11,7 @@ namespace ServiceInterface.Model
     {
         private decimal _total;
 
-        public delegate void TotalChangedEvent(decimal newAmount);
-        public event TotalChangedEvent TotalChanged;
+       
         public int Id { get; set; }
         public string BuyerId { get; set; }
 
@@ -35,32 +34,27 @@ namespace ServiceInterface.Model
         //private readonly List<OrdreItem> _items = new List<OrdreItem>();
         public BindableCollection<OrderItem> OrderItems { get; set; }
 
-        public Order() {
-            this.TotalChanged += TotalChangedEventHandler;
+        public Order()
+        {
+            
         }
         public Order(string buyerId) : this()
         {           
             BuyerId = buyerId;
         }
 
-        public void OnTotalChanged(decimal newAmount)
+       
+        public OrderItem AddItem(Product product, decimal unitPrice, int quantity = 1)
         {
-            TotalChanged(newAmount);
-        }
-
-        protected virtual void TotalChangedEventHandler(decimal newAmount)
-        {            
-            Total += newAmount;
-        }
-        public void AddItem(Product product, decimal unitPrice, int quantity = 1)
-        {
-            if (!OrderItems.Any(p => p.Product.Equals(product)))
+            if ((product is Platter && (product as Platter).Additives !=null )  || !OrderItems.Any(p => p.Product.Equals(product)))
             {
-                OrderItems.Add(new OrderItem(product, quantity, unitPrice, this));
-                return;
+                var item = new OrderItem(product, quantity, unitPrice, this);
+                OrderItems.Add(item);
+                return item;
             }
             var existingItem = OrderItems.FirstOrDefault(p => p.Product.Equals(product));
             existingItem.AddQuantity(quantity);
+            return existingItem;
         }
 
         public void RemoveEmptyItems()

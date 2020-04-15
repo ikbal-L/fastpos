@@ -10,6 +10,17 @@ namespace ServiceInterface.Model
     public class OrderItem : PropertyChangedBase
     {
         private int _quantity;
+        private BindableCollection<Additive> _additives;
+
+        public OrderItem() { }
+
+        public OrderItem(Product product, int quantity, decimal unitPrice, Order order)
+        {
+            Order = order;
+            Product = product;
+            UnitPrice = unitPrice;
+            Quantity = quantity;
+        }
 
         public int Id { set; get; }
         public Order Order { get; set; }
@@ -24,7 +35,7 @@ namespace ServiceInterface.Model
                 _quantity = value;
                 NotifyOfPropertyChange(() => Quantity);
                 NotifyOfPropertyChange(() => Total);
-                Order.OnTotalChanged(UnitPrice);
+                Order.Total += UnitPrice;
             } 
         }
         public decimal Total {
@@ -33,17 +44,15 @@ namespace ServiceInterface.Model
                 return Quantity * UnitPrice;
             }           
         }
-
-        public OrderItem() { }
-
-        public OrderItem(Product product, int quantity, decimal unitPrice, Order order)
-        {
-            Order = order;
-            Product = product;
-            UnitPrice = unitPrice;
-            Quantity = quantity;
+        public BindableCollection<Additive> Additives 
+        { 
+            get => _additives;
+            set
+            {
+                _additives = value;
+                NotifyOfPropertyChange(nameof(Additives));
+            }
         }
-
         public Product Product { get; set; }
 
         public void AddQuantity(int quantity)

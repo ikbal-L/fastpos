@@ -85,10 +85,13 @@
     <Compile Include="Interface\IOrderService.cs" />
     <Compile Include="Interface\IOrdreItemService.cs" />
     <Compile Include="Interface\IProductService.cs" />
+    <Compile Include="Model\Additive.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\Ingredient.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\OrderItem.cs" />
+    <Compile Include="Model\Platter.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interface\ICategorieService.cs" />

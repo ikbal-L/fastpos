@@ -48,7 +48,9 @@ namespace PosTest.ViewModels
 
             checkoutViewModel.AllRequestedProducts = productService.GetAllProducts();
             checkoutViewModel.FilteredProducts = CollectionViewSource.GetDefaultView(checkoutViewModel.AllRequestedProducts);
-            checkoutViewModel.MaxProductPageSize = 12;
+            checkoutViewModel.MaxProductPageSize = 30;
+            checkoutViewModel.ProductsVisibility = Visibility.Visible;
+            checkoutViewModel.AdditivesVisibility = Visibility.Collapsed;
             //checkoutViewModel.ProductsPage = checkoutViewModel.FilteredProducts;
             checkoutViewModel.PaginateProducts(NextOrPrevious.First);
             /*toActivateViewModel.currentOrderitem =

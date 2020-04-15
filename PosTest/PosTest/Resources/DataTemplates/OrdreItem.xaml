@@ -4,9 +4,16 @@
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
                     xmlns:cal="http://www.caliburnproject.org"
                     >
+    <DataTemplate x:Key="PlatterAdditives">
+        <StackPanel Orientation="Vertical" Background="Aqua">
+            <TextBlock Text="{Binding Description}"></TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type src:OrderItem}">
         <Border BorderThickness="1" BorderBrush="Black">
             <StackPanel>
+
                 <DockPanel LastChildFill="False">
                     <TextBlock FontWeight="Bold" 
                                    FontSize="16"
@@ -18,13 +25,33 @@
                                    Width="Auto" 
                                    Text="{Binding Path=Total,StringFormat=' {0}  DA'}"/>
                 </DockPanel>
+
                 <TextBlock Margin="5,0,0,0" FontSize="12" FontWeight="Bold">
                                 <Run Text="{Binding Quantity, StringFormat=' {0} Unit:'}"/>
                                 <Run Text="{Binding UnitPrice , StringFormat=' {0} DA'}"/>
                 </TextBlock>
-                <TextBlock Padding="0,0,0,0" Text="+Harissa"  />
+
+                <ListBox ItemsSource="{Binding Additives}"
+                         ItemTemplate="{StaticResource PlatterAdditives}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+                    
+
             </StackPanel>
         </Border>
     </DataTemplate>
+    
+    <!--<DataTemplate DataType="{x:Type src:Additive}" x:Key="PlatterAditives">
+        <StackPanel Orientation="Vertical" Background="Aqua">
+            <Label Content=" *****" />
+            <TextBlock Text="{Binding Description}"></TextBlock>
+        </StackPanel>
+    </DataTemplate>-->
+   
 
 </ResourceDictionary>

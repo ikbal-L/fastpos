@@ -56,7 +56,6 @@ D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLi
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CopyComplete
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.dll
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.pdb
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceLib.dll.config
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceLib.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceLib.pdb
@@ -86,6 +85,7 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.TypedParts.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Net.Http.Formatting.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csprojAssemblyReference.cache
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CopyComplete
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.pdb

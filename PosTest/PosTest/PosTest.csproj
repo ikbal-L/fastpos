@@ -168,6 +168,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\DataTemplates\Additives.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\DataTemplates\OrdreItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
