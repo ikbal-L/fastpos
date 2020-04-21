@@ -5,45 +5,54 @@
                     xmlns:cal="http://www.caliburnproject.org"
                     >
     <DataTemplate x:Key="PlatterAdditives">
-        <StackPanel Orientation="Vertical" Background="Aqua">
-            <TextBlock Text="{Binding Description}"></TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="text" Text="{Binding Description}"></TextBlock>
+            <Button  
+                     BorderBrush="{Binding ElementName=text, Path=Background}"
+                     Background="{Binding ElementName=text, Path=Background}"
+                     Height="{Binding ElementName=text, Path=Height}" 
+                     Style="{StaticResource AddtiviveItemBtnstyle}"
+                     cal:Message.Attach="[Event Click] = [Action RemoveAdditive($this)]">
+                <Image Source="/icons/close.png" />
+            </Button>
         </StackPanel>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:OrderItem}">
-        <Border BorderThickness="1" BorderBrush="Black">
-            <StackPanel>
+        <StackPanel>
 
-                <DockPanel LastChildFill="False">
-                    <TextBlock FontWeight="Bold" 
-                                   FontSize="16"
-                                   Text="{Binding Path=Product.Name}"
-                                   />
-                    <TextBlock DockPanel.Dock="Right" 
-                                   FontWeight="Bold" 
-                                   FontSize="16" 
-                                   Width="Auto" 
-                                   Text="{Binding Path=Total,StringFormat=' {0}  DA'}"/>
-                </DockPanel>
+            <DockPanel LastChildFill="False">
+                <TextBlock FontWeight="Bold" 
+                                FontSize="16"
+                                Text="{Binding Path=Product.Name}"
+                                />
+                <TextBlock DockPanel.Dock="Right" 
+                                FontWeight="Bold" 
+                                FontSize="16" 
+                                Width="Auto" 
+                                Text="{Binding Path=Total,StringFormat=' {0}  DA'}"/>
+            </DockPanel>
 
-                <TextBlock Margin="5,0,0,0" FontSize="12" FontWeight="Bold">
-                                <Run Text="{Binding Quantity, StringFormat=' {0} Unit:'}"/>
-                                <Run Text="{Binding UnitPrice , StringFormat=' {0} DA'}"/>
-                </TextBlock>
+            <TextBlock Margin="5,0,0,0" FontSize="12" FontWeight="Bold">
+                            <Run Text="{Binding Quantity, StringFormat=' {0} Unit:'}"/>
+                            <Run Text="{Binding UnitPrice , StringFormat=' {0} DA'}"/>
+            </TextBlock>
 
-                <ListBox ItemsSource="{Binding Additives}"
-                         ItemTemplate="{StaticResource PlatterAdditives}"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
-                    
+            <ListBox ItemsSource="{Binding Additives}"
+                     SelectedItem="{Binding SelectedAdditive}"
+                    ItemTemplate="{StaticResource PlatterAdditives}"
+                    Style="{StaticResource kidslist}"
+                    ItemContainerStyle="{StaticResource AdditiveItem}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
 
-            </StackPanel>
-        </Border>
+
+        </StackPanel>
     </DataTemplate>
     
     <!--<DataTemplate DataType="{x:Type src:Additive}" x:Key="PlatterAditives">

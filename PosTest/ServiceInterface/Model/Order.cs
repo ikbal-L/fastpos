@@ -10,8 +10,17 @@ namespace ServiceInterface.Model
     public class Order : PropertyChangedBase
     {
         private decimal _total;
+        private OrderItem _selectedOrdernItem;
 
-       
+        public Order()
+        {
+            OrderItems = new BindableCollection<OrderItem>();
+        }
+        public Order(string buyerId) : this()
+        {
+            BuyerId = buyerId;
+        }
+
         public int Id { get; set; }
         public string BuyerId { get; set; }
 
@@ -32,29 +41,33 @@ namespace ServiceInterface.Model
         }
 
         //private readonly List<OrdreItem> _items = new List<OrdreItem>();
+        public OrderItem SelectedOrdernItem 
+        {
+            get => _selectedOrdernItem;
+            set
+            {
+                _selectedOrdernItem = value;
+                NotifyOfPropertyChange(() => SelectedOrdernItem);
+            }
+        }
         public BindableCollection<OrderItem> OrderItems { get; set; }
-
-        public Order()
+        public void AddItem(Product product, decimal unitPrice, bool setSelected, int quantity = 1)
         {
-            
-        }
-        public Order(string buyerId) : this()
-        {           
-            BuyerId = buyerId;
-        }
-
-       
-        public OrderItem AddItem(Product product, decimal unitPrice, int quantity = 1)
-        {
+            OrderItem item;
             if ((product is Platter && (product as Platter).Additives !=null )  || !OrderItems.Any(p => p.Product.Equals(product)))
             {
-                var item = new OrderItem(product, quantity, unitPrice, this);
+                item = new OrderItem(product, quantity, unitPrice, this);
                 OrderItems.Add(item);
-                return item;
+                
             }
-            var existingItem = OrderItems.FirstOrDefault(p => p.Product.Equals(product));
-            existingItem.AddQuantity(quantity);
-            return existingItem;
+            else
+            {
+               item = OrderItems.FirstOrDefault(p => p.Product.Equals(product));
+               item.AddQuantity(quantity);
+            }
+
+            if (setSelected)
+                SelectedOrdernItem = item;
         }
 
         public void RemoveEmptyItems()
@@ -69,5 +82,9 @@ namespace ServiceInterface.Model
             BuyerId = buyerId;
         }
 
+        public void DeleteOrderItem(OrderItem item)
+        {
+            OrderItems.Remove(item);
+        }
     }
 }

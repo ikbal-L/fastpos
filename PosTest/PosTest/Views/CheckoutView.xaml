@@ -26,7 +26,8 @@
 
             <ListBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" 
                      ItemsSource="{Binding CurrentOrder.OrderItems}"
-                     SelectedItem="{Binding Path=CurrentOrdernItem, Mode=TwoWay}"
+                     SelectedItem="{Binding Path=CurrentOrder.SelectedOrdernItem, Mode=TwoWay}"
+                     ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                      HorizontalContentAlignment="Stretch" 
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
 

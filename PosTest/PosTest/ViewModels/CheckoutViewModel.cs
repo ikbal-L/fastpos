@@ -11,14 +11,16 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Media;
 using ServiceInterface.StaticValues;
-using System.Collections.Generic;
 using System.Windows;
+using System.ComponentModel.Composition;
+using ServiceInterface.Interface;
 
 namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen
     {
         
+
         private  ICollectionView _productsPage { get; set; }
         private  ICollectionView _additvesPage { get; set; }
         private int _pageNumber=0;
@@ -27,14 +29,20 @@ namespace PosTest.ViewModels
         private Order _currentOrder;
         private Visibility _additivesVisibility;
 
-        public CheckoutViewModel()
+        public CheckoutViewModel(int pageSize, IProductService productService, ICategorieService categorieService)
         {
             //currentOrderitem = new BindableCollection<OrdreItem>();
             Orders = new BindableCollection<Order>();
             CurrentOrder = new Order();
-            CurrentOrder.OrderItems = new BindableCollection<OrderItem>();
             Orders.Add(CurrentOrder);
-            //CurrentOrder = Orders[0];
+            AllRequestedProducts = productService.GetAllProducts();
+            FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
+            MaxProductPageSize = pageSize;
+            ProductsVisibility = Visibility.Visible;
+            AdditivesVisibility = Visibility.Collapsed;
+            CategorieFiltering("Home");
+            Categories = new BindableCollection<Category>(categorieService.GetAllCategory());
+            InitCategoryColors();
         }
 
         public bool CanExecuteMext
@@ -60,18 +68,8 @@ namespace PosTest.ViewModels
 
         private Category _currantCategory;
         private Visibility _productsVisibility;
-        private OrderItem _currentOrdernItem;
         private string _numericZone;
 
-        public OrderItem CurrentOrdernItem 
-        { 
-            get => _currentOrdernItem;
-            set
-            {
-                _currentOrdernItem = value;
-                NotifyOfPropertyChange(()=>CurrentOrdernItem);
-            } 
-        }
         public Category CurrentCategory
         {
             get { return _currantCategory; }
@@ -219,14 +217,31 @@ namespace PosTest.ViewModels
 
         public void AddAditive(Additive additive)
         {
-            if (CurrentOrdernItem.Additives == null)
-                CurrentOrdernItem.Additives = new BindableCollection<Additive>();
+            CurrentOrder.SelectedOrdernItem.AddAdditives(additive);
+           // NotifyOfPropertyChange(nameof(CurrentOrdernItem));
 
-            CurrentOrdernItem.Additives.Add(additive);
-            NotifyOfPropertyChange(nameof(CurrentOrdernItem));
+        } 
+
+        public void RemoveAdditive(Additive additive)
+        {
+            CurrentOrder.SelectedOrdernItem.RemoveAdditives(additive);
+           // NotifyOfPropertyChange(nameof(CurrentOrdernItem));
 
         }
 
+        public void DeleteOrerItem(OrderItem item)
+        {
+            CurrentOrder.DeleteOrderItem(item);
+            AdditivesVisibility = Visibility.Collapsed;
+            ProductsVisibility = Visibility.Visible;
+        }
+
+        public void AddAdditives(OrderItem oitem)
+        {
+            AdditivesVisibility = Visibility.Visible;
+            ProductsVisibility = Visibility.Collapsed;
+            AdditivesPage = AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
+        }
         public void CategorieFiltering(object param)
         {
             AdditivesVisibility = Visibility.Collapsed;
@@ -249,13 +264,22 @@ namespace PosTest.ViewModels
             }
             else  
                 if(param is string)
-                    if((param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
+                    if( (param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
                     {
                         FilteredProducts.Filter = null;
+
                         if (CurrentCategory != null)
                             CurrentCategory.BackGroundColor = DefaultColors.Category_DefaultBackground;
+
                         CurrentCategory = null;
-                    PaginateProducts(NextOrPrevious.First);
+                        var muchInDemanadProducts = AllRequestedProducts.Where(p => p.IsMuchInDemand == true).ToList();
+                        FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
+                        PaginateProducts(NextOrPrevious.First);
+                    }
+                    else // param == "ALL"
+                    {
+                        FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
+                        PaginateProducts(NextOrPrevious.First);
                     }
         }
 
@@ -270,7 +294,7 @@ namespace PosTest.ViewModels
             //Console.WriteLine();
 
             
-            CurrentOrdernItem = CurrentOrder.AddItem(selectedproduct, selectedproduct.Price, 1);
+            CurrentOrder.AddItem(selectedproduct, selectedproduct.Price, true, 1);
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {

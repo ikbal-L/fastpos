@@ -63,6 +63,7 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Calibu
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.Core.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\CommonComposition.Mef.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\NLog.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceInterface.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.AttributedModel.dll
@@ -77,6 +78,8 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Servic
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Caliburn.Micro.Platform.Core.xml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\NLog.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.AttributedModel.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.Convention.xml

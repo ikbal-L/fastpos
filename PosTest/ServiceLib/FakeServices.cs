@@ -101,12 +101,14 @@ namespace ServiceLib
                 new Additive {Id=addId++, Description="Sans Olive" },
                 new Additive {Id=addId++, Description="Harissa+++" },
             };
-            
+
             products.ForEach(
-                p => 
+                p =>
                 {
                     if (p is Platter && p.CategorieId == 1)
-                        (p as Platter).Additives = additives; 
+                        (p as Platter).Additives = additives;
+                    if (p.Id % 2 == 0)
+                        p.IsMuchInDemand = true;
                 }
             );
            
