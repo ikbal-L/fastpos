@@ -9,8 +9,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                     <Border Name="Border" BorderThickness="1" CornerRadius="3" Padding="1" BorderBrush="Black">
-                        <DockPanel Name="Dock">
-                            <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+                        <DockPanel Name="Dock" >
+                            <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0 -20 0 0" Panel.ZIndex="2">
                                 <Button Name="DelButton"   
                                     DockPanel.Dock="Right"
                                     Visibility="Collapsed"
@@ -48,7 +48,7 @@
                                     <Image Source="/icons/minus.png"  />
                                 </Button>
                             </DockPanel>
-                            <ContentPresenter DockPanel.Dock="Bottom"/>
+                            <ContentPresenter DockPanel.Dock="Bottom" Panel.ZIndex="0"/>
                         </DockPanel>
                     </Border>
                     <ControlTemplate.Triggers>

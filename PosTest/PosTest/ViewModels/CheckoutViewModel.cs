@@ -217,14 +217,14 @@ namespace PosTest.ViewModels
 
         public void AddAditive(Additive additive)
         {
-            CurrentOrder.SelectedOrdernItem.AddAdditives(additive);
+            CurrentOrder.SelectedOrderItem.AddAdditives(additive);
            // NotifyOfPropertyChange(nameof(CurrentOrdernItem));
 
         } 
 
         public void RemoveAdditive(Additive additive)
         {
-            CurrentOrder.SelectedOrdernItem.RemoveAdditives(additive);
+            CurrentOrder.SelectedOrderItem.RemoveAdditives(additive);
            // NotifyOfPropertyChange(nameof(CurrentOrdernItem));
 
         }

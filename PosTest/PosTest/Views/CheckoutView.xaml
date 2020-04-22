@@ -29,7 +29,7 @@
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrdernItem, Mode=TwoWay}"
                      ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                      HorizontalContentAlignment="Stretch" 
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
 
             <DockPanel Grid.Row="0" Grid.Column="1" Background="Black" LastChildFill="False">
                 <Button  Content="Tables" Style="{StaticResource ButtonStyle16}"  />

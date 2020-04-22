@@ -10,7 +10,7 @@ namespace ServiceInterface.Model
     public class Order : PropertyChangedBase
     {
         private decimal _total;
-        private OrderItem _selectedOrdernItem;
+        private OrderItem _selectedOrderItem;
 
         public Order()
         {
@@ -41,13 +41,13 @@ namespace ServiceInterface.Model
         }
 
         //private readonly List<OrdreItem> _items = new List<OrdreItem>();
-        public OrderItem SelectedOrdernItem 
+        public OrderItem SelectedOrderItem 
         {
-            get => _selectedOrdernItem;
+            get => _selectedOrderItem;
             set
             {
-                _selectedOrdernItem = value;
-                NotifyOfPropertyChange(() => SelectedOrdernItem);
+                _selectedOrderItem = value;
+                NotifyOfPropertyChange(() => SelectedOrderItem);
             }
         }
         public BindableCollection<OrderItem> OrderItems { get; set; }
@@ -67,7 +67,7 @@ namespace ServiceInterface.Model
             }
 
             if (setSelected)
-                SelectedOrdernItem = item;
+                SelectedOrderItem = item;
         }
 
         public void RemoveEmptyItems()

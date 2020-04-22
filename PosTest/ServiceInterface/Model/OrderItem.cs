@@ -55,7 +55,7 @@ namespace ServiceInterface.Model
             set
             {
                 __selectedAdditive = value;
-                Order.SelectedOrdernItem = this;
+                Order.SelectedOrderItem = this;
                 foreach (var oitem in Order.OrderItems)
                 {
                     if(! oitem.Equals(this))
