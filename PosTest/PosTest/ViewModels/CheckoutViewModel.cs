@@ -19,7 +19,8 @@ namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen
     {
-        
+        private IProductService _productsService;
+        private ICategorieService _categoriesService;
 
         private  ICollectionView _productsPage { get; set; }
         private  ICollectionView _additvesPage { get; set; }
@@ -29,19 +30,21 @@ namespace PosTest.ViewModels
         private Order _currentOrder;
         private Visibility _additivesVisibility;
 
-        public CheckoutViewModel(int pageSize, IProductService productService, ICategorieService categorieService)
+        public CheckoutViewModel(int pageSize, IProductService productsService, ICategorieService categoriesService)
         {
+            _productsService = productsService;
+            _categoriesService = categoriesService;
             //currentOrderitem = new BindableCollection<OrdreItem>();
             Orders = new BindableCollection<Order>();
             CurrentOrder = new Order();
             Orders.Add(CurrentOrder);
-            AllRequestedProducts = productService.GetAllProducts();
+            AllRequestedProducts = productsService.GetAllProducts();
             FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
             MaxProductPageSize = pageSize;
             ProductsVisibility = Visibility.Visible;
             AdditivesVisibility = Visibility.Collapsed;
             CategorieFiltering("Home");
-            Categories = new BindableCollection<Category>(categorieService.GetAllCategory());
+            Categories = new BindableCollection<Category>(categoriesService.GetAllCategory());
             InitCategoryColors();
         }
 
@@ -210,6 +213,13 @@ namespace PosTest.ViewModels
 
         public void Close()
         {
+            CategoryTabViewModel categoryTabViewModel = new CategoryTabViewModel(30, _productsService, _categoriesService);
+            categoryTabViewModel.Parent = this.Parent;
+
+
+            (this.Parent as Conductor<object>).ActivateItem(categoryTabViewModel);
+
+            return;
             LoginViewModel toActivateViewModel = new LoginViewModel();
             toActivateViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(toActivateViewModel);

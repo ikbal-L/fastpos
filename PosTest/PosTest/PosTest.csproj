@@ -106,9 +106,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ShellBootstrapper.cs" />
+    <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\CategoryTabView.xaml.cs">
+      <DependentUpon>CategoryTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CheckoutView.xaml.cs">
       <DependentUpon>CheckoutView.xaml</DependentUpon>
     </Compile>
@@ -193,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Styles\OrderItemListStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CategoryTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

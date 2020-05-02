@@ -25,21 +25,21 @@ namespace PosTest.ViewModels
         private ICategorieService categorieService = null;
 
 
-        public String Username { get; set; }
-        public String Password { get; set; }
+        //public String Username { get; set; }
+        //public String Password { get; set; }
 
         protected override void OnActivate()
         {
             base.OnActivate();
             this.Compose(); 
         }
-        public bool CanLogin(string username, string password)
+        public bool CanLogin()
         {
             //logger.Info("User: " + username + "  Pass: " + password);
             return true;// !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
         }
 
-        public async void Login(string username, string password)
+        public async void Login()
         {
             
             CheckoutViewModel checkoutViewModel = new CheckoutViewModel(30, productService, categorieService);
