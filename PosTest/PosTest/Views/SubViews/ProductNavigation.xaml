@@ -23,7 +23,7 @@
                  ItemsSource="{Binding ProductsPage}"
                  Margin="2"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                  Visibility="{Binding ProductsVisibility}">
+                  Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding" Value="0"/>
@@ -43,7 +43,7 @@
                  ItemsSource="{Binding AdditivesPage}"
                  Margin="2"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                 Visibility="{Binding AdditivesVisibility}">
+                 Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding" Value="0"/>
@@ -57,7 +57,7 @@
             </ListBox.ItemsPanel>
         </ListBox>
 
-        <Grid Grid.Row="1" Visibility="{Binding AdditivesVisibility}">
+        <Grid Grid.Row="1" Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="116"/>

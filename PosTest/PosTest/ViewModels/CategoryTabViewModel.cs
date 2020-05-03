@@ -20,8 +20,6 @@ namespace PosTest.ViewModels
             var Categories = new BindableCollection<Category>(categorieService.GetAllCategory());
             CategoriesTab = new BindableCollection<CategoryItem>();
 
-            
-
             foreach (var p in AllRequestedProducts)
             {
                 if (CategoriesTab.Count == 0)
@@ -68,7 +66,7 @@ namespace PosTest.ViewModels
             set
             {
                 _category = value;
-                NotifyOfPropertyChange(() => Category);
+                //NotifyOfPropertyChange(() => Category);
             }
         }
 
@@ -78,7 +76,7 @@ namespace PosTest.ViewModels
             set
             {
                 _products = value;
-                NotifyOfPropertyChange(() => Products);
+                //NotifyOfPropertyChange(() => Products);
             }
         }
     }
