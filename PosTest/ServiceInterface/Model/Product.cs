@@ -25,10 +25,9 @@ namespace ServiceInterface.Model
             set
             {
                 _isMuchInDemand = value;
-                Console.WriteLine("----- Set to " + value);
             }
         }
-        //public List<> MyProperty { get; set; }
+
         public int CategorieId
         {
             get => Category == null ? -1 : Category.Id;
@@ -49,7 +48,7 @@ namespace ServiceInterface.Model
             get => _backgroundString ?? "#f39c12";
             set => _backgroundString = value;
         }
-        public Brush Background { 
+        public virtual Brush Background { 
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
         }
 

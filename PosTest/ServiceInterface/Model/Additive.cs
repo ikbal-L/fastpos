@@ -8,6 +8,7 @@ namespace ServiceInterface.Model
         private string _backgroundString = null;
 
         public Additive() { }
+
         public Additive(Additive additive)
         {
             Id = additive.Id;

@@ -42,13 +42,13 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Quantity);
                 NotifyOfPropertyChange(() => Total);
                 Order.Total = Order.Total + UnitPrice * (_quantity - oldQuqntity);
+                //decimal total = 0;
+                //Order.OrderItems.Cast<OrderItem>().ToList().ForEach(item => total += item.Total);
+                //Order.Total = total;
             } 
         }
         public decimal Total {
-            get
-            {
-                return Quantity * UnitPrice;
-            }           
+            get => Quantity * UnitPrice;          
         }
         public Additive SelectedAdditive 
         { 
@@ -93,16 +93,6 @@ namespace ServiceInterface.Model
             } 
         }
         public Product Product { get; set; }
-
-        public void AddQuantity(int quantity)
-        {
-            Quantity += quantity;
-        }
-
-        public void SetNewQuantity(int quantity)
-        {
-            Quantity = quantity;
-        }
 
         public void AddAdditives(Additive additive)
         {
