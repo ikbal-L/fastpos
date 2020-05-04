@@ -37,10 +37,11 @@ namespace ServiceInterface.Model
             get => _quantity;
             set
             {
+                var oldQuqntity = _quantity;
                 _quantity = value;
                 NotifyOfPropertyChange(() => Quantity);
                 NotifyOfPropertyChange(() => Total);
-                Order.Total += UnitPrice;
+                Order.Total = Order.Total + UnitPrice * (_quantity - oldQuqntity);
             } 
         }
         public decimal Total {
@@ -105,14 +106,16 @@ namespace ServiceInterface.Model
 
         public void AddAdditives(Additive additive)
         {
-           /* if (this.Additives == null)
-                this.Additives = new BindableCollection<Additive>();*/
-           this.Additives.Add(additive);
+            /* if (this.Additives == null)
+                 this.Additives = new BindableCollection<Additive>();*/
+            var additive1 = new Additive(additive);
+            additive1.ParentOrderItem = this; 
+            this.Additives.Add(additive1);
         }
 
         public void RemoveAdditives(Additive additive)
         {
-           this.Additives.Remove(additive);
+            Additives.Remove(additive);
         }
     }
 }

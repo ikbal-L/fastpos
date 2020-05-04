@@ -5,11 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
+             xmlns:convert="clr-namespace:PosTest.Converters"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              mc:Ignorable="d"
              d:DataContext="{d:DesignData Source=/Design/Order.xaml}" d:DesignWidth="800" d:DesignHeight="450"  Background="White" >
-
+    <UserControl.Resources>
+        <convert:DecimalToVisibilityConverter x:Key="DecimalToVisibility"/>
+    </UserControl.Resources>
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -24,9 +27,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" 
+            <ListBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Margin="0 0 0 0"
                      ItemsSource="{Binding CurrentOrder.OrderItems}"
-                     SelectedItem="{Binding Path=CurrentOrder.SelectedOrdernItem, Mode=TwoWay}"
+                     SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
+                     Style="{StaticResource OrderItemListStyle}"
                      ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                      HorizontalContentAlignment="Stretch" 
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
@@ -35,7 +39,7 @@
                 <Button  Content="Tables" Style="{StaticResource ButtonStyle16}"  />
                 <Button  Content="+" Style="{StaticResource ButtonStyle16}"  Width="40" />
                 <Button  Content="-" Style="{StaticResource ButtonStyle16}" Width="40" FontSize="16" />
-                <Button DockPanel.Dock="Right"   
+                <Button  DockPanel.Dock="Right"   
                          VerticalContentAlignment="Top"  >SessionID</Button>
             </DockPanel>
 
@@ -109,20 +113,48 @@
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Height="40"  Grid.Row="0" Grid.Column="0">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" >                        
-                    <Run Text="Total: " FontWeight="Bold"/>
-                    <Run Text="{Binding CurrentOrder.Total}" FontWeight="Bold"></Run>
-                    </TextBlock>
-                </Border>
 
-                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" 
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Background="Gray">
+                    <StackPanel Orientation="Horizontal"  >
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Aqua" >                        
+                            <Run Text="Total: " FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.Total}" FontWeight="Bold"></Run>
+                        </TextBlock>
+                        <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
+                                   Visibility="{Binding CurrentOrder.NewTotal, Converter={StaticResource DecimalToVisibility}}" >                        
+                            <Run Text="Total To be Paid: " FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.NewTotal}" FontWeight="Bold"></Run>
+                        </TextBlock>
+                        <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
+                                   Visibility="{Binding CurrentOrder.Discount, Converter={StaticResource DecimalToVisibility}}" >                        
+                            <Run Text="Discount: " FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.Discount}" FontWeight="Bold"></Run>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Aqua" 
+                                   Visibility="{Binding CurrentOrder.PayedAmount, Converter={StaticResource DecimalToVisibility}}">                        
+                            <Run Text="Payed: " FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.PayedAmount}" FontWeight="Bold"></Run>
+                        </TextBlock>
+                        <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
+                                   Visibility="{Binding CurrentOrder.ReturnedAmount, Converter={StaticResource DecimalToVisibility}}" >                        
+                            <Run Text="Returned: " FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.ReturnedAmount}" FontWeight="Bold"></Run>
+                        </TextBlock>
+
+                   </StackPanel>
+                </StackPanel>
+
+
+                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Padding="5"
                          Text="{Binding NumericZone}" 
-                         FontSize="18" FontWeight="Bold"
+                         FontSize="26" FontWeight="Bold" FontFamily="Segoe"
                          HorizontalContentAlignment="Right"/>
 
                 <Button Content="Client" Grid.Row="2" Grid.Column="0" FontSize="16"/>
-                <Button Content="Payment" Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" FontSize="16"/>
+                <Button Content="Payment" Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" FontSize="16"
+                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('Payment')]"/>
 
                 <Button Grid.Row="2" Grid.Column="1" Content="1" Style="{StaticResource ButtonStyle22}" 
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('1')]"/>
@@ -139,8 +171,8 @@
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('5')]"/>
                 <Button Grid.Row="3" Grid.Column="3" Content="6" Style="{StaticResource ButtonStyle22}"
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]"/>
-                <Button Grid.Row="3" Grid.Column="4" Content="Dis" Style="{StaticResource ButtonStyle18}"
-                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('Dis')]"/>
+                <Button Grid.Row="3" Grid.Column="4" Content="Disc" Style="{StaticResource ButtonStyle18}"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('Disc')]"/>
 
                 <Button Grid.Row="4" Grid.Column="1" Content="7" Style="{StaticResource ButtonStyle22}"
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('7')]"/>
@@ -155,7 +187,7 @@
                 <Button Grid.Row="5" Grid.Column="2" Content="0" Style="{StaticResource ButtonStyle22}"
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('0')]" />
                 <Button Grid.Row="5" Grid.Column="3" Content="." Style="{StaticResource ButtonStyle22}"
-                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('.')]" />
+                        cal:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]" />
                 <Button Grid.Row="5" Grid.Column="4" Content="Del" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('Del')]"/>
             </Grid>
@@ -168,7 +200,3 @@
 </UserControl>
 
 
-<!--StackPanel>
-    <DataGrid x:Name="Products"></DataGrid>
-    <Button x:Name="Close">Close</Button>
-</StackPanel-->    

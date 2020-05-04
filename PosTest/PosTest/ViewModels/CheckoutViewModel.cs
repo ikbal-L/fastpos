@@ -14,12 +14,20 @@ using ServiceInterface.StaticValues;
 using System.Windows;
 using System.ComponentModel.Composition;
 using ServiceInterface.Interface;
+using ToastNotifications;
+using ToastNotifications.Position;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
 
 namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen
     {
-        
+        private IProductService _productsService;
+        private ICategorieService _categoriesService;
+        private Category _currantCategory;
+        private bool _productsVisibility;
+        private string _numericZone;
 
         private  ICollectionView _productsPage { get; set; }
         private  ICollectionView _additvesPage { get; set; }
@@ -27,21 +35,25 @@ namespace PosTest.ViewModels
         private bool _canExecuteNext;
         private bool _canExecutePrevious;
         private Order _currentOrder;
-        private Visibility _additivesVisibility;
+        private bool _additivesVisibility;
 
-        public CheckoutViewModel(int pageSize, IProductService productService, ICategorieService categorieService)
+        public CheckoutViewModel() { }
+
+        public CheckoutViewModel(int pageSize, IProductService productsService, ICategorieService categoriesService)
         {
+            _productsService = productsService;
+            _categoriesService = categoriesService;
             //currentOrderitem = new BindableCollection<OrdreItem>();
             Orders = new BindableCollection<Order>();
             CurrentOrder = new Order();
             Orders.Add(CurrentOrder);
-            AllRequestedProducts = productService.GetAllProducts();
+            AllRequestedProducts = productsService.GetAllProducts();
             FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
             MaxProductPageSize = pageSize;
-            ProductsVisibility = Visibility.Visible;
-            AdditivesVisibility = Visibility.Collapsed;
+            ProductsVisibility = true;
+            AdditivesVisibility = false;
             CategorieFiltering("Home");
-            Categories = new BindableCollection<Category>(categorieService.GetAllCategory());
+            Categories = new BindableCollection<Category>(categoriesService.GetAllCategory());
             InitCategoryColors();
         }
 
@@ -66,9 +78,7 @@ namespace PosTest.ViewModels
         public ICollectionView FilteredProducts { get; set; }
         public ICollection<Product> AllRequestedProducts { get; set; }
 
-        private Category _currantCategory;
-        private Visibility _productsVisibility;
-        private string _numericZone;
+
 
         public Category CurrentCategory
         {
@@ -81,7 +91,7 @@ namespace PosTest.ViewModels
             }
         }
         public int MaxProductPageSize { get; set; }
-        public Visibility AdditivesVisibility 
+        public bool AdditivesVisibility 
         { 
             get => _additivesVisibility;
             set 
@@ -91,7 +101,7 @@ namespace PosTest.ViewModels
             } 
         }
 
-       public Visibility ProductsVisibility 
+       public bool ProductsVisibility 
         { 
             get => _productsVisibility;
             set 
@@ -153,8 +163,8 @@ namespace PosTest.ViewModels
 
         public void ReturnFromAdditives()
         {
-            ProductsVisibility = Visibility.Visible;
-            AdditivesVisibility = Visibility.Collapsed;
+            ProductsVisibility = true;
+            AdditivesVisibility = false;
         }
          public void PaginateProducts(NextOrPrevious nextOrprevious)
         {          
@@ -210,42 +220,45 @@ namespace PosTest.ViewModels
 
         public void Close()
         {
-            LoginViewModel toActivateViewModel = new LoginViewModel();
+            CategoryTabViewModel categoryTabViewModel = new CategoryTabViewModel(30, _productsService, _categoriesService);
+            categoryTabViewModel.Parent = this.Parent;
+
+
+            (this.Parent as Conductor<object>).ActivateItem(categoryTabViewModel);
+
+            
+            /*LoginViewModel toActivateViewModel = new LoginViewModel();
             toActivateViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(toActivateViewModel);
+            (this.Parent as Conductor<object>).ActivateItem(toActivateViewModel);*/
         }
 
         public void AddAditive(Additive additive)
         {
             CurrentOrder.SelectedOrderItem.AddAdditives(additive);
-           // NotifyOfPropertyChange(nameof(CurrentOrdernItem));
-
         } 
 
         public void RemoveAdditive(Additive additive)
         {
-            CurrentOrder.SelectedOrderItem.RemoveAdditives(additive);
-           // NotifyOfPropertyChange(nameof(CurrentOrdernItem));
-
+            additive.ParentOrderItem.Additives.Remove(additive);
         }
 
         public void DeleteOrerItem(OrderItem item)
         {
             CurrentOrder.DeleteOrderItem(item);
-            AdditivesVisibility = Visibility.Collapsed;
-            ProductsVisibility = Visibility.Visible;
+            AdditivesVisibility = false;
+            ProductsVisibility = true;
         }
 
         public void AddAdditives(OrderItem oitem)
         {
-            AdditivesVisibility = Visibility.Visible;
-            ProductsVisibility = Visibility.Collapsed;
-            AdditivesPage = AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
+            AdditivesVisibility = true;
+            ProductsVisibility = false;
+            AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
         }
         public void CategorieFiltering(object param)
         {
-            AdditivesVisibility = Visibility.Collapsed;
-            ProductsVisibility = Visibility.Visible;
+            AdditivesVisibility = false;
+            ProductsVisibility = true;
             if(param is Category)
             { 
                 Category category = param as Category;
@@ -253,7 +266,8 @@ namespace PosTest.ViewModels
                 if(CurrentCategory != null)
                     CurrentCategory.BackGroundColor = DefaultColors.Category_DefaultBackground;
                 CurrentCategory = category;
-                FilteredProducts.Filter = CatFilter;
+                FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+
                 PaginateProducts(NextOrPrevious.First);
                 
                 //Console.WriteLine(Products.Where(p => p.CategorieId == CurrantCategorie.Id).Count());
@@ -299,8 +313,8 @@ namespace PosTest.ViewModels
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
                 AdditivesPage = CollectionViewSource.GetDefaultView((selectedproduct as Platter).Additives);
-                ProductsVisibility = Visibility.Collapsed;
-                AdditivesVisibility = Visibility.Visible;
+                ProductsVisibility = false;
+                AdditivesVisibility = true;
             }
 
             //Console.WriteLine(CurrentOrder.Items.Count);
@@ -312,9 +326,19 @@ namespace PosTest.ViewModels
 
         public void NumericKeyboard(string number)
         {
+            if (String.IsNullOrEmpty(number))
+                return;
+            if (number.Length > 1)
+                return;
+            var numbers = new string[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "." };
+            if ( !numbers.Contains(number) )
+                return;
             if (NumericZone == null)
                 NumericZone = String.Empty;
-            NumericZone += number ;
+            if(number.Equals("."))
+                NumericZone = NumericZone.Contains(".") ? NumericZone : NumericZone + ".";
+            else
+                NumericZone += number ;
         }
 
         public void ActionKeyboard(string cmd)
@@ -324,16 +348,114 @@ namespace PosTest.ViewModels
             switch (cmd)
             {
                 case "Del":
-                    NumericZone = String.IsNullOrEmpty(NumericZone) ? String.Empty : NumericZone.Remove(NumericZone.Length-1); break;
-                case ".":
-                    NumericZone = NumericZone.Contains(".") ? NumericZone : NumericZone + "."; break;
-                case "Qty": NumericZone = ""; break;
+                    NumericZone = String.IsNullOrEmpty(NumericZone) ? String.Empty : NumericZone.Remove(NumericZone.Length-1); 
+                    break;
+
+                case "Qty":
+                    int qty;
+                    try
+                    {
+                        qty = Convert.ToInt32(NumericZone);
+                    }
+                    catch (Exception)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+
+                    if (qty <= 0)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+                    if (CurrentOrder.SelectedOrderItem != null)
+                        CurrentOrder.SelectedOrderItem.Quantity = qty;
+                    NumericZone = ""; 
+                    break;
+
+                case "Price":
+                    if (Convert.ToDecimal(NumericZone) < 0)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+                    CurrentOrder.NewTotal = Convert.ToDecimal(NumericZone);
+                    if (CurrentOrder.NewTotal < CurrentOrder.Total)
+                    {
+                        CurrentOrder.Discount = CurrentOrder.Total - CurrentOrder.NewTotal;
+                    }
+                    NumericZone = "";
+                    break;
+
+                case "Disc":
+                    if (Convert.ToDecimal(NumericZone) < 0)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+
+                    var discount = Convert.ToDecimal(NumericZone);                    
+                    if (discount >= CurrentOrder.Total) 
+                    {
+                        //Use Local to select message according to UI language
+                        ToastNotification("Discount bigger than total");
+                        CurrentOrder.Discount = 0;
+                        NumericZone = "";
+                        return;
+                    }
+                    CurrentOrder.Discount = discount;
+                    CurrentOrder.NewTotal = CurrentOrder.Total - discount;
+                    NumericZone = ""; 
+                    break;
+
+                case "Payment":
+                    var payedAmount = Convert.ToDecimal(NumericZone);
+                    if (Convert.ToDecimal(NumericZone) < 0)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+                                      
+                    if (payedAmount < CurrentOrder.NewTotal) 
+                    {
+                        //Use Local to select message according to UI language
+                        ToastNotification("Payed amount lower than total");
+                        CurrentOrder.Discount = 0;
+                        NumericZone = "";
+                        return;
+                    }
+
+                    CurrentOrder.PayedAmount = payedAmount;
+                    CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
+                    NumericZone = "";
+                    SaveCurrentOrderAndPassOrderToKitchen();
+                    break;
             }
         }
-        private bool CatFilter(object item)
+
+        private void SaveCurrentOrderAndPassOrderToKitchen()
         {
-            Product p = item as Product;
-            return p.CategorieId.Equals(_currantCategory.Id);
+
+        }
+
+        private void ToastNotification(string message)
+        {
+            Notifier notifier = new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.BottomLeft,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(3),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+            });
+
+            notifier.ShowError(message);
         }
 
     }

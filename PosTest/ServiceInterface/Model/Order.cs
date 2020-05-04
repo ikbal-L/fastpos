@@ -10,7 +10,11 @@ namespace ServiceInterface.Model
     public class Order : PropertyChangedBase
     {
         private decimal _total;
+        private decimal _newTotal;
         private OrderItem _selectedOrderItem;
+        private decimal _discount = 0;
+        private decimal _payedAmount;
+        private decimal _returnedAmount;
 
         public Order()
         {
@@ -29,13 +33,59 @@ namespace ServiceInterface.Model
         public String Name { get; set; }
         public String Type { get; set; }
         public String Color { get; set; }
+
         public decimal Total 
         {
             get => _total;
             set
             {
                 _total = value;
+                NewTotal = _total - _discount;
                 NotifyOfPropertyChange(() => Total);
+            }
+                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
+        }
+        
+        public decimal NewTotal 
+        {
+            get => _newTotal;
+            set
+            {
+                _newTotal = value;
+                NotifyOfPropertyChange(() => NewTotal);
+            }
+                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
+        }
+
+        public decimal Discount 
+        {
+            get => _discount;
+            set
+            {
+                _discount = value;
+                NotifyOfPropertyChange(() => Discount);
+            }
+                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
+        }
+
+        public decimal PayedAmount 
+        {
+            get => _payedAmount;
+            set
+            {
+                _payedAmount = value;
+                NotifyOfPropertyChange(() => PayedAmount);
+            }
+                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
+        }
+
+        public decimal ReturnedAmount 
+        {
+            get => _returnedAmount;
+            set
+            {
+                _returnedAmount = value;
+                NotifyOfPropertyChange(() => ReturnedAmount);
             }
                 //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
@@ -51,6 +101,7 @@ namespace ServiceInterface.Model
             }
         }
         public BindableCollection<OrderItem> OrderItems { get; set; }
+
         public void AddItem(Product product, decimal unitPrice, bool setSelected, int quantity = 1)
         {
             OrderItem item;
@@ -84,6 +135,7 @@ namespace ServiceInterface.Model
 
         public void DeleteOrderItem(OrderItem item)
         {
+            Total -= item.Total;
             OrderItems.Remove(item);
         }
     }
