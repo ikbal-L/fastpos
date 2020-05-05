@@ -76,4 +76,7 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.csproj.CopyComplete
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.pdb
-C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.csprojAssemblyReference.cache
+<<<<<<< Updated upstream
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.csprojAssemblyReference.cache
+=======
+>>>>>>> Stashed changes

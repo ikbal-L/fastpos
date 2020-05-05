@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceInterface", "Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{01A1DE97-A9AB-4116-BAD7-D0DDD68F2074}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTesting", "XUnitTesting\XUnitTesting.csproj", "{F05B9379-0B90-46E0-89FF-B1BC20D0166E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockPanelTest", "..\..\wpfexamples\DockPanelTest\DockPanelTest.csproj", "{AB181DE1-287E-471F-9C07-FCC88A34C8C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,14 @@ Global
 		{01A1DE97-A9AB-4116-BAD7-D0DDD68F2074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01A1DE97-A9AB-4116-BAD7-D0DDD68F2074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01A1DE97-A9AB-4116-BAD7-D0DDD68F2074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F05B9379-0B90-46E0-89FF-B1BC20D0166E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F05B9379-0B90-46E0-89FF-B1BC20D0166E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F05B9379-0B90-46E0-89FF-B1BC20D0166E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F05B9379-0B90-46E0-89FF-B1BC20D0166E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB181DE1-287E-471F-9C07-FCC88A34C8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB181DE1-287E-471F-9C07-FCC88A34C8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB181DE1-287E-471F-9C07-FCC88A34C8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB181DE1-287E-471F-9C07-FCC88A34C8C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

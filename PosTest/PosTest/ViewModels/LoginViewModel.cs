@@ -25,42 +25,27 @@ namespace PosTest.ViewModels
         private ICategorieService categorieService = null;
 
 
-        public String Username { get; set; }
-        public String Password { get; set; }
+        //public String Username { get; set; }
+        //public String Password { get; set; }
 
         protected override void OnActivate()
         {
             base.OnActivate();
-            this.Compose();
-            
+            this.Compose(); 
         }
-        public bool CanLogin(string username, string password)
+        public bool CanLogin()
         {
             //logger.Info("User: " + username + "  Pass: " + password);
             return true;// !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
         }
 
-        public async void Login(string username, string password)
+        public async void Login()
         {
             
-            CheckoutViewModel checkoutViewModel = new CheckoutViewModel();
+            CheckoutViewModel checkoutViewModel = new CheckoutViewModel(30, productService, categorieService);
             checkoutViewModel.Parent = this.Parent;
 
-            checkoutViewModel.AllRequestedProducts = productService.GetAllProducts();
-            checkoutViewModel.FilteredProducts = CollectionViewSource.GetDefaultView(checkoutViewModel.AllRequestedProducts);
-            checkoutViewModel.MaxProductPageSize = 30;
-            checkoutViewModel.ProductsVisibility = Visibility.Visible;
-            checkoutViewModel.AdditivesVisibility = Visibility.Collapsed;
-            //checkoutViewModel.ProductsPage = checkoutViewModel.FilteredProducts;
-            checkoutViewModel.PaginateProducts(NextOrPrevious.First);
-            /*toActivateViewModel.currentOrderitem =
-                new BindableCollection<OrdreItem>(
-                    new List<OrdreItem>{
-                        new OrdreItem{ Id=0, ProductId= 1, OrderId=0, Quantity=1, UnitPrice=1, Total=1, product= 
-                        new Product{Id=1, Name="test", Price=1, Unit="ddd", },} });*/
             
-            checkoutViewModel.Categories = new BindableCollection<Category>(categorieService.GetAllCategory());
-            checkoutViewModel.InitCategoryColors();
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
         }
 

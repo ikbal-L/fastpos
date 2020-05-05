@@ -12,14 +12,22 @@ namespace ServiceInterface.Model
     {
         private string _backgroundString = null;
         private int _nothing;
+        private bool _isMuchInDemand;
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string Unit { get; set; }
-        public bool IsMuchInDemand { get; set; }
-        //public List<> MyProperty { get; set; }
+        public bool IsMuchInDemand 
+        { 
+            get => _isMuchInDemand;
+            set
+            {
+                _isMuchInDemand = value;
+            }
+        }
+
         public int CategorieId
         {
             get => Category == null ? -1 : Category.Id;
@@ -40,7 +48,7 @@ namespace ServiceInterface.Model
             get => _backgroundString ?? "#f39c12";
             set => _backgroundString = value;
         }
-        public Brush Background { 
+        public virtual Brush Background { 
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
         }
 

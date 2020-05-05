@@ -1,0 +1,98 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:cal="http://www.caliburnproject.org"
+                    xmlns:local="clr-namespace:PosTest.Resources.Styles">
+    
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+    
+    <Style TargetType="{x:Type ListBoxItem}" x:Key="OrderItems_ItemStyle" >
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border Name="Border" BorderThickness="1" CornerRadius="3" Padding="1" BorderBrush="Black">
+                        <DockPanel Name="Dock" >
+                            <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0 -18 0 0" ClipToBounds="False">
+                                <Button Name="DelButton"   
+                                    DockPanel.Dock="Right"
+                                    Visibility="Collapsed"
+                                    Style="{StaticResource AddtiviveItemBtnstyle}"
+                                    cal:Message.Attach="[Event Click] = [Action DeleteOrerItem($this)]"
+                                    Height="30" Width="30">
+                                    <Image Source="/icons/reddelete.png"  />
+                                </Button>
+                                <Button Name="OptionsButton"   
+                                    DockPanel.Dock="Right"
+                                    Background="LightGreen"
+                                    Style="{StaticResource AddtiviveItemBtnstyle}"
+                                    IsEnabled="{Binding CanAddAdditives}"
+                                    Visibility="Collapsed"
+                                    cal:Message.Attach="[Event Click] = [Action AddAdditives($this)]"
+                                    Height="30" Width="30">
+                                    <Image Source="/icons/option.png"  />
+                                </Button>
+                                <Button Name="AddButton"   
+                                    DockPanel.Dock="Right"
+                                    Background="LightGreen"
+                                    Style="{StaticResource AddtiviveItemBtnstyle}"
+                                    Visibility="Collapsed"
+                                    cal:Message.Attach="[Event Click] = [Action AddAdditives($this)]"
+                                    Height="30" Width="30">
+                                    <Image Source="/icons/add.png"  />
+                                </Button>
+                                <Button Name="MinusButton"   
+                                    DockPanel.Dock="Right"
+                                    Background="LightGreen"
+                                    Style="{StaticResource AddtiviveItemBtnstyle}"
+                                    Visibility="Collapsed"
+                                    cal:Message.Attach="[Event Click] = [Action AddAdditives($this)]"
+                                    Height="30" Width="30">
+                                    <Image Source="/icons/minus.png"  />
+                                </Button>
+                            </DockPanel>
+                            <ContentPresenter DockPanel.Dock="Bottom" />
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Red"/>
+                            <Setter TargetName="Border" Property="Background" Value="Beige"/>
+                            <Setter TargetName="Border" Property="TextBlock.FontSize" Value="13" />
+                            <Setter TargetName="Border" Property="TextBlock.FontWeight" Value="Bold" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="2" />
+                            <Setter TargetName="DelButton" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="OptionsButton" Property="Visibility" Value="{Binding CanAddAdditives, Converter={StaticResource BoolToVisibility} }" />
+                            <Setter TargetName="AddButton" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="MinusButton" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" TargetName="Border" Value="AliceBlue"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!--<Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                <Setter Property="Margin" Value="0 15 0 0" />
+            </DataTrigger>
+        </Style.Triggers>-->
+    </Style>
+
+    <Style TargetType="{x:Type ListBox}" x:Key="OrderItemListStyle">
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border Name="canvas"
+                        Padding="0 15 0 0">
+                        <ItemsPresenter Margin="2" />
+                    </Border>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+    </Style>
+
+</ResourceDictionary>
