@@ -89,3 +89,6 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\Servic
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CopyComplete
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.pdb
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.dll
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\Newtonsoft.Json.xml
