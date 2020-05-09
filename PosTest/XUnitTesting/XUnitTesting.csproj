@@ -62,11 +62,13 @@
   <ItemGroup>
     <Compile Include="CheckpointTesting\CheckpointTests.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="ProductsViewModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="xunit.runner.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />

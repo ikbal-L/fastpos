@@ -9,7 +9,8 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              mc:Ignorable="d"
-             d:DataContext="{d:DesignData Source=/Design/Order.xaml}" d:DesignWidth="800" d:DesignHeight="450"  Background="White" >
+             d:DataContext="{d:DesignData Source=/Design/Order.xaml}" 
+             d:DesignWidth="800" d:DesignHeight="450"  Background="White" >
     <UserControl.Resources>
         <convert:DecimalToVisibilityConverter x:Key="DecimalToVisibility"/>
     </UserControl.Resources>

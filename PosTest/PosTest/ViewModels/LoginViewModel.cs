@@ -39,14 +39,22 @@ namespace PosTest.ViewModels
             return true;// !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
         }
 
-        public async void Login()
+        public void Login()
         {
-            
-            CheckoutViewModel checkoutViewModel = new CheckoutViewModel(30, productService, categorieService);
-            checkoutViewModel.Parent = this.Parent;
+            CheckoutViewModel checkoutViewModel = 
+                new CheckoutViewModel(30, 
+                productService, 
+                categorieService);
 
-            
+            checkoutViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+        }
+        
+        public void Settings()
+        {
+            SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService);
+            settingsViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
 
         //This method load th DLL file containing the implemetation of IProductService 

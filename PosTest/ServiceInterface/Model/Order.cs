@@ -114,7 +114,7 @@ namespace ServiceInterface.Model
             else
             {
                item = OrderItems.FirstOrDefault(p => p.Product.Equals(product));
-               item.AddQuantity(quantity);
+               item.Quantity+=quantity;
             }
 
             if (setSelected)

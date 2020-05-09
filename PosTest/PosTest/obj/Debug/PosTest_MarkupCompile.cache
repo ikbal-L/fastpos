@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\App.xaml
-142138039484
+182039995855
 
-151962150801
-140-2071510757
-Design\Products.xaml;Design\Order.xaml;Resources\DataTemplates\Additives.xaml;Resources\DataTemplates\OrdreItem.xaml;Resources\DataTemplates\Products.xaml;Resources\Styles\AdditiveListStyle.xaml;Resources\Styles\Button.xaml;Resources\Styles\Brushes.xaml;Resources\Styles\OrderItemListStyle.xaml;Views\CategoryTabView.xaml;Views\CheckoutView.xaml;Views\LoginView.xaml;Views\MainView.xaml;Views\SubViews\ProductNavigation.xaml;
+191781561291
+1661034697224
+Design\Products.xaml;Design\Order.xaml;Resources\DataTemplates\Additives.xaml;Resources\DataTemplates\OrdreItem.xaml;Resources\DataTemplates\Products.xaml;Resources\Icons.xaml;Resources\IconsNonShared.xaml;Resources\Styles\AdditiveListStyle.xaml;Resources\Styles\Button.xaml;Resources\Styles\Brushes.xaml;Resources\Styles\OrderItemListStyle.xaml;Views\CategoryTabView.xaml;Views\CheckoutView.xaml;Views\LoginView.xaml;Views\MainView.xaml;Views\ProductsView.xaml;Views\SettingsView.xaml;Views\SubViews\ProductNavigation.xaml;
 
 False
 
