@@ -1,9 +1,6 @@
 ﻿using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceInterface.Model
 {
@@ -12,9 +9,10 @@ namespace ServiceInterface.Model
         private decimal _total;
         private decimal _newTotal;
         private OrderItem _selectedOrderItem;
-        private decimal _discount = 0;
+        private decimal _discountAmount = 0;
         private decimal _payedAmount;
         private decimal _returnedAmount;
+        private decimal _discountPercentage;
 
         public Order()
         {
@@ -40,7 +38,8 @@ namespace ServiceInterface.Model
             set
             {
                 _total = value;
-                NewTotal = _total - _discount;
+                //NewTotal = _total - _discountAmount;
+                NotifyOfPropertyChange(() => NewTotal);
                 NotifyOfPropertyChange(() => Total);
             }
                 //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
@@ -48,22 +47,49 @@ namespace ServiceInterface.Model
         
         public decimal NewTotal 
         {
-            get => _newTotal;
-            set
+            get
+            {
+                var sumItemDiscounts = 0m;
+                OrderItems.Cast<OrderItem>().ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
+                var allDiscounts = _discountAmount + sumItemDiscounts;
+                return Total - allDiscounts;
+            }
+
+           /* set
             {
                 _newTotal = value;
+                NotifyOfPropertyChange(() => NewTotal);
+            }*/
+                
+        }
+
+        public decimal DiscountAmount 
+        {
+            get
+            {
+                var sumItemDiscounts = 0m;
+                OrderItems.Cast<OrderItem>().ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
+                var allDiscounts = _discountAmount + sumItemDiscounts;
+                //NewTotal = Total - allDiscounts;
+                return allDiscounts;
+            }
+            set
+            {
+                _discountAmount = value;
+                NotifyOfPropertyChange(() => DiscountAmount);
                 NotifyOfPropertyChange(() => NewTotal);
             }
                 //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
 
-        public decimal Discount 
+        public decimal DiscountPercentage 
         {
-            get => _discount;
+            get => _discountPercentage;
             set
             {
-                _discount = value;
-                NotifyOfPropertyChange(() => Discount);
+                _discountPercentage = value;
+                DiscountAmount = Total * _discountPercentage / 100;
+                NotifyOfPropertyChange(() => DiscountPercentage);
             }
                 //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
@@ -114,7 +140,7 @@ namespace ServiceInterface.Model
             else
             {
                item = OrderItems.FirstOrDefault(p => p.Product.Equals(product));
-               item.AddQuantity(quantity);
+               item.Quantity+=quantity;
             }
 
             if (setSelected)
@@ -133,8 +159,10 @@ namespace ServiceInterface.Model
             BuyerId = buyerId;
         }
 
-        public void DeleteOrderItem(OrderItem item)
+        public void RemoveOrderItem(OrderItem item)
         {
+            if (item == null)
+                return;
             Total -= item.Total;
             OrderItems.Remove(item);
         }

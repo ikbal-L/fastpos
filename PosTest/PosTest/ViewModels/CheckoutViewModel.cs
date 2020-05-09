@@ -23,6 +23,10 @@ namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen
     {
+        private static readonly bool IsRunningFromXUnit =
+                   AppDomain.CurrentDomain.GetAssemblies().Any(
+                       a => a.FullName.StartsWith("XUnitTesting"));
+
         private IProductService _productsService;
         private ICategorieService _categoriesService;
         private Category _currantCategory;
@@ -37,16 +41,19 @@ namespace PosTest.ViewModels
         private Order _currentOrder;
         private bool _additivesVisibility;
 
-        public CheckoutViewModel() { }
+        public CheckoutViewModel() 
+        {
+            Orders = new BindableCollection<Order>();
+            CurrentOrder = new Order();
+            Orders.Add(CurrentOrder);
+        }
 
-        public CheckoutViewModel(int pageSize, IProductService productsService, ICategorieService categoriesService)
+        public CheckoutViewModel(int pageSize, IProductService productsService, ICategorieService categoriesService) : this()
         {
             _productsService = productsService;
             _categoriesService = categoriesService;
             //currentOrderitem = new BindableCollection<OrdreItem>();
-            Orders = new BindableCollection<Order>();
-            CurrentOrder = new Order();
-            Orders.Add(CurrentOrder);
+            
             AllRequestedProducts = productsService.GetAllProducts();
             FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
             MaxProductPageSize = pageSize;
@@ -242,14 +249,93 @@ namespace PosTest.ViewModels
             additive.ParentOrderItem.Additives.Remove(additive);
         }
 
-        public void DeleteOrerItem(OrderItem item)
+        public void RemoveOrerItem(OrderItem item)
         {
-            CurrentOrder.DeleteOrderItem(item);
+            CurrentOrder.RemoveOrderItem(item);
             AdditivesVisibility = false;
             ProductsVisibility = true;
         }
 
-        public void AddAdditives(OrderItem oitem)
+        public void AddOneToQuantity(OrderItem item)
+        {
+            item.Quantity += 1;
+        }
+        public void SubtractOneFromQuantity(OrderItem item)
+        {
+            if (item.Quantity <= 1)
+                return;
+            item.Quantity -= 1;
+        }
+        
+        public void DiscountOnOrderItem(OrderItem item)
+        {
+            if (String.IsNullOrEmpty(NumericZone))
+                return;
+            var oldDiscount = item.DiscountAmount;
+            var discountPercent = 0m;
+            var discount = 0m;
+            if (NumericZone.Contains("%"))
+            {
+                if (NumericZone.Length == 1)
+                {
+                    return;
+                }
+                try
+                {
+                    discountPercent = Convert.ToDecimal(NumericZone.Remove(NumericZone.Length - 1));
+                }
+                catch (Exception)
+                {
+                    NumericZone = string.Empty;
+                    if (IsRunningFromXUnit)
+                        throw;
+                }
+                discount = item.Total * discountPercent / 100;
+            }
+            else
+            {
+                try
+                {
+                    discount = Convert.ToDecimal(NumericZone);
+                }
+                catch (Exception)
+                {
+                    NumericZone = string.Empty;
+                    if (IsRunningFromXUnit)
+                        throw;
+                } //discount = Convert.ToDecimal(NumericZone);
+            }
+                //decimal discount =0;
+            
+
+            NumericZone = string.Empty;
+            if (item.Total < discount)
+            {
+                if (IsRunningFromXUnit)
+                {
+                    throw new Exception("Discount Greater Than Price");
+                }
+                else
+                {
+                    ToastNotification("Discount Greater Than Price");
+                    return;
+                }
+            }
+
+            if (discountPercent>0)
+            {
+                item.DiscountPercentatge = discountPercent;
+
+            }
+            if (discount>0)
+            {
+                item.DiscountAmount = discount;
+
+            }
+            //CurrentOrder.NewTotal = CurrentOrder.NewTotal + oldDiscount - discount;
+        }
+        
+        public void GoToAdditiveButtonsPage(OrderItem oitem)
         {
             AdditivesVisibility = true;
             ProductsVisibility = false;
@@ -306,9 +392,10 @@ namespace PosTest.ViewModels
         {
             //Product selectedproduct = (Product)sender;
             //Console.WriteLine();
-
+            if (selectedproduct == null)
+                return;
             
-            CurrentOrder.AddItem(selectedproduct, selectedproduct.Price, true, 1);
+            CurrentOrder.AddItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true, quantity: 1);
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
@@ -330,28 +417,61 @@ namespace PosTest.ViewModels
                 return;
             if (number.Length > 1)
                 return;
-            var numbers = new string[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "." };
+            var numbers = new string[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "." , "%"};
             if ( !numbers.Contains(number) )
                 return;
             if (NumericZone == null)
                 NumericZone = String.Empty;
-            if(number.Equals("."))
+
+            if (number.Equals("."))
+            {
                 NumericZone = NumericZone.Contains(".") ? NumericZone : NumericZone + ".";
-            else
-                NumericZone += number ;
+                return;
+            }
+
+            if (number.Equals("%"))
+            {
+                NumericZone = NumericZone.Contains("%") ? NumericZone : NumericZone + "%";
+                return;
+            }
+
+            if (NumericZone.Contains("%"))
+            {
+                var percentStr = _numericZone.Remove(_numericZone.Length - 1, 1) + number;
+                var percent = Convert.ToDecimal(percentStr);
+                if (percent < 0 || percent > 100)
+                {
+                    if (IsRunningFromXUnit)
+                    {
+                        throw new Exception("Invalid value for Percentagte");
+                    }
+                    else
+                    {
+                        ToastNotification("Invalid value for Percentagte");
+                    }
+                }
+                else
+                {
+                    NumericZone = _numericZone.Remove(_numericZone.Length - 1, 1) + number + "%";
+
+                }
+                return;
+            }
+
+            NumericZone += number ;
         }
 
-        public void ActionKeyboard(string cmd)
+        public void ActionKeyboard(ActionButton cmd)
         {
             if (String.IsNullOrEmpty(NumericZone))
                 return;
             switch (cmd)
             {
-                case "Del":
+                case ActionButton.Del:
                     NumericZone = String.IsNullOrEmpty(NumericZone) ? String.Empty : NumericZone.Remove(NumericZone.Length-1); 
                     break;
 
-                case "Qty":
+                case ActionButton.Qty:
                     int qty;
                     try
                     {
@@ -373,44 +493,87 @@ namespace PosTest.ViewModels
                     NumericZone = ""; 
                     break;
 
-                case "Price":
-                    if (Convert.ToDecimal(NumericZone) < 0)
+                case ActionButton.Price:
+                    decimal price;
+                    try
+                    {
+                        price = Convert.ToDecimal(NumericZone);
+                    }
+                    catch (Exception)
                     {
                         NumericZone = "";
                         return;
                     }
-                    CurrentOrder.NewTotal = Convert.ToDecimal(NumericZone);
-                    if (CurrentOrder.NewTotal < CurrentOrder.Total)
+                    if (price < 0)
                     {
-                        CurrentOrder.Discount = CurrentOrder.Total - CurrentOrder.NewTotal;
+                        NumericZone = "";
+                        return;
+                    }
+                    //CurrentOrder.NewTotal
+                    var newTotal = price;
+                    if (newTotal <= CurrentOrder.Total)
+                    {
+                        CurrentOrder.DiscountAmount = CurrentOrder.Total - newTotal;// CurrentOrder.NewTotal;
+                    }
+                    else
+                    {
+                        NumericZone = string.Empty;
+                        ToastNotification("New price less than the total price");
                     }
                     NumericZone = "";
                     break;
 
-                case "Disc":
-                    if (Convert.ToDecimal(NumericZone) < 0)
+                case ActionButton.Disc:
+                    var discountPercent = 0m;
+                    var discount = 0m;
+                    var isPercentage = false;
+                    if (NumericZone.Contains("%"))
+                    {
+                        isPercentage = true;
+                        discountPercent = Convert.ToDecimal(NumericZone.Remove(NumericZone.Length-1));
+                        if (discountPercent>100)
+                        {
+                            NumericZone = string.Empty;
+                            return;
+                        }
+                        discount = CurrentOrder.NewTotal * discountPercent / 100;
+                    }
+                    else
+                    {
+                        discount = Convert.ToDecimal(NumericZone);
+                    }
+                    if (discount < 0)
                     {
                         NumericZone = "";
                         return;
                     }
 
-                    var discount = Convert.ToDecimal(NumericZone);                    
-                    if (discount >= CurrentOrder.Total) 
+                                       
+                    if (discount > CurrentOrder.Total) 
                     {
                         //Use Local to select message according to UI language
-                        ToastNotification("Discount bigger than total");
-                        CurrentOrder.Discount = 0;
                         NumericZone = "";
+                        ToastNotification("Discount bigger than total");
+                        //CurrentOrder.DiscountAmount = 0;
                         return;
                     }
-                    CurrentOrder.Discount = discount;
-                    CurrentOrder.NewTotal = CurrentOrder.Total - discount;
+                    if (!isPercentage)
+                    {
+                        CurrentOrder.DiscountAmount = discount;
+
+                    }
+                    else
+                    {
+                        CurrentOrder.DiscountPercentage = discountPercent;
+
+                    }
+                    //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
                     NumericZone = ""; 
                     break;
 
-                case "Payment":
+                case ActionButton.Payment:
                     var payedAmount = Convert.ToDecimal(NumericZone);
-                    if (Convert.ToDecimal(NumericZone) < 0)
+                    if (payedAmount < 0)
                     {
                         NumericZone = "";
                         return;
@@ -418,10 +581,10 @@ namespace PosTest.ViewModels
                                       
                     if (payedAmount < CurrentOrder.NewTotal) 
                     {
+                        NumericZone = "";
                         //Use Local to select message according to UI language
                         ToastNotification("Payed amount lower than total");
-                        CurrentOrder.Discount = 0;
-                        NumericZone = "";
+                        //CurrentOrder.DiscountAmount = 0;
                         return;
                     }
 
@@ -454,8 +617,14 @@ namespace PosTest.ViewModels
 
                 cfg.Dispatcher = Application.Current.Dispatcher;
             });
-
-            notifier.ShowError(message);
+            if (!IsRunningFromXUnit)
+            {
+                notifier.ShowError(message);
+            }
+            else
+            {
+                throw new Exception(message);
+            }
         }
 
     }
@@ -465,6 +634,15 @@ namespace PosTest.ViewModels
         Next,
         Previous,
         First
+    }
+
+    public enum ActionButton
+    {
+        Del,
+        Qty,
+        Price,
+        Disc,
+        Payment
     }
 
 }

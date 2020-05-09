@@ -60,7 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckpointTesting\CheckpointTests.cs" />
+    <Compile Include="CheckpointTesting\CheckPointTestingMethodsNeedMock.cs" />
+    <Compile Include="CheckpointTesting\CheckpointBasicMethodTests.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

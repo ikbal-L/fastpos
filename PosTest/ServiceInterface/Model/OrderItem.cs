@@ -9,14 +9,19 @@ namespace ServiceInterface.Model
 {
     public class OrderItem : PropertyChangedBase
     {
+        private static readonly bool IsRunningFromXUnit =
+                   AppDomain.CurrentDomain.GetAssemblies().Any(
+                       a => a.FullName.StartsWith("XUnitTesting"));
         private int _quantity;
         private BindableCollection<Additive> _additives;
         private Additive __selectedAdditive;
         private bool _canAddAdditives;
+        private decimal _discountAmount = 0;
+        private decimal _discountPercentage = 0;
 
         public OrderItem() 
         {
-            Additives = new BindableCollection<Additive>();
+            //Additives = new BindableCollection<Additive>();
         }
 
         public OrderItem(Product product, int quantity, decimal unitPrice, Order order) : this()
@@ -41,6 +46,11 @@ namespace ServiceInterface.Model
                 _quantity = value;
                 NotifyOfPropertyChange(() => Quantity);
                 NotifyOfPropertyChange(() => Total);
+                _discountAmount = 0;
+                if (_discountPercentage>0)
+                {
+                    DiscountAmount = Total * _discountPercentage / 100;
+                }
                 Order.Total = Order.Total + UnitPrice * (_quantity - oldQuqntity);
                 //decimal total = 0;
                 //Order.OrderItems.Cast<OrderItem>().ToList().ForEach(item => total += item.Total);
@@ -50,6 +60,41 @@ namespace ServiceInterface.Model
         public decimal Total {
             get => Quantity * UnitPrice;          
         }
+
+        public decimal DiscountAmount
+        {
+            get => _discountAmount;
+            set
+            {
+                _discountAmount = value;
+                NotifyOfPropertyChange(() => DiscountAmount);
+                //Execute GETTER of Order.DiscountAmount to modify the Order.NewTotal
+                //This GETTER is usable for Test because NotifyOfPropertyChange() executes the getter
+               /* if (IsRunningFromXUnit)
+                {
+                    var a = Order.DiscountAmount;
+                }
+                else
+                */
+                {
+                    Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                    Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
+                }
+            }
+        }
+
+        public decimal DiscountPercentatge
+        {
+            get => _discountPercentage;
+            set
+            {
+                _discountPercentage = value;
+                DiscountAmount = Total * _discountPercentage / 100;
+                NotifyOfPropertyChange(() => DiscountPercentatge);
+                Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+            }
+        }
+
         public Additive SelectedAdditive 
         { 
             get => __selectedAdditive;
@@ -96,8 +141,8 @@ namespace ServiceInterface.Model
 
         public void AddAdditives(Additive additive)
         {
-            /* if (this.Additives == null)
-                 this.Additives = new BindableCollection<Additive>();*/
+            if (this.Additives == null)
+                this.Additives = new BindableCollection<Additive>();
             var additive1 = new Additive(additive);
             additive1.ParentOrderItem = this; 
             this.Additives.Add(additive1);
