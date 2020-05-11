@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace XUnitTesting.CheckpointTesting
 {
-    class CheckPointTestingMethodsNeedMock
+    public class CheckPointTestingMethodsNeedMock
     {
+
+        [Fact]
+        public void PaginateProducts_()
+        {
+
+        }
     }
 }

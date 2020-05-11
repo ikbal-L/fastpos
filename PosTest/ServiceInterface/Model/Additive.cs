@@ -13,8 +13,8 @@ namespace ServiceInterface.Model
         {
             Id = additive.Id;
             Description = additive.Description;
-            Ingrediants = additive.Ingrediants;
-            ParentOrderItem = additive.ParentOrderItem;
+            //Ingrediants = additive.Ingrediants;
+            //ParentOrderItem = additive.ParentOrderItem;
             BackgroundString = additive.BackgroundString;
         }
 
@@ -30,6 +30,15 @@ namespace ServiceInterface.Model
         public Brush Background
         {
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
+        }
+
+        public override bool Equals(object additiveObj)
+        {
+            var additive = additiveObj as Additive;
+            return additive != null &&
+                   additive.Id == Id &&
+                   additive.Description == Description &&
+                   additive.BackgroundString == BackgroundString;
         }
     }
 }

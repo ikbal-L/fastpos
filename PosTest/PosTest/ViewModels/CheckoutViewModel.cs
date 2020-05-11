@@ -241,12 +241,24 @@ namespace PosTest.ViewModels
 
         public void AddAditive(Additive additive)
         {
-            CurrentOrder.SelectedOrderItem.AddAdditives(additive);
+            if (additive == null)
+            {
+                return;
+            }
+            if (!CurrentOrder.SelectedOrderItem.AddAdditives(additive))
+            {
+                CurrentOrder.SelectedOrderItem.SelectedAdditive = null;
+                CurrentOrder.SelectedOrderItem.SelectedAdditive = 
+                                    CurrentOrder.SelectedOrderItem.Additives.
+                                        Where(addv => addv.Equals(additive)).
+                                        FirstOrDefault();
+            }
+                
         } 
 
         public void RemoveAdditive(Additive additive)
         {
-            additive.ParentOrderItem.Additives.Remove(additive);
+            CurrentOrder.SelectedOrderItem.RemoveAdditive(additive);
         }
 
         public void RemoveOrerItem(OrderItem item)

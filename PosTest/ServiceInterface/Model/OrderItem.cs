@@ -78,6 +78,7 @@ namespace ServiceInterface.Model
                 */
                 {
                     Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                    Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                     Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 }
             }
@@ -139,18 +140,29 @@ namespace ServiceInterface.Model
         }
         public Product Product { get; set; }
 
-        public void AddAdditives(Additive additive)
+        //returns false if exists (did not add this additive)
+        public bool AddAdditives(Additive additive)
         {
             if (this.Additives == null)
+            {
                 this.Additives = new BindableCollection<Additive>();
+            }
+            if (Additives.Count>0 && Additives.Any(a => a.Equals(additive)))
+            {
+                return false;
+            }
             var additive1 = new Additive(additive);
             additive1.ParentOrderItem = this; 
             this.Additives.Add(additive1);
+            return true;
         }
 
-        public void RemoveAdditives(Additive additive)
+        public void RemoveAdditive(Additive additive)
         {
-            Additives.Remove(additive);
+            if ( Additives.Any(addtv => addtv.Equals(additive)) )
+            {
+                Additives.Remove(additive);
+            }
         }
     }
 }

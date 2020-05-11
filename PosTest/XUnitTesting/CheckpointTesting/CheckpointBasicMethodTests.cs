@@ -161,16 +161,108 @@ namespace XUnitTesting.CheckpointTesting
         }
 
         [Fact]
-        public void AddAdditices_()
+        public void AddAdditices_AddNull()
         {
-            throw new NotImplementedException();
+            var checkoutVM = new CheckoutViewModel();
+            var additives = new List<Additive>
+            {
+                new Additive{Id=1, Description="add1"},
+                new Additive{Id=2, Description="add2"},
+                new Additive{Id=3, Description="add3"},
+                new Additive{Id=4, Description="add4"},
+            };
+
+            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
+
+            //Act
+            checkoutVM.AddOrderItem(p);
+            checkoutVM.AddAditive(null);
+
+            //Assert
+            Assert.Null(checkoutVM.CurrentOrder.SelectedOrderItem.Additives);
+        }
+
+        [Fact]
+        public void AddAdditices_AddTheSameAdditiveTwice()
+        {
+            var checkoutVM = new CheckoutViewModel();
+            var additives = new List<Additive>
+            {
+                new Additive{Id=1, Description="add1"},
+                new Additive{Id=2, Description="add2"},
+                new Additive{Id=3, Description="add3"},
+                new Additive{Id=4, Description="add4"},
+            };
+
+            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
+
+            //Act
+            checkoutVM.AddOrderItem(p);
+            checkoutVM.AddAditive(additives[0]);
+
+            //Assert
+            Assert.Single(checkoutVM.CurrentOrder.SelectedOrderItem.Additives);
+            
+            //Act
+            checkoutVM.AddAditive(additives[0]);
+            checkoutVM.AddAditive(additives[0]);
+
+            //Assert
+            Assert.Single(checkoutVM.CurrentOrder.SelectedOrderItem.Additives);
+            Assert.Equal(additives[0], checkoutVM.CurrentOrder.SelectedOrderItem.SelectedAdditive);
         }
 
         [Fact]
         public void RemoveAdditives_()
         {
-            throw new NotImplementedException();
+            var checkoutVM = new CheckoutViewModel();
+            var additives = new List<Additive>
+            {
+                new Additive{Id=1, Description="add1"},
+                new Additive{Id=2, Description="add2"},
+                new Additive{Id=3, Description="add3"},
+                new Additive{Id=4, Description="add4"},
+            };
 
+            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
+
+            //Act
+            checkoutVM.AddOrderItem(p);
+            checkoutVM.AddAditive(additives[0]);
+            checkoutVM.AddAditive(additives[1]);
+            checkoutVM.AddAditive(additives[2]);
+            checkoutVM.CurrentOrder.SelectedOrderItem.SelectedAdditive = additives[1];
+
+            //Assert
+            Assert.Equal(3, checkoutVM.CurrentOrder.SelectedOrderItem.Additives.Count);
+
+            //Act
+            var addtv = checkoutVM.CurrentOrder.SelectedOrderItem.Additives[1];
+            checkoutVM.RemoveAdditive(addtv);
+
+            //Assert
+            Assert.Equal(2, checkoutVM.CurrentOrder.SelectedOrderItem.Additives.Count);
+            Assert.Null(checkoutVM.CurrentOrder.SelectedOrderItem.Additives.
+                                        Where(addv => addv.Equals(addtv)).
+                                        FirstOrDefault());
+
+            //Act 
+            //remove removed one
+            checkoutVM.RemoveAdditive(addtv);
+            
+            //Assert nothing would happen
+
+            //Act
+            //remove null
+            checkoutVM.RemoveAdditive(null);
+            
+            //Assert nothing would happen
+
+            //Act
+            //remove not existing additive
+            checkoutVM.RemoveAdditive(new Additive());
+            
+            //Assert nothing would happen
         }
 
         [Fact]

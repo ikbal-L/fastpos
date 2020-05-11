@@ -126,9 +126,9 @@
                             <Run Text="{Binding CurrentOrder.NewTotal, Mode=OneWay}" FontWeight="Bold"></Run>
                         </TextBlock>
                         <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
-                                   Visibility="{Binding CurrentOrder.DiscountAmount, Converter={StaticResource DecimalToVisibility}}" >                        
+                                   Visibility="{Binding CurrentOrder.TotalDiscountAmount, Converter={StaticResource DecimalToVisibility}}" >                        
                             <Run Text="Discount: " FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.DiscountAmount}" FontWeight="Bold"></Run>
+                            <Run Text="{Binding CurrentOrder.TotalDiscountAmount, Mode=OneWay}" FontWeight="Bold"></Run>
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
