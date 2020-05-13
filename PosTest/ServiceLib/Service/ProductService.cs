@@ -51,22 +51,15 @@ namespace ServiceLib.Service
 
         private async Task<List<Product>> GetProductAsync(HttpClient client, string path)
         {
-            Console.WriteLine(21);
             List<Product> products = null;
-            Console.WriteLine(21);
-            var taskres = await client.GetAsync(path);
-            //other work
-            var result = taskres;
-            Console.WriteLine(result.StatusCode);
-            Console.WriteLine(result.Content);
-            Console.WriteLine(result.Headers);
-            //HttpResponseMessage response = await client.GetAsync(path);
-            var response = result;
-            Console.WriteLine(response.ToString());
+
+            HttpResponseMessage response = await client.GetAsync(path);
+
             if (response.IsSuccessStatusCode)
             {
-                products =await response.Content.ReadAsAsync<List<Product>>();
-                Console.WriteLine(products.Count);
+
+                products = await response.Content.ReadAsAsync<List<Product>>();
+
             }
             return products;
         }

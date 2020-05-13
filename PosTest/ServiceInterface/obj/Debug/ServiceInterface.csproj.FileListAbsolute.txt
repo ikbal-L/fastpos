@@ -72,6 +72,7 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\bin\Debug\
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\bin\Debug\System.Composition.Hosting.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\bin\Debug\System.Composition.Runtime.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\bin\Debug\System.Composition.TypedParts.xml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.csprojAssemblyReference.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.csproj.CopyComplete
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceInterface\obj\Debug\ServiceInterface.dll

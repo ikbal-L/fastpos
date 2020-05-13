@@ -19,10 +19,12 @@ namespace ConsoleApp
         //string message;
 
         [Import(typeof(IProductService))]
+
         private IProductService productService = null;
 
         [Import(typeof(ICategorieService))]
         private ICategorieService categorieService = null;
+
 
         static HttpClient client = new HttpClient();
 
@@ -39,6 +41,7 @@ namespace ConsoleApp
 
 
         static async Task Main(string[] args)
+
         {/*
             client.BaseAddress = new Uri("http://192.168.1.3:8080/");
             client.DefaultRequestHeaders.Accept.Clear();
@@ -126,14 +129,17 @@ namespace ConsoleApp
             Console.WriteLine(products3?.Count);
             products3.ForEach(p => Console.WriteLine($"{p.Id} {p.Name}"));
             Console.ReadKey();           
+
         }
 
         private void Compose()
         {
+
             //AssemblyCatalog catalog1 = new AssemblyCatalog(System.Reflection.Assembly.GetExecutingAssembly());
            /* AssemblyCatalog catalog = new AssemblyCatalog("ServiceLib.dll");
             CompositionContainer container = new CompositionContainer(catalog);
             container.SatisfyImportsOnce(this);*/
+
 
             AssemblyCatalog catalog2 = new AssemblyCatalog("ServiceLib.dll");
             CompositionContainer container = new CompositionContainer(catalog2);

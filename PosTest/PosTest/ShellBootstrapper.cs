@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using PosTest.ViewModels;
+using PosTest.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
@@ -20,6 +21,11 @@ namespace PosTest
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            //var splashScreen = new SplashScreenView();
+            //splashScreen.Show();
+            //System.Threading.Thread.Sleep(7000);
+            //splashScreen.Close();
+
             DisplayRootViewFor<MainViewModel>();
         }
 

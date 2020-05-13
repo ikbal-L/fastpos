@@ -18,6 +18,8 @@
                 <ResourceDictionary Source="/Resources/DataTemplates/OrdreItem.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Additives.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
+
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

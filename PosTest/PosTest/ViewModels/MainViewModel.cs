@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using PosTest.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace PosTest.ViewModels
 
         private string _windowTitle = WindowTitleDefault;
         private string _buttonStr = "Login";
+
+
+
 
         public String ButtonStr { get=> _buttonStr; set { _buttonStr = value; NotifyOfPropertyChange(() => ButtonStr); } }
 
@@ -45,9 +49,22 @@ namespace PosTest.ViewModels
 
         protected override void OnActivate()
         {
+            //var splashScreen = new SplashScreenView();
+            //splashScreen.Show();
+            //System.Threading.Thread.Sleep(7000);
+            //Task.Factory.StartNew(() =>
+            //{
+            //    
+            //    this.Dispatcher.Invoke(() =>
+            //    {
+            //        DisplayRootViewFor<MainViewModel>();
+            //        splashScreen.Close();
+            //    });
+            //});
             LoginViewModel toActivateViewModel = new LoginViewModel();
             toActivateViewModel.Parent = this;
             ActivateItem(toActivateViewModel);
+            //splashScreen.Close();
         }
         public void showLogin()
         {
