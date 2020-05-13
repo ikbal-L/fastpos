@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Caliburn.Micro;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
 using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
-    public class Additive
+    public class Additive : PropertyChangedBase
     {
         private string _backgroundString = null;
 
@@ -25,8 +27,14 @@ namespace ServiceInterface.Model
         public string BackgroundString
         {
             get => _backgroundString ?? "#00f39c12";
-            set => _backgroundString = value;
+          set
+            {
+                _backgroundString = value;
+                NotifyOfPropertyChange(nameof(Background));
+            }
         }
+
+        [ScriptIgnore]
         public Brush Background
         {
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));

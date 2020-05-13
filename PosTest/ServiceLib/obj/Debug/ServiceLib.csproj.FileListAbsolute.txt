@@ -71,7 +71,9 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.Hosting.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.Runtime.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.TypedParts.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Net.Http.Extensions.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Net.Http.Primitives.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Windows.Interactivity.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceInterface.pdb
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\ServiceInterface.dll.config
@@ -86,9 +88,8 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.Hosting.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.Runtime.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.TypedParts.xml
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csprojAssemblyReference.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CopyComplete
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.pdb
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csprojAssemblyReference.cache

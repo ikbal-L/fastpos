@@ -62,6 +62,8 @@ D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleAp
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.csproj.CopyComplete
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.exe
 D:\6-StoryDev\Softlines\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.pdb
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.csprojAssemblyReference.cache
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\ConsoleApp.exe.config
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\ConsoleApp.exe
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\ConsoleApp.pdb
@@ -78,8 +80,10 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Composition.Hosting.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Composition.Runtime.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Composition.TypedParts.dll
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Net.Http.Extensions.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Net.Http.Primitives.dll
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Windows.Interactivity.dll
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\ServiceInterface.pdb
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\ServiceInterface.dll.config
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\ServiceLib.pdb
@@ -95,9 +99,6 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Composition.Hosting.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Composition.Runtime.xml
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Composition.TypedParts.xml
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\bin\Debug\System.Net.Http.Formatting.xml
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.csprojAssemblyReference.cache
-C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.csproj.CopyComplete
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.exe
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\ConsoleApp\obj\Debug\ConsoleApp.pdb
