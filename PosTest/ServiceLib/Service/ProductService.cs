@@ -44,7 +44,7 @@ namespace ServiceLib.Service
         public  async Task<List<Product>> getProductsREST()
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://127.0.0.1/");
+            client.BaseAddress = new Uri("http://127.0.0.1:5000/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             List<Product> taskPproducts = await GetProductAsync(client, "/Products");
@@ -56,8 +56,10 @@ namespace ServiceLib.Service
         {
             List<Product> products = null;
             HttpResponseMessage response = await client.GetAsync(path);
+
             if (response.IsSuccessStatusCode)
             {
+
                 products = await response.Content.ReadAsAsync<List<Product>>();
             }
             return products;

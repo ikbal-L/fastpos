@@ -13,6 +13,8 @@ namespace PosTest.ViewModels
 {
     public class ProductsViewModel : Screen
     {
+        public bool ListViewSwitcher { get; set; }
+
         public int pageSize;
         public IProductService productService;
 

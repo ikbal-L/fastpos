@@ -18,37 +18,59 @@
 
     <Grid Background="#FFECEEEF">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="70*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label 
             Grid.Column="0" 
             Grid.Row="0" 
-            Grid.ColumnSpan="2"  
+            Grid.ColumnSpan="3"  
             Name="Titel" 
             Content="Settings" 
-            Background="#FF3367D6" FontSize="18" FontWeight="Bold" Foreground="White"/>
+            Background="#FF40508D" FontSize="18" FontWeight="Bold" Foreground="White"/>
         
         <StackPanel 
             Grid.Column="0" 
             Grid.Row="1" 
-            Margin="10,5"
+            Margin="5,5"
             >
             
             <Button Name="Product" Content="Products" Height="35"/>
         
         </StackPanel>
-
-        <ContentControl 
+        <GridSplitter 
+            ResizeDirection="Columns" 
             Grid.Column="1" 
             Grid.Row="1"
+            Height="Auto" 
+            Width="5" 
+             Background="#FF40508D"
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Margin="0"/>
+
+        <ContentControl 
+            Grid.Column="2" 
+            Grid.Row="1"
             Content="{Binding CurrentView }" 
-            Margin="20,0,20,0" 
+            Margin="10,0,10,0" 
             Background="#FF455868" />
+        <TextBlock 
+            Height="25" 
+            Foreground="White" 
+            Background="#FF40508D" 
+            Grid.Column="0" 
+            Grid.Row="2" 
+            Grid.ColumnSpan="3">
+            
+                 SoftLines
+        </TextBlock>
 
     </Grid>
 </UserControl>

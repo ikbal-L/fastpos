@@ -41,6 +41,21 @@
             <Button Content="{Binding Name}" Height="40"></Button>
         </StackPanel>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type src:Product}" x:Key="ProductKanbanTemplate" >
+        <StackPanel Orientation="Horizontal">
+            <Button Content="{Binding Name}" Height="80"></Button>
+        </StackPanel>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="MyItemTemplate">
+        <Control x:Name="myControl" Template="{StaticResource ProductGridTemplate}" />
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding ListViewSwitcher}" Value="True">
+                <Setter TargetName="myControl" Property="Template" Value="{StaticResource ProductKanbanTemplate}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
 
 

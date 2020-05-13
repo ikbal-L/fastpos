@@ -136,6 +136,8 @@ C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.M
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.Metro.IconPacks.Unicons.dll
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.Metro.IconPacks.WeatherIcons.dll
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.Metro.IconPacks.Zondicons.dll
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignColors.dll
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignThemes.Wpf.dll
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Newtonsoft.Json.dll
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\NLog.dll
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\ServiceInterface.dll
@@ -203,6 +205,9 @@ C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.M
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.Metro.IconPacks.WeatherIcons.xml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.Metro.IconPacks.Zondicons.pdb
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MahApps.Metro.IconPacks.Zondicons.xml
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignColors.pdb
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignThemes.Wpf.pdb
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignThemes.Wpf.xml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\Newtonsoft.Json.xml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\NLog.xml
@@ -219,12 +224,14 @@ C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources\IconsNonShared.baml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources\Styles\Button.baml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Resources\Styles\Brushes.baml
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\SplashScreenView.baml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\CategoryTabView.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\CheckoutView.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\LoginView.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\MainView.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\ProductsView.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\SettingsView.g.cs
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\SplashScreenView.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\SubViews\ProductNavigation.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\App.g.cs
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\GeneratedInternalTypeHelper.g.cs
@@ -250,8 +257,3 @@ C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.c
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.csproj.CopyComplete
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.exe
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.pdb
-C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignColors.dll
-C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignThemes.Wpf.dll
-C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignColors.pdb
-C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignThemes.Wpf.pdb
-C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\PosTest\bin\Debug\MaterialDesignThemes.Wpf.xml

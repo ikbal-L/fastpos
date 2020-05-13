@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTesting", "XUnitTestin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockPanelTest", "..\..\wpfexamples\DockPanelTest\DockPanelTest.csproj", "{AB181DE1-287E-471F-9C07-FCC88A34C8C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{E72329CF-1532-44FA-8B6D-3BB30804D8E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MahappTutorial", "MahappTutorial\MahappTutorial.csproj", "{85A972DA-5023-4DB9-8349-08ABB3B3E7B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,14 @@ Global
 		{AB181DE1-287E-471F-9C07-FCC88A34C8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB181DE1-287E-471F-9C07-FCC88A34C8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB181DE1-287E-471F-9C07-FCC88A34C8C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E72329CF-1532-44FA-8B6D-3BB30804D8E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E72329CF-1532-44FA-8B6D-3BB30804D8E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E72329CF-1532-44FA-8B6D-3BB30804D8E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E72329CF-1532-44FA-8B6D-3BB30804D8E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85A972DA-5023-4DB9-8349-08ABB3B3E7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85A972DA-5023-4DB9-8349-08ABB3B3E7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85A972DA-5023-4DB9-8349-08ABB3B3E7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85A972DA-5023-4DB9-8349-08ABB3B3E7B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

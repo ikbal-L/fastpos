@@ -87,6 +87,7 @@ C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.Runtime.xml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Composition.TypedParts.xml
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csprojAssemblyReference.cache
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CoreCompileInputs.cache
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.csproj.CopyComplete
 C:\Users\User\Source\Repos\fast-pos-frontend\PosTest\ServiceLib\obj\Debug\ServiceLib.dll
