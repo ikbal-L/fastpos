@@ -222,7 +222,7 @@ namespace PosTest.ViewModels
         internal void InitCategoryColors()
         {
             foreach (var category in Categories)
-                category.BackGroundColor = DefaultColors.Category_DefaultBackground;
+                category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();
         }
 
         public void Close()
@@ -360,9 +360,9 @@ namespace PosTest.ViewModels
             if(param is Category)
             { 
                 Category category = param as Category;
-                category.BackGroundColor = DefaultColors.Category_SelectedBackground;
+                category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
                 if(CurrentCategory != null)
-                    CurrentCategory.BackGroundColor = DefaultColors.Category_DefaultBackground;
+                    CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
                 CurrentCategory = category;
                 FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
 
@@ -381,7 +381,7 @@ namespace PosTest.ViewModels
                         FilteredProducts.Filter = null;
 
                         if (CurrentCategory != null)
-                            CurrentCategory.BackGroundColor = DefaultColors.Category_DefaultBackground;
+                            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
 
                         CurrentCategory = null;
                         var muchInDemanadProducts = AllRequestedProducts.Where(p => p.IsMuchInDemand == true).ToList();

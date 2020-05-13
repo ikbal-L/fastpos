@@ -19,11 +19,7 @@ namespace ServiceLib.Service
         public ICollection<Product> GetAllProducts()
         {
             return FakeServices.Products;
-
         }
-
-
-
 
         public List<Product> createProducts()
         {
@@ -39,26 +35,38 @@ namespace ServiceLib.Service
             return products;
         }
 
-
-
         public  async Task<List<Product>> getProductsREST()
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://127.0.0.1/");
+            client.BaseAddress = new Uri("http://127.0.0.1:5000/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            List<Product> taskPproducts = await GetProductAsync(client, "/Products");
+            Console.WriteLine(11);
+
+            List<Product> taskPproducts = await GetProductAsync(client, "/products");
+            Console.WriteLine(12);
           
             return taskPproducts;
         }
 
         private async Task<List<Product>> GetProductAsync(HttpClient client, string path)
         {
+            Console.WriteLine(21);
             List<Product> products = null;
-            HttpResponseMessage response = await client.GetAsync(path);
+            Console.WriteLine(21);
+            var taskres = await client.GetAsync(path);
+            //other work
+            var result = taskres;
+            Console.WriteLine(result.StatusCode);
+            Console.WriteLine(result.Content);
+            Console.WriteLine(result.Headers);
+            //HttpResponseMessage response = await client.GetAsync(path);
+            var response = result;
+            Console.WriteLine(response.ToString());
             if (response.IsSuccessStatusCode)
             {
-                products = await response.Content.ReadAsAsync<List<Product>>();
+                products =await response.Content.ReadAsAsync<List<Product>>();
+                Console.WriteLine(products.Count);
             }
             return products;
         }
