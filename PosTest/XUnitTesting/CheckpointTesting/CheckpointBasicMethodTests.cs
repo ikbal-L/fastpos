@@ -827,7 +827,7 @@ namespace XUnitTesting.CheckpointTesting
             checkoutVM.ActionKeyboard(ActionButton.Payment);
 
             //Assert  
-            Assert.Equal(price1 + price2, checkoutVM.CurrentOrder.PayedAmount);
+            Assert.Equal(price1 + price2, checkoutVM.CurrentOrder.GivenAmount);
             Assert.Equal(0, checkoutVM.CurrentOrder.ReturnedAmount);
             Assert.Empty(checkoutVM.NumericZone);
 
@@ -840,7 +840,7 @@ namespace XUnitTesting.CheckpointTesting
             //Assert  
             Assert.Equal(price1+price2, checkoutVM.CurrentOrder.Total);
             Assert.Equal(price1+price2-50, checkoutVM.CurrentOrder.NewTotal);
-            Assert.Equal(price1 + price2 - 50, checkoutVM.CurrentOrder.PayedAmount);
+            Assert.Equal(price1 + price2 - 50, checkoutVM.CurrentOrder.GivenAmount);
             Assert.Equal(0, checkoutVM.CurrentOrder.ReturnedAmount);
             Assert.Empty(checkoutVM.NumericZone);
 

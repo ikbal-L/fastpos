@@ -600,7 +600,7 @@ namespace PosTest.ViewModels
                         return;
                     }
 
-                    CurrentOrder.PayedAmount = payedAmount;
+                    CurrentOrder.GivenAmount = payedAmount;
                     CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
                     NumericZone = "";
                     SaveCurrentOrderAndPassOrderToKitchen();

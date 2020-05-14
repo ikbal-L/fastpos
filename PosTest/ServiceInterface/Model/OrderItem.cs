@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,11 +33,21 @@ namespace ServiceInterface.Model
             Quantity = quantity;
         }
 
-        public int Id { set; get; }
+        [DataMember]
+        public long Id { set; get; }
+
         public Order Order { get; set; }
-        public int OrderId { get => Order.Id; }
-        public int ProductId { get => Product.Id; }
+        
+        [DataMember]
+        public long OrderId { get; set; }
+        
+        [DataMember]
+        public long ProductId { get; set; }
+        
+        [DataMember]
         public decimal UnitPrice { get; set; }
+
+        [DataMember]
         public int Quantity 
         { 
             get => _quantity;
@@ -52,15 +63,15 @@ namespace ServiceInterface.Model
                     DiscountAmount = Total * _discountPercentage / 100;
                 }
                 Order.Total = Order.Total + UnitPrice * (_quantity - oldQuqntity);
-                //decimal total = 0;
-                //Order.OrderItems.Cast<OrderItem>().ToList().ForEach(item => total += item.Total);
-                //Order.Total = total;
             } 
         }
+
+        [DataMember]
         public decimal Total {
             get => Quantity * UnitPrice;          
         }
 
+        [DataMember]
         public decimal DiscountAmount
         {
             get => _discountAmount;
@@ -68,22 +79,13 @@ namespace ServiceInterface.Model
             {
                 _discountAmount = value;
                 NotifyOfPropertyChange(() => DiscountAmount);
-                //Execute GETTER of Order.DiscountAmount to modify the Order.NewTotal
-                //This GETTER is usable for Test because NotifyOfPropertyChange() executes the getter
-               /* if (IsRunningFromXUnit)
-                {
-                    var a = Order.DiscountAmount;
-                }
-                else
-                */
-                {
-                    Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
-                    Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
-                    Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
-                }
+                Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
+                Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }
         }
 
+        [DataMember]
         public decimal DiscountPercentatge
         {
             get => _discountPercentage;
@@ -95,6 +97,7 @@ namespace ServiceInterface.Model
                 Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
             }
         }
+
 
         public Additive SelectedAdditive 
         { 
@@ -118,6 +121,9 @@ namespace ServiceInterface.Model
             __selectedAdditive = null;
             NotifyOfPropertyChange(()=>SelectedAdditive);
         }
+
+        [DataMember]
+        public List<long> AdditiveIds; 
 
         public BindableCollection<Additive> Additives 
         { 

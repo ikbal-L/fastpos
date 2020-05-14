@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class Customer
+    public class User
     {
         [DataMember]
         public long Id { get; set; }
@@ -17,6 +17,9 @@ namespace ServiceInterface.Model
         public string Name { get; set; }
 
         [DataMember]
-        public string Mobile { get; set; }
-    }    
+        public string Password { get; set; }
+
+        [DataMember]
+        public string PhoneNumber { get; set; }
+    }
 }

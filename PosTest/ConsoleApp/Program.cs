@@ -40,43 +40,11 @@ namespace ConsoleApp
         }
 
 
-        static async Task Main(string[] args)
-
-        {/*
-            client.BaseAddress = new Uri("http://192.168.1.3:8080/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            Task<List<Product>> taskPproducts =  GetProductAsync("/Products");
-            taskPproducts.Wait();
-            List<Product> products = taskPproducts.Result;
-
-            products.ForEach(p => Console.WriteLine(p.Id + p.Name));*/
-
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://127.0.0.1:5000/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            List<Product> products = null;
-            HttpResponseMessage response = await client.GetAsync("/products");
-            Console.WriteLine(response.Content);
-            string resp;
-            if (response.IsSuccessStatusCode)
-            {
-                resp = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(resp);
-                var items = JsonConvert.DeserializeObject<List<Product>>(resp);
-                products = await response.Content.ReadAsAsync<List<Product>>();
-            }
-            //return products;
-            //List<Product> taskPproducts = await GetProductAsync(client, "/Products");
-            Console.WriteLine(products.Count);
-            Console.ReadKey();
-
+        static void Main(string[] args)
+        {
             Program p = new Program();
-            await p.Run();
-            //p.CalRestAsync();
-
-
+            p.Run();
+            Console.ReadKey();
         }
 
         private async void CalRestAsync()
@@ -90,44 +58,53 @@ namespace ConsoleApp
 
         }
 
-        async Task Run()
+        void Run()
         {
             Compose();
             Console.WriteLine(1);
             Console.WriteLine(productService.GetAllProducts().Count);
             //Console.WriteLine(message+service.getProductsREST().Count);
             //service.getProductsREST().ForEach(p => Console.WriteLine(p.Id + p.Name));
-/*            var products = this.productService.GetAllProducts();
-            List<Product> products2;
-            var cat1 = new Category { Id = 1, Description="abc", Name = "def", BackgroundString = "green",  };
-            var cat2 = new Category { Id = 1, Description="abc", Name = "def", BackgroundString = "green",  };
-            var cat3 = new Category { Id = 1, Description="abc", Name = "def", BackgroundString = "green",  };
-            var cats = new List<Category>();
-            cats.Add(cat1);
-            cats.Add(cat2);
-            cats.Add(cat3);
+            /*            var products = this.productService.GetAllProducts();
+                        List<Product> products2;
+                        var cat1 = new Category { Id = 1, Description="abc", Name = "def", BackgroundString = "green",  };
+                        var cat2 = new Category { Id = 1, Description="abc", Name = "def", BackgroundString = "green",  };
+                        var cat3 = new Category { Id = 1, Description="abc", Name = "def", BackgroundString = "green",  };
+                        var cats = new List<Category>();
+                        cats.Add(cat1);
+                        cats.Add(cat2);
+                        cats.Add(cat3);
 
-            var currentProductId = 1;
-             products2 = new List<Product>()
+                        var currentProductId = 1;
+                         products2 = new List<Product>()
+                        {
+                            new Platter { Id = currentProductId++, Name = "Pizza maison", Price = 15, CategorieId = 1,  Category=cat1 },
+                            new Platter { Id = currentProductId++, Name = "PIZZA VIANDES", Price = 29, CategorieId = 1,  Category=cat2},
+                            new Platter { Id = currentProductId++, Name = "PIZZA POULET", Price = 26, CategorieId = 1,  Category=cat3},
+                            new Platter { Id = currentProductId++, Name = "PIZZA BOEUF CHILI", Price = 29, CategorieId = 1,  Category=cat2},
+                            new Platter { Id = currentProductId++, Name = "PIZZA BUFFALO", Price = 26, CategorieId = 1,  Category=cat2},
+                        };
+
+                        var platter = new Platter { Id = currentProductId++, Name = "PIZZA BUFFALO", Price = 26, CategorieId = 1, Category=cat1 };
+                        var jsserializer = new JavaScriptSerializer();
+                        //jsserializer.RecursionLimit = 99999999;
+                        cat1.Products = products2;
+                        var json = jsserializer.Serialize(products);
+            */
+            Product p = new Product
             {
-                new Platter { Id = currentProductId++, Name = "Pizza maison", Price = 15, CategorieId = 1,  Category=cat1 },
-                new Platter { Id = currentProductId++, Name = "PIZZA VIANDES", Price = 29, CategorieId = 1,  Category=cat2},
-                new Platter { Id = currentProductId++, Name = "PIZZA POULET", Price = 26, CategorieId = 1,  Category=cat3},
-                new Platter { Id = currentProductId++, Name = "PIZZA BOEUF CHILI", Price = 29, CategorieId = 1,  Category=cat2},
-                new Platter { Id = currentProductId++, Name = "PIZZA BUFFALO", Price = 26, CategorieId = 1,  Category=cat2},
+                Id = 1,
+                Name = "prod1",
+                CategorieId = 1,
+                BackgroundString = "Green",
+                AvailableStock = 222,
+                IsNotifying = true
             };
-
-            var platter = new Platter { Id = currentProductId++, Name = "PIZZA BUFFALO", Price = 26, CategorieId = 1, Category=cat1 };
-            var jsserializer = new JavaScriptSerializer();
-            //jsserializer.RecursionLimit = 99999999;
-            cat1.Products = products2;
-            var json = jsserializer.Serialize(products);
-*/            
-            Console.WriteLine(2);
-            var products3 = await productService.getProductsREST();
-            Console.WriteLine(3);
-            Console.WriteLine(products3?.Count);
-            products3.ForEach(p => Console.WriteLine($"{p.Id} {p.Name}"));
+            var status = productService.SaveProduct(p);
+            var p1 = productService.GetProduct(1);
+            
+            Console.WriteLine(p1.IsMuchInDemand);
+ 
             Console.ReadKey();           
 
         }

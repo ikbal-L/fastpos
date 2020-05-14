@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace ServiceInterface.Model
 {
@@ -23,28 +25,37 @@ namespace ServiceInterface.Model
             BuyerId = buyerId;
         }
 
-        public int Id { get; set; }
+        [DataMember]
+        public long Id { get; set; }
+
+        [DataMember]
         public string BuyerId { get; set; }
 
-        public DateTime dateOrder { get; set; }
+        [DataMember]
+        public DateTime OrderTime { get; set; }
 
-        public String Name { get; set; }
-        public String Type { get; set; }
-        public String Color { get; set; }
+        [DataMember]
+        public OrderType Type { get; set; }
 
+       [DataMember]
+        public OrderState State { get; set; }
+
+        //get from state
+        public string Color { get; set; }
+
+        [DataMember]
         public decimal Total 
         {
             get => _total;
             set
             {
                 _total = value;
-                //NewTotal = _total - _discountAmount;
                 NotifyOfPropertyChange(() => NewTotal);
                 NotifyOfPropertyChange(() => Total);
             }
-                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
-        
+
+        [DataMember]
         public decimal NewTotal 
         {
             get
@@ -54,15 +65,9 @@ namespace ServiceInterface.Model
                 var allDiscounts = _discountAmount + sumItemDiscounts;
                 return Total - allDiscounts;
             }
-
-           /* set
-            {
-                _newTotal = value;
-                NotifyOfPropertyChange(() => NewTotal);
-            }*/
-                
         }
 
+        [DataMember]
         public decimal DiscountAmount 
         {
             get =>  _discountAmount ;
@@ -75,6 +80,7 @@ namespace ServiceInterface.Model
             }
         }
 
+        [DataMember]
         public decimal TotalDiscountAmount
         {
             get
@@ -87,6 +93,7 @@ namespace ServiceInterface.Model
             }
         }
 
+        [DataMember]
         public decimal DiscountPercentage 
         {
             get => _discountPercentage;
@@ -99,17 +106,19 @@ namespace ServiceInterface.Model
                 //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
 
-        public decimal PayedAmount 
+        [DataMember]
+        public decimal GivenAmount 
         {
             get => _payedAmount;
             set
             {
                 _payedAmount = value;
-                NotifyOfPropertyChange(() => PayedAmount);
+                NotifyOfPropertyChange(() => GivenAmount);
             }
                 //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
 
+        [DataMember]
         public decimal ReturnedAmount 
         {
             get => _returnedAmount;
@@ -131,7 +140,26 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => SelectedOrderItem);
             }
         }
+        
         public BindableCollection<OrderItem> OrderItems { get; set; }
+
+        [DataMember]
+        public List<long> OrderItemIds { get; set; }
+
+        public Session Session { get; set; }
+
+        [DataMember]
+        public long SessionId { get; set; }
+
+        public Customer Customer { get; set; }
+
+        [DataMember]
+        public long CustomerId { get; set; }
+
+        public Table Table { get; set; }
+
+        [DataMember]
+        public Table TableId { get; set; }
 
         public void AddItem(Product product, decimal unitPrice, bool setSelected, int quantity = 1)
         {
@@ -171,5 +199,19 @@ namespace ServiceInterface.Model
             Total -= item.Total;
             OrderItems.Remove(item);
         }
+    }
+
+    public enum OrderState 
+    {
+        Ordered,
+        Prepared,
+        Ready,
+        Delivered
+    }
+    public enum OrderType
+    {
+        Delivery,
+        OnTable,
+        Takeaway
     }
 }

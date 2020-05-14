@@ -3,17 +3,17 @@
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class Ingredient
+    public class DebtPayement
     {
         [DataMember]
         public long Id { get; set; }
 
-        public Product Product { get; set; }
+        [DataMember]
+        public long CustomerId { get; set; }
+
+        public Customer Customer { get; set; }
 
         [DataMember]
-        public long ProductId { get; set; }
-
-        [DataMember]
-        public decimal Quantity { get; set; }
+        public decimal  Amount { get; set; }
     }
 }

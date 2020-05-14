@@ -8,15 +8,20 @@ using System.Threading.Tasks;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class Customer
+    public class Discard
     {
         [DataMember]
-        public long Id { get; set; }
+        public long  Id { get; set; }
+
+        public Product Product { get; set; }
 
         [DataMember]
-        public string Name { get; set; }
+        public long ProductId { get; set; }
 
         [DataMember]
-        public string Mobile { get; set; }
-    }    
+        public DateTime DateTime { get; set; }
+
+        [DataMember]
+        public decimal Quantity { get; set; }
+    }
 }

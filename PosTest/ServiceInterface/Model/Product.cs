@@ -13,12 +13,12 @@ namespace ServiceInterface.Model
     public class Product : PropertyChangedBase
     {
         private string _backgroundString = null;
-        private int _categoryId;
+        private long _categoryId;
         private bool _isMuchInDemand;
 
 
         [DataMember]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]
@@ -37,7 +37,7 @@ namespace ServiceInterface.Model
             }
         }
         [DataMember]
-        public int CategorieId
+        public long CategorieId
         {
             get => Category == null ? _categoryId : Category.Id;
             set { _categoryId = value; }
@@ -68,7 +68,6 @@ namespace ServiceInterface.Model
             
         }
 
-        [DataMember]
         public virtual Brush Background { 
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
         }

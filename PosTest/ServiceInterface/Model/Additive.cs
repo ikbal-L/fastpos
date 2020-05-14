@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
 using System.Windows.Media;
 
@@ -19,11 +20,20 @@ namespace ServiceInterface.Model
             //ParentOrderItem = additive.ParentOrderItem;
             BackgroundString = additive.BackgroundString;
         }
+        [DataMember]
+        public long Id { get; set; }
 
-        public int Id { get; set; }
+        [DataMember]
         public string Description { get; set; }
+
         public List<Ingredient> Ingrediants { get; set; }
+
+        [DataMember]
+        public List<long> IdIngrediants { get; set; }
+        
         public OrderItem ParentOrderItem { get; set; }
+
+        [DataMember]
         public string BackgroundString
         {
             get => _backgroundString ?? "#00f39c12";
@@ -34,7 +44,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        [ScriptIgnore]
+        [DataMember]
         public Brush Background
         {
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));

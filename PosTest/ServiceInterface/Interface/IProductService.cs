@@ -13,5 +13,10 @@ namespace ServiceInterface.Interface
 
         List<Product> createProducts();
         Task<List<Product>> getProductsREST();
+
+        bool SaveProduct(Product product);
+        bool SaveProducts(IEnumerable<Product> products);
+
+        Product GetProduct(long id);
     }
 }

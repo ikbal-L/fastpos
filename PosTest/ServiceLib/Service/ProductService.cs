@@ -1,4 +1,5 @@
-﻿using ServiceInterface.Interface;
+﻿using Newtonsoft.Json;
+using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
@@ -64,9 +65,53 @@ namespace ServiceLib.Service
             return products;
         }
 
+        public bool SaveProduct(Product product)
+        {
+            string json = JsonConvert.SerializeObject(product,
+                            Newtonsoft.Json.Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var url = "http://127.0.0.1:5000/SaveProduct";
+            var client = new HttpClient();
+
+            var response =  client.PostAsync(url, data).Result;
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            return false;
+        }
+
+        public bool SaveProducts(IEnumerable<Product> products)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public Product GetProduct(long id)
+        {
+            Product product=null;
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://127.0.0.1:5000/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response = client.GetAsync($"/product/{id}").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                product =  response.Content.ReadAsAsync<Product>().Result;
+
+            }
+            return product;
+
         }
     }
 }

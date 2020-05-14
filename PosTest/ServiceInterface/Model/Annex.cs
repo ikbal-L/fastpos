@@ -8,15 +8,18 @@ using System.Threading.Tasks;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class Customer
+    public class Annex
     {
         [DataMember]
         public long Id { get; set; }
 
         [DataMember]
-        public string Name { get; set; }
+        public string  Name { get; set; }
 
         [DataMember]
-        public string Mobile { get; set; }
-    }    
+        public string Address { get; set; }
+
+        [DataMember]
+        public string ServerLicenceKey { get; set; }
+    }
 }
