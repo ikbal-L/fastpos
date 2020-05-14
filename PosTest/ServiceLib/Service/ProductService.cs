@@ -68,5 +68,10 @@ namespace ServiceLib.Service
         {
             //throw new NotImplementedException();
         }
+
+        public void DeleteProduct(long idProduct)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

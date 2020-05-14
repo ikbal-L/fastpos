@@ -258,3 +258,5 @@ C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.c
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.csproj.CopyComplete
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.exe
 C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\PosTest.pdb
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\ProductEditView.g.cs
+C:\Users\User\source\repos\fast-pos-frontend\PosTest\PosTest\obj\Debug\Views\ProductEditView.baml

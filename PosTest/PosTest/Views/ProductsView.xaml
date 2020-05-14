@@ -23,73 +23,97 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="GhostWhite" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Grid.Row="0" Name="controller" Background="Beige">
-            <Grid  Background="AliceBlue" Margin="5,5,5,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="New Product" FontSize="22"></Label>
-                <TextBox Grid.Column="1" materialDesign:HintAssist.Hint="Filter" FontSize="18"></TextBox>
-            </Grid>
-            <Grid Background="Azure" Margin="5,5,5,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="25*" />
-                    <ColumnDefinition Width="25*"/>
-                    <ColumnDefinition Width="25*"/>
-                    <ColumnDefinition Width="25*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Button    Style="{StaticResource MaterialDesignRaisedDarkButton}" Margin="2,0,2,0">
-                        <iconPacks:PackIconBoxIcons Kind="RegularListPlus" />
-                        
-                    </Button>
-                    <Button   Style="{StaticResource MaterialDesignRaisedDarkButton}" Margin="2,0,2,0">
-                        <iconPacks:PackIconFeatherIcons Kind="Trash2" />
-                    </Button>
-                    <Button Name="Edit" Margin="2,0,2,0">
-                        <iconPacks:PackIconFeatherIcons Kind="Edit" />
-                    </Button>
-                </StackPanel>
-                <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Label Grid.Column="0" Content="1-20/40" FontSize="16"></Label>
-                    <Button Margin="2,0,2,0">
-                        <iconPacks:PackIconFeatherIcons Kind="ChevronLeft" />
-                    </Button>
-                    <Button Margin="2,0,2,0">
-                        <iconPacks:PackIconFeatherIcons Kind="ChevronRight" />
-                    </Button>
-
-                    <Button Margin="2,0,2,0">
-                        <iconPacks:PackIconFeatherIcons Kind="Grid" />
-                    </Button>
-                    <Button Margin="2,0,2,0">
-                        <iconPacks:PackIconFeatherIcons Kind="List" />
-                    </Button>
-                </StackPanel>
-            </Grid>
-        </StackPanel>
-
-        <ListView Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" ItemsSource="{Binding Products}" >
-            <ListView.View >
-                <GridView >
-                    <GridViewColumn DisplayMemberBinding="{Binding Id}" Header="Id" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Description" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Price" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Unit}" Header="Unit" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Category.Name}" Header="Category" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-
+    <materialDesign:DialogHost CloseOnClickAway="True" >
         
-    </Grid>
+        <materialDesign:DialogHost.DialogContent>
+            <Grid Margin="20">
+                <TextBox Text="{Binding CurrentProduct.Id}" />
+                <TextBox Text="{Binding CurrentProduct.Name}" />
+                <TextBox Text="{Binding CurrentProduct.Description}" />
+                <TextBox Text="{Binding CurrentProduct.Price}" />
+                <TextBox Text="{Binding CurrentProduct.Unit}" />
+                <CheckBox Checked="{Binding CurrentProduct.IsMuchInDemand}" />
+                <ComboBox Text="{Binding CurrentProduct.CategorieId}" />
+                
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
+       
+        <Grid Background="GhostWhite" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Name="controller" Background="Beige">
+                <Grid  Background="AliceBlue" Margin="5,5,5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="New Product" FontSize="22"></Label>
+                    <TextBox Grid.Column="1" materialDesign:HintAssist.Hint="Filter" FontSize="18"></TextBox>
+                </Grid>
+                <Grid Background="Azure" Margin="5,5,5,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25*" />
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button Width="100" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Content="Show Dialog"/>
+                            <TextBlock Text="{Binding CurrentProduct.Name}" />
+
+                        <Button    Style="{StaticResource MaterialDesignRaisedDarkButton}" Margin="2,0,2,0">
+                            <iconPacks:PackIconBoxIcons Kind="RegularListPlus"   />
+                        
+                        </Button>
+                        <Button   Style="{StaticResource MaterialDesignRaisedDarkButton}" Margin="2,0,2,0"
+                                  cal:Message.Attach="[Event Click] = [Action DeleteCommand]"
+                                  >
+                            <iconPacks:PackIconFeatherIcons Kind="Trash2" />
+                        </Button>
+                        <Button Name="Edit" Margin="2,0,2,0" >
+                            <iconPacks:PackIconFeatherIcons Kind="Edit" />
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label Grid.Column="0" Content="1-20/40" FontSize="16"></Label>
+                        <Button Margin="2,0,2,0">
+                            <iconPacks:PackIconFeatherIcons Kind="ChevronLeft" />
+                        </Button>
+                        <Button Margin="2,0,2,0">
+                            <iconPacks:PackIconFeatherIcons Kind="ChevronRight" />
+                        </Button>
+
+                        <Button Margin="2,0,2,0">
+                            <iconPacks:PackIconFeatherIcons Kind="Grid" />
+                        </Button>
+                        <Button Margin="2,0,2,0">
+                            <iconPacks:PackIconFeatherIcons Kind="List" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+            <ListView 
+                Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" 
+                ItemsSource="{Binding Products}" 
+                SelectedItem="{Binding CurrentProduct}"
+                      >
+                <ListView.View >
+                    <GridView >
+                        <GridViewColumn DisplayMemberBinding="{Binding Id}" Header="Id" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Description" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Price" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Unit}" Header="Unit" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Category.Name}" Header="Category" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            
+        </Grid>
+    </materialDesign:DialogHost>
 </UserControl>

@@ -30,7 +30,7 @@ namespace PosTest.ViewModels
             set
             {
                 _currentProduct = value;
-                NotifyOfPropertyChange(() => _currentProduct);
+                NotifyOfPropertyChange(() => CurrentProduct);
 
             }
         }
@@ -46,6 +46,18 @@ namespace PosTest.ViewModels
             _pageSize = pageSize;
             _productsService = productsService;
             Products = CollectionViewSource.GetDefaultView(_productsService.GetAllProducts());
+        }
+
+        public void DeleteCommand()
+        {
+            if (_currentProduct == null)
+                return;
+            _productsService.DeleteProduct(_currentProduct.Id);
+        }     
+            public void EditProduct()
+        {
+            //var newDialogViewModel = new NewDialogViewModel();
+            //bool? result = this.windowManager.ShowDialog(newDialogViewModel);
         }
 
     }
