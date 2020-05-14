@@ -1,4 +1,5 @@
-﻿using PosTest.ViewModels;
+﻿using Moq;
+using PosTest.ViewModels;
 using ServiceInterface.Interface;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,10 @@ namespace XUnitTesting
         public ProductsViewModelTest()
         {
             _IProductServiceMock = new Mock<IProductService>();
-            _viewModel = new ProductsViewModel(5,_IProductServiceMock);
+            _viewModel = new ProductsViewModel(5,_IProductServiceMock.Object);
         }
 
+        [Fact]
         public void ShouldLoadProduct()
         {
         }
