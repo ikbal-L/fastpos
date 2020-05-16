@@ -17,7 +17,20 @@ namespace ServiceInterface.Model
     {
         private string _backGroundString=null;
         public int Id { get; set; }
-        public String Name { get; set; }
+        private String _name { get; set; }
+
+        public String Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                NotifyOfPropertyChange(() => Name);
+            }
+        }
+
+
+
         public string Description { get; set; }
 
         public string BackgroundString 
@@ -34,6 +47,14 @@ namespace ServiceInterface.Model
         public List<Product> Products { get; set; }
 
         public Brush BackGroundColor => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
+
+
+
+
+
+
+
+
     }
 
    

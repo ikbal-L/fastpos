@@ -15,5 +15,9 @@ namespace ServiceInterface.Interface
         Task<List<Product>> getProductsREST();
 
         void DeleteProduct(long idProduct);
+        
+        void SaveProduct(Product product);
+
+
     }
 }

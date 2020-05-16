@@ -11,8 +11,8 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignData Source=/Design/Products.xaml}" 
              d:DesignWidth="800" d:DesignHeight="450" 
+             xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
         >
-
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,19 +23,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <materialDesign:DialogHost CloseOnClickAway="True" >
-        
+    <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen}">
         <materialDesign:DialogHost.DialogContent>
-            <Grid Margin="20">
-                <TextBox Text="{Binding CurrentProduct.Id}" />
-                <TextBox Text="{Binding CurrentProduct.Name}" />
-                <TextBox Text="{Binding CurrentProduct.Description}" />
-                <TextBox Text="{Binding CurrentProduct.Price}" />
-                <TextBox Text="{Binding CurrentProduct.Unit}" />
-                <CheckBox Checked="{Binding CurrentProduct.IsMuchInDemand}" />
-                <ComboBox Text="{Binding CurrentProduct.CategorieId}" />
-                
-            </Grid>
+            <subviews:ProductEditView/>
         </materialDesign:DialogHost.DialogContent>
        
         <Grid Background="GhostWhite" >
@@ -62,21 +52,21 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                            <Button Width="100" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Content="Show Dialog"/>
-                            <TextBlock Text="{Binding CurrentProduct.Name}" />
-
-                        <Button    Style="{StaticResource MaterialDesignRaisedDarkButton}" Margin="2,0,2,0">
+                        <Button  Name="New" Margin="2,0,2,0"
+                                 cal:Message.Attach="[Event Click] = [Action NewCommand]"
+                                 Style="{StaticResource MaterialDesignRaisedDarkButton}">
                             <iconPacks:PackIconBoxIcons Kind="RegularListPlus"   />
+                        </Button>
                         
-                        </Button>
-                        <Button   Style="{StaticResource MaterialDesignRaisedDarkButton}" Margin="2,0,2,0"
-                                  cal:Message.Attach="[Event Click] = [Action DeleteCommand]"
-                                  >
-                            <iconPacks:PackIconFeatherIcons Kind="Trash2" />
-                        </Button>
-                        <Button Name="Edit" Margin="2,0,2,0" >
+                        <Button Name="Edit" Margin="2,0,2,0"  Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
                             <iconPacks:PackIconFeatherIcons Kind="Edit" />
                         </Button>
+                        
+                        <Button   Style="{StaticResource MaterialDesignRaisedDarkButton}" Margin="2,0,2,0"
+                                  cal:Message.Attach="[Event Click] = [Action DeleteCommand]">
+                            <iconPacks:PackIconFeatherIcons Kind="Trash2" />
+                        </Button>
+
                     </StackPanel>
                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Label Grid.Column="0" Content="1-20/40" FontSize="16"></Label>
@@ -99,13 +89,12 @@
 
             <ListView 
                 Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" 
-                ItemsSource="{Binding Products}" 
-                SelectedItem="{Binding CurrentProduct}"
-                      >
+                ItemsSource="{Binding Products, Mode=TwoWay}" 
+                SelectedItem="{Binding CurrentProduct}">
                 <ListView.View >
                     <GridView >
                         <GridViewColumn DisplayMemberBinding="{Binding Id}" Header="Id" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Name }" Header="Name"/>
                         <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Description" />
                         <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Price" />
                         <GridViewColumn DisplayMemberBinding="{Binding Unit}" Header="Unit" />

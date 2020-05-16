@@ -73,5 +73,10 @@ namespace ServiceLib.Service
         {
             throw new NotImplementedException();
         }
+
+        public void SaveProduct(Product product)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

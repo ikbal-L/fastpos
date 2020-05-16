@@ -18,7 +18,7 @@ namespace XUnitTesting
         public ProductsViewModelTest()
         {
             _IProductServiceMock = new Mock<IProductService>();
-            _viewModel = new ProductsViewModel(5,_IProductServiceMock.Object);
+            //_viewModel = new ProductsViewModel(5,_IProductServiceMock.Object);
         }
 
         [Fact]
