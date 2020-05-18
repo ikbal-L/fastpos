@@ -81,6 +81,7 @@ namespace PosTest.ViewModels
         {
             if (CurrentProduct != null)
             {
+                //verify thqt CurrentProduct is the nez one
                 if (CurrentProduct.Id == 0)
                     Products.Remove(CurrentProduct);
             }
