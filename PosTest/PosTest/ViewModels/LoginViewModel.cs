@@ -52,7 +52,7 @@ namespace PosTest.ViewModels
         
         public void Settings()
         {
-            SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService);
+            SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService, categorieService);
             settingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }

@@ -12,14 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PosTest.Views
+namespace MahappTutorial
 {
     /// <summary>
-    /// Interaction logic for SettingsView.xaml
+    /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class Window1 : UserControl
+
     {
-        public SettingsView()
+        public Window1()
         {
             InitializeComponent();
             

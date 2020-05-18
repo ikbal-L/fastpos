@@ -12,17 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PosTest.Views
+namespace PosTest.Views.SubViews
 {
     /// <summary>
-    /// Interaction logic for SettingsView.xaml
+    /// Interaction logic for ProductEditView.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class ProductEditView : UserControl
     {
-        public SettingsView()
+        public ProductEditView()
         {
             InitializeComponent();
-            
         }
     }
 }

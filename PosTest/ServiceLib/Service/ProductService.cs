@@ -113,5 +113,12 @@ namespace ServiceLib.Service
             return product;
 
         }
+
+        public void DeleteProduct(long idProduct)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

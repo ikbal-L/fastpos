@@ -15,25 +15,61 @@ namespace ServiceInterface.Model
         private string _backgroundString = null;
         private long _categoryId;
         private bool _isMuchInDemand;
-
+        private string _description;
+        private string _name;
+        private decimal _price;
+        private string _unit;
+        private Category _category;
 
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                NotifyOfPropertyChange(() => Name);
+            }
+        }
         [DataMember]
-        public string Description { get; set; }
+        public string Description { 
+            get => _description;
+            set
+            {
+                _description = value;
+                NotifyOfPropertyChange(() => Description);
+            }
+        }
         [DataMember]
-        public decimal Price { get; set; }
+        public decimal Price
+        {
+            get => _price;
+            set
+            {
+                _price = value;
+                NotifyOfPropertyChange(() => Price);
+            }
+        }
         [DataMember]
-        public string Unit { get; set; }
+        public string Unit
+        {
+            get => _unit;
+            set
+            {
+                _unit = value;
+                NotifyOfPropertyChange(() => Unit);
+            }
+        }
         [DataMember]
         public bool IsMuchInDemand 
-        { 
+        {
             get => _isMuchInDemand;
             set
             {
                 _isMuchInDemand = value;
+                NotifyOfPropertyChange(() => IsMuchInDemand);
             }
         }
         [DataMember]
@@ -43,8 +79,17 @@ namespace ServiceInterface.Model
             set { _categoryId = value; }
         }
 
-        
-        public Category Category { get; set; }
+        public Category Category
+        {
+            get => _category;
+            set
+            {
+                _category = value;
+                NotifyOfPropertyChange(() => Category);
+            }
+        }
+
+       
         [DataMember]
         public string Type { get; set; }
         [DataMember]
