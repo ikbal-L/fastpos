@@ -34,7 +34,7 @@ namespace ServiceInterface.Authorisation
             }
         }
 
-        public override string Token => _user.Token;
+        public override string AuthorizationToken => _user.Token;
 
         /// <summary>
         /// This method determines whether the user is authorize to perform the requested operation

@@ -16,7 +16,7 @@ namespace ServiceInterface.Authorisation
         /// </summary>
         public abstract bool CheckpPermissions(UIElementPermission uipermission);
 
-        public abstract string Token { get; }
+        public abstract string AuthorizationToken { get; }
 
         public static void Initialize<TProvider>() where TProvider : AuthProvider, new()
         {

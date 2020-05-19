@@ -17,9 +17,43 @@ namespace ServiceInterface.Model
         public string Name { get; set; }
 
         [DataMember]
+        public string Username { get; set; }
+
+        [DataMember]
         public string Password { get; set; }
+
+        public string Token { get; set; }
 
         [DataMember]
         public string PhoneNumber { get; set; }
+
+        public List<Role> Roles { get; set; }
+        [DataMember]
+        public List<long> RoleIds { get; set; }
     }
+
+    [DataContract]
+    public class Role
+    {
+        [DataMember]
+        public long Id { get; set; }
+
+        [DataMember]
+        public List<Permission> Permissions { get; set; }
+    }
+
+    [DataContract]
+    public class Permission
+    {
+        [DataMember]
+        public long Id { get; set; }
+
+        [DataMember]
+        public string Description { get; set; }
+
+        [DataMember]
+        public string[] Permissions { get; set; }
+
+    }
+
 }

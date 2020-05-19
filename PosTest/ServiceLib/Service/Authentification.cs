@@ -24,7 +24,7 @@ namespace ServiceLib.Service
                             });
 
             //json = $"{{\"user\" : \"{user}\", \"password\" : \"{password}\"}}";
-            Console.WriteLine(json);
+           
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var url = "http://127.0.0.1:5000/auth/login";
             var client = new HttpClient();

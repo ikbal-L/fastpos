@@ -25,6 +25,9 @@ namespace ConsoleApp
         [Import(typeof(ICategorieService))]
         private ICategorieService categorieService = null;
 
+        [Import(typeof(IAuthentification))]
+        private IAuthentification authService = null;
+
 
         static HttpClient client = new HttpClient();
 
@@ -44,7 +47,7 @@ namespace ConsoleApp
         {
             Program p = new Program();
             p.Run();
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
         private async void CalRestAsync()
@@ -61,8 +64,8 @@ namespace ConsoleApp
         void Run()
         {
             Compose();
-            Console.WriteLine(1);
-            Console.WriteLine(productService.GetAllProducts().Count);
+            //Console.WriteLine(1);
+            //Console.WriteLine(productService.GetAllProducts().Count);
             //Console.WriteLine(message+service.getProductsREST().Count);
             //service.getProductsREST().ForEach(p => Console.WriteLine(p.Id + p.Name));
             /*            var products = this.productService.GetAllProducts();
@@ -93,18 +96,28 @@ namespace ConsoleApp
             */
             Product p = new Product
             {
-                Id = 1,
+                Id = 4,
                 Name = "prod1",
-                CategorieId = 1,
+                CategorieId = 11,
+                Price=300.00m,
                 BackgroundString = "Green",
                 AvailableStock = 222,
                 IsNotifying = true
             };
-            var status = productService.SaveProduct(p);
-            var p1 = productService.GetProduct(1);
-            
-            Console.WriteLine(p1.IsMuchInDemand);
- 
+            //var status = productService.SaveProduct(p);
+            var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id=1});
+            // Console.WriteLine(p1.Name);
+            //var b1 = productService.DeleteProduct(3);
+            //var status = productService.SaveProduct(p);
+            //Console.WriteLine(b1);
+            var status = productService.GetProduct(3);
+            var products = productService.GetAllProducts();
+            Console.WriteLine(status);
+            Console.WriteLine(products.Count);
+            foreach(var p2 in products)
+            {
+                Console.WriteLine($"Id: {p2.Id}  name {p2.Name}");
+            }
             Console.ReadKey();           
 
         }

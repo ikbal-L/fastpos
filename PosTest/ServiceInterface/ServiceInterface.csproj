@@ -83,6 +83,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorisation\AuthProvider.cs" />
+    <Compile Include="Authorisation\DefaultAuthProvider.cs" />
+    <Compile Include="Authorisation\UIElementPermission.cs" />
+    <Compile Include="Authorisation\VisibilityOrBool.cs" />
+    <Compile Include="Interface\IAuthentification.cs" />
     <Compile Include="Interface\IOrderService.cs" />
     <Compile Include="Interface\IOrdreItemService.cs" />
     <Compile Include="Interface\IProductService.cs" />
@@ -111,5 +116,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

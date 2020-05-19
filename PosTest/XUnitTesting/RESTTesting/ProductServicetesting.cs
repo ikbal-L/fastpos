@@ -23,6 +23,7 @@ namespace XUnitTesting.RESTTesting
         public async Task PaginateProducts_Async()
         {
             string json = JsonConvert.SerializeObject("sss");
+
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var url = "http://127.0.0.1:5000/guid";
             var client = new HttpClient();
