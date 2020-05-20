@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -118,7 +119,12 @@ namespace ConsoleApp
             {
                 Console.WriteLine($"Id: {p2.Id}  name {p2.Name}");
             }
-            Console.ReadKey();           
+            
+            var pp = FakeServices.Products[0];
+            productService.PostTest(pp);
+
+            productService.SaveProducts(FakeServices.Products);
+            Console.ReadKey();
 
         }
 

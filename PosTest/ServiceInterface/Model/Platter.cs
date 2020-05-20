@@ -10,8 +10,9 @@ namespace ServiceInterface.Model
     
     public class Platter : Product
     {
-        public List<Ingredient> Ingredients { get; set; }
         [DataMember]
+        public List<Ingredient> Ingredients { get; set; }
+
         public List<long> IdIngredients { get; set; }
         public List<Additive> Additives { get; set; }
         [DataMember]

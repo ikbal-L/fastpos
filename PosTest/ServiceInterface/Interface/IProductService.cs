@@ -20,5 +20,7 @@ namespace ServiceInterface.Interface
         Product GetProduct(long id);
 
         bool DeleteProduct(long idProduct);
+
+        void PostTest(Product product);
     }
 }

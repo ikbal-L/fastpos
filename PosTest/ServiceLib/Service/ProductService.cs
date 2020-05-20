@@ -80,6 +80,7 @@ namespace ServiceLib.Service
         public bool SaveProduct(Product product)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
+            product = MapProduct.MapOneProduct(product);
             string json = JsonConvert.SerializeObject(product,
                             Newtonsoft.Json.Formatting.None,
                             new JsonSerializerSettings
@@ -100,7 +101,31 @@ namespace ServiceLib.Service
 
         public bool SaveProducts(IEnumerable<Product> products)
         {
-            throw new NotImplementedException();
+            string token = AuthProvider.Instance.AuthorizationToken;
+            var client = new RestClient("http://127.0.0.1:5000/product/savemany");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("Authorization", token);
+            foreach (var p in products)
+            {
+                MapProduct.MapOneProduct(p);
+            }
+            var jsonData = JsonConvert.SerializeObject(products,
+                                        Newtonsoft.Json.Formatting.None,
+                                        new JsonSerializerSettings
+                                        {
+                                            NullValueHandling = NullValueHandling.Ignore
+                                        });
+            Console.WriteLine(jsonData);
+            request.AddParameter("application/json", jsonData, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            Console.WriteLine(response.Content);
+            
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
         }
 
         public void Dispose()
@@ -145,7 +170,60 @@ namespace ServiceLib.Service
             return false;
         }
 
+        public void PostTest(Product product)
+        {
+            string token = AuthProvider.Instance.AuthorizationToken;
+            var client = new RestClient("http://127.0.0.1:5000/product/sss");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("Authorization", token);
+            product = MapProduct.MapOneProduct(product);
+            var jsonData = JsonConvert.SerializeObject(product,
+                                        Newtonsoft.Json.Formatting.None,
+                                        new JsonSerializerSettings
+                                        {
+                                            NullValueHandling = NullValueHandling.Ignore
+                                        });
+            Console.WriteLine(jsonData);
+            request.AddParameter("application/json", jsonData, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+        }
     }
 
+    public class MapProduct
+    {
+        public static Product MapOneProduct(Product product)
+        {
+            if (product.CategorieId <= 0 && product.Category != null)
+            {
+                product.CategorieId = product.Category.Id;
+            }
+
+            if (product is Platter plat)
+            {
+                if (plat.Additives != null)
+                    foreach (var a in plat.Additives)
+                    {
+                        if (plat.IdAdditives == null)
+                        {
+                            plat.IdAdditives = new List<long>();
+                        }
+                        plat.IdAdditives.Add(a.Id);
+                    }
+
+                if(plat.Ingredients != null)
+                    foreach (var ing in plat.Ingredients)
+                    {
+                        if (ing.Product != null)
+                        {
+                            ing.ProductId = ing.Product.Id;
+                        }
+                    }
+            }
+
+            return product;
+
+    }
+}
  
 }
