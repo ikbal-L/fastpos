@@ -124,6 +124,7 @@ namespace ConsoleApp
             productService.PostTest(pp);
 
             productService.SaveProducts(FakeServices.Products);
+            productService.createProducts();
             Console.ReadKey();
 
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServiceInterface.Interface
 {
-    public interface IProductService : IDisposable
+    public interface IProductService
     {
         ICollection<Product> GetAllProducts();
 
@@ -22,5 +22,16 @@ namespace ServiceInterface.Interface
         bool DeleteProduct(long idProduct);
 
         void PostTest(Product product);
+    }
+
+    public interface IAdditiveService
+    {
+        IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids);
+        bool SaveAdditive(Additive additive);
+        bool SaveAdditives(IEnumerable<Additive> additives);
+
+        Additive GetAdditive(long id);
+
+        bool DeleteAdditive(long idProduct);
     }
 }

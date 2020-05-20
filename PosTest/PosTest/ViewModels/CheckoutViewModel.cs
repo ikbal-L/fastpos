@@ -26,8 +26,9 @@ namespace PosTest.ViewModels
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
                        a => a.FullName.StartsWith("XUnitTesting"));
-
+        [Import(typeof(IProductService))]
         private IProductService _productsService;
+        [Import(typeof(ICategorieService))]
         private ICategorieService _categoriesService;
         private Category _currantCategory;
         private bool _productsVisibility;
@@ -50,8 +51,8 @@ namespace PosTest.ViewModels
 
         public CheckoutViewModel(int pageSize, IProductService productsService, ICategorieService categoriesService) : this()
         {
-            _productsService = productsService;
-            _categoriesService = categoriesService;
+            //_productsService = productsService;
+            //_categoriesService = categoriesService;
             //currentOrderitem = new BindableCollection<OrdreItem>();
             
             AllRequestedProducts = productsService.GetAllProducts();
