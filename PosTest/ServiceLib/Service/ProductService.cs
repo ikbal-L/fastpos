@@ -17,10 +17,7 @@ namespace ServiceLib.Service
 {
     [Export(typeof(IProductService))]
     class ProductService : IProductService
-    {
-        [Import(typeof(IAdditiveService))]
-        IAdditiveService additiveService;
-
+    {                
         public ICollection<Product> GetAllProducts()
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
@@ -42,7 +39,6 @@ namespace ServiceLib.Service
 
         public List<Product> createProducts()
         {
-            var a = additiveService.GetAdditive(1);
             Product p1 = new Product { Id = 1, Name = "AAAA", Type = "A", Color = "blue" };
             Product p2 = new Product { Id = 2, Name = "BBBB", Type = "A", Color = "white" };
             Product p3 = new Product { Id = 3, Name = "CCCC", Type = "B", Color = "gray" };
@@ -196,7 +192,7 @@ namespace ServiceLib.Service
         }
     }
 
-    [Export(typeof(IProductService))]
+    [Export(typeof(IAdditiveService))]
     public class AdditiveService : IAdditiveService
     {
         public bool DeleteAdditive(long idProduct)
