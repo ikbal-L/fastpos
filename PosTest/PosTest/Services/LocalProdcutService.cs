@@ -43,19 +43,113 @@ namespace PosTest.Services
             container.SatisfyImportsOnce(this);
         }
 
+        //public IEnumerable<Product> GetAllProducts()
+        //{
+        //    var products = _productService.GetAllProducts();
+        //    //var idProducts = new List<long>();
+        //    //products.ToList().ForEach(p => idProducts.Add(p.Id));            
+        //    var categories = new List<Category>();
+        //    foreach (var p in products)
+        //    {
+        //        Category category;
+        //        if (categories.Any(c => c.Id == p.CategorieId))
+        //        {
+        //            category = categories.Where(c => c.Id == p.CategorieId).First();
+        //        }
+        //        else
+        //        {
+        //            category = _categoryService.GetCategory(p.CategorieId);
+        //            categories.Add(category);
+        //        }
+        //        IEnumerable<Additive> additives = null;
+        //        if (p is Platter plat && plat.IdAdditives != null)
+        //        {
+        //            additives = _additiveService.GetManyAdditives(plat.IdAdditives);
+        //        }
+        //        p.MappingAfterReceiving(category, additives?.ToList());
+        //    }
+
+        //    return products;
+        //}
+
+        //public IEnumerable<Product> GetAllProducts2()
+        //{
+        //    var products = _productService.GetAllProducts();
+        //    var idProducts = new List<long>();
+        //    var idCategories = new HashSet<long>();
+        //    products.ToList().ForEach(p => idProducts.Add(p.Id));
+        //    products.ToList().ForEach(p => idCategories.Add(p.CategorieId));
+            
+        //    var categories = _categoryService.GetManyCategories(idCategories);
+        //    foreach (var p in products)
+        //    {
+        //        Category category;
+        //        if (categories.Any(c => c.Id == p.CategorieId))
+        //        {
+        //            category = categories.Where(c => c.Id == p.CategorieId).First();
+        //        }
+        //        else
+        //        {
+        //            category = _categoryService.GetCategory(p.CategorieId);
+        //        }
+        //        IEnumerable<Additive> additives = null;
+        //        if (p is Platter plat && plat.IdAdditives != null)
+        //        {
+        //            additives = _additiveService.GetManyAdditives(plat.IdAdditives);
+        //        }
+        //        p.MappingAfterReceiving(category, additives?.ToList());
+        //    }
+
+        //    return products;
+        //}
+
         public IEnumerable<Product> GetAllProducts()
         {
+            IEnumerable<Additive> GetAdditivesFromCollection(IEnumerable<Additive> additives, IEnumerable<long> idAdditves)
+            {
+                foreach (var id in idAdditves)
+                {
+                    var additive = additives.Where(a => a.Id == id).FirstOrDefault();
+                    if (additive != null)
+                    {
+                         yield return additive;
+                    }
+                }
+            }
+            var t1 = DateTime.Now;
             var products = _productService.GetAllProducts();
-            //var idProducts = new List<long>();
-            //products.ToList().ForEach(p => idProducts.Add(p.Id));
-
+            var idProducts = new List<long>();
+            var idCategories = new HashSet<long>();
+            var idAdditivesOfAllProducts = new HashSet<long>();
+            products.ToList().ForEach(p => idProducts.Add(p.Id));
+            products.ToList().ForEach(p => idCategories.Add(p.CategorieId));
             foreach (var p in products)
             {
-                var category = _categoryService.GetCategory(p.CategorieId);
-                IEnumerable<Additive> additives = null;
-                if (p is Platter plat && plat.Additives != null)
+                if(p is Platter plat && plat.IdAdditives != null)
                 {
-                    additives = _additiveService.GetManyAdditives(plat.IdAdditives);
+                    plat.IdAdditives.ForEach(id => idAdditivesOfAllProducts.Add(id));
+                }
+            }
+
+            var additivesOfAllProducts = _additiveService.GetManyAdditives(idAdditivesOfAllProducts);
+            var categories = _categoryService.GetManyCategories(idCategories);
+            var t2 = DateTime.Now;
+            Console.WriteLine($"{t2 - t1}");
+            foreach (var p in products)
+            {
+                Category category;
+                if (categories.Any(c => c.Id == p.CategorieId))
+                {
+                    category = categories.Where(c => c.Id == p.CategorieId).First();
+                }
+                else
+                {
+                    category = _categoryService.GetCategory(p.CategorieId);
+                }
+                IEnumerable<Additive> additives = null;
+                if (p is Platter plat && plat.IdAdditives != null)
+                {
+                    additives = GetAdditivesFromCollection(additivesOfAllProducts, plat.IdAdditives);
                 }
                 p.MappingAfterReceiving(category, additives?.ToList());
             }
