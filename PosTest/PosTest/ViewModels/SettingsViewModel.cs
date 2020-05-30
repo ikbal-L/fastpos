@@ -12,7 +12,7 @@ namespace PosTest.ViewModels
     {
         private int _pageSize;
         private IProductService _productService;
-        private ICategorieService _categorieService;
+        private ICategoryService _categorieService;
 
 
         public Screen CurrentView { get; set; }
@@ -21,7 +21,7 @@ namespace PosTest.ViewModels
             CurrentView = new ProductsViewModel();
         }
 
-        public SettingsViewModel(int pageSize, IProductService productService, ICategorieService categorieService)
+        public SettingsViewModel(int pageSize, IProductService productService, ICategoryService categorieService)
         {
             this._pageSize = pageSize;
             this._productService = productService;

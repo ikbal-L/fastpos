@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PosTest.Services;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib;
@@ -23,11 +24,14 @@ namespace ConsoleApp
 
         private IProductService productService = null;
 
-        [Import(typeof(ICategorieService))]
-        private ICategorieService categorieService = null;
+        [Import(typeof(ICategoryService))]
+        private ICategoryService categorieService = null;
 
         [Import(typeof(IAuthentification))]
         private IAuthentification authService = null;
+
+        [Import(typeof(IAdditiveService))]
+        private IAdditiveService additiveService = null;
 
 
         static HttpClient client = new HttpClient();
@@ -111,20 +115,28 @@ namespace ConsoleApp
             //var b1 = productService.DeleteProduct(3);
             //var status = productService.SaveProduct(p);
             //Console.WriteLine(b1);
-            var status = productService.GetProduct(3);
-            var products = productService.GetAllProducts();
-            Console.WriteLine(status);
-            Console.WriteLine(products.Count);
-            foreach(var p2 in products)
-            {
-                Console.WriteLine($"Id: {p2.Id}  name {p2.Name}");
-            }
-            
-            var pp = FakeServices.Products[0];
-            productService.PostTest(pp);
+            //var status = productService.GetProduct(3);
+            //var products = productService.GetAllProducts();
+            //Console.WriteLine(status);
+            //Console.WriteLine(products.Count);
+            //foreach(var p2 in products)
+            //{
+            //    Console.WriteLine($"Id: {p2.Id}  name {p2.Name}");
+            //}
 
-            productService.SaveProducts(FakeServices.Products);
-            productService.createProducts();
+            //var pp = FakeServices.Products[0];
+            //productService.PostTest(pp);
+
+            //productService.SaveProducts(FakeServices.Products);
+            //productService.createProducts();
+            //additiveService.SaveAdditives(FakeServices.Additives);
+            //categorieService.SaveCategory(FakeServices.Categories[0]);
+
+            var prodserv = LocalProdcutService.Instance;
+            prodserv.SaveProducts(FakeServices.Products);
+            
+            var prods = prodserv.GetAllProducts();
+            //prodserv.SaveCategories(FakeServices.Categories);
             Console.ReadKey();
 
         }

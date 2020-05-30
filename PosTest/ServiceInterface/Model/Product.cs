@@ -20,6 +20,7 @@ namespace ServiceInterface.Model
         private decimal _price;
         private string _unit;
         private Category _category;
+        private SolidColorBrush _background;
 
         [DataMember]
         public long Id { get; set; }
@@ -75,8 +76,8 @@ namespace ServiceInterface.Model
         [DataMember]
         public long CategorieId
         {
-            get => Category == null ? _categoryId : Category.Id;
-            set { _categoryId = value; }
+            get;
+            set;
         }
 
         public Category Category
@@ -114,9 +115,67 @@ namespace ServiceInterface.Model
         }
 
         public virtual Brush Background { 
-            get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
+            get => _background ?? (_background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
         }
 
-        
+        public void MappingBeforeSending()
+        {
+            if (this.CategorieId <= 0 && this.Category != null)
+            {
+                this.CategorieId = this.Category.Id;
+            }
+
+            if (this is Platter plat)
+            {
+                if (plat.Additives != null)
+                    foreach (var a in plat.Additives)
+                    {
+                        if (plat.IdAdditives == null)
+                        {
+                            plat.IdAdditives = new List<long>();
+                        }
+                        plat.IdAdditives.Add(a.Id);
+                    }
+
+                if (plat.Ingredients != null)
+                    foreach (var ing in plat.Ingredients)
+                    {
+                        if (ing.Product != null)
+                        {
+                            ing.ProductId = ing.Product.Id;
+                        }
+                    }
+            }
+        }
+
+        public void MappingAfterReceiving(Category category, List<Additive> additives)
+        {
+            if (category != null && this.CategorieId == category.Id)
+            {
+                this.Category = category;
+            }
+            else
+            {
+                throw new ProductMappingException("Id category different of CategoryId of the related Product");
+            }
+            if (this is Platter plat &&
+                plat.IdAdditives != null && additives != null &&
+                additives.Count == plat.IdAdditives.Count)
+            {
+                plat.Additives = new List<Additive>();
+                foreach (var a in additives)
+                {
+                    if (plat.IdAdditives.Any(id => id == a.Id))
+                    {
+                        plat.Additives.Add(a);
+                    }
+                    else
+                    {
+                        throw new ProductMappingException("Additive Id does not exist in the list of ids");
+                    }
+                }
+            }
+        }
+
     }
 }

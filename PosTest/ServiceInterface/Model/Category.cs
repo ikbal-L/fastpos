@@ -17,13 +17,13 @@ namespace ServiceInterface.Model
     {
         private string _backGroundString=null;
         private Brush _backGroundColor;
+        private string _name;
 
         [DataMember]
         public long Id { get; set; }
 
-        private String _name { get; set; }
         [DataMember]
-        public String Name
+        public string Name
         {
             get => _name;
             set
@@ -52,8 +52,43 @@ namespace ServiceInterface.Model
         public List<Product> Products { get; set; }
 
 
-        public Brush BackGroundColor => _backGroundColor ?? (_backGroundColor=new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+        public Brush BackGroundColor => _backGroundColor ?? 
+            (_backGroundColor=new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+
+        public void MappingBeforeSending()
+        {
+            if (Products != null)
+                foreach (var p in Products)
+                {
+                    if (ProductIds == null)
+                    {
+                        ProductIds = new List<long>();
+                    }
+                    ProductIds.Add(p.Id);
+                }
+        }
+
+        public void MappingAfterReceiving(List<Product> products)
+        {
+            if (ProductIds != null && products != null &&
+                products.Count == ProductIds.Count)
+            {
+                Products = new List<Product>();
+                foreach (var p in products)
+                {
+                    if (ProductIds.Any(id => id == p.Id))
+                    {
+                        Products.Add(p);
+                    }
+                    else
+                    {
+                        throw new ProductMappingException("Additive Id does not exist in the list of ids");
+                    }
+                }
+            }
+        }
+
     }
 
-   
+
 }

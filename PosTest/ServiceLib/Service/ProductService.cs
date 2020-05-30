@@ -3,8 +3,10 @@ using RestSharp;
 using ServiceInterface.Authorisation;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceInterface.StaticValues;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Net;
 using System.Net.Http;
@@ -21,20 +23,51 @@ namespace ServiceLib.Service
         public ICollection<Product> GetAllProducts()
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
-            var client = new RestClient("http://127.0.0.1:5000/product/getall");
+            var client = new RestClient(UrlConfig.ProductUrl.GetAllProducts);
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
-            request.AddHeader("content-type", "application/json");            
+            request.AddHeader("content-type", "application/json");
             IRestResponse response = client.Execute(request);
-            ICollection<Product> products;
+            ICollection<Product> products = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                products = JsonConvert.DeserializeObject<ICollection<Product>>(response.Content);
+                var all = JsonConvert.DeserializeObject<List<Platter>>(response.Content);
+                if (all != null && all.Count>0)
+                {
+                    products = new Collection<Product>();
+                    foreach (var item in all)
+                    {
+                        if (!item.IsPlatter)
+                        {
+                            var p = new Product
+                            {
+                                AvailableStock = item.AvailableStock,
+                                BackgroundString = item.BackgroundString,
+                                CategorieId = item.CategorieId,
+                                Description = item.Description,
+                                Id = item.Id,
+                                IsMuchInDemand = item.IsMuchInDemand,
+                                Name = item.Name,
+                                PictureFileName = item.PictureFileName,
+                                PictureUri = item.PictureUri,
+                                Price = item.Price,
+                                Type = item.Type,
+                                Unit = item.Unit
+                            };
+                            products.Add(p);
+                        }
+                        else
+                        {
+                            products.Add(item);
+                        }
+                    }
+
+                } 
             }
             
-            return FakeServices.Products;// ;products
+            return products;// FakeServices.Products;
         }
 
         public List<Product> createProducts()
@@ -83,7 +116,6 @@ namespace ServiceLib.Service
         public bool SaveProduct(Product product)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(product,
                             Newtonsoft.Json.Formatting.None,
                             new JsonSerializerSettings
@@ -91,7 +123,7 @@ namespace ServiceLib.Service
                                 NullValueHandling = NullValueHandling.Ignore
                             });
             var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var url = "http://127.0.0.1:5000/product/save";
+            var url = UrlConfig.ProductUrl.SaveProduct;
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", token);
             var response =  client.PostAsync(url, data).Result;
@@ -105,14 +137,11 @@ namespace ServiceLib.Service
         public bool SaveProducts(IEnumerable<Product> products)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            var client = new RestClient("http://127.0.0.1:5000/product/savemany");
+            var client = new RestClient(UrlConfig.ProductUrl.SaveProducts);
             var request = new RestRequest(Method.POST);
             request.AddHeader("content-type", "application/json");
             request.AddHeader("Authorization", token);
-            foreach (var p in products)
-            {
-                MapProduct.MapProductToSend(p);
-            }
+           
             var jsonData = JsonConvert.SerializeObject(products,
                                         Newtonsoft.Json.Formatting.None,
                                         new JsonSerializerSettings
@@ -159,7 +188,7 @@ namespace ServiceLib.Service
         public bool DeleteProduct(long productId)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            var client = new RestClient($"http://127.0.0.1:5000/product/delete/{productId}");
+            var client = new RestClient(UrlConfig.ProductUrl.DeleteProduct + $"{productId}");
             var request = new RestRequest(Method.DELETE);
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", token);
@@ -179,7 +208,6 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.POST);
             request.AddHeader("content-type", "application/json");
             request.AddHeader("Authorization", token);
-            product = MapProduct.MapProductToSend(product);
             var jsonData = JsonConvert.SerializeObject(product,
                                         Newtonsoft.Json.Formatting.None,
                                         new JsonSerializerSettings
@@ -192,32 +220,5 @@ namespace ServiceLib.Service
         }
     }
 
-    [Export(typeof(IAdditiveService))]
-    public class AdditiveService : IAdditiveService
-    {
-        public bool DeleteAdditive(long idProduct)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Additive GetAdditive(long id)
-        {
-           return new Additive { Id=id};
-        }
-
-        public IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SaveAdditive(Additive additive)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SaveAdditives(IEnumerable<Additive> additives)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

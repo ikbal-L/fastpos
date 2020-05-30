@@ -24,7 +24,7 @@ namespace PosTest.ViewModels
         private Product _currentProduct;
         private int _pageSize;
         private IProductService _productsService;
-        private ICategorieService _categorieService;
+        private ICategoryService _categorieService;
 
         private bool _IsDialogOpen;
         public bool IsDialogOpen
@@ -47,7 +47,7 @@ namespace PosTest.ViewModels
         {
         }
 
-        public ProductsViewModel(int pageSize, IProductService productsService, ICategorieService categorieService)
+        public ProductsViewModel(int pageSize, IProductService productsService, ICategoryService categorieService)
         {
             _pageSize = pageSize;
             _productsService = productsService;
@@ -55,7 +55,7 @@ namespace PosTest.ViewModels
 
             //Products = BindableCollection.GetDefaultView(_productsService.GetAllProducts());
             Products = new BindableCollection<Product>( _productsService.GetAllProducts());
-            Categories = new BindableCollection<Category>(_categorieService.GetAllCategory());
+            Categories = new BindableCollection<Category>(_categorieService.GetAllCategories());
             CurrentProduct = Products.Cast<Product>().FirstOrDefault();
         }
 

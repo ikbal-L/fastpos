@@ -12,6 +12,7 @@ namespace ServiceLib
         static int currentcategorieId = 1;
 
 
+        public static List<Additive> Additives { get; }
 
         static List<Category> categories = new List<Category>()
         {
@@ -101,7 +102,7 @@ namespace ServiceLib
                 new Additive {Id=addId++, Description="Sans Olive" },
                 new Additive {Id=addId++, Description="Harissa+++" },
             };
-
+            Additives = additives;
             products.ForEach(
                 p =>
                 {
@@ -117,7 +118,6 @@ namespace ServiceLib
         public static List<Product> Products 
         {
             get => products;
-        } 
-       
+        }
     }
 }

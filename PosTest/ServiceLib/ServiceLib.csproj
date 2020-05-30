@@ -104,9 +104,9 @@
   <ItemGroup>
     <Compile Include="FakeServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AdditiveService.cs" />
     <Compile Include="Service\Authentification.cs" />
-    <Compile Include="Service\CategorieService.cs" />
-    <Compile Include="Service\MapProduct.cs" />
+    <Compile Include="Service\CategoryService.cs" />
     <Compile Include="Service\ProductMappingException.cs" />
     <Compile Include="Service\ProductService.cs" />
   </ItemGroup>

@@ -119,6 +119,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PosTest\PosTest.csproj">
+      <Project>{5ab5cc56-7a2f-4446-8dc1-03c9a207b2f5}</Project>
+      <Name>PosTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ServiceInterface\ServiceInterface.csproj">
       <Project>{07d0d89c-3a6c-4068-bbc0-14a3cb7ffad4}</Project>
       <Name>ServiceInterface</Name>

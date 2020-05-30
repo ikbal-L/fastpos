@@ -21,8 +21,8 @@ namespace PosTest.ViewModels
         [Import(typeof(IProductService))]
         private IProductService productService = null;
 
-        [Import(typeof(ICategorieService))]
-        private ICategorieService categorieService = null;
+        [Import(typeof(ICategoryService))]
+        private ICategoryService categorieService = null;
 
 
         //public String Username { get; set; }

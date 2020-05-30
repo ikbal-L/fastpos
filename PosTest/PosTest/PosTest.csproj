@@ -196,6 +196,8 @@
     </Compile>
     <Compile Include="Converters\NumberToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Services\LocalProdcutService.cs" />
     <Compile Include="ShellBootstrapper.cs" />
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />

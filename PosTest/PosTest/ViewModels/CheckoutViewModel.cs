@@ -28,8 +28,8 @@ namespace PosTest.ViewModels
                        a => a.FullName.StartsWith("XUnitTesting"));
         [Import(typeof(IProductService))]
         private IProductService _productsService;
-        [Import(typeof(ICategorieService))]
-        private ICategorieService _categoriesService;
+        [Import(typeof(ICategoryService))]
+        private ICategoryService _categoriesService;
         private Category _currantCategory;
         private bool _productsVisibility;
         private string _numericZone;
@@ -49,7 +49,7 @@ namespace PosTest.ViewModels
             Orders.Add(CurrentOrder);
         }
 
-        public CheckoutViewModel(int pageSize, IProductService productsService, ICategorieService categoriesService) : this()
+        public CheckoutViewModel(int pageSize, IProductService productsService, ICategoryService categoriesService) : this()
         {
             //_productsService = productsService;
             //_categoriesService = categoriesService;
@@ -61,7 +61,7 @@ namespace PosTest.ViewModels
             ProductsVisibility = true;
             AdditivesVisibility = false;
             CategorieFiltering("Home");
-            Categories = new BindableCollection<Category>(categoriesService.GetAllCategory());
+            Categories = new BindableCollection<Category>(categoriesService.GetAllCategories());
             InitCategoryColors();
         }
 
