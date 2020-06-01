@@ -12,6 +12,7 @@
             public static string SaveProducts = hostname + "product/savemany";
             public static string GetProduct;
             public static string DeleteProduct = hostname + "product/delete/";
+            public static string UpdateProduct = hostname + "product/update/";
         }
 
         public static class AdditiveUrl

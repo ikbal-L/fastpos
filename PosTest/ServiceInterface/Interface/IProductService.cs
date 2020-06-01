@@ -11,6 +11,7 @@ namespace ServiceInterface.Interface
     {
         ICollection<Product> GetAllProducts();
         bool SaveProduct(Product product);
+        bool UpdateProduct(Product product);
         bool SaveProducts(IEnumerable<Product> products);
         Product GetProduct(long id);
         bool DeleteProduct(long idProduct);

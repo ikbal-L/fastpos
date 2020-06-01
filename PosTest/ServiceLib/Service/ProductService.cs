@@ -24,6 +24,14 @@ namespace ServiceLib.Service
         private RestProductService _restProductService = RestProductService.Instance;
         private RestAdditiveService _restAdditiveService = RestAdditiveService.Instance;
         private RestCategoryService _restCategoryService = RestCategoryService.Instance;
+
+        public bool UpdateProduct(Product product)
+        {
+            product.MappingBeforeSending();
+            return _restProductService.UpdateProduct(product);
+
+        }
+
         bool IProductService.DeleteProduct(long idProduct)
         {
             return _restProductService.DeleteProduct(idProduct);
@@ -196,6 +204,32 @@ namespace ServiceLib.Service
             var response =  client.PostAsync(url, data).Result;
 
             if (response.IsSuccessStatusCode)
+                return true;
+
+            return false;
+        }
+
+        public bool UpdateProduct(Product product)
+        {
+            string token = AuthProvider.Instance.AuthorizationToken;
+            //product = MapProduct.MapProductToSend(product);
+            string json = JsonConvert.SerializeObject(product,
+                            Newtonsoft.Json.Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
+
+            var url = UrlConfig.ProductUrl.UpdateProduct;
+            var client = new RestClient(url);
+            var request = new RestRequest(Method.PUT);
+            request.AddHeader("cache-control", "no-cache");
+            request.AddHeader("authorization", token);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
 
             return false;
