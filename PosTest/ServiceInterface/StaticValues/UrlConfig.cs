@@ -2,38 +2,45 @@
 {
     public static class UrlConfig
     {
-        public static class ProductUrl
+       
+        public static class ProductUrl 
         {
-            public static string GetAllProducts = "http://127.0.0.1:5000/product/getall";
-            public static string SaveProduct = "http://127.0.0.1:5000/product/save";
-            public static string SaveProducts = "http://127.0.0.1:5000/product/savemany";
+            static string hostname = "http://127.0.0.1:5000/";
+
+            public static string GetAllProducts = hostname+"product/getall";
+            public static string SaveProduct = hostname+"product/save";
+            public static string SaveProducts = hostname + "product/savemany";
             public static string GetProduct;
-            public static string DeleteProduct = "http://127.0.0.1:5000/product/delete/";
+            public static string DeleteProduct = hostname + "product/delete/";
         }
 
         public static class AdditiveUrl
         {
-            public static string GetManyAdditives = "http://127.0.0.1:5000/additive/getmany";
-            public static string SaveAdditive = "http://127.0.0.1:5000/additive/save";
-            public static string SaveAdditives = "http://127.0.0.1:5000/additive/savemany";
+            static string hostname = "http://127.0.0.1:5000/";
 
-            public static string GetAdditive = "http://127.0.0.1:5000/additive/get/";
+            public static string GetManyAdditives = hostname + "additive/getmany";
+            public static string SaveAdditive = hostname + "additive/save";
+            public static string SaveAdditives = hostname + "additive/savemany";
 
-            public static string DeleteAdditive = "http://127.0.0.1:5000/additive/delete/";
-            public static string UpdateAdditive = "http://127.0.0.1:5000/additive/update";
+            public static string GetAdditive = hostname + "additive/get/";
+
+            public static string DeleteAdditive = hostname + "additive/delete/";
+            public static string UpdateAdditive = hostname + "additive/update";
         }
 
         public static class CategoryUrl
         {
-            public static string GetAllCategories = "http://127.0.0.1:5000/category/getall";
-            public static string GetManyCategories = "http://127.0.0.1:5000/category/getmany";
-            public static string SaveCategory = "http://127.0.0.1:5000/category/save";
-            public static string SaveCategories = "http://127.0.0.1:5000/category/savemany";
+            static string hostname = "http://127.0.0.1:5000/";
 
-            public static string GetCategory = "http://127.0.0.1:5000/category/get/";
+            public static string GetAllCategories = hostname + "category/getall";
+            public static string GetManyCategories = hostname + "category/getmany";
+            public static string SaveCategory = hostname + "category/save";
+            public static string SaveCategories = hostname + "category/savemany";
 
-            public static string DeleteCategory = "http://127.0.0.1:5000/category/delete/";
-            public static string UpdateCategory = "http://127.0.0.1:5000/category/update";
+            public static string GetCategory = hostname + "category/get/";
+
+            public static string DeleteCategory = hostname + "category/delete/";
+            public static string UpdateCategory = hostname + "category/update";
         }
     }
 }
