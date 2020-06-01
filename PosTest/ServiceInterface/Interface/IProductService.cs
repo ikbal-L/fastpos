@@ -10,17 +10,9 @@ namespace ServiceInterface.Interface
     public interface IProductService
     {
         ICollection<Product> GetAllProducts();
-
-        List<Product> createProducts();
-        Task<List<Product>> getProductsREST();
-
         bool SaveProduct(Product product);
         bool SaveProducts(IEnumerable<Product> products);
-
         Product GetProduct(long id);
-
         bool DeleteProduct(long idProduct);
-
-        void PostTest(Product product);
     }
 }

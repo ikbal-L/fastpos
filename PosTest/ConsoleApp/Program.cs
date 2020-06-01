@@ -134,8 +134,8 @@ namespace ConsoleApp
 
             var prodserv = LocalProdcutService.Instance;
             //prodserv.SaveProducts(FakeServices.Products);
-              prodserv.GetAllProducts();
-           
+            var prods =  productService.GetAllProducts();
+            var cats = categorieService.GetAllCategories();           
             //prodserv.SaveCategories(FakeServices.Categories);
             Console.ReadKey();
 

@@ -16,6 +16,42 @@ namespace ServiceLib.Service
     [Export(typeof(IAdditiveService))]
     public class AdditiveService : IAdditiveService
     {
+        public bool DeleteAdditive(long idProduct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Additive GetAdditive(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveAdditive(Additive additive)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveAdditives(IEnumerable<Additive> additives)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateAdditive(Additive additive)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class RestAdditiveService
+    {
+        private static RestAdditiveService _instance;
+
+        public static RestAdditiveService Instance => _instance ?? (_instance = new RestAdditiveService());
         public bool DeleteAdditive(long additivdId)
         {
             string token = AuthProvider.Instance.AuthorizationToken;

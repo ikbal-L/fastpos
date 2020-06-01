@@ -20,6 +20,48 @@ namespace ServiceLib.Service
     [Export(typeof(ICategoryService))]
     class CategoryService : ICategoryService
     {
+        private RestCategoryService _restCategoryService = RestCategoryService.Instance;
+        public bool DeleteCategory(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Category> GetAllCategories()
+        {
+            return _restCategoryService.GetAllCategories();
+        }
+
+        public Category GetCategory(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Category> GetManyCategories(IEnumerable<long> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveCategories(IEnumerable<Category> categories)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SaveCategory(Category category)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateCategory(Category category)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class RestCategoryService
+    {
+        private static RestCategoryService _instance;
+        public static RestCategoryService Instance => _instance ?? (_instance = new RestCategoryService());
+
         public bool DeleteCategory(long id)
         {
             string token = AuthProvider.Instance.AuthorizationToken;

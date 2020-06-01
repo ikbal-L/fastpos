@@ -24,6 +24,9 @@ namespace PosTest.ViewModels
         [Import(typeof(ICategoryService))]
         private ICategoryService categorieService = null;
 
+        [Import(typeof(IAuthentification))]
+        private IAuthentification authService = null;
+
 
         //public String Username { get; set; }
         //public String Password { get; set; }
@@ -41,6 +44,7 @@ namespace PosTest.ViewModels
 
         public void Login()
         {
+            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
             CheckoutViewModel checkoutViewModel = 
                 new CheckoutViewModel(30, 
                 productService, 
