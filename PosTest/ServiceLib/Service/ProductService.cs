@@ -32,12 +32,12 @@ namespace ServiceLib.Service
 
         }
 
-        bool IProductService.DeleteProduct(long idProduct)
+        public bool DeleteProduct(long idProduct)
         {
             return _restProductService.DeleteProduct(idProduct);
         }
 
-        ICollection<Product> IProductService.GetAllProducts()
+        public ICollection<Product> GetAllProducts()
         {
             IEnumerable<Additive> GetAdditivesFromCollection(IEnumerable<Additive> additives, IEnumerable<long> idAdditves)
             {
@@ -97,7 +97,7 @@ namespace ServiceLib.Service
             return products;
         }
 
-        Product IProductService.GetProduct(long id)
+        public Product GetProduct(long id)
         {
             var product =_restProductService.GetProduct(id);
             if(product == null)
@@ -115,13 +115,13 @@ namespace ServiceLib.Service
             return product;
         }
 
-        bool IProductService.SaveProduct(Product product)
+        public bool SaveProduct(Product product)
         {
             product.MappingBeforeSending();
             return _restProductService.SaveProduct(product);
         }
 
-        bool IProductService.SaveProducts(IEnumerable<Product> products)
+        public bool SaveProducts(IEnumerable<Product> products)
         {
             if (products == null)
             {
