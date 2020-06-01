@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using PosTest.Services;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib;
@@ -132,7 +131,7 @@ namespace ConsoleApp
             //additiveService.SaveAdditives(FakeServices.Additives);
             //categorieService.SaveCategory(FakeServices.Categories[0]);
 
-            var prodserv = LocalProdcutService.Instance;
+            
             //prodserv.SaveProducts(FakeServices.Products);
             var prods =  productService.GetAllProducts();
             var cats = categorieService.GetAllCategories();           
