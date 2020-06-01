@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ServiceInterface.Authorisation;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceInterface.StaticValues;
 using System;
 using System.ComponentModel.Composition;
 using System.Net.Http;
@@ -26,7 +27,8 @@ namespace ServiceLib.Service
             //json = $"{{\"user\" : \"{user}\", \"password\" : \"{password}\"}}";
            
             var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var url = "http://127.0.0.1:5000/auth/login";
+            var url = UrlConfig.AuthUrl.Authenticate;
+            //var url = "http://127.0.0.1:5000/auth/login";
             var client = new HttpClient();
             
             var response = client.PostAsync(url, data).Result;

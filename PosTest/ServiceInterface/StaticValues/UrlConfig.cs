@@ -5,7 +5,7 @@
        
         public static class ProductUrl 
         {
-            static string hostname = "http://127.0.0.1:5000/";
+            static string hostname = "http://192.168.1.3:5000/";
 
             public static string GetAllProducts = hostname+"product/getall";
             public static string SaveProduct = hostname+"product/save";
@@ -16,7 +16,7 @@
 
         public static class AdditiveUrl
         {
-            static string hostname = "http://127.0.0.1:5000/";
+            static string hostname = "http://192.168.1.3:5000/";
 
             public static string GetManyAdditives = hostname + "additive/getmany";
             public static string SaveAdditive = hostname + "additive/save";
@@ -30,7 +30,7 @@
 
         public static class CategoryUrl
         {
-            static string hostname = "http://127.0.0.1:5000/";
+            static string hostname = "http://192.168.1.3:5000/";
 
             public static string GetAllCategories = hostname + "category/getall";
             public static string GetManyCategories = hostname + "category/getmany";
@@ -41,6 +41,14 @@
 
             public static string DeleteCategory = hostname + "category/delete/";
             public static string UpdateCategory = hostname + "category/update";
+        }        
+        
+        public static class AuthUrl
+        {
+            static string hostname = "http://192.168.1.3:5000/";
+
+            public static string Authenticate = hostname + "auth/login";
+
         }
     }
 }

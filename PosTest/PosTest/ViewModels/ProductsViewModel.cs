@@ -70,8 +70,10 @@ namespace PosTest.ViewModels
             CurrentProduct = new Product();
             Products.Add(CurrentProduct);
             IsDialogOpen = true;
+
         }
-       public void SaveCommand()
+
+        public void SaveCommand()
         {
             _productsService.SaveProduct(CurrentProduct);
             IsDialogOpen = false;
