@@ -26,7 +26,7 @@ namespace ServiceLib.Service
         private RestCategoryService _restCategoryService = RestCategoryService.Instance;
         bool IProductService.DeleteProduct(long idProduct)
         {
-            throw new NotImplementedException();
+            return _restProductService.DeleteProduct(idProduct);
         }
 
         ICollection<Product> IProductService.GetAllProducts()
@@ -45,6 +45,10 @@ namespace ServiceLib.Service
 
             var t1 = DateTime.Now;
             var products = _restProductService.GetAllProducts();
+            if (products == null)
+            {
+                return null;
+            }
             var idProducts = new List<long>();
             var idCategories = new HashSet<long>();
             var idAdditivesOfAllProducts = new HashSet<long>();
@@ -87,16 +91,36 @@ namespace ServiceLib.Service
 
         Product IProductService.GetProduct(long id)
         {
-            throw new NotImplementedException();
+            var product =_restProductService.GetProduct(id);
+            if(product == null)
+            {
+                return null;
+            }
+            var category = _restCategoryService.GetCategory(product.CategorieId);
+            IEnumerable<Additive> additives = null;
+            if (product is Platter plat && plat.IdAdditives!=null && plat.IdAdditives.Count>0)
+            {
+                additives = _restAdditiveService.GetManyAdditives(plat.IdAdditives);
+            }
+            product.MappingAfterReceiving(category, additives.ToList());
+
+            return product;
         }
 
         bool IProductService.SaveProduct(Product product)
         {
-            throw new NotImplementedException();
+            product.MappingBeforeSending();
+            return _restProductService.SaveProduct(product);
         }
 
         bool IProductService.SaveProducts(IEnumerable<Product> products)
         {
+            if (products == null)
+            {
+                return false;
+            }
+            products.ToList().ForEach(p => p.MappingBeforeSending());
+            return _restProductService.SaveProducts(products);
             throw new NotImplementedException();
         }
     }
