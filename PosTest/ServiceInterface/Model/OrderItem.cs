@@ -165,10 +165,8 @@ namespace ServiceInterface.Model
 
         public void RemoveAdditive(Additive additive)
         {
-            if ( Additives.Any(addtv => addtv.Equals(additive)) )
-            {
-                Additives.Remove(additive);
-            }
+            
+           
         }
     }
 }

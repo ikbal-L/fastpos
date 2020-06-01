@@ -259,7 +259,11 @@ namespace PosTest.ViewModels
 
         public void RemoveAdditive(Additive additive)
         {
-            CurrentOrder.SelectedOrderItem.RemoveAdditive(additive);
+            if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
+            {
+                CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
+                additive.ParentOrderItem.Additives.Remove(additive);
+            }
         }
 
         public void RemoveOrerItem(OrderItem item)
