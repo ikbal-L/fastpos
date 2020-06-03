@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,6 +103,8 @@ namespace ServiceInterface.Model
         [DataMember]
         public int AvailableStock { get; set; }
 
+        private Color? _backgroundColor;
+
         [DataMember]
         public string BackgroundString 
         { 
@@ -116,8 +119,34 @@ namespace ServiceInterface.Model
 
         public virtual Brush Background { 
             get => _background ?? (_background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+            set
+            {
+                _background = (SolidColorBrush)value;
+            }
         }
 
+        public virtual Color? BackgroundColor {
+
+            get
+            {
+                if (_backgroundColor == null)
+                {
+                    _backgroundColor = (Color)ColorConverter.ConvertFromString(BackgroundString);
+                }
+                return _backgroundColor;
+            }
+            set
+            {
+                _backgroundColor = value;
+                BackgroundString = _backgroundColor.ToString();
+                Background = new SolidColorBrush((Color)_backgroundColor);
+            }
+
+        }
+        [DataMember]
+        //[DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool IsPlatter { get; set; } = false;
         public void MappingBeforeSending()
         {
             if (this.CategorieId <= 0 && this.Category != null)

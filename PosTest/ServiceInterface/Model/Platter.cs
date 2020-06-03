@@ -12,18 +12,19 @@ namespace ServiceInterface.Model
     
     public class Platter : Product
     {
+        public Platter()
+        {
+            IsPlatter = true;
+        }
         [DataMember]
         public List<Ingredient> Ingredients { get; set; }
 
-        public List<long> IdIngredients { get; set; }
+        //public List<long> IdIngredients { get; set; }
         public List<Additive> Additives { get; set; }
-
+        public int aaa { get => 100;  }
         [DataMember]
         public List<long> IdAdditives { get; set; }
 
-        [DataMember]
-        //[DefaultValue(false)]
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool IsPlatter { get; set; } = true;
+        
     }
 }

@@ -58,5 +58,7 @@ namespace ServiceInterface.Model
                    additive.Description == Description &&
                    additive.BackgroundString == BackgroundString;
         }
+
+
     }
 }

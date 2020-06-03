@@ -28,4 +28,10 @@
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate x:Key="AdditiveSettingDataTemplate" DataType="{x:Type src:Additive}">
+        <Border>
+            <TextBlock Text="{Binding Path=Description}"/>
+        </Border>
+    </DataTemplate>
+
 </ResourceDictionary>

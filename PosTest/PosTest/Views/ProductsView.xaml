@@ -13,7 +13,7 @@
              d:DesignWidth="800" d:DesignHeight="450" 
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
         >
-    <UserControl.Resources>
+    <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
@@ -22,30 +22,31 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </UserControl.Resources>
+    </FrameworkElement.Resources>
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen}">
         <materialDesign:DialogHost.DialogContent>
             <subviews:ProductEditView/>
         </materialDesign:DialogHost.DialogContent>
        
-        <Grid Background="GhostWhite" >
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Name="controller" Background="Beige">
-                <Grid  Background="AliceBlue" Margin="5,5,5,0">
+            <StackPanel Grid.Row="0" Name="controller" >
+                <Grid Margin="5,5,5,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Content="New Product" FontSize="22"></Label>
+                    <Label Grid.Column="0" Content="Products" FontSize="22"></Label>
                     <TextBox Grid.Column="1" materialDesign:HintAssist.Hint="Filter" FontSize="18"></TextBox>
                 </Grid>
-                <Grid Background="Azure" Margin="5,5,5,5">
+                <Grid Margin="5,5,5,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="25*" />
+                        <ColumnDefinition Width="25*"/>
                         <ColumnDefinition Width="25*"/>
                         <ColumnDefinition Width="25*"/>
                         <ColumnDefinition Width="25*"/>
@@ -54,7 +55,7 @@
                     <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                         <Button  Name="New" Margin="2,0,2,0"
                                  cal:Message.Attach="[Event Click] = [Action NewCommand]"
-                                 Style="{StaticResource MaterialDesignRaisedDarkButton}">
+                                 Style="{StaticResource MaterialDesignOutlinedButton}">
                             <iconPacks:PackIconBoxIcons Kind="RegularListPlus"   />
                         </Button>
                         
@@ -93,12 +94,13 @@
                 SelectedItem="{Binding CurrentProduct}">
                 <ListView.View >
                     <GridView >
-                        <GridViewColumn DisplayMemberBinding="{Binding Id}" Header="Id" />
+                        
                         <GridViewColumn DisplayMemberBinding="{Binding Name }" Header="Name"/>
                         <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Description" />
                         <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Price" />
                         <GridViewColumn DisplayMemberBinding="{Binding Unit}" Header="Unit" />
                         <GridViewColumn DisplayMemberBinding="{Binding Category.Name}" Header="Category" />
+                        <GridViewColumn DisplayMemberBinding="{Binding IsPlatter}" Header="IsPlatter" />
                     </GridView>
                 </ListView.View>
             </ListView>

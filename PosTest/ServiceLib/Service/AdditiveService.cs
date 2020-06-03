@@ -13,7 +13,7 @@ using System.Text;
 
 namespace ServiceLib.Service
 {
-    [Export(typeof(IAdditiveService))]
+//    [Export(typeof(IAdditiveService))]
     public class AdditiveService : IAdditiveService
     {
         public bool DeleteAdditive(long idProduct)
@@ -47,7 +47,8 @@ namespace ServiceLib.Service
         }
     }
 
-    internal class RestAdditiveService
+    [Export(typeof(IAdditiveService))]
+    public class RestAdditiveService: IAdditiveService
     {
         private static RestAdditiveService _instance;
 
@@ -71,7 +72,7 @@ namespace ServiceLib.Service
         public Additive GetAdditive(long id)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
-            var client = new RestClient(UrlConfig.AdditiveUrl.GetAdditive);
+            var client = new RestClient(UrlConfig.AdditiveUrl.GetAdditive+id.ToString());
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);

@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PosTest.Views"
         xmlns:convert="clr-namespace:PosTest.Converters"
-        xmlns:cal="http://www.caliburnproject.org"
-        mc:Ignorable="d"
-        d:DesignWidth="1000"
+        xmlns:cal="http://www.caliburnproject.org" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+        d:DesignWidth="800"
              d:DesignHeight="600" 
         >
-    <UserControl.Resources>
+    <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
@@ -19,47 +20,129 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </UserControl.Resources>
-    <StackPanel Margin="20" Width="600">
-    <Grid >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="7*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="Edit Product"  Background="AliceBlue" Grid.ColumnSpan="2"/>
-        
+    </FrameworkElement.Resources>
+    <StackPanel Margin="5" Width="790">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="70*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="Edit Product" Grid.ColumnSpan="3"/>
 
-        <Label Grid.Row="1" Grid.Column="0" Content="Name"  />
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentProduct.Name}" />
+            <Label Grid.Row="1" Grid.Column="0" Content="Name"  />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentProduct.Name}" />
 
-        <Label Grid.Row="2" Grid.Column="0" Content="Description"  />
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentProduct.Description}" />
+            <Label Grid.Row="2" Grid.Column="0" Content="Description"  />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentProduct.Description}" />
 
-        <Label Grid.Row="3" Grid.Column="0" Content="Price"  />
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentProduct.Price}" />
+            <Label Grid.Row="3" Grid.Column="0" Content="Price"  />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentProduct.Price}" />
 
-        <Label Grid.Row="4" Grid.Column="0" Content="Unit"  />
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentProduct.Unit}" />
+            <Label Grid.Row="4" Grid.Column="0" Content="Unit"  />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentProduct.Unit}" />
 
-        <Label Grid.Row="5" Grid.Column="0" Content="Unit"  />
-        <ComboBox Grid.Row="5" Grid.Column="1"  
+            <Label Grid.Row="5" Grid.Column="0" Content="Categories"  />
+            <ComboBox Grid.Row="5" Grid.Column="1"  
                   ItemsSource="{Binding Categories}" 
                   DisplayMemberPath="Name"
                   SelectedValue ="{Binding CurrentProduct.Category }"
                   IsSynchronizedWithCurrentItem="True"/>
-        
-        
-    </Grid>
+
+            <Label Grid.Row="6" Grid.Column="0" Content="Color"  />
+            <Rectangle Grid.Row="6" Grid.Column="2" Fill="{Binding CurrentProduct.Background}"  />
+            <materialDesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding CurrentProduct.BackgroundColor}" />
 
 
+            <Label Grid.Row="7" Grid.Column="0" Content="IsMuchInDemand"  />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CurrentProduct.IsMuchInDemand}"  />
+
+            <Label Grid.Row="8" Grid.Column="0" Content="Picture "  />
+            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding CurrentProduct.PictureFileName}"  />
+
+            <Label Grid.Row="9" Grid.Column="0" Content="Available Stock"  />
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding CurrentProduct.AvailableStock}"  />
+
+            <TabControl Grid.Row="10" Grid.Column="0"  Grid.ColumnSpan="3" Height="180" 
+                        Visibility="{Binding CurrentProduct.IsPlatter ,Converter={StaticResource BoolToVisibility}}">
+                <TabItem Header="Additives" >
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="46*"/>
+                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition Width="46*"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <ListBox 
+                                ItemsSource="{Binding Additives}" 
+                                ItemTemplate="{StaticResource AdditiveSettingDataTemplate}"  Grid.Column="0"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                AlternationCount="2"
+                                />
+                            <StackPanel VerticalAlignment="Top" Grid.Row="0" Grid.Column="1">
+                                <Button Margin="2"/>
+                                <Button Margin="2"/>
+                                <Button Margin="2"/>
+                                <Button Margin="2"/>
+                            </StackPanel>
+                            <ListBox  
+                                ItemsSource="{Binding CurrentProduct.Additives}" 
+                                ItemTemplate="{StaticResource AdditiveSettingDataTemplate}" Grid.Column="2" 
+                                materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                AlternationCount="2"
+                                />
+
+                        </Grid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Ingredients">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70*"/>
+                            <RowDefinition Height="30*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="38*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="60*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ListBox Margin="2" ItemsSource="{Binding ProductsCanCompositIngredients}" DisplayMemberPath="Name"
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="0" />
+                        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
+                            <TextBox Text="10" Width="180"/>
+                            <Button Content="+"/>
+                        </StackPanel>
+
+                        <ListView Margin="2" ItemsSource="{Binding CurrentProduct.Ingredients}" DisplayMemberPath="Name"
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="2" Grid.RowSpan="2">
+                            <ListView.View >
+                                <GridView >
+                                    <GridViewColumn DisplayMemberBinding="{Binding Product.Name}" Header="Product" />
+                                    <GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Quantity" />
+                                </GridView >
+                            </ListView.View >
+                        </ListView>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+        </Grid>
         <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
@@ -77,6 +160,10 @@
                         cal:Message.Attach="[Event Click] = [Action CancelCommand]"
                         Content="CANCEL">
             </Button>
+
+
+
+
         </StackPanel>
     </StackPanel>
 </UserControl>
