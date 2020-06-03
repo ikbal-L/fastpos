@@ -30,6 +30,8 @@ namespace PosTest.ViewModels
         private IProductService _productsService;
         [Import(typeof(ICategoryService))]
         private ICategoryService _categoriesService;
+        [Import(typeof(IOrderService))]
+        private IOrderService _orderService;
         private Category _currantCategory;
         private bool _productsVisibility;
         private string _numericZone;
@@ -45,23 +47,29 @@ namespace PosTest.ViewModels
         public CheckoutViewModel() 
         {
             Orders = new BindableCollection<Order>();
-            CurrentOrder = new Order();
-            Orders.Add(CurrentOrder);
+            //CurrentOrder = new Order(); 
+            //Orders.Add(CurrentOrder);
         }
 
-        public CheckoutViewModel(int pageSize, IProductService productsService, ICategoryService categoriesService) : this()
+        public CheckoutViewModel(int pageSize, IProductService productsService, 
+            ICategoryService categoriesService,
+            IOrderService orderService) : this()
         {
-            //_productsService = productsService;
-            //_categoriesService = categoriesService;
+            _productsService = productsService;
+            _categoriesService = categoriesService;
+            _orderService = orderService;
             //currentOrderitem = new BindableCollection<OrdreItem>();
-            
-            AllRequestedProducts = productsService.GetAllProducts();
+
+            //CurrentOrder.Id = _orderService.GetIdmax();
+            int getProductsStatusCode = 0,
+                getCategoriesStatusCode = 0;
+            AllRequestedProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
             FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
             CategorieFiltering("Home");
-            Categories = new BindableCollection<Category>(categoriesService.GetAllCategories());
+            Categories = new BindableCollection<Category>(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
             InitCategoryColors();
         }
 
@@ -154,7 +162,7 @@ namespace PosTest.ViewModels
             set
             {
                 _currentOrder = value;            
-                NotifyOfPropertyChange(() => _currentOrder);
+                NotifyOfPropertyChange(() => CurrentOrder);
                                
             }
         }
@@ -334,7 +342,7 @@ namespace PosTest.ViewModels
                 }
                 else
                 {
-                    ToastNotification("Discount Greater Than Price");
+                    ToastNotification.Notify("Discount Greater Than Price");
                     return;
                 }
             }
@@ -412,6 +420,14 @@ namespace PosTest.ViewModels
             if (selectedproduct == null)
                 return;
             
+            if (CurrentOrder == null)
+            {
+                CurrentOrder = new Order();
+                Orders.Add(CurrentOrder); 
+                CurrentOrder.Id = _orderService.GetIdmax()+1;
+                CurrentOrder.OrderTime = DateTime.Now;
+            }
+
             CurrentOrder.AddItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true, quantity: 1);
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
@@ -464,7 +480,7 @@ namespace PosTest.ViewModels
                     }
                     else
                     {
-                        ToastNotification("Invalid value for Percentagte");
+                        ToastNotification.Notify("Invalid value for Percentagte");
                     }
                 }
                 else
@@ -535,7 +551,7 @@ namespace PosTest.ViewModels
                     else
                     {
                         NumericZone = string.Empty;
-                        ToastNotification("New price less than the total price");
+                        ToastNotification.Notify("New price less than the total price");
                     }
                     NumericZone = "";
                     break;
@@ -570,7 +586,7 @@ namespace PosTest.ViewModels
                     {
                         //Use Local to select message according to UI language
                         NumericZone = "";
-                        ToastNotification("Discount bigger than total");
+                        ToastNotification.Notify("Discount bigger than total");
                         //CurrentOrder.DiscountAmount = 0;
                         return;
                     }
@@ -600,7 +616,7 @@ namespace PosTest.ViewModels
                     {
                         NumericZone = "";
                         //Use Local to select message according to UI language
-                        ToastNotification("Payed amount lower than total");
+                        ToastNotification.Notify("Payed amount lower than total");
                         //CurrentOrder.DiscountAmount = 0;
                         return;
                     }
@@ -608,17 +624,49 @@ namespace PosTest.ViewModels
                     CurrentOrder.GivenAmount = payedAmount;
                     CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
                     NumericZone = "";
-                    SaveCurrentOrderAndPassOrderToKitchen();
+                    SaveCurrentOrder();
                     break;
             }
         }
 
-        private void SaveCurrentOrderAndPassOrderToKitchen()
+        private void SaveCurrentOrder()
         {
+            int resp;
+            try
+            {
+                 resp = _orderService.SaveOrder(CurrentOrder);
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Check your server connection");
+                return;
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+            
+            switch (resp)
+            {
+                case 401: ToastNotification.Notify("Database insertion error"); break;
+                case 402: ToastNotification.Notify("Order Id exists in the database"); break;
+                case 403: ToastNotification.Notify("Database access error"); break;
+                case 200: CurrentOrder = null; break;
+            }
+           
         }
 
-        private void ToastNotification(string message)
+        
+
+    }
+
+    static class ToastNotification
+    {
+        private static readonly bool IsRunningFromXUnit =
+                  AppDomain.CurrentDomain.GetAssemblies().Any(
+                      a => a.FullName.StartsWith("XUnitTesting"));
+        public static void Notify(string message)
         {
             Notifier notifier = new Notifier(cfg =>
             {
@@ -643,7 +691,6 @@ namespace PosTest.ViewModels
                 throw new Exception(message);
             }
         }
-
     }
 
     public enum NextOrPrevious

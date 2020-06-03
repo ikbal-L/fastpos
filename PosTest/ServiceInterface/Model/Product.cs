@@ -156,7 +156,7 @@ namespace ServiceInterface.Model
             }
             else
             {
-                throw new ProductMappingException("Id category different of CategoryId of the related Product");
+                throw new MappingException("Id category different of CategoryId of the related Product");
             }
             if (this is Platter plat &&
                 plat.IdAdditives != null && additives != null &&
@@ -171,7 +171,7 @@ namespace ServiceInterface.Model
                     }
                     else
                     {
-                        throw new ProductMappingException("Additive Id does not exist in the list of ids");
+                        throw new MappingException("Additive Id does not exist in the list of ids");
                     }
                 }
             }

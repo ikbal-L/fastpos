@@ -68,21 +68,21 @@ namespace ServiceInterface.Model
                 }
         }
 
-        public void MappingAfterReceiving(List<Product> products)
+        public void MappingAfterReceiving(ICollection<Product> products)
         {
-            if (ProductIds != null && products != null &&
-                products.Count == ProductIds.Count)
+            if (ProductIds != null && products != null)
             {
                 Products = new List<Product>();
-                foreach (var p in products)
+                foreach (var id in ProductIds)
                 {
-                    if (ProductIds.Any(id => id == p.Id))
+                    var prod = products.Where(p => id == p.Id).FirstOrDefault();
+                    if (prod != null)
                     {
-                        Products.Add(p);
+                        Products.Add(prod);
                     }
                     else
                     {
-                        throw new ProductMappingException("Additive Id does not exist in the list of ids");
+                        throw new MappingException("Product does not exist");
                     }
                 }
             }

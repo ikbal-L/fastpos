@@ -4,21 +4,21 @@ using System.Runtime.Serialization;
 namespace ServiceLib.Service
 {
     [Serializable]
-    internal class ProductMappingException : Exception
+    internal class MappingException : Exception
     {
-        public ProductMappingException()
+        public MappingException()
         {
         }
 
-        public ProductMappingException(string message) : base(message)
+        public MappingException(string message) : base(message)
         {
         }
 
-        public ProductMappingException(string message, Exception innerException) : base(message, innerException)
+        public MappingException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected ProductMappingException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected MappingException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

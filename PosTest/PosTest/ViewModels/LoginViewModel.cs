@@ -11,6 +11,7 @@ using ServiceInterface.Model;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Net.Http;
 
 namespace PosTest.ViewModels
 {
@@ -27,6 +28,8 @@ namespace PosTest.ViewModels
         [Import(typeof(IAuthentification))]
         private IAuthentification authService = null;
 
+        [Import(typeof(IOrderService))]
+        private IOrderService orderService;
 
         //public String Username { get; set; }
         //public String Password { get; set; }
@@ -44,11 +47,26 @@ namespace PosTest.ViewModels
 
         public void Login()
         {
-            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            int resp;
+            try
+            {
+                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Check your server connection");
+                return;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             CheckoutViewModel checkoutViewModel = 
                 new CheckoutViewModel(30, 
                 productService, 
-                categorieService);
+                categorieService, orderService);
 
             checkoutViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);

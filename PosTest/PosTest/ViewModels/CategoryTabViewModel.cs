@@ -14,10 +14,13 @@ namespace PosTest.ViewModels
 
         public CategoryTabViewModel(int pageSize, IProductService productService, ICategoryService categorieService)
         {
-            
+
             //currentOrderitem = new BindableCollection<OrdreItem>();
-            var AllRequestedProducts = productService.GetAllProducts();
-            var Categories = new BindableCollection<Category>(categorieService.GetAllCategories());
+            int getProductsStatusCode = 0,
+                getCategoriesStatusCode = 0;
+            
+            var AllRequestedProducts = productService.GetAllProducts(ref getProductsStatusCode);
+            var Categories = new BindableCollection<Category>(categorieService.GetAllCategories(ref getCategoriesStatusCode));
             CategoriesTab = new BindableCollection<CategoryItem>();
 
             foreach (var p in AllRequestedProducts)

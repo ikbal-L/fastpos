@@ -134,9 +134,9 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Aqua" 
-                                   Visibility="{Binding CurrentOrder.PayedAmount, Converter={StaticResource DecimalToVisibility}}">                        
+                                   Visibility="{Binding CurrentOrder.GivenAmount, Converter={StaticResource DecimalToVisibility}}">                        
                             <Run Text="Payed: " FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.PayedAmount}" FontWeight="Bold"></Run>
+                            <Run Text="{Binding CurrentOrder.GivenAmount}" FontWeight="Bold"></Run>
                         </TextBlock>
                         <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
                                    Visibility="{Binding CurrentOrder.ReturnedAmount, Converter={StaticResource DecimalToVisibility}}" >                        

@@ -14,7 +14,23 @@ namespace ServiceLib.Service
     [Export(typeof(IAuthentification))]
     public class Authentification : IAuthentification
     {
-        public bool Authenticate(string user, string password, Annex annex, Terminal terminal)
+        private readonly RestAuthentification _restAuthentification = RestAuthentification.Instance;
+        public int Authenticate(string user, string password, Annex annex, Terminal terminal)
+        {
+            int response;
+            response = _restAuthentification.Authenticate(user, password, annex, terminal);
+            return (int)response;
+
+        }
+
+    }
+
+    public class RestAuthentification : IAuthentification
+    {
+        private static RestAuthentification _instance;
+
+        internal static RestAuthentification Instance => _instance ?? (_instance = new RestAuthentification());
+        public int Authenticate(string user, string password, Annex annex, Terminal terminal)  
         {
             string json = JsonConvert.SerializeObject(
                             new AuthUser {Username=user, Password=password, AnnexId = annex.Id, TerminalId=terminal.Id },
@@ -30,8 +46,8 @@ namespace ServiceLib.Service
             var url = UrlConfig.AuthUrl.Authenticate;
             //var url = "http://127.0.0.1:5000/auth/login";
             var client = new HttpClient();
-            
-            var response = client.PostAsync(url, data).Result;
+            HttpResponseMessage response;
+            response = client.PostAsync(url, data).Result;
 
             if (response.IsSuccessStatusCode)
             {
@@ -39,9 +55,9 @@ namespace ServiceLib.Service
                 var jsonContentDict = JObject.Parse(jsonContent);
                 string token = jsonContentDict["auth_token"].ToString();
                 AuthProvider.Initialize<DefaultAuthProvider>(new User { Token = token});
-                return true;
+                //return true;
             }
-            return false;
+            return (int)response.StatusCode;
 
         }
 

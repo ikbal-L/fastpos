@@ -9,12 +9,12 @@ namespace ServiceInterface.Interface
 {
     public interface ICategoryService
     {
-        IEnumerable<Category> GetAllCategories();
-        IEnumerable<Category> GetManyCategories(IEnumerable<long> ids);
-        bool SaveCategory(Category category);
-        bool UpdateCategory(Category category);
-        bool SaveCategories(IEnumerable<Category> categories);
-        Category GetCategory(long id);
-        bool DeleteCategory(long id);
+        IEnumerable<Category> GetAllCategories(ref int statusCode);
+        IEnumerable<Category> GetManyCategories(IEnumerable<long> ids, ref int statusCode);
+        int SaveCategory(Category category);
+        int UpdateCategory(Category category);
+        int SaveCategories(IEnumerable<Category> categories);
+        Category GetCategory(long id, ref int statusCode);
+        int DeleteCategory(long id);
     }
 }

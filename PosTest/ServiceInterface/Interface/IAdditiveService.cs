@@ -5,13 +5,14 @@ namespace ServiceInterface.Interface
 {
     public interface IAdditiveService
     {
-        IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids);
-        bool SaveAdditive(Additive additive);
-        bool UpdateAdditive(Additive additive);
-        bool SaveAdditives(IEnumerable<Additive> additives);
+        IEnumerable<Additive> GetAllAdditives(ref int statusCode);
+        IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids, ref int statusCode);
+        int SaveAdditive(Additive additive);
+        int UpdateAdditive(Additive additive);
+        int SaveAdditives(IEnumerable<Additive> additives);
 
-        Additive GetAdditive(long id);
+        Additive GetAdditive(long id, ref int statusCode);
 
-        bool DeleteAdditive(long idProduct);
+        int DeleteAdditive(long idProduct);
     }
 }
