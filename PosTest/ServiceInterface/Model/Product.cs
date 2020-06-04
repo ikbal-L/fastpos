@@ -185,13 +185,13 @@ namespace ServiceInterface.Model
             }
             else
             {
-                throw new ProductMappingException("Id category different of CategoryId of the related Product");
+                throw new MappingException("Id category different of CategoryId of the related Product");
             }
             if (this is Platter plat &&
                 plat.IdAdditives != null && additives != null &&
                 additives.Count == plat.IdAdditives.Count)
             {
-                plat.Additives = new List<Additive>();
+                plat.Additives = new BindableCollection<Additive>();
                 foreach (var a in additives)
                 {
                     if (plat.IdAdditives.Any(id => id == a.Id))
@@ -200,7 +200,7 @@ namespace ServiceInterface.Model
                     }
                     else
                     {
-                        throw new ProductMappingException("Additive Id does not exist in the list of ids");
+                        throw new MappingException("Additive Id does not exist in the list of ids");
                     }
                 }
             }

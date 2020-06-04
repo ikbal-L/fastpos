@@ -19,7 +19,6 @@
             <Control x:Name="myControl" Template="{StaticResource MyItemTemplate1}" />
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding IsActive}" Value="True">
-                    
                     <Setter TargetName="myControl" Property="Template" Value="{StaticResource MyItemTemplate}" />
                     <Setter TargetName="myControl" Property="Background" Value="Aqua" />
                 </DataTrigger>
@@ -56,7 +55,8 @@
         <TextBlock Text="{Binding IsActivev}" Grid.Row="1" />
         <ListView Grid.Row="2" Name="lvDataBinding" ItemsSource="{Binding Items}"
                  ItemTemplate="{StaticResource MyItemTemplate2}"
-                 View="{StaticResource lsitview}">
+                 View="{StaticResource lsitview}"
+                 local:ListViewEx.IsWrapTemplate="{Binding IsActivev}">
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Style.Triggers>

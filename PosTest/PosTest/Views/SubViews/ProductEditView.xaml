@@ -76,7 +76,7 @@
             <Label Grid.Row="9" Grid.Column="0" Content="Available Stock"  />
             <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding CurrentProduct.AvailableStock}"  />
 
-            <TabControl Grid.Row="10" Grid.Column="0"  Grid.ColumnSpan="3" Height="180" 
+            <TabControl Grid.Row="10" Grid.Column="0"  Grid.ColumnSpan="3" 
                         Visibility="{Binding CurrentProduct.IsPlatter ,Converter={StaticResource BoolToVisibility}}">
                 <TabItem Header="Additives" >
                     <StackPanel>
@@ -87,25 +87,32 @@
                                 <ColumnDefinition Width="46*"/>
                             </Grid.ColumnDefinitions>
 
-
                             <ListBox 
-                                ItemsSource="{Binding Additives}" 
+                                Background="Aqua"
+                                ItemsSource="{Binding AvailableAdditives}" 
+                                SelectedItem="{Binding SelectedAvailableAdditive}"
                                 ItemTemplate="{StaticResource AdditiveSettingDataTemplate}"  Grid.Column="0"
-                                materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                AlternationCount="2"
                                 />
-                            <StackPanel VerticalAlignment="Top" Grid.Row="0" Grid.Column="1">
-                                <Button Margin="2"/>
-                                <Button Margin="2"/>
-                                <Button Margin="2"/>
-                                <Button Margin="2"/>
-                            </StackPanel>
                             <ListBox  
-                                ItemsSource="{Binding CurrentProduct.Additives}" 
+                                ItemsSource="{Binding CurrentProduct.Additives}"  
+                                SelectedItem="{Binding SelectedAddedAdditive}"
                                 ItemTemplate="{StaticResource AdditiveSettingDataTemplate}" Grid.Column="2" 
                                 materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                 AlternationCount="2"
                                 />
+
+
+                            <StackPanel VerticalAlignment="Top" Grid.Row="0" Grid.Column="1">
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        cal:Message.Attach="[Event Click] = [Action AddAllAdditivesCommand]" Margin="2" Content=">>"/>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        cal:Message.Attach="[Event Click] = [Action AddAdditiveCommand]" Margin="2" Content=">" />
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        cal:Message.Attach="[Event Click] = [Action RemoveAdditiveCommand]" Margin="2" Content="-" />
+                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        cal:Message.Attach="[Event Click] = [Action RemoveAllAdditivesCommand]" Margin="2" Content="-" />
+                            </StackPanel>
+                         
 
                         </Grid>
                     </StackPanel>
@@ -122,14 +129,20 @@
                             <ColumnDefinition Width="60*"/>
                         </Grid.ColumnDefinitions>
 
-                        <ListBox Margin="2" ItemsSource="{Binding ProductsCanCompositIngredients}" DisplayMemberPath="Name"
+                        <ListBox Margin="2" 
+                                 ItemsSource="{Binding ProductsCanCompositIngredients}" 
+                                 SelectedItem="{Binding SelectedCompositProduct}"
+                                 DisplayMemberPath="Name"
                                  materialDesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="0" />
                         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
-                            <TextBox Text="10" Width="180"/>
-                            <Button Content="+"/>
+                            <TextBox x:Name="Quantity" Text="10" Width="180"/>
+                            <Button Content="+" cal:Message.Attach="[Event Click] = [Action addNewIngredientCommand(Quantity.Text)]" />
                         </StackPanel>
 
-                        <ListView Margin="2" ItemsSource="{Binding CurrentProduct.Ingredients}" DisplayMemberPath="Name"
+                        <ListView Margin="2" 
+                                  ItemsSource="{Binding CurrentProduct.Ingredients}" 
+                                  SelectedItem="{Binding SelectedIngredient}"
+                                  DisplayMemberPath="Name"
                                  materialDesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="2" Grid.RowSpan="2">
                             <ListView.View >
                                 <GridView >

@@ -48,8 +48,8 @@ namespace WpfApp1
             }
             (DataContext as VewModel).IsActivev = tempcheck.IsChecked;
 
-            /*lvDataBinding.View = tempcheck.IsChecked==true ? null : listview;
-            
+            /*lvDataBinding.View = tempcheck.IsChecked == true ? null : listview;
+
             if (tempcheck.IsChecked == true)
             {
                 lvDataBinding.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(WrapPanel)));
@@ -58,7 +58,7 @@ namespace WpfApp1
             {
                 lvDataBinding.ItemsPanel = itemsPanel; //new ItemsPanelTemplate(new FrameworkElementFactory(typeof(WrapPanel)));
             }*/
-            
+
         }
     }
 

@@ -1,24 +1,15 @@
 ﻿using ServiceInterface.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceInterface.Interface
 {
-    public interface IOrderService : IDisposable
+    public interface IOrderService 
     {
-        ICollection<Product> GetAll();
-
-        bool Create(Product product);
-
-        bool Update(Product product);
-
-        bool Delete(int personId);
-
-
-        List<Product> createProducts();
-        Task<List<Product>> getProductsREST();
+        IEnumerable<Order> GetAllOrders();
+        IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds);
+        int SaveOrder(Order order);
+        int UpdateOrder(Order order);
+        int DeleteOrder(int orderId);
+        long GetIdmax();
     }
 }

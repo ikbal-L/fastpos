@@ -18,6 +18,7 @@ namespace ServiceInterface.Model
         private string _backGroundString=null;
         private Brush _backGroundColor;
         private string _name;
+        private Color? _backgroundColor;
 
         [DataMember]
         public long Id { get; set; }
@@ -38,7 +39,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public string BackgroundString 
         { 
-            get => _backGroundString; 
+            get => _backGroundString ?? "#f39c12";
             set 
             { 
                 _backGroundString = value;
@@ -51,9 +52,14 @@ namespace ServiceInterface.Model
         public List<long> ProductIds { get; set; }
         public List<Product> Products { get; set; }
 
-
-        public Brush BackGroundColor => _backGroundColor ?? 
-            (_backGroundColor=new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+        public virtual Brush BackGroundColor
+        {
+            get => _backGroundColor ?? (_backGroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+            set
+            {
+                _backGroundColor = (SolidColorBrush)value;
+            }
+        }
 
         public void MappingBeforeSending()
         {
@@ -68,26 +74,44 @@ namespace ServiceInterface.Model
                 }
         }
 
-        public void MappingAfterReceiving(List<Product> products)
+        public void MappingAfterReceiving(ICollection<Product> products)
         {
-            if (ProductIds != null && products != null &&
-                products.Count == ProductIds.Count)
+            if (ProductIds != null && products != null)
             {
                 Products = new List<Product>();
-                foreach (var p in products)
+                foreach (var id in ProductIds)
                 {
-                    if (ProductIds.Any(id => id == p.Id))
+                    var prod = products.Where(p => id == p.Id).FirstOrDefault();
+                    if (prod != null)
                     {
-                        Products.Add(p);
+                        Products.Add(prod);
                     }
                     else
                     {
-                        throw new ProductMappingException("Additive Id does not exist in the list of ids");
+                        throw new MappingException("Product does not exist");
                     }
                 }
             }
         }
 
+        public virtual Color? BackgroundColor
+        {
+            get
+            {
+                if (_backgroundColor == null)
+                {
+                    _backgroundColor = (Color)ColorConverter.ConvertFromString(BackgroundString);
+                }
+                return _backgroundColor;
+            }
+            set
+            {
+                _backgroundColor = value;
+                BackgroundString = _backgroundColor.ToString();
+                BackGroundColor = new SolidColorBrush((Color)_backgroundColor);
+            }
+
+        }
     }
 
 

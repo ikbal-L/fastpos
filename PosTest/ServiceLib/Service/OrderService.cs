@@ -1,67 +1,72 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
+﻿using RestSharp;
 using ServiceInterface.Authorisation;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Net;
-using System.Net.Http;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.ComponentModel;
+using System.ComponentModel.Composition;
+using Newtonsoft.Json.Linq;
 
 namespace ServiceLib.Service
 {
-    public class AdditiveService : IAdditiveService
+    [Export(typeof(IOrderService))]
+    public class OrderService : IOrderService
     {
-        private readonly RestAdditiveService _restAdditiveService = RestAdditiveService.Instance;
-        public int DeleteAdditive(long id)
-        {
-            return _restAdditiveService.DeleteAdditive(id);
-        }
-
-        public Additive GetAdditive(long id, ref int statusCode)
+        private readonly RestOrderService _restOrderService = RestOrderService.Instance;
+        public int DeleteOrder(int orderId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids, ref int statusCode)
+        public IEnumerable<Order> GetAllOrders()
         {
             throw new NotImplementedException();
         }
 
-        public int SaveAdditive(Additive additive)
+        public long GetIdmax()
+        {
+
+            var idmax = _restOrderService.GetIdmax();
+            if (idmax==null)
+            {
+                throw new Exception("idmax is null");
+            }
+            return (long)idmax;
+        }
+
+        public IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds)
         {
             throw new NotImplementedException();
         }
 
-        public int SaveAdditives(IEnumerable<Additive> additives)
+        public int SaveOrder(Order order)
         {
-            throw new NotImplementedException();
+            order.MappingBeforeSending();
+            return _restOrderService.SaveOrder(order);
         }
 
-        public int UpdateAdditive(Additive additive)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Additive> GetAllAdditives(ref int statusCode)
+        public int UpdateOrder(Order order)
         {
             throw new NotImplementedException();
         }
     }
 
-    [Export(typeof(IAdditiveService))]
-    public class RestAdditiveService : IAdditiveService
+    internal class RestOrderService
     {
-        private static RestAdditiveService _instance;
+        private static RestOrderService _instance;
 
-        public static RestAdditiveService Instance => _instance ?? (_instance = new RestAdditiveService());
-        public int DeleteAdditive(long additivdId)
+        internal static RestOrderService Instance => _instance ?? (_instance = new RestOrderService());
+        public int DeleteOrder(long orderId)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            var client = new RestClient(UrlConfig.AdditiveUrl.DeleteAdditive + $"{additivdId}");
+            var client = new RestClient(UrlConfig.OrderUrl.DeleteOrder + $"{orderId}");
             var request = new RestRequest(Method.DELETE);
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", token);
@@ -74,33 +79,30 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public Additive GetAdditive(long id, ref int statusCode)
+        public Order GetOrder(long id)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
-            var client = new RestClient(UrlConfig.AdditiveUrl.GetAdditive+id.ToString());
+            var client = new RestClient(UrlConfig.OrderUrl.GetOrder+id.ToString());
             var request = new RestRequest(Method.GET);
-            request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
             IRestResponse response = client.Execute(request);
-            Additive additive = null;
-            statusCode = (int)response.StatusCode;
+            Order order = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                additive = JsonConvert.DeserializeObject<Additive>(response.Content);
+                order = JsonConvert.DeserializeObject<Order>(response.Content);
             }
 
-            return additive;// ;products
+            return order;// ;products
 
             //return new Additive { Id=id};
         }
 
-        public IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids, ref int statusCode)
+        public IEnumerable<Order> GetManyOrders(IEnumerable<long> ids)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            var client = new RestClient(UrlConfig.AdditiveUrl.GetManyAdditives);
+            var client = new RestClient(UrlConfig.OrderUrl.GetManyOrders);
             var request = new RestRequest(Method.POST);
-            request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddHeader("content-type", "application/json");
             string json = JsonConvert.SerializeObject(ids,
@@ -111,73 +113,66 @@ namespace ServiceLib.Service
                            });
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
-            statusCode = (int)response.StatusCode;
 
-            IEnumerable<Additive> additives = null;
+            IEnumerable<Order> orders = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                additives = JsonConvert.DeserializeObject<IEnumerable<Additive>>(response.Content);
+                orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(response.Content);
             }
-
-            return additives;
+            return orders;
         }
 
-        public int SaveAdditive(Additive additive)
+        public int SaveOrder(Order Order)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
-            string json = JsonConvert.SerializeObject(additive,
+            string json = JsonConvert.SerializeObject(Order,
                             Newtonsoft.Json.Formatting.None,
                             new JsonSerializerSettings
                             {
                                 NullValueHandling = NullValueHandling.Ignore
                             });
 
-            var url = UrlConfig.AdditiveUrl.SaveAdditive;
+            var url = UrlConfig.OrderUrl.SaveOrder;
             var client = new RestClient(url);
             var request = new RestRequest(Method.POST);
-            request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
-
             IRestResponse response = client.Execute(request);
-
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
-
             return (int)response.StatusCode;
         }
 
-       public int UpdateAdditive(Additive additive)
+        public bool UpdateOrder(Order order)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            //product = MapProduct.MapProductToSend(product);
-            string json = JsonConvert.SerializeObject(additive,
-                            Newtonsoft.Json.Formatting.None,
+
+            string json = JsonConvert.SerializeObject(order,
+                            Formatting.None,
                             new JsonSerializerSettings
                             {
                                 NullValueHandling = NullValueHandling.Ignore
                             });
 
-            var url = UrlConfig.AdditiveUrl.UpdateAdditive;
+            var url = UrlConfig.OrderUrl.UpdateOrder;
             var client = new RestClient(url);
             var request = new RestRequest(Method.PUT);
-            request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
 
-            //if (response.StatusCode == HttpStatusCode.OK)
-            //    return true;
+            if (response.StatusCode == HttpStatusCode.OK)
+                return true;
 
-            return (int)response.StatusCode;
+            return false;
         }
 
-        public int SaveAdditives(IEnumerable<Additive> additives)
+        public bool SaveOrders(IEnumerable<Order> orders)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            var client = new RestClient(UrlConfig.AdditiveUrl.SaveAdditives);
+            var client = new RestClient(UrlConfig.OrderUrl.SaveOrders);
             var request = new RestRequest(Method.POST);
             request.AddHeader("content-type", "application/json");
             request.AddHeader("Authorization", token);
@@ -185,7 +180,7 @@ namespace ServiceLib.Service
             //{
             //    MapProduct.MapProductToSend(p);
             //}
-            var jsonData = JsonConvert.SerializeObject(additives,
+            var jsonData = JsonConvert.SerializeObject(orders,
                                         Newtonsoft.Json.Formatting.None,
                                         new JsonSerializerSettings
                                         {
@@ -196,29 +191,38 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
 
-            //if (response.StatusCode == HttpStatusCode.OK)
-            //    return true;
-
-            return (int)response.StatusCode;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
         }
 
-        public IEnumerable<Additive> GetAllAdditives(ref int statusCode)
+        internal long? GetIdmax()
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
-            var client = new RestClient(UrlConfig.AdditiveUrl.GetAllAdditives);
+            var client = new RestClient(UrlConfig.OrderUrl.GetIdMax);
             var request = new RestRequest(Method.GET);
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
             IRestResponse response = client.Execute(request);
-            IEnumerable<Additive> additives = null;
+            long? idmax = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                additives = JsonConvert.DeserializeObject<IEnumerable<Additive>>(response.Content);
+                //var jsonContentDict = JObject.Parse(response.Content);
+                try
+                {
+                    idmax = Convert.ToInt64(response.Content);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+                
+                //idmax = JsonConvert.DeserializeObject<long>(response.Content);
             }
-            statusCode = (int)response.StatusCode;
-            return additives;
+
+            return idmax;
         }
     }
-
-
 }

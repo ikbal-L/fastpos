@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using Newtonsoft.Json;
 
 namespace ServiceInterface.Model
@@ -12,6 +13,8 @@ namespace ServiceInterface.Model
     
     public class Platter : Product
     {
+        private BindableCollection<Additive> _additives;
+
         public Platter()
         {
             IsPlatter = true;
@@ -20,7 +23,15 @@ namespace ServiceInterface.Model
         public List<Ingredient> Ingredients { get; set; }
 
         //public List<long> IdIngredients { get; set; }
-        public List<Additive> Additives { get; set; }
+        public BindableCollection<Additive> Additives 
+        {
+            get => _additives;
+            set
+            {
+                _additives = value;
+                NotifyOfPropertyChange(() => Additives);
+            }
+        }
         public int aaa { get => 100;  }
         [DataMember]
         public List<long> IdAdditives { get; set; }

@@ -107,6 +107,7 @@
     <Compile Include="Service\AdditiveService.cs" />
     <Compile Include="Service\Authentification.cs" />
     <Compile Include="Service\CategoryService.cs" />
+    <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\ProductMappingException.cs" />
     <Compile Include="Service\ProductService.cs" />
   </ItemGroup>

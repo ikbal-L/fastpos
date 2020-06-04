@@ -25,19 +25,19 @@ namespace ServiceLib.Service
         private RestAdditiveService _restAdditiveService = RestAdditiveService.Instance;
         private RestCategoryService _restCategoryService = RestCategoryService.Instance;
 
-        public bool UpdateProduct(Product product)
+        public int UpdateProduct(Product product)
         {
             product.MappingBeforeSending();
             return _restProductService.UpdateProduct(product);
 
         }
 
-        public bool DeleteProduct(long idProduct)
+        public int DeleteProduct(long idProduct)
         {
             return _restProductService.DeleteProduct(idProduct);
         }
 
-        public ICollection<Product> GetAllProducts()
+        public ICollection<Product> GetAllProducts(ref int statusCode)
         {
             IEnumerable<Additive> GetAdditivesFromCollection(IEnumerable<Additive> additives, IEnumerable<long> idAdditves)
             {
@@ -51,8 +51,7 @@ namespace ServiceLib.Service
                 }
             }
 
-            var t1 = DateTime.Now;
-            var products = _restProductService.GetAllProducts();
+            var products = _restProductService.GetAllProducts(ref statusCode);
             if (products == null)
             {
                 return null;
@@ -70,21 +69,22 @@ namespace ServiceLib.Service
                 }
             }
 
-            var additivesOfAllProducts = _restAdditiveService.GetManyAdditives(idAdditivesOfAllProducts);
-            var categories = _restCategoryService.GetManyCategories(idCategories);
-            var t2 = DateTime.Now;
-            Console.WriteLine($"{t2 - t1}");
+            int getAdditivestatusCode=0,
+                getCategriesStatusCode=0;
+            var additivesOfAllProducts = _restAdditiveService.GetManyAdditives(idAdditivesOfAllProducts, ref getAdditivestatusCode);
+            if (getAdditivestatusCode != 200)
+            {
+                throw new MappingException("Error in GetManyAdditives to map with products, StatusCode: " + getAdditivestatusCode.ToString());
+            }
+            var categories = _restCategoryService.GetManyCategories(idCategories, ref getCategriesStatusCode);
+            if (getCategriesStatusCode != 200)
+            {
+                throw new MappingException("Error in GetManyCategories to map with products, StatusCode: "+ getCategriesStatusCode.ToString());
+            }
             foreach (var p in products)
             {
-                Category category;
-                if (categories.Any(c => c.Id == p.CategorieId))
-                {
-                    category = categories.Where(c => c.Id == p.CategorieId).First();
-                }
-                else
-                {
-                    category = _restCategoryService.GetCategory(p.CategorieId);
-                }
+                Category category = categories.Where(c => c.Id == p.CategorieId).First() ;
+                
                 IEnumerable<Additive> additives = null;
                 if (p is Platter plat && plat.IdAdditives != null)
                 {
@@ -97,48 +97,62 @@ namespace ServiceLib.Service
             return products;
         }
 
-        public Product GetProduct(long id)
+        public Product GetProduct(long id, ref int statusCode)
         {
-            var product =_restProductService.GetProduct(id);
+            var product =_restProductService.GetProduct(id, ref statusCode);
             if(product == null)
             {
                 return null;
             }
-            var category = _restCategoryService.GetCategory(product.CategorieId);
+            int getAdditivestatusCode = 0,
+                getCategryStatusCode = 0;
+            var category = _restCategoryService.GetCategory(product.CategorieId, ref getCategryStatusCode);
+            if (getCategryStatusCode != 200)
+            {
+                throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getCategryStatusCode.ToString());
+            }
             IEnumerable<Additive> additives = null;
             if (product is Platter plat && plat.IdAdditives!=null && plat.IdAdditives.Count>0)
             {
-                additives = _restAdditiveService.GetManyAdditives(plat.IdAdditives);
+                additives = _restAdditiveService.GetManyAdditives(plat.IdAdditives, ref getAdditivestatusCode);
+                if (getAdditivestatusCode != 200)
+                {
+                    throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getAdditivestatusCode.ToString());
+                }
             }
-            product.MappingAfterReceiving(category, additives.ToList());
+            product.MappingAfterReceiving(category, additives?.ToList());
 
             return product;
         }
 
-        public bool SaveProduct(Product product)
+        public int SaveProduct(Product product)
         {
+            if (product == null)
+            {
+                return -1;
+            }
             product.MappingBeforeSending();
             return _restProductService.SaveProduct(product);
         }
 
-        public bool SaveProducts(IEnumerable<Product> products)
+        public int SaveProducts(IEnumerable<Product> products)
         {
             if (products == null)
             {
-                return false;
+                return -1;
             }
             products.ToList().ForEach(p => p.MappingBeforeSending());
             return _restProductService.SaveProducts(products);
-            throw new NotImplementedException();
         }
     }
 
 
-    internal class RestProductService{
+    internal class RestProductService : IProductService
+    {
         private static RestProductService _instance;
 
         public static RestProductService Instance => _instance ?? (_instance = new RestProductService());
-        public ICollection<Product> GetAllProducts()
+        public ICollection<Product> GetAllProducts(ref int statusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.ProductUrl.GetAllProducts);
@@ -184,11 +198,117 @@ namespace ServiceLib.Service
 
                 } 
             }
-            
+            statusCode = (int)response.StatusCode;
             return products;// FakeServices.Products;
         }
 
-        public bool SaveProduct(Product product)
+        public ICollection<Product> GetAllProducts(IEnumerable<long> ids, ref int statusCode)
+        {
+            string token = AuthProvider.Instance.AuthorizationToken;
+            var client = new RestClient(UrlConfig.ProductUrl.GetAllProducts);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("authorization", token);
+            request.AddHeader("accept", "application/json");
+            
+            IRestResponse response = client.Execute(request);
+
+            ICollection<Product> products = null;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var plattersProducts = JsonConvert.DeserializeObject<List<Platter>>(response.Content);
+                if (plattersProducts != null && plattersProducts.Count > 0)
+                {
+                    products = new Collection<Product>();
+                    foreach (var platProduct in plattersProducts)
+                    {
+                        if (!platProduct.IsPlatter)
+                        {
+                            var p = new Product
+                            {
+                                AvailableStock = platProduct.AvailableStock,
+                                BackgroundString = platProduct.BackgroundString,
+                                CategorieId = platProduct.CategorieId,
+                                Description = platProduct.Description,
+                                Id = platProduct.Id,
+                                IsMuchInDemand = platProduct.IsMuchInDemand,
+                                Name = platProduct.Name,
+                                PictureFileName = platProduct.PictureFileName,
+                                PictureUri = platProduct.PictureUri,
+                                Price = platProduct.Price,
+                                Type = platProduct.Type,
+                                Unit = platProduct.Unit
+                            };
+                            products.Add(p);
+                        }
+                        else
+                        {
+                            products.Add(platProduct);
+                        }
+                    }
+
+                }
+            }
+            statusCode = (int)response.StatusCode;
+            return products;
+        }
+
+        public ICollection<Product> GetManyProducts(IEnumerable<long> ids, ref int statusCode)
+        {
+            string token = AuthProvider.Instance.AuthorizationToken;
+            var client = new RestClient(UrlConfig.ProductUrl.GetManyProducts);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", token);
+            request.AddHeader("content-type", "application/json");
+            string json = JsonConvert.SerializeObject(ids,
+                           Newtonsoft.Json.Formatting.None,
+                           new JsonSerializerSettings
+                           {
+                               NullValueHandling = NullValueHandling.Ignore
+                           });
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+
+            ICollection<Product> products = null;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var plattersProducts = JsonConvert.DeserializeObject<List<Platter>>(response.Content);
+                if (plattersProducts != null && plattersProducts.Count > 0)
+                {
+                    products = new Collection<Product>();
+                    foreach (var platProduct in plattersProducts)
+                    {
+                        if (!platProduct.IsPlatter)
+                        {
+                            var p = new Product
+                            {
+                                AvailableStock = platProduct.AvailableStock,
+                                BackgroundString = platProduct.BackgroundString,
+                                CategorieId = platProduct.CategorieId,
+                                Description = platProduct.Description,
+                                Id = platProduct.Id,
+                                IsMuchInDemand = platProduct.IsMuchInDemand,
+                                Name = platProduct.Name,
+                                PictureFileName = platProduct.PictureFileName,
+                                PictureUri = platProduct.PictureUri,
+                                Price = platProduct.Price,
+                                Type = platProduct.Type,
+                                Unit = platProduct.Unit
+                            };
+                            products.Add(p);
+                        }
+                        else
+                        {
+                            products.Add(platProduct);
+                        }
+                    }
+
+                }
+            }
+            statusCode = (int)response.StatusCode;
+            return products;
+        }
+
+        public int SaveProduct(Product product)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             string json = JsonConvert.SerializeObject(product,
@@ -203,13 +323,13 @@ namespace ServiceLib.Service
             client.DefaultRequestHeaders.Add("Authorization", token);
             var response =  client.PostAsync(url, data).Result;
 
-            if (response.IsSuccessStatusCode)
-                return true;
+            //if (response.IsSuccessStatusCode)
+            //    return true;
 
-            return false;
+            return (int)response.StatusCode;
         }
 
-        public bool UpdateProduct(Product product)
+        public int UpdateProduct(Product product)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
@@ -229,13 +349,13 @@ namespace ServiceLib.Service
 
             IRestResponse response = client.Execute(request);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-                return true;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //    return true;
 
-            return false;
+            return (int)response.StatusCode;
         }
 
-        public bool SaveProducts(IEnumerable<Product> products)
+        public int SaveProducts(IEnumerable<Product> products)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.ProductUrl.SaveProducts);
@@ -254,19 +374,19 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
             
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return true;
-            }
-            return false;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //{
+            //    return true;
+            //}
+            return (int)response.StatusCode;
         }
 
-        public Product GetProduct(long id)
+        public Product GetProduct(long id, ref int statusCode)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             Product product=null;
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://127.0.0.1:5000/");
+            client.BaseAddress = new Uri("http://192.168.1.102:5000/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Authorization", token);
@@ -277,11 +397,12 @@ namespace ServiceLib.Service
             {
                 product =  response.Content.ReadAsAsync<Product>().Result;
             }
+            statusCode = (int)response.StatusCode;
             return product;
 
         }
 
-        public bool DeleteProduct(long productId)
+        public int DeleteProduct(long productId)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.ProductUrl.DeleteProduct + $"{productId}");
@@ -290,11 +411,11 @@ namespace ServiceLib.Service
             request.AddHeader("Authorization", token);
             //request.AddParameter("application/json", "{\n\"id\":1\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
-            if (response.StatusCode == HttpStatusCode.OK )
-            {
-                return true;
-            }
-            return false;
+            //if (response.StatusCode == HttpStatusCode.OK )
+            //{
+            //    return true;
+            //}
+            return (int)response.StatusCode;
         }
 
     }

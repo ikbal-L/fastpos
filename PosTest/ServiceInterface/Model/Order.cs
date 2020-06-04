@@ -12,7 +12,7 @@ namespace ServiceInterface.Model
         private decimal _newTotal;
         private OrderItem _selectedOrderItem;
         private decimal _discountAmount = 0;
-        private decimal _payedAmount;
+        private decimal _givenAmount;
         private decimal _returnedAmount;
         private decimal _discountPercentage;
 
@@ -109,10 +109,10 @@ namespace ServiceInterface.Model
         [DataMember]
         public decimal GivenAmount 
         {
-            get => _payedAmount;
+            get => _givenAmount;
             set
             {
-                _payedAmount = value;
+                _givenAmount = value;
                 NotifyOfPropertyChange(() => GivenAmount);
             }
                 //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
@@ -140,10 +140,11 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => SelectedOrderItem);
             }
         }
-        
-        public BindableCollection<OrderItem> OrderItems { get; set; }
 
         [DataMember]
+        public BindableCollection<OrderItem> OrderItems { get; set; }
+
+        //[DataMember]
         public List<long> OrderItemIds { get; set; }
 
         public Session Session { get; set; }
@@ -154,12 +155,12 @@ namespace ServiceInterface.Model
         public Customer Customer { get; set; }
 
         [DataMember]
-        public long CustomerId { get; set; }
+        public long? CustomerId { get; set; }
 
         public Table Table { get; set; }
 
         [DataMember]
-        public Table TableId { get; set; }
+        public long? TableId { get; set; }
 
         public void AddItem(Product product, decimal unitPrice, bool setSelected, int quantity = 1)
         {
@@ -198,6 +199,36 @@ namespace ServiceInterface.Model
                 return;
             Total -= item.Total;
             OrderItems.Remove(item);
+        }
+
+        public void MappingBeforeSending()
+        {
+            foreach (var oitem in OrderItems) 
+            { 
+                oitem.ProductId = oitem.Product.Id; 
+                oitem.OrderId = Id;            
+            }
+
+            this.TableId = Table?.Id;
+            this.CustomerId = Customer?.Id;
+        }
+
+        public void MappingAfterReceiving(IEnumerable<Product> products)
+        {
+            if (products==null)
+            {
+                throw new MappingException("Order mapping products is null");
+            }
+
+            foreach (var oit in OrderItems)
+            {
+                var product = products.Where(p => p.Id == oit.ProductId).FirstOrDefault();
+                if (product == null)
+                {
+                    throw new MappingException("Order mapping product is null");
+                }
+                oit.Product = product;
+            }
         }
     }
 

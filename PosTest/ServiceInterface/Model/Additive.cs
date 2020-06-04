@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
@@ -6,7 +7,7 @@ using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
-    public class Additive : PropertyChangedBase
+    public class Additive : PropertyChangedBase //, IEquatable<Additive>
     {
         private string _backgroundString = null;
 
@@ -50,15 +51,25 @@ namespace ServiceInterface.Model
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
         }
 
-        public override bool Equals(object additiveObj)
+        /*bool IEquatable<Additive>.Equals(Additive additive)
         {
-            var additive = additiveObj as Additive;
-            return additive != null &&
-                   additive.Id == Id &&
-                   additive.Description == Description &&
-                   additive.BackgroundString == BackgroundString;
+            // var additive = additiveObj as Additive;
+            var result = additive != null &&
+                    additive.Id == Id &&
+                    additive.Description == Description &&
+                    additive.BackgroundString == BackgroundString;
+            return result;
+        }*/
+
+        public override bool Equals(object other)
+        {
+            var additive = other as Additive;
+            var result = additive != null &&
+                    additive.Id == Id &&
+                    additive.Description == Description &&
+                    additive.BackgroundString == BackgroundString;
+            return result;
+            //           return Equals(other as Additive);
         }
-
-
     }
 }

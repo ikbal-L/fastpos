@@ -13,7 +13,7 @@ namespace ServiceInterface.Model
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
                        a => a.FullName.StartsWith("XUnitTesting"));
-        private int _quantity;
+        private float _quantity;
         private BindableCollection<Additive> _additives;
         private Additive __selectedAdditive;
         private bool _canAddAdditives;
@@ -48,7 +48,7 @@ namespace ServiceInterface.Model
         public decimal UnitPrice { get; set; }
 
         [DataMember]
-        public int Quantity 
+        public float Quantity 
         { 
             get => _quantity;
             set
@@ -62,13 +62,13 @@ namespace ServiceInterface.Model
                 {
                     DiscountAmount = Total * _discountPercentage / 100;
                 }
-                Order.Total = Order.Total + UnitPrice * (_quantity - oldQuqntity);
+                Order.Total = Order.Total + UnitPrice * (decimal)(_quantity - oldQuqntity);
             } 
         }
 
         [DataMember]
         public decimal Total {
-            get => Quantity * UnitPrice;          
+            get => (decimal)Quantity * UnitPrice;          
         }
 
         [DataMember]
@@ -168,5 +168,7 @@ namespace ServiceInterface.Model
             
            
         }
+
+        
     }
 }

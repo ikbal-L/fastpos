@@ -59,7 +59,9 @@
                             <iconPacks:PackIconBoxIcons Kind="RegularListPlus"   />
                         </Button>
                         
-                        <Button Name="Edit" Margin="2,0,2,0"  Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                        <Button Name="Edit" Margin="2,0,2,0"  
+                                cal:Message.Attach="[Event Click] = [Action EditCommand]"
+                                >
                             <iconPacks:PackIconFeatherIcons Kind="Edit" />
                         </Button>
                         
@@ -70,7 +72,7 @@
 
                     </StackPanel>
                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Label Grid.Column="0" Content="1-20/40" FontSize="16"></Label>
+                        <Label Grid.Column="0" Content="1-20/40" FontSize="16" Background="Aqua"></Label>
                         <Button Margin="2,0,2,0">
                             <iconPacks:PackIconFeatherIcons Kind="ChevronLeft" />
                         </Button>
@@ -91,7 +93,9 @@
             <ListView 
                 Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" 
                 ItemsSource="{Binding Products, Mode=TwoWay}" 
-                SelectedItem="{Binding CurrentProduct}">
+                SelectedItem="{Binding CurrentProduct}"
+                SelectedIndex="{Binding CurrentProductIndex}"
+                >
                 <ListView.View >
                     <GridView >
                         

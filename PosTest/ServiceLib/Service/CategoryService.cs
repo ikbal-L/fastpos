@@ -21,48 +21,78 @@ namespace ServiceLib.Service
     class CategoryService : ICategoryService
     {
         private RestCategoryService _restCategoryService = RestCategoryService.Instance;
-        public bool DeleteCategory(long id)
+        private RestProductService _restProductService = RestProductService.Instance;
+        public int DeleteCategory(long id)
+        {
+            return _restCategoryService.DeleteCategory(id);
+        }
+
+        public IEnumerable<Category> GetAllCategories(ref int statusCode)
+        {
+            var code = 0;
+            var categories = _restCategoryService.GetAllCategories(ref statusCode);
+            if (statusCode != 200)
+            {
+                return null;
+            }
+            var products = _restProductService.GetAllProducts(ref code);
+            if (code != 200)
+            {
+                throw new MappingException("Error in GetAllProducts to map with products, StatusCode: " + code.ToString());
+            }
+            categories.ToList().ForEach(c => c.MappingAfterReceiving(products));
+            return categories;
+        }
+
+        public Category GetCategory(long id, ref int statusCode)
+        {
+            Category category;
+            category = _restCategoryService.GetCategory(id, ref statusCode);
+            if (statusCode != 200)
+            {
+                return null;
+            }
+            int getProductStatusCode=0;
+            var products = _restProductService.GetManyProducts(category.ProductIds, ref getProductStatusCode);
+
+            if (getProductStatusCode != 200)
+            {
+                throw new MappingException("Error in GetManyProducts to map with products, StatusCode: " + getProductStatusCode.ToString());
+            }
+            category.MappingAfterReceiving(products);
+            return category;
+
+        }
+
+        public IEnumerable<Category> GetManyCategories(IEnumerable<long> ids, ref int statusCode)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Category> GetAllCategories()
-        {
-            return _restCategoryService.GetAllCategories();
-        }
-
-        public Category GetCategory(long id)
+        public int SaveCategories(IEnumerable<Category> categories)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Category> GetManyCategories(IEnumerable<long> ids)
+        public int SaveCategory(Category category)
         {
-            throw new NotImplementedException();
+            category.MappingBeforeSending();
+            return _restCategoryService.SaveCategory(category);
         }
 
-        public bool SaveCategories(IEnumerable<Category> categories)
+        public int UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool SaveCategory(Category category)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateCategory(Category category)
-        {
-            throw new NotImplementedException();
+            category.MappingBeforeSending();
+            return _restCategoryService.UpdateCategory(category);
         }
     }
 
-    internal class RestCategoryService
+    internal class RestCategoryService : ICategoryService
     {
         private static RestCategoryService _instance;
         public static RestCategoryService Instance => _instance ?? (_instance = new RestCategoryService());
 
-        public bool DeleteCategory(long id)
+        public int DeleteCategory(long id)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.CategoryUrl.DeleteCategory + $"{id}");
@@ -71,14 +101,14 @@ namespace ServiceLib.Service
             request.AddHeader("Authorization", token);
             //request.AddParameter("application/json", "{\n\"id\":1\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return true;
-            }
-            return false;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //{
+            //    return true;
+            //}
+            return (int)response.StatusCode;
         }
 
-        public IEnumerable<Category> GetAllCategories()
+        public IEnumerable<Category> GetAllCategories(ref int statusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.CategoryUrl.GetAllCategories);
@@ -92,7 +122,7 @@ namespace ServiceLib.Service
             {
                 categories = JsonConvert.DeserializeObject<IEnumerable<Category>>(response.Content);
             }
-
+            statusCode = (int)response.StatusCode;
             return categories;
         }
 
@@ -101,7 +131,7 @@ namespace ServiceLib.Service
         //    return FakeServices.Categories;
         //}
 
-        public Category GetCategory(long id)
+        public Category GetCategory(long id, ref int StatusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.CategoryUrl.GetCategory + id.ToString());
@@ -115,11 +145,11 @@ namespace ServiceLib.Service
             {
                 category = JsonConvert.DeserializeObject<Category>(response.Content);
             }
-
+            StatusCode = (int)response.StatusCode;
             return category;
         }
 
-        public IEnumerable<Category> GetManyCategories(IEnumerable<long> ids)
+        public IEnumerable<Category> GetManyCategories(IEnumerable<long> ids, ref int StatusCode)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.CategoryUrl.GetManyCategories);
@@ -141,11 +171,11 @@ namespace ServiceLib.Service
             {
                 categories = JsonConvert.DeserializeObject<IEnumerable<Category>>(response.Content);
             }
-
+            StatusCode = (int)response.StatusCode;
             return categories;
         }
 
-        public bool SaveCategories(IEnumerable<Category> categories)
+        public int SaveCategories(IEnumerable<Category> categories)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.CategoryUrl.SaveCategories);
@@ -167,14 +197,14 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return true;
-            }
-            return false;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //{
+            //    return true;
+            //}
+            return (int)response.StatusCode; ;
         }
 
-        public bool SaveCategory(Category category)
+        public int SaveCategory(Category category)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
@@ -194,13 +224,13 @@ namespace ServiceLib.Service
 
             IRestResponse response = client.Execute(request);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-                return true;
-            return false;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //    return true;
+            return (int)response.StatusCode;
 
         }
 
-        public bool UpdateCategory(Category category)
+        public int UpdateCategory(Category category)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
@@ -220,10 +250,14 @@ namespace ServiceLib.Service
 
             IRestResponse response = client.Execute(request);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-                return true;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //    return true;
+            return (int)response.StatusCode;
+        }
 
-            return false;
+        int ICategoryService.SaveCategories(IEnumerable<Category> categories)
+        {
+            return ((ICategoryService)Instance).SaveCategories(categories);
         }
     }
 }

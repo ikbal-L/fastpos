@@ -7,8 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              
-             xmlns:cal="http://www.caliburnproject.org"
-             >
+             xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -40,7 +39,15 @@
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentCategory.Description}" />
 
             <Label Grid.Row="3" Grid.Column="0" Content="Color"  />
-            <Rectangle Grid.Row="3" Grid.Column="1" Fill="{Binding CurrentCategory.Background}"  />
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="8*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="0" Fill="{Binding CurrentCategory.BackGroundColor}"  />
+                <materialDesign:ColorPicker Grid.Column="1" Color="{Binding CurrentCategory.BackgroundColor}" />
+            </Grid>
+            
         </Grid>
 
         <StackPanel Orientation="Horizontal"
