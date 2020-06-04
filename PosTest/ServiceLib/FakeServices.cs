@@ -1,4 +1,5 @@
-﻿using ServiceInterface.Model;
+﻿using Caliburn.Micro;
+using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,7 +108,7 @@ namespace ServiceLib
                 p =>
                 {
                     if (p is Platter && p.CategorieId == 1)
-                        (p as Platter).Additives = additives;
+                        (p as Platter).Additives = new BindableCollection<Additive>(additives);
                     if (p.Id % 2 == 0)
                         p.IsMuchInDemand = true;
                 }

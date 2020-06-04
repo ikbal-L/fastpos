@@ -24,6 +24,9 @@ namespace PosTest.ViewModels
 
         [Import(typeof(ICategoryService))]
         private ICategoryService categorieService = null;
+                
+        [Import(typeof(IAdditiveService))]
+        private IAdditiveService additiveService = null;
 
         [Import(typeof(IAuthentification))]
         private IAuthentification authService = null;
@@ -74,7 +77,8 @@ namespace PosTest.ViewModels
         
         public void Settings()
         {
-            SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService, categorieService);
+            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService, categorieService, additiveService);
             settingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }

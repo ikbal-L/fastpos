@@ -13,7 +13,6 @@ using System.Text;
 
 namespace ServiceLib.Service
 {
-    
     public class AdditiveService : IAdditiveService
     {
         private readonly RestAdditiveService _restAdditiveService = RestAdditiveService.Instance;

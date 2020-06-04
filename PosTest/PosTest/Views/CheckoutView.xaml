@@ -123,9 +123,11 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
+
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
@@ -184,6 +186,9 @@
                 <Button Grid.Row="2" Grid.Column="4" Content="Qty" Style="{StaticResource ButtonStyle18}" 
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('QTY')]"/>
 
+                <Button Grid.Row="2" Grid.Column="5" Content="TABLE" Style="{StaticResource ButtonStyle18}" 
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]"/>
+
                 <Button Grid.Row="3" Grid.Column="1" Content="4" Style="{StaticResource ButtonStyle22}"
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('4')]"/>
                 <Button Grid.Row="3" Grid.Column="2" Content="5" Style="{StaticResource ButtonStyle22}"
@@ -192,6 +197,9 @@
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]"/>
                 <Button Grid.Row="3" Grid.Column="4" Content="Disc" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]"/>
+                
+                <Button Grid.Row="3" Grid.Column="5" Content="CMD" Style="{StaticResource ButtonStyle18}"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('CMD')]"/>
 
                 <Button Grid.Row="4" Grid.Column="1" Content="7" Style="{StaticResource ButtonStyle22}"
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('7')]"/>
@@ -202,6 +210,9 @@
                 <Button Grid.Row="4" Grid.Column="4" Content="Price" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]"/>
 
+                <Button Grid.Row="4" Grid.Column="5" Content="SPLIT" Style="{StaticResource ButtonStyle18}"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]"/>
+
                 <Button Grid.Row="5" Grid.Column="1" Content="%" Style="{StaticResource ButtonStyle22}"
                          cal:Message.Attach="[Event Click] = [Action NumericKeyboard('%')]"/>
                 <Button Grid.Row="5" Grid.Column="2" Content="0" Style="{StaticResource ButtonStyle22}"
@@ -210,6 +221,8 @@
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]" />
                 <Button Grid.Row="5" Grid.Column="4" Content="Del" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DEL')]"/>
+                <Button Grid.Row="5" Grid.Column="5" Content="TRANSFER" Style="{StaticResource ButtonStyle18}"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
             </Grid>
 
             <subviews:ProductNavigation  Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Margin="0" />

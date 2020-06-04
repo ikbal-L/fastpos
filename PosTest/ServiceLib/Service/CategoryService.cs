@@ -83,7 +83,7 @@ namespace ServiceLib.Service
         public int UpdateCategory(Category category)
         {
             category.MappingBeforeSending();
-            return _restCategoryService.SaveCategory(category);
+            return _restCategoryService.UpdateCategory(category);
         }
     }
 

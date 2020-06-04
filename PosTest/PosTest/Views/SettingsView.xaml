@@ -5,6 +5,7 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:Views="clr-namespace:PosTest.Views"
             xmlns:ViewModels="clr-namespace:PosTest.ViewModels"
+             xmlns:cal="http://www.caliburnproject.org"
             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
             xmlns:system="clr-namespace:System;assembly=mscorlib"
             mc:Ignorable="d"
@@ -14,6 +15,12 @@
             <DataTemplate DataType="{x:Type ViewModels:ProductsViewModel}">
                 <Views:ProductsView />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type ViewModels:CategoryViewModel}">
+                <Views:CategoryView />
+            </DataTemplate>
+        
+        
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
@@ -26,7 +33,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <materialDesign:DrawerHost BorderBrush="{DynamicResource MaterialDesignDivider}">
+    <materialDesign:DrawerHost BorderBrush="{DynamicResource MaterialDesignDivider}" IsLeftDrawerOpen="{Binding IsLeftDrawerOpen}">
         <materialDesign:DrawerHost.Style>
             <Style TargetType="materialDesign:DrawerHost"  BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}">
                 <Style.Triggers>
@@ -38,16 +45,21 @@
         </materialDesign:DrawerHost.Style>
         <materialDesign:DrawerHost.LeftDrawerContent>
             <StackPanel Margin="16">
-                <TextBlock Margin="4" HorizontalAlignment="Center">  LEFT FIELD</TextBlock>
-                <Button Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
-                        CommandParameter="{x:Static Dock.Left}"  Margin="4" HorizontalAlignment="Center"
-                        Style="{DynamicResource MaterialDesignFlatButton}">
-                    CLOSE THIS
-                </Button>
-                <Button Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
-                        Margin="4" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignFlatButton}">
-                    CLOSE ALL
-                </Button>
+                <TextBlock Margin="4" HorizontalAlignment="Center">Settings</TextBlock>
+
+                <Button  cal:Message.Attach="[Event Click] = [Action CategoryTabCommand]" 
+                         Margin="4" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignFlatButton}"
+                         Content="Category"/>
+
+                <Button cal:Message.Attach="[Event Click] = [Action ProductsTabCommand]" 
+                    Margin="4" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignFlatButton}"
+                    Content="Products"/>
+
+                <Button Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}" 
+                        Margin="4" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignFlatButton}"
+                        Content="CLOSE ALL"
+                        />
+                
             </StackPanel>
         </materialDesign:DrawerHost.LeftDrawerContent>
         <DockPanel>
@@ -55,7 +67,7 @@
                 <DockPanel>
                     <ToggleButton
                         Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Left}"
-                        x:Name="MenuToggleButton" Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False" />
+                        x:Name="MenuToggleButton" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" IsChecked="False" />
 
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Settings</TextBlock>
                 </DockPanel>

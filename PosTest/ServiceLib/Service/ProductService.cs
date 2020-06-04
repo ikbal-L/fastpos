@@ -120,7 +120,7 @@ namespace ServiceLib.Service
                     throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getAdditivestatusCode.ToString());
                 }
             }
-            product.MappingAfterReceiving(category, additives.ToList());
+            product.MappingAfterReceiving(category, additives?.ToList());
 
             return product;
         }
@@ -386,7 +386,7 @@ namespace ServiceLib.Service
             string token = AuthProvider.Instance.AuthorizationToken;
             Product product=null;
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://127.0.0.1:5000/");
+            client.BaseAddress = new Uri("http://192.168.1.102:5000/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Authorization", token);

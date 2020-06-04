@@ -127,7 +127,7 @@ namespace XUnitTesting.CheckpointTesting
         {
             //Arrange
             var checkoutVM = new CheckoutViewModel();
-            var additives = new List<Additive>
+            var additives = new BindableCollection<Additive>
             {
                 new Additive{Id=1, Description="abc"},
                 new Additive{Id=2, Description="abc"},
@@ -164,7 +164,7 @@ namespace XUnitTesting.CheckpointTesting
         public void AddAdditices_AddNull()
         {
             var checkoutVM = new CheckoutViewModel();
-            var additives = new List<Additive>
+            var additives = new BindableCollection<Additive>
             {
                 new Additive{Id=1, Description="add1"},
                 new Additive{Id=2, Description="add2"},
@@ -186,7 +186,7 @@ namespace XUnitTesting.CheckpointTesting
         public void AddAdditices_AddTheSameAdditiveTwice()
         {
             var checkoutVM = new CheckoutViewModel();
-            var additives = new List<Additive>
+            var additives = new BindableCollection<Additive>
             {
                 new Additive{Id=1, Description="add1"},
                 new Additive{Id=2, Description="add2"},
@@ -216,7 +216,7 @@ namespace XUnitTesting.CheckpointTesting
         public void RemoveAdditives_()
         {
             var checkoutVM = new CheckoutViewModel();
-            var additives = new List<Additive>
+            var additives = new BindableCollection<Additive>
             {
                 new Additive{Id=1, Description="add1"},
                 new Additive{Id=2, Description="add2"},
