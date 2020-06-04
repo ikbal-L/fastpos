@@ -5,11 +5,11 @@ namespace ServiceInterface.Interface
 {
     public interface IOrderService 
     {
-        IEnumerable<Order> GetAllOrders();
-        IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds);
+        IEnumerable<Order> GetAllOrders(ref int statusCode);
+        IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds, ref int statusCode);
         int SaveOrder(Order order);
         int UpdateOrder(Order order);
-        int DeleteOrder(int orderId);
-        long GetIdmax();
+        int DeleteOrder(long orderId);
+        long? GetIdmax(ref int statusCode);
     }
 }

@@ -22,8 +22,8 @@ namespace ServiceInterface.Model
         private Category _category;
         private SolidColorBrush _background;
 
-        [DataMember]
-        public long Id { get; set; }
+        [DataMember(IsRequired = true)]
+        public long? Id { get; set; }
         [DataMember]
         public string Name
         {
@@ -122,7 +122,7 @@ namespace ServiceInterface.Model
         {
             if (this.CategorieId <= 0 && this.Category != null)
             {
-                this.CategorieId = this.Category.Id;
+                this.CategorieId = (long)this.Category.Id;
             }
 
             if (this is Platter plat)
@@ -142,7 +142,7 @@ namespace ServiceInterface.Model
                     {
                         if (ing.Product != null)
                         {
-                            ing.ProductId = ing.Product.Id;
+                            ing.ProductId = (long)ing.Product.Id;
                         }
                     }
             }

@@ -9,7 +9,6 @@ namespace ServiceInterface.Model
     public class Order : PropertyChangedBase
     {
         private decimal _total;
-        private decimal _newTotal;
         private OrderItem _selectedOrderItem;
         private decimal _discountAmount = 0;
         private decimal _givenAmount;
@@ -25,8 +24,8 @@ namespace ServiceInterface.Model
             BuyerId = buyerId;
         }
 
-        [DataMember]
-        public long Id { get; set; }
+        [DataMember(IsRequired = true)]
+        public long? Id { get; set; }
 
         [DataMember]
         public string BuyerId { get; set; }
@@ -61,7 +60,7 @@ namespace ServiceInterface.Model
             get
             {
                 var sumItemDiscounts = 0m;
-                OrderItems.Cast<OrderItem>().ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
+                OrderItems.ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
                 var allDiscounts = _discountAmount + sumItemDiscounts;
                 return Total - allDiscounts;
             }
@@ -86,7 +85,7 @@ namespace ServiceInterface.Model
             get
             {
                 var sumItemDiscounts = 0m;
-                OrderItems.Cast<OrderItem>().ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
+                OrderItems.ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
                 var allDiscounts = _discountAmount + sumItemDiscounts;
                 //NewTotal = Total - allDiscounts;
                 return allDiscounts;
@@ -205,8 +204,8 @@ namespace ServiceInterface.Model
         {
             foreach (var oitem in OrderItems) 
             { 
-                oitem.ProductId = oitem.Product.Id; 
-                oitem.OrderId = Id;            
+                oitem.ProductId = (long)oitem.Product.Id; 
+                oitem.OrderId = (long)Id;            
             }
 
             this.TableId = Table?.Id;

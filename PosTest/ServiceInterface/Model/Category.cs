@@ -19,8 +19,8 @@ namespace ServiceInterface.Model
         private Brush _backGroundColor;
         private string _name;
 
-        [DataMember]
-        public long Id { get; set; }
+        [DataMember(IsRequired = true)]
+        public long? Id { get; set; }
 
         [DataMember]
         public string Name
@@ -64,7 +64,7 @@ namespace ServiceInterface.Model
                     {
                         ProductIds = new List<long>();
                     }
-                    ProductIds.Add(p.Id);
+                    ProductIds.Add((long)p.Id);
                 }
         }
 

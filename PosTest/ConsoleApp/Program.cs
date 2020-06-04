@@ -51,7 +51,6 @@ namespace ConsoleApp
         {
             Program p = new Program();
             p.Run();
-            //Console.ReadKey();
         }
 
         private async void CalRestAsync()

@@ -38,8 +38,26 @@
 
             <DockPanel Grid.Row="0" Grid.Column="1" Background="Black" LastChildFill="False">
                 <Button  Content="Tables" Style="{StaticResource ButtonStyle16}"  />
-                <Button  Content="+" Style="{StaticResource ButtonStyle16}"  Width="40" />
-                <Button  Content="-" Style="{StaticResource ButtonStyle16}" Width="40" FontSize="16" />
+                <ItemsControl x:Name="OrdersList" Grid.Column="0" ItemsSource="{Binding Orders}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type src:Order}">
+                            <Button MinWidth="80" 
+                                    Content="{Binding OrderTime}" 
+                                    cal:Message.Attach="[Event Click] = [Action ShowOrder($this)]"
+                                    FontWeight="Bold" 
+                                    FontSize="12" Padding="10,0"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button  Content="+" Style="{StaticResource ButtonStyle16}"  Width="40"
+                         cal:Message.Attach="[Event Click] = [Action NewOrder()]"/>
+                <Button  Content="-" Style="{StaticResource ButtonStyle16}" Width="40" FontSize="16" 
+                         cal:Message.Attach="[Event Click] = [Action RemoveOrder()]"/>
                 <Button  DockPanel.Dock="Right"   
                          VerticalContentAlignment="Top"  >SessionID</Button>
             </DockPanel>

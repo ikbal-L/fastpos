@@ -20,28 +20,28 @@ namespace ServiceLib.Service
     public class OrderService : IOrderService
     {
         private readonly RestOrderService _restOrderService = RestOrderService.Instance;
-        public int DeleteOrder(int orderId)
+        public int DeleteOrder(long orderId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Order> GetAllOrders()
+        public IEnumerable<Order> GetAllOrders(ref int statusCode)
         {
             throw new NotImplementedException();
         }
 
-        public long GetIdmax()
+        public long? GetIdmax(ref int statusCode)
         {
 
-            var idmax = _restOrderService.GetIdmax();
-            if (idmax==null)
+            var idmax = _restOrderService.GetIdmax(ref statusCode);
+            /*if (idmax==null)
             {
-                throw new Exception("idmax is null");
-            }
-            return (long)idmax;
+                throw new ArgumentNullException("idmax is null");
+            }*/
+            return idmax;
         }
 
-        public IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds)
+        public IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds, ref int statusCode)
         {
             throw new NotImplementedException();
         }
@@ -58,7 +58,7 @@ namespace ServiceLib.Service
         }
     }
 
-    internal class RestOrderService
+    internal class RestOrderService : IOrderService
     {
         private static RestOrderService _instance;
 
@@ -79,7 +79,7 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public Order GetOrder(long id)
+        public Order GetOrder(long id, ref int statusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.OrderUrl.GetOrder+id.ToString());
@@ -92,13 +92,13 @@ namespace ServiceLib.Service
             {
                 order = JsonConvert.DeserializeObject<Order>(response.Content);
             }
-
+            statusCode = (int)response.StatusCode;
             return order;// ;products
 
             //return new Additive { Id=id};
         }
 
-        public IEnumerable<Order> GetManyOrders(IEnumerable<long> ids)
+        public IEnumerable<Order> GetManyOrders(IEnumerable<long> ids, ref int statusCode)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.OrderUrl.GetManyOrders);
@@ -119,6 +119,7 @@ namespace ServiceLib.Service
             {
                 orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(response.Content);
             }
+            statusCode = (int)response.StatusCode;
             return orders;
         }
 
@@ -144,7 +145,7 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public bool UpdateOrder(Order order)
+        public int UpdateOrder(Order order)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
 
@@ -163,13 +164,13 @@ namespace ServiceLib.Service
 
             IRestResponse response = client.Execute(request);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-                return true;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //    return true;
 
-            return false;
+            return (int)response.StatusCode;
         }
 
-        public bool SaveOrders(IEnumerable<Order> orders)
+        public int SaveOrders(IEnumerable<Order> orders)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.OrderUrl.SaveOrders);
@@ -191,14 +192,13 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return true;
-            }
-            return false;
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //    return true;
+
+            return (int)response.StatusCode;
         }
 
-        internal long? GetIdmax()
+        public long? GetIdmax(ref int statusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.OrderUrl.GetIdMax);
@@ -206,6 +206,7 @@ namespace ServiceLib.Service
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
             IRestResponse response = client.Execute(request);
+            statusCode = (int)response.StatusCode;
             long? idmax = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -221,8 +222,13 @@ namespace ServiceLib.Service
                 
                 //idmax = JsonConvert.DeserializeObject<long>(response.Content);
             }
-
+            
             return idmax;
+        }
+
+        public IEnumerable<Order> GetAllOrders(ref int statusCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }

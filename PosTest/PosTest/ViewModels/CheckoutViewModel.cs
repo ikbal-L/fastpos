@@ -234,6 +234,31 @@ namespace PosTest.ViewModels
                 category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();
         }
 
+        public void ShowOrder(Order order)
+        {
+            if (order==null)
+            {
+                return;
+            }
+            CurrentOrder = order;
+        }
+        public void NewOrder()
+        {
+            CurrentOrder = new Order();
+            Orders.Add(CurrentOrder);
+            CurrentOrder.OrderTime = DateTime.Now;
+        }
+        public void RemoveOrder()
+        {
+            if (CurrentOrder==null || Orders==null)
+            {
+                return;
+            }
+
+            Orders.Remove(CurrentOrder);
+            CurrentOrder = null;
+        }
+
         public void Close()
         {
             CategoryTabViewModel categoryTabViewModel = new CategoryTabViewModel(30, _productsService, _categoriesService);
@@ -634,7 +659,10 @@ namespace PosTest.ViewModels
             int resp;
             try
             {
-                 resp = _orderService.SaveOrder(CurrentOrder);
+                var status = 0;
+                CurrentOrder.Id = _orderService.GetIdmax(ref status) + 1;
+
+                resp = _orderService.SaveOrder(CurrentOrder);
             }
             catch (AggregateException)
             {
@@ -649,10 +677,17 @@ namespace PosTest.ViewModels
             
             switch (resp)
             {
-                case 401: ToastNotification.Notify("Database insertion error"); break;
-                case 402: ToastNotification.Notify("Order Id exists in the database"); break;
-                case 403: ToastNotification.Notify("Database access error"); break;
-                case 200: CurrentOrder = null; break;
+                case 401: ToastNotification.Notify("Database insertion error "+resp.ToString()); break;
+                case 402: ToastNotification.Notify("Id exists in the database " + resp.ToString()); break;
+                case 403: ToastNotification.Notify("Database access error " + resp.ToString()); break;
+                case 404: ToastNotification.Notify("Bad request " + resp.ToString()); break;
+                case 405: ToastNotification.Notify("Authentification error " + resp.ToString()); break;
+                case 406: ToastNotification.Notify("Authentification error " + resp.ToString()); break;
+                case 407: ToastNotification.Notify("Authentification error " + resp.ToString()); break;
+                case 408: ToastNotification.Notify("Database error in Annex_id " + resp.ToString()); break;
+                case 409: ToastNotification.Notify("Config Database error " + resp.ToString()); break;
+                case 410: ToastNotification.Notify(" User or password error" + resp.ToString()); break;
+                case 200: RemoveOrder(); break;
             }
            
         }
