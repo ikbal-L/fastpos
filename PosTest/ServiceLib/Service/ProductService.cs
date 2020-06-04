@@ -59,7 +59,7 @@ namespace ServiceLib.Service
             var idProducts = new List<long>();
             var idCategories = new HashSet<long>();
             var idAdditivesOfAllProducts = new HashSet<long>();
-            products.ToList().ForEach(p => idProducts.Add(p.Id));
+            products.ToList().ForEach(p => idProducts.Add((long)p.Id));
             products.ToList().ForEach(p => idCategories.Add(p.CategorieId));
             foreach (var p in products)
             {

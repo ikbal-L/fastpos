@@ -65,7 +65,7 @@ namespace PosTest.ViewModels
         {
             if (_currentProduct == null)
                 return;
-            _productsService.DeleteProduct(_currentProduct.Id);
+            _productsService.DeleteProduct((long)_currentProduct.Id);
         }     
         public void NewCommand()
         {

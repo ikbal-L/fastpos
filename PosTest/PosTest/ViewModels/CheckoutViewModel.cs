@@ -449,7 +449,6 @@ namespace PosTest.ViewModels
             {
                 CurrentOrder = new Order();
                 Orders.Add(CurrentOrder); 
-                CurrentOrder.Id = _orderService.GetIdmax()+1;
                 CurrentOrder.OrderTime = DateTime.Now;
             }
 
@@ -661,7 +660,6 @@ namespace PosTest.ViewModels
             {
                 var status = 0;
                 CurrentOrder.Id = _orderService.GetIdmax(ref status) + 1;
-
                 resp = _orderService.SaveOrder(CurrentOrder);
             }
             catch (AggregateException)
