@@ -157,14 +157,20 @@ namespace ServiceInterface.Model
             if (this is Platter plat)
             {
                 if (plat.Additives != null)
+                {
+                    if (plat.IdAdditives == null)
+                    {
+                        plat.IdAdditives = new List<long>();
+                    }
+                    else
+                    {
+                        plat.IdAdditives.Clear();
+                    }
                     foreach (var a in plat.Additives)
                     {
-                        if (plat.IdAdditives == null)
-                        {
-                            plat.IdAdditives = new List<long>();
-                        }
                         plat.IdAdditives.Add(a.Id);
                     }
+                }
 
                 if (plat.Ingredients != null)
                     foreach (var ing in plat.Ingredients)

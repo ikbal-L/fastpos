@@ -327,9 +327,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Views\CategoryView.xaml">
+    <Page Include="Views\CategoryView.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Compile>
+    </Page>
     <Page Include="Views\CheckoutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -83,7 +83,7 @@ namespace PosTest.ViewModels
         {
             if (_currentCategory == null)
                 return;
-            _categorieService.DeleteCategory(_currentCategory.Id);
+            _categorieService.DeleteCategory((long)_currentCategory.Id);
         }     
 
         public void CancelCommand()
