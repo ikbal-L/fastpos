@@ -46,6 +46,16 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
+        public Table GetTable(int id, ref int statusCode)
+        {
+            return _restOrderService.GetTable(id, ref statusCode);
+        }
+
+        public Table GetTableByNumber(int tableNumber, ref int statusCode)
+        {
+            return _restOrderService.GetTableByNumber(tableNumber, ref statusCode);
+        }
+
         public int SaveOrder(Order order)
         {
             order.MappingBeforeSending();
@@ -247,13 +257,13 @@ namespace ServiceLib.Service
              }
              statusCode = (int)response.StatusCode;
              return table;// ;products*/
-            RestService.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
+            return RestService.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
 
         }
 
         public Table GetTableByNumber(int tableNumber, ref int statusCode)
         {
-            throw new NotImplementedException();
+            return RestService.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
         }
     }
 

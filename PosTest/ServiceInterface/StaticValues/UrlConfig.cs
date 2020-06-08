@@ -58,7 +58,8 @@ namespace ServiceInterface.StaticValues
             public static string GetManyOrders = hostname + "order/getmany";
             public static string SaveOrders = hostname + "order/savemany";
             public static string GetOrder = hostname + "order/get/";
-            public static string GetTable = hostname + "order/gettable/";
+            public static string GetTableByNumber = hostname + "order//table/getbynumber/";
+            public static string GetTable = hostname + "order//table/get/";
             public static string DeleteOrder = hostname + "order/delete/";
             public static string UpdateOrder = hostname + "order/update";
             public static string SaveOrder = hostname + "order/save";

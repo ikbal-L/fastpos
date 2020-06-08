@@ -10,7 +10,7 @@
     <DataTemplate DataType="{x:Type src:Product}" >
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
             <!--cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]"-->
-            <Button x:Name="ProductClick"  >
+            <Button x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cal:ActionMessage MethodName="AddOrderItem">

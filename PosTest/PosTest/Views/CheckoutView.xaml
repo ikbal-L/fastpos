@@ -4,17 +4,34 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
+             xmlns:local="clr-namespace:PosTest.Views"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
              xmlns:convert="clr-namespace:PosTest.Converters"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             
              mc:Ignorable="d"
-             d:DataContext="{d:DesignData Source=/Design/Order.xaml}" 
              d:DesignWidth="800" d:DesignHeight="450"  Background="White" >
-    <UserControl.Resources>
-        <convert:NumberToVisibilityConverter x:Key="DecimalToVisibility"/>
-    </UserControl.Resources>
-    <Grid>
+    <FrameworkElement.Resources>
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+
+    <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen}" >
+        <materialDesign:DialogHost.DialogContent>
+            <local:SplitView/>
+        </materialDesign:DialogHost.DialogContent>
+
+
+    
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -146,7 +163,7 @@
                 </Grid.ColumnDefinitions>
 
 
-                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Background="Gray">
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="Gray">
                     <StackPanel Orientation="Horizontal"  >
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Aqua" >                        
                             <Run Text="Total: " FontWeight="Bold"/>
@@ -179,7 +196,7 @@
                 </StackPanel>
 
 
-                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Padding="5"
+                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Padding="5"
                          Text="{Binding NumericZone}" 
                          FontSize="26" FontWeight="Bold" FontFamily="Segoe"
                          HorizontalContentAlignment="Right"/>
@@ -240,7 +257,8 @@
 
         </Grid>
 
-    </Grid>
+    
+    </materialDesign:DialogHost>
 </UserControl>
 
 

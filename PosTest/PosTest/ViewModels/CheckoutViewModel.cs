@@ -43,6 +43,15 @@ namespace PosTest.ViewModels
         private ICollectionView _productsPage;
         private ICollectionView _additvesPage;
 
+        private bool _IsDialogOpen;
+        private Order _splitedOrder;
+
+        public bool IsDialogOpen
+        {
+            get => _IsDialogOpen;
+            set => Set(ref _IsDialogOpen, value);
+        }
+
         public CheckoutViewModel() 
         {
             Orders = new BindableCollection<Order>();
@@ -169,6 +178,19 @@ namespace PosTest.ViewModels
                                
             }
         }
+
+        public Order SplitedOrder
+        {
+            get { return _splitedOrder; }
+            set
+            {
+                _splitedOrder = value;            
+                NotifyOfPropertyChange(() => SplitedOrder);
+                               
+            }
+        }
+
+
 
         public string NumericZone 
         { 
@@ -715,17 +737,56 @@ namespace PosTest.ViewModels
                         NumericZone = "";
                         return;
                     }
-                    {
-                    if (CurrentOrder == null)
+                    
+                    if (CurrentOrder == null) { 
                         ToastNotification.Notify("Add products before ...");
                         return;
                     }
-                    var table = _orderService.GetTableByNumber(tableNumber);
+                    var status = 0;
+                    var table = _orderService.GetTableByNumber(tableNumber, ref status);
                     
                     CurrentOrder.State = OrderState.Ordered;
                     SaveCurrentOrder();
                     break;
+
+                case ActionButton.SplittedPayment:
+                    payedAmount = Convert.ToDecimal(NumericZone);
+                    if (payedAmount < 0)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+                                      
+                    if (payedAmount < CurrentOrder.NewTotal) 
+                    {
+                        NumericZone = "";
+                        //Use Local to select message according to UI language
+                        ToastNotification.Notify("Payed amount lower than total");
+                        //CurrentOrder.DiscountAmount = 0;
+                        return;
+                    }
+
+                    CurrentOrder.GivenAmount = payedAmount;
+                    CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
+                    NumericZone = "";
+                    SaveSplittedOrder();
+                    break;
+
+                case ActionButton.Split:
+                    IsDialogOpen = CurrentOrder!=null 
+                        && CurrentOrder.OrderItems!=null
+                        && CurrentOrder.OrderItems.Count>1;
+                    if (IsDialogOpen == true)
+                    {
+                        CurrentOrder.SelectedOrderItem = null;
+                    }
+                    break;
             }
+        }
+
+        private void SaveSplittedOrder()
+        {
+            throw new NotImplementedException();
         }
 
         private void SaveCurrentOrder()
@@ -785,8 +846,99 @@ namespace PosTest.ViewModels
            
         }
 
-        
 
+        #region Split Commands
+
+        public void BackFromSplitCommand()
+        {
+            
+            if (SplitedOrder == null)
+            {
+                IsDialogOpen = false;
+                return;
+            }
+            if (SplitedOrder.OrderItems == null)
+            {
+                IsDialogOpen = false;
+                return;
+            }
+            if (SplitedOrder.OrderItems.Count() == 0)
+            {
+                IsDialogOpen = false;
+                return;
+            }
+            SplitedOrder.OrderItems.Clear();
+            IsDialogOpen = false;
+            /* SplitedOrder
+                 .OrderItems
+                 .ToList()
+                 .ForEach(o =>
+                 {
+                     CurrentOrder.AddOrderItem(o);
+                     SplitedOrder.RemoveOrderItem(o);
+                 });
+             IsDialogOpen = false;*/
+        }
+
+        public void AddSplittedItemsCommand()
+        {
+            var _selectedOrderItems = CurrentOrder.OrderItems.Where(o => o.IsSelected == true);
+            if (_selectedOrderItems == null)
+            {
+                return;
+            }
+
+            if (SplitedOrder == null)
+            {
+                SplitedOrder = new Order();
+            }
+            
+            if (SplitedOrder.OrderItems == null)
+                SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
+
+            SplitedOrder.OrderItems.Clear();
+            //SplitedOrder.Total = 0;
+
+            _selectedOrderItems
+                .ToList()
+                .ForEach(o =>
+                {
+                    SplitedOrder.AddOrderItem(o);
+                });
+        }
+
+        public void RemoveSplittedItemsCommand()
+        {
+            if (SplitedOrder == null)
+            {
+                return;
+            }
+            if (SplitedOrder.OrderItems == null)
+            {
+                return;
+            }
+
+            var _selectedSplitedItems = SplitedOrder.OrderItems.Where(o => o.IsSelected == true);
+
+            if (_selectedSplitedItems == null)
+            {
+                return;
+            }
+            if (_selectedSplitedItems.Count() == 0)
+            {
+                return;
+            }
+
+            _selectedSplitedItems
+                .ToList()
+                .ForEach(o =>
+                {
+                    CurrentOrder.AddOrderItem(o);
+                    SplitedOrder.RemoveOrderItem(o);
+                });
+        }
+        
+        #endregion
     }
 
     static class ToastNotification
@@ -830,14 +982,15 @@ namespace PosTest.ViewModels
 
     public enum ActionButton
     {
-        Del,
-        Qty,
-        Price,
-        Disc,
-        Cmd,
-        Payment,
-        Split,
-        Table
+        Del=0,
+        Qty=1,
+        Price=2,
+        Disc=3,
+        Cmd=4,
+        Payment=5,
+        Split=6,
+        Table=7,
+        SplittedPayment=8
     }
 
 }

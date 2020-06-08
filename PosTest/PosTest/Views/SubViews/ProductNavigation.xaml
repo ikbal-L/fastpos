@@ -67,7 +67,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Button x:Name="ReturnFromAdditives" Grid.Column="1" Grid.Row="0" Content="Return" Margin="8" cal:Message.Attach="[Event Click] = [Action ReturnFromAdditives()]"/>
+            <Button x:Name="ReturnFromAdditives"  Grid.Column="1" Grid.Row="0" Content="Return" Margin="8" cal:Message.Attach="[Event Click] = [Action ReturnFromAdditives()]"/>
 
         </Grid> 
 
