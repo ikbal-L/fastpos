@@ -16,7 +16,7 @@ namespace ServiceInterface.Model
     public class Category : PropertyChangedBase
     {
         private string _backGroundString=null;
-        private Brush _backGroundColor;
+        private Brush _backGround;
         private string _name;
         private Color? _backgroundColor;
 
@@ -44,7 +44,7 @@ namespace ServiceInterface.Model
             { 
                 _backGroundString = value;
                 NotifyOfPropertyChange(() => BackgroundString); 
-                NotifyOfPropertyChange(() => BackGroundColor); 
+                NotifyOfPropertyChange(() => Background); 
             } 
         }
 
@@ -52,26 +52,33 @@ namespace ServiceInterface.Model
         public List<long> ProductIds { get; set; }
         public List<Product> Products { get; set; }
 
-        public virtual Brush BackGroundColor
+        public Brush Background
         {
-            get => _backGroundColor ?? (_backGroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+            get => _backGround ?? (_backGround = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
             set
             {
-                _backGroundColor = (SolidColorBrush)value;
+                _backGround = (SolidColorBrush)value;
+                NotifyOfPropertyChange(() => Background);
             }
         }
 
         public void MappingBeforeSending()
         {
             if (Products != null)
+            {
+                if (ProductIds == null)
+                {
+                    ProductIds = new List<long>();
+                }
+                else
+                {
+                    ProductIds.Clear();
+                }
                 foreach (var p in Products)
                 {
-                    if (ProductIds == null)
-                    {
-                        ProductIds = new List<long>();
-                    }
                     ProductIds.Add((long)p.Id);
                 }
+            }
         }
 
         public void MappingAfterReceiving(ICollection<Product> products)
@@ -94,7 +101,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        public virtual Color? BackgroundColor
+        public Color? BackgroundColor
         {
             get
             {
@@ -108,7 +115,7 @@ namespace ServiceInterface.Model
             {
                 _backgroundColor = value;
                 BackgroundString = _backgroundColor.ToString();
-                BackGroundColor = new SolidColorBrush((Color)_backgroundColor);
+                Background = new SolidColorBrush((Color)_backgroundColor);
             }
 
         }

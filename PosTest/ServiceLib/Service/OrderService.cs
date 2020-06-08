@@ -54,7 +54,8 @@ namespace ServiceLib.Service
 
         public int UpdateOrder(Order order)
         {
-            throw new NotImplementedException();
+            order.MappingBeforeSending();
+            return _restOrderService.UpdateOrder(order);
         }
     }
 
@@ -229,6 +230,51 @@ namespace ServiceLib.Service
         public IEnumerable<Order> GetAllOrders(ref int statusCode)
         {
             throw new NotImplementedException();
+        }
+
+       public Table GetTable(int id, ref int statusCode)
+        {
+            /* string token = AuthProvider.Instance?.AuthorizationToken;
+             var client = new RestClient(UrlConfig.OrderUrl.GetTable + number.ToString());
+             var request = new RestRequest(Method.GET);
+             request.AddHeader("authorization", token);
+             request.AddHeader("accept", "application/json");
+             IRestResponse response = client.Execute(request);
+             Table table = null;
+             if (response.StatusCode == HttpStatusCode.OK)
+             {
+                 table = JsonConvert.DeserializeObject<Table>(response.Content);
+             }
+             statusCode = (int)response.StatusCode;
+             return table;// ;products*/
+            RestService.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
+
+        }
+
+        public Table GetTableByNumber(int tableNumber, ref int statusCode)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class RestService
+    {
+        static public T GetThing<T>(string url, ref int statusCode)
+        {
+            string token = AuthProvider.Instance?.AuthorizationToken;
+            var client = new RestClient(url);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("authorization", token);
+            request.AddHeader("accept", "application/json");
+            IRestResponse response = client.Execute(request);
+            T t = default;
+            statusCode = (int)response.StatusCode;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                t = JsonConvert.DeserializeObject<T>(response.Content);
+            }
+            return t;// ;products
+
         }
     }
 }

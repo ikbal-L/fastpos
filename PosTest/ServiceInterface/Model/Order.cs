@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -18,6 +20,7 @@ namespace ServiceInterface.Model
         public Order()
         {
             OrderItems = new BindableCollection<OrderItem>();
+            OrderItems.CollectionChanged += new NotifyCollectionChangedEventHandler((s, e)=> NotifyOfPropertyChange(()=>Total));
         }
         public Order(string buyerId) : this()
         {
@@ -37,7 +40,7 @@ namespace ServiceInterface.Model
         public OrderType Type { get; set; }
 
        [DataMember]
-        public OrderState State { get; set; }
+        public OrderState? State { get; set; }
 
         //get from state
         public string Color { get; set; }
@@ -45,13 +48,18 @@ namespace ServiceInterface.Model
         [DataMember]
         public decimal Total 
         {
-            get => _total;
-            set
+            get
+            {
+                var sumItemTotals = 0m;
+                OrderItems.ToList().ForEach(item => sumItemTotals += item.Total);
+                return sumItemTotals;
+            }
+            /*set
             {
                 _total = value;
                 NotifyOfPropertyChange(() => NewTotal);
                 NotifyOfPropertyChange(() => Total);
-            }
+            }*/
         }
 
         [DataMember]
@@ -161,6 +169,12 @@ namespace ServiceInterface.Model
         [DataMember]
         public long? TableId { get; set; }
 
+        //public ICollectionView ProductsPage { get; set; }
+        public Category ShownCategory { get; private set; }
+        public ICollectionView ShownAdditivesPage { get; set; }
+
+        public bool ProductsVisibility { get; set; }
+        public bool AdditivesVisibility { get; set; }
         public void AddItem(Product product, decimal unitPrice, bool setSelected, int quantity = 1)
         {
             OrderItem item;
@@ -196,7 +210,8 @@ namespace ServiceInterface.Model
         {
             if (item == null)
                 return;
-            Total -= item.Total;
+            //Total -= item.Total;
+            
             OrderItems.Remove(item);
         }
 
@@ -229,6 +244,15 @@ namespace ServiceInterface.Model
                 oit.Product = product;
             }
         }
+
+        public void SaveScreenState(Category category, ICollectionView additives,
+            bool productsVisibility, bool additviesVisibility)
+        {
+            ShownCategory = category;
+            ShownAdditivesPage = additives;
+            ProductsVisibility = productsVisibility;
+            AdditivesVisibility = additviesVisibility;
+        }
     }
 
     public enum OrderState 
@@ -236,7 +260,8 @@ namespace ServiceInterface.Model
         Ordered,
         Prepared,
         Ready,
-        Delivered
+        Delivered,
+        Payed
     }
     public enum OrderType
     {

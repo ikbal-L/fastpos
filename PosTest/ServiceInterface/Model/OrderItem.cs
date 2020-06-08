@@ -62,7 +62,8 @@ namespace ServiceInterface.Model
                 {
                     DiscountAmount = Total * _discountPercentage / 100;
                 }
-                Order.Total = Order.Total + UnitPrice * (decimal)(_quantity - oldQuqntity);
+                Order.NotifyOfPropertyChange(nameof(Order.Total));
+                //Order.Total = Order.Total + UnitPrice * (decimal)(_quantity - oldQuqntity);
             } 
         }
 

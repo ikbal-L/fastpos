@@ -11,5 +11,6 @@ namespace ServiceInterface.Interface
         int UpdateOrder(Order order);
         int DeleteOrder(long orderId);
         long? GetIdmax(ref int statusCode);
+        Table GetTableByNumber(int tableNumber, ref int statusCode);
     }
 }

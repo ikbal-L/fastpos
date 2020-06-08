@@ -71,7 +71,8 @@ namespace ServiceLib.Service
 
         public int SaveCategories(IEnumerable<Category> categories)
         {
-            throw new NotImplementedException();
+            categories.ToList().ForEach(c => c.MappingBeforeSending());
+            return _restCategoryService.SaveCategories(categories);
         }
 
         public int SaveCategory(Category category)

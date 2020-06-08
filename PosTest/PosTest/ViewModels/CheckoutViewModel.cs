@@ -35,20 +35,23 @@ namespace PosTest.ViewModels
         private Category _currantCategory;
         private bool _productsVisibility;
         private string _numericZone;
-
-        private  ICollectionView _productsPage { get; set; }
-        private  ICollectionView _additvesPage { get; set; }
         private int _pageNumber=0;
         private bool _canExecuteNext;
         private bool _canExecutePrevious;
         private Order _currentOrder;
         private bool _additivesVisibility;
+        private ICollectionView _productsPage;
+        private ICollectionView _additvesPage;
 
         public CheckoutViewModel() 
         {
             Orders = new BindableCollection<Order>();
-            //CurrentOrder = new Order(); 
-            //Orders.Add(CurrentOrder);
+            if (IsRunningFromXUnit)
+            {
+                CurrentOrder = new Order();
+                Orders.Add(CurrentOrder);
+
+            }
         }
 
         public CheckoutViewModel(int pageSize, IProductService productsService, 
@@ -230,8 +233,8 @@ namespace PosTest.ViewModels
         }
         internal void InitCategoryColors()
         {
-            foreach (var category in Categories)
-                category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();
+            /*foreach (var category in Categories)
+                category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();*/
         }
 
         public void ShowOrder(Order order)
@@ -240,13 +243,43 @@ namespace PosTest.ViewModels
             {
                 return;
             }
+            if (CurrentOrder != null)
+            {
+                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
+            }
             CurrentOrder = order;
+            CurrentCategory = CurrentOrder.ShownCategory;
+            if (_currantCategory == null)
+            {
+                CategorieFiltering("Home");
+            }
+            else
+            {
+                CategorieFiltering(CurrentCategory);
+            }            
+            AdditivesPage = CurrentOrder.ShownAdditivesPage;
+            ProductsVisibility = CurrentOrder.ProductsVisibility;
+            AdditivesVisibility = CurrentOrder.AdditivesVisibility;
         }
         public void NewOrder()
         {
+            if (CurrentOrder != null)
+            {
+                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
+            }
+            CategorieFiltering("Home");
             CurrentOrder = new Order();
             Orders.Add(CurrentOrder);
             CurrentOrder.OrderTime = DateTime.Now;
+        }
+        public void SetNullCurrentOrder()
+        {
+            if (CurrentOrder != null)
+            {
+                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
+            }
+            CategorieFiltering("Home");
+            CurrentOrder = null;
         }
         public void RemoveOrder()
         {
@@ -292,6 +325,10 @@ namespace PosTest.ViewModels
 
         public void RemoveAdditive(Additive additive)
         {
+            if (additive is null || additive.ParentOrderItem is null)
+            {
+                return;
+            }
             if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
             {
                 CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
@@ -447,9 +484,10 @@ namespace PosTest.ViewModels
             
             if (CurrentOrder == null)
             {
-                CurrentOrder = new Order();
+                NewOrder();
+                /*CurrentOrder = new Order();
                 Orders.Add(CurrentOrder); 
-                CurrentOrder.OrderTime = DateTime.Now;
+                CurrentOrder.OrderTime = DateTime.Now;*/
             }
 
             CurrentOrder.AddItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true, quantity: 1);
@@ -520,8 +558,11 @@ namespace PosTest.ViewModels
 
         public void ActionKeyboard(ActionButton cmd)
         {
-            if (String.IsNullOrEmpty(NumericZone))
+            if (string.IsNullOrEmpty(NumericZone) && cmd != ActionButton.Split && cmd != ActionButton.Cmd)
+            {
+                ToastNotification.Notify("Enter the required vlue before ..");
                 return;
+            }
             switch (cmd)
             {
                 case ActionButton.Del:
@@ -635,10 +676,15 @@ namespace PosTest.ViewModels
                         NumericZone = "";
                         return;
                     }
-                                      
+                    if (CurrentOrder == null)
+                    {
+                        ToastNotification.Notify("Add products before ...");
+                        return;
+                    } 
+
                     if (payedAmount < CurrentOrder.NewTotal) 
                     {
-                        NumericZone = "";
+                        //NumericZone = "";
                         //Use Local to select message according to UI language
                         ToastNotification.Notify("Payed amount lower than total");
                         //CurrentOrder.DiscountAmount = 0;
@@ -647,7 +693,36 @@ namespace PosTest.ViewModels
 
                     CurrentOrder.GivenAmount = payedAmount;
                     CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
+                    CurrentOrder.State = OrderState.Payed;
                     NumericZone = "";
+                    SaveCurrentOrder();
+                    break;
+
+                case ActionButton.Cmd:
+                    if (CurrentOrder == null)
+                    {
+                        ToastNotification.Notify("Add products before ...");
+                        return;
+                    }
+                    CurrentOrder.State = OrderState.Ordered;
+                    SaveCurrentOrder();
+                    break;
+
+                case ActionButton.Table:
+                    var tableNumber = Convert.ToInt32(NumericZone);
+                    if (tableNumber < 0)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+                    {
+                    if (CurrentOrder == null)
+                        ToastNotification.Notify("Add products before ...");
+                        return;
+                    }
+                    var table = _orderService.GetTableByNumber(tableNumber);
+                    
+                    CurrentOrder.State = OrderState.Ordered;
                     SaveCurrentOrder();
                     break;
             }
@@ -655,12 +730,23 @@ namespace PosTest.ViewModels
 
         private void SaveCurrentOrder()
         {
+            if (IsRunningFromXUnit)
+            {
+                return;
+            }
             int resp;
             try
             {
                 var status = 0;
-                CurrentOrder.Id = _orderService.GetIdmax(ref status) + 1;
-                resp = _orderService.SaveOrder(CurrentOrder);
+                if (CurrentOrder.Id == null)
+                {
+                    CurrentOrder.Id = _orderService.GetIdmax(ref status) + 1;
+                    resp = _orderService.SaveOrder(CurrentOrder);
+                }
+                else
+                {
+                    resp = _orderService.UpdateOrder(CurrentOrder);
+                }
             }
             catch (AggregateException)
             {
@@ -685,7 +771,16 @@ namespace PosTest.ViewModels
                 case 408: ToastNotification.Notify("Database error in Annex_id " + resp.ToString()); break;
                 case 409: ToastNotification.Notify("Config Database error " + resp.ToString()); break;
                 case 410: ToastNotification.Notify(" User or password error" + resp.ToString()); break;
-                case 200: RemoveOrder(); break;
+                case 200:
+                    if (CurrentOrder.State == OrderState.Payed)
+                    {
+                        RemoveOrder();
+                    }
+                    else
+                    {
+                        SetNullCurrentOrder(); ;
+                    }
+                    break;
             }
            
         }
@@ -739,7 +834,10 @@ namespace PosTest.ViewModels
         Qty,
         Price,
         Disc,
-        Payment
+        Cmd,
+        Payment,
+        Split,
+        Table
     }
 
 }

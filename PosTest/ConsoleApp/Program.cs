@@ -49,11 +49,14 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
+            var date = "2020-06-06 15:16:12.343000";
+            DateTime oDate = Convert.ToDateTime(date);
+            Console.WriteLine(oDate);
             Program p = new Program();
             p.Run();
         }
 
-        private async void CalRestAsync()
+        private async void CallRestAsync()
         {
             using (var client = new HttpClient())
             {
@@ -78,8 +81,10 @@ namespace ConsoleApp
                 IsNotifying = true
             };
             //var status = productService.SaveProduct(p);
-            var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id=1});
- 
+            var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 2 }, new Terminal { Id=1});
+            var resp1 = productService.SaveProducts(FakeServices.Products);
+            var resp2 = categorieService.SaveCategories(FakeServices.Categories);
+            var resp3 = additiveService.SaveAdditives(FakeServices.Additives);
             int getProductsStatusCode = 0,
                 getCategoriesStatusCode = 0, code = 0;
             var prods =  productService.GetAllProducts(ref getProductsStatusCode);
