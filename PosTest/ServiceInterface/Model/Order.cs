@@ -16,6 +16,7 @@ namespace ServiceInterface.Model
         private decimal _givenAmount;
         private decimal _returnedAmount;
         private decimal _discountPercentage;
+        private BindableCollection<OrderItem> _orderItems;
 
         public Order()
         {
@@ -149,7 +150,15 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public BindableCollection<OrderItem> OrderItems { get; set; }
+        public BindableCollection<OrderItem> OrderItems
+        {
+            get => _orderItems;
+            set
+            {
+                _orderItems = value;
+                NotifyOfPropertyChange(() => OrderItems);
+            }
+        }
 
         //[DataMember]
         public List<long> OrderItemIds { get; set; }

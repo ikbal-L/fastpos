@@ -745,8 +745,8 @@ namespace PosTest.ViewModels
                     var status = 0;
                     var table = _orderService.GetTableByNumber(tableNumber, ref status);
                     
-                    CurrentOrder.State = OrderState.Ordered;
-                    SaveCurrentOrder();
+                    //CurrentOrder.State = OrderState.Ordered;
+                    //SaveCurrentOrder();
                     break;
 
                 case ActionButton.SplittedPayment:
@@ -773,6 +773,8 @@ namespace PosTest.ViewModels
                     break;
 
                 case ActionButton.Split:
+                    SplitedOrder = new Order();
+                    //SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
                     IsDialogOpen = CurrentOrder!=null 
                         && CurrentOrder.OrderItems!=null
                         && CurrentOrder.OrderItems.Count>1;
@@ -882,33 +884,49 @@ namespace PosTest.ViewModels
 
         public void AddSplittedItemsCommand()
         {
+            return;
             var _selectedOrderItems = CurrentOrder.OrderItems.Where(o => o.IsSelected == true);
             if (_selectedOrderItems == null)
             {
                 return;
             }
-
             if (SplitedOrder == null)
             {
                 SplitedOrder = new Order();
             }
-            
             if (SplitedOrder.OrderItems == null)
                 SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
 
             SplitedOrder.OrderItems.Clear();
-            //SplitedOrder.Total = 0;
+            SplitedOrder.OrderItems.AddRange(_selectedOrderItems);
+            //var _selectedOrderItems = CurrentOrder.OrderItems.Where(o => o.IsSelected == true);
+            //if (_selectedOrderItems == null)
+            //{
+            //    return;
+            //}
 
-            _selectedOrderItems
-                .ToList()
-                .ForEach(o =>
-                {
-                    SplitedOrder.AddOrderItem(o);
-                });
+            //if (SplitedOrder == null)
+            //{
+            //    SplitedOrder = new Order();
+            //}
+            
+            //if (SplitedOrder.OrderItems == null)
+            //    SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
+
+            //SplitedOrder.OrderItems.Clear();
+            ////SplitedOrder.Total = 0;
+
+            //_selectedOrderItems
+            //    .ToList()
+            //    .ForEach(o =>
+            //    {
+            //        SplitedOrder.AddOrderItem(o);
+            //    });
         }
 
         public void RemoveSplittedItemsCommand()
         {
+            return;
             if (SplitedOrder == null)
             {
                 return;

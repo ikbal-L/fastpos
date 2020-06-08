@@ -46,6 +46,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <CheckBox x:Name="tempcheck" Content="Template" 
                   IsChecked="{Binding IsActivev}" 
@@ -56,7 +57,11 @@
         <ListView Grid.Row="2" Name="lvDataBinding" ItemsSource="{Binding Items}"
                  ItemTemplate="{StaticResource MyItemTemplate2}"
                  View="{StaticResource lsitview}"
-                 local:ListViewEx.IsWrapTemplate="{Binding IsActivev}">
+                 local:ListViewEx.IsWrapTemplate="{Binding IsActivev}"
+                 SelectionMode="Multiple"
+                 local:ListBoxMultiSelectionEx.SelectedItems="{Binding SelectedItems}"
+                 local:ListBoxMultiSelectionEx.IsSorted="True"
+                  >
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Style.Triggers>
@@ -71,7 +76,10 @@
 
         </ListView>
 
-
+        <ListView Grid.Row="3" Name="lvDataBinding1" ItemsSource="{Binding SelectedItems}"
+                 ItemTemplate="{StaticResource MyItemTemplate2}"
+                 SelectionMode="Multiple"
+                 />
 
 
 

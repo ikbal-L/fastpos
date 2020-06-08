@@ -33,6 +33,7 @@ namespace WpfApp1
             this.DataContext = new VewModel();
             listview = lvDataBinding.View;
             itemsPanel = lvDataBinding.ItemsPanel;
+            //lvDataBinding.ite
             //lvDataBinding.ItemTemplate = (DataTemplate)this.FindResource("MyItemTemplate2");
 
 
@@ -96,13 +97,19 @@ namespace WpfApp1
 
         public VewModel()
         {
+            var u1 = new User() { Name = "Salim Sao", Age = 42, Mail = "salim@doe-family.com" };
             Items = new ObservableCollection<User>();
-            Items.Add(new User() { Name = "John Doe", Age = 42, Mail = "john@doe-family.com",IsActive=true });
+            Items.Add(u1);
+            SelectedItems = new ObservableCollection<User>();
+            SelectedItems.Add(u1);
+            Items.Add(new User() { Name = "John Doe", Age = 42, Mail = "john@doe-family.com" });
             Items.Add(new User() { Name = "Jane Doe", Age = 39, Mail = "jane@doe-family.com" });
             Items.Add(new User() { Name = "Sammy Doe", Age = 13, Mail = "sammy.doe@gmail.com" });
+            IsActivev = false;
             //lvDataBinding.ItemsSource = Items;
         }
         public ObservableCollection<User> Items { get; set; }
+        public ObservableCollection<User> SelectedItems { get; set; }
         public bool? IsActivev { 
             get => _isActivev;
             set

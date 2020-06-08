@@ -53,7 +53,7 @@ namespace PosTest.ViewModels
             int resp;
             try
             {
-                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 2 }, new Terminal { Id = 1 });
+                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
             }
             catch (AggregateException)
             {
@@ -77,7 +77,7 @@ namespace PosTest.ViewModels
         
         public void Settings()
         {
-            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 2 }, new Terminal { Id = 1 });
+            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
             SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService, categorieService, additiveService);
             settingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views"
+             xmlns:ex="clr-namespace:PosTest.Extensions"
              
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -94,13 +95,13 @@
                          MinHeight="280" MaxHeight="280"
                          MinWidth="250" MaxWidth="250"
                          Background="WhiteSmoke"
-                     ItemsSource="{Binding CurrentOrder.OrderItems}"
-                     SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
-                     
-                         cal:Message.Attach="[Event SelectionChanged] = [Action AddSplittedItemsCommand]"
-                         
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     SelectionMode="Multiple">
+                         ItemsSource="{Binding CurrentOrder.OrderItems}"
+                         SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
+                         ex:ListBoxMultiSelectionEx.SelectedItems="{Binding SplitedOrder.OrderItems}"
+                         ex:ListBoxMultiSelectionEx.IsSorted="True"                  
+                         ScrollViewer.VerticalScrollBarVisibility="Visible"
+                         SelectionMode="Multiple">
+                         <!--cal:Message.Attach="[Event SelectionChanged] = [Action AddSplittedItemsCommand]"-->
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SplittedOrderItems_ItemStyle}">
                             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
