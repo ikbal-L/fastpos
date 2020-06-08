@@ -897,45 +897,29 @@ namespace PosTest.ViewModels
                 SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
 
             SplitedOrder.OrderItems.Clear();
+            SplitedOrder.OrderItems.AddRange(_selectedOrderItems);
+
             //SplitedOrder.Total = 0;
 
-            _selectedOrderItems
-                .ToList()
-                .ForEach(o =>
-                {
-                    SplitedOrder.AddOrderItem(o);
-                });
+            //_selectedOrderItems
+            //    .ToList()
+            //    .ForEach(o =>
+            //    {
+            //        SplitedOrder.AddOrderItem(o);
+            //    });
         }
 
         public void RemoveSplittedItemsCommand()
         {
-            if (SplitedOrder == null)
+            /*if (SplitedOrder == null)
             {
                 return;
             }
             if (SplitedOrder.OrderItems == null)
             {
                 return;
-            }
-
-            var _selectedSplitedItems = SplitedOrder.OrderItems.Where(o => o.IsSelected == true);
-
-            if (_selectedSplitedItems == null)
-            {
-                return;
-            }
-            if (_selectedSplitedItems.Count() == 0)
-            {
-                return;
-            }
-
-            _selectedSplitedItems
-                .ToList()
-                .ForEach(o =>
-                {
-                    CurrentOrder.AddOrderItem(o);
-                    SplitedOrder.RemoveOrderItem(o);
-                });
+            }*/
+            SplitedOrder.OrderItems.Clear();
         }
         
         #endregion

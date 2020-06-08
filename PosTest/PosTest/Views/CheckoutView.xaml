@@ -91,12 +91,13 @@
                          VerticalContentAlignment="Top"  >SessionID</Button>
             </DockPanel>
 
-            <DockPanel Grid.Row="1" Grid.Column="1"   Margin="2 2 2 2" LastChildFill="False" Height="30">
-                <Button     DockPanel.Dock="Left"
-                        x:Name="Home"
+            <DockPanel Grid.Row="1" Grid.Column="1"   Margin="2 2 2 2" LastChildFill="False" >
+                <Button DockPanel.Dock="Left" x:Name="Home" Padding="0"
                         cal:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
-                        Content="Home"  
-                        Width="50"/>
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="{materialDesign:PackIcon Home,Size=30}">
+                    
+                </Button>
                 <TextBlock  Text="{Binding CurrentCategory.Name, Mode=TwoWay}" Background="Aqua"/>
                 <TextBox    DockPanel.Dock="Left"
                         Width="200"
@@ -108,20 +109,25 @@
                 <Button     DockPanel.Dock="Right" Margin="2 0 0 0"
                         x:Name="NextPage"
                         cal:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
-                        IsEnabled="{Binding CanExecuteMext}"
-                        Content="NextPage"  
-                        Width="50"/>
+                        IsEnabled="{Binding CanExecuteMext}" Padding="0"
+                         Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Content="{materialDesign:PackIcon ChevronDoubleRight,30}" 
+                        />
                 <Button     DockPanel.Dock="Right" 
                         x:Name="PreviousPqge"
                         cal:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
-                        IsEnabled="{Binding CanExecutePrevious}"
-                        Content="PreviousPqge"  
-                        Width="50"/>
+                        IsEnabled="{Binding CanExecutePrevious}" Padding="0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Content="{materialDesign:PackIcon ChevronDoubleLeft,30}"  
+                        />
                 <Button     DockPanel.Dock="Right" 
                         x:Name="Close"
                         cal:Message.Attach="[Event Click] = [Action Close()]"
-                        Content="Close"  
-                        Width="50"/>
+                            Padding="0"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                            
+                        Content="{materialDesign:PackIcon Close,30}"  
+                        />
             </DockPanel>
 
             <StackPanel Grid.Row="2" Grid.Column="2"  Orientation="Horizontal"  Background="#7f8c8d" Margin="2 0 0 0" Height="30">
