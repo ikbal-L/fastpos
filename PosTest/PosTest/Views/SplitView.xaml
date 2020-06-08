@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="PosTest.Views.SplitView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PosTest.Views"
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             Width="600" Height="500"
+            d:DesignWidth ="600" >
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <DockPanel LastChildFill="True" >
+        <StackPanel DockPanel.Dock="Top">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="5"
+                        Height="50"
+                    cal:Message.Attach="[Event Click] = [Action BackFromSplitCommand]" Grid.Column="0"  
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                        >
+                    <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ChevronDoubleLeft" />
+                        <TextBlock Margin="5 -3">Back </TextBlock>
+                    </StackPanel>
+                </Button>
+                <Label Grid.Column="0" Grid.ColumnSpan="2" FontSize="24" FontWeight="Bold" Content="Bill Splitting" HorizontalAlignment="Center"></Label>
+            </Grid>
+        </StackPanel>
+        <StackPanel>
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+               
+
+                <Label Grid.Column="1" Grid.Row="2" FontSize="20" Content="{Binding CurrentOrder.Total,FallbackValue='00.00'}" HorizontalAlignment="Right"/>
+                <Label Grid.Column="3" Grid.Row="2" FontSize="20" Content="{Binding SplitedOrder.Total,FallbackValue='00.00'}" HorizontalAlignment="Right" />
+                <Button Margin="5" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" HorizontalAlignment="Stretch"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT','SPLITTED')]"
+                        FontSize="15"
+                        Height="50"
+                    Style="{StaticResource MaterialDesignFlatAccentBgButton}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CreditCardOutline" />
+                        <TextBlock Margin="5 -3">  Payment</TextBlock>
+                    </StackPanel>
+                </Button>
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" Margin="0,95">
+                    <Button cal:Message.Attach="[Event Click] = [Action AddSplittedItemsCommand]"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                            >
+                        <materialDesign:PackIcon Kind="Plus"  Height="24" Width="24" />
+                    </Button>
+                    <Label></Label>
+                    <Button  cal:Message.Attach="[Event Click] = [Action RemoveSplittedItemsCommand]"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                            >
+                        <materialDesign:PackIcon Kind="Minus"  Height="24" Width="24" />
+                    </Button>
+                </StackPanel>
+
+                <ListBox Grid.Row="1" Grid.Column="1" 
+                         MinHeight="280" MaxHeight="280"
+                         MinWidth="250" MaxWidth="250"
+                         Background="WhiteSmoke"
+                     ItemsSource="{Binding CurrentOrder.OrderItems}"
+                     SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
+                     
+                         cal:Message.Attach="[Event SelectionChanged] = [Action AddSplittedItemsCommand]"
+                         
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     SelectionMode="Multiple">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SplittedOrderItems_ItemStyle}">
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+
+                <ListBox Grid.Row="1" Grid.Column="3"  
+                         MinWidth="250" MaxWidth="250"
+                         MinHeight="280" MaxHeight="280"
+                        Background="WhiteSmoke"
+                     ItemsSource="{Binding SplitedOrder.OrderItems}"
+                     SelectedItem="{Binding Path=SplitedOrder.SelectedOrderItem, Mode=TwoWay}"
+                    
+                     SelectionMode="Multiple"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     >
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SplittedOrderItems_ItemStyle}">
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </Grid>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

@@ -161,7 +161,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public long? TableId { get; set; }
 
-        public void AddItem(Product product, decimal unitPrice, bool setSelected, int quantity = 1)
+        public void AddItem(Product product, decimal unitPrice, bool setSelected, float quantity = 1)
         {
             OrderItem item;
             if ((product is Platter && (product as Platter).Additives !=null )  || !OrderItems.Any(p => p.Product.Equals(product)))
@@ -178,6 +178,11 @@ namespace ServiceInterface.Model
 
             if (setSelected)
                 SelectedOrderItem = item;
+        }
+
+        public void AddOrderItem(OrderItem orderItem)
+        {
+            AddItem(orderItem.Product, orderItem.UnitPrice, false, orderItem.Quantity);
         }
 
         public void RemoveEmptyItems()

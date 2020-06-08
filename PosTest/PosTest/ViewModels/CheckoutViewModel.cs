@@ -43,6 +43,14 @@ namespace PosTest.ViewModels
         private bool _canExecutePrevious;
         private Order _currentOrder;
         private bool _additivesVisibility;
+        private bool _IsDialogOpen;
+        private Order _splitedOrder;
+
+        public bool IsDialogOpen
+        {
+            get => _IsDialogOpen;
+            set => Set(ref _IsDialogOpen, value);
+        }
 
         public CheckoutViewModel() 
         {
@@ -167,6 +175,19 @@ namespace PosTest.ViewModels
             }
         }
 
+        public Order SplitedOrder
+        {
+            get { return _splitedOrder; }
+            set
+            {
+                _splitedOrder = value;            
+                NotifyOfPropertyChange(() => SplitedOrder);
+                               
+            }
+        }
+
+
+
         public string NumericZone 
         { 
             get => _numericZone;
@@ -230,8 +251,8 @@ namespace PosTest.ViewModels
         }
         internal void InitCategoryColors()
         {
-            foreach (var category in Categories)
-                category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();
+            //foreach (var category in Categories)
+            //    category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();
         }
 
         public void ShowOrder(Order order)
@@ -520,7 +541,7 @@ namespace PosTest.ViewModels
 
         public void ActionKeyboard(ActionButton cmd)
         {
-            if (String.IsNullOrEmpty(NumericZone))
+            if (String.IsNullOrEmpty(NumericZone)&& cmd != ActionButton.Split)
                 return;
             switch (cmd)
             {
@@ -650,7 +671,45 @@ namespace PosTest.ViewModels
                     NumericZone = "";
                     SaveCurrentOrder();
                     break;
+
+                case ActionButton.SplittedPayment:
+                    payedAmount = Convert.ToDecimal(NumericZone);
+                    if (payedAmount < 0)
+                    {
+                        NumericZone = "";
+                        return;
+                    }
+                                      
+                    if (payedAmount < CurrentOrder.NewTotal) 
+                    {
+                        NumericZone = "";
+                        //Use Local to select message according to UI language
+                        ToastNotification.Notify("Payed amount lower than total");
+                        //CurrentOrder.DiscountAmount = 0;
+                        return;
+                    }
+
+                    CurrentOrder.GivenAmount = payedAmount;
+                    CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
+                    NumericZone = "";
+                    SaveSplittedOrder();
+                    break;
+
+                case ActionButton.Split:
+                    IsDialogOpen = CurrentOrder!=null 
+                        && CurrentOrder.OrderItems!=null
+                        && CurrentOrder.OrderItems.Count>1;
+                    if (IsDialogOpen == true)
+                    {
+                        CurrentOrder.SelectedOrderItem = null;
+                    }
+                    break;
             }
+        }
+
+        private void SaveSplittedOrder()
+        {
+            throw new NotImplementedException();
         }
 
         private void SaveCurrentOrder()
@@ -690,8 +749,99 @@ namespace PosTest.ViewModels
            
         }
 
-        
 
+        #region Split Commands
+
+        public void BackFromSplitCommand()
+        {
+            
+            if (SplitedOrder == null)
+            {
+                IsDialogOpen = false;
+                return;
+            }
+            if (SplitedOrder.OrderItems == null)
+            {
+                IsDialogOpen = false;
+                return;
+            }
+            if (SplitedOrder.OrderItems.Count() == 0)
+            {
+                IsDialogOpen = false;
+                return;
+            }
+            SplitedOrder.OrderItems.Clear();
+            IsDialogOpen = false;
+            /* SplitedOrder
+                 .OrderItems
+                 .ToList()
+                 .ForEach(o =>
+                 {
+                     CurrentOrder.AddOrderItem(o);
+                     SplitedOrder.RemoveOrderItem(o);
+                 });
+             IsDialogOpen = false;*/
+        }
+
+        public void AddSplittedItemsCommand()
+        {
+            var _selectedOrderItems = CurrentOrder.OrderItems.Where(o => o.IsSelected == true);
+            if (_selectedOrderItems == null)
+            {
+                return;
+            }
+
+            if (SplitedOrder == null)
+            {
+                SplitedOrder = new Order();
+            }
+            
+            if (SplitedOrder.OrderItems == null)
+                SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
+
+            SplitedOrder.OrderItems.Clear();
+            SplitedOrder.Total = 0;
+
+            _selectedOrderItems
+                .ToList()
+                .ForEach(o =>
+                {
+                    SplitedOrder.AddOrderItem(o);
+                });
+        }
+
+        public void RemoveSplittedItemsCommand()
+        {
+            if (SplitedOrder == null)
+            {
+                return;
+            }
+            if (SplitedOrder.OrderItems == null)
+            {
+                return;
+            }
+
+            var _selectedSplitedItems = SplitedOrder.OrderItems.Where(o => o.IsSelected == true);
+
+            if (_selectedSplitedItems == null)
+            {
+                return;
+            }
+            if (_selectedSplitedItems.Count() == 0)
+            {
+                return;
+            }
+
+            _selectedSplitedItems
+                .ToList()
+                .ForEach(o =>
+                {
+                    CurrentOrder.AddOrderItem(o);
+                    SplitedOrder.RemoveOrderItem(o);
+                });
+        }
+        
+        #endregion
     }
 
     static class ToastNotification
@@ -739,7 +889,14 @@ namespace PosTest.ViewModels
         Qty,
         Price,
         Disc,
-        Payment
+        Payment,
+        Split,
+        SplittedPayment
     }
 
+    public enum PaymentMode 
+    {
+        Splitted,
+        Current
+    }
 }

@@ -17,6 +17,7 @@ namespace ServiceInterface.Model
     {
         private string _backGroundString=null;
         private Brush _backGroundColor;
+                      
         private string _name;
         private Color? _backgroundColor;
 

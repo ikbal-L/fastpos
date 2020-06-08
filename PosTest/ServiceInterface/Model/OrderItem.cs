@@ -19,13 +19,14 @@ namespace ServiceInterface.Model
         private bool _canAddAdditives;
         private decimal _discountAmount = 0;
         private decimal _discountPercentage = 0;
+        private bool _isSelected;
 
         public OrderItem() 
         {
             //Additives = new BindableCollection<Additive>();
         }
 
-        public OrderItem(Product product, int quantity, decimal unitPrice, Order order) : this()
+        public OrderItem(Product product, float quantity, decimal unitPrice, Order order) : this()
         {
             Order = order;
             Product = product;
@@ -123,8 +124,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public List<long> AdditiveIds; 
-
+        public List<long> AdditiveIds;
         public BindableCollection<Additive> Additives 
         { 
             get => _additives;
@@ -144,6 +144,22 @@ namespace ServiceInterface.Model
                    
             } 
         }
+
+        
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                NotifyOfPropertyChange(nameof(IsSelected));
+
+            }
+
+        }
+
+
+
         public Product Product { get; set; }
 
         //returns false if exists (did not add this additive)

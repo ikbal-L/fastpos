@@ -29,6 +29,7 @@
         </materialDesign:DialogHost.DialogContent>
        
         <Grid>
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
