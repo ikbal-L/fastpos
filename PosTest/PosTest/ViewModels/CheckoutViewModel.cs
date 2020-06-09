@@ -887,26 +887,15 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-
             if (SplitedOrder == null)
             {
                 SplitedOrder = new Order();
             }
-            
             if (SplitedOrder.OrderItems == null)
                 SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
 
             SplitedOrder.OrderItems.Clear();
             SplitedOrder.OrderItems.AddRange(_selectedOrderItems);
-
-            //SplitedOrder.Total = 0;
-
-            //_selectedOrderItems
-            //    .ToList()
-            //    .ForEach(o =>
-            //    {
-            //        SplitedOrder.AddOrderItem(o);
-            //    });
         }
 
         public void RemoveSplittedItemsCommand()
@@ -921,7 +910,14 @@ namespace PosTest.ViewModels
             }*/
             SplitedOrder.OrderItems.Clear();
         }
-        
+
+        public void CloseCommand()
+        {
+            //TryClose();
+            System.Environment.Exit(0);
+        }
+
+
         #endregion
     }
 

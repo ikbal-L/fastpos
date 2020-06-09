@@ -10,7 +10,7 @@
              
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             Width="600" Height="500"
+             Width="800" Height="500"
             d:DesignWidth ="600" >
     <FrameworkElement.Resources>
         <ResourceDictionary>
@@ -47,10 +47,11 @@
             <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="40*"/>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="45*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -58,41 +59,48 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-               
+
+                <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" BorderBrush="Orange" BorderThickness="0 0 0 4" >
+                    <Label Content="Step 1: Split"  FontSize="18" FontWeight="Bold"/>
+                </Border>
+                <Border Grid.Column="5" Grid.Row="0" BorderBrush="Green" BorderThickness="0 0 0 4" >
+                    <Label Content="Step 2 Payment"  FontSize="18" FontWeight="Bold"/>
+                </Border>
+                
 
                 <Label Grid.Column="1" Grid.Row="2" FontSize="20" Content="{Binding CurrentOrder.Total,FallbackValue='00.00'}" HorizontalAlignment="Right"/>
                 <Label Grid.Column="3" Grid.Row="2" FontSize="20" Content="{Binding SplitedOrder.Total,FallbackValue='00.00'}" HorizontalAlignment="Right" />
-                <Button Margin="5" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" HorizontalAlignment="Stretch"
+                
+                <Button Margin="5" Grid.Column="5" Grid.Row="3" HorizontalAlignment="Stretch"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT','SPLITTED')]"
                         FontSize="15"
                         Height="50"
                     Style="{StaticResource MaterialDesignFlatAccentBgButton}"
                     >
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="CreditCardOutline" />
-                        <TextBlock Margin="5 -3">  Payment</TextBlock>
+                        <materialDesign:PackIcon Kind="CreditCardOutline" Width="30" Height="30"/>
+                        <TextBlock VerticalAlignment="Center" >  Validate</TextBlock>
                     </StackPanel>
                 </Button>
-                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" Margin="0,95">
-                    <Button cal:Message.Attach="[Event Click] = [Action AddSplittedItemsCommand]"
-                            Style="{StaticResource MaterialDesignIconButton}"
-                            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                            >
-                        <materialDesign:PackIcon Kind="Plus"  Height="24" Width="24" />
-                    </Button>
-                    <Label></Label>
-                    <Button  cal:Message.Attach="[Event Click] = [Action RemoveSplittedItemsCommand]"
-                            Style="{StaticResource MaterialDesignIconButton}"
-                            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                            >
-                        <materialDesign:PackIcon Kind="Minus"  Height="24" Width="24" />
-                    </Button>
-                </StackPanel>
+                <Button Margin="5" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Stretch"
+                        
+                        FontSize="15"
+                        Height="50"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Broom" Width="30" Height="30"/>
+                        <TextBlock  VerticalAlignment="Center">  Clear</TextBlock>
+                    </StackPanel>
+                </Button>
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center"></StackPanel>
 
                 <ListBox Grid.Row="1" Grid.Column="1" 
                          MinHeight="280" MaxHeight="280"
                          MinWidth="250" MaxWidth="250"
+                         Margin="0 10 0 0"
                          Background="WhiteSmoke"
                      ItemsSource="{Binding CurrentOrder.OrderItems}"
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
@@ -109,7 +117,7 @@
                 </ListBox>
 
                 <ListBox Grid.Row="1" Grid.Column="3"  
-                         MinWidth="250" MaxWidth="250"
+                         MinWidth="250" MaxWidth="250" Margin="0 10 0 0"
                          MinHeight="280" MaxHeight="280"
                         Background="WhiteSmoke"
                      ItemsSource="{Binding SplitedOrder.OrderItems}"

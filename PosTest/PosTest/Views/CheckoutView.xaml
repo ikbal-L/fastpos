@@ -12,7 +12,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              
              mc:Ignorable="d"
-             d:DesignWidth="800" d:DesignHeight="450"  Background="White" >
+             d:DesignWidth="900" d:DesignHeight="600"  Background="White" >
     <FrameworkElement.Resources>
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
@@ -21,11 +21,27 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
+                <ResourceDictionary>
+                    <src:Order x:Key="CurrentOrder"></src:Order>
+                    <x:Array Type="src:OrderItem" x:Key="DesignItmes">
+                        <src:OrderItem Order="{StaticResource CurrentOrder}" Id="1" Quantity="2" UnitPrice="5"  >
+                            <src:OrderItem.Product>
+                                <src:Product Id="1" Name="Pizza Home" Price="5" Unit="Unit"/>
+                            </src:OrderItem.Product>
+                        </src:OrderItem>
+                        <src:OrderItem Order="{StaticResource CurrentOrder}" Id="2" Quantity="2" UnitPrice="4"  >
+                            <src:OrderItem.Product>
+                                <src:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
+                            </src:OrderItem.Product>
+                        </src:OrderItem>
+                    </x:Array>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
+         
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
-    <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen}" >
+    <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen ,FallbackValue='False'}" >
         <materialDesign:DialogHost.DialogContent>
             <local:SplitView/>
         </materialDesign:DialogHost.DialogContent>
@@ -34,15 +50,15 @@
     
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="32"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="280"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="4">
@@ -54,20 +70,36 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Label Content="{Binding CurrentOrder.State}"></Label>
-                <Label Grid.Column="1" Content="{Binding CurrentOrder.TableId}"></Label>
+                <Border Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0 0 0 1" BorderBrush="Black">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding CurrentOrder.State}" ></Label>
+                        <Border  Grid.Column="1" BorderThickness="1 0 0 0" BorderBrush="Black">
+                            <Label Content="{Binding CurrentOrder.TableId}" ></Label>
+                        </Border>
+
+                    </Grid>
+                </Border>
                 <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 0"
-                     ItemsSource="{Binding CurrentOrder.OrderItems}"
+                     ItemsSource="{Binding CurrentOrder.OrderItems ,FallbackValue={StaticResource DesignItmes} }"
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
                      Style="{StaticResource OrderItemListStyle}"
                      ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                      HorizontalContentAlignment="Stretch" 
+                     AlternationCount="2"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
             </Grid>
 
-            <DockPanel Grid.Row="0" Grid.Column="1" Background="Black" LastChildFill="False">
-                <Button  Content="Tables" Style="{StaticResource ButtonStyle16}"  />
-                <ItemsControl x:Name="OrdersList" Grid.Column="0" ItemsSource="{Binding Orders}">
+            <DockPanel Grid.Row="0" Grid.Column="1" Margin="0" LastChildFill="False">
+                <Button  Content="{materialDesign:PackIcon TableChair,25}" Margin="1 0"
+                         Background="{DynamicResource MaterialDesignBackground}"
+                         Style="{StaticResource MaterialDesignOutlinedButton}"
+                         Padding="0"
+                         />
+                <ItemsControl x:Name="OrdersList" ItemsSource="{Binding Orders}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
@@ -83,29 +115,55 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Button  Content="+" Style="{StaticResource ButtonStyle16}"  Width="40"
+                <Button  Style="{StaticResource MaterialDesignOutlinedButton}" 
+                         Content="{materialDesign:PackIcon Plus,25}" Padding="0"
+                         Background="{DynamicResource MaterialDesignBackground}"
                          cal:Message.Attach="[Event Click] = [Action NewOrder()]"/>
-                <Button  Content="-" Style="{StaticResource ButtonStyle16}" Width="40" FontSize="16" 
+                
+                <Button  DockPanel.Dock="Right"   Padding="0"
+                         Content="{materialDesign:PackIcon Close,25}"
+                         Background="{DynamicResource MaterialDesignBackground}"
+                         Style="{StaticResource MaterialDesignOutlinedButton}"
+                         cal:Message.Attach="[Event Click] = [Action CloseCommand()]" />
+                <Button  Style="{StaticResource MaterialDesignOutlinedButton}"
+                         Content="{materialDesign:PackIcon Minus,25}" Padding="0"
+                         Background="{DynamicResource MaterialDesignBackground}"
                          cal:Message.Attach="[Event Click] = [Action RemoveOrder()]"/>
-                <Button  DockPanel.Dock="Right"   
-                         VerticalContentAlignment="Top"  >SessionID</Button>
+
             </DockPanel>
 
-            <DockPanel Grid.Row="1" Grid.Column="1"   Margin="2 2 2 2" LastChildFill="False" >
+            <DockPanel Grid.Row="1" Grid.Column="1"   Margin="2 2 2 2" LastChildFill="False"
+                      Background="{StaticResource MaterialDesignPaper}" >
                 <Button DockPanel.Dock="Left" x:Name="Home" Padding="0"
                         cal:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
                         Style="{StaticResource MaterialDesignFlatButton}"
                         Content="{materialDesign:PackIcon Home,Size=30}">
                     
                 </Button>
-                <TextBlock  Text="{Binding CurrentCategory.Name, Mode=TwoWay}" Background="Aqua"/>
-                <TextBox    DockPanel.Dock="Left"
-                        Width="200"
-                        Background="#95a5a6"
-                        x:Name="Search" 
-                        TextWrapping="Wrap"
-                        cal:Message.Attach="[Event TextChanged] = [Action ProductFiltering($this)]"/>
-
+                <TextBlock VerticalAlignment="Center" >
+                    <materialDesign:PackIcon Kind="ChevronRight" Width="30" Height="30"/>
+                    <Run Text="{Binding CurrentCategory.Name, Mode=TwoWay}"/>
+                </TextBlock>
+                <Border DockPanel.Dock="Right" Background="White" MaxHeight="30" CornerRadius="3" ToolTip="Enter to search, ignore case">
+                    <Grid Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                x:Name="SearchButton" Height="24" Width="24">
+                            <materialDesign:PackIcon Kind="Magnify" Opacity=".56" />
+                        </Button>
+                        <TextBox  Grid.Column="1" 
+                                  Margin="5 0 0 0"
+                                  materialDesign:HintAssist.Hint="Search" x:Name="Search"
+                                  materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                  BorderThickness="0"
+                                  MinWidth="200"
+                                  VerticalAlignment="Center"
+                                  cal:Message.Attach="[Event TextChanged] = [Action ProductFiltering($this)]"/>
+                    </Grid>
+                </Border>
                 <Button     DockPanel.Dock="Right" Margin="2 0 0 0"
                         x:Name="NextPage"
                         cal:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
@@ -120,14 +178,10 @@
                         Style="{StaticResource MaterialDesignOutlinedButton}"
                         Content="{materialDesign:PackIcon ChevronDoubleLeft,30}"  
                         />
-                <Button     DockPanel.Dock="Right" 
-                        x:Name="Close"
-                        cal:Message.Attach="[Event Click] = [Action Close()]"
-                            Padding="0"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                            
-                        Content="{materialDesign:PackIcon Close,30}"  
-                        />
+                <Button DockPanel.Dock="Right" x:Name="Close" Padding="0"
+                        cal:Message.Attach="[Event Click] = [Action CloseCommand]"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Content="{materialDesign:PackIcon AccountCircleOutline,30}" />
             </DockPanel>
 
             <StackPanel Grid.Row="2" Grid.Column="2"  Orientation="Horizontal"  Background="#7f8c8d" Margin="2 0 0 0" Height="30">
@@ -207,8 +261,8 @@
                          FontSize="26" FontWeight="Bold" FontFamily="Segoe"
                          HorizontalContentAlignment="Right"/>
 
-                <Button Content="Client" Grid.Row="2" Grid.Column="0" FontSize="16"/>
-                <Button Content="Payment" Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" FontSize="16"
+                <Button Content="Client" Grid.Row="2" Grid.Column="0" FontSize="16"  Style="{x:Null}"/>
+                <Button Content="Payment" Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" FontSize="16"  Style="{x:Null}"
                          cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"/>
 
                 <Button Grid.Row="2" Grid.Column="1" Content="1" Style="{StaticResource ButtonStyle22}" 
@@ -259,7 +313,7 @@
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
             </Grid>
 
-            <subviews:ProductNavigation  Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Margin="0" />
+            <subviews:ProductNavigation Background="#FF263238" Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Margin="0" />
 
         </Grid>
 
