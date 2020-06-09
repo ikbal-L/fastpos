@@ -843,9 +843,8 @@ namespace PosTest.ViewModels
             }
            
         }
+}
 
-
-            }
 
     static class ToastNotification
     {

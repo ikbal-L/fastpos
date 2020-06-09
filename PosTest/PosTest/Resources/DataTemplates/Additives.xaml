@@ -8,7 +8,7 @@
     <DataTemplate DataType="{x:Type src:Additive}">
         <StackPanel  Orientation="Vertical"  x:Name="AddivieTemplate" >
             <!--cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]"-->
-            <Button x:Name="ProductClick"  >
+            <Button x:Name="ProductClick"   Style="{x:Null}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cal:ActionMessage MethodName="AddAditive">

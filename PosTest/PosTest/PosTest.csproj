@@ -199,6 +199,9 @@
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ShellBootstrapper.cs" />
+    <Compile Include="SL.Controls\NumericKeypad.xaml.cs">
+      <DependentUpon>NumericKeypad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -324,6 +327,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Styles\OrderItemListStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SL.Controls\NumericKeypad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
