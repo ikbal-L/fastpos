@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views"
+             xmlns:src="clr-namespace:PosTest.ViewModels"
              xmlns:ex="clr-namespace:PosTest.Extensions"
-             
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"             
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              Width="600" Height="500"
@@ -23,6 +22,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </FrameworkElement.Resources>
+    
     <DockPanel LastChildFill="True" >
         <StackPanel DockPanel.Dock="Top">
             <Grid>
@@ -97,14 +97,14 @@
                          Background="WhiteSmoke"
                          ItemsSource="{Binding CurrentOrder.OrderItems}"
                          SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
-                         ex:ListBoxMultiSelectionEx.SelectedItems="{Binding SplitedOrder.OrderItems}"
-                         ex:ListBoxMultiSelectionEx.IsSorted="True"                  
+                         ex:ListBoxMultiSelectionEx.SelectedItems="{Binding SplitedOrder.OrderItems, Mode=TwoWay}"
+                         ex:ListBoxMultiSelectionEx.IsSorted="False"                  
                          ScrollViewer.VerticalScrollBarVisibility="Visible"
                          SelectionMode="Multiple">
                          <!--cal:Message.Attach="[Event SelectionChanged] = [Action AddSplittedItemsCommand]"-->
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SplittedOrderItems_ItemStyle}">
-                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <!--<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />-->
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>

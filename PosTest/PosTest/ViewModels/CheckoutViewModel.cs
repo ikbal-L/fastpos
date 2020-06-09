@@ -44,13 +44,7 @@ namespace PosTest.ViewModels
         private ICollectionView _additvesPage;
 
         private bool _IsDialogOpen;
-        private Order _splitedOrder;
-
-        public bool IsDialogOpen
-        {
-            get => _IsDialogOpen;
-            set => Set(ref _IsDialogOpen, value);
-        }
+        private SplitViewModel _splitViewModel;
 
         public CheckoutViewModel() 
         {
@@ -83,6 +77,12 @@ namespace PosTest.ViewModels
             CategorieFiltering("Home");
             Categories = new BindableCollection<Category>(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
             InitCategoryColors();
+        }
+
+        public bool IsDialogOpen
+        {
+            get => _IsDialogOpen;
+            set => Set(ref _IsDialogOpen, value);
         }
 
         public bool CanExecuteMext
@@ -179,19 +179,6 @@ namespace PosTest.ViewModels
             }
         }
 
-        public Order SplitedOrder
-        {
-            get { return _splitedOrder; }
-            set
-            {
-                _splitedOrder = value;            
-                NotifyOfPropertyChange(() => SplitedOrder);
-                               
-            }
-        }
-
-
-
         public string NumericZone 
         { 
             get => _numericZone;
@@ -200,6 +187,16 @@ namespace PosTest.ViewModels
                 _numericZone = value;
                 NotifyOfPropertyChange(() => NumericZone);
             } 
+        }
+
+        public SplitViewModel SplitViewModel
+        {
+            get => _splitViewModel;
+            set
+            {
+                _splitViewModel = value;
+                NotifyOfPropertyChange(() => SplitViewModel);
+            }
         }
 
         public void ReturnFromAdditives()
@@ -769,27 +766,26 @@ namespace PosTest.ViewModels
                     CurrentOrder.GivenAmount = payedAmount;
                     CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
                     NumericZone = "";
-                    SaveSplittedOrder();
+                    //SaveSplittedOrder();
                     break;
 
                 case ActionButton.Split:
-                    SplitedOrder = new Order();
+                    
                     //SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
-                    IsDialogOpen = CurrentOrder!=null 
-                        && CurrentOrder.OrderItems!=null
-                        && CurrentOrder.OrderItems.Count>1;
+                    IsDialogOpen = CurrentOrder != null
+                        && CurrentOrder.OrderItems != null
+                        && CurrentOrder.OrderItems.Count > 1;
                     if (IsDialogOpen == true)
                     {
                         CurrentOrder.SelectedOrderItem = null;
+                        SplitViewModel = new SplitViewModel(this);
+
                     }
                     break;
             }
         }
 
-        private void SaveSplittedOrder()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         private void SaveCurrentOrder()
         {
@@ -849,115 +845,7 @@ namespace PosTest.ViewModels
         }
 
 
-        #region Split Commands
-
-        public void BackFromSplitCommand()
-        {
-            
-            if (SplitedOrder == null)
-            {
-                IsDialogOpen = false;
-                return;
             }
-            if (SplitedOrder.OrderItems == null)
-            {
-                IsDialogOpen = false;
-                return;
-            }
-            if (SplitedOrder.OrderItems.Count() == 0)
-            {
-                IsDialogOpen = false;
-                return;
-            }
-            SplitedOrder.OrderItems.Clear();
-            IsDialogOpen = false;
-            /* SplitedOrder
-                 .OrderItems
-                 .ToList()
-                 .ForEach(o =>
-                 {
-                     CurrentOrder.AddOrderItem(o);
-                     SplitedOrder.RemoveOrderItem(o);
-                 });
-             IsDialogOpen = false;*/
-        }
-
-        public void AddSplittedItemsCommand()
-        {
-            return;
-            var _selectedOrderItems = CurrentOrder.OrderItems.Where(o => o.IsSelected == true);
-            if (_selectedOrderItems == null)
-            {
-                return;
-            }
-            if (SplitedOrder == null)
-            {
-                SplitedOrder = new Order();
-            }
-            if (SplitedOrder.OrderItems == null)
-                SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
-
-            SplitedOrder.OrderItems.Clear();
-            SplitedOrder.OrderItems.AddRange(_selectedOrderItems);
-            //var _selectedOrderItems = CurrentOrder.OrderItems.Where(o => o.IsSelected == true);
-            //if (_selectedOrderItems == null)
-            //{
-            //    return;
-            //}
-
-            //if (SplitedOrder == null)
-            //{
-            //    SplitedOrder = new Order();
-            //}
-            
-            //if (SplitedOrder.OrderItems == null)
-            //    SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
-
-            //SplitedOrder.OrderItems.Clear();
-            ////SplitedOrder.Total = 0;
-
-            //_selectedOrderItems
-            //    .ToList()
-            //    .ForEach(o =>
-            //    {
-            //        SplitedOrder.AddOrderItem(o);
-            //    });
-        }
-
-        public void RemoveSplittedItemsCommand()
-        {
-            return;
-            if (SplitedOrder == null)
-            {
-                return;
-            }
-            if (SplitedOrder.OrderItems == null)
-            {
-                return;
-            }
-
-            var _selectedSplitedItems = SplitedOrder.OrderItems.Where(o => o.IsSelected == true);
-
-            if (_selectedSplitedItems == null)
-            {
-                return;
-            }
-            if (_selectedSplitedItems.Count() == 0)
-            {
-                return;
-            }
-
-            _selectedSplitedItems
-                .ToList()
-                .ForEach(o =>
-                {
-                    CurrentOrder.AddOrderItem(o);
-                    SplitedOrder.RemoveOrderItem(o);
-                });
-        }
-        
-        #endregion
-    }
 
     static class ToastNotification
     {
@@ -1011,4 +899,84 @@ namespace PosTest.ViewModels
         SplittedPayment=8
     }
 
+    public class SplitViewModel : PropertyChangedBase
+    {
+        private Order _currentOrder;
+        private Order _splitedOrder;
+        CheckoutViewModel Parent;
+
+        public SplitViewModel()
+        {
+
+        }
+
+        public SplitViewModel(CheckoutViewModel parent)
+        {
+            Parent = parent;
+            SplitedOrder = new Order();
+            CurrentOrder = new Order();
+            CurrentOrder = Parent.CurrentOrder;
+        }
+
+        public Order CurrentOrder
+        {
+            get { return _currentOrder; }
+            set
+            {
+                _currentOrder = value;
+                NotifyOfPropertyChange(() => CurrentOrder);
+
+            }
+        }
+
+        public Order SplitedOrder
+        {
+            get { return _splitedOrder; }
+            set
+            {
+                _splitedOrder = value;
+                NotifyOfPropertyChange(() => SplitedOrder);
+            }
+        }
+
+        #region Split Commands
+        public void BackFromSplitCommand()
+        {
+
+            if (SplitedOrder == null)
+            {
+                Parent.IsDialogOpen = false;
+                return;
+            }
+            if (SplitedOrder.OrderItems == null)
+            {
+                Parent.IsDialogOpen = false;
+                return;
+            }
+            if (SplitedOrder.OrderItems.Count() == 0)
+            {
+                Parent.IsDialogOpen = false;
+                return;
+            }
+            SplitedOrder.OrderItems.Clear();
+            Parent.IsDialogOpen = false;
+            /* SplitedOrder
+                 .OrderItems
+                 .ToList()
+                 .ForEach(o =>
+                 {
+                     CurrentOrder.AddOrderItem(o);
+                     SplitedOrder.RemoveOrderItem(o);
+                 });
+             IsDialogOpen = false;*/
+        }
+
+
+        private void SaveSplittedOrder()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+    }
 }

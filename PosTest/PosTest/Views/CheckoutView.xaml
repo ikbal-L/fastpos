@@ -22,16 +22,18 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type vm:SplitViewModel}">
+                <local:SplitView/>
+            </DataTemplate>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen}" >
         <materialDesign:DialogHost.DialogContent>
-            <local:SplitView/>
+
+            <ContentControl Content="{Binding SplitViewModel}" />
         </materialDesign:DialogHost.DialogContent>
-
-
-    
+  
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -196,7 +198,7 @@
                 </StackPanel>
 
 
-                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Padding="5"
+                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Padding="0"
                          Text="{Binding NumericZone}" 
                          FontSize="26" FontWeight="Bold" FontFamily="Segoe"
                          HorizontalContentAlignment="Right"/>
