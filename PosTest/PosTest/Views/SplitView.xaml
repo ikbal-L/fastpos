@@ -92,7 +92,7 @@
                     >
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Broom" Width="30" Height="30"/>
-                        <TextBlock  VerticalAlignment="Center">  Clear</TextBlock>
+                        <TextBlock  VerticalAlignment="Center">Clean</TextBlock>
                     </StackPanel>
                 </Button>
                 <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center"></StackPanel>
@@ -132,6 +132,9 @@
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
+                
+                
+            
             </Grid>
         </StackPanel>
     </DockPanel>
