@@ -37,13 +37,9 @@
                     </x:Array>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-<<<<<<< HEAD
             <DataTemplate DataType="{x:Type vm:SplitViewModel}">
                 <local:SplitView/>
             </DataTemplate>
-=======
-         
->>>>>>> origin/split-1.0
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -216,7 +212,6 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
-
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -226,7 +221,6 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-
 
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="Gray">
                     <StackPanel Orientation="Horizontal"  >
@@ -256,10 +250,8 @@
                             <Run Text="Returned: " FontWeight="Bold"/>
                             <Run Text="{Binding CurrentOrder.ReturnedAmount}" FontWeight="Bold"></Run>
                         </TextBlock>
-
-                   </StackPanel>
+                    </StackPanel>
                 </StackPanel>
-
 
                 <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Padding="0"
                          Text="{Binding NumericZone}" 

@@ -12,11 +12,12 @@ using System.Windows.Controls;
 
 namespace PosTest.Extensions
 {
-    public class ListBoxMultiSelectionEx : DependencyObject
+    public class ListBoxMultiSelectionEx 
     {
         public static readonly DependencyProperty SelectedItemsProperty =
                     DependencyProperty.RegisterAttached(
-                          "SelectedItems", typeof(IList), typeof(ListBoxMultiSelectionEx),
+                          "SelectedItems", typeof(IList), 
+                          typeof(ListBoxMultiSelectionEx),                          
                           new PropertyMetadata(null, OnSelectedItemsChanged));
 
         public static readonly DependencyProperty IsSortedProperty =
@@ -66,6 +67,47 @@ namespace PosTest.Extensions
            
         }
 
+        static void SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            var selectedItems = GetSelectedItems(sender as DependencyObject);           
+
+
+            if (GetIsSorted(sender as DependencyObject))
+            {
+                CopySortedSedelectedItems(sender as DependencyObject);
+            }
+            else
+            {
+
+                IList l = (IList)selectedItems.GetType().GetConstructor(new Type[] { }).Invoke(new object[] { });// replace new BindableCollection<OrderItem>();
+                foreach (var item in listBox.SelectedItems)
+                {
+                    l.Add(item);
+                }
+                SetSelectedItems(listBox, l);
+                //CopySedelectedItems(sender as DependencyObject);
+            }
+        }
+
+        public static IList GetSelectedItems(DependencyObject d)
+        {
+            return (IList)d.GetValue(SelectedItemsProperty);
+        }
+        public static void SetSelectedItems(DependencyObject d, IList value)
+        {
+            d.SetValue(SelectedItemsProperty, (IList)value);
+        }
+
+        public static bool GetIsSorted(DependencyObject d)
+        {
+            return (bool)d.GetValue(IsSortedProperty);
+        }
+        public static void SetIsSorted(DependencyObject d, bool value)
+        {
+            d.SetValue(IsSortedProperty, value);
+        }
+
         private static void CopySortedSedelectedItems(DependencyObject d)
         {
             var listBox = d as ListBox;
@@ -93,7 +135,7 @@ namespace PosTest.Extensions
             }
         }
 
-       private static void CopySedelectedItems(DependencyObject d)
+        private static void CopySedelectedItems(DependencyObject d)
         {
             var listBox = d as ListBox;
             var selectedItems = GetSelectedItems(d);
@@ -108,45 +150,6 @@ namespace PosTest.Extensions
             }
         }
 
-        static void SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var listBox = sender as ListBox;
-            var selectedItems = GetSelectedItems(sender as DependencyObject);           
 
-
-            if (GetIsSorted(sender as DependencyObject))
-            {
-                CopySortedSedelectedItems(sender as DependencyObject);
-            }
-            else
-            {
-
-                IList l = (IList)selectedItems.GetType().GetConstructor(new Type[] { }).Invoke(new object[] { });// new BindableCollection<OrderItem>();
-                foreach (var item in listBox.SelectedItems)
-                {
-                    l.Add(item);
-                }
-                SetSelectedItems(listBox, l);
-                //CopySedelectedItems(sender as DependencyObject);
-            }
-        }
-
-        public static IList GetSelectedItems(DependencyObject d)
-        {
-            return (IList)d.GetValue(SelectedItemsProperty);
-        }
-        public static void SetSelectedItems(DependencyObject d, IList value)
-        {
-            d.SetValue(SelectedItemsProperty, (IList)value);
-        }
-
-        public static bool GetIsSorted(DependencyObject d)
-        {
-            return (bool)d.GetValue(IsSortedProperty);
-        }
-        public static void SetIsSorted(DependencyObject d, bool value)
-        {
-            d.SetValue(IsSortedProperty, value);
-        }
     }
 }

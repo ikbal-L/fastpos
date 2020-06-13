@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:src="clr-namespace:PosTest.ViewModels"
+             xmlns:sl="clr-namespace:PosTest.SL.Controls"
              xmlns:ex="clr-namespace:PosTest.Extensions"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"             
@@ -57,7 +58,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -71,20 +72,47 @@
                 </Border>
                 
 
-                <Label Grid.Column="1" Grid.Row="2" FontSize="20" Content="{Binding CurrentOrder.Total,FallbackValue='00.00'}" HorizontalAlignment="Right"/>
-                <Label Grid.Column="3" Grid.Row="2" FontSize="20" Content="{Binding SplitedOrder.Total,FallbackValue='00.00'}" HorizontalAlignment="Right" />
-                
-                <Button Margin="5" Grid.Column="5" Grid.Row="3" HorizontalAlignment="Stretch"
-                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT','SPLITTED')]"
+                <Label Grid.Column="1" Grid.Row="2" FontSize="20" 
+                       Content="{Binding CurrentOrder.Total,FallbackValue='00.00'}" 
+                       Height="30"
+                       HorizontalAlignment="Right"/>
+                <Label Grid.Column="3" Grid.Row="2" FontSize="20" 
+                       Content="{Binding SplittedOrder.Total,FallbackValue='00.00'}" 
+                       HorizontalAlignment="Right"  Grid.RowSpan="1" />
+                <Label Grid.Column="3" Grid.Row="3" FontSize="20" 
+                       Content="{Binding SplittedOrder.NewTotal}" 
+                       HorizontalAlignment="Right" Margin="0,2,0,58" Grid.RowSpan="1" />
+
+                <Grid Grid.Column="5" Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Margin="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('VALIDATE')]"
                         FontSize="15"
                         Height="50"
-                    Style="{StaticResource MaterialDesignFlatAccentBgButton}"
-                    >
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="CreditCardOutline" Width="30" Height="30"/>
-                        <TextBlock VerticalAlignment="Center" >  Validate</TextBlock>
-                    </StackPanel>
-                </Button>
+                    Style="{StaticResource MaterialDesignFlatAccentBgButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CreditCardOutline" Width="30" Height="30"/>
+                            <TextBlock VerticalAlignment="Center" >  Validate</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    
+                    <RadioButton Margin="5" Grid.Column="1" Grid.Row="0"
+                                 HorizontalAlignment="Stretch"
+                                 GroupName="action"
+                                 Style="{StaticResource ButtonStyle18radio}"
+                                 IsChecked="{Binding IsPayementChecked}"
+                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"
+                                 FontSize="15"
+                                 Height="50">
+                            <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CreditCardOutline" Width="30" Height="30"/>
+                            <TextBlock VerticalAlignment="Center" >Payement</TextBlock>
+                        </StackPanel>
+                    </RadioButton>
+                </Grid>
                 <Button Margin="5" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Stretch"
                         
                         FontSize="15"
@@ -105,11 +133,11 @@
                          Background="WhiteSmoke"
                          ItemsSource="{Binding CurrentOrder.OrderItems}"
                          SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
-                         ex:ListBoxMultiSelectionEx.SelectedItems="{Binding SplitedOrder.OrderItems, Mode=TwoWay}"
-                         ex:ListBoxMultiSelectionEx.IsSorted="False"                  
+                         ex:ListBoxMultiSelectionEx.SelectedItems="{Binding SplittedOrder.OrderItems, Mode=TwoWay}"
+                         ex:ListBoxMultiSelectionEx.IsSorted="True"                  
                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                         cal:Message.Attach="[Event SelectionChanged] = [Action AddSplittedItemsCommand]"
                          SelectionMode="Multiple">
-                         <!--cal:Message.Attach="[Event SelectionChanged] = [Action AddSplittedItemsCommand]"-->
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SplittedOrderItems_ItemStyle}">
                             <!--<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />-->
@@ -120,19 +148,63 @@
                 <ListBox Grid.Row="1" Grid.Column="3"  
                          MinWidth="250" MaxWidth="250" Margin="0 10 0 0"
                          MinHeight="280" MaxHeight="280"
-                        Background="WhiteSmoke"
-                     ItemsSource="{Binding SplitedOrder.OrderItems}"
-                     SelectedItem="{Binding Path=SplitedOrder.SelectedOrderItem, Mode=TwoWay}"
-                    
-                     SelectionMode="Multiple"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     >
+                         Background="WhiteSmoke"
+                         ItemsSource="{Binding SplittedOrder.OrderItems}"
+                         SelectedItem="{Binding Path=SplittedOrder.SelectedOrderItem, Mode=TwoWay}"
+                         ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SplittedOrderItems_ItemStyle}">
                             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
+
+                <!--
+                <sl:NumericKeypad Grid.Column="5" Grid.Row="1" />-->
+                <Grid Grid.Column="5" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <sl:NumericKeypad x:Name="keypad" Grid.Column="0" Grid.Row="0" 
+                                      Grid.ColumnSpan="3" Grid.RowSpan="4" 
+                                      NumericValue="{Binding NumericZone, Mode=TwoWay}"
+                                      Switched="{Binding CommandSwitched, Mode=TwoWay}"
+                                      AllowDotkey="True"
+                                      AllowPercentKey="{Binding IsPercentKeyAllowed}"/>
+                    <RadioButton Grid.Column="3" Grid.Row="0" Content="Item&#xa;Price" 
+                                 GroupName="action"
+                                Style="{StaticResource ButtonStyle18radio}"
+                                IsChecked="{Binding IsItemPriceChecked}"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('ITEMPRICE')]"/>
+                    <RadioButton Grid.Column="3" Grid.Row="1" Content="Total&#xa;Price" 
+                                 GroupName="action"
+                                 Style="{StaticResource ButtonStyle18radio}"
+                                 IsChecked="{Binding IsTotalPriceChecked}"
+                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]" />
+                    <RadioButton Grid.Column="3" Grid.Row="2" Content="Disc" 
+                                 GroupName="action"
+                                 Style="{StaticResource ButtonStyle18radio}"
+                                 IsChecked="{Binding IsDiscChecked}"
+                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]"/>
+                    <Button Grid.Column="3" Grid.Row="3" Content="Del" 
+                            Style="{StaticResource ButtonStyle22}"
+                            Command="{Binding ElementName=keypad, Path=DelCommand, Mode=OneTime}"/>
+                </Grid>
+                
+                <TextBox Grid.Column="5" Grid.Row="2" Text="{Binding ElementName=keypad, Path=NumericValue}" 
+                             HorizontalContentAlignment="Right"
+                             Padding="1 1 3 1"
+                             FontWeight="Bold"
+                             FontSize="20"/>
             </Grid>
         </StackPanel>
     </DockPanel>

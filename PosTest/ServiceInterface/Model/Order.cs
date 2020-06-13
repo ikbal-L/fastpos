@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -17,11 +19,18 @@ namespace ServiceInterface.Model
         private decimal _returnedAmount;
         private decimal _discountPercentage;
         private BindableCollection<OrderItem> _orderItems;
+        private Table _table;
+        private Order _splittedFrom;
 
         public Order()
         {
             OrderItems = new BindableCollection<OrderItem>();
-            OrderItems.CollectionChanged += new NotifyCollectionChangedEventHandler((s, e)=> NotifyOfPropertyChange(()=>Total));
+            OrderItems.CollectionChanged += 
+                (s, e)=> 
+                { 
+                    NotifyOfPropertyChange(() => Total); 
+                    NotifyOfPropertyChange(() => NewTotal); 
+                };
         }
         public Order(string buyerId) : this()
         {
@@ -40,7 +49,8 @@ namespace ServiceInterface.Model
         [DataMember]
         public OrderType Type { get; set; }
 
-       [DataMember]
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         public OrderState? State { get; set; }
 
         //get from state
@@ -61,7 +71,25 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => NewTotal);
                 NotifyOfPropertyChange(() => Total);
             }*/
+        } 
+        
+        public Order SplittedFrom
+        {
+            get => _splittedFrom;
+            set
+            {
+                _splittedFrom = value;
+                SplittedFromId = value.Id;
+            }
         }
+            
+        [DataMember]
+        public long? SplittedFromId
+        {
+            get ;
+            set;
+        }
+            
 
         [DataMember]
         public decimal NewTotal 
@@ -173,7 +201,15 @@ namespace ServiceInterface.Model
         [DataMember]
         public long? CustomerId { get; set; }
 
-        public Table Table { get; set; }
+        public Table Table 
+        {
+            get => _table;
+            set
+            {
+                _table = value;
+                TableId = _table?.Id;
+            }
+        }
 
         [DataMember]
         public long? TableId { get; set; }
@@ -183,10 +219,11 @@ namespace ServiceInterface.Model
 
         public bool ProductsVisibility { get; set; }
         public bool AdditivesVisibility { get; set; }
-        public void AddItem(Product product, decimal unitPrice, bool setSelected, float quantity = 1)
+        public void AddOrderItem(Product product, decimal unitPrice, bool setSelected, float quantity = 1, bool groupByProduct = true)
         {
             OrderItem item;
-            if ((product is Platter && (product as Platter).Additives !=null )  || !OrderItems.Any(p => p.Product.Equals(product)))
+            if ((product is Platter && (product as Platter).Additives !=null )  || 
+                !OrderItems.Any(p => p.Product.Equals(product)) || !groupByProduct)
             {
                 item = new OrderItem(product, quantity, unitPrice, this);
                 OrderItems.Add(item);
@@ -206,7 +243,7 @@ namespace ServiceInterface.Model
 
         public void AddOrderItem(OrderItem orderItem)
         {
-            AddItem(orderItem.Product, orderItem.UnitPrice, false, orderItem.Quantity);
+            AddOrderItem(orderItem.Product, orderItem.UnitPrice, false, orderItem.Quantity);
         }
 
         public void RemoveEmptyItems()
@@ -276,7 +313,8 @@ namespace ServiceInterface.Model
         Prepared,
         Ready,
         Delivered,
-        Payed
+        Payed,
+        Splitted
     }
     public enum OrderType
     {

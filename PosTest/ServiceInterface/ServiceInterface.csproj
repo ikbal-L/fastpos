@@ -116,6 +116,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interface\ICategoryService.cs" />
+    <Compile Include="StaticValues\ActionConfig.cs" />
     <Compile Include="StaticValues\DefaultColors.cs" />
     <Compile Include="StaticValues\UrlConfig.cs" />
   </ItemGroup>

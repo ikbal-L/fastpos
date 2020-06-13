@@ -79,6 +79,11 @@ namespace PosTest.ViewModels
             InitCategoryColors();
         }
 
+        internal static void ItempriceAction(ref string numericZone, Order currentOrder)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsDialogOpen
         {
             get => _IsDialogOpen;
@@ -300,7 +305,7 @@ namespace PosTest.ViewModels
             CategorieFiltering("Home");
             CurrentOrder = null;
         }
-        public void RemoveOrder()
+        public void RemoveCurrentOrder()
         {
             if (CurrentOrder==null || Orders==null)
             {
@@ -509,7 +514,7 @@ namespace PosTest.ViewModels
                 CurrentOrder.OrderTime = DateTime.Now;*/
             }
 
-            CurrentOrder.AddItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true, quantity: 1);
+            CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true, quantity: 1);
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
@@ -589,10 +594,10 @@ namespace PosTest.ViewModels
                     break;
 
                 case ActionButton.Qty:
-                    int qty;
+                    float qty;
                     try
                     {
-                        qty = Convert.ToInt32(NumericZone);
+                        qty = (float)Convert.ToDouble(NumericZone);
                     }
                     catch (Exception)
                     {
@@ -611,83 +616,21 @@ namespace PosTest.ViewModels
                     break;
 
                 case ActionButton.Price:
-                    decimal price;
-                    try
                     {
-                        price = Convert.ToDecimal(NumericZone);
+                        string numericZone = NumericZone;
+                        PriceAction(ref numericZone, CurrentOrder);
+                        NumericZone = numericZone;
+                        break;
                     }
-                    catch (Exception)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
-                    if (price < 0)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
-                    //CurrentOrder.NewTotal
-                    var newTotal = price;
-                    if (newTotal <= CurrentOrder.Total)
-                    {
-                        CurrentOrder.DiscountAmount = CurrentOrder.Total - newTotal;// CurrentOrder.NewTotal;
-                    }
-                    else
-                    {
-                        NumericZone = string.Empty;
-                        ToastNotification.Notify("New price less than the total price");
-                    }
-                    NumericZone = "";
-                    break;
 
                 case ActionButton.Disc:
-                    var discountPercent = 0m;
-                    var discount = 0m;
-                    var isPercentage = false;
-                    if (NumericZone.Contains("%"))
                     {
-                        isPercentage = true;
-                        discountPercent = Convert.ToDecimal(NumericZone.Remove(NumericZone.Length-1));
-                        if (discountPercent>100)
-                        {
-                            NumericZone = string.Empty;
-                            return;
-                        }
-                        discount = CurrentOrder.NewTotal * discountPercent / 100;
-                    }
-                    else
-                    {
-                        discount = Convert.ToDecimal(NumericZone);
-                    }
-                    if (discount < 0)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
+                        string numericZone = NumericZone;
+                        DiscAction(ref numericZone, CurrentOrder);
+                        NumericZone = numericZone;
 
-                                       
-                    if (discount > CurrentOrder.Total) 
-                    {
-                        //Use Local to select message according to UI language
-                        NumericZone = "";
-                        ToastNotification.Notify("Discount bigger than total");
-                        //CurrentOrder.DiscountAmount = 0;
-                        return;
+                        break;
                     }
-                    if (!isPercentage)
-                    {
-                        CurrentOrder.DiscountAmount = discount;
-
-                    }
-                    else
-                    {
-                        CurrentOrder.DiscountPercentage = discountPercent;
-
-                    }
-                    //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
-                    NumericZone = ""; 
-                    break;
-
                 case ActionButton.Payment:
                     var payedAmount = Convert.ToDecimal(NumericZone);
                     if (payedAmount < 0)
@@ -741,32 +684,9 @@ namespace PosTest.ViewModels
                     }
                     var status = 0;
                     var table = _orderService.GetTableByNumber(tableNumber, ref status);
-                    
+                    CurrentOrder.Table = table;
                     //CurrentOrder.State = OrderState.Ordered;
                     //SaveCurrentOrder();
-                    break;
-
-                case ActionButton.SplittedPayment:
-                    payedAmount = Convert.ToDecimal(NumericZone);
-                    if (payedAmount < 0)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
-                                      
-                    if (payedAmount < CurrentOrder.NewTotal) 
-                    {
-                        NumericZone = "";
-                        //Use Local to select message according to UI language
-                        ToastNotification.Notify("Payed amount lower than total");
-                        //CurrentOrder.DiscountAmount = 0;
-                        return;
-                    }
-
-                    CurrentOrder.GivenAmount = payedAmount;
-                    CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
-                    NumericZone = "";
-                    //SaveSplittedOrder();
                     break;
 
                 case ActionButton.Split:
@@ -774,10 +694,11 @@ namespace PosTest.ViewModels
                     //SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
                     IsDialogOpen = CurrentOrder != null
                         && CurrentOrder.OrderItems != null
-                        && CurrentOrder.OrderItems.Count > 1;
+                        && (CurrentOrder.OrderItems.Count > 1 || 
+                           (CurrentOrder.OrderItems.Count==1 && CurrentOrder.OrderItems[0].Quantity>1));
                     if (IsDialogOpen == true)
                     {
-                        CurrentOrder.SelectedOrderItem = null;
+                        //CurrentOrder.SelectedOrderItem = null;
                         SplitViewModel = new SplitViewModel(this);
 
                     }
@@ -785,60 +706,149 @@ namespace PosTest.ViewModels
             }
         }
 
-        
+        public static void PriceAction(ref string priceStr, Order order)
+        {
+            decimal price;
+            if (priceStr=="")
+            {
+                return;
+            }
+            try
+            {
+                price = Convert.ToDecimal(priceStr);
+            }
+            catch (Exception)
+            {
+                priceStr = "";
+                return;
+            }
+            if (price < 0)
+            {
+                priceStr = "";
+                return;
+            }
+            //CurrentOrder.NewTotal
+            var newTotal = price;
+            if (newTotal <= order.Total)
+            {
+                order.DiscountAmount = order.Total - newTotal;// CurrentOrder.NewTotal;
+            }
+            else
+            {
+                priceStr = string.Empty;
+                ToastNotification.Notify("New price less than the total price");
+            }
+            //priceStr = "";
 
-        private void SaveCurrentOrder()
+        }
+        public static void DiscAction(ref string discStr, Order order)
+        {
+            if (discStr == "")
+            {
+                return;
+            }
+            var discountPercent = 0m;
+            var discount = 0m;
+            var isPercentage = false;
+            if (discStr.Contains("%"))
+            {
+                isPercentage = true;
+                if (discStr.Remove(discStr.Length - 1) == "")
+                {
+                    return;
+                }
+                discountPercent = Convert.ToDecimal(discStr.Remove(discStr.Length - 1));
+                if (discountPercent > 100)
+                {
+                    discStr = string.Empty;
+                    return;
+                }
+                discount = order.NewTotal * discountPercent / 100;
+            }
+            else
+            {
+                discount = Convert.ToDecimal(discStr);
+            }
+            if (discount < 0)
+            {
+                discStr = "";
+                return;
+            }
+
+            if (discount > order.Total)
+            {
+                //Use Local to select message according to UI language
+                discStr = "";
+                ToastNotification.Notify("Discount bigger than total");
+                //CurrentOrder.DiscountAmount = 0;
+                return;
+            }
+            if (!isPercentage)
+            {
+                order.DiscountAmount = discount;
+
+            }
+            else
+            {
+                order.DiscountPercentage = discountPercent;
+
+            }
+            //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
+            // = "";
+        }
+
+        public int? SaveOrder(Order order)
         {
             if (IsRunningFromXUnit)
             {
-                return;
+                return null;
             }
             int resp;
             try
             {
                 var status = 0;
-                if (CurrentOrder.Id == null)
+                if (order.Id == null)
                 {
-                    CurrentOrder.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(CurrentOrder);
+                    order.Id = _orderService.GetIdmax(ref status) + 1;
+                    resp = _orderService.SaveOrder(order);
+                    if (resp != 200)
+                    {
+                        order.Id = null;
+                    }
                 }
                 else
                 {
-                    resp = _orderService.UpdateOrder(CurrentOrder);
+                    resp = _orderService.UpdateOrder(order);
                 }
             }
             catch (AggregateException)
             {
                 ToastNotification.Notify("Check your server connection");
-                return;
+                return null;
             }
-            catch (Exception)
-            {
 
-                throw;
-            }
-            
+            return resp;
+        }
+        private void SaveCurrentOrder()
+        {
+            var resp = SaveOrder(CurrentOrder);
             switch (resp)
             {
-                case 401: ToastNotification.Notify("Database insertion error "+resp.ToString()); break;
-                case 402: ToastNotification.Notify("Id exists in the database " + resp.ToString()); break;
-                case 403: ToastNotification.Notify("Database access error " + resp.ToString()); break;
-                case 404: ToastNotification.Notify("Bad request " + resp.ToString()); break;
-                case 405: ToastNotification.Notify("Authentification error " + resp.ToString()); break;
-                case 406: ToastNotification.Notify("Authentification error " + resp.ToString()); break;
-                case 407: ToastNotification.Notify("Authentification error " + resp.ToString()); break;
-                case 408: ToastNotification.Notify("Database error in Annex_id " + resp.ToString()); break;
-                case 409: ToastNotification.Notify("Config Database error " + resp.ToString()); break;
-                case 410: ToastNotification.Notify(" User or password error" + resp.ToString()); break;
                 case 200:
                     if (CurrentOrder.State == OrderState.Payed)
                     {
-                        RemoveOrder();
+                        RemoveCurrentOrder();
                     }
                     else
                     {
                         SetNullCurrentOrder(); ;
                     }
+                    break;
+
+                case null: break;
+
+                default:
+                    ToastNotification.ErrorNotification((int)resp);
                     break;
             }
            
@@ -876,6 +886,24 @@ namespace PosTest.ViewModels
                 throw new Exception(message);
             }
         }
+
+        public static void ErrorNotification(int respStatusCode)
+        {
+            switch (respStatusCode)
+            {
+                case 401: ToastNotification.Notify("Database insertion error " + respStatusCode.ToString()); break;
+                case 402: ToastNotification.Notify("Id exists in the database " + respStatusCode.ToString()); break;
+                case 403: ToastNotification.Notify("Database access error " + respStatusCode.ToString()); break;
+                case 404: ToastNotification.Notify("Bad request " + respStatusCode.ToString()); break;
+                case 405: ToastNotification.Notify("Authentification error " + respStatusCode.ToString()); break;
+                case 406: ToastNotification.Notify("Authentification error " + respStatusCode.ToString()); break;
+                case 407: ToastNotification.Notify("Authentification error " + respStatusCode.ToString()); break;
+                case 408: ToastNotification.Notify("Database error in Annex_id " + respStatusCode.ToString()); break;
+                case 409: ToastNotification.Notify("Config Database error " + respStatusCode.ToString()); break;
+                case 410: ToastNotification.Notify(" User or password error" + respStatusCode.ToString()); break;
+            }
+        }
+
     }
 
     public enum NextOrPrevious
@@ -895,87 +923,8 @@ namespace PosTest.ViewModels
         Payment=5,
         Split=6,
         Table=7,
-        SplittedPayment=8
-    }
-
-    public class SplitViewModel : PropertyChangedBase
-    {
-        private Order _currentOrder;
-        private Order _splitedOrder;
-        CheckoutViewModel Parent;
-
-        public SplitViewModel()
-        {
-
-        }
-
-        public SplitViewModel(CheckoutViewModel parent)
-        {
-            Parent = parent;
-            SplitedOrder = new Order();
-            CurrentOrder = new Order();
-            CurrentOrder = Parent.CurrentOrder;
-        }
-
-        public Order CurrentOrder
-        {
-            get { return _currentOrder; }
-            set
-            {
-                _currentOrder = value;
-                NotifyOfPropertyChange(() => CurrentOrder);
-
-            }
-        }
-
-        public Order SplitedOrder
-        {
-            get { return _splitedOrder; }
-            set
-            {
-                _splitedOrder = value;
-                NotifyOfPropertyChange(() => SplitedOrder);
-            }
-        }
-
-        #region Split Commands
-        public void BackFromSplitCommand()
-        {
-
-            if (SplitedOrder == null)
-            {
-                Parent.IsDialogOpen = false;
-                return;
-            }
-            if (SplitedOrder.OrderItems == null)
-            {
-                Parent.IsDialogOpen = false;
-                return;
-            }
-            if (SplitedOrder.OrderItems.Count() == 0)
-            {
-                Parent.IsDialogOpen = false;
-                return;
-            }
-            SplitedOrder.OrderItems.Clear();
-            Parent.IsDialogOpen = false;
-            /* SplitedOrder
-                 .OrderItems
-                 .ToList()
-                 .ForEach(o =>
-                 {
-                     CurrentOrder.AddOrderItem(o);
-                     SplitedOrder.RemoveOrderItem(o);
-                 });
-             IsDialogOpen = false;*/
-        }
-
-
-        private void SaveSplittedOrder()
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
+        SplittedPayment=8,
+        Itemprice = 9,
+        Validate = 10
     }
 }
