@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
+        xmlns:sl="clr-namespace:Softline.Controls;assembly=SlCustomKeypad"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" >
     <Window.Resources>
@@ -47,6 +48,9 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <CheckBox x:Name="tempcheck" Content="Template" 
                   IsChecked="{Binding IsActivev}" 
@@ -80,6 +84,10 @@
                  ItemTemplate="{StaticResource MyItemTemplate2}"
                  SelectionMode="Multiple"
                  />
+
+        <sl:NumericPad Name="pad" Grid.Row="4" AllowDotkey="True" AllowPercentKey="True"/>
+        <TextBlock Text="{Binding ElementName=pad, Path=NumericValue}" Grid.Row="5"/>
+        <Button Content="DEL" Grid.Row="6" Command="{Binding ElementName=pad, Path=DelCommand}" />
 
 
 

@@ -9,5 +9,6 @@ namespace ServiceInterface.StaticValues
     public static class ActionConfig
     {
         public static bool AllowNewTotalGreaterThanToal = true;
+        public static bool AllowUsingVirtualTable = true;
     }
 }

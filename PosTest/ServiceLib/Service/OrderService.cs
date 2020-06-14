@@ -211,29 +211,19 @@ namespace ServiceLib.Service
 
         public long? GetIdmax(ref int statusCode)
         {
-            string token = AuthProvider.Instance?.AuthorizationToken;
-            var client = new RestClient(UrlConfig.OrderUrl.GetIdMax);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("authorization", token);
-            request.AddHeader("accept", "application/json");
-            IRestResponse response = client.Execute(request);
-            statusCode = (int)response.StatusCode;
+            var responseContent = GenericRest.RestGet(UrlConfig.OrderUrl.GetIdMax, ref statusCode);
             long? idmax = null;
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (statusCode == (int)HttpStatusCode.OK)
             {
-                //var jsonContentDict = JObject.Parse(response.Content);
                 try
                 {
-                    idmax = Convert.ToInt64(response.Content);
+                    idmax = Convert.ToInt64(responseContent);
                 }
                 catch (Exception)
                 {
                     return null;
                 }
-                
-                //idmax = JsonConvert.DeserializeObject<long>(response.Content);
             }
-            
             return idmax;
         }
 
@@ -244,32 +234,30 @@ namespace ServiceLib.Service
 
        public Table GetTable(int id, ref int statusCode)
         {
-            /* string token = AuthProvider.Instance?.AuthorizationToken;
-             var client = new RestClient(UrlConfig.OrderUrl.GetTable + number.ToString());
-             var request = new RestRequest(Method.GET);
-             request.AddHeader("authorization", token);
-             request.AddHeader("accept", "application/json");
-             IRestResponse response = client.Execute(request);
-             Table table = null;
-             if (response.StatusCode == HttpStatusCode.OK)
-             {
-                 table = JsonConvert.DeserializeObject<Table>(response.Content);
-             }
-             statusCode = (int)response.StatusCode;
-             return table;// ;products*/
-            return RestService.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
-
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
         }
 
         public Table GetTableByNumber(int tableNumber, ref int statusCode)
         {
-            return RestService.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
         }
     }
 
-    public class RestService
+    public class GenericRest
     {
         static public T GetThing<T>(string url, ref int statusCode)
+        {
+            var respContent = RestGet(url, ref statusCode);
+            T t = default;
+            if (statusCode == (int)HttpStatusCode.OK)
+            {
+                t = JsonConvert.DeserializeObject<T>(respContent);
+            }
+            return t;// ;products
+
+        }
+
+        public static string RestGet(string url, ref int statusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(url);
@@ -277,14 +265,8 @@ namespace ServiceLib.Service
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
             IRestResponse response = client.Execute(request);
-            T t = default;
             statusCode = (int)response.StatusCode;
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                t = JsonConvert.DeserializeObject<T>(response.Content);
-            }
-            return t;// ;products
-
+            return response.Content;
         }
     }
 }

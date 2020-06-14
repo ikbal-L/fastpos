@@ -32,6 +32,9 @@ namespace ConsoleApp
         [Import(typeof(IAdditiveService))]
         private IAdditiveService additiveService = null;
 
+        [Import(typeof(IOrderService))]
+        private IOrderService orderService = null;
+
 
         static HttpClient client = new HttpClient();
 
@@ -70,26 +73,33 @@ namespace ConsoleApp
         void Run()
         {
             Compose();
-             Product p = new Product
+            Product p = new Product
             {
                 Id = 4,
                 Name = "prod1",
                 CategorieId = 11,
-                Price=300.00m,
+                Price = 300.00m,
                 BackgroundString = "Green",
                 AvailableStock = 222,
                 IsNotifying = true
             };
             //var status = productService.SaveProduct(p);
-            var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 2 }, new Terminal { Id=1});
-            var resp1 = productService.SaveProducts(FakeServices.Products);
-            var resp2 = categorieService.SaveCategories(FakeServices.Categories);
-            var resp3 = additiveService.SaveAdditives(FakeServices.Additives);
-            int getProductsStatusCode = 0,
-                getCategoriesStatusCode = 0, code = 0;
-            var prods =  productService.GetAllProducts(ref getProductsStatusCode);
-            var cats = categorieService.GetAllCategories(ref getCategoriesStatusCode);
-            var adds = additiveService.GetAllAdditives(ref code);
+            var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id=1});
+            //var resp1 = productService.SaveProducts(FakeServices.Products);
+            //var resp2 = categorieService.SaveCategories(FakeServices.Categories);
+            //var resp3 = additiveService.SaveAdditives(FakeServices.Additives);
+            //int getProductsStatusCode = 0,
+            //    getCategoriesStatusCode = 0, code = 0;
+            //var prods =  productService.GetAllProducts(ref getProductsStatusCode);
+            //var cats = categorieService.GetAllCategories(ref getCategoriesStatusCode);
+            //var adds = additiveService.GetAllAdditives(ref code);
+
+            Order o = new Order
+            {
+                State = OrderState.Ready
+            };
+
+            orderService.SaveOrder(o);
 
             Console.ReadKey();
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,13 +9,23 @@ using System.Threading.Tasks;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class Table
+    public class Table : PropertyChangedBase
     {
-        [DataMember]
-        public long  Id { get; set; }
+        private string _number;
 
         [DataMember]
-        public string Number { get; set; }
+        public long?  Id { get; set; }
+
+        [DataMember]
+        public string Number
+        {
+            get => _number;
+            set
+            {
+                _number = value;
+                NotifyOfPropertyChange(()=> Number);
+            }
+        }
 
         [DataMember]
         public int Seats { get; set; }
@@ -23,5 +34,8 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public Place PlaceId { get; set; }
+
+        [DataMember]
+        public bool IsVirtual { get; set; } = false;
     }
 }
