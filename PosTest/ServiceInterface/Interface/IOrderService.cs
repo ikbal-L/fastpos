@@ -13,5 +13,6 @@ namespace ServiceInterface.Interface
         long? GetIdmax(ref int statusCode);
         Table GetTableByNumber(int tableNumber, ref int statusCode);
         Table GetTable(int id, ref int statusCode);
+        int SaveTable(Table table);
     }
 }

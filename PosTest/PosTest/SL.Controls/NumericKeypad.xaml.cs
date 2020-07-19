@@ -162,14 +162,14 @@ namespace PosTest.SL.Controls
                     NumericValue = NumericValue.Remove(NumericValue.Length - 1, 1) + "." + "%";
 
                 }
-                NumericValue += key;
+                //NumericValue += key;
                 return;
             }
 
             if (key.Equals("%"))
             {
                 NumericValue = NumericValue.Contains("%") ? NumericValue : NumericValue + "%";
-                
+                return;
             }
 
             if (NumericValue.Contains("%"))

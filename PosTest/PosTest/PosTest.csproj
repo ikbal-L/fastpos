@@ -196,6 +196,7 @@
     </Compile>
     <Compile Include="Converters\NumberToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="Converters\OrderStateEnumToBrushConverter.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="ViewModels\ProductsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
+    <Compile Include="ViewModels\TablesViewModel.cs" />
     <Compile Include="Views\CategoryTabView.xaml.cs">
       <DependentUpon>CategoryTabView.xaml</DependentUpon>
     </Compile>
@@ -247,6 +249,9 @@
     </Compile>
     <Compile Include="Views\SubViews\ProductNavigation.xaml.cs">
       <DependentUpon>ProductNavigation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TablesView.xaml.cs">
+      <DependentUpon>TablesView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -380,6 +385,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SubViews\ProductNavigation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TablesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

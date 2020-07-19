@@ -11,13 +11,13 @@ namespace ServiceInterface.Model
     [DataContract]
     public class Table : PropertyChangedBase
     {
-        private string _number;
+        private int _number;
 
         [DataMember]
         public long?  Id { get; set; }
 
         [DataMember]
-        public string Number
+        public int Number
         {
             get => _number;
             set
@@ -37,5 +37,12 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public bool IsVirtual { get; set; } = false;
+
+        public BindableCollection<Order> TableOrders { get; set; }
+
+        public void AddOrder(Order currentOrder)
+        {
+            
+        }
     }
 }

@@ -39,8 +39,6 @@ namespace ServiceLib.Service
                             {
                                 NullValueHandling = NullValueHandling.Ignore
                             });
-
-            //json = $"{{\"user\" : \"{user}\", \"password\" : \"{password}\"}}";
            
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var url = UrlConfig.AuthUrl.Authenticate;
@@ -54,11 +52,12 @@ namespace ServiceLib.Service
                 var jsonContent = response.Content.ReadAsStringAsync().Result;
                 var jsonContentDict = JObject.Parse(jsonContent);
                 string token = jsonContentDict["auth_token"].ToString();
-                AuthProvider.Initialize<DefaultAuthProvider>(new User { Token = token});
+                long sessionId = jsonContentDict.Value<long>("SessionId");
+                AuthProvider.Initialize<DefaultAuthProvider>(new object[] { new User { }, token, sessionId});
                 //return true;
             }
-            return (int)response.StatusCode;
 
+            return (int)response.StatusCode;
         }
 
     }

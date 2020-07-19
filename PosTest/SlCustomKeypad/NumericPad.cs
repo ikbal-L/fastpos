@@ -100,6 +100,17 @@ namespace Softline.Controls
                             DefaultValue = false
                         });
 
+        public static readonly DependencyProperty VerifyPercentValueProperty =
+                     DependencyProperty.Register(nameof(VerifyPercentValue),
+                         typeof(bool),
+                         typeof(NumericPad),
+                        new FrameworkPropertyMetadata
+                        {
+                            BindsTwoWayByDefault = true,
+                            DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                            DefaultValue = true
+                        });
+
         public string NumericValue
         {
             get { return (string)GetValue(NumericValueProperty); }
@@ -129,6 +140,12 @@ namespace Softline.Controls
             get { return (bool)GetValue(AllowDotkeyProperty); }
             set { SetValue(AllowDotkeyProperty, value); }
         }
+        public bool VerifyPercentValue
+        {
+            get { return (bool)GetValue(VerifyPercentValueProperty); }
+            set { SetValue(VerifyPercentValueProperty, value); }
+        }
+
         static NumericPad()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(NumericPad), new FrameworkPropertyMetadata(typeof(NumericPad)));
@@ -189,55 +206,110 @@ namespace Softline.Controls
                 Switched = false;
             }
 
-            if (key.Equals("."))
+            switch (key)
             {
-                if (NumericValue.Contains("."))
-                {
-                    return;
-                }
-                if (NumericValue.Contains("%"))
-                {
-                    NumericValue = NumericValue.Remove(NumericValue.Length - 1, 1) + "." + "%";
+                case ".":
+                    if (NumericValue.Contains("."))
+                    {
+                        return;
+                    }
+                    else if (NumericValue.Contains("%"))
+                    {
+                        NumericValue = NumericValue.Insert(NumericValue.Length - 1,  ".");
+                    }
+                    else
+                    {
+                        NumericValue = NumericValue + ".";
+                    }
+                    break;
 
-                }
-                NumericValue += key;
-                return;
+                case "%":
+                    NumericValue = NumericValue.Contains("%") ? NumericValue : NumericValue + "%";
+                    if (NumericValue != "%")
+                    {
+                        var percentStr = NumericValue.Remove(NumericValue.Length - 1, 1);
+                        var percent = Convert.ToDecimal(percentStr);
+                        if (percent > 100 && VerifyPercentValue)
+                        {
+                            NumericValue = percentStr.Substring(0, 2) + "%";
+                        }
+                    }
+                    break;
+
+                default:
+                    if (NumericValue.Contains("%"))
+                    {
+                        var percentStr = NumericValue.Replace("%", key);
+                        var percent = Convert.ToDecimal(percentStr);
+                        if (percent > 100 && VerifyPercentValue)
+                        {
+                            if (percent == 100)
+                            {
+                                NumericValue = "100%";
+                            }
+                            else
+                            {
+                                NumericValue = percentStr.Substring(0, 2) + "%";
+                            }
+                        }
+                        else
+                        {
+                            NumericValue = NumericValue.Insert(NumericValue.Length - 1, key);
+                        }
+                        return;
+                    }
+                    NumericValue += key;
+                    break;
             }
 
-            if (key.Equals("%"))
-            {
-                NumericValue = NumericValue.Contains("%") ? NumericValue : NumericValue + "%";
+            //if (key.Equals("."))
+            //{
+            //    if (NumericValue.Contains("."))
+            //    {
+            //        return;
+            //    }
+            //    if (NumericValue.Contains("%"))
+            //    {
+            //        NumericValue = NumericValue.Remove(NumericValue.Length - 1, 1) + "." + "%";
+            //    }
+            //    //NumericValue += key;
+            //    return;
+            //}
 
-            }
+            //if (key.Equals("%"))
+            //{
+            //    NumericValue = NumericValue.Contains("%") ? NumericValue : NumericValue + "%";
 
-            if (NumericValue.Contains("%"))
-            {
-                var percentStr = "";
-                if (key != "%")
-                {
-                    percentStr = NumericValue.Remove(NumericValue.Length - 1, 1) + key;
-                }
-                else
-                {
-                    percentStr = NumericValue.Remove(NumericValue.Length - 1, 1);
-                }
-                if (percentStr == "")
-                {
-                    return;
-                }
-                var percent = Convert.ToDecimal(percentStr);
-                if (percent < 0 || percent > 100)
-                {
-                    NumericValue = percentStr.Substring(0, 2) + "%";
-                }
-                else if (key != "%")
-                {
-                    NumericValue = NumericValue.Remove(NumericValue.Length - 1, 1) + key + "%";
-                }
-                return;
-            }
+            //}
 
-            NumericValue += key;
+            //if (NumericValue.Contains("%"))
+            //{
+            //    var percentStr = "";
+            //    if (key != "%")
+            //    {
+            //        percentStr = NumericValue.Remove(NumericValue.Length - 1, 1) + key;
+            //    }
+            //    else
+            //    {
+            //        percentStr = NumericValue.Remove(NumericValue.Length - 1, 1);
+            //    }
+            //    if (percentStr == "")
+            //    {
+            //        return;
+            //    }
+            //    var percent = Convert.ToDecimal(percentStr);
+            //    if (percent < 0 || percent > 100)
+            //    {
+            //        NumericValue = percentStr.Substring(0, 2) + "%";
+            //    }
+            //    else if (key != "%")
+            //    {
+            //        NumericValue = NumericValue.Remove(NumericValue.Length - 1, 1) + key + "%";
+            //    }
+            //    return;
+            //}
+
+            //NumericValue += key;
         }
     }
 

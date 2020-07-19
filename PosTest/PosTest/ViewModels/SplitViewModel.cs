@@ -420,7 +420,7 @@ namespace PosTest.ViewModels
             //    return;
             //}
             Parent.IsDialogOpen = false;
-            Parent.SplitViewModel = null;
+            Parent.DialogViewModel = null;
             if (Parent.CurrentOrder != null)
             {
                 CopyBackToCurrentOrderWithGroupingOfQuantities();

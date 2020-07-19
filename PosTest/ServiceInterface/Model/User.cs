@@ -22,8 +22,6 @@ namespace ServiceInterface.Model
         [DataMember]
         public string Password { get; set; }
 
-        public string Token { get; set; }
-
         [DataMember]
         public string PhoneNumber { get; set; }
 

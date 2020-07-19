@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ServiceInterface.Authorisation;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -21,6 +22,7 @@ namespace ServiceInterface.Model
         private BindableCollection<OrderItem> _orderItems;
         private Table _table;
         private Order _splittedFrom;
+        private OrderState? _state;
 
         public Order()
         {
@@ -51,8 +53,32 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
-        public OrderState? State { get; set; }
+        public OrderState? State
+        {
+            get => _state;
+            set
+            {
+                _state = value;
+                if (State == null)
+                {
+                    return;
+                }
 
+                if (OrderStates == null)
+                {
+                    OrderStates = new BindableCollection<OrderStateElement>();
+                }
+                OrderStates.Add(new OrderStateElement
+                {
+                    State = (OrderState)_state,
+                    StateTime = DateTime.Now,
+                    SessionId = AuthProvider.Instance.SessionId
+                });
+            }
+        }
+
+        [DataMember]
+        public IList<OrderStateElement> OrderStates { get; set; }
         //get from state
         public string Color { get; set; }
 
@@ -208,6 +234,7 @@ namespace ServiceInterface.Model
             {
                 _table = value;
                 TableId = _table?.Id;
+                NotifyOfPropertyChange();
             }
         }
 
@@ -307,6 +334,20 @@ namespace ServiceInterface.Model
         }
     }
 
+    [DataContract]
+    public class OrderStateElement
+    {
+        [DataMember]
+        public long SessionId { get; set; }
+
+        [DataMember]
+        public DateTime StateTime { get; set; }
+
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public OrderState State { get; set; }
+    }
+
     public enum OrderState 
     {
         Ordered,
@@ -314,7 +355,8 @@ namespace ServiceInterface.Model
         Ready,
         Delivered,
         Payed,
-        Splitted
+        Splitted, 
+        Canceled
     }
     public enum OrderType
     {

@@ -46,16 +46,6 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public Table GetTable(int id, ref int statusCode)
-        {
-            return _restOrderService.GetTable(id, ref statusCode);
-        }
-
-        public Table GetTableByNumber(int tableNumber, ref int statusCode)
-        {
-            return _restOrderService.GetTableByNumber(tableNumber, ref statusCode);
-        }
-
         public int SaveOrder(Order order)
         {
             order.MappingBeforeSending();
@@ -67,7 +57,23 @@ namespace ServiceLib.Service
             order.MappingBeforeSending();
             return _restOrderService.UpdateOrder(order);
         }
+
+        public Table GetTable(int id, ref int statusCode)
+        {
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
+        }
+
+        public Table GetTableByNumber(int tableNumber, ref int statusCode)
+        {
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
+        }
+
+        public int SaveTable(Table table)
+        {
+            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable);
+        }
     }
+
 
     internal class RestOrderService : IOrderService
     {
@@ -134,11 +140,11 @@ namespace ServiceLib.Service
             return orders;
         }
 
-        public int SaveOrder(Order Order)
+        public int SaveOrder(Order order)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
-            string json = JsonConvert.SerializeObject(Order,
+            string json = JsonConvert.SerializeObject(order,
                             Newtonsoft.Json.Formatting.None,
                             new JsonSerializerSettings
                             {
@@ -211,13 +217,14 @@ namespace ServiceLib.Service
 
         public long? GetIdmax(ref int statusCode)
         {
-            var responseContent = GenericRest.RestGet(UrlConfig.OrderUrl.GetIdMax, ref statusCode);
+            var response = GenericRest.RestGet(UrlConfig.OrderUrl.GetIdMax);
+            statusCode = (int)response.StatusCode;
             long? idmax = null;
             if (statusCode == (int)HttpStatusCode.OK)
             {
                 try
                 {
-                    idmax = Convert.ToInt64(responseContent);
+                    idmax = Convert.ToInt64(response.Content);
                 }
                 catch (Exception)
                 {
@@ -241,32 +248,10 @@ namespace ServiceLib.Service
         {
             return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
         }
-    }
 
-    public class GenericRest
-    {
-        static public T GetThing<T>(string url, ref int statusCode)
+        public int SaveTable(Table table)
         {
-            var respContent = RestGet(url, ref statusCode);
-            T t = default;
-            if (statusCode == (int)HttpStatusCode.OK)
-            {
-                t = JsonConvert.DeserializeObject<T>(respContent);
-            }
-            return t;// ;products
-
-        }
-
-        public static string RestGet(string url, ref int statusCode)
-        {
-            string token = AuthProvider.Instance?.AuthorizationToken;
-            var client = new RestClient(url);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("authorization", token);
-            request.AddHeader("accept", "application/json");
-            IRestResponse response = client.Execute(request);
-            statusCode = (int)response.StatusCode;
-            return response.Content;
+            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable);
         }
     }
 }

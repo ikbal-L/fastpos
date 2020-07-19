@@ -23,6 +23,7 @@ namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen
     {
+        #region private fields
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
                        a => a.FullName.StartsWith("XUnitTesting"));
@@ -45,7 +46,12 @@ namespace PosTest.ViewModels
 
         private bool _IsDialogOpen;
         private SplitViewModel _splitViewModel;
+        private Order _displayedOrder;
+        private TablesViewModel _tablesViewModel;
+        private INotifyPropertyChanged _dialogViewModel;
+        #endregion
 
+        #region Constructors
         public CheckoutViewModel() 
         {
             Orders = new BindableCollection<Order>();
@@ -53,7 +59,6 @@ namespace PosTest.ViewModels
             {
                 CurrentOrder = new Order();
                 Orders.Add(CurrentOrder);
-
             }
         }
 
@@ -64,9 +69,7 @@ namespace PosTest.ViewModels
             _productsService = productsService;
             _categoriesService = categoriesService;
             _orderService = orderService;
-            //currentOrderitem = new BindableCollection<OrdreItem>();
 
-            //CurrentOrder.Id = _orderService.GetIdmax();
             int getProductsStatusCode = 0,
                 getCategoriesStatusCode = 0;
             AllRequestedProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
@@ -78,12 +81,9 @@ namespace PosTest.ViewModels
             Categories = new BindableCollection<Category>(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
             InitCategoryColors();
         }
+        #endregion
 
-        internal static void ItempriceAction(ref string numericZone, Order currentOrder)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region Properties
         public bool IsDialogOpen
         {
             get => _IsDialogOpen;
@@ -111,8 +111,6 @@ namespace PosTest.ViewModels
         public ICollectionView FilteredProducts { get; set; }
         public ICollection<Product> AllRequestedProducts { get; set; }
 
-
-
         public Category CurrentCategory
         {
             get { return _currantCategory; }
@@ -120,7 +118,6 @@ namespace PosTest.ViewModels
             {
                 _currantCategory = value;
                 NotifyOfPropertyChange(() => CurrentCategory);
-                //NotifyOfPropertyChange(() => CanSayHello);
             }
         }
         public int MaxProductPageSize { get; set; }
@@ -144,8 +141,6 @@ namespace PosTest.ViewModels
             } 
         }
 
-        //public BindableCollection<Product> ProductsPage { get; set; }
-
         public ICollectionView ProductsPage
         {
             get => _productsPage;
@@ -168,6 +163,15 @@ namespace PosTest.ViewModels
             }
         }
 
+        public Order DisplayedOrder
+        {
+            get => _displayedOrder;
+            set
+            {
+                _displayedOrder = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public BindableCollection<Category> Categories { get; set; }
 
@@ -194,24 +198,236 @@ namespace PosTest.ViewModels
             } 
         }
 
-        public SplitViewModel SplitViewModel
+        //public SplitViewModel SplitViewModel
+        //{
+        //    get => _splitViewModel;
+        //    set
+        //    {
+        //        _splitViewModel = value;
+        //        NotifyOfPropertyChange(() => SplitViewModel);
+        //    }
+        //}
+
+        public TablesViewModel TablesViewModel
         {
-            get => _splitViewModel;
+            get => _tablesViewModel;
             set
             {
-                _splitViewModel = value;
-                NotifyOfPropertyChange(() => SplitViewModel);
+                _tablesViewModel = value;
+                NotifyOfPropertyChange();
             }
         }
 
-        public void ReturnFromAdditives()
+        public INotifyPropertyChanged DialogViewModel
         {
-            ProductsVisibility = true;
-            AdditivesVisibility = false;
+            get => _dialogViewModel;
+            set
+            {
+                _dialogViewModel = value;
+                NotifyOfPropertyChange();
+            }
         }
-         public void PaginateProducts(NextOrPrevious nextOrprevious)
-        {          
-            if(nextOrprevious == NextOrPrevious.First)
+
+        
+        #endregion
+
+
+        internal void InitCategoryColors()
+        {
+            /*foreach (var category in Categories)
+                category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();*/
+        }
+
+        #region Order Commands
+        public int? SaveOrder(Order order)
+        {
+            if (IsRunningFromXUnit)
+            {
+                return null;
+            }
+            int resp;
+            try
+            {
+                var status = 0;
+                if (order.Id == null)
+                {
+                    order.Id = _orderService.GetIdmax(ref status) + 1;
+                    resp = _orderService.SaveOrder(order);
+                    if (resp != 200)
+                    {
+                        order.Id = null;
+                    }
+                }
+                else
+                {
+                    resp = _orderService.UpdateOrder(order);
+                }
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Check your server connection");
+                return null;
+            }
+
+            return resp;
+        }
+
+        private void SaveCurrentOrder()
+        {
+            var resp = SaveOrder(CurrentOrder);
+            switch (resp)
+            {
+                case 200:
+                    if (CurrentOrder.State == OrderState.Payed)
+                    {
+                        RemoveCurrentOrder();
+                    }
+                    else
+                    {
+                        SetNullCurrentOrder(); ;
+                    }
+                    break;
+
+                case null: break;
+
+                default:
+                    ToastNotification.ErrorNotification((int)resp);
+                    break;
+            }
+
+        }
+        public void ShowOrder(Order order)
+        {
+            if (order==null)
+            {
+                return;
+            }
+            if (CurrentOrder != null)
+            {
+                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
+            }
+            CurrentOrder = order;
+            DisplayedOrder = order;
+            CurrentCategory = CurrentOrder.ShownCategory;
+            if (_currantCategory == null)
+            {
+                CategorieFiltering("Home");
+            }
+            else
+            {
+                CategorieFiltering(CurrentCategory);
+            }            
+            AdditivesPage = CurrentOrder.ShownAdditivesPage;
+            ProductsVisibility = CurrentOrder.ProductsVisibility;
+            AdditivesVisibility = CurrentOrder.AdditivesVisibility;
+        }
+        public void NewOrder()
+        {
+            if (CurrentOrder != null)
+            {
+                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
+            }
+            CategorieFiltering("Home");
+            CurrentOrder = new Order();
+            DisplayedOrder = CurrentOrder;
+            Orders.Add(CurrentOrder);
+            CurrentOrder.OrderTime = DateTime.Now;
+        }
+
+        public void SetNullCurrentOrder()
+        {
+            if (CurrentOrder != null)
+            {
+                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
+            }
+            CategorieFiltering("Home");
+            CurrentOrder = null;
+            DisplayedOrder = null;
+        }
+
+        public void RemoveCurrentOrder()
+        {
+            if (CurrentOrder==null || Orders==null)
+            {
+                return;
+            }
+
+            Orders.Remove(CurrentOrder);
+            CurrentOrder = null;
+        }
+
+        public void CancelOrder()
+        {
+            if (CurrentOrder == null)
+            {
+                return;
+            }
+            if (CurrentOrder.OrderItems.Count == 0)
+            {
+                return;
+            }
+            CurrentOrder.State = OrderState.Canceled;
+            SaveCurrentOrder();
+            RemoveCurrentOrder();
+            var i = Orders.IndexOf(CurrentOrder);
+
+        }
+        #endregion
+
+        public void Close()
+        {
+            CategoryTabViewModel categoryTabViewModel = new CategoryTabViewModel(30, _productsService, _categoriesService);
+            categoryTabViewModel.Parent = this.Parent;
+
+
+            (this.Parent as Conductor<object>).ActivateItem(categoryTabViewModel);
+        }
+
+        #region Filtering and pagination
+        public void CategorieFiltering(object param)
+        {
+            AdditivesVisibility = false;
+            ProductsVisibility = true;
+            if(param is Category)
+            { 
+                Category category = param as Category;
+                category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
+                if(CurrentCategory != null)
+                    CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
+                CurrentCategory = category;
+                FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+
+                PaginateProducts(NextOrPrevious.First);
+            }
+            else  
+                if(param is string)
+                    if( (param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
+                    {
+                        FilteredProducts.Filter = null;
+
+                        if (CurrentCategory != null)
+                            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
+
+                        CurrentCategory = null;
+                        var muchInDemanadProducts = AllRequestedProducts.Where(p => p.IsMuchInDemand == true).ToList();
+                        FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
+                        PaginateProducts(NextOrPrevious.First);
+                    }
+                    else // param == "ALL"
+                    {
+                        FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
+                        PaginateProducts(NextOrPrevious.First);
+                    }
+        }
+
+        public void ProductFiltering(string text)
+        {
+            Console.WriteLine("Param=" + text);
+        }
+
+        public void PaginateProducts(NextOrPrevious nextOrprevious)
+        {
+            if (nextOrprevious == NextOrPrevious.First)
             {
                 _pageNumber = 0;
                 nextOrprevious = NextOrPrevious.Next;
@@ -242,347 +458,30 @@ namespace PosTest.ViewModels
                     listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, listProducts.Count - (_pageNumber * MaxProductPageSize));
                     CanExecuteMext = false;
                 }
-                _pageNumber++;                
+                _pageNumber++;
             }
             else
             {
-                 listProducts = listProducts.GetRange((_pageNumber - 2) * MaxProductPageSize, MaxProductPageSize);
+                listProducts = listProducts.GetRange((_pageNumber - 2) * MaxProductPageSize, MaxProductPageSize);
                 _pageNumber--;
                 CanExecuteMext = true;
 
             }
             ProductsPage = CollectionViewSource.GetDefaultView(listProducts);
 
-            CanExecutePrevious = _pageNumber==1 ? false : true;
+            CanExecutePrevious = _pageNumber == 1 ? false : true;
         }
-        internal void InitCategoryColors()
-        {
-            /*foreach (var category in Categories)
-                category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();*/
-        }
-
-        public void ShowOrder(Order order)
-        {
-            if (order==null)
-            {
-                return;
-            }
-            if (CurrentOrder != null)
-            {
-                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-            }
-            CurrentOrder = order;
-            CurrentCategory = CurrentOrder.ShownCategory;
-            if (_currantCategory == null)
-            {
-                CategorieFiltering("Home");
-            }
-            else
-            {
-                CategorieFiltering(CurrentCategory);
-            }            
-            AdditivesPage = CurrentOrder.ShownAdditivesPage;
-            ProductsVisibility = CurrentOrder.ProductsVisibility;
-            AdditivesVisibility = CurrentOrder.AdditivesVisibility;
-        }
-        public void NewOrder()
-        {
-            if (CurrentOrder != null)
-            {
-                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-            }
-            CategorieFiltering("Home");
-            CurrentOrder = new Order();
-            Orders.Add(CurrentOrder);
-            CurrentOrder.OrderTime = DateTime.Now;
-        }
-        public void SetNullCurrentOrder()
-        {
-            if (CurrentOrder != null)
-            {
-                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-            }
-            CategorieFiltering("Home");
-            CurrentOrder = null;
-        }
-        public void RemoveCurrentOrder()
-        {
-            if (CurrentOrder==null || Orders==null)
-            {
-                return;
-            }
-
-            Orders.Remove(CurrentOrder);
-            CurrentOrder = null;
-        }
-
-        public void Close()
-        {
-            CategoryTabViewModel categoryTabViewModel = new CategoryTabViewModel(30, _productsService, _categoriesService);
-            categoryTabViewModel.Parent = this.Parent;
+        #endregion
 
 
-            (this.Parent as Conductor<object>).ActivateItem(categoryTabViewModel);
 
-            
-            /*LoginViewModel toActivateViewModel = new LoginViewModel();
-            toActivateViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(toActivateViewModel);*/
-        }
-
-        public void AddAditive(Additive additive)
-        {
-            if (additive == null)
-            {
-                return;
-            }
-            if (!CurrentOrder.SelectedOrderItem.AddAdditives(additive))
-            {
-                CurrentOrder.SelectedOrderItem.SelectedAdditive = null;
-                CurrentOrder.SelectedOrderItem.SelectedAdditive = 
-                                    CurrentOrder.SelectedOrderItem.Additives.
-                                        Where(addv => addv.Equals(additive)).
-                                        FirstOrDefault();
-            }
-                
-        } 
-
-        public void RemoveAdditive(Additive additive)
-        {
-            if (additive is null || additive.ParentOrderItem is null)
-            {
-                return;
-            }
-            if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
-            {
-                CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
-                additive.ParentOrderItem.Additives.Remove(additive);
-            }
-        }
-
-        public void RemoveOrerItem(OrderItem item)
-        {
-            CurrentOrder.RemoveOrderItem(item);
-            AdditivesVisibility = false;
-            ProductsVisibility = true;
-        }
-
-        public void AddOneToQuantity(OrderItem item)
-        {
-            item.Quantity += 1;
-        }
-        public void SubtractOneFromQuantity(OrderItem item)
-        {
-            if (item.Quantity <= 1)
-                return;
-            item.Quantity -= 1;
-        }
-        
-        public void DiscountOnOrderItem(OrderItem item)
-        {
-            if (String.IsNullOrEmpty(NumericZone))
-                return;
-            var oldDiscount = item.DiscountAmount;
-            var discountPercent = 0m;
-            var discount = 0m;
-            if (NumericZone.Contains("%"))
-            {
-                if (NumericZone.Length == 1)
-                {
-                    return;
-                }
-                try
-                {
-                    discountPercent = Convert.ToDecimal(NumericZone.Remove(NumericZone.Length - 1));
-                }
-                catch (Exception)
-                {
-                    NumericZone = string.Empty;
-                    if (IsRunningFromXUnit)
-                        throw;
-                }
-                discount = item.Total * discountPercent / 100;
-            }
-            else
-            {
-                try
-                {
-                    discount = Convert.ToDecimal(NumericZone);
-                }
-                catch (Exception)
-                {
-                    NumericZone = string.Empty;
-                    if (IsRunningFromXUnit)
-                        throw;
-                } //discount = Convert.ToDecimal(NumericZone);
-            }
-                //decimal discount =0;
-            
-
-            NumericZone = string.Empty;
-            if (item.Total < discount)
-            {
-                if (IsRunningFromXUnit)
-                {
-                    throw new Exception("Discount Greater Than Price");
-                }
-                else
-                {
-                    ToastNotification.Notify("Discount Greater Than Price");
-                    return;
-                }
-            }
-
-            if (discountPercent>0)
-            {
-                item.DiscountPercentatge = discountPercent;
-
-            }
-            if (discount>0)
-            {
-                item.DiscountAmount = discount;
-
-            }
-            //CurrentOrder.NewTotal = CurrentOrder.NewTotal + oldDiscount - discount;
-        }
-        
-        public void GoToAdditiveButtonsPage(OrderItem oitem)
-        {
-            AdditivesVisibility = true;
-            ProductsVisibility = false;
-            AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
-        }
-        public void CategorieFiltering(object param)
-        {
-            AdditivesVisibility = false;
-            ProductsVisibility = true;
-            if(param is Category)
-            { 
-                Category category = param as Category;
-                category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
-                if(CurrentCategory != null)
-                    CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
-                CurrentCategory = category;
-                FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
-
-                PaginateProducts(NextOrPrevious.First);
-                
-                //Console.WriteLine(Products.Where(p => p.CategorieId == CurrantCategorie.Id).Count());
-                //Console.WriteLine(Products.Count());
-                //Products =  Products.Where(p => p.CategorieId == CurrantCategorie.Id).ToList();
-                
-                //Products = Products;
-            }
-            else  
-                if(param is string)
-                    if( (param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
-                    {
-                        FilteredProducts.Filter = null;
-
-                        if (CurrentCategory != null)
-                            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
-
-                        CurrentCategory = null;
-                        var muchInDemanadProducts = AllRequestedProducts.Where(p => p.IsMuchInDemand == true).ToList();
-                        FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
-                        PaginateProducts(NextOrPrevious.First);
-                    }
-                    else // param == "ALL"
-                    {
-                        FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
-                        PaginateProducts(NextOrPrevious.First);
-                    }
-        }
-
-        public void ProductFiltering(string text)
-        {
-            Console.WriteLine("Param=" + text);
-        }
-
-        public void AddOrderItem(Product selectedproduct)
-        {
-            //Product selectedproduct = (Product)sender;
-            //Console.WriteLine();
-            if (selectedproduct == null)
-                return;
-            
-            if (CurrentOrder == null)
-            {
-                NewOrder();
-                /*CurrentOrder = new Order();
-                Orders.Add(CurrentOrder); 
-                CurrentOrder.OrderTime = DateTime.Now;*/
-            }
-
-            CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true, quantity: 1);
-
-            if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
-            {
-                AdditivesPage = CollectionViewSource.GetDefaultView((selectedproduct as Platter).Additives);
-                ProductsVisibility = false;
-                AdditivesVisibility = true;
-            }
-
-            //Console.WriteLine(CurrentOrder.Items.Count);
-            //currentOrderitem = new BindableCollection<OrdreItem>(CurrentOrder.Items);
-            //Console.WriteLine(selectedproduct+"  |  "+ currentOrderitem);
-
-
-        }
-
-        public void NumericKeyboard(string number)
-        {
-            if (String.IsNullOrEmpty(number))
-                return;
-            if (number.Length > 1)
-                return;
-            var numbers = new string[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "." , "%"};
-            if ( !numbers.Contains(number) )
-                return;
-            if (NumericZone == null)
-                NumericZone = String.Empty;
-
-            if (number.Equals("."))
-            {
-                NumericZone = NumericZone.Contains(".") ? NumericZone : NumericZone + ".";
-                return;
-            }
-
-            if (number.Equals("%"))
-            {
-                NumericZone = NumericZone.Contains("%") ? NumericZone : NumericZone + "%";
-                return;
-            }
-
-            if (NumericZone.Contains("%"))
-            {
-                var percentStr = _numericZone.Remove(_numericZone.Length - 1, 1) + number;
-                var percent = Convert.ToDecimal(percentStr);
-                if (percent < 0 || percent > 100)
-                {
-                    if (IsRunningFromXUnit)
-                    {
-                        throw new Exception("Invalid value for Percentagte");
-                    }
-                    else
-                    {
-                        ToastNotification.Notify("Invalid value for Percentagte");
-                    }
-                }
-                else
-                {
-                    NumericZone = _numericZone.Remove(_numericZone.Length - 1, 1) + number + "%";
-
-                }
-                return;
-            }
-
-            NumericZone += number ;
-        }
-
+        #region Command Buttons' Actions
         public void ActionKeyboard(ActionButton cmd)
         {
-            if (string.IsNullOrEmpty(NumericZone) && cmd != ActionButton.Split && cmd != ActionButton.Cmd)
+            if (string.IsNullOrEmpty(NumericZone) && 
+                cmd != ActionButton.Split && 
+                cmd != ActionButton.Cmd && 
+                cmd != ActionButton.Table)
             {
                 ToastNotification.Notify("Enter the required vlue before ..");
                 return;
@@ -610,7 +509,7 @@ namespace PosTest.ViewModels
                         NumericZone = "";
                         return;
                     }
-                    if (CurrentOrder.SelectedOrderItem != null)
+                    if (CurrentOrder?.SelectedOrderItem != null)
                         CurrentOrder.SelectedOrderItem.Quantity = qty;
                     NumericZone = ""; 
                     break;
@@ -632,36 +531,11 @@ namespace PosTest.ViewModels
                         break;
                     }
                 case ActionButton.Payment:
-                    var payedAmount = Convert.ToDecimal(NumericZone);
-                    if (payedAmount < 0)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
-                    if (CurrentOrder == null)
-                    {
-                        ToastNotification.Notify("Add products before ...");
-                        return;
-                    } 
-
-                    if (payedAmount < CurrentOrder.NewTotal) 
-                    {
-                        //NumericZone = "";
-                        //Use Local to select message according to UI language
-                        ToastNotification.Notify("Payed amount lower than total");
-                        //CurrentOrder.DiscountAmount = 0;
-                        return;
-                    }
-
-                    CurrentOrder.GivenAmount = payedAmount;
-                    CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
-                    CurrentOrder.State = OrderState.Payed;
-                    NumericZone = "";
-                    SaveCurrentOrder();
+                    PayementAction();
                     break;
 
                 case ActionButton.Cmd:
-                    if (CurrentOrder == null)
+                    if (CurrentOrder == null || CurrentOrder.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
                     {
                         ToastNotification.Notify("Add products before ...");
                         return;
@@ -671,42 +545,117 @@ namespace PosTest.ViewModels
                     break;
 
                 case ActionButton.Table:
-                    var tableNumber = Convert.ToInt32(NumericZone);
-                    if (tableNumber < 0)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
-                    
-                    if (CurrentOrder == null) { 
-                        ToastNotification.Notify("Add products before ...");
-                        return;
-                    }
-                    var status = 0;
-                    var table = _orderService.GetTableByNumber(tableNumber, ref status);
-                    CurrentOrder.Table = table;
-                    //CurrentOrder.State = OrderState.Ordered;
-                    //SaveCurrentOrder();
+                    TableAction();
                     break;
 
                 case ActionButton.Split:
-                    
-                    //SplitedOrder.OrderItems = new BindableCollection<OrderItem>();
                     IsDialogOpen = CurrentOrder != null
                         && CurrentOrder.OrderItems != null
                         && (CurrentOrder.OrderItems.Count > 1 || 
                            (CurrentOrder.OrderItems.Count==1 && CurrentOrder.OrderItems[0].Quantity>1));
                     if (IsDialogOpen == true)
                     {
-                        //CurrentOrder.SelectedOrderItem = null;
-                        SplitViewModel = new SplitViewModel(this);
-
+                        DialogViewModel = new SplitViewModel(this);
+                    }
+                    else
+                    {
+                        ToastNotification.Notify("Non products to split");
                     }
                     break;
             }
         }
+        
+        private void PayementAction()
+        {
+            var payedAmount = Convert.ToDecimal(NumericZone);
+            if (payedAmount < 0)
+            {
+                NumericZone = "";
+                return;
+            }
+            if (CurrentOrder == null)
+            {
+                ToastNotification.Notify("Add products before ...");
+                return;
+            }
 
-        public static void PriceAction(ref string priceStr, Order order)
+            if (payedAmount < CurrentOrder.NewTotal)
+            {
+                //NumericZone = "";
+                //Use Local to select message according to UI language
+                ToastNotification.Notify("Payed amount lower than total");
+                //CurrentOrder.DiscountAmount = 0;
+                return;
+            }
+
+            CurrentOrder.GivenAmount = payedAmount;
+            CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
+            CurrentOrder.State = OrderState.Payed;
+            NumericZone = "";
+            SaveCurrentOrder();
+        }
+
+        private void TableAction()
+        {
+            int tableNumber;
+            if (string.IsNullOrEmpty(NumericZone))
+            {
+                IsDialogOpen = true;
+                DialogViewModel = TablesViewModel ?? new TablesViewModel(this);
+                return;
+            }
+            try
+            {
+                tableNumber = Convert.ToInt32(NumericZone);
+            }
+            catch (Exception)
+            {
+                ToastNotification.Notify("Table Number should be integer");
+                NumericZone = "";
+                return;
+            }
+            if (tableNumber < 0)
+            {
+                NumericZone = "";
+                return;
+            }
+
+            var status = 0;
+            var table = _orderService.GetTableByNumber(tableNumber, ref status);
+            switch (status)
+            {
+                case 200:
+                    if (CurrentOrder == null)
+                    {
+                        NewOrder();
+                    }
+                    CurrentOrder.Table = table;
+                    table.AddOrder(CurrentOrder);
+                    break;
+                case 400:
+                    if (ActionConfig.AllowUsingVirtualTable)
+                    {
+                        var status2 = _orderService.SaveTable(new Table { IsVirtual = true, Number = tableNumber });
+                        if (status2 == 200)
+                        {
+                            ToastNotification.Notify("Creation of virtual table", 1);
+                            NewOrder();
+                        }
+                        else
+                        {
+                            ToastNotification.ErrorNotification(status2);
+                        }
+                    }
+                    ToastNotification.ErrorNotification(status);
+                    break;
+                default:
+                    ToastNotification.ErrorNotification(status);
+                    break;
+            }
+            NumericZone = "";
+        }
+
+        private void PriceAction(ref string priceStr, Order order)
         {
             decimal price;
             if (priceStr=="")
@@ -741,7 +690,8 @@ namespace PosTest.ViewModels
             //priceStr = "";
 
         }
-        public static void DiscAction(ref string discStr, Order order)
+        
+        private void DiscAction(ref string discStr, Order order)
         {
             if (discStr == "")
             {
@@ -797,93 +747,282 @@ namespace PosTest.ViewModels
             // = "";
         }
 
-        public int? SaveOrder(Order order)
+        public void NumericKeyboard(string number)
         {
-            if (IsRunningFromXUnit)
+            if (String.IsNullOrEmpty(number))
+                return;
+            if (number.Length > 1)
+                return;
+            var numbers = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "%" };
+            if (!numbers.Contains(number))
+                return;
+            if (NumericZone == null)
+                NumericZone = String.Empty;
+
+            if (number.Equals("."))
             {
-                return null;
+                NumericZone = NumericZone.Contains(".") ? NumericZone : NumericZone + ".";
+                return;
             }
-            int resp;
-            try
+
+            if (number.Equals("%"))
             {
-                var status = 0;
-                if (order.Id == null)
+                NumericZone = NumericZone.Contains("%") ? NumericZone : NumericZone + "%";
+                return;
+            }
+
+            if (NumericZone.Contains("%"))
+            {
+                var percentStr = _numericZone.Remove(_numericZone.Length - 1, 1) + number;
+                var percent = Convert.ToDecimal(percentStr);
+                if (percent < 0 || percent > 100)
                 {
-                    order.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(order);
-                    if (resp != 200)
+                    if (IsRunningFromXUnit)
                     {
-                        order.Id = null;
+                        throw new Exception("Invalid value for Percentagte");
+                    }
+                    else
+                    {
+                        ToastNotification.Notify("Invalid value for Percentagte");
                     }
                 }
                 else
                 {
-                    resp = _orderService.UpdateOrder(order);
+                    NumericZone = _numericZone.Remove(_numericZone.Length - 1, 1) + number + "%";
+
+                }
+                return;
+            }
+
+            NumericZone += number;
+        }
+        #endregion
+
+
+        #region Order Item commands
+        public void AddAditive(Additive additive)
+        {
+            if (additive == null)
+            {
+                return;
+            }
+            if (!CurrentOrder.SelectedOrderItem.AddAdditives(additive))
+            {
+                CurrentOrder.SelectedOrderItem.SelectedAdditive = null;
+                CurrentOrder.SelectedOrderItem.SelectedAdditive =
+                                    CurrentOrder.SelectedOrderItem.Additives.
+                                        Where(addv => addv.Equals(additive)).
+                                        FirstOrDefault();
+            }
+
+        }
+
+        public void RemoveAdditive(Additive additive)
+        {
+            if (additive is null || additive.ParentOrderItem is null)
+            {
+                return;
+            }
+            if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
+            {
+                CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
+                additive.ParentOrderItem.Additives.Remove(additive);
+            }
+        }
+
+        public void RemoveOrerItem(OrderItem item)
+        {
+            CurrentOrder.RemoveOrderItem(item);
+            AdditivesVisibility = false;
+            ProductsVisibility = true;
+        }
+
+        public void AddOneToQuantity(OrderItem item)
+        {
+            item.Quantity += 1;
+        }
+
+        public void SubtractOneFromQuantity(OrderItem item)
+        {
+            if (item.Quantity <= 1)
+                return;
+            item.Quantity -= 1;
+        }
+
+        public void DiscountOnOrderItem(OrderItem item)
+        {
+            if (String.IsNullOrEmpty(NumericZone))
+                return;
+            var oldDiscount = item.DiscountAmount;
+            var discountPercent = 0m;
+            var discount = 0m;
+            if (NumericZone.Contains("%"))
+            {
+                if (NumericZone.Length == 1)
+                {
+                    return;
+                }
+                try
+                {
+                    discountPercent = Convert.ToDecimal(NumericZone.Remove(NumericZone.Length - 1));
+                }
+                catch (Exception)
+                {
+                    NumericZone = string.Empty;
+                    if (IsRunningFromXUnit)
+                        throw;
+                }
+                discount = item.Total * discountPercent / 100;
+            }
+            else
+            {
+                try
+                {
+                    discount = Convert.ToDecimal(NumericZone);
+                }
+                catch (Exception)
+                {
+                    NumericZone = string.Empty;
+                    if (IsRunningFromXUnit)
+                        throw;
                 }
             }
-            catch (AggregateException)
+
+            NumericZone = string.Empty;
+            if (item.Total < discount)
             {
-                ToastNotification.Notify("Check your server connection");
-                return null;
+                if (IsRunningFromXUnit)
+                {
+                    throw new Exception("Discount Greater Than Price");
+                }
+                else
+                {
+                    ToastNotification.Notify("Discount Greater Than Price");
+                    return;
+                }
             }
 
-            return resp;
+            if (discountPercent > 0)
+            {
+                item.DiscountPercentatge = discountPercent;
+
+            }
+            if (discount > 0)
+            {
+                item.DiscountAmount = discount;
+
+            }
         }
-        private void SaveCurrentOrder()
+
+        public void AddOrderItem(Product selectedproduct)
         {
-            var resp = SaveOrder(CurrentOrder);
-            switch (resp)
+            //Product selectedproduct = (Product)sender;
+            //Console.WriteLine();
+            if (selectedproduct == null)
+                return;
+            
+            if (CurrentOrder == null)
             {
-                case 200:
-                    if (CurrentOrder.State == OrderState.Payed)
-                    {
-                        RemoveCurrentOrder();
-                    }
-                    else
-                    {
-                        SetNullCurrentOrder(); ;
-                    }
-                    break;
-
-                case null: break;
-
-                default:
-                    ToastNotification.ErrorNotification((int)resp);
-                    break;
+                NewOrder();
+                /*CurrentOrder = new Order();
+                Orders.Add(CurrentOrder); 
+                CurrentOrder.OrderTime = DateTime.Now;*/
             }
-           
+
+            CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true, quantity: 1);
+
+            if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
+            {
+                AdditivesPage = CollectionViewSource.GetDefaultView((selectedproduct as Platter).Additives);
+                ProductsVisibility = false;
+                AdditivesVisibility = true;
+            }
+
+            //Console.WriteLine(CurrentOrder.Items.Count);
+            //currentOrderitem = new BindableCollection<OrdreItem>(CurrentOrder.Items);
+            //Console.WriteLine(selectedproduct+"  |  "+ currentOrderitem);
+
+
         }
-}
+
+        public void ReturnFromAdditives()
+        {
+            ProductsVisibility = true;
+            AdditivesVisibility = false;
+        }
+
+        public void GoToAdditiveButtonsPage(OrderItem oitem)
+        {
+            AdditivesVisibility = true;
+            ProductsVisibility = false;
+            AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
+        }
+
+
+        #endregion
+
+    }
 
 
     static class ToastNotification
     {
+        // https://github.com/rafallopatka/ToastNotifications
         private static readonly bool IsRunningFromXUnit =
                   AppDomain.CurrentDomain.GetAssemblies().Any(
                       a => a.FullName.StartsWith("XUnitTesting"));
-        public static void Notify(string message)
+        private static Notifier _notifier; 
+        private static Notifier Instance 
         {
-            Notifier notifier = new Notifier(cfg =>
-            {
-                cfg.PositionProvider = new WindowPositionProvider(
-                    parentWindow: Application.Current.MainWindow,
-                    corner: Corner.BottomLeft,
-                    offsetX: 10,
-                    offsetY: 10);
+            get => _notifier ?? 
+                (_notifier = new Notifier(cfg =>
+                    {
+                        cfg.PositionProvider = new WindowPositionProvider(
+                            parentWindow: Application.Current.MainWindow,
+                            corner: Corner.BottomLeft,
+                            offsetX: 10,
+                            offsetY: 10);
 
-                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromSeconds(3),
-                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+                        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                            notificationLifetime: TimeSpan.FromSeconds(3),
+                            maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
-                cfg.Dispatcher = Application.Current.Dispatcher;
-            });
+                        cfg.Dispatcher = Application.Current.Dispatcher;
+                    }));
+        }
+        public static void Notify(string message, int type=-1)
+        {
+            Notifier notifier = Instance;
+            //    new Notifier(cfg =>
+            //{
+            //    cfg.PositionProvider = new WindowPositionProvider(
+            //        parentWindow: Application.Current.MainWindow,
+            //        corner: Corner.BottomLeft,
+            //        offsetX: 10,
+            //        offsetY: 10);
+
+            //    cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+            //        notificationLifetime: TimeSpan.FromSeconds(3),
+            //        maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+            //    cfg.Dispatcher = Application.Current.Dispatcher;
+            //});
             if (!IsRunningFromXUnit)
             {
-                notifier.ShowError(message);
+                if (type == -1)
+                {
+                    notifier.ShowError(message);
+                }
+                else if (type == 1)
+                {
+                    notifier.ShowInformation(message);
+                }
             }
             else
             {
-                throw new Exception(message);
+                if (type == -1)
+                {
+                    throw new Exception(message);
+                }
             }
         }
 

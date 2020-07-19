@@ -42,7 +42,7 @@
 
 
     </Window.Resources>
-    <Grid>
+    <Grid Background="Gray">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -82,13 +82,14 @@
 
         <ListView Grid.Row="3" Name="lvDataBinding1" ItemsSource="{Binding SelectedItems}"
                  ItemTemplate="{StaticResource MyItemTemplate2}"
-                 SelectionMode="Multiple"
+                 SelectionMode="Multiple" 
                  />
 
-        <sl:NumericPad Name="pad" Grid.Row="4" AllowDotkey="True" AllowPercentKey="True"/>
-        <TextBlock Text="{Binding ElementName=pad, Path=NumericValue}" Grid.Row="5"/>
+        <sl:NumericPad Name="pad" Grid.Row="4" AllowDotkey="True" AllowPercentKey="True" 
+                       Width="120" Background="Yellow" BorderThickness="15" BorderBrush="Green"
+                       VerifyPercentValue="True"/>
+        <TextBlock Text="{Binding ElementName=pad, Path=NumericValue}" Grid.Row="5" />
         <Button Content="DEL" Grid.Row="6" Command="{Binding ElementName=pad, Path=DelCommand}" />
-
 
 
     </Grid>

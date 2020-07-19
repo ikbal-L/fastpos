@@ -16,16 +16,19 @@ namespace ServiceInterface.Authorisation
         /// </summary>
         public abstract bool CheckpPermissions(UIElementPermission uipermission);
 
-        public abstract string AuthorizationToken { get; }
+        public abstract string AuthorizationToken { get; } 
+        
+        public abstract long SessionId { get; }
+
 
         public static void Initialize<TProvider>() where TProvider : AuthProvider, new()
         {
             _instance = new TProvider();
         }
 
-        public static void Initialize<TProvider>(object parameter)
+        public static void Initialize<TProvider>(object[] parameters)
         {
-            _instance = (AuthProvider)typeof(TProvider).GetConstructor(new Type[] { typeof(User) }).Invoke(new object[] { parameter });
+            _instance = (AuthProvider)typeof(TProvider).GetConstructor(new Type[] { typeof(User), typeof(string), typeof(long) }).Invoke(parameters);
         }
 
         public static AuthProvider Instance

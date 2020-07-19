@@ -54,16 +54,18 @@ namespace ServiceInterface.StaticValues
         {
             static string hostname = "http://192.168.1.102:5000/";
 
-            public static string GetAllOrders = hostname + "order/getall";
-            public static string GetManyOrders = hostname + "order/getmany";
-            public static string SaveOrders = hostname + "order/savemany";
-            public static string GetOrder = hostname + "order/get/";
-            public static string GetTableByNumber = hostname + "/table/getbynumber/";
-            public static string GetTable = hostname + "/table/get/";
-            public static string DeleteOrder = hostname + "order/delete/";
-            public static string UpdateOrder = hostname + "order/update";
-            public static string SaveOrder = hostname + "order/save";
-            public static string GetIdMax = hostname + "order/idmax";
+            public static string GetAllOrders = hostname1 + "order/getall";
+            public static string GetManyOrders = hostname1 + "order/getmany";
+            public static string SaveOrders = hostname1 + "order/savemany";
+            public static string GetOrder = hostname1 + "order/get/";
+            public static string DeleteOrder = hostname1 + "order/delete/";
+            public static string UpdateOrder = hostname1 + "order/update";
+            public static string SaveOrder = hostname1 + "order/save";
+            public static string GetIdMax = hostname1 + "order/idmax";
+
+            public static string GetTableByNumber = hostname1 + "table/getbynumber/";
+            public static string GetTable = hostname1 + "table/get/";
+            public static string SaveTable = hostname1 + "table/save";
         }
 
         public static class AuthUrl

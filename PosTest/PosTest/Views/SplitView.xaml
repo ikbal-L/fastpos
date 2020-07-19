@@ -35,8 +35,7 @@
                         Height="50"
                     cal:Message.Attach="[Event Click] = [Action BackFromSplitCommand]" Grid.Column="0"  
                     Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                        >
+                        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
                     <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="ChevronDoubleLeft" />
                         <TextBlock Margin="5 -3">Back </TextBlock>

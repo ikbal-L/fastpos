@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceInterface.StaticValues;
 using ServiceLib;
+using ServiceLib.Service;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
@@ -99,8 +102,14 @@ namespace ConsoleApp
                 State = OrderState.Ready
             };
 
-            orderService.SaveOrder(o);
+            int? a;
 
+
+            //orderService.SaveOrder(o);
+            var status = 0;
+            var prods = GenericRest.GetManyThings<Platter>(new List<long> { 1, 2, 3, 4 }, UrlConfig.ProductUrl.GetManyProducts, ref status);
+
+            Console.WriteLine(prods.Where(pl => pl.IsPlatter==true).Count());
             Console.ReadKey();
 
         }

@@ -22,7 +22,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
                 <ResourceDictionary>
-                    <src:Order x:Key="CurrentOrder"></src:Order>
+                    <!--<src:Order x:Key="CurrentOrder"></src:Order>
                     <x:Array Type="src:OrderItem" x:Key="DesignItmes">
                         <src:OrderItem Order="{StaticResource CurrentOrder}" Id="1" Quantity="2" UnitPrice="5"  >
                             <src:OrderItem.Product>
@@ -34,11 +34,14 @@
                                 <src:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
                             </src:OrderItem.Product>
                         </src:OrderItem>
-                    </x:Array>
+                    </x:Array>-->
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type vm:SplitViewModel}">
                 <local:SplitView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:TablesViewModel}">
+                <local:TablesView/>
             </DataTemplate>
         </ResourceDictionary>
     </FrameworkElement.Resources>
@@ -46,7 +49,7 @@
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen ,FallbackValue='False'}" >
         <materialDesign:DialogHost.DialogContent>
 
-            <ContentControl Content="{Binding SplitViewModel}" />
+            <ContentControl Content="{Binding DialogViewModel}" />
         </materialDesign:DialogHost.DialogContent>
   
         <Grid>
@@ -71,21 +74,23 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                
                 <Border Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0 0 0 1" BorderBrush="Black">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="{Binding CurrentOrder.State}" ></Label>
+                        <Label Content="{Binding CurrentOrder.State}" Background="{Binding CurrentOrder.State, Converter={StaticResource OrderStateEnumToBrush}}" BorderBrush="Blue" BorderThickness="0 0 1 0"></Label>
                         <Border  Grid.Column="1" BorderThickness="1 0 0 0" BorderBrush="Black">
-                            <Label Content="{Binding CurrentOrder.Table.Number}" ></Label>
+                            <Label Content="{Binding CurrentOrder.Table.Number}"></Label>
                         </Border>
-
+                        <!-- Background="{Binding CurrentOrder.State, Converter={StaticResource OrderStateEnumToBrush}}"-->
                     </Grid>
                 </Border>
+                
                 <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 0"
-                     ItemsSource="{Binding CurrentOrder.OrderItems ,FallbackValue={StaticResource DesignItmes} }"
+                     ItemsSource="{Binding CurrentOrder.OrderItems}"
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
                      Style="{StaticResource OrderItemListStyle}"
                      ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
@@ -98,30 +103,27 @@
                 <Button  Content="{materialDesign:PackIcon TableChair,25}" Margin="1 0"
                          Background="{DynamicResource MaterialDesignBackground}"
                          Style="{StaticResource MaterialDesignOutlinedButton}"
-                         Padding="0"
-                         />
-                <ItemsControl x:Name="OrdersList" ItemsSource="{Binding Orders}">
-                    <ItemsControl.ItemsPanel>
+                         Padding="0"/>
+
+                <ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}" 
+                         SelectedItem="{Binding DisplayedOrder}"
+                         ItemTemplate="{StaticResource OrderButtonList_ItemTemplate}"
+                         ItemContainerStyle="{StaticResource OrderButtonList_ItemStyle}"
+                         HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center">
+                    <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type src:Order}">
-                            <Button MinWidth="80" Padding="5 0 5 0" 
-                                    cal:Message.Attach="[Event Click] = [Action ShowOrder($this)]"
-                                    FontWeight="Bold" 
-                                    FontSize="12">
-                                <StackPanel Orientation="Horizontal" >
-                                    <Border CornerRadius="90" Background="Gray" Height="20" Width="20" Margin="0 0 2 0">
-                                        <TextBlock Text="{Binding Table.Number}" HorizontalAlignment="Center"/>
-                                    </Border>
-                                    <TextBlock Text="{Binding OrderTime, StringFormat=t}"/>
-                                </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </ListBox.ItemsPanel>
+                    <!--<ListBox.Style>
+                        <Style TargetType="{x:Type ListBox}">
+                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                             <Setter Property="VerticalContentAlignment" Value="Top"/>
+                         </Style>
+                    </ListBox.Style>-->
+                </ListBox>
+                
                 <Button  Style="{StaticResource MaterialDesignOutlinedButton}" 
                          Content="{materialDesign:PackIcon Plus,25}" Padding="0"
                          Background="{DynamicResource MaterialDesignBackground}"
@@ -135,7 +137,7 @@
                 <Button  Style="{StaticResource MaterialDesignOutlinedButton}"
                          Content="{materialDesign:PackIcon Minus,25}" Padding="0"
                          Background="{DynamicResource MaterialDesignBackground}"
-                         cal:Message.Attach="[Event Click] = [Action RemoveOrder()]"/>
+                         cal:Message.Attach="[Event Click] = [Action CancelOrder()]"/>
 
             </DockPanel>
 
@@ -171,14 +173,13 @@
                                   cal:Message.Attach="[Event TextChanged] = [Action ProductFiltering($this)]"/>
                     </Grid>
                 </Border>
-                <Button     DockPanel.Dock="Right" Margin="2 0 0 0"
+                <Button DockPanel.Dock="Right" Margin="2 0 0 0"
                         x:Name="NextPage"
                         cal:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
                         IsEnabled="{Binding CanExecuteMext}" Padding="0"
                          Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Content="{materialDesign:PackIcon ChevronDoubleRight,30}" 
-                        />
-                <Button     DockPanel.Dock="Right" 
+                        Content="{materialDesign:PackIcon ChevronDoubleRight,30}" />
+                <Button DockPanel.Dock="Right" 
                         x:Name="PreviousPqge"
                         cal:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
                         IsEnabled="{Binding CanExecutePrevious}" Padding="0"
