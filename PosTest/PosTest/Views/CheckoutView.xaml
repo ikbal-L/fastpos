@@ -11,8 +11,10 @@
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              
+              d:DataContext="{d:DesignData Source=/Design/CurrentOrder.xaml}"
+             DataContext="{Binding}"
              mc:Ignorable="d"
-             d:DesignWidth="900" d:DesignHeight="600"  Background="White" >
+             d:DesignWidth="900" d:DesignHeight="600"  >
     <FrameworkElement.Resources>
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
@@ -22,19 +24,6 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
                 <ResourceDictionary>
-                    <!--<src:Order x:Key="CurrentOrder"></src:Order>
-                    <x:Array Type="src:OrderItem" x:Key="DesignItmes">
-                        <src:OrderItem Order="{StaticResource CurrentOrder}" Id="1" Quantity="2" UnitPrice="5"  >
-                            <src:OrderItem.Product>
-                                <src:Product Id="1" Name="Pizza Home" Price="5" Unit="Unit"/>
-                            </src:OrderItem.Product>
-                        </src:OrderItem>
-                        <src:OrderItem Order="{StaticResource CurrentOrder}" Id="2" Quantity="2" UnitPrice="4"  >
-                            <src:OrderItem.Product>
-                                <src:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
-                            </src:OrderItem.Product>
-                        </src:OrderItem>
-                    </x:Array>-->
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type vm:SplitViewModel}">
@@ -48,17 +37,16 @@
 
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen ,FallbackValue='False'}" >
         <materialDesign:DialogHost.DialogContent>
-
             <ContentControl Content="{Binding DialogViewModel}" />
         </materialDesign:DialogHost.DialogContent>
-  
+
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="32"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="280"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -92,6 +80,7 @@
                 <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 0"
                      ItemsSource="{Binding CurrentOrder.OrderItems}"
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
+                         SelectedIndex="0"
                      Style="{StaticResource OrderItemListStyle}"
                      ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                      HorizontalContentAlignment="Stretch" 
@@ -149,10 +138,24 @@
                         Content="{materialDesign:PackIcon Home,Size=30}">
                     
                 </Button>
-                <TextBlock VerticalAlignment="Center" >
-                    <materialDesign:PackIcon Kind="ChevronRight" Width="30" Height="30"/>
-                    <Run Text="{Binding CurrentCategory.Name, Mode=TwoWay}"/>
-                </TextBlock>
+                
+
+                    <materialDesign:PackIcon x:Name="Breadcrumb" Kind="ChevronRight" Width="30" Height="30">
+                        <materialDesign:PackIcon.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentCategory.Name}" Value="{x:Null}">
+                                        <Setter Property="materialDesign:PackIcon.Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+                
+                <Label Name="LabelBreadcrumb" Content="{Binding CurrentCategory.Name, Mode=TwoWay}" FontSize="18" FontWeight="Bold">
+                   
+                </Label>
+               
                 <Border DockPanel.Dock="Right" Background="White" MaxHeight="30" CornerRadius="3" ToolTip="Enter to search, ignore case">
                     <Grid Background="White">
                         <Grid.ColumnDefinitions>
@@ -213,8 +216,8 @@
 
             <Grid Grid.Row="4" Grid.RowSpan="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
@@ -229,7 +232,8 @@
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="Gray">
+
+                <!--<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="Gray">
                     <StackPanel Orientation="Horizontal"  >
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Aqua" >                        
                             <Run Text="Total: " FontWeight="Bold"/>
@@ -258,13 +262,48 @@
                             <Run Text="{Binding CurrentOrder.ReturnedAmount}" FontWeight="Bold"></Run>
                         </TextBlock>
                     </StackPanel>
-                </StackPanel>
+                </StackPanel>-->
 
                 <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Padding="0"
                          Text="{Binding NumericZone}" 
                          FontSize="26" FontWeight="Bold" FontFamily="Segoe"
                          HorizontalContentAlignment="Right"/>
 
+
+                <Grid  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Border  Grid.Row="0" BorderBrush="Black" BorderThickness="0 4 0 0" Margin="120 0 0 0"/>
+                    <TextBlock Grid.Row="1"   Margin="0 0 10 0" HorizontalAlignment="Right">                       
+                            <Run Text="Total: " FontSize="16" FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.Total,StringFormat='{}{0:0}.00  DA',FallbackValue='00.00', Mode=OneWay}" FontSize="24" FontWeight="Bold"/><LineBreak />
+                            <Run Text="Discount: " FontSize="12" FontWeight="Bold" />
+                            <Run Text="{Binding CurrentOrder.TotalDiscountAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='00.00', Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
+                        </TextBlock>
+
+                    <TextBlock Grid.Row="2"  Margin="0 0 10 0" HorizontalAlignment="Right" Visibility="{Binding CurrentOrder.GivenAmount, Converter={StaticResource DecimalToVisibility}}">                        
+                            <!--<Run Text="Payed: " FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.GivenAmount}" FontWeight="Bold"></Run>-->
+                            <Run Text="Returned: " FontWeight="Bold" FontSize="12"/>
+                            <Run Text="{Binding CurrentOrder.ReturnedAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='00.00'}" FontSize="20" FontWeight="Bold"></Run>
+                        </TextBlock>
+                </Grid>
+
+
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6"  BorderBrush="Black" BorderThickness="1" >
+                    <Border BorderBrush="White" BorderThickness="2">
+                <TextBox
+                    
+                    Background="Black" Foreground="#26ff26"
+                    Text="{Binding NumericZone,FallbackValue=123456789}" 
+                    FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
+                    
+                    HorizontalContentAlignment="Right"/>
+                    </Border>
+                </Border>
                 <Button Content="Client" Grid.Row="2" Grid.Column="0" FontSize="16"  Style="{x:Null}"/>
                 <Button Content="Payment" Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" FontSize="16"  Style="{x:Null}"
                          cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"/>
@@ -278,7 +317,7 @@
                 <Button Grid.Row="2" Grid.Column="4" Content="Qty" Style="{StaticResource ButtonStyle18}" 
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('QTY')]"/>
 
-                <Button Grid.Row="2" Grid.Column="5" Content="TABLE" Style="{StaticResource ButtonStyle18}" 
+                <Button Grid.Row="2" Grid.Column="5" Content="{materialDesign:PackIcon TableChair,30}" Style="{StaticResource ButtonStyle18}" 
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]"/>
 
                 <Button Grid.Row="3" Grid.Column="1" Content="4" Style="{StaticResource ButtonStyle22}"
@@ -290,7 +329,8 @@
                 <Button Grid.Row="3" Grid.Column="4" Content="Disc" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]"/>
                 
-                <Button Grid.Row="3" Grid.Column="5" Content="CMD" Style="{StaticResource ButtonStyle18}"
+                <Button Grid.Row="3" Grid.Column="5" Style="{StaticResource ButtonStyle18}"
+                        Content="{materialDesign:PackIcon SilverwareForkKnife, 30 }"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('CMD')]"/>
 
                 <Button Grid.Row="4" Grid.Column="1" Content="7" Style="{StaticResource ButtonStyle22}"
@@ -302,8 +342,11 @@
                 <Button Grid.Row="4" Grid.Column="4" Content="Price" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]"/>
 
-                <Button Grid.Row="4" Grid.Column="5" Content="SPLIT" Style="{StaticResource ButtonStyle18}"
-                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]"/>
+                <Button Grid.Row="4" Grid.Column="5" Style="{StaticResource ButtonStyle18}"
+                        Content="{materialDesign:PackIcon ViewSplitHorizontal, 30}"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]">
+                    
+                </Button>
 
                 <Button Grid.Row="5" Grid.Column="1" Content="%" Style="{StaticResource ButtonStyle22}"
                          cal:Message.Attach="[Event Click] = [Action NumericKeyboard('%')]"/>
@@ -311,8 +354,11 @@
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('0')]" />
                 <Button Grid.Row="5" Grid.Column="3" Content="." Style="{StaticResource ButtonStyle22}"
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]" />
-                <Button Grid.Row="5" Grid.Column="4" Content="Del" Style="{StaticResource ButtonStyle18}"
-                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DEL')]"/>
+                <Button Grid.Row="5" Grid.Column="4" Style="{StaticResource ButtonStyle18}"
+                        Content="{materialDesign:PackIcon  Kind=BackspaceOutline, Size=30}"
+                        cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DEL')]">
+                    
+                </Button>
                 <Button Grid.Row="5" Grid.Column="5" Content="TRANSFER" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
             </Grid>

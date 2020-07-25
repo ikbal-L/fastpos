@@ -3,10 +3,8 @@
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:local="clr-namespace:PosTest.Converters"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
-                    
+                    xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
                     >
-
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
@@ -23,11 +21,12 @@
                     <Border Name="Border" BorderThickness="1" CornerRadius="3" Padding="1" BorderBrush="Black">
                         <DockPanel Name="Dock" >
                             <DockPanel x:Name="BonttonsPanel" DockPanel.Dock="Top" LastChildFill="False" Margin="0 -18 0 0" Visibility="Collapsed">
-                                <Button Name="DelButton" DockPanel.Dock="Right" Visibility="Visible"
+                                <Button Name="DelButton" DockPanel.Dock="Right" Visibility="Visible" BorderBrush="#2496ed" 
+                                        Foreground="#2496ed" Background="WhiteSmoke"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                     cal:Message.Attach="[Event Click] = [Action RemoveOrerItem($this)]"
                                     Height="30" Width="30">
-                                    <materialDesign:PackIcon Kind="TrashCanOutline" Height="25" Width="25"/>
+                                    <materialDesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
                                     <!--<Image Source="/icons/reddelete.png"  />-->
                                 </Button>
                                 <Button Name="AdditivePageButton"   

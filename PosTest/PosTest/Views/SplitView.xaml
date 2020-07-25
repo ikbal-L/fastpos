@@ -120,7 +120,7 @@
                     >
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Broom" Width="30" Height="30"/>
-                        <TextBlock  VerticalAlignment="Center">  Clear</TextBlock>
+                        <TextBlock  VerticalAlignment="Center">Clean</TextBlock>
                     </StackPanel>
                 </Button>
                 <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center"></StackPanel>
@@ -157,7 +157,6 @@
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
-
                 <!--
                 <sl:NumericKeypad Grid.Column="5" Grid.Row="1" />-->
                 <Grid Grid.Column="5" Grid.Row="1">
@@ -198,7 +197,7 @@
                             Style="{StaticResource ButtonStyle22}"
                             Command="{Binding ElementName=keypad, Path=DelCommand, Mode=OneTime}"/>
                 </Grid>
-                
+
                 <TextBox Grid.Column="5" Grid.Row="2" Text="{Binding ElementName=keypad, Path=NumericValue}" 
                              HorizontalContentAlignment="Right"
                              Padding="1 1 3 1"

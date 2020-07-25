@@ -8,10 +8,11 @@
         mc:Ignorable="d"
         d:DataContext="{x:Type vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
-        
+        xmlns:res="clr-namespace:PosTest.Properties"
         Title="{Binding WindowTitle}" Height="800" Width="1100">
-    
+
     <Grid>
+        
         
         <ContentControl  x:Name="ActiveItem"/>
 
