@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:PosTest">
     <Application.Resources>
         <ResourceDictionary>
@@ -19,12 +20,12 @@
                 <ResourceDictionary Source="/Resources/DataTemplates/Additives.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
 
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <materialDesign:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="DigitalFontFamily">/PosTest;Component/Fonts/#digital-7</FontFamily>
+            <FontFamily x:Key="DSDIGIFontFamily">/PosTest;Component/Fonts/#DS-DIGI</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

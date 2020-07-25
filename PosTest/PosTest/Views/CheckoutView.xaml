@@ -11,30 +11,24 @@
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              
+              d:DataContext="{d:DesignData Source=/Design/CurrentOrder.xaml}"
+             DataContext="{Binding}"
              mc:Ignorable="d"
              d:DesignWidth="900" d:DesignHeight="600"  >
     <FrameworkElement.Resources>
-        <ResourceDictionary >
-            <ResourceDictionary.MergedDictionaries>
-
-                <ResourceDictionary>
-                    <src:Order x:Key="CurrentOrder"></src:Order>
-                    <x:Array Type="src:OrderItem" x:Key="DesignItmes">
-                        <src:OrderItem Order="{StaticResource CurrentOrder}" Id="1" Quantity="2" UnitPrice="5"  >
-                            <src:OrderItem.Product>
-                                <src:Product Id="1" Name="Pizza Home" Price="5" Unit="Unit"/>
-                            </src:OrderItem.Product>
-                        </src:OrderItem>
-                        <src:OrderItem Order="{StaticResource CurrentOrder}" Id="2" Quantity="2" UnitPrice="4"  >
-                            <src:OrderItem.Product>
-                                <src:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
-                            </src:OrderItem.Product>
-                        </src:OrderItem>
-                    </x:Array>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-         
-        </ResourceDictionary>
+        <src:Order x:Key="CurrentOrder"></src:Order>
+        <x:Array Type="src:OrderItem" x:Key="DesignItmes">
+            <src:OrderItem Order="{StaticResource CurrentOrder}" Id="1" Quantity="2" UnitPrice="5"  >
+                <src:OrderItem.Product>
+                    <src:Product Id="1" Name="Pizza Home" Price="5" Unit="Unit"/>
+                </src:OrderItem.Product>
+            </src:OrderItem>
+            <src:OrderItem Order="{StaticResource CurrentOrder}" Id="2" Quantity="2" UnitPrice="4"  >
+                <src:OrderItem.Product>
+                    <src:Product Id="2" Name="Cocacola" Price="5" Unit="Canette"/>
+                </src:OrderItem.Product>
+            </src:OrderItem>
+        </x:Array>
     </FrameworkElement.Resources>
 
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen ,FallbackValue='False'}" >
@@ -80,6 +74,7 @@
                 <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 0"
                      ItemsSource="{Binding CurrentOrder.OrderItems}"
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
+                         SelectedIndex="0"
                      Style="{StaticResource OrderItemListStyle}"
                      ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                      HorizontalContentAlignment="Stretch" 
@@ -134,10 +129,24 @@
                         Content="{materialDesign:PackIcon Home,Size=30}">
                     
                 </Button>
-                <TextBlock VerticalAlignment="Center" >
-                    <materialDesign:PackIcon Kind="ChevronRight" Width="30" Height="30"/>
-                    <Run Text="{Binding CurrentCategory.Name, Mode=TwoWay}"/>
-                </TextBlock>
+                
+
+                    <materialDesign:PackIcon x:Name="Breadcrumb" Kind="ChevronRight" Width="30" Height="30">
+                        <materialDesign:PackIcon.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentCategory.Name}" Value="{x:Null}">
+                                        <Setter Property="materialDesign:PackIcon.Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+                
+                <Label Name="LabelBreadcrumb" Content="{Binding CurrentCategory.Name, Mode=TwoWay}" FontSize="18" FontWeight="Bold">
+                   
+                </Label>
+               
                 <Border DockPanel.Dock="Right" Background="White" MaxHeight="30" CornerRadius="3" ToolTip="Enter to search, ignore case">
                     <Grid Background="White">
                         <Grid.ColumnDefinitions>
@@ -200,7 +209,7 @@
             <Grid Grid.Row="4" Grid.RowSpan="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
@@ -238,11 +247,16 @@
                         </TextBlock>
                 </Grid>
 
-                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" BorderBrush="Gray" BorderThickness="0 1 0 0" >
-                <TextBox 
-                         Text="{Binding NumericZone}" 
-                         FontSize="26" FontWeight="Bold" FontFamily="Segoe"
-                         HorizontalContentAlignment="Right"/>
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6"  BorderBrush="Black" BorderThickness="1" >
+                    <Border BorderBrush="White" BorderThickness="2">
+                <TextBox
+                    
+                    Background="Black" Foreground="#26ff26"
+                    Text="{Binding NumericZone,FallbackValue=123456789}" 
+                    FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
+                    
+                    HorizontalContentAlignment="Right"/>
+                    </Border>
                 </Border>
                 <Button Content="Client" Grid.Row="2" Grid.Column="0" FontSize="16"  Style="{x:Null}"/>
                 <Button Content="Payment" Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" FontSize="16"  Style="{x:Null}"
