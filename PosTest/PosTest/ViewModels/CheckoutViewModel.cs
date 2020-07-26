@@ -473,15 +473,14 @@ namespace PosTest.ViewModels
         }
         #endregion
 
-
-
         #region Command Buttons' Actions
         public void ActionKeyboard(ActionButton cmd)
         {
             if (string.IsNullOrEmpty(NumericZone) && 
                 cmd != ActionButton.Split && 
                 cmd != ActionButton.Cmd && 
-                cmd != ActionButton.Table)
+                cmd != ActionButton.Table &&
+                cmd != ActionButton.Del)
             {
                 ToastNotification.Notify("Enter the required vlue before ..");
                 return;
@@ -687,7 +686,7 @@ namespace PosTest.ViewModels
                 priceStr = string.Empty;
                 ToastNotification.Notify("New price less than the total price");
             }
-            //priceStr = "";
+            priceStr = "";
 
         }
         
@@ -744,7 +743,7 @@ namespace PosTest.ViewModels
 
             }
             //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
-            // = "";
+            discStr = "";
         }
 
         public void NumericKeyboard(string number)
