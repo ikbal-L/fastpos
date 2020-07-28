@@ -18,25 +18,20 @@
                 <ResourceDictionary Source="/Resources/DataTemplates/Products.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/OrdreItem.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Additives.xaml"/>
-                <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
-
 
                 <!--ToastNotifications-->
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
 
+                <!--Mateirla design-->
                 <materialDesign:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-
-
-                <!--Mateirla design-->
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="DigitalFontFamily">/PosTest;Component/Fonts/#digital-7</FontFamily>
             <FontFamily x:Key="DSDIGIFontFamily">/PosTest;Component/Fonts/#DS-DIGI</FontFamily>
         </ResourceDictionary>
-        
     </Application.Resources>
 </Application>
