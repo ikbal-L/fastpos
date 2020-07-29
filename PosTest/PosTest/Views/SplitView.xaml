@@ -11,19 +11,9 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"             
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             Width="800" Height="500"
+             Width="800" Height="470"
             d:DesignWidth ="600" >
-    <FrameworkElement.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </FrameworkElement.Resources>
-    
+   
     <DockPanel LastChildFill="True" >
         <StackPanel DockPanel.Dock="Top">
             <Grid>
@@ -31,17 +21,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-                <Button Margin="5"
-                        Height="50"
-                    cal:Message.Attach="[Event Click] = [Action BackFromSplitCommand]" Grid.Column="0"  
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
-                    <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="ChevronDoubleLeft" />
-                        <TextBlock Margin="5 -3">Back </TextBlock>
-                    </StackPanel>
-                </Button>
-                <Label Grid.Column="0" Grid.ColumnSpan="2" FontSize="24" FontWeight="Bold" Content="Bill Splitting" HorizontalAlignment="Center"></Label>
+                <Label Grid.Column="0" Grid.ColumnSpan="2" FontSize="12" FontWeight="Bold" Content="Bill Splitting" HorizontalAlignment="Center"></Label>
             </Grid>
         </StackPanel>
         <StackPanel>
@@ -56,8 +36,8 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -69,19 +49,72 @@
                 <Border Grid.Column="5" Grid.Row="0" BorderBrush="Green" BorderThickness="0 0 0 4" >
                     <Label Content="Step 2 Payment"  FontSize="18" FontWeight="Bold"/>
                 </Border>
+
+                <Grid Grid.Column="1" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Grid.Row="1" FontSize="13" Content="Total"  />
+                    <Label Grid.Column="1" Grid.Row="1" FontSize="13"  FontWeight="Bold"
+                       Content="{Binding CurrentOrder.Total, StringFormat=N2}"/>
+                </Grid>
+
+                <Grid Grid.Column="3" Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition  Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Total"/>
+                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding SplittedOrder.Total, StringFormat=N2}" FontSize="13" FontWeight="Bold">
+                    </Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Discount"/>
+                    <TextBlock  Grid.Column="1" Grid.Row="1" Text="{Binding SplittedOrder.DiscountAmount,StringFormat={}{0:#.##}}" FontSize="13" FontWeight="Bold" />
+                </Grid>
+                <Grid Grid.Column="5" Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition  Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Payed"/>
+                    <Label Grid.Column="1" Grid.Row="0" FontSize="13" FontWeight="Bold">
+                        <Label.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SplittedOrder.Total}" Value="0">
+                                        <Setter Property="Label.Content" Value="{Binding GivenAmount}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Returned"/>
+                    <Label Grid.Column="1" Grid.Row="1" FontSize="13" FontWeight="Bold">
+                        <Label.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SplittedOrder.Total}" Value="0">
+                                        <Setter Property="Label.Content" Value="{Binding ReturnedAmount}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                </Grid>
                 
-
-                <Label Grid.Column="1" Grid.Row="2" FontSize="20" 
-                       Content="{Binding CurrentOrder.Total,FallbackValue='00.00'}" 
-                       Height="30"
-                       HorizontalAlignment="Right"/>
-                <Label Grid.Column="3" Grid.Row="2" FontSize="20" 
-                       Content="{Binding SplittedOrder.Total,FallbackValue='00.00'}" 
-                       HorizontalAlignment="Right"  Grid.RowSpan="1" />
-                <Label Grid.Column="3" Grid.Row="3" FontSize="20" 
-                       Content="{Binding SplittedOrder.NewTotal}" 
-                       HorizontalAlignment="Right" Margin="0,2,0,58" Grid.RowSpan="1" />
-
+                
                 <Grid Grid.Column="5" Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -113,7 +146,6 @@
                     </RadioButton>
                 </Grid>
                 <Button Margin="5" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Stretch"
-                        
                         FontSize="15"
                         Height="50"
                     Style="{StaticResource MaterialDesignFlatButton}"
@@ -123,12 +155,26 @@
                         <TextBlock  VerticalAlignment="Center">Clean</TextBlock>
                     </StackPanel>
                 </Button>
+
+                <Button Margin="5" Height="50" Grid.Column="1"  Grid.Row="3"
+                    cal:Message.Attach="[Event Click] = [Action BackFromSplitCommand]" 
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ChevronDoubleLeft" />
+                        <TextBlock Margin="5 -3">Back</TextBlock>
+                    </StackPanel>
+                </Button>
+
+
+
+
                 <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center"></StackPanel>
 
-                <ListBox Grid.Row="1" Grid.Column="1" 
+                <ListBox Grid.Row="2" Grid.Column="1" 
                          MinHeight="280" MaxHeight="280"
                          MinWidth="250" MaxWidth="250"
-                         Margin="0 10 0 0"
+                         Margin="0 0 0 0"
                          Background="WhiteSmoke"
                          ItemsSource="{Binding CurrentOrder.OrderItems}"
                          SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
@@ -144,8 +190,8 @@
                     </ListBox.ItemContainerStyle>
                 </ListBox>
 
-                <ListBox Grid.Row="1" Grid.Column="3"  
-                         MinWidth="250" MaxWidth="250" Margin="0 10 0 0"
+                <ListBox Grid.Row="2" Grid.Column="3"  
+                         MinWidth="250" MaxWidth="250" Margin="0 0 0 0"
                          MinHeight="280" MaxHeight="280"
                          Background="WhiteSmoke"
                          ItemsSource="{Binding SplittedOrder.OrderItems}"
@@ -157,9 +203,8 @@
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
-                <!--
-                <sl:NumericKeypad Grid.Column="5" Grid.Row="1" />-->
-                <Grid Grid.Column="5" Grid.Row="1">
+
+                <Grid Grid.Column="5" Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -171,38 +216,42 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <sl:NumericKeypad x:Name="keypad" Grid.Column="0" Grid.Row="0" 
+
+                    <Border BorderBrush="White" BorderThickness="2" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4">
+                        <TextBox  Text="{Binding ElementName=keypad, Path=NumericValue}" 
+                    Background="Black" Foreground="#26ff26" FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
+                             HorizontalContentAlignment="Right" Padding="1 -2 1 1"  FontWeight="Bold"     />
+                    </Border>
+
+
+                    <sl:NumericKeypad x:Name="keypad" Grid.Column="0" Grid.Row="1" 
                                       Grid.ColumnSpan="3" Grid.RowSpan="4" 
                                       NumericValue="{Binding NumericZone, Mode=TwoWay}"
                                       Switched="{Binding CommandSwitched, Mode=TwoWay}"
                                       AllowDotkey="True"
                                       AllowPercentKey="{Binding IsPercentKeyAllowed}"/>
-                    <RadioButton Grid.Column="3" Grid.Row="0" Content="Item&#xa;Price" 
+                    <RadioButton Grid.Column="3" Grid.Row="1" Content="Item&#xa;Price" 
                                  GroupName="action"
                                 Style="{StaticResource ButtonStyle18radio}"
                                 IsChecked="{Binding IsItemPriceChecked}"
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('ITEMPRICE')]"/>
-                    <RadioButton Grid.Column="3" Grid.Row="1" Content="Total&#xa;Price" 
+                    <RadioButton Grid.Column="3" Grid.Row="2" Content="Total&#xa;Price" 
                                  GroupName="action"
                                  Style="{StaticResource ButtonStyle18radio}"
                                  IsChecked="{Binding IsTotalPriceChecked}"
                                  cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]" />
-                    <RadioButton Grid.Column="3" Grid.Row="2" Content="Disc" 
+                    <RadioButton Grid.Column="3" Grid.Row="3" Content="Disc" 
                                  GroupName="action"
                                  Style="{StaticResource ButtonStyle18radio}"
                                  IsChecked="{Binding IsDiscChecked}"
                                  cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]"/>
-                    <Button Grid.Column="3" Grid.Row="3" Content="Del" 
+                    <Button Grid.Column="3" Grid.Row="4" Content="Del" 
                             Style="{StaticResource ButtonStyle22}"
                             Command="{Binding ElementName=keypad, Path=DelCommand, Mode=OneTime}"/>
                 </Grid>
 
-                <TextBox Grid.Column="5" Grid.Row="2" Text="{Binding ElementName=keypad, Path=NumericValue}" 
-                             HorizontalContentAlignment="Right"
-                             Padding="1 1 3 1"
-                             FontWeight="Bold"
-                             FontSize="20"/>
             </Grid>
         </StackPanel>
     </DockPanel>

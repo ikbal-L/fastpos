@@ -20,10 +20,29 @@ namespace PosTest.ViewModels
         private bool _isPercentKeyAllowed;
         private bool _isPayementChecked;
 
+        private decimal givenAmount;
+        private decimal returnedAmount;
+
         public SplitViewModel()
         {
 
         }
+
+        public decimal GivenAmount
+        {
+            get=> givenAmount;
+            set {
+                givenAmount = value;
+                NotifyOfPropertyChange(() => GivenAmount); }
+        }
+
+        
+        public decimal ReturnedAmount
+        {
+            get => returnedAmount;
+            set { returnedAmount = value; NotifyOfPropertyChange(() => ReturnedAmount); }
+        }
+
 
         public SplitViewModel(CheckoutViewModel parent)
         {
@@ -391,6 +410,8 @@ namespace PosTest.ViewModels
                     break;
                 case ActionButton.Validate:
                     PayementAction();
+                    GivenAmount = SplittedOrder.GivenAmount;
+                    ReturnedAmount = SplittedOrder.ReturnedAmount;
                     if (CurrentOrder.OrderItems.Count == 0)
                     {
                         Parent.RemoveCurrentOrder();

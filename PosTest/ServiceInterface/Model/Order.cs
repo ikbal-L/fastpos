@@ -27,6 +27,7 @@ namespace ServiceInterface.Model
         public Order()
         {
             OrderItems = new BindableCollection<OrderItem>();
+            
             OrderItems.CollectionChanged += 
                 (s, e)=> 
                 { 
