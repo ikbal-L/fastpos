@@ -901,12 +901,12 @@ namespace PosTest.ViewModels
                 }
             }
 
-            if (discountPercent > 0)
+            if (discountPercent >= 0)
             {
                 item.DiscountPercentatge = discountPercent;
 
             }
-            if (discount > 0)
+            if (discount >=0)
             {
                 item.DiscountAmount = discount;
 
@@ -972,6 +972,7 @@ namespace PosTest.ViewModels
         private static Notifier _notifier; 
         private static Notifier Instance 
         {
+            
             get => _notifier ?? 
                 (_notifier = new Notifier(cfg =>
                     {
@@ -982,7 +983,7 @@ namespace PosTest.ViewModels
                             offsetY: 10);
 
                         cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                            notificationLifetime: TimeSpan.FromSeconds(3),
+                            notificationLifetime: TimeSpan.FromSeconds(1.5),
                             maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
                         cfg.Dispatcher = Application.Current.Dispatcher;
