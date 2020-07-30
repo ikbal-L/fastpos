@@ -20,10 +20,29 @@ namespace PosTest.ViewModels
         private bool _isPercentKeyAllowed;
         private bool _isPayementChecked;
 
+        private decimal givenAmount;
+        private decimal returnedAmount;
+
         public SplitViewModel()
         {
 
         }
+
+        public decimal GivenAmount
+        {
+            get=> givenAmount;
+            set {
+                givenAmount = value;
+                NotifyOfPropertyChange(() => GivenAmount); }
+        }
+
+        
+        public decimal ReturnedAmount
+        {
+            get => returnedAmount;
+            set { returnedAmount = value; NotifyOfPropertyChange(() => ReturnedAmount); }
+        }
+
 
         public SplitViewModel(CheckoutViewModel parent)
         {
@@ -230,14 +249,10 @@ namespace PosTest.ViewModels
         }
         public  void DiscAction(ref string discStr, Order order)
         {
-            if (discStr == "%")
-            {
-                //discStr = order.DiscountPercentage.ToString() + "%";
-                //CommandSwitched = true;
-            }
             var discountPercent = 0m;
             var discount = 0m;
             var isPercentage = false;
+
             if (discStr.Contains("%"))
             {
                 isPercentage = true;
@@ -274,24 +289,18 @@ namespace PosTest.ViewModels
 
             if (discount > order.Total)
             {
-                //Use Local to select message according to UI language
                 discStr = discStr.Remove(discStr.Length - 1, 1);
                 ToastNotification.Notify("Discount bigger than total");
-                //CurrentOrder.DiscountAmount = 0;
                 return;
             }
             if (!isPercentage)
             {
                 order.DiscountAmount = discount;
-                order.DiscountPercentage = order.DiscountAmount * 100 / order.Total;
             }
             else
             {
                 order.DiscountPercentage = discountPercent;
-
             }
-            //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
-            // = "";
         }
 
         public void PayementAction()
@@ -391,6 +400,8 @@ namespace PosTest.ViewModels
                     break;
                 case ActionButton.Validate:
                     PayementAction();
+                    GivenAmount = SplittedOrder.GivenAmount;
+                    ReturnedAmount = SplittedOrder.ReturnedAmount;
                     if (CurrentOrder.OrderItems.Count == 0)
                     {
                         Parent.RemoveCurrentOrder();
