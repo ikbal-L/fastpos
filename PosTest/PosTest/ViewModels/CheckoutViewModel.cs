@@ -719,6 +719,10 @@ namespace PosTest.ViewModels
         
         private void DiscAction(ref string discStr, Order order)
         {
+            if (order == null)
+            {
+                return;
+            }
             if (discStr == "")
             {
                 return;
@@ -739,7 +743,7 @@ namespace PosTest.ViewModels
                     discStr = string.Empty;
                     return;
                 }
-                discount = order.NewTotal * discountPercent / 100;
+                discount = order.Total * discountPercent / 100;
             }
             else
             {
@@ -762,12 +766,10 @@ namespace PosTest.ViewModels
             if (!isPercentage)
             {
                 order.DiscountAmount = discount;
-
             }
             else
             {
                 order.DiscountPercentage = discountPercent;
-
             }
             //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
             discStr = "";
