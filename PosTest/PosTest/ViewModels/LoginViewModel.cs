@@ -60,11 +60,6 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("Check your server connection");
                 return;
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
 
             CheckoutViewModel checkoutViewModel = 
                 new CheckoutViewModel(30, 

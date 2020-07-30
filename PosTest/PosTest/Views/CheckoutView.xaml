@@ -279,11 +279,11 @@
                     <Border  Grid.Row="0" BorderBrush="Black" BorderThickness="0 4 0 0" Margin="120 0 0 0"/>
                     <TextBlock Grid.Row="1"   Margin="0 0 10 0" HorizontalAlignment="Right">                       
                             <Run Text="Total: " FontSize="16" FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.NewTotal,StringFormat='{}{0:0}.00  DA',FallbackValue='00.00', Mode=OneWay}" FontSize="24" FontWeight="Bold"/><LineBreak />
+                            <Run Text="{Binding CurrentOrder.NewTotal, StringFormat={}{0:#,#.00}, FallbackValue='00.00', Mode=OneWay}" FontSize="24" FontWeight="Bold"/><LineBreak />
                             <Run Text="Discount: " FontSize="12" FontWeight="Bold" />
-                            <Run Text="{Binding CurrentOrder.TotalDiscountAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='00.00', Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
+                            <Run Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat={}{0:#,#.00},FallbackValue='00.00', Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
                         </TextBlock>
-
+                    <!--StringFormat={0:#,#.0},StringFormat='{}{0:0}.00  DA',-->
                     <!--Visibility="{Binding CurrentOrder.GivenAmount, Converter={StaticResource DecimalToVisibility}}"-->
                     <TextBlock Grid.Row="2"  Margin="0 0 10 0" HorizontalAlignment="Right">
                         <!--<Run Text="Payed: " FontWeight="Bold"/>

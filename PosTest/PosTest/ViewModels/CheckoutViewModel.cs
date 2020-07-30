@@ -66,19 +66,37 @@ namespace PosTest.ViewModels
             ICategoryService categoriesService,
             IOrderService orderService) : this()
         {
+            IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
+            {
+                var categories = new HashSet<Category>();
+                foreach (var p in products)
+                {
+                    categories.Add(p.Category);
+                    if (p.Category.Products == null)
+                    {
+                        p.Category.Products = new List<Product>();
+                    }
+                    if (!p.Category.Products.Any(pr => pr == p))
+                    {
+                        p.Category.Products.Add(p);
+                    }
+                }
+                return categories;
+            }
+
             _productsService = productsService;
             _categoriesService = categoriesService;
             _orderService = orderService;
 
             int getProductsStatusCode = 0,
                 getCategoriesStatusCode = 0;
-            AllRequestedProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
-            FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
+            AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
+            FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
             CategorieFiltering("Home");
-            Categories = new BindableCollection<Category>(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
+            Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts)); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
             InitCategoryColors();
         }
         #endregion
@@ -109,7 +127,7 @@ namespace PosTest.ViewModels
             }
         }
         public ICollectionView FilteredProducts { get; set; }
-        public ICollection<Product> AllRequestedProducts { get; set; }
+        public ICollection<Product> AllProducts { get; set; }
 
         public Category CurrentCategory
         {
@@ -409,13 +427,13 @@ namespace PosTest.ViewModels
                             CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
 
                         CurrentCategory = null;
-                        var muchInDemanadProducts = AllRequestedProducts.Where(p => p.IsMuchInDemand == true).ToList();
+                        var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
                         FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
                         PaginateProducts(NextOrPrevious.First);
                     }
                     else // param == "ALL"
                     {
-                        FilteredProducts = CollectionViewSource.GetDefaultView(AllRequestedProducts);
+                        FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
                         PaginateProducts(NextOrPrevious.First);
                     }
         }
@@ -572,7 +590,9 @@ namespace PosTest.ViewModels
                 NumericZone = "";
                 return;
             }
-            if (CurrentOrder == null)
+            if (CurrentOrder == null ||
+                CurrentOrder.OrderItems == null || 
+                CurrentOrder.OrderItems.Count <1)
             {
                 ToastNotification.Notify("Add products before ...");
                 return;
@@ -679,7 +699,14 @@ namespace PosTest.ViewModels
             var newTotal = price;
             if (newTotal <= order.Total)
             {
-                order.DiscountAmount = order.Total - newTotal;// CurrentOrder.NewTotal;
+                var sumItemDiscounts = 0m;
+                order.OrderItems.ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
+                order.DiscountAmount = order.Total - newTotal - sumItemDiscounts;// CurrentOrder.NewTotal;
+                if (order.DiscountAmount<0 && order.Total > newTotal)
+                {
+                    order.OrderItems.ToList().ForEach(item => item.DiscountAmount=0);
+                    order.DiscountAmount = order.Total - newTotal;
+                }
             }
             else
             {
@@ -692,6 +719,10 @@ namespace PosTest.ViewModels
         
         private void DiscAction(ref string discStr, Order order)
         {
+            if (order == null)
+            {
+                return;
+            }
             if (discStr == "")
             {
                 return;
@@ -712,7 +743,7 @@ namespace PosTest.ViewModels
                     discStr = string.Empty;
                     return;
                 }
-                discount = order.NewTotal * discountPercent / 100;
+                discount = order.Total * discountPercent / 100;
             }
             else
             {
@@ -735,12 +766,10 @@ namespace PosTest.ViewModels
             if (!isPercentage)
             {
                 order.DiscountAmount = discount;
-
             }
             else
             {
                 order.DiscountPercentage = discountPercent;
-
             }
             //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
             discStr = "";

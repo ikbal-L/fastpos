@@ -464,6 +464,7 @@ namespace PosTest.ViewModels
                             CurrentOrder.OrderItems.RemoveRange(SplittedOrder.OrderItems);
                             Parent.CurrentOrder.OrderItems.RemoveRange(SplittedOrder.OrderItems);
                             SplittedOrder.OrderItems.Clear();
+                            SplittedOrder.Id = null;
                             break;
 
                         case null: break;
