@@ -32,6 +32,7 @@ namespace ServiceInterface.Model
                 (s, e)=> 
                 { 
                     NotifyOfPropertyChange(() => Total); 
+                    NotifyOfPropertyChange(() => TotalDiscountAmount); 
                     NotifyOfPropertyChange(() => NewTotal); 
                 };
         }
@@ -123,10 +124,24 @@ namespace ServiceInterface.Model
         {
             get
             {
-                var sumItemDiscounts = 0m;
+                /*var sumItemDiscounts = 0m;
                 OrderItems.ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
-                var allDiscounts = _discountAmount + sumItemDiscounts;
-                return Total - allDiscounts;
+                var allDiscounts = _discountAmount + sumItemDiscounts;*/
+                return Total - TotalDiscountAmount;
+            }
+        }
+
+        [DataMember]
+        public decimal TotalDiscountAmount
+        {
+            get
+            {
+                var sumItemDiscounts = 0m;
+                OrderItems.ToList().ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
+                //either _discountAmount==0 or _discountPercentage==0
+                var allDiscounts = _discountAmount + sumItemDiscounts + Total * _discountPercentage / 100;
+                //NewTotal = Total - allDiscounts;
+                return allDiscounts;
             }
         }
 
@@ -137,22 +152,10 @@ namespace ServiceInterface.Model
             set
             {
                 _discountAmount = value;
+                _discountPercentage = 0;
                 NotifyOfPropertyChange(() => DiscountAmount);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
                 NotifyOfPropertyChange(() => NewTotal);
-            }
-        }
-
-        [DataMember]
-        public decimal TotalDiscountAmount
-        {
-            get
-            {
-                var sumItemDiscounts = 0m;
-                OrderItems.ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
-                var allDiscounts = _discountAmount + sumItemDiscounts;
-                //NewTotal = Total - allDiscounts;
-                return allDiscounts;
             }
         }
 
@@ -163,10 +166,12 @@ namespace ServiceInterface.Model
             set
             {
                 _discountPercentage = value;
-                DiscountAmount = Total * _discountPercentage / 100;
+                _discountAmount = 0;
                 NotifyOfPropertyChange(() => DiscountPercentage);
+                NotifyOfPropertyChange(() => TotalDiscountAmount);
+                NotifyOfPropertyChange(() => NewTotal);
             }
-                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
+            //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
 
         [DataMember]

@@ -10,8 +10,7 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             
-              d:DataContext="{d:DesignData Source=/Design/CurrentOrder.xaml}"
+             d:DataContext="{d:DesignData Source=/Design/CurrentOrder.xaml}"
              DataContext="{Binding}"
              mc:Ignorable="d"
              d:DesignWidth="900" d:DesignHeight="600">

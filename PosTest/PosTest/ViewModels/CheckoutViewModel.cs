@@ -881,8 +881,9 @@ namespace PosTest.ViewModels
         {
             if (String.IsNullOrEmpty(NumericZone))
                 return;
-            var oldDiscount = item.DiscountAmount;
-            var discountPercent = 0m;
+
+            var discountPercent = -1m;
+            var discountAmount = -1m;
             var discount = 0m;
             if (NumericZone.Contains("%"))
             {
@@ -906,7 +907,7 @@ namespace PosTest.ViewModels
             {
                 try
                 {
-                    discount = Convert.ToDecimal(NumericZone);
+                    discountAmount = discount = Convert.ToDecimal(NumericZone);
                 }
                 catch (Exception)
                 {
@@ -919,26 +920,17 @@ namespace PosTest.ViewModels
             NumericZone = string.Empty;
             if (item.Total < discount)
             {
-                if (IsRunningFromXUnit)
-                {
-                    throw new Exception("Discount Greater Than Price");
-                }
-                else
-                {
-                    ToastNotification.Notify("Discount Greater Than Price");
-                    return;
-                }
+                ToastNotification.Notify("Discount Greater Than Price");
+                return;
             }
 
             if (discountPercent >= 0)
             {
                 item.DiscountPercentatge = discountPercent;
-
             }
-            if (discount >=0)
+            if (discountAmount >= 0)
             {
-                item.DiscountAmount = discount;
-
+                item.DiscountAmount = discountAmount;
             }
         }
 

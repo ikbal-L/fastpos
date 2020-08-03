@@ -58,13 +58,10 @@ namespace ServiceInterface.Model
                 _quantity = value;
                 NotifyOfPropertyChange(() => Quantity);
                 NotifyOfPropertyChange(() => Total);
-                _discountAmount = 0;
-                if (_discountPercentage>0)
-                {
-                    DiscountAmount = Total * _discountPercentage / 100;
-                }
+                NotifyOfPropertyChange(nameof(TotalDiscountAmount));
                 Order.NotifyOfPropertyChange(nameof(Order.Total));
                 Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
+                Order.NotifyOfPropertyChange(nameof(TotalDiscountAmount));
                 //Order.Total = Order.Total + UnitPrice * (decimal)(_quantity - oldQuqntity);
             } 
         }
@@ -75,14 +72,37 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
+        public decimal TotalDiscountAmount
+        {
+            get 
+            {
+                //either _discountAmount==0 or _discountPercentage==0
+                
+                //NotifyOfPropertyChange(() => DiscountAmount);
+                //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
+                Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
+                return CalcTotalDiscount();
+            }
+        }
+
+        public decimal CalcTotalDiscount()
+        {
+            var totalDiscount = _discountAmount * (decimal)Quantity + Total * _discountPercentage / 100;
+            return totalDiscount;
+        }
+
+        [DataMember]
         public decimal DiscountAmount
         {
             get => _discountAmount;
             set
             {
                 _discountAmount = value;
+                _discountPercentage = 0;
                 NotifyOfPropertyChange(() => DiscountAmount);
-                Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                NotifyOfPropertyChange(() => TotalDiscountAmount);
+                //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
                 Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                 Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }
@@ -95,9 +115,12 @@ namespace ServiceInterface.Model
             set
             {
                 _discountPercentage = value;
-                DiscountAmount = Total * _discountPercentage / 100;
+                _discountAmount = 0;
                 NotifyOfPropertyChange(() => DiscountPercentatge);
-                Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                NotifyOfPropertyChange(() => TotalDiscountAmount);
+                //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
+                Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }
         }
 
@@ -127,6 +150,8 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public List<long> AdditiveIds;
+        private decimal _totalDiscountAmount;
+
         public BindableCollection<Additive> Additives 
         { 
             get => _additives;
