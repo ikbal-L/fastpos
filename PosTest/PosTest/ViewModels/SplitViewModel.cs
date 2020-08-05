@@ -405,7 +405,7 @@ namespace PosTest.ViewModels
                     if (CurrentOrder.OrderItems.Count == 0)
                     {
                         Parent.RemoveCurrentOrder();
-                        BackFromSplitCommand();
+                        //BackFromSplitCommand();
                     }
                     break;
             }
@@ -442,6 +442,15 @@ namespace PosTest.ViewModels
         public void AddSplittedItemsCommand()
         {
             if (SplittedOrder is null) ;
+        }
+
+        public void ClearSplittedOrder()
+        {
+            if (SplittedOrder != null && SplittedOrder.OrderItems != null)
+            {
+                SplittedOrder.OrderItems.Clear();
+                CurrentOrder.SelectedOrderItem = null;
+            }
         }
 
         private void SaveSplittedOrder()

@@ -23,11 +23,32 @@
                     <Border DockPanel.Dock="Top" 
                             Height="40"  >
                         <TextBlock Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center" 
-                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold"/>
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="LightBlue"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Border>
                     <Border  DockPanel.Dock="Bottom">
                         <TextBlock Text="{Binding Path=Price, StringFormat='Price: {0} DA'}" FontSize="12" 
-                               TextAlignment="Center" VerticalAlignment="Center"  TextTrimming="WordEllipsis" />
+                               TextAlignment="Center" VerticalAlignment="Center"  TextTrimming="WordEllipsis">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="LightBlue"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+
+                        </TextBlock>
                     </Border>
                 </DockPanel>
                 

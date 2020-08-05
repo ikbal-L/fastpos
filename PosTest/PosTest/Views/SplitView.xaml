@@ -74,10 +74,10 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0" Grid.Row="0" Content="Total"/>
-                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding SplittedOrder.Total, StringFormat=N2}" FontSize="13" FontWeight="Bold">
+                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding SplittedOrder.NewTotal, StringFormat=N2}" FontSize="13" FontWeight="Bold">
                     </Label>
                     <Label Grid.Column="0" Grid.Row="1" Content="Discount"/>
-                    <TextBlock  Grid.Column="1" Grid.Row="1" Text="{Binding SplittedOrder.DiscountAmount,StringFormat={}{0:#.##}}" FontSize="13" FontWeight="Bold" />
+                    <TextBlock  Grid.Column="1" Grid.Row="1" Text="{Binding SplittedOrder.TotalDiscountAmount,StringFormat={}{0:#.##}}" FontSize="13" FontWeight="Bold" />
                 </Grid>
                 <Grid Grid.Column="5" Grid.Row="1" >
                     <Grid.ColumnDefinitions>
@@ -146,10 +146,10 @@
                     </RadioButton>
                 </Grid>
                 <Button Margin="5" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Stretch"
+                         cal:Message.Attach="[Event Click] = [Action ClearSplittedOrder]" 
                         FontSize="15"
                         Height="50"
-                    Style="{StaticResource MaterialDesignFlatButton}"
-                    >
+                        Style="{StaticResource MaterialDesignFlatButton}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Broom" Width="30" Height="30"/>
                         <TextBlock  VerticalAlignment="Center">Clean</TextBlock>
@@ -165,9 +165,6 @@
                         <TextBlock Margin="5 -3">Back</TextBlock>
                     </StackPanel>
                 </Button>
-
-
-
 
                 <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center"></StackPanel>
 

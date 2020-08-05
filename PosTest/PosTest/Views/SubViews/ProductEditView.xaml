@@ -67,7 +67,9 @@
                   IsSynchronizedWithCurrentItem="True"/>
 
             <Label Grid.Row="6" Grid.Column="0" Content="Color"  />
-            <Rectangle Grid.Row="6" Grid.Column="2" Fill="{Binding CurrentProduct.Background}"  />
+            <Border Grid.Row="6" Grid.Column="2" Background="{Binding CurrentProduct.Background}"  >
+                <TextBlock Text="{Binding CurrentProduct.Background}"/>
+            </Border>
             <materialDesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding CurrentProduct.BackgroundColor}" />
 
 

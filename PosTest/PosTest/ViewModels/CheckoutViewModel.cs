@@ -296,7 +296,8 @@ namespace PosTest.ViewModels
             switch (resp)
             {
                 case 200:
-                    if (CurrentOrder.State == OrderState.Payed)
+                    if (CurrentOrder.State == OrderState.Payed ||
+                        CurrentOrder.State == OrderState.Canceled)
                     {
                         RemoveCurrentOrder();
                     }
@@ -382,12 +383,13 @@ namespace PosTest.ViewModels
             }
             if (CurrentOrder.OrderItems.Count == 0)
             {
+                RemoveCurrentOrder();
                 return;
             }
             CurrentOrder.State = OrderState.Canceled;
             SaveCurrentOrder();
             RemoveCurrentOrder();
-            var i = Orders.IndexOf(CurrentOrder);
+            //var i = Orders.IndexOf(CurrentOrder);
 
         }
         #endregion
