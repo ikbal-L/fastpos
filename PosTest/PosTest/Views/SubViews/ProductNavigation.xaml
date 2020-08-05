@@ -6,6 +6,7 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:localvm="clr-namespace:PosTest.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="600"
              d:DataContext="{d:DesignData localvm:CheckoutViewModel, IsDesignTimeCreatable=False}" >
@@ -14,34 +15,54 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="0" BorderThickness="0" 
-                  Background="#4CFFFFFF"  
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ItemsSource="{Binding ProductsPage}"
-                 Margin="2"
-                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                  Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="Margin" Value="2"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
+        <Grid Grid.Row="0" Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="2" Height="100" Width="35" Margin="2 0 0 0" Padding="0" VerticalAlignment="Center"
+                        x:Name="NextPage"
+                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
+                        Visibility="{Binding CanExecuteMext,Converter={StaticResource BoolToVisibility}}" 
+                         Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="{materialDesign:PackIcon ChevronDoubleRight,30}" />
 
-        <ListBox Grid.Row="0" BorderThickness="0" Background="Beige"
-                
+            <Button Grid.Column="0" Height="100" Width="35" VerticalAlignment="Center" Padding="0"
+                        x:Name="PreviousPqge"
+                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
+                        Visibility="{Binding CanExecutePrevious,Converter={StaticResource BoolToVisibility}}" 
+                         Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="{materialDesign:PackIcon ChevronDoubleLeft,30}"  
+                        />
+            <Rectangle Grid.Column="0" Height="100" Width="35"/>
+            <Rectangle Grid.Column="0" Height="100" Width="35"/>
+
+            <ListBox  Grid.Column="1" ItemsSource="{Binding ProductsPage}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="2"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="2"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
+        <ListBox Grid.Row="0" BorderThickness="0" 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ItemsSource="{Binding AdditivesPage}"
-                 Margin="2"
+                 Margin="0"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                  Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}">
             <ListBox.ItemContainerStyle>
@@ -57,20 +78,14 @@
             </ListBox.ItemsPanel>
         </ListBox>
 
-        <Grid Grid.Row="1" Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="116"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="116"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Button x:Name="ReturnFromAdditives"  Style="{x:Null}"  Grid.Column="1" Grid.Row="0" Content="Return" Margin="8" cal:Message.Attach="[Event Click] = [Action ReturnFromAdditives()]"/>
-
-        </Grid> 
-
+        <Button Grid.Row="1" 
+                    Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}"
+                    Width="116" Height="116" 
+                    VerticalAlignment="Top" HorizontalAlignment="Right" 
+                    x:Name="ReturnFromAdditives"  Style="{x:Null}"  
+                    Content="Return" Margin="8" 
+                    cal:Message.Attach="[Event Click] = [Action ReturnFromAdditives()]"
+        />
     </Grid>
 
 </UserControl>

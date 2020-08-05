@@ -10,22 +10,13 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             
-              d:DataContext="{d:DesignData Source=/Design/CurrentOrder.xaml}"
+             d:DataContext="{d:DesignData Source=/Design/CurrentOrder.xaml}"
              DataContext="{Binding}"
+             
              mc:Ignorable="d"
              d:DesignWidth="900" d:DesignHeight="600"  >
     <FrameworkElement.Resources>
         <ResourceDictionary >
-            <!--<ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
-                <ResourceDictionary>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>-->
             <DataTemplate DataType="{x:Type vm:SplitViewModel}">
                 <local:SplitView/>
             </DataTemplate>
@@ -47,6 +38,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -62,7 +54,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                
+
                 <Border Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0 0 0 1" BorderBrush="Black">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -73,10 +65,9 @@
                         <Border  Grid.Column="1" BorderThickness="1 0 0 0" BorderBrush="Black">
                             <Label Content="{Binding CurrentOrder.Table.Number}"></Label>
                         </Border>
-                        <!-- Background="{Binding CurrentOrder.State, Converter={StaticResource OrderStateEnumToBrush}}"-->
                     </Grid>
                 </Border>
-                
+
                 <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 0"
                      ItemsSource="{Binding CurrentOrder.OrderItems}"
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
@@ -105,24 +96,31 @@
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                    <!--<ListBox.Style>
-                        <Style TargetType="{x:Type ListBox}">
-                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                             <Setter Property="VerticalContentAlignment" Value="Top"/>
-                         </Style>
-                    </ListBox.Style>-->
                 </ListBox>
-                
+
                 <Button  Style="{StaticResource MaterialDesignOutlinedButton}" 
                          Content="{materialDesign:PackIcon Plus,25}" Padding="0"
                          Background="{DynamicResource MaterialDesignBackground}"
                          cal:Message.Attach="[Event Click] = [Action NewOrder()]"/>
-                
-                <Button  DockPanel.Dock="Right"   Padding="0"
+
+
+
+                <Button DockPanel.Dock="Right" Padding="0"
+                        Content="{materialDesign:PackIcon AccountCircleOutline,30}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        cal:Message.Attach="[Event Click] = [Action CloseCommand]"
+                         />
+
+                <Button  DockPanel.Dock="Right" Padding="0"
                          Content="{materialDesign:PackIcon Close,25}"
-                         Background="{DynamicResource MaterialDesignBackground}"
                          Style="{StaticResource MaterialDesignOutlinedButton}"
-                         cal:Message.Attach="[Event Click] = [Action CloseCommand()]" />
+                         cal:Message.Attach="[Event Click] = [Action CloseCommand]" />
+
+
+
+
+
+
                 <Button  Style="{StaticResource MaterialDesignOutlinedButton}"
                          Content="{materialDesign:PackIcon Minus,25}" Padding="0"
                          Background="{DynamicResource MaterialDesignBackground}"
@@ -136,26 +134,24 @@
                         cal:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
                         Style="{StaticResource MaterialDesignFlatButton}"
                         Content="{materialDesign:PackIcon Home,Size=30}">
-                    
                 </Button>
-                
 
-                    <materialDesign:PackIcon x:Name="Breadcrumb" Kind="ChevronRight" Width="30" Height="30">
-                        <materialDesign:PackIcon.Style>
-                            <Style>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentCategory.Name}" Value="{x:Null}">
-                                        <Setter Property="materialDesign:PackIcon.Visibility" Value="Hidden"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </materialDesign:PackIcon.Style>
-                    </materialDesign:PackIcon>
-                
+                <materialDesign:PackIcon x:Name="Breadcrumb" Kind="ChevronRight" Width="30" Height="30">
+                    <materialDesign:PackIcon.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentCategory.Name}" Value="{x:Null}">
+                                    <Setter Property="materialDesign:PackIcon.Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:PackIcon.Style>
+                </materialDesign:PackIcon>
+
                 <Label Name="LabelBreadcrumb" Content="{Binding CurrentCategory.Name, Mode=TwoWay}" FontSize="18" FontWeight="Bold">
-                   
+
                 </Label>
-               
+
                 <Border DockPanel.Dock="Right" Background="White" MaxHeight="30" CornerRadius="3" ToolTip="Enter to search, ignore case">
                     <Grid Background="White">
                         <Grid.ColumnDefinitions>
@@ -176,26 +172,9 @@
                                   cal:Message.Attach="[Event TextChanged] = [Action ProductFiltering($this)]"/>
                     </Grid>
                 </Border>
-                <Button DockPanel.Dock="Right" Margin="2 0 0 0"
-                        x:Name="NextPage"
-                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
-                        IsEnabled="{Binding CanExecuteMext}" Padding="0"
-                         Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Content="{materialDesign:PackIcon ChevronDoubleRight,30}" />
-                <Button DockPanel.Dock="Right" 
-                        x:Name="PreviousPqge"
-                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
-                        IsEnabled="{Binding CanExecutePrevious}" Padding="0"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Content="{materialDesign:PackIcon ChevronDoubleLeft,30}"  
-                        />
-                <Button DockPanel.Dock="Right" x:Name="Close" Padding="0"
-                        cal:Message.Attach="[Event Click] = [Action CloseCommand]"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Content="{materialDesign:PackIcon AccountCircleOutline,30}" />
             </DockPanel>
 
-            <StackPanel Grid.Row="2" Grid.Column="2"  Orientation="Horizontal"  Background="#7f8c8d" Margin="2 0 0 0" Height="30">
+            <StackPanel Grid.Row="2" Grid.Column="2"  Orientation="Horizontal" Margin="2 0 0 0" Height="30">
                 <ItemsControl x:Name="Stack" Grid.Column="0" ItemsSource="{Binding Categories}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -233,70 +212,46 @@
                 </Grid.ColumnDefinitions>
 
 
-                <!--<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="Gray">
-                    <StackPanel Orientation="Horizontal"  >
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Aqua" >                        
-                            <Run Text="Total: " FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.Total, Mode=OneWay}" FontWeight="Bold"></Run>
-                        </TextBlock>
-                        <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
-                                   Visibility="{Binding CurrentOrder.NewTotal, Mode=OneWay, Converter={StaticResource DecimalToVisibility}}" >                        
-                            <Run Text="Total To be Paid: " FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.NewTotal, Mode=OneWay}" FontWeight="Bold"></Run>
-                        </TextBlock>
-                        <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
-                                   Visibility="{Binding CurrentOrder.TotalDiscountAmount, Converter={StaticResource DecimalToVisibility}}" >                        
-                            <Run Text="Discount: " FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.TotalDiscountAmount, Mode=OneWay}" FontWeight="Bold"></Run>
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Aqua" 
-                                   Visibility="{Binding CurrentOrder.GivenAmount, Converter={StaticResource DecimalToVisibility}}">                        
-                            <Run Text="Payed: " FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.GivenAmount}" FontWeight="Bold"></Run>
-                        </TextBlock>
-                        <TextBlock Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="Beige"
-                                   Visibility="{Binding CurrentOrder.ReturnedAmount, Converter={StaticResource DecimalToVisibility}}" >                        
-                            <Run Text="Returned: " FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.ReturnedAmount}" FontWeight="Bold"></Run>
-                        </TextBlock>
-                    </StackPanel>
-                </StackPanel>-->
-
                 <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Padding="0"
                          Text="{Binding NumericZone}" 
                          FontSize="26" FontWeight="Bold" FontFamily="Segoe"
                          HorizontalContentAlignment="Right"/>
-
 
                 <Grid  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Border  Grid.Row="0" BorderBrush="Black" BorderThickness="0 4 0 0" Margin="120 0 0 0"/>
-                    <TextBlock Grid.Row="1"   Margin="0 0 10 0" HorizontalAlignment="Right">                       
-                            <Run Text="Total: " FontSize="16" FontWeight="Bold"/>
-                            <Run Text="{Binding CurrentOrder.NewTotal, StringFormat={}{0:#,#.00}, FallbackValue='00.00', Mode=OneWay}" FontSize="24" FontWeight="Bold"/><LineBreak />
-                            <Run Text="Discount: " FontSize="12" FontWeight="Bold" />
-                            <Run Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat={}{0:#,#.00},FallbackValue='00.00', Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
-                        </TextBlock>
-                    <!--StringFormat={0:#,#.0},StringFormat='{}{0:0}.00  DA',-->
-                    <!--Visibility="{Binding CurrentOrder.GivenAmount, Converter={StaticResource DecimalToVisibility}}"-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border    Grid.Row="0" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="0 4 0 0" Margin="120 0 0 0"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Total: "/>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding CurrentOrder.NewTotal, StringFormat={}{0:#,#.00}, FallbackValue='0', Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="Discount: "/>
+                    <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat={}{0:#,#.00},FallbackValue='0', Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Payed: "/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GivenAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='0'}" FontSize="20" FontWeight="Bold"></TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Returned: "/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ReturnedAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='0'}" FontSize="20" FontWeight="Bold"></TextBlock>
+
+
                     <TextBlock Grid.Row="2"  Margin="0 0 10 0" HorizontalAlignment="Right">
-                        <!--<Run Text="Payed: " FontWeight="Bold"/>
-                        <Run Text="{Binding CurrentOrder.GivenAmount}" FontWeight="Bold"></Run>-->
-                        <Run Text="Returned: " FontWeight="Bold" FontSize="12"/>
-                        <Run Text="{Binding CurrentOrder.ReturnedAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='00.00'}" FontSize="20" FontWeight="Bold"></Run>
                     </TextBlock>
                 </Grid>
 
 
                 <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6"  BorderBrush="Black" BorderThickness="1" >
                     <Border BorderBrush="White" BorderThickness="2">
-                <TextBox
+                        <TextBox
                     
                     Background="Black" Foreground="#26ff26"
                     Text="{Binding NumericZone,FallbackValue=123456789}" 
@@ -329,7 +284,7 @@
                         cal:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]"/>
                 <Button Grid.Row="3" Grid.Column="4" Content="Disc" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]"/>
-                
+
                 <Button Grid.Row="3" Grid.Column="5" Style="{StaticResource ButtonStyle18}"
                         Content="{materialDesign:PackIcon SilverwareForkKnife, 30 }"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('CMD')]"/>
@@ -346,7 +301,7 @@
                 <Button Grid.Row="4" Grid.Column="5" Style="{StaticResource ButtonStyle18}"
                         Content="{materialDesign:PackIcon ViewSplitHorizontal, 30}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]">
-                    
+
                 </Button>
 
                 <Button Grid.Row="5" Grid.Column="1" Content="%" Style="{StaticResource ButtonStyle22}"
@@ -358,17 +313,43 @@
                 <Button Grid.Row="5" Grid.Column="4" Style="{StaticResource ButtonStyle18}"
                         Content="{materialDesign:PackIcon  Kind=BackspaceOutline, Size=30}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DEL')]">
-                    
+
                 </Button>
                 <Button Grid.Row="5" Grid.Column="5" Content="TRANSFER" Style="{StaticResource ButtonStyle18}"
                         cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
             </Grid>
 
-            <subviews:ProductNavigation Background="#FF263238" Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Margin="0" />
 
+            <Grid Grid.Row="3" Grid.Column="1" Grid.RowSpan="3"  Background="AliceBlue" Margin="5,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="404*"/>
+                    <ColumnDefinition Width="41*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <subviews:ProductNavigation Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"/>
+                <RadioButton  GroupName="BottomBtn" Grid.Row="1" Width="90" Height="90" Style="{StaticResource ButtonTabDesactive}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                    <TextBlock>
+                        <Run Text="Tables"/>
+                        <Run Text=""/>
+                    </TextBlock>
+                </RadioButton>
+                <RadioButton GroupName="BottomBtn" Grid.Row="3" IsChecked="True" Width="90" Height="90" Content="Emporters"
+                             HorizontalAlignment="Center" Style="{StaticResource ButtonTabDesactive}" HorizontalContentAlignment="Center"/>
+                <RadioButton GroupName="BottomBtn" Grid.Row="5"  Width="90" Height="90" Content="Delivery" HorizontalAlignment="Center" Style="{StaticResource ButtonTabDesactive}" HorizontalContentAlignment="Center"/>
+                <Rectangle Grid.Column="1"  Grid.Row="1" Grid.RowSpan="6" Fill="#FF03A9F4"/>
+            </Grid>
         </Grid>
 
-    
+
     </materialDesign:DialogHost>
 </UserControl>
 

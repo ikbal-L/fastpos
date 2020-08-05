@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:PosTest.Views"
         xmlns:vm="clr-namespace:PosTest.ViewModels" 
         mc:Ignorable="d"
+        
+        WindowStyle="None"
+        
         d:DataContext="{x:Type vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
         xmlns:res="clr-namespace:PosTest.Properties"

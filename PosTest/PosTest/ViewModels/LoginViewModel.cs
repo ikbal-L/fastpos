@@ -62,7 +62,7 @@ namespace PosTest.ViewModels
             }
 
             CheckoutViewModel checkoutViewModel = 
-                new CheckoutViewModel(30, 
+                new CheckoutViewModel(10, 
                 productService, 
                 categorieService, orderService);
 
