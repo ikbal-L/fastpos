@@ -62,7 +62,7 @@ namespace PosTest.ViewModels
             }
 
             CheckoutViewModel checkoutViewModel = 
-                new CheckoutViewModel(30, 
+                new CheckoutViewModel(10, 
                 productService, 
                 categorieService, orderService);
 
@@ -76,6 +76,11 @@ namespace PosTest.ViewModels
             SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService, categorieService, additiveService);
             settingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+        }
+
+        public void close()
+        {
+            Application.Current.MainWindow.Close();
         }
 
         //This method load th DLL file containing the implemetation of IProductService 

@@ -16,6 +16,8 @@
                     />
             <Button x:Name="Settings" Content="Settings" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
+            <Button x:Name="Close" Content="Close" Margin="5"
+                    Style="{StaticResource MaterialDesignFlatButton}"/>
 
 
             <!--<TextBlock Text="{res:Resources.HelloWorld,Converter={StaticResource}}"/>-->

@@ -49,6 +49,8 @@ namespace PosTest.ViewModels
         private Order _displayedOrder;
         private TablesViewModel _tablesViewModel;
         private INotifyPropertyChanged _dialogViewModel;
+        private decimal givenAmount;
+        private decimal returnedAmount;
         #endregion
 
         #region Constructors
@@ -246,8 +248,25 @@ namespace PosTest.ViewModels
             }
         }
 
-        
+
         #endregion
+
+        public decimal GivenAmount
+        {
+            get => givenAmount;
+            set
+            {
+                givenAmount = value;
+                NotifyOfPropertyChange(() => GivenAmount);
+            }
+        }
+
+
+        public decimal ReturnedAmount
+        {
+            get => returnedAmount;
+            set { returnedAmount = value; NotifyOfPropertyChange(() => ReturnedAmount); }
+        }
 
 
         internal void InitCategoryColors()
@@ -394,13 +413,12 @@ namespace PosTest.ViewModels
         }
         #endregion
 
-        public void Close()
+        public void CloseCommand()
         {
-            CategoryTabViewModel categoryTabViewModel = new CategoryTabViewModel(30, _productsService, _categoriesService);
-            categoryTabViewModel.Parent = this.Parent;
-
-
-            (this.Parent as Conductor<object>).ActivateItem(categoryTabViewModel);
+            LoginViewModel loginvm = new LoginViewModel();
+            loginvm.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+            //Application.Current.MainWindow.Close();
         }
 
         #region Filtering and pagination
@@ -482,6 +500,8 @@ namespace PosTest.ViewModels
             }
             else
             {
+                if ((_pageNumber - 2) * MaxProductPageSize < 0)
+                    return;
                 listProducts = listProducts.GetRange((_pageNumber - 2) * MaxProductPageSize, MaxProductPageSize);
                 _pageNumber--;
                 CanExecuteMext = true;
