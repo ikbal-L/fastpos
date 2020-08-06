@@ -40,12 +40,63 @@
                 <TextBlock Margin="5 -3">Back</TextBlock>
             </StackPanel>
         </Button>
-        <ListBox ItemsSource="{Binding Tables}" Grid.Row="1" Grid.ColumnSpan="2">
+        <ListBox ItemsSource="{Binding Tables}" Grid.Row="1" Grid.ColumnSpan="2" Width="1070" Height="1500">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Table}">
-                    <Border Background="Blue" />
+                    <Border BorderThickness="2" BorderBrush="Red"  Height="130">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Number}"/>
+                            <ListBox ItemsSource="{Binding TableOrders}"  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{Binding State, Converter={StaticResource OrderStateEnumToBrush}}" BorderBrush="Blue" BorderThickness="1">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding OrderTime, StringFormat=t}"/>
+                                                <TextBlock Text="{Binding OrderItems.Count}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                        </StackPanel>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Width" Value="150"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding TableOrders.Count}" Value="3">
+                                        <Setter Property="Width" Value="150"></Setter>
+                                    </DataTrigger>
+                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="4">
+                                        <Setter Property="Width" Value="150"></Setter>
+                                    </DataTrigger>
+                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="5">
+                                        <Setter Property="Width" Value="230"></Setter>
+                                    </DataTrigger>
+                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="6">
+                                        <Setter Property="Width" Value="230"></Setter>
+                                    </DataTrigger>
+                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="7">
+                                        <Setter Property="Width" Value="310"></Setter>
+                                    </DataTrigger>
+                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="8">
+                                        <Setter Property="Width" Value="310"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
+             </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
         </ListBox>
     </Grid>
 </UserControl>

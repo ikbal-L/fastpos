@@ -391,6 +391,14 @@ namespace PosTest.ViewModels
             }
 
             Orders.Remove(CurrentOrder);
+            if (CurrentOrder.Table != null)
+            {
+                var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
+                if (count == 0 && TablesViewModel!=null)
+                {
+                    TablesViewModel.RemoveTable(CurrentOrder.Table);
+                }
+            }
             CurrentOrder = null;
         }
 
@@ -418,7 +426,6 @@ namespace PosTest.ViewModels
             LoginViewModel loginvm = new LoginViewModel();
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
-            //Application.Current.MainWindow.Close();
         }
 
         #region Filtering and pagination
@@ -660,9 +667,11 @@ namespace PosTest.ViewModels
                 NumericZone = "";
                 return;
             }
-
-            var status = 0;
-            var table = _orderService.GetTableByNumber(tableNumber, ref status);
+            
+            var status = 200;
+            Table table;
+            if((table = LookForTableInOrders(tableNumber))==null)
+                table = _orderService.GetTableByNumber(tableNumber, ref status);
             switch (status)
             {
                 case 200:
@@ -670,8 +679,22 @@ namespace PosTest.ViewModels
                     {
                         NewOrder();
                     }
+                    //case of table transfer
+                    if (CurrentOrder.Table!= null && TablesViewModel != null)
+                    {
+                        var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
+                        if (count == 0)
+                        {
+                            TablesViewModel.RemoveTable(CurrentOrder.Table);
+                        }
+                    }
                     CurrentOrder.Table = table;
                     table.AddOrder(CurrentOrder);
+                    if (TablesViewModel == null)
+                    {
+                        TablesViewModel = new TablesViewModel(this);
+                    }
+                    TablesViewModel.Add(table);
                     break;
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
@@ -694,6 +717,18 @@ namespace PosTest.ViewModels
                     break;
             }
             NumericZone = "";
+        }
+
+        private Table LookForTableInOrders(int tableNumber)
+        {
+            foreach (var o in Orders)
+            {
+                if (o.Table != null && o.Table.Number == tableNumber)
+                {
+                    return o.Table;
+                } 
+            }
+            return null;
         }
 
         private void PriceAction(ref string priceStr, Order order)
