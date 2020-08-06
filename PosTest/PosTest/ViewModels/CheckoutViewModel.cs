@@ -51,6 +51,7 @@ namespace PosTest.ViewModels
         private INotifyPropertyChanged _dialogViewModel;
         private decimal givenAmount;
         private decimal returnedAmount;
+        private BindableCollection<Table> _tables;
         #endregion
 
         #region Constructors
@@ -99,6 +100,9 @@ namespace PosTest.ViewModels
             AdditivesVisibility = false;
             CategorieFiltering("Home");
             Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts)); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
+            var status = 0;
+            var tables = _orderService.GeAlltTables(ref status);
+            Tables = new BindableCollection<Table>(tables);
             InitCategoryColors();
         }
         #endregion
@@ -234,6 +238,16 @@ namespace PosTest.ViewModels
             set
             {
                 _tablesViewModel = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public BindableCollection<Table> Tables
+        {
+            get => _tables;
+            set
+            {
+                _tables = value;
                 NotifyOfPropertyChange();
             }
         }

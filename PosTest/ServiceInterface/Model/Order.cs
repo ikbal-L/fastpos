@@ -240,7 +240,7 @@ namespace ServiceInterface.Model
             {
                 _table = value;
                 TableId = _table?.Id;
-                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(()=>Table);
             }
         }
 

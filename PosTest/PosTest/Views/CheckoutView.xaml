@@ -58,7 +58,7 @@
                 
 
 
-                    <Grid Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -66,28 +66,32 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <ComboBox materialDesign:HintAssist.Hint="Tables" IsEditable="False" HorizontalContentAlignment="Center">
+                    <ComboBox materialDesign:HintAssist.Hint="Tables" IsEditable="False"  HorizontalContentAlignment="Center"
+                                  ItemsSource="{Binding Tables}" SelectedValue="{Binding CurrentOrder.Table}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type src:Table}">
+                                    <Border BorderThickness="1" BorderBrush="Blue" Background="Blue"  CornerRadius="10" Width="30" Height="30" HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding Number}" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                    <ComboBox materialDesign:HintAssist.Hint="Servers" IsEditable="False" Grid.Column="1" HorizontalContentAlignment="Center">
                             <ComboBoxItem Content="Table-1"/>
                             <ComboBoxItem Content="Table-2"/>
                             <ComboBoxItem Content="Table-3"/>
                             <ComboBoxItem Content="Table-4"/>
                         </ComboBox>
 
-                    <ComboBox materialDesign:HintAssist.Hint="Servers" IsEditable="False" Grid.Column="1" HorizontalContentAlignment="Center">
-                            <ComboBoxItem Content="Server-1"/>
-                            <ComboBoxItem Content="Server-2"/>
-                            <ComboBoxItem Content="Server-3"/>
-                            <ComboBoxItem Content="Server-4"/>
-                        </ComboBox>
-
-                    <ComboBox materialDesign:HintAssist.Hint="Livreur" IsEditable="False" Grid.Column="2" HorizontalContentAlignment="Center">
+                        <ComboBox materialDesign:HintAssist.Hint="Livreur" IsEditable="False" Grid.Column="2" HorizontalContentAlignment="Center">
                             <ComboBoxItem Content="Livreur-1"/>
                             <ComboBoxItem Content="Livreur-2"/>
                             <ComboBoxItem Content="Livreur-3"/>
                             <ComboBoxItem Content="Livreur-4"/>
                         </ComboBox>
 
-                    <ComboBox materialDesign:HintAssist.Hint="Clients" IsEditable="False" Grid.Column="3" HorizontalContentAlignment="Center">
+                       <ComboBox materialDesign:HintAssist.Hint="Clients" IsEditable="False" Grid.Column="3" HorizontalContentAlignment="Center">
                             <ComboBoxItem Content="Clients-1"/>
                             <ComboBoxItem Content="Clients-2"/>
                             <ComboBoxItem Content="Clients-3"/>

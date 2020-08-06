@@ -14,5 +14,7 @@ namespace ServiceInterface.Interface
         Table GetTableByNumber(int tableNumber, ref int statusCode);
         Table GetTable(int id, ref int statusCode);
         int SaveTable(Table table);
+
+        IEnumerable<Table> GeAlltTables(ref int statusCode);
     }
 }

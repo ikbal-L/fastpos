@@ -107,9 +107,9 @@ namespace ConsoleApp
 
             //orderService.SaveOrder(o);
             var status = 0;
-            var prods = GenericRest.GetManyThings<Platter>(new List<long> { 1, 2, 3, 4 }, UrlConfig.ProductUrl.GetManyProducts, ref status);
-
-            Console.WriteLine(prods.Where(pl => pl.IsPlatter==true).Count());
+            //var prods = GenericRest.GetManyThings<Platter>(new List<long> { 1, 2, 3, 4 }, UrlConfig.ProductUrl.GetManyProducts, ref status);
+            var tabs = orderService.GeAlltTables(ref status);
+            Console.WriteLine(tabs.Count());
             Console.ReadKey();
 
         }

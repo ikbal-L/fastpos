@@ -72,6 +72,11 @@ namespace ServiceLib.Service
         {
             return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable);
         }
+
+        public IEnumerable<Table> GeAlltTables(ref int statusCode)
+        {
+            return GenericRest.GetThing<IEnumerable<Table>>(UrlConfig.OrderUrl.GetAllTables, ref statusCode);
+        }
     }
 
 
@@ -252,6 +257,11 @@ namespace ServiceLib.Service
         public int SaveTable(Table table)
         {
             return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable);
+        }
+
+        public IEnumerable<Table> GeAlltTables(ref int statusCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }

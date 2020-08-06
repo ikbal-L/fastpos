@@ -66,6 +66,7 @@ namespace ServiceInterface.StaticValues
             public static string GetTableByNumber = hostname1 + "table/getbynumber/";
             public static string GetTable = hostname1 + "table/get/";
             public static string SaveTable = hostname1 + "table/save";
+            public static string GetAllTables = hostname1 + "table/getall";
         }
 
         public static class AuthUrl
