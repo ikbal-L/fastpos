@@ -362,7 +362,8 @@ namespace ServiceInterface.Model
         Delivered,
         Payed,
         Splitted, 
-        Canceled
+        Canceled,
+        Removed
     }
     public enum OrderType
     {

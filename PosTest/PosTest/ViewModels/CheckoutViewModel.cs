@@ -316,7 +316,8 @@ namespace PosTest.ViewModels
             {
                 case 200:
                     if (CurrentOrder.State == OrderState.Payed ||
-                        CurrentOrder.State == OrderState.Canceled)
+                        CurrentOrder.State == OrderState.Canceled ||
+                        CurrentOrder.State == OrderState.Removed)
                     {
                         RemoveCurrentOrder();
                     }
@@ -389,8 +390,7 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-
-            Orders.Remove(CurrentOrder);
+             Orders.Remove(CurrentOrder);
             if (CurrentOrder.Table != null)
             {
                 var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
@@ -400,6 +400,7 @@ namespace PosTest.ViewModels
                 }
             }
             CurrentOrder = null;
+            //saved in the DB as removed or canceled and remove it for Orders List
         }
 
         public void CancelOrder()
@@ -408,14 +409,21 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-            if (CurrentOrder.OrderItems.Count == 0)
+            /*if (CurrentOrder.OrderItems.Count == 0)
             {
                 RemoveCurrentOrder();
                 return;
+            }*/
+            if (CurrentOrder.State == null)
+            {
+                CurrentOrder.State = OrderState.Removed;
             }
-            CurrentOrder.State = OrderState.Canceled;
+            else
+            {
+                CurrentOrder.State = OrderState.Canceled;
+            }
             SaveCurrentOrder();
-            RemoveCurrentOrder();
+            //RemoveCurrentOrder();
             //var i = Orders.IndexOf(CurrentOrder);
 
         }
