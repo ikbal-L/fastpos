@@ -42,7 +42,21 @@ namespace ServiceInterface.Model
 
         public void AddOrder(Order currentOrder)
         {
-            
+            if (TableOrders == null)
+            {
+                TableOrders = new BindableCollection<Order>();
+            }
+            TableOrders.Add(currentOrder);
+        }
+
+        public int RemoveOrder(Order currentOrder)
+        {
+            if (TableOrders == null)
+            {
+                return 0;
+            }
+            TableOrders.Remove(currentOrder);
+            return TableOrders.Count;
         }
     }
 }

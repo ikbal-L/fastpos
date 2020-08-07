@@ -12,6 +12,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Net.Http;
+using ServiceInterface.StaticValues;
 
 namespace PosTest.ViewModels
 {
@@ -62,7 +63,7 @@ namespace PosTest.ViewModels
             }
 
             CheckoutViewModel checkoutViewModel = 
-                new CheckoutViewModel(10, 
+                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage, 
                 productService, 
                 categorieService, orderService);
 
