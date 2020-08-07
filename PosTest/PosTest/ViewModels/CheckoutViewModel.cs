@@ -242,6 +242,19 @@ namespace PosTest.ViewModels
             }
         }
 
+
+        public Table SelectedTable
+        {
+            get => _selectedTable;
+            set
+            {
+                TableAction(value.Number);
+                _selectedTable = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+
         public BindableCollection<Table> Tables
         {
             get => _tables;
