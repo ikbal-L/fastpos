@@ -16,7 +16,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ListBox x:Name="listbox" ex:ListPaginationEx.ItemsSource="{Binding Products}" 
-                 ex:ListPaginationEx.ItemsPerPage="5" Grid.RowSpan="2">
+                 ex:ListPaginationEx.ItemsPerPage="5" Grid.RowSpan="2"
+                 Width="200" Background="LightBlue">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type src:Product}">
                     <Border>
@@ -33,45 +34,85 @@
             <Button Content="Previous" Command="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.PreviousCommand)}" 
                     IsEnabled="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.CanExecutePrevious)}"/>
             <TextBox Text="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.CurrentPageNumber), Mode=TwoWay}"/>
+            <TextBox Text="{Binding ElementName=listbox, Path=SelectedIndex, Mode=TwoWay}"/>
+            <TextBlock Margin="10">
+                <Run Text="Number of Pages"/>
+                <Run Text="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.NumberOfPages), Mode=TwoWay}"/>
+            </TextBlock> 
             <Button Content="Next" Command="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.NextCommand)}" 
                     IsEnabled="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.CanExecuteMext)}"/>
         </StackPanel>
 
         <Button x:Name="Close"  Grid.Row="3" Content="Close" />
+        <Popup PlacementTarget="{Binding ElementName=listbox}" Placement="Right" Margin="-10" AllowsTransparency="True">
+            <StackPanel Background="Transparent">
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                        <materialDesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="ShapePlus" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="Plus" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="Minus" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="CashMinus" Height="25"  Width="25"/>
+                </Button>
+            </StackPanel>
+            <Popup.Style>
+                <Style TargetType="Popup">
+                    <Setter Property="IsOpen" Value="True"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=listbox, Path=SelectedIndex}" Value="-1">
+                            <Setter Property="IsOpen" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Popup.Style>
+        </Popup>
         <!--Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"-->
-        <materialDesign:PopupBox
+        <!--<materialDesign:PopupBox
                 Grid.Row="3"
-                
+                Background="Gray"
                 PlacementMode="LeftAndAlignMiddles"
                 UnfurlOrientation="Horizontal"
                 ToolTip="Manage items"
                 Margin="0 0 10 10"
+                IsPopupOpen="True"
+                IsManipulationEnabled="False"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom">
-                    <StackPanel
-                  Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
                         <Button
-                    ToolTip="Add an item"
-                    Command="{Binding AddCommand}">
-                            <Path
-                      Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                      Stretch="Uniform"
-                      Width="15"
-                      Height="15"
-                      Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+                            ToolTip="Add an item"
+                            Command="{Binding AddCommand}">
+                                    <Path
+                              Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                              Stretch="Uniform"
+                              Width="15"
+                              Height="15"
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
                         </Button>
                         <Button
-                    ToolTip="Remove selected item"
-                    Command="{Binding RemoveSelectedItemCommand}">
-                            <Path
-                      Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-                      Stretch="Uniform"
-                      Width="15"
-                      Height="15"
-                      Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+                            ToolTip="Remove selected item"
+                            Command="{Binding RemoveSelectedItemCommand}">
+                                    <Path
+                              Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+                              Stretch="Uniform"
+                              Width="15"
+                              Height="15"
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
                         </Button>
                     </StackPanel>
-        </materialDesign:PopupBox>
+        </materialDesign:PopupBox>-->
     </Grid>
 
 </UserControl>

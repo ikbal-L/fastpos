@@ -23,7 +23,7 @@ namespace PosTest.Extensions
         public static readonly DependencyProperty CurrentPageNumberProperty =
                     DependencyProperty.RegisterAttached(
                           "CurrentPageNumber", typeof(int), typeof(ListPaginationEx),
-                          new PropertyMetadata(1, OnCurrentPageNumberChanged));
+                          new PropertyMetadata(-1, OnCurrentPageNumberChanged));
 
         public static readonly DependencyProperty NumberOfPagesProperty =
                     DependencyProperty.RegisterAttached(
@@ -98,11 +98,12 @@ namespace PosTest.Extensions
 
         private static void OnCurrentPageNumberChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if ((int)e.NewValue == (int)e.OldValue || 
-                (int)e.NewValue > GetNumberOfPages(d) || 
-                (int)e.NewValue < 1)
+            int currentPage = GetCurrentPageNumber(d);
+            int queriedpage = (int)e.NewValue;
+            if (queriedpage > GetNumberOfPages(d) ||
+                queriedpage < 1)
             {
-                SetCurrentPageNumber(d,(int)e.OldValue);
+                SetCurrentPageNumber(d, (int)e.OldValue);
                 return;
             }
 
@@ -112,7 +113,9 @@ namespace PosTest.Extensions
             if (itemsSource.Cast<object>().Count() <= itemsPerPage)
             {
                 listBox.ItemsSource = itemsSource;
+                oldPageNumber = GetCurrentPageNumber(d);
                 SetCurrentPageNumber(d, 1);
+                newPageNumber = GetCurrentPageNumber(d);
                 SetCanExecuteMext(d, false);
                 SetCanExecutePrevious(d, false);
                 //CanExecuteMext = false;
@@ -134,6 +137,8 @@ namespace PosTest.Extensions
                 SetCanExecuteMext(d, false);
                 //CanExecuteMext = false;
             }
+            listBox.ItemsSource = listObjects;
+            SetCanExecutePrevious(d, GetCurrentPageNumber(d) == 1 ? false : true);
 
         }
 
@@ -159,6 +164,21 @@ namespace PosTest.Extensions
 
         private static void Paginate(DependencyObject d, NextOrPrevious nextOrprevious)
         {
+            switch (nextOrprevious)
+            {
+                case NextOrPrevious.Next:
+                    SetCurrentPageNumber(d, GetCurrentPageNumber(d) + 1);
+                    break;
+                case NextOrPrevious.Previous:
+                    SetCurrentPageNumber(d, GetCurrentPageNumber(d) - 1);
+                    break;
+                case NextOrPrevious.First:
+                    SetCurrentPageNumber(d, 1);
+                    break;
+                default:
+                    break;
+            }
+            return;
             int currentPage = -1;
             if (nextOrprevious == NextOrPrevious.First)
             {
@@ -178,7 +198,9 @@ namespace PosTest.Extensions
             if (itemsSource.Cast<object>().Count() <= itemsPerPage)
             {
                 listBox.ItemsSource = itemsSource;
+                oldPageNumber = GetCurrentPageNumber(d);
                 SetCurrentPageNumber(d, 1);
+                newPageNumber = GetCurrentPageNumber(d);
                 SetCanExecuteMext(d, false);
                 SetCanExecutePrevious(d, false);
                 //CanExecuteMext = false;
@@ -203,14 +225,18 @@ namespace PosTest.Extensions
                     SetCanExecuteMext(d, false);
                     //CanExecuteMext = false;
                 }
+                oldPageNumber = GetCurrentPageNumber(d);
                 SetCurrentPageNumber(d, currentPage + 1);
+                newPageNumber = GetCurrentPageNumber(d);
             }
             else
             {
                 if ((currentPage - 2) * itemsPerPage < 0)
                     return;
                 listObjects = listObjects.GetRange((GetCurrentPageNumber(d) - 2) * itemsPerPage, itemsPerPage);
+                oldPageNumber = GetCurrentPageNumber(d);
                 SetCurrentPageNumber(d, currentPage - 1); //_pageNumber--;
+                newPageNumber = GetCurrentPageNumber(d);
                 SetCanExecuteMext(d, true);
                 //CanExecuteMext = true;
 

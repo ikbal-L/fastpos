@@ -118,7 +118,7 @@
                     </Grid>
                 
 
-                <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 0"
+                <ListBox Name="OrderitemsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 0"
                      ItemsSource="{Binding CurrentOrder.OrderItems}"
                      SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
                          SelectedIndex="0"
@@ -127,6 +127,40 @@
                      HorizontalContentAlignment="Stretch" 
                      AlternationCount="2"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                <Popup PlacementTarget="{Binding ElementName=OrderitemsList}" PlacementRectangle="414,0,0,50" AllowsTransparency="True">
+                    <StackPanel Background="Transparent">
+                        <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                            <materialDesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
+                        </Button>
+                        <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                            <materialDesign:PackIcon Kind="ShapePlus" Height="25"  Width="25"/>
+                        </Button>
+                        <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                            <materialDesign:PackIcon Kind="Plus" Height="25"  Width="25"/>
+                        </Button>
+                        <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                            <materialDesign:PackIcon Kind="Minus" Height="25"  Width="25"/>
+                        </Button>
+                        <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                            <materialDesign:PackIcon Kind="CashMinus" Height="25"  Width="25"/>
+                        </Button>
+                    </StackPanel>
+                    <Popup.Style>
+                        <Style TargetType="Popup">
+                            <Setter Property="IsOpen" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=OrderitemsList, Path=SelectedIndex}" Value="-1">
+                                    <Setter Property="IsOpen" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Popup.Style>
+                </Popup>
             </Grid>
 
             <DockPanel Grid.Row="0" Grid.Column="1" Margin="0" LastChildFill="False">
