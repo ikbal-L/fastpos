@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <Grid>
-        <StackPanel Width="200" Height="200" >
+        <StackPanel Width="200" Height="240" >
             <TextBox x:Name="Username" Margin="5" Text="Admin"/>
             <PasswordBox x:Name="Password" Margin="5" />
             <Button x:Name="Login" Content="Log-in" Margin="5"
@@ -17,6 +17,8 @@
             <Button x:Name="Settings" Content="Settings" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
             <Button x:Name="Close" Content="Close" Margin="5"
+                    Style="{StaticResource MaterialDesignFlatButton}"/>
+            <Button x:Name="PaginationTest" Content="Pagination Test" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
 
 

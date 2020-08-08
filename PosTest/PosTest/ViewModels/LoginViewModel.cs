@@ -84,6 +84,29 @@ namespace PosTest.ViewModels
             Application.Current.MainWindow.Close();
         }
 
+        public void PaginationTest()
+        {
+            int resp;
+            try
+            {
+                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Check your server connection");
+                return;
+            }
+
+            PaginationTestViewModel paginationtesttViewModel =
+                new PaginationTestViewModel(
+                        productService,
+                        categorieService, 
+                        orderService);
+
+            paginationtesttViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(paginationtesttViewModel);
+        }
+
         //This method load th DLL file containing the implemetation of IProductService 
         // and satisfay the import in this class
         private void Compose()

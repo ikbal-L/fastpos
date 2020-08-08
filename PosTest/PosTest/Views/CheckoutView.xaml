@@ -417,7 +417,8 @@
                              cal:Message.Attach="[Event Click] = [Action SelectListedOrders('WAITING')]"
                              HorizontalContentAlignment="Center"/>
                 <Rectangle Grid.Column="1"  Grid.Row="1" Grid.RowSpan="7" Fill="#FF03A9F4"/>
-                <ContentControl Grid.Row="1" Grid.Column="2" Content="{Binding ListedOrdersViewModel}" ContentTemplateSelector="{StaticResource tableViewSelector}"/>
+                <ContentControl Grid.Row="1" Grid.Column="2" Grid.RowSpan="7" Grid.ColumnSpan="2"
+                                Content="{Binding ListedOrdersViewModel}" ContentTemplateSelector="{StaticResource tableViewSelector}"/>
             </Grid>
         </Grid>
     </materialDesign:DialogHost>

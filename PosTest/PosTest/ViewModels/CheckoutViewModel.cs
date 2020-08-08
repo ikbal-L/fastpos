@@ -479,6 +479,10 @@ namespace PosTest.ViewModels
                 case ListedOrdersType.Delivery:
                     break;
                 case ListedOrdersType.Tables:
+                    if (TablesViewModel == null)
+                    {
+                        TablesViewModel = new TablesViewModel(this);
+                    }
                     TablesViewModel.IsFullView = false;
                     ListedOrdersViewModel = TablesViewModel;
                     break;
