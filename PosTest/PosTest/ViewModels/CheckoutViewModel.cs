@@ -1005,7 +1005,14 @@ namespace PosTest.ViewModels
 
         public void RemoveOrerItem(OrderItem item)
         {
-            CurrentOrder.RemoveOrderItem(item);
+            if (item == null)
+            {
+                CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
+            }
+            else
+            {
+                CurrentOrder.RemoveOrderItem(item);
+            }
             AdditivesVisibility = false;
             ProductsVisibility = true;
         }

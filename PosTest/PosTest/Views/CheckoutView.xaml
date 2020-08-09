@@ -40,7 +40,6 @@
         <materialDesign:DialogHost.DialogContent>
             <ContentControl Content="{Binding DialogViewModel}" ContentTemplateSelector="{StaticResource tableViewSelector}" />
         </materialDesign:DialogHost.DialogContent>
-
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -64,9 +63,6 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-
-                
-
 
                     <Grid Grid.Column="0" Grid.ColumnSpan="2" >
                         <Grid.ColumnDefinitions>
@@ -129,8 +125,9 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 <Popup PlacementTarget="{Binding ElementName=OrderitemsList}" PlacementRectangle="414,0,0,50" AllowsTransparency="True">
                     <StackPanel Background="Transparent">
-                        <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
-                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                        <Button Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                                cal:Message.Attach="[Event Click] = [Action RemoveOrerItem($this)]"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
                             <materialDesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
                         </Button>
                         <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
