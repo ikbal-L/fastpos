@@ -14,11 +14,11 @@
     <local:OrderStateEnumToBrushConverter x:Key="OrderStateEnumToBrush"/>
 
     <Style TargetType="{x:Type ListBoxItem}" x:Key="OrderItems_ItemStyle" >
-        <Setter Property="Margin" Value="1"/>
-        <Setter Property="Template">
+        <Setter Property="Margin" Value="0"/>
+        <!--<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border Name="Border" BorderThickness="1" CornerRadius="3" Padding="1" BorderBrush="Black">
+                    <Border Name="Border" BorderThickness="1" CornerRadius="3" Padding="1" BorderBrush="#FF03A9F4">
                         <DockPanel Name="Dock" >
                             <DockPanel x:Name="BonttonsPanel" DockPanel.Dock="Top" LastChildFill="False" Margin="0 -18 0 0" Visibility="Collapsed">
                                 <Button Name="DelButton" DockPanel.Dock="Right" Visibility="Visible" BorderBrush="#2496ed" Margin="10 0 5 0"
@@ -27,7 +27,7 @@
                                     cal:Message.Attach="[Event Click] = [Action RemoveOrerItem($this)]"
                                     Height="30" Width="30">
                                     <materialDesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
-                                    <!--<Image Source="/icons/reddelete.png"  />-->
+                                    --><!--<Image Source="/icons/reddelete.png"  />--><!--
                                 </Button>
                                 <Button Name="AdditivePageButton"   
                                     DockPanel.Dock="Right"
@@ -39,7 +39,7 @@
                                     cal:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage($this)]"
                                     Height="30" Width="30">
                                     <materialDesign:PackIcon Kind="ShapePlus" Height="25"  Width="25"/>
-                                    
+
                                 </Button>
                                 <Button Name="AddButton" DockPanel.Dock="Right" Visibility="Visible"  Margin="10 0 0 0"
                                         Background="WhiteSmoke" Foreground="#2496ed"  BorderBrush="#2496ed"
@@ -47,7 +47,7 @@
                                     cal:Message.Attach="[Event Click] = [Action AddOneToQuantity($this)]"
                                     Height="30" Width="30">
                                     <materialDesign:PackIcon Kind="Plus" Height="25" Width="25"/>
-                                    <!--<Image Source="/icons/add.png"  />-->
+                                    --><!--<Image Source="/icons/add.png"  />--><!--
                                 </Button>
                                 <Button Name="MinusButton"  DockPanel.Dock="Right" Visibility="Visible"  Margin="10 0 0 0"
                                         Background="WhiteSmoke" Foreground="#2496ed"  BorderBrush="#2496ed"
@@ -55,7 +55,7 @@
                                     cal:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity($this)]"
                                     Height="30" Width="30">
                                     <materialDesign:PackIcon Kind="Minus" />
-                                    <!--<Image Source="/icons/minus.png"  />-->
+                                    --><!--<Image Source="/icons/minus.png"  />--><!--
                                 </Button>
                                 <Button DockPanel.Dock="Right" Name="discount" Visibility="Visible"  Margin="10 0 0 0"
                                         Background="WhiteSmoke" Foreground="#2496ed"  BorderBrush="#2496ed"
@@ -72,8 +72,8 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Red"/>
-                            <Setter TargetName="Border" Property="Background" Value="Beige"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#3700B3"/>
+                            <Setter TargetName="Border" Property="Background" Value="#FF03A9F4"/>
                             <Setter TargetName="Border" Property="TextBlock.FontSize" Value="13" />
                             <Setter TargetName="Border" Property="TextBlock.FontWeight" Value="Bold" />
                             <Setter TargetName="Border" Property="BorderThickness" Value="2" />
@@ -89,7 +89,15 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                <Setter Property="Background" Value="WhiteSmoke"></Setter>
+            </Trigger>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="LightBlue"></Setter>
+            </Trigger>
+        </Style.Triggers>
         <!--<Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
                 <Setter Property="Margin" Value="0 15 0 0" />
@@ -134,9 +142,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
-                        <Border Name="canvas" Padding="0 15 0 0">
-                            <ItemsPresenter Margin="01" />
-                        </Border>
+                    <Border Name="canvas" Padding="0 15 0 0">
+                        <ItemsPresenter Margin="01" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -18,6 +18,7 @@ using ToastNotifications;
 using ToastNotifications.Position;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
+using PosTest.ViewModels.SubViewModel;
 
 namespace PosTest.ViewModels
 {
@@ -54,6 +55,9 @@ namespace PosTest.ViewModels
         private BindableCollection<Table> _tables;
         private Table _selectedTable;
         private INotifyPropertyChanged _listedOrdersViewModel;
+        private WaitingViewModel _waitingViewModel;
+        private DelivereyViewModel _delivereyViewModel;
+        private TakeAwayViewModel _takeAwayViewModel;
         #endregion
 
         #region Constructors
@@ -243,16 +247,36 @@ namespace PosTest.ViewModels
                 NotifyOfPropertyChange();
             }
         }
-
-        public BindableCollection<Table> Tables
+        public WaitingViewModel WaitingViewModel
         {
-            get => _tables;
+            get => _waitingViewModel;
             set
             {
-                _tables = value;
+                _waitingViewModel = value;
                 NotifyOfPropertyChange();
             }
         }
+
+        public DelivereyViewModel DelivereyViewModel
+        {
+            get => _delivereyViewModel;
+            set
+            {
+                _delivereyViewModel = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public TakeAwayViewModel TakeAwayViewModel
+        {
+            get => _takeAwayViewModel;
+            set
+            {
+                _takeAwayViewModel = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public Table SelectedTable
         {
             get => _selectedTable;
@@ -260,6 +284,17 @@ namespace PosTest.ViewModels
             {
                 TableAction(value.Number);
                 _selectedTable = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+
+        public BindableCollection<Table> Tables
+        {
+            get => _tables;
+            set
+            {
+                _tables = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -405,6 +440,8 @@ namespace PosTest.ViewModels
             DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
             CurrentOrder.OrderTime = DateTime.Now;
+            WaitingViewModel = WaitingViewModel ?? new WaitingViewModel();
+            WaitingViewModel.AddOrder(CurrentOrder);
         }
 
         public void SetNullCurrentOrder()
@@ -475,8 +512,18 @@ namespace PosTest.ViewModels
             switch (type)
             {
                 case ListedOrdersType.Takeaway:
+                    if (TakeAwayViewModel == null)
+                    {
+                        TakeAwayViewModel = new TakeAwayViewModel();
+                    }
+                    ListedOrdersViewModel = TakeAwayViewModel;
                     break;
                 case ListedOrdersType.Delivery:
+                    if (DelivereyViewModel == null)
+                    {
+                        DelivereyViewModel = new DelivereyViewModel();
+                    }
+                    ListedOrdersViewModel = DelivereyViewModel;
                     break;
                 case ListedOrdersType.Tables:
                     if (TablesViewModel == null)
@@ -487,6 +534,11 @@ namespace PosTest.ViewModels
                     ListedOrdersViewModel = TablesViewModel;
                     break;
                 case ListedOrdersType.Waiting:
+                    if (WaitingViewModel == null)
+                    {
+                        WaitingViewModel = new WaitingViewModel();
+                    }
+                    ListedOrdersViewModel = WaitingViewModel;
                     break;
                 default:
                     break;
@@ -594,7 +646,7 @@ namespace PosTest.ViewModels
                 cmd != ActionButton.Table &&
                 cmd != ActionButton.Del)
             {
-                ToastNotification.Notify("Enter the required vlue before ..");
+                ToastNotification.Notify("Enter the required value before ..");
                 return;
             }
             switch (cmd)
@@ -701,6 +753,13 @@ namespace PosTest.ViewModels
                         ToastNotification.Notify("Non products to split");
                     }
                     break;
+                case ActionButton.Deliverey:
+                    break;
+
+                case ActionButton.Takeaway:
+                    break;
+
+
             }
         }
         
@@ -1019,11 +1078,19 @@ namespace PosTest.ViewModels
 
         public void AddOneToQuantity(OrderItem item)
         {
+            if (item==null)
+            {
+                item = CurrentOrder.SelectedOrderItem;
+            }
             item.Quantity += 1;
         }
 
         public void SubtractOneFromQuantity(OrderItem item)
         {
+            if (item == null)
+            {
+                item = CurrentOrder.SelectedOrderItem;
+            }
             if (item.Quantity <= 1)
                 return;
             item.Quantity -= 1;
@@ -1034,6 +1101,10 @@ namespace PosTest.ViewModels
             if (String.IsNullOrEmpty(NumericZone))
                 return;
 
+            if (item == null)
+            {
+                item = CurrentOrder.SelectedOrderItem;
+            }
             var discountPercent = -1m;
             var discountAmount = -1m;
             var discount = 0m;
@@ -1125,6 +1196,10 @@ namespace PosTest.ViewModels
 
         public void GoToAdditiveButtonsPage(OrderItem oitem)
         {
+            if (oitem==null)
+            {
+                oitem = CurrentOrder.SelectedOrderItem;
+            }
             AdditivesVisibility = true;
             ProductsVisibility = false;
             AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
@@ -1237,7 +1312,9 @@ namespace PosTest.ViewModels
         Table=7,
         SplittedPayment=8,
         Itemprice = 9,
-        Validate = 10
+        Validate = 10,
+        Deliverey = 11,
+        Takeaway = 12
     }
 
     public enum ListedOrdersType

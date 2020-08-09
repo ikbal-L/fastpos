@@ -14,13 +14,27 @@ namespace PosTest.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is OrderItem item && item.Product is Platter && (item.Product as Platter).Additives != null)
+            if (value is OrderItem)
             {
-                return Visibility.Visible;
+                if (value is OrderItem item && item.Product is Platter && (item.Product as Platter).Additives != null)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
             }
             else
             {
-                return Visibility.Collapsed;
+                if (value!=null)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
             }
         }
 

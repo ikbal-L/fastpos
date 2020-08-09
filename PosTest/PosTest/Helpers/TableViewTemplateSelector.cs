@@ -18,12 +18,9 @@ namespace PosTest.Helpers
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             // Null value can be passed by IDE designer
-            if (item == null) return null;
-
-            if (item is SplitViewModel)
-            {
-                return SplitView;
-            }
+            if (item == null ||
+                !(item is TablesViewModel)) 
+                return null;
 
             var tableVM = item as TablesViewModel;
             // Select one of the DataTemplate objects, based on the 
