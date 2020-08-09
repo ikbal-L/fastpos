@@ -198,8 +198,10 @@
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\OrderStateEnumToBrushConverter.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
+    <Compile Include="Extensions\ListPaginationEx.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
+    <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Properties\Resources.en.Designer.cs">
       <DependentUpon>Resources.en.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -258,6 +260,9 @@
     </Compile>
     <Compile Include="Views\SubViews\ProductNavigation.xaml.cs">
       <DependentUpon>ProductNavigation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubViews\TableButtomView.xaml.cs">
+      <DependentUpon>TableButtomView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TablesView.xaml.cs">
       <DependentUpon>TablesView.xaml</DependentUpon>
@@ -407,6 +412,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SubViews\ProductNavigation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubViews\TableButtomView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

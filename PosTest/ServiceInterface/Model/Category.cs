@@ -116,8 +116,20 @@ namespace ServiceInterface.Model
                 _backgroundColor = value;
                 BackgroundString = _backgroundColor.ToString();
                 Background = new SolidColorBrush((Color)_backgroundColor);
+                NotifyOfPropertyChange(() => IsDark);
             }
 
+        }
+
+        public bool IsDark
+        {
+            get
+            {
+                var c = BackgroundColor.GetValueOrDefault();
+                var d = (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
+                Console.Write(Name + " "); Console.WriteLine(d);
+                return (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
+            }
         }
     }
 

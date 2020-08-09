@@ -52,6 +52,8 @@ namespace PosTest.ViewModels
         private decimal givenAmount;
         private decimal returnedAmount;
         private BindableCollection<Table> _tables;
+        private Table _selectedTable;
+        private INotifyPropertyChanged _listedOrdersViewModel;
         #endregion
 
         #region Constructors
@@ -275,7 +277,15 @@ namespace PosTest.ViewModels
             }
         }
 
-
+        public INotifyPropertyChanged ListedOrdersViewModel
+        {
+            get => _listedOrdersViewModel;
+            set
+            {
+                _listedOrdersViewModel = value;
+                NotifyOfPropertyChange();
+            }
+        }
         #endregion
 
         public decimal GivenAmount
@@ -343,7 +353,8 @@ namespace PosTest.ViewModels
             {
                 case 200:
                     if (CurrentOrder.State == OrderState.Payed ||
-                        CurrentOrder.State == OrderState.Canceled)
+                        CurrentOrder.State == OrderState.Canceled ||
+                        CurrentOrder.State == OrderState.Removed)
                     {
                         RemoveCurrentOrder();
                     }
@@ -416,9 +427,17 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-
-            Orders.Remove(CurrentOrder);
+             Orders.Remove(CurrentOrder);
+            if (CurrentOrder.Table != null)
+            {
+                var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
+                if (count == 0 && TablesViewModel!=null)
+                {
+                    TablesViewModel.RemoveTable(CurrentOrder.Table);
+                }
+            }
             CurrentOrder = null;
+            //saved in the DB as removed or canceled and remove it for Orders List
         }
 
         public void CancelOrder()
@@ -427,14 +446,21 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-            if (CurrentOrder.OrderItems.Count == 0)
+            /*if (CurrentOrder.OrderItems.Count == 0)
             {
                 RemoveCurrentOrder();
                 return;
+            }*/
+            if (CurrentOrder.State == null)
+            {
+                CurrentOrder.State = OrderState.Removed;
             }
-            CurrentOrder.State = OrderState.Canceled;
+            else
+            {
+                CurrentOrder.State = OrderState.Canceled;
+            }
             SaveCurrentOrder();
-            RemoveCurrentOrder();
+            //RemoveCurrentOrder();
             //var i = Orders.IndexOf(CurrentOrder);
 
         }
@@ -445,7 +471,25 @@ namespace PosTest.ViewModels
             LoginViewModel loginvm = new LoginViewModel();
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
-            //Application.Current.MainWindow.Close();
+        }
+
+        public void SelectListedOrders(ListedOrdersType type)
+        {
+            switch (type)
+            {
+                case ListedOrdersType.Takeaway:
+                    break;
+                case ListedOrdersType.Delivery:
+                    break;
+                case ListedOrdersType.Tables:
+                    TablesViewModel.IsFullView = false;
+                    ListedOrdersViewModel = TablesViewModel;
+                    break;
+                case ListedOrdersType.Waiting:
+                    break;
+                default:
+                    break;
+            }
         }
 
         #region Filtering and pagination
@@ -611,7 +655,35 @@ namespace PosTest.ViewModels
                     break;
 
                 case ActionButton.Table:
-                    TableAction();
+                    int tableNumber;
+                    if (string.IsNullOrEmpty(NumericZone))
+                    {
+                        if (TablesViewModel != null)
+                        {
+                            TablesViewModel.IsFullView = true;
+                        }
+                        else
+                        {
+                            TablesViewModel = new TablesViewModel(this);
+                            TablesViewModel.IsFullView = true;
+                        }
+
+                        DialogViewModel = TablesViewModel;
+                        IsDialogOpen = true;
+                        return;
+                    }
+                    try
+                    {
+                        tableNumber = Convert.ToInt32(NumericZone);
+                    }
+                    catch (Exception)
+                    {
+                        ToastNotification.Notify("Table Number should be integer");
+                        NumericZone = "";
+                        return;
+                    }
+
+                    TableAction(tableNumber);
                     break;
 
                 case ActionButton.Split:
@@ -663,33 +735,18 @@ namespace PosTest.ViewModels
             SaveCurrentOrder();
         }
 
-        private void TableAction()
+        private void TableAction(int tableNumber)
         {
-            int tableNumber;
-            if (string.IsNullOrEmpty(NumericZone))
-            {
-                IsDialogOpen = true;
-                DialogViewModel = TablesViewModel ?? new TablesViewModel(this);
-                return;
-            }
-            try
-            {
-                tableNumber = Convert.ToInt32(NumericZone);
-            }
-            catch (Exception)
-            {
-                ToastNotification.Notify("Table Number should be integer");
-                NumericZone = "";
-                return;
-            }
-            if (tableNumber < 0)
+             if (tableNumber < 0)
             {
                 NumericZone = "";
                 return;
             }
-
-            var status = 0;
-            var table = _orderService.GetTableByNumber(tableNumber, ref status);
+            
+            var status = 200;
+            Table table;
+            if((table = LookForTableInOrders(tableNumber))==null)
+                table = _orderService.GetTableByNumber(tableNumber, ref status);
             switch (status)
             {
                 case 200:
@@ -697,8 +754,22 @@ namespace PosTest.ViewModels
                     {
                         NewOrder();
                     }
+                    //case of table transfer
+                    if (CurrentOrder.Table!= null && TablesViewModel != null)
+                    {
+                        var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
+                        if (count == 0)
+                        {
+                            TablesViewModel.RemoveTable(CurrentOrder.Table);
+                        }
+                    }
                     CurrentOrder.Table = table;
                     table.AddOrder(CurrentOrder);
+                    if (TablesViewModel == null)
+                    {
+                        TablesViewModel = new TablesViewModel(this);
+                    }
+                    TablesViewModel.Add(table);
                     break;
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
@@ -721,6 +792,30 @@ namespace PosTest.ViewModels
                     break;
             }
             NumericZone = "";
+        }
+
+        private Table LookForTableInOrders(int tableNumber)
+        {
+            if (Tables == null)
+            {
+                return null;
+            }
+            foreach (var t in Tables)
+            {
+                if (t.Number == tableNumber)
+                {
+                    return t;
+                }
+
+            }
+            /*foreach (var o in Orders)
+            {
+                if (o.Table != null && o.Table.Number == tableNumber)
+                {
+                    return o.Table;
+                } 
+            }
+*/          return null;
         }
 
         private void PriceAction(ref string priceStr, Order order)
@@ -1135,5 +1230,13 @@ namespace PosTest.ViewModels
         SplittedPayment=8,
         Itemprice = 9,
         Validate = 10
+    }
+
+    public enum ListedOrdersType
+    {
+        Takeaway,
+        Delivery,
+        Tables,
+        Waiting
     }
 }

@@ -22,33 +22,30 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:OrderItem}">
-        <StackPanel>
-            <DockPanel LastChildFill="False">
-                <TextBlock FontWeight="Bold" FontSize="14" 
-                                Text="{Binding Path=Product.Name}" />
-                <TextBlock DockPanel.Dock="Right" Width="Auto" >
-                    <Run Text="{Binding Path=Total, Mode=OneWay}" FontSize="16" FontWeight="Bold" />
-                    <Run Text=" DA" FontSize="12"/>
-                </TextBlock>
-            </DockPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-            <DockPanel  LastChildFill="False">
-                <TextBlock DockPanel.Dock="Left" Margin="5,0,0,0" >
-                            <Run Text="{Binding Quantity}" FontSize="16" FontWeight="Bold"/>
-                            <Run Text="Unit" FontSize="14"/>
-                            <Run Text="{Binding UnitPrice}" FontSize="16" FontWeight="Bold" />
-                            <Run Text="DA" FontSize="12" />
-                </TextBlock>
-                <TextBlock DockPanel.Dock="Right"  FontSize="12" FontWeight="Bold"
-                           Text="{Binding TotalDiscountAmount, StringFormat='Discount {0} DA'}" 
+            <TextBlock Grid.Column="0" Text="{Binding Quantity}" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" />
+            <TextBlock Grid.Column="1" Text="{Binding Path=Product.Name}"  FontSize="14" FontWeight="Bold"/>
+            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="14" FontWeight="Bold"/>
+            <TextBlock                      Grid.Column="3" 
+                           Text="{Binding TotalDiscountAmount, StringFormat='- {0} DA'}" 
                            Visibility="{Binding TotalDiscountAmount, Converter={StaticResource NumberToVisibility}}"
                            Background="#f7d6e0" 
-                           Foreground="Gray"
-                           Width="Auto"
-                           Padding="5"/>
-            </DockPanel>
+                           Foreground="Gray" HorizontalAlignment="Right"  FontSize="14" FontWeight="Bold"/>
+            <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="14" FontWeight="Bold"/>
 
-            <ListBox ItemsSource="{Binding Additives}"
+            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="14" FontWeight="Bold"
                      SelectedItem="{Binding SelectedAdditive}"
                     ItemTemplate="{StaticResource PlatterAdditives}"
                     Style="{StaticResource kidslist}"
@@ -60,9 +57,10 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
+            
 
 
-        </StackPanel>
+        </Grid>
     </DataTemplate>
     
     <!--<DataTemplate DataType="{x:Type src:Additive}" x:Key="PlatterAditives">

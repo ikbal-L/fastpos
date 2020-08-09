@@ -18,7 +18,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border Name="Border" BorderThickness="1" CornerRadius="3" Padding="1" BorderBrush="Black">
+                    <Border Name="Border" BorderThickness="1" CornerRadius="3" Padding="1" BorderBrush="#FF03A9F4">
                         <DockPanel Name="Dock" >
                             <DockPanel x:Name="BonttonsPanel" DockPanel.Dock="Top" LastChildFill="False" Margin="0 -18 0 0" Visibility="Collapsed">
                                 <Button Name="DelButton" DockPanel.Dock="Right" Visibility="Visible" BorderBrush="#2496ed" Margin="10 0 5 0"
@@ -72,8 +72,8 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Red"/>
-                            <Setter TargetName="Border" Property="Background" Value="Beige"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#3700B3"/>
+                            <Setter TargetName="Border" Property="Background" Value="#FF03A9F4"/>
                             <Setter TargetName="Border" Property="TextBlock.FontSize" Value="13" />
                             <Setter TargetName="Border" Property="TextBlock.FontWeight" Value="Bold" />
                             <Setter TargetName="Border" Property="BorderThickness" Value="2" />

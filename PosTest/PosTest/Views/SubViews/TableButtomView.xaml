@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PosTest.Views.TablesView"
+﻿<UserControl x:Class="PosTest.Views.SubViews.TableButtomView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -72,19 +72,19 @@
                                     <DataTrigger Binding="{Binding TableOrders.Count}" Value="3">
                                         <Setter Property="Width" Value="150"></Setter>
                                     </DataTrigger>
-                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="4">
+                                    <DataTrigger Binding="{Binding TableOrders.Count}" Value="4">
                                         <Setter Property="Width" Value="150"></Setter>
                                     </DataTrigger>
-                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="5">
+                                    <DataTrigger Binding="{Binding TableOrders.Count}" Value="5">
                                         <Setter Property="Width" Value="230"></Setter>
                                     </DataTrigger>
-                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="6">
+                                    <DataTrigger Binding="{Binding TableOrders.Count}" Value="6">
                                         <Setter Property="Width" Value="230"></Setter>
                                     </DataTrigger>
-                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="7">
+                                    <DataTrigger Binding="{Binding TableOrders.Count}" Value="7">
                                         <Setter Property="Width" Value="310"></Setter>
                                     </DataTrigger>
-                                   <DataTrigger Binding="{Binding TableOrders.Count}" Value="8">
+                                    <DataTrigger Binding="{Binding TableOrders.Count}" Value="8">
                                         <Setter Property="Width" Value="310"></Setter>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -92,7 +92,7 @@
                         </Border.Style>
                     </Border>
                 </DataTemplate>
-             </ListBox.ItemTemplate>
+            </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -101,3 +101,4 @@
         </ListBox>
     </Grid>
 </UserControl>
+

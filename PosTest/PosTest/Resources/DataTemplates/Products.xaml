@@ -28,7 +28,7 @@
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                            <Setter Property="Foreground" Value="LightBlue"/>
+                                            <Setter Property="Foreground" Value="White"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -42,7 +42,7 @@
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                            <Setter Property="Foreground" Value="LightBlue"/>
+                                            <Setter Property="Foreground" Value="White"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

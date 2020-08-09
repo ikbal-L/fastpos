@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:PosTest.ViewModels" 
         mc:Ignorable="d"
         
-        WindowStyle="ThreeDBorderWindow"
+        WindowStyle="SingleBorderWindow"
         
         d:DataContext="{x:Type vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"

@@ -3,36 +3,50 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:cal="http://www.caliburnproject.org"
-             xmlns:vm="clr-namespace:PosTest.ViewModels"
-             xmlns:local="clr-namespace:PosTest.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
+             xmlns:local="clr-namespace:PosTest.Views"
+             xmlns:vm="clr-namespace:PosTest.ViewModels"
+             xmlns:help="clr-namespace:PosTest.Helpers"
+             xmlns:convert="clr-namespace:PosTest.Converters"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             Background="#FFC2C3C9"
              d:DataContext="{d:DesignData Source=/Design/CurrentOrder.xaml}"
-             DataContext="{Binding}"
-             
+             DataContext="{Binding}"         
              mc:Ignorable="d"
+             
              d:DesignWidth="900" d:DesignHeight="600">
     <FrameworkElement.Resources>
         <ResourceDictionary >
-            <DataTemplate DataType="{x:Type vm:SplitViewModel}">
+            <DataTemplate DataType="{x:Type vm:SplitViewModel}"  x:Key="splitView">
                 <local:SplitView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:TablesViewModel}">
+            
+            <DataTemplate DataType="{x:Type vm:TablesViewModel}" x:Key="tableFullView">
                 <local:TablesView/>
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:TablesViewModel}" x:Key="tableButtomView">
+                <subviews:TableButtomView/>
+            </DataTemplate>
+
+            <help:TableViewTemplateSelector x:Key="tableViewSelector"
+                                            TableFullView="{StaticResource tableFullView}"
+                                            TableButtomView="{StaticResource tableButtomView}"
+                                            SplitView="{StaticResource splitView}"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen ,FallbackValue='False'}" >
         <materialDesign:DialogHost.DialogContent>
-            <ContentControl Content="{Binding DialogViewModel}" />
+            <ContentControl Content="{Binding DialogViewModel}" ContentTemplateSelector="{StaticResource tableViewSelector}" />
         </materialDesign:DialogHost.DialogContent>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
@@ -51,15 +65,38 @@
 
                     <StackPanel Height="200" Margin="16" HorizontalAlignment="Center" Orientation="Vertical">
 
-                            <ListBox materialDesign:HintAssist.Hint="Tables"   HorizontalContentAlignment="Center"
+                            <ListBox x:Name="ltab" materialDesign:HintAssist.Hint="Tables"   HorizontalContentAlignment="Center"
                                   ItemsSource="{Binding Tables}" SelectedValue="{Binding SelectedTable}" >
-                                <ListBox.ItemTemplate>
+                                
+
+                              
+
+                                    <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type src:Table}">
 
-                                        <Button Content="{Binding Number}"
+                                        <RadioButton  Background="AliceBlue" Content="{Binding Number}" GroupName="groupName" >
+                                            <RadioButton.Style>
+                                                <Style TargetType="{x:Type RadioButton}">
+                                                    <Setter Property="IsChecked" 
+                                                            Value="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" />
+                                                </Style>
+                                            </RadioButton.Style>
+                                        </RadioButton>
+
+                                        <!--<Button Content="{Binding Number}" 
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                                                 materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                                        </Button>
+                                            <i:Interaction.Triggers>
+                                                
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:EventTrigger.Actions>
+                                                        <
+                                                        
+                                                    </i:EventTrigger.Actions>
+                                                    --><!--<i:InvokeCommandAction Command="{Binding SelectedTable}" CommandParameter="{Binding ElementName=ltab, Path=SelectedItem}"/>--><!--
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Button>-->
                                         <!--<materialDesign:Chip Content="Tabe" Icon="" />-->
                                         <!--<Border BorderThickness="1" BorderBrush="Blue" Background="Blue"  CornerRadius="25" Width="25" Height="25" HorizontalAlignment="Center">
                                             <TextBlock                                            
@@ -98,15 +135,24 @@
 
                     <Grid Grid.Column="0" Grid.ColumnSpan="2" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Content="{Binding CurrentOrder.Table,  FallbackValue=Tables,TargetNullValue=Tables}" Grid.Column="0" Margin="2"  Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}"/>
-                        <Button Content="Servers" Grid.Column="1" Margin="2" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}"/>
-                        <Button Content="Livreur" Grid.Column="2" Margin="2" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}"/>
-                        <Button Content="Clients" Grid.Column="3" Margin="2" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}"/>
+<!--Content="{Binding CurrentOrder.Table.Number,  FallbackValue=Tables,TargetNullValue=Tables}"-->
+                        <Button   Height="50" Grid.Column="0" Margin="2"  Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="TableChair" Width="25" Height="25" Margin="-15 0 10 0" />
+                                <TextBlock Text="{Binding CurrentOrder.Table.Number, FallbackValue=Table, TargetNullValue=Tableeee}"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Height="50" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="1" Margin="2" FontSize="16" FontWeight="Bold" Padding="0" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}">
+                            <TextBlock Text="Abde el rahmen" TextWrapping="Wrap"></TextBlock>
+                        </Button>
+                        <Button  Height="50" Content="Livreur" Grid.Column="2" Margin="2" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                        <Button  Height="50" Content="Clients" Grid.Column="3" Margin="2" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Top}" Style="{StaticResource MaterialDesignOutlinedButton}"/>
+
                     </Grid>
 
 
@@ -176,7 +222,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="1" Grid.Column="1"   Margin="2 2 2 2" LastChildFill="False"
-                      Background="{StaticResource MaterialDesignPaper}" >
+                      >
                 <Button DockPanel.Dock="Left" x:Name="Home" Padding="0"
                         cal:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
                         Style="{StaticResource MaterialDesignFlatButton}"
@@ -194,14 +240,24 @@
                                     Content="{Binding Name}" 
                                     cal:Message.Attach="[Event Click] = [Action CategorieFiltering($this)]"
                                     FontWeight="Bold" 
-                                    FontSize="12" Padding="10,0"/>
+                                    FontSize="16" 
+                                    Padding="3 0 0 5"
+                                    Margin="3 0 0 0">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-
             </DockPanel>
-
 
             <Grid Grid.Row="4" Grid.RowSpan="1">
                 <Grid.RowDefinitions>
@@ -221,8 +277,6 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-
-
 
                 <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Padding="0"
                          Text="{Binding NumericZone}" 
@@ -250,7 +304,7 @@
                     <TextBlock Grid.Row="2" Grid.Column="2" Text="Discount: "/>
                     <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,#.00}',FallbackValue='0', Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Payed: "/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Payed: " Foreground="Black"/>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GivenAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='0'}" FontSize="20" FontWeight="Bold"></TextBlock>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Returned: "/>
                     <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ReturnedAmount,StringFormat='{}{0:0}.00  DA',FallbackValue='0'}" FontSize="20" FontWeight="Bold"></TextBlock>
@@ -357,7 +411,7 @@
             </Grid>
 
 
-            <Grid Grid.Row="3" Grid.Column="1" Grid.RowSpan="3"  Background="AliceBlue" Margin="5,0,0,0">
+            <Grid Grid.Row="3" Grid.Column="1" Grid.RowSpan="3"  Margin="5,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="10"/>
@@ -375,17 +429,32 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <subviews:ProductNavigation Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"/>
-                <RadioButton  GroupName="BottomBtn" Grid.Row="1" Width="90" Height="67" Style="{StaticResource ButtonTabDesactive}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                <RadioButton  GroupName="BottomBtn" Grid.Row="1" Width="90" Height="67" 
+                              Style="{StaticResource ButtonTabDesactive}" 
+                              HorizontalAlignment="Center" 
+                              cal:Message.Attach="[Event Click] = [Action SelectListedOrders('TABLES')]"
+                              HorizontalContentAlignment="Center">
                     <TextBlock>
                         <Run Text="Tables"/>
                         <Run Text=""/>
                     </TextBlock>
                 </RadioButton>
                 <RadioButton GroupName="BottomBtn" Grid.Row="3" IsChecked="True" Width="90" Height="67" Content="Emporters"
-                             HorizontalAlignment="Center" Style="{StaticResource ButtonTabDesactive}" HorizontalContentAlignment="Center"/>
-                <RadioButton GroupName="BottomBtn" Grid.Row="5"  Width="90" Height="67" Content="Delivery" HorizontalAlignment="Center" Style="{StaticResource ButtonTabDesactive}" HorizontalContentAlignment="Center"/>
-                <RadioButton GroupName="BottomBtn" Grid.Row="7"  Width="90" Height="67" Content="Attente" HorizontalAlignment="Center" Style="{StaticResource ButtonTabDesactive}" HorizontalContentAlignment="Center"/>
+                             HorizontalAlignment="Center" Style="{StaticResource ButtonTabDesactive}" 
+                             cal:Message.Attach="[Event Click] = [Action SelectListedOrders('TAKEAWAY')]"
+                             HorizontalContentAlignment="Center"/>
+                <RadioButton GroupName="BottomBtn" Grid.Row="5"  Width="90" Height="67" 
+                             Content="Delivery" HorizontalAlignment="Center" 
+                             Style="{StaticResource ButtonTabDesactive}" 
+                              cal:Message.Attach="[Event Click] = [Action SelectListedOrders('DELIVERY')]"
+                            HorizontalContentAlignment="Center"/>
+                <RadioButton GroupName="BottomBtn" Grid.Row="7"  Width="90" Height="67" Content="Attente" 
+                             HorizontalAlignment="Center" 
+                             Style="{StaticResource ButtonTabDesactive}" 
+                             cal:Message.Attach="[Event Click] = [Action SelectListedOrders('WAITING')]"
+                             HorizontalContentAlignment="Center"/>
                 <Rectangle Grid.Column="1"  Grid.Row="1" Grid.RowSpan="7" Fill="#FF03A9F4"/>
+                <ContentControl Grid.Row="1" Grid.Column="2" Content="{Binding ListedOrdersViewModel}" ContentTemplateSelector="{StaticResource tableViewSelector}"/>
             </Grid>
         </Grid>
     </materialDesign:DialogHost>

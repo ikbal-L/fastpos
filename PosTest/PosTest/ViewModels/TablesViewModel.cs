@@ -13,14 +13,34 @@ namespace PosTest.ViewModels
         public TablesViewModel(CheckoutViewModel checkoutViewModel)
         {
             Parent = checkoutViewModel;
+            Tables = new BindableCollection<Table>();
+            IsFullView = false;
         }
         public BindableCollection<Table> Tables { get; set; }
         public CheckoutViewModel Parent { get; set; }
+        public bool IsFullView { get; set; }
     
         public void BackCommand()
         {
             Parent.IsDialogOpen = false;
             Parent.DialogViewModel = null;
+        }
+
+        internal void Add(Table table)
+        {
+            if (!Tables.Any(t => t==table))
+            {
+                Tables.Add(table);
+            }
+        }
+
+        internal void RemoveTable(Table table)
+        {
+            if (Tables == null || Tables.Count==0)
+            {
+                return;
+            }
+            Tables.Remove(table);
         }
     }
 }
