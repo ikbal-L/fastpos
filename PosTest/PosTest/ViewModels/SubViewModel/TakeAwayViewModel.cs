@@ -19,13 +19,32 @@ namespace PosTest.ViewModels.SubViewModel
         {
             Parent = checkoutViewModel;
             TakeawayOrders = new BindableCollection<Order>();
-            Orders = CollectionViewSource.GetDefaultView(Parent.Orders);
-            Orders.Filter = o => (o as Order).Type == OrderType.Takeaway;
+            OrderViewSource = new CollectionViewSource();
+            OrderViewSource.Source = Parent.Orders;
+            OrderViewSource.Filter += OrderTypeFilter;
+            Orders = OrderViewSource.View;// CollectionViewSource.GetDefaultView(Parent.Orders);
+           // Orders.Filter = o => (o as Order).Type == OrderType.Takeaway;
 
         }
+        public CollectionViewSource OrderViewSource { get; set; }
         public BindableCollection<Order> TakeawayOrders { get; set; }
         public CheckoutViewModel Parent { get; set; }
-
+        public void OrderTypeFilter(object sender, FilterEventArgs e)
+        {
+            Order order = e.Item as Order;
+            if (order != null)
+            {
+                // Filter out products with price 25 or above
+                if (order.Type == OrderType.Takeaway)
+                {
+                    e.Accepted = true;
+                }
+                else
+                {
+                    e.Accepted = false;
+                }
+            }
+        }
         public ICollectionView Orders
         {
             get => _orders;
@@ -43,23 +62,6 @@ namespace PosTest.ViewModels.SubViewModel
                 _selectedOrder = value;
                 NotifyOfPropertyChange();
             }
-        }
-
-        internal void AddOrder(Order order)
-        {
-            if (!TakeawayOrders.Any(t => t == order))
-            {
-                TakeawayOrders.Add(order);
-            }
-        }
-
-        internal void RemoveOrder(Order order)
-        {
-            if (TakeawayOrders == null || TakeawayOrders.Count == 0)
-            {
-                return;
-            }
-            TakeawayOrders.Remove(order);
         }
 
     }

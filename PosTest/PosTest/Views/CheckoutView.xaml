@@ -123,11 +123,11 @@
                             </ListBox>
 
                             <Button Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
-                            CommandParameter="{x:Static Dock.Top}"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Margin="4" VerticalAlignment="Center">
-                            CLOSE THIS
-                        </Button>
+                                CommandParameter="{x:Static Dock.Top}"
+                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                Margin="4" VerticalAlignment="Center">
+                                CLOSE THIS
+                            </Button>
                     </StackPanel>
                         
                     </Grid>

@@ -70,6 +70,9 @@ namespace PosTest.ViewModels
                 CurrentOrder = new Order();
                 Orders.Add(CurrentOrder);
             }
+            TakeAwayViewModel = new TakeawayViewModel(this);
+            DelivereyViewModel = new DelivereyViewModel(this);
+            WaitingViewModel = new WaitingViewModel(this);
             Task.Run(CalculateOrderElapsedTime);
         }
 
@@ -125,7 +128,12 @@ namespace PosTest.ViewModels
             var status = 0;
             var tables = _orderService.GeAlltTables(ref status);
             Tables = new BindableCollection<Table>(tables);
-            InitCategoryColors();
+            foreach (var table in Tables)
+            {
+                table.AllOrders = Orders;
+            }
+            TablesViewModel = new TablesViewModel(this);
+            //InitCategoryColors();
         }
         #endregion
 
@@ -457,68 +465,46 @@ namespace PosTest.ViewModels
             Orders.Add(CurrentOrder);
             CurrentOrder.OrderTime = DateTime.Now;
             SetCurrentOrderType(OrderType.InWaiting);
-            //WaitingViewModel = WaitingViewModel ?? new WaitingViewModel();
-            //WaitingViewModel.AddOrder(CurrentOrder);
-        }
-        private void RemoveCurrentOrderFromAnyList()
-        {
-            switch (CurrentOrder.Type)
-            {
-                case OrderType.Delivery:
-                    DelivereyViewModel = DelivereyViewModel ?? new DelivereyViewModel(this);
-                    DelivereyViewModel.RemoveOrder(CurrentOrder);
-                    break;
-                case OrderType.OnTable:
-                    TablesViewModel = TablesViewModel ?? new TablesViewModel(this);
-                    TablesViewModel.RemoveOrder(CurrentOrder);
-                    break;
-                case OrderType.Takeaway:
-                    TakeAwayViewModel = TakeAwayViewModel ?? new TakeawayViewModel(this);
-                    TakeAwayViewModel.RemoveOrder(CurrentOrder);
-                    break;
-                case OrderType.InWaiting:
-                    WaitingViewModel = WaitingViewModel ?? new WaitingViewModel(this);
-                    WaitingViewModel.RemoveOrder(CurrentOrder);
-                    break;
-                default:
-                    break;
-            }
-
         }
 
+        FilterEventHandler TableOrdersFilter;
         private void SetCurrentOrderType(OrderType orderType, Table table=null)
-        {
-            RemoveCurrentOrderFromAnyList();
+        { 
             CurrentOrder.Type = orderType;
-            switch (CurrentOrder.Type)
+            if (orderType == OrderType.OnTable)
             {
-                case OrderType.Delivery:
-                    DelivereyViewModel = DelivereyViewModel ?? new DelivereyViewModel(this);
-                    DelivereyViewModel.Orders.Refresh();
-                    //DelivereyViewModel.AddOrder(CurrentOrder);
-                    break;
-                case OrderType.OnTable:
-                    TablesViewModel = TablesViewModel ?? new TablesViewModel(this);
-                    CurrentOrder.Table = table;
-                    CurrentOrder.Table.AddOrder(CurrentOrder);
-                    if (TablesViewModel == null)
-                    {
-                        TablesViewModel = new TablesViewModel(this);
-                    }
-                    TablesViewModel.AddIfNotExists(table);
-                    break;
-                case OrderType.Takeaway:
-                    TakeAwayViewModel = TakeAwayViewModel ?? new TakeawayViewModel(this);
-                    TakeAwayViewModel.AddOrder(CurrentOrder);
-                    break;
-                case OrderType.InWaiting:
-                    WaitingViewModel = WaitingViewModel ?? new WaitingViewModel(this);
-                    WaitingViewModel.AddOrder(CurrentOrder);
-                    break;
-                default:
-                    break;
+                CurrentOrder.Table = table;
             }
             
+            DelivereyViewModel.OrderViewSource.Filter -= DelivereyViewModel.OrderTypeFilter;
+            DelivereyViewModel.OrderViewSource.Filter += DelivereyViewModel.OrderTypeFilter;
+            WaitingViewModel.OrderViewSource.Filter -= WaitingViewModel.OrderTypeFilter;
+            WaitingViewModel.OrderViewSource.Filter += WaitingViewModel.OrderTypeFilter;
+            TakeAwayViewModel.OrderViewSource.Filter -= TakeAwayViewModel.OrderTypeFilter;
+            TakeAwayViewModel.OrderViewSource.Filter += TakeAwayViewModel.OrderTypeFilter;
+
+            foreach (var t in Tables)
+            {
+                TableOrdersFilter = (s, e) =>
+                {
+                    Order order = e.Item as Order;
+                    if (order != null)
+                    {
+                        if (order.Table == t)
+                        {
+                            e.Accepted = true;
+                        }
+                        else
+                        {
+                            e.Accepted = false;
+                        }
+                    }
+                };
+                t.OrderViewSource.Filter -= TableOrdersFilter;
+                t.OrderViewSource.Filter += TableOrdersFilter;
+            }
+            TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
+            TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
         }
 
         public void SetNullCurrentOrder()
@@ -538,18 +524,10 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-            RemoveCurrentOrderFromAnyList();
             Orders.Remove(CurrentOrder);
-            if (CurrentOrder.Table != null)
-            {
-                var isremoved = false;
-                var count = CurrentOrder.Table.RemoveOrder(CurrentOrder, ref isremoved);
-                if (count == 0 && TablesViewModel!=null)
-                {
-                    TablesViewModel.RemoveTable(CurrentOrder.Table);
-                }
-            }
+           
             CurrentOrder = null;
+            TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
             //saved in the DB as removed or canceled and remove it for Orders List
         }
 
@@ -591,32 +569,16 @@ namespace PosTest.ViewModels
             switch (type)
             {
                 case ListedOrdersType.Takeaway:
-                    if (TakeAwayViewModel == null)
-                    {
-                        TakeAwayViewModel = new TakeawayViewModel(this);
-                    }
                     ListedOrdersViewModel = TakeAwayViewModel;
                     break;
                 case ListedOrdersType.Delivery:
-                    if (DelivereyViewModel == null)
-                    {
-                        DelivereyViewModel = new DelivereyViewModel(this);
-                    }
                     ListedOrdersViewModel = DelivereyViewModel;
                     break;
                 case ListedOrdersType.Tables:
-                    if (TablesViewModel == null)
-                    {
-                        TablesViewModel = new TablesViewModel(this);
-                    }
                     TablesViewModel.IsFullView = false;
                     ListedOrdersViewModel = TablesViewModel;
                     break;
                 case ListedOrdersType.Waiting:
-                    if (WaitingViewModel == null)
-                    {
-                        WaitingViewModel = new WaitingViewModel(this);
-                    }
                     ListedOrdersViewModel = WaitingViewModel;
                     break;
                 default:

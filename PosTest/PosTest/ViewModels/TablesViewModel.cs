@@ -2,9 +2,11 @@
 using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace PosTest.ViewModels
 {
@@ -13,10 +15,32 @@ namespace PosTest.ViewModels
         public TablesViewModel(CheckoutViewModel checkoutViewModel)
         {
             Parent = checkoutViewModel;
-            Tables = new BindableCollection<Table>();
             IsFullView = false;
+            TablesViewSource = new CollectionViewSource();
+            TablesViewSource.Source = Parent.Tables;
+            TablesViewSource.Filter += TablesFilter;
+            TablesView = TablesViewSource.View;
         }
-        public BindableCollection<Table> Tables { get; set; }
+
+        public void TablesFilter(object sender, FilterEventArgs e)
+        {
+            Table table = e.Item as Table;
+            if (table != null)
+            {
+                // Filter out products with price 25 or above
+                if (table.Orders.Cast<Order>().Count() > 0)
+                {
+                    e.Accepted = true;
+                }
+                else
+                {
+                    e.Accepted = false;
+                }
+            }
+        }
+        public CollectionViewSource TablesViewSource { get; set; }
+
+        public ICollectionView TablesView { get; set; }
         public CheckoutViewModel Parent { get; set; }
         public bool IsFullView { get; set; }
     
@@ -24,38 +48,6 @@ namespace PosTest.ViewModels
         {
             Parent.IsDialogOpen = false;
             Parent.DialogViewModel = null;
-        }
-
-        internal void AddIfNotExists(Table table)
-        {
-            if (!Tables.Any(t => t==table))
-            {
-                Tables.Add(table);
-            }
-        }
-
-        internal void RemoveTable(Table table)
-        {
-            if (Tables == null || Tables.Count==0)
-            {
-                return;
-            }
-            Tables.Remove(table);
-        }
-
-        internal void RemoveOrder(Order currentOrder)
-        {
-            Table toRemove=null;
-            foreach (var table in Tables)
-            {
-                var isremoved = false;
-                var count = table.RemoveOrder(currentOrder, ref isremoved);
-                if (count == 0 && isremoved)
-                {
-                    toRemove = table;
-                }
-            }
-            RemoveTable(toRemove);
         }
     }
 }
