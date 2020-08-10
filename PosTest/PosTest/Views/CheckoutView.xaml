@@ -47,6 +47,7 @@
             <helpers:TableViewTemplateSelector x:Key="tableViewSelector"
                                             TableFullView="{StaticResource tableFullView}"
                                             TableButtomView="{StaticResource tableButtomView}"/>
+            <convert:ObjectToBoolConverter x:Key="objectToBoolConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -148,6 +149,7 @@
                    
                 </Grid>
                 <Grid Grid.Column="1">
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
@@ -155,43 +157,45 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" Foreground="#2496ed" Background="WhiteSmoke"
                                 caliburn:Message.Attach="[Event Click] = [Action RemoveOrerItem($this)]"
-                                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                                Style="{StaticResource ButtonStyle22}">
                         <materialdesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
                     </Button>
-                    <Button Grid.Row="1" Foreground="#2496ed" Background="WhiteSmoke" 
-                                 Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                        <Button Grid.Row="1" Foreground="#2496ed" Background="WhiteSmoke" IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
+                           
+                                 Style="{StaticResource ButtonStyle22}"
                                  caliburn:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage($this)]">
                         <materialdesign:PackIcon Kind="ShapePlus" Height="25"  Width="25"/>
                     </Button>
                     <Button   Grid.Row="2" Foreground="#2496ed" Background="WhiteSmoke"
-                                 Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                 Style="{StaticResource ButtonStyle22}"
                                  caliburn:Message.Attach="[Event Click] = [Action AddOneToQuantity($this)]">
                         <materialdesign:PackIcon Kind="Plus" Height="25"  Width="25"/>
                     </Button>
                     <Button   Grid.Row="3" Foreground="#2496ed" Background="WhiteSmoke"
-                                 Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                 Style="{StaticResource ButtonStyle22}"
                                  caliburn:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity($this)]">
                         <materialdesign:PackIcon Kind="Minus" Height="25"  Width="25"/>
                     </Button>
                     <Button   Grid.Row="4" Foreground="#2496ed" Background="WhiteSmoke"
-                                 Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                 Style="{StaticResource ButtonStyle22}"
                                  caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem($this)]">
                         <materialdesign:PackIcon Kind="CashMinus" Height="25"  Width="25"/>
                     </Button>
 
-                        <Button   Grid.Row="7" Foreground="#2496ed" Background="WhiteSmoke"
-                                 Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                        <Button   Grid.Row="8" Foreground="#2496ed" Background="WhiteSmoke"
+                                 Style="{StaticResource ButtonStyle22}"
                                  caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem($this)]">
                             <materialdesign:PackIcon Kind="ChevronDoubleDown" Height="25"  Width="25"/>
                         </Button>
 
-                        <Button   Grid.Row="6" Foreground="#2496ed" Background="WhiteSmoke"
-                                 Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                        <Button   Grid.Row="7" Foreground="#2496ed" Background="WhiteSmoke"
+                                 Style="{StaticResource ButtonStyle22}"
                                  caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem($this)]">
                             <materialdesign:PackIcon Kind="ChevronDoubleUp" Height="25"  Width="25"/>
                         </Button>
@@ -222,17 +226,17 @@
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="2*"/>
                                 </Grid.RowDefinitions>
-                                <Border  Grid.Row="1" Grid.Column="1" BorderThickness="1 0 0 0" BorderBrush="CornflowerBlue">
+                                <Border  Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0" BorderBrush="CornflowerBlue">
                                     <TextBox  Foreground="#26ff26"
                                               Text="{Binding NumericZone,FallbackValue=123}" 
                                               FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
                                               HorizontalContentAlignment="Right"/>
                                 </Border>
 
-                                <Border Grid.Row="0" Grid.Column="1" BorderThickness="1 0 0 1" BorderBrush="CornflowerBlue">
+                                <Border Grid.Row="0" Grid.Column="1" BorderThickness="0 0 0 0" BorderBrush="CornflowerBlue">
                                     <TextBlock  
                                            Text="{Binding GivenAmount,StringFormat='{}{0:0}.00',FallbackValue='0'}" 
-                                           FontSize="20" FontWeight="Bold"
+                                           FontSize="25" FontWeight="Bold"
                                            Foreground="#26ff26"  FontFamily="{StaticResource DigitalFontFamily}"
                                            HorizontalAlignment="Right"/>
                                 </Border>
@@ -242,19 +246,19 @@
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    
-                                        <StackPanel Orientation="Horizontal">
+
+                                    <DockPanel >
                                             <materialdesign:PackIcon Kind="Sigma" Width="30" Height="30" Padding="0" Foreground="#26ff26"/>
-                                            <TextBlock  Foreground="#26ff26"  FontFamily="{StaticResource DigitalFontFamily}"
+                                        <TextBlock  Foreground="#26ff26" TextAlignment="Right" FontFamily="{StaticResource DigitalFontFamily}"
                                                         FontSize="28" 
                                                         Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,#.00}', FallbackValue='000000', Mode=OneWay}">
                                             </TextBlock>
-                                        </StackPanel>
-                                    <StackPanel  Grid.Row="2" Grid.Column="3"  Orientation="Horizontal">
-                                        <materialdesign:PackIcon Kind="CashMinus" Width="30" Height="30" Padding="0" Foreground="#26ff26"/>
-                                        <TextBlock Foreground="#26ff26" FontSize="30"  FontFamily="{StaticResource DigitalFontFamily}"
+                                        </DockPanel>
+                                    <DockPanel  Grid.Row="2" Grid.Column="3">
+                                        <materialdesign:PackIcon Kind="CashMinus" DockPanel.Dock="Left" Width="30" Height="30" Padding="0" Foreground="#26ff26"/>
+                                        <TextBlock Foreground="#26ff26" FontSize="30" DockPanel.Dock="Right" TextAlignment="Right"  FontFamily="{StaticResource DigitalFontFamily}"
                                                Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,#.00}',FallbackValue='0', Mode=OneWay}"/>
-                                    </StackPanel>
+                                    </DockPanel>
                                 </Grid>
                             </Grid>
                             
@@ -341,8 +345,8 @@
                             <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="Payment" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"   Style="{StaticResource ButtonStyle18}" 
-                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"/>
+                        <Button  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"   Style="{StaticResource ButtonStyle18}" 
+                          Content="{materialdesign:PackIcon CashRegister, 30 }" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"/>
 
                         <Button Grid.Row="3" Grid.Column="0" Content="{materialdesign:PackIcon  Kind=DotsHorizontal, Size=30}"
                         Style="{StaticResource ButtonStyle18}" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Other')]"/>
@@ -513,20 +517,43 @@
 
                 <RadioButton Grid.Row="0" Width="90" Height="70" GroupName="BottomBtn"   
                              Style="{StaticResource ButtonTabDesactive}" caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TABLES')]">
-                    <TextBlock>
-                        <Run Text="Tables"/>
-                        <Run Text=""/>
-                    </TextBlock>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Tables"/>
+                        <Border Width="30" Height="30" CornerRadius="30"  Background="#e74c3c" >
+                            <TextBlock Text="2" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
                 </RadioButton>
                 <RadioButton Grid.Row="1" Width="90" Height="70" GroupName="BottomBtn" IsChecked="True" 
-                              Content="Emporters" Style="{StaticResource ButtonTabDesactive}" 
-                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TAKEAWAY')]"/>
+                            Style="{StaticResource ButtonTabDesactive}" 
+                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TAKEAWAY')]">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Emporters"/>
+                        <Border Width="30" Height="30" CornerRadius="30"  Background="#e74c3c" >
+                            <TextBlock Text="2" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </RadioButton>
                 <RadioButton Grid.Row="2" Width="90" Height="70" GroupName="BottomBtn" 
-                             Content="Delivery"  Style="{StaticResource ButtonTabDesactive}" 
-                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('DELIVERY')]"/>
+                              Style="{StaticResource ButtonTabDesactive}" 
+                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('DELIVERY')]">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Delivery"/>
+                        <Border Width="30" Height="30" CornerRadius="30"  Background="#e74c3c" >
+                            <TextBlock Text="2" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </RadioButton>
                 <RadioButton Grid.Row="3" Width="90" Height="70" GroupName="BottomBtn"
-                             Content="Attente" Style="{StaticResource ButtonTabDesactive}" 
-                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('WAITING')]"/>
+                              Style="{StaticResource ButtonTabDesactive}" 
+                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('WAITING')]">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Attente"/>
+                        <Border Width="30" Height="30" CornerRadius="30"  Background="#e74c3c" >
+                            <TextBlock Text="2" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </RadioButton>
                 <ContentControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Content="{Binding ListedOrdersViewModel}" ContentTemplateSelector="{StaticResource tableViewSelector}"/>
             </Grid>
 
