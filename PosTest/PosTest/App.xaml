@@ -11,6 +11,10 @@
                 <ResourceDictionary>
                     <local:ShellBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>
+                <!--Mateirla design-->
+                <materialDesign:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                
                 <ResourceDictionary Source="/Resources/Styles/Brushes.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/AdditiveListStyle.xaml"/>
@@ -22,9 +26,6 @@
                 <!--ToastNotifications-->
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
 
-                <!--Mateirla design-->
-                <materialDesign:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />

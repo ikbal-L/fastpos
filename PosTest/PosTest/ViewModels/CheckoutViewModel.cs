@@ -1208,7 +1208,20 @@ namespace PosTest.ViewModels
 
         #endregion
 
-    }
+        private bool _IsTopDrawerOpen;
+        public bool IsTopDrawerOpen {
+            get => _IsTopDrawerOpen;
+            set => Set(ref _IsTopDrawerOpen, value);
+        }
+
+        public void ShowTablesCommand()
+        {
+            IsTopDrawerOpen = true;
+        }
+
+
+
+        }
 
 
     static class ToastNotification

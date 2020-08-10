@@ -35,18 +35,16 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Quantity, StringFormat=' {0}x'}" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"
-                       Foreground="Blue"/>
-            <TextBlock Grid.Column="1" Text="{Binding Path=Product.Name}"  FontSize="14" FontWeight="Bold"/>
-            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="14" FontWeight="Bold"/>
+            <TextBlock Grid.Column="0" Text="{Binding Quantity, StringFormat=' {0}x'}" HorizontalAlignment="Center" FontSize="16"/>
+            <TextBlock Grid.Column="1" Text="{Binding Path=Product.Name}"  FontSize="16" />
+            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="16" />
             <TextBlock     Grid.Column="3" 
-                           Text="{Binding TotalDiscountAmount, StringFormat=' {0} DA'}" 
+                           Text="{Binding TotalDiscountAmount, StringFormat='-{0}'}" 
                            Visibility="{Binding TotalDiscountAmount, Converter={StaticResource NumberToVisibility}}"
-                           Background="#f7d6e0" 
-                           Foreground="Gray" HorizontalAlignment="Right"  FontSize="14" FontWeight="Bold"/>
-            <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="14" FontWeight="Bold"/>
+                           Background="#f7d6e0" HorizontalAlignment="Right"  FontSize="16" />
+            <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="16" />
 
-            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="14" FontWeight="Bold"
+            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="16"
                      SelectedItem="{Binding SelectedAdditive}"
                      ItemTemplate="{StaticResource PlatterAdditives}"
                      Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"

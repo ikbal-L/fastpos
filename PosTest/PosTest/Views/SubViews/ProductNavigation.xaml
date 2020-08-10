@@ -20,29 +20,8 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="2" Height="100" Width="35" Margin="2 0 0 0" Padding="0" VerticalAlignment="Center"
-                        x:Name="NextPage"
-                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
-                        Visibility="{Binding CanExecuteMext,Converter={StaticResource BoolToVisibility}}" 
-                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialDesign:PackIcon ChevronDoubleRight,30}" />
 
-            <Button Grid.Column="0" Height="100" Width="35" VerticalAlignment="Center" Padding="0"
-                        x:Name="PreviousPqge"
-                        cal:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
-                        Visibility="{Binding CanExecutePrevious,Converter={StaticResource BoolToVisibility}}" 
-                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialDesign:PackIcon ChevronDoubleLeft,30}"  
-                        />
-            <Rectangle Grid.Column="0" Height="100" Width="35"/>
-            <Rectangle Grid.Column="0" Height="100" Width="35"/>
-
-            <ListBox  Grid.Column="1" ItemsSource="{Binding ProductsPage}"
+            <ListBox ItemsSource="{Binding ProductsPage}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="2"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                  Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
@@ -79,13 +58,16 @@
         </ListBox>
 
         <Button Grid.Row="1" 
+                 Style="{StaticResource MaterialDesignFlatButton}"
                     Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}"
-                    Width="116" Height="116" 
+                    Width="70" Height="70" 
                     VerticalAlignment="Top" HorizontalAlignment="Right" 
-                    x:Name="ReturnFromAdditives"  Style="{x:Null}"  
-                    Content="Return" Margin="8" 
+                    x:Name="ReturnFromAdditives"  
+                    Margin="8" 
                     cal:Message.Attach="[Event Click] = [Action ReturnFromAdditives()]"
-        />
+        >
+            <materialDesign:PackIcon Kind="KeyboardReturn" Width="35" Height="35" FontSize="18"/>
+        </Button>
     </Grid>
 
 </UserControl>
