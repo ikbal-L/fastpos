@@ -26,7 +26,7 @@ namespace PosTest.ViewModels
             Parent.DialogViewModel = null;
         }
 
-        internal void Add(Table table)
+        internal void AddIfNotExists(Table table)
         {
             if (!Tables.Any(t => t==table))
             {
@@ -41,6 +41,21 @@ namespace PosTest.ViewModels
                 return;
             }
             Tables.Remove(table);
+        }
+
+        internal void RemoveOrder(Order currentOrder)
+        {
+            Table toRemove=null;
+            foreach (var table in Tables)
+            {
+                var isremoved = false;
+                var count = table.RemoveOrder(currentOrder, ref isremoved);
+                if (count == 0 && isremoved)
+                {
+                    toRemove = table;
+                }
+            }
+            RemoveTable(toRemove);
         }
     }
 }

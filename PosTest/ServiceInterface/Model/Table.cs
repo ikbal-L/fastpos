@@ -49,13 +49,13 @@ namespace ServiceInterface.Model
             TableOrders.Add(currentOrder);
         }
 
-        public int RemoveOrder(Order currentOrder)
+        public int RemoveOrder(Order currentOrder, ref bool isRemoved)
         {
             if (TableOrders == null)
             {
                 return 0;
             }
-            TableOrders.Remove(currentOrder);
+            isRemoved = TableOrders.Remove(currentOrder);
             return TableOrders.Count;
         }
     }

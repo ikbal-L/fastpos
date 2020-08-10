@@ -158,13 +158,13 @@
                 <Border CornerRadius="90" Background="Gray" Height="20" Width="20" Margin="0 0 2 0" >
                     <TextBlock FontWeight="Bold" FontSize="12"  Text="{Binding Table.Number}" HorizontalAlignment="Center"/>
                 </Border>
-                <TextBlock Text="{Binding OrderTime, StringFormat=t}"/>
+                <TextBlock Text="{Binding ElapsedTime.Minutes}"/>
             </StackPanel>
         </Button>
     </DataTemplate>
 
     <Style TargetType="{x:Type ListBoxItem}" x:Key="OrderButtonList_ItemStyle">
-        <Setter Property="Background" Value="Blue"/>
+        <Setter Property="Background" Value="LightBlue"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="12"/>

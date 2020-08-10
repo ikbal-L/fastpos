@@ -23,6 +23,8 @@ namespace ServiceInterface.Model
         private Table _table;
         private Order _splittedFrom;
         private OrderState? _state;
+        private OrderType? _type;
+        private TimeSpan _elapsedTime;
 
         public Order()
         {
@@ -50,8 +52,26 @@ namespace ServiceInterface.Model
         [DataMember]
         public DateTime OrderTime { get; set; }
 
+        public TimeSpan ElapsedTime
+        {
+            get => _elapsedTime;
+            set
+            {
+                _elapsedTime = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         [DataMember]
-        public OrderType Type { get; set; }
+        public OrderType? Type 
+        {
+            get => _type;
+            set
+            {
+                _type = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -343,11 +363,13 @@ namespace ServiceInterface.Model
     [DataContract]
     public class OrderStateElement
     {
+
         [DataMember]
         public long SessionId { get; set; }
 
         [DataMember]
         public DateTime StateTime { get; set; }
+
 
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -369,6 +391,7 @@ namespace ServiceInterface.Model
     {
         Delivery,
         OnTable,
-        Takeaway
+        Takeaway,
+        InWaiting
     }
 }

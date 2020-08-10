@@ -19,6 +19,7 @@ using ToastNotifications.Position;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
 using PosTest.ViewModels.SubViewModel;
+using System.Threading;
 
 namespace PosTest.ViewModels
 {
@@ -57,7 +58,7 @@ namespace PosTest.ViewModels
         private INotifyPropertyChanged _listedOrdersViewModel;
         private WaitingViewModel _waitingViewModel;
         private DelivereyViewModel _delivereyViewModel;
-        private TakeAwayViewModel _takeAwayViewModel;
+        private TakeawayViewModel _takeAwayViewModel;
         #endregion
 
         #region Constructors
@@ -69,8 +70,23 @@ namespace PosTest.ViewModels
                 CurrentOrder = new Order();
                 Orders.Add(CurrentOrder);
             }
+            Task.Run(CalculateOrderElapsedTime);
         }
 
+        void CalculateOrderElapsedTime()
+        {
+            while (true)
+            {
+                if (Orders != null)
+                {
+                    foreach (var o in Orders)
+                    {
+                        o.ElapsedTime = DateTime.Now - o.OrderTime;
+                    }
+                }
+                Thread.Sleep(30000);
+            }
+        }
         public CheckoutViewModel(int pageSize, IProductService productsService, 
             ICategoryService categoriesService,
             IOrderService orderService) : this()
@@ -267,7 +283,7 @@ namespace PosTest.ViewModels
             }
         }
 
-        public TakeAwayViewModel TakeAwayViewModel
+        public TakeawayViewModel TakeAwayViewModel
         {
             get => _takeAwayViewModel;
             set
@@ -440,8 +456,69 @@ namespace PosTest.ViewModels
             DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
             CurrentOrder.OrderTime = DateTime.Now;
-            WaitingViewModel = WaitingViewModel ?? new WaitingViewModel();
-            WaitingViewModel.AddOrder(CurrentOrder);
+            SetCurrentOrderType(OrderType.InWaiting);
+            //WaitingViewModel = WaitingViewModel ?? new WaitingViewModel();
+            //WaitingViewModel.AddOrder(CurrentOrder);
+        }
+        private void RemoveCurrentOrderFromAnyList()
+        {
+            switch (CurrentOrder.Type)
+            {
+                case OrderType.Delivery:
+                    DelivereyViewModel = DelivereyViewModel ?? new DelivereyViewModel(this);
+                    DelivereyViewModel.RemoveOrder(CurrentOrder);
+                    break;
+                case OrderType.OnTable:
+                    TablesViewModel = TablesViewModel ?? new TablesViewModel(this);
+                    TablesViewModel.RemoveOrder(CurrentOrder);
+                    break;
+                case OrderType.Takeaway:
+                    TakeAwayViewModel = TakeAwayViewModel ?? new TakeawayViewModel(this);
+                    TakeAwayViewModel.RemoveOrder(CurrentOrder);
+                    break;
+                case OrderType.InWaiting:
+                    WaitingViewModel = WaitingViewModel ?? new WaitingViewModel(this);
+                    WaitingViewModel.RemoveOrder(CurrentOrder);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        private void SetCurrentOrderType(OrderType orderType, Table table=null)
+        {
+            RemoveCurrentOrderFromAnyList();
+            CurrentOrder.Type = orderType;
+            switch (CurrentOrder.Type)
+            {
+                case OrderType.Delivery:
+                    DelivereyViewModel = DelivereyViewModel ?? new DelivereyViewModel(this);
+                    DelivereyViewModel.Orders.Refresh();
+                    //DelivereyViewModel.AddOrder(CurrentOrder);
+                    break;
+                case OrderType.OnTable:
+                    TablesViewModel = TablesViewModel ?? new TablesViewModel(this);
+                    CurrentOrder.Table = table;
+                    CurrentOrder.Table.AddOrder(CurrentOrder);
+                    if (TablesViewModel == null)
+                    {
+                        TablesViewModel = new TablesViewModel(this);
+                    }
+                    TablesViewModel.AddIfNotExists(table);
+                    break;
+                case OrderType.Takeaway:
+                    TakeAwayViewModel = TakeAwayViewModel ?? new TakeawayViewModel(this);
+                    TakeAwayViewModel.AddOrder(CurrentOrder);
+                    break;
+                case OrderType.InWaiting:
+                    WaitingViewModel = WaitingViewModel ?? new WaitingViewModel(this);
+                    WaitingViewModel.AddOrder(CurrentOrder);
+                    break;
+                default:
+                    break;
+            }
+            
         }
 
         public void SetNullCurrentOrder()
@@ -461,10 +538,12 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-             Orders.Remove(CurrentOrder);
+            RemoveCurrentOrderFromAnyList();
+            Orders.Remove(CurrentOrder);
             if (CurrentOrder.Table != null)
             {
-                var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
+                var isremoved = false;
+                var count = CurrentOrder.Table.RemoveOrder(CurrentOrder, ref isremoved);
                 if (count == 0 && TablesViewModel!=null)
                 {
                     TablesViewModel.RemoveTable(CurrentOrder.Table);
@@ -514,14 +593,14 @@ namespace PosTest.ViewModels
                 case ListedOrdersType.Takeaway:
                     if (TakeAwayViewModel == null)
                     {
-                        TakeAwayViewModel = new TakeAwayViewModel();
+                        TakeAwayViewModel = new TakeawayViewModel(this);
                     }
                     ListedOrdersViewModel = TakeAwayViewModel;
                     break;
                 case ListedOrdersType.Delivery:
                     if (DelivereyViewModel == null)
                     {
-                        DelivereyViewModel = new DelivereyViewModel();
+                        DelivereyViewModel = new DelivereyViewModel(this);
                     }
                     ListedOrdersViewModel = DelivereyViewModel;
                     break;
@@ -536,7 +615,7 @@ namespace PosTest.ViewModels
                 case ListedOrdersType.Waiting:
                     if (WaitingViewModel == null)
                     {
-                        WaitingViewModel = new WaitingViewModel();
+                        WaitingViewModel = new WaitingViewModel(this);
                     }
                     ListedOrdersViewModel = WaitingViewModel;
                     break;
@@ -643,6 +722,8 @@ namespace PosTest.ViewModels
             if (string.IsNullOrEmpty(NumericZone) && 
                 cmd != ActionButton.Split && 
                 cmd != ActionButton.Cmd && 
+                cmd != ActionButton.Deliverey &&
+                cmd != ActionButton.Takeaway &&
                 cmd != ActionButton.Table &&
                 cmd != ActionButton.Del)
             {
@@ -754,9 +835,11 @@ namespace PosTest.ViewModels
                     }
                     break;
                 case ActionButton.Deliverey:
+                    SetCurrentOrderType(OrderType.Delivery);
                     break;
 
                 case ActionButton.Takeaway:
+                    SetCurrentOrderType(OrderType.Takeaway);
                     break;
 
 
@@ -814,22 +897,23 @@ namespace PosTest.ViewModels
                     {
                         NewOrder();
                     }
+                    SetCurrentOrderType(OrderType.OnTable, table);
                     //case of table transfer
-                    if (CurrentOrder.Table!= null && TablesViewModel != null)
-                    {
-                        var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
-                        if (count == 0)
-                        {
-                            TablesViewModel.RemoveTable(CurrentOrder.Table);
-                        }
-                    }
-                    CurrentOrder.Table = table;
-                    table.AddOrder(CurrentOrder);
-                    if (TablesViewModel == null)
-                    {
-                        TablesViewModel = new TablesViewModel(this);
-                    }
-                    TablesViewModel.Add(table);
+                    //if (CurrentOrder.Table!= null && TablesViewModel != null)
+                    //{
+                    //    var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
+                    //    if (count == 0)
+                    //    {
+                    //        TablesViewModel.RemoveTable(CurrentOrder.Table);
+                    //    }
+                    //}
+                    //CurrentOrder.Table = table;
+                    //table.AddOrder(CurrentOrder);
+                    //if (TablesViewModel == null)
+                    //{
+                    //    TablesViewModel = new TablesViewModel(this);
+                    //}
+                    //TablesViewModel.Add(table);
                     break;
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)

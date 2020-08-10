@@ -223,7 +223,7 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
-    <Compile Include="ViewModels\SubViewModel\TakeAwayViewModel.cs" />
+    <Compile Include="ViewModels\SubViewModel\TakeawayViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
     <Compile Include="ViewModels\TablesViewModel.cs" />
     <Compile Include="Views\CategoryTabView.xaml.cs">
