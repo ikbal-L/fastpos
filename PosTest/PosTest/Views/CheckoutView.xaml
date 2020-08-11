@@ -40,7 +40,8 @@
                 <subviews:WaitingView/>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type subviewmodels:TakeAwayViewModel}">
+            <DataTemplate DataType="{x:Type subviewmodels:TakeawayViewModel}">
+
                 <subviews:TakeAwayView/>
             </DataTemplate>
 
@@ -123,6 +124,7 @@
                                 CLOSE THIS
                             </Button>
                         </StackPanel>
+
 
                     </Grid>
                 </materialdesign:DrawerHost.TopDrawerContent>
@@ -462,7 +464,7 @@
                         x:Name="PreviousPqge"  Style="{StaticResource ButtonStyle22}"
                         caliburn:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
                         Content="{materialdesign:PackIcon ChevronDoubleLeft,30}" />
-                    
+
                     <Button DockPanel.Dock="Left" x:Name="Home" Padding="0"
                         caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
                         Style="{StaticResource MaterialDesignFlatButton}"

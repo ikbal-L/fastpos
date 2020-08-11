@@ -2,17 +2,58 @@
 using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace PosTest.ViewModels.SubViewModel
 {
     public class DelivereyViewModel : PropertyChangedBase
     {
         private Order _selectedOrder;
+        private ICollectionView _orders;
+        
+        public DelivereyViewModel(CheckoutViewModel checkoutViewModel)
+        {
+            Parent = checkoutViewModel;
+            OrderViewSource = new CollectionViewSource();
+            OrderViewSource.Source = Parent.Orders;
+            OrderViewSource.Filter += OrderTypeFilter;
+            Orders = OrderViewSource.View;
+        }
+        public CollectionViewSource OrderViewSource { get; set; }
+        public void OrderTypeFilter(object sender, FilterEventArgs e)
+        {
+            Order order = e.Item as Order;
+            if (order != null)
+            {
+                // Filter out products with price 25 or above
+                if (order.Type == OrderType.Delivery)
+                {
+                    e.Accepted = true;
+                }
+                else
+                {
+                    e.Accepted = false;
+                }
+            }
+        }
 
-        public BindableCollection<Order> DelivereyOrders { get; set; }
+        public ICollectionView Orders 
+        {
+            get => _orders;
+            set
+            {
+                _orders = value;
+                NotifyOfPropertyChange();
+            }
+        } 
+
+
+        public CheckoutViewModel Parent { get; set; }
+
         public Order SelectedOrder
         {
             get => _selectedOrder;
@@ -23,21 +64,5 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
-        internal void AddOrder(Order order)
-        {
-            if (!DelivereyOrders.Any(t => t == order))
-            {
-                DelivereyOrders.Add(order);
-            }
-        }
-
-        internal void RemoveOrder(Order order)
-        {
-            if (DelivereyOrders == null || DelivereyOrders.Count == 0)
-            {
-                return;
-            }
-            DelivereyOrders.Remove(order);
-        }
     }
 }

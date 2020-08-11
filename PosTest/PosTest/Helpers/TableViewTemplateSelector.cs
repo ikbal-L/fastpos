@@ -24,7 +24,7 @@ namespace PosTest.Helpers
 
             var tableVM = item as TablesViewModel;
             // Select one of the DataTemplate objects, based on the 
-            // value of the selected item in the ComboBox.
+            // value that represents the view kid
             if (tableVM.IsFullView)
             {
                 return TableFullView;

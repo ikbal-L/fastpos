@@ -18,11 +18,11 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DockPanel Height="80" Width="100" Background="{Binding Background}" >
+                <DockPanel Height="65" Width="102" Background="{Binding Background}" >
                     <!--cal:Message.Attach="[Event MouseLeftButtonUp] = [Action AddOrderItem($this)]"-->
                     <Border DockPanel.Dock="Top" 
                             Height="40"  >
-                        <TextBlock Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center" 
+                        <TextBlock Text="{Binding Path=Name}" Padding="1"  FontSize="14"  TextWrapping="WrapWithOverflow" TextAlignment="Center" 
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -35,7 +35,7 @@
                             </TextBlock.Style>
                         </TextBlock>
                     </Border>
-                    <Border  DockPanel.Dock="Bottom">
+                    <!--<Border  DockPanel.Dock="Bottom">
                         <TextBlock Text="{Binding Path=Price, StringFormat='Price: {0} DA'}" FontSize="12" 
                                TextAlignment="Center" VerticalAlignment="Center"  TextTrimming="WordEllipsis">
                             <TextBlock.Style>
@@ -49,7 +49,7 @@
                             </TextBlock.Style>
 
                         </TextBlock>
-                    </Border>
+                    </Border>-->
                 </DockPanel>
                 
             </Button>
