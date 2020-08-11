@@ -43,11 +43,28 @@ namespace PosTest.ViewModels
         public ICollectionView TablesView { get; set; }
         public CheckoutViewModel Parent { get; set; }
         public bool IsFullView { get; set; }
-    
+        public int OrderCount 
+        {
+            get
+            {
+                var count = 0;
+                foreach (Table table in TablesView)
+                {
+                    count += table.Orders.Cast<Order>().Count();
+                }
+                return count;
+            }
+        } 
+
         public void BackCommand()
         {
             Parent.IsDialogOpen = false;
             Parent.DialogViewModel = null;
+        }
+
+        public void OrderSelectionChanged(Order order)
+        {
+
         }
     }
 }

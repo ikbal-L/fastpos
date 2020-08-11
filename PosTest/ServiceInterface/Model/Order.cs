@@ -96,6 +96,7 @@ namespace ServiceInterface.Model
                     StateTime = DateTime.Now,
                     SessionId = AuthProvider.Instance.SessionId
                 });
+                NotifyOfPropertyChange();
             }
         }
 
@@ -385,7 +386,8 @@ namespace ServiceInterface.Model
         Payed,
         Splitted, 
         Canceled,
-        Removed
+        Removed,
+        Served
     }
     public enum OrderType
     {
