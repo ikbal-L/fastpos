@@ -23,8 +23,8 @@ namespace PosTest.ViewModels.SubViewModel
             OrderViewSource.Source = Parent.Orders;
             OrderViewSource.Filter += OrderTypeFilter;
             Orders = OrderViewSource.View;// CollectionViewSource.GetDefaultView(Parent.Orders);
-           // Orders.Filter = o => (o as Order).Type == OrderType.Takeaway;
-
+                                          // Orders.Filter = o => (o as Order).Type == OrderType.Takeaway;
+           
         }
         public CollectionViewSource OrderViewSource { get; set; }
         public BindableCollection<Order> TakeawayOrders { get; set; }
@@ -64,5 +64,6 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
+        public int OrderCount => Orders.Cast<Order>().Count();
     }
 }

@@ -18,10 +18,10 @@
         <Setter Property="Foreground" Value="White"/>
         <Style.Triggers>
             <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                <Setter Property="Background" Value="#95afc0"></Setter>
+                <Setter Property="Background" Value="#318fb5"></Setter>
             </Trigger>
             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                <Setter Property="Background" Value="#95a5a6"></Setter>
+                <Setter Property="Background" Value="#007086"></Setter>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Foreground" Value="Black"/>
@@ -63,15 +63,15 @@
     </Style>
 
     <Style TargetType="{x:Type ListBox}" x:Key="OrderItemListStyle">
-        <Setter Property="Template">
+        <!--<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
                     <Border Name="canvas" Padding="0 15 0 0">
-                        <ItemsPresenter Margin="01" />
+                        <ItemsPresenter Margin="0" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
         
     </Style>
     <!--  -->

@@ -483,6 +483,10 @@ namespace PosTest.ViewModels
             TakeAwayViewModel.OrderViewSource.Filter -= TakeAwayViewModel.OrderTypeFilter;
             TakeAwayViewModel.OrderViewSource.Filter += TakeAwayViewModel.OrderTypeFilter;
 
+            //DelivereyViewModel.NotifyOfPropertyChange(() => DelivereyViewModel.OrderCount);
+            //WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
+            
             foreach (var t in Tables)
             {
                 TableOrdersFilter = (s, e) =>
@@ -505,6 +509,7 @@ namespace PosTest.ViewModels
             }
             TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
+            //TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
 
         public void SetNullCurrentOrder()

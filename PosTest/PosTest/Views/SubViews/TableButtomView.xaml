@@ -32,13 +32,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding Tables}" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray" Height="270">
+        <ListBox ItemsSource="{Binding TablesView}" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray" Height="270">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Table}">
                     <Border BorderThickness="2" BorderBrush="Red"  Height="130">
                         <StackPanel>
                             <TextBlock Text="{Binding Number}"/>
-                            <ListBox ItemsSource="{Binding TableOrders}"  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListBox ItemsSource="{Binding Orders}"  ScrollViewer.VerticalScrollBarVisibility="Auto">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Border Background="{Binding State, Converter={StaticResource OrderStateEnumToBrush}}" BorderBrush="Blue" BorderThickness="1">
