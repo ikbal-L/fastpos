@@ -155,7 +155,7 @@ namespace ServiceInterface.Model
             {
                 var c = BackgroundColor.GetValueOrDefault();
                 var d = (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
-                return (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
+                return (5 * c.G + 2 * c.R + c.B) <= 8 * 140;
             }
         }
 

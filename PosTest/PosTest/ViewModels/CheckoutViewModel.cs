@@ -25,6 +25,10 @@ namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen
     {
+        public void OrderSelectionChanged(Order order)
+        {
+
+        }
         #region private fields
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
@@ -82,10 +86,19 @@ namespace PosTest.ViewModels
             {
                 if (Orders != null)
                 {
-                    foreach (var o in Orders)
+                    try
                     {
-                        o.ElapsedTime = DateTime.Now - o.OrderTime;
+                        foreach (var o in Orders)
+                        {
+                            var lastStateTime = o.OrderStates?.LastOrDefault<OrderStateElement>();
+
+                            o.ElapsedTime = lastStateTime!=null? DateTime.Now - lastStateTime.StateTime : DateTime.Now- o.OrderTime;
+                        }
                     }
+                    catch (Exception)
+                    {
+                        
+                    }                    
                 }
                 Thread.Sleep(30000);
             }
@@ -131,6 +144,7 @@ namespace PosTest.ViewModels
             foreach (var table in Tables)
             {
                 table.AllOrders = Orders;
+                table.AllTables = Tables;
             }
             TablesViewModel = new TablesViewModel(this);
             //InitCategoryColors();
@@ -223,8 +237,28 @@ namespace PosTest.ViewModels
             set
             {
                 _displayedOrder = value;
+                SetSelectedInListedOrdersDisplayedOrder();
                 NotifyOfPropertyChange();
             }
+        }
+        private void SetSelectedInListedOrdersDisplayedOrder()
+        {
+            var table = Tables.Where(t => t.Orders.Contains(DisplayedOrder)).FirstOrDefault();
+            if(table != null)
+            {
+                table.SelectedOrder = DisplayedOrder;
+                TablesViewModel.SelectedTable = table;
+            }
+            
+            foreach (var t in Tables.Where(t => !t.Orders.Contains(DisplayedOrder)))
+            {
+                t.SelectedOrder = null;
+                if (TablesViewModel.SelectedTable == t)
+                {
+                    TablesViewModel.SelectedTable = null;
+                }
+            }
+
         }
 
         public BindableCollection<Category> Categories { get; set; }
@@ -236,7 +270,16 @@ namespace PosTest.ViewModels
             get { return _currentOrder; }
             set
             {
-                _currentOrder = value;            
+                if (value == null)
+                {
+                    SetNullCurrentOrder();
+                }
+                else
+                {
+                    _currentOrder = value;            
+
+                }
+                SetSelectedInListedOrdersDisplayedOrder();
                 NotifyOfPropertyChange(() => CurrentOrder);
                                
             }
@@ -416,7 +459,7 @@ namespace PosTest.ViewModels
                     }
                     else
                     {
-                        SetNullCurrentOrder(); ;
+                        CurrentOrder = null;
                     }
                     break;
 
@@ -460,7 +503,7 @@ namespace PosTest.ViewModels
                 CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
             }
             CategorieFiltering("Home");
-            CurrentOrder = new Order();
+            CurrentOrder = new Order(this.Orders);
             DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
             CurrentOrder.OrderTime = DateTime.Now;
@@ -483,8 +526,8 @@ namespace PosTest.ViewModels
             TakeAwayViewModel.OrderViewSource.Filter -= TakeAwayViewModel.OrderTypeFilter;
             TakeAwayViewModel.OrderViewSource.Filter += TakeAwayViewModel.OrderTypeFilter;
 
-            //DelivereyViewModel.NotifyOfPropertyChange(() => DelivereyViewModel.OrderCount);
-            //WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            DelivereyViewModel.NotifyOfPropertyChange(() => DelivereyViewModel.OrderCount);
+            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
             TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
             
             foreach (var t in Tables)
@@ -509,7 +552,9 @@ namespace PosTest.ViewModels
             }
             TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
-            //TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
+            //TablesViewModel.RefreshTables();
+            SetSelectedInListedOrdersDisplayedOrder();
+            TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
 
         public void SetNullCurrentOrder()
@@ -519,8 +564,9 @@ namespace PosTest.ViewModels
                 CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
             }
             CategorieFiltering("Home");
-            CurrentOrder = null;
+            _currentOrder = null;
             DisplayedOrder = null;
+            //SetSelectedInListedOrdersDisplayedOrder();
         }
 
         public void RemoveCurrentOrder()
@@ -530,7 +576,7 @@ namespace PosTest.ViewModels
                 return;
             }
             Orders.Remove(CurrentOrder);
-           
+
             CurrentOrder = null;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
             //saved in the DB as removed or canceled and remove it for Orders List
@@ -692,6 +738,7 @@ namespace PosTest.ViewModels
                 cmd != ActionButton.Deliverey &&
                 cmd != ActionButton.Takeaway &&
                 cmd != ActionButton.Table &&
+                cmd != ActionButton.Served &&
                 cmd != ActionButton.Del)
             {
                 ToastNotification.Notify("Enter the required value before ..");
@@ -808,7 +855,9 @@ namespace PosTest.ViewModels
                 case ActionButton.Takeaway:
                     SetCurrentOrderType(OrderType.Takeaway);
                     break;
-
+                case ActionButton.Served:
+                    CurrentOrder.State = OrderState.Served;
+                    break;
 
             }
         }
@@ -1113,49 +1162,52 @@ namespace PosTest.ViewModels
             }
         }
 
-        public void RemoveOrerItem(OrderItem item)
+        public void RemoveOrerItem()
         {
-            if (item == null)
+            if (CurrentOrder.SelectedOrderItem == null)
             {
-                CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
+                return;
             }
-            else
-            {
-                CurrentOrder.RemoveOrderItem(item);
-            }
+            
+             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
+
             AdditivesVisibility = false;
             ProductsVisibility = true;
         }
 
-        public void AddOneToQuantity(OrderItem item)
+        public void AddOneToQuantity()
         {
-            if (item==null)
+            if (CurrentOrder.SelectedOrderItem == null)
             {
-                item = CurrentOrder.SelectedOrderItem;
+                return;
             }
-            item.Quantity += 1;
+            CurrentOrder.SelectedOrderItem.Quantity += 1;
         }
 
-        public void SubtractOneFromQuantity(OrderItem item)
+        public void SubtractOneFromQuantity()
         {
-            if (item == null)
+            if (CurrentOrder.SelectedOrderItem == null)
             {
-                item = CurrentOrder.SelectedOrderItem;
+                return;
             }
+
+            var item = CurrentOrder.SelectedOrderItem;
             if (item.Quantity <= 1)
                 return;
             item.Quantity -= 1;
         }
 
-        public void DiscountOnOrderItem(OrderItem item)
+        public void DiscountOnOrderItem()
         {
             if (String.IsNullOrEmpty(NumericZone))
                 return;
 
-            if (item == null)
+            if (CurrentOrder.SelectedOrderItem == null)
             {
-                item = CurrentOrder.SelectedOrderItem;
+                return;
             }
+
+            var item = CurrentOrder.SelectedOrderItem;
             var discountPercent = -1m;
             var discountAmount = -1m;
             var discount = 0m;
@@ -1245,12 +1297,13 @@ namespace PosTest.ViewModels
             AdditivesVisibility = false;
         }
 
-        public void GoToAdditiveButtonsPage(OrderItem oitem)
+        public void GoToAdditiveButtonsPage()
         {
-            if (oitem==null)
+            if (CurrentOrder.SelectedOrderItem== null)
             {
-                oitem = CurrentOrder.SelectedOrderItem;
+                return;
             }
+            var oitem = CurrentOrder.SelectedOrderItem;
             AdditivesVisibility = true;
             ProductsVisibility = false;
             AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
@@ -1378,7 +1431,8 @@ namespace PosTest.ViewModels
         Itemprice = 9,
         Validate = 10,
         Deliverey = 11,
-        Takeaway = 12
+        Takeaway = 12,
+        Served = 13
     }
 
     public enum ListedOrdersType

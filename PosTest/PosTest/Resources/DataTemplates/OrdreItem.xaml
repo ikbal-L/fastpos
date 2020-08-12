@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PosTest.Converters"
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
+                    xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:cal="http://www.caliburnproject.org">
 
     <local:NumberToVisibilityConverter x:Key="NumberToVisibility"/>
@@ -10,13 +11,14 @@
     <DataTemplate x:Key="PlatterAdditives">
         <StackPanel Orientation="Horizontal">
             <TextBlock x:Name="text" Text="{Binding Description}"></TextBlock>
-            <Button  
+            <Button   Padding="0"
                      BorderBrush="{Binding ElementName=text, Path=Background}"
                      Background="{Binding ElementName=text, Path=Background}"
+                     Foreground="{Binding ElementName=text, Path=Foreground}"
                      Height="{Binding ElementName=text, Path=Height}" 
-                     Style="{StaticResource AddtiviveItemBtnstyle}"
+                     
                      cal:Message.Attach="[Event Click] = [Action RemoveAdditive($this)]">
-                <Image Source="/icons/close.png" />
+                <materialdesign:PackIcon Kind="CloseBoxOutline" Width="25" Height="25" Padding="0"/>
             </Button>
         </StackPanel>
     </DataTemplate>

@@ -61,6 +61,8 @@ namespace PosTest.ViewModels.SubViewModel
                 NotifyOfPropertyChange();
             }
         }
+        
+        public int OrderCount => Orders.Cast<Order>().Count();
 
     }
 }

@@ -13,7 +13,7 @@ namespace PosTest.Converters
         {
             if (value == null)
             {
-                return Brushes.Gray;
+                return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#838383")); //Brushes.Gray; //#4b5d67
             }
             switch ((OrderState)value)
             {
@@ -22,7 +22,9 @@ namespace PosTest.Converters
                 case OrderState.Payed:
                     return Brushes.BlueViolet;
                 case OrderState.Ordered:
-                    return Brushes.Green;
+                    return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#a35d6a")); // Brushes.Green; //#a35d6a
+                case OrderState.Served:
+                    return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3b5249")); //Brushes.Green; //#3b5249
                 default:
                     return Brushes.Gray;
             }

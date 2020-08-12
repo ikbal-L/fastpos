@@ -194,6 +194,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\MultiValueEqualityConverter.cs" />
     <Compile Include="Converters\NumberToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
