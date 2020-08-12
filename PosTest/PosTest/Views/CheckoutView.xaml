@@ -374,6 +374,9 @@
                         Style="{StaticResource ButtonStyle18}" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Other')]"/>
 
                         <Button Grid.Row="3" Grid.Column="1" Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}" Style="{StaticResource ButtonStyle18}"
+                       caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
+
+                        <Button Grid.Row="3" Grid.Column="1" Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
 
                         <Button Grid.Row="0" Grid.Column="2"  Content="{materialdesign:PackIcon NoteOutline, 30}" Style="{StaticResource ButtonStyle18}"
@@ -396,7 +399,7 @@
 
                         <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]"/>
-                        <Button Content="{materialdesign:PackIcon FastFood, 30}"              Grid.Row="3" Grid.Column="1"  Style="{StaticResource ButtonStyle18}" 
+                        <Button Content="{materialdesign:PackIcon FastFood, 30}"  Grid.Row="2" Grid.Column="0"  Style="{StaticResource ButtonStyle18}" 
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SERVED')]"/>
 
                     </Grid>
