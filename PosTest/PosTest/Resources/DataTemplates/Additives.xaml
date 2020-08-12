@@ -7,8 +7,7 @@
 
     <DataTemplate DataType="{x:Type src:Additive}">
         <StackPanel  Orientation="Vertical"  x:Name="AddivieTemplate" >
-            <!--cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]"-->
-            <Button x:Name="ProductClick"   Style="{x:Null}">
+            <Button x:Name="ProductClick" Height="50" Width="90" Style="{StaticResource MaterialDesignOutlinedButton}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cal:ActionMessage MethodName="AddAditive">
@@ -16,14 +15,10 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DockPanel Height="80" Width="100" Background="{Binding Background}" >
-                    <!--cal:Message.Attach="[Event MouseLeftButtonUp] = [Action AddOrderItem($this)]"-->
-                    <Border DockPanel.Dock="Top" 
-                            Height="40"  >
-                        <TextBlock Text="{Binding Path=Description}"   FontSize="12"  TextAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold"/>
-                    </Border>
-                    
-                </DockPanel>
+                <TextBlock Text="{Binding Path=Description}"   FontSize="12"  
+                                   TextAlignment="Center" VerticalAlignment="Center" 
+                                   TextTrimming="WordEllipsis" FontWeight="Bold"/>
+
             </Button>
         </StackPanel>
     </DataTemplate>

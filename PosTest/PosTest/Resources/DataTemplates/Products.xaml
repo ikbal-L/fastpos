@@ -6,6 +6,7 @@
                     xmlns:cal="http://www.caliburnproject.org" >
 
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    
 
     <DataTemplate DataType="{x:Type src:Product}" >
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">

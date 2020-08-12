@@ -9,7 +9,7 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="400" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=vm:TablesViewModel, IsDesignTimeCreatable=False}"
             >
     <FrameworkElement.Resources>
@@ -32,7 +32,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding TablesView}" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray" Height="270">
+        <ListBox ItemsSource="{Binding TablesView}" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray" Height="240">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Table}">
                     <Border BorderThickness="2" BorderBrush="Red"  Height="130">
