@@ -15,6 +15,7 @@ namespace ServiceInterface.Model
     {
         private int _number;
         private IEnumerable<Order> _allOrders;
+        private Order _selectedOrder;
 
         public Table()
         {
@@ -54,6 +55,7 @@ namespace ServiceInterface.Model
         public bool IsVirtual { get; set; } = false;
 
         public BindableCollection<Order> TableOrders { get; set; }
+        public BindableCollection<Table> AllTables { get; set; }
 
         public CollectionViewSource OrderViewSource { get; set; }
 
@@ -61,6 +63,34 @@ namespace ServiceInterface.Model
         {
             get;
             set;
+        }
+
+        public Order SelectedOrder
+        {
+            get => _selectedOrder;
+            set
+            {
+                _selectedOrder = value;
+                
+                //foreach (var table in AllTables.Where(t => t!= this && t.Orders.Cast<Order>().Count()>0))
+                //{
+                //        table.SetSelectedAdditive(null);
+                //}
+
+                NotifyOfPropertyChange();
+            }
+        }
+
+        private void SetSelectedAdditive(Order order)
+        {
+            _selectedOrder = null;
+            NotifyOfPropertyChange(() => SelectedOrder);
+        }
+
+
+        public int OrdersCount
+        {
+            get => Orders.Cast<Order>().Count();
         }
 
         public IEnumerable<Order> AllOrders

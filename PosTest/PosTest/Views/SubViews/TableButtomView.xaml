@@ -7,11 +7,11 @@
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
              xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:convert="clr-namespace:PosTest.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=vm:TablesViewModel, IsDesignTimeCreatable=False}"
-            >
+             d:DataContext="{d:DesignInstance Type=vm:TablesViewModel, IsDesignTimeCreatable=False}">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,6 +20,43 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <convert:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter"/>
+            <convert:NumberToVisibilityConverter x:Key="NumberToVisibilityConverter"/>
+            <Style TargetType="FrameworkElement" x:Key="tableOrderVisibility">
+                <Setter Property="Visibility" Value="{Binding Table.OrdersCount, Converter={StaticResource NumberToVisibilityConverter}, ConverterParameter=5}"/>
+                <!--<Style.Triggers>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="5">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="6">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="7">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="8">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                    </DataTrigger>
+                </Style.Triggers>-->
+            </Style>
+            <Style TargetType="RowDefinition" x:Key="tableOrderHeight">
+                <Setter Property="Height" Value="21"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="5">
+                        <Setter Property="Height" Value="0"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="6">
+                        <Setter Property="Height" Value="0"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="7">
+                        <Setter Property="Height" Value="0"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Table.OrdersCount}" Value="8">
+                        <Setter Property="Height" Value="0"></Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <Grid>
@@ -32,57 +69,105 @@
             <RowDefinition/>
         </Grid.RowDefinitions>-->
 
-        <ListBox ItemsSource="{Binding TablesView}">
+        <ListBox Name="tablesList" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Table}">
-                    <Border BorderThickness="3" BorderBrush="#523906" CornerRadius="10"  Height="115" Background="#c7b198">
+                    <Border  CornerRadius="10"  Height="125" Background="#c7b198" Margin="0">
                         <StackPanel>
                             <Border Width="40" Height="20" CornerRadius="0 0 90 90"  Margin="-2 0 0 0"  Background="#523906"  >
                                 <TextBlock Text="{Binding Number}"
                                        Foreground="White" TextAlignment="Left"
                                        FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-                            <ListBox ItemsSource="{Binding Orders}"  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            <ListBox Name="ordersList" ItemsSource="{Binding Orders}"  ScrollViewer.VerticalScrollBarVisibility="Auto"
                                      Margin="0 -4 0 0"
                                      caliburn:Message.Attach="[Event SelectionChanged] = [Action OrderSelectionChanged($this)]"
                                      SelectedItem="{Binding SelectedOrder}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type model:Order}">
-                                        <Border Background="{Binding State, Converter={StaticResource OrderStateEnumToBrush}}"
-                                                Width="42" Height="42"
-                                                Padding="2"
+                                        <!--<Button Width="42" Padding="0" Height="{Binding ElementName=border, Path=Height}" Background="Transparent" BorderThickness="0"
+                                                caliburn:Message.Attach="[Event Click] = [Action ShowOrder($this)]" Style="{x:Null}">-->
+                                        <Border Name="border"
+                                                
+                                                Width="42" 
+                                                Padding="0"
                                                 CornerRadius="5"
-                                                BorderBrush="#dfd3c3" BorderThickness="2" >
+                                                BorderBrush="#ffd23f"  
+                                                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]"
+                                                    >
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition />
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
-                                                <materialDesign:PackIcon Foreground="White" Kind="TimerSand"  Width="15" Height="21"/>
-                                                <Label Grid.Column="1" Padding="0" Margin="0 -1 0 0"
-                                                       Content="{Binding ElapsedTime.Minutes}" 
-                                                                HorizontalAlignment="Right"
-                                                               Foreground="White"
-                                                               FontSize="16" FontWeight="Bold"/>
-                                                <materialDesign:PackIcon Grid.Row="1" Foreground="White" Kind="BallotOutline"  Width="15" Height="21" />
-                                                <Label Grid.Column="1" Grid.Row="1" Padding="0" Margin="0 -1 0 0"
-                                                           Content="{Binding OrderItems.Count}" 
-                                                               Foreground="White"
-                                                               HorizontalAlignment="Right"
-                                                               FontSize="16" FontWeight="Bold"/>
+                                                <materialDesign:PackIcon  Kind="Schedule"  Width="20" Height="20"
+                                                                          Padding="2 0 0 0"/>
+                                                <TextBlock  Grid.Column="1" Padding="0 0 2 0" Margin="0 0 0 0"
+                                                        Text="{Binding ElapsedTime.Minutes}" 
+                                                        TextAlignment="Right"
+                                                        FontSize="16" FontWeight="Bold"/>
+                                                <materialDesign:PackIcon Grid.Row="1" Padding="2 0 0 2" Margin="0 0 0 0"
+                                                                         Style="{StaticResource tableOrderVisibility}"
+                                                                         Kind="ReorderHorizontal"  Width="20" Height="21" />
+                                                <TextBlock  Grid.Column="1" Grid.Row="1" Padding="0 0 2 5" Margin="0 -1 0 0"
+                                                        Text="{Binding OrderItems.Count}" 
+                                                        Style="{StaticResource tableOrderVisibility}"
+                                                        
+                                                        HorizontalAlignment="Right"
+                                                        FontSize="16" FontWeight="Bold"/>
                                             </Grid>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Height" Value="42"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Background" Value="{Binding State, Converter={StaticResource OrderStateEnumToBrush}}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Table.OrdersCount}" Value="5">
+                                                            <Setter Property="Height" Value="22"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Table.OrdersCount}" Value="6">
+                                                            <Setter Property="Height" Value="22"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Table.OrdersCount}" Value="7">
+                                                            <Setter Property="Height" Value="22"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Table.OrdersCount}" Value="8">
+                                                            <Setter Property="Height" Value="22"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Value="True">
+                                                            <DataTrigger.Binding>
+                                                                <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                                    <Binding ElementName="ordersList" Path="SelectedItem"/>
+                                                                    <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                                </MultiBinding>
+                                                            </DataTrigger.Binding>
+                                                            <!--Binding="{Binding ElementName=ordersList, Path=SelectedItem}" Value="{Binding}">-->
+                                                            <Setter Property="BorderThickness" Value="1"></Setter>
+                                                        </DataTrigger>
 
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
                                         </Border>
+                                        <!--</Button>-->
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Setter Property="Margin" Value="1 1 1 1"/>
                                         <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <!--<Setter Property="Background" Value="{Binding State, Converter={StaticResource OrderStateEnumToBrush}}"/>-->
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <!--<Setter Property="Background" Value="Red"/>-->
+                                                <Setter Property="Foreground" Value="#ffd23f"/>
+                                            </Trigger>
+                                        </Style.Triggers>
                                     </Style>
                                 </ListBox.ItemContainerStyle>
 
@@ -96,24 +181,19 @@
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Width" Value="100"/>
+                                <Setter Property="BorderBrush" Value="#523906"/>
+                                <Setter Property="BorderThickness" Value="3"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Orders.Count}" Value="5">
-                                        <Setter Property="Width" Value="150"></Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Orders.Count}" Value="6">
-                                        <Setter Property="Width" Value="150"></Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Orders.Count}" Value="7">
-                                        <Setter Property="Width" Value="200"></Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Orders.Count}" Value="8">
-                                        <Setter Property="Width" Value="200"></Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Orders.Count}" Value="9">
-                                        <Setter Property="Width" Value="250"></Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Orders.Count}" Value="10">
-                                        <Setter Property="Width" Value="250"></Setter>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                <Binding ElementName="tablesList" Path="SelectedItem"/>
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <!--Binding="{Binding ElementName=ordersList, Path=SelectedItem}" Value="{Binding}">-->
+                                        <Setter Property="BorderThickness" Value="3"></Setter>
+                                        <Setter Property="BorderBrush" Value="#ffd23f"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -121,6 +201,7 @@
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />

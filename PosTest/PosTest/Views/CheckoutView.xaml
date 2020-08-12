@@ -386,7 +386,8 @@
                         <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]"/>
 
-                        <Button Content="Served" Grid.Row="3" Grid.Column="1"  Style="{StaticResource ButtonStyle18}" />
+                        <Button Content="{materialdesign:PackIcon FastFood, 30}" Grid.Row="3" Grid.Column="1"  Style="{StaticResource ButtonStyle18}" 
+                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SERVED')]"/>
                     </Grid>
                 </Grid>
 
@@ -396,18 +397,18 @@
 
             <Grid Grid.Column="1" Grid.Row="0">
 
-                <ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}"
-            SelectedItem="{Binding DisplayedOrder}"
-            ItemTemplate="{StaticResource OrderButtonList_ItemTemplate}"
-            ItemContainerStyle="{StaticResource OrderButtonList_ItemStyle}"
-            HorizontalContentAlignment="Left"
-            VerticalContentAlignment="Center">
+                <!--<ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}"
+                    SelectedItem="{Binding DisplayedOrder}"
+                    ItemTemplate="{StaticResource OrderButtonList_ItemTemplate}"
+                    ItemContainerStyle="{StaticResource OrderButtonList_ItemStyle}"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                </ListBox>
+                </ListBox>-->
                 <DockPanel Grid.Row="0" Grid.Column="1" Margin="0" LastChildFill="False">
 
 

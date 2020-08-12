@@ -25,6 +25,7 @@ namespace ServiceInterface.Model
         private OrderState? _state;
         private OrderType? _type;
         private TimeSpan _elapsedTime;
+        private BindableCollection<Order> _orders;
 
         public Order()
         {
@@ -42,6 +43,13 @@ namespace ServiceInterface.Model
         {
             BuyerId = buyerId;
         }
+
+        public Order(BindableCollection<Order> orders) : this()
+        {
+            this.Orders = orders;
+        }
+
+        public BindableCollection<Order> Orders { get; set; }
 
         [DataMember(IsRequired = true)]
         public long? Id { get; set; }
@@ -111,7 +119,10 @@ namespace ServiceInterface.Model
             get
             {
                 var sumItemTotals = 0m;
-                OrderItems.ToList().ForEach(item => sumItemTotals += item.Total);
+                if (OrderItems != null)
+                {
+                    OrderItems.ToList().ForEach(item => sumItemTotals += item.Total);
+                }
                 return sumItemTotals;
             }
             /*set
@@ -158,7 +169,10 @@ namespace ServiceInterface.Model
             get
             {
                 var sumItemDiscounts = 0m;
-                OrderItems.ToList().ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
+                if (OrderItems != null)
+                {
+                    OrderItems.ToList().ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
+                }
                 //either _discountAmount==0 or _discountPercentage==0
                 var allDiscounts = _discountAmount + sumItemDiscounts + Total * _discountPercentage / 100;
                 //NewTotal = Total - allDiscounts;
