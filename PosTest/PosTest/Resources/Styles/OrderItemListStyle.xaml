@@ -23,9 +23,10 @@
             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                 <Setter Property="Background" Value="#dee2e6"></Setter>
             </Trigger>
-            <!--<Trigger Property="IsSelected" Value="True">
-                <Setter Property="Foreground" Value="Black"/>
-            </Trigger>-->
+            <Trigger Property="IsSelected" Value="True">
+                <!--<Setter Property="Foreground" Value="Black"/>-->
+                <!--<Setter TargetName="Border" Property="Background" Value="Red"/>-->
+            </Trigger>
         </Style.Triggers>
     </Style>
 
@@ -62,19 +63,6 @@
         </Style.Triggers>-->
     </Style>
 
-    <Style TargetType="{x:Type ListBox}" x:Key="OrderItemListStyle">
-        <!--<Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ListBox}">
-                    <Border Name="canvas" Padding="0 15 0 0">
-                        <ItemsPresenter Margin="0" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>-->
-        
-    </Style>
-    <!--  -->
     <DataTemplate DataType="{x:Type src:Order}" x:Key="OrderButtonList_ItemTemplate">
         <Button MinWidth="80" Padding="5 0 5 0" BorderThickness="0" FontWeight="Bold" Height="28"
                 cal:Message.Attach="[Event Click] = [Action ShowOrder($this)]"

@@ -6,11 +6,9 @@
                     xmlns:cal="http://www.caliburnproject.org" >
 
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-    
 
-    <DataTemplate DataType="{x:Type src:Product}" >
+    <DataTemplate DataType="{x:Type src:Product}">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
-            <!--cal:Message.Attach="[Event Click] = [Action AddOrderItem($this)]"-->
             <Button x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -20,9 +18,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DockPanel Height="70" Width="100" Background="{Binding Background}" >
-                    <!--cal:Message.Attach="[Event MouseLeftButtonUp] = [Action AddOrderItem($this)]"-->
-                    <Border DockPanel.Dock="Top"
-                            Height="40"  >
+                    <Border DockPanel.Dock="Top" Height="40">
                         <TextBlock Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
                             <TextBlock.Style>
@@ -52,23 +48,21 @@
                         </TextBlock>
                     </Border>
                 </DockPanel>
-
             </Button>
         </StackPanel>
     </DataTemplate>
-
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="ProductGridTemplate" >
         <StackPanel Orientation="Horizontal">
             <Button Content="{Binding Name}" Height="40"></Button>
         </StackPanel>
     </DataTemplate>
+    
     <DataTemplate DataType="{x:Type src:Product}" x:Key="ProductKanbanTemplate" >
         <StackPanel Orientation="Horizontal">
             <Button Content="{Binding Name}" Height="80"></Button>
         </StackPanel>
     </DataTemplate>
-
 
     <DataTemplate x:Key="MyItemTemplate">
         <Control x:Name="myControl" Template="{StaticResource ProductGridTemplate}" />
@@ -78,9 +72,6 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-
-
-
 
     <DataTemplate DataType="{x:Type local:CategoryItem}">
         <ListBox Grid.Row="0" BorderThickness="0"
@@ -102,7 +93,5 @@
             </ListBox.ItemsPanel>
         </ListBox>
     </DataTemplate>
-
-
 
 </ResourceDictionary>
