@@ -185,7 +185,7 @@
                         <StackPanel Height="200" Width="400" Margin="16" HorizontalAlignment="Center" Orientation="Vertical">
                             <TextBlock Text="Tables" HorizontalAlignment="Center"/>
 
-                            <ListBox x:Name="ltab" materialdesign:HintAssist.Hint="Tables"   HorizontalContentAlignment="Center"
+                            <ListBox x:Name="ltab"
                                   ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable,Mode=TwoWay}" >
 
                                 <ListBox.ItemTemplate>
@@ -198,6 +198,11 @@
                                         
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
 
                             </ListBox>
                             
