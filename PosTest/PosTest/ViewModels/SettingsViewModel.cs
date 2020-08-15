@@ -71,5 +71,13 @@ namespace PosTest.ViewModels
 
             ProductsTabCommand();
         }
+
+        public void CloseCommand()
+        {
+            LoginViewModel loginvm = new LoginViewModel();
+            loginvm.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+        }
+
     }
 }

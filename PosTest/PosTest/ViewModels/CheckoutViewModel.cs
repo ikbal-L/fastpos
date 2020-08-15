@@ -351,6 +351,7 @@ namespace PosTest.ViewModels
             {
                 TableAction(value.Number);
                 _selectedTable = value;
+                
                 NotifyOfPropertyChange();
             }
         }

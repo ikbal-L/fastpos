@@ -17,6 +17,7 @@
              Background="{StaticResource MaterialDesignPaper}"
              DataContext="{Binding}"        
              mc:Ignorable="d"
+             
              d:DesignWidth="900">
     <FrameworkElement.Resources>
         <ResourceDictionary >
@@ -95,48 +96,10 @@
 
             </Grid>
 
-            <materialdesign:DrawerHost IsTopDrawerOpen="{Binding IsTopDrawerOpen}"  Grid.Column="0" Grid.Row="1">
-
-                <materialdesign:DrawerHost.TopDrawerContent>
-                    <Grid>
-                        <StackPanel Height="200" Margin="16" HorizontalAlignment="Center" Orientation="Vertical">
-                            <ListBox x:Name="ltab" materialdesign:HintAssist.Hint="Tables"   HorizontalContentAlignment="Center"
-                                  ItemsSource="{Binding Tables}" SelectedValue="{Binding SelectedTable}" >
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type models:Table}">
-                                        <RadioButton  Background="AliceBlue" Content="{Binding Number}" GroupName="groupName" >
-                                            <RadioButton.Style>
-                                                <Style TargetType="{x:Type RadioButton}">
-                                                    <Setter Property="IsChecked"
-                                                            Value="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" />
-                                                </Style>
-                                            </RadioButton.Style>
-                                        </RadioButton>
-
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel/>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                            </ListBox>
-
-                            <Button Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
-                            CommandParameter="{x:Static Dock.Top}"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Margin="4" VerticalAlignment="Center">
-                                CLOSE THIS
-                            </Button>
-                        </StackPanel>
-
-                    </Grid>
-                </materialdesign:DrawerHost.TopDrawerContent>
-
-                <Grid>
+            <Grid Grid.Column="0" Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="36"/>
+                        <ColumnDefinition Width="54"/>
                     </Grid.ColumnDefinitions>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -156,66 +119,100 @@
                             Path=SelectedItem, Converter={StaticResource ObjectToVisibility}}">
 
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <Button Grid.Row="0" Foreground="#2496ed" Background="WhiteSmoke"
                                 IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
 
-                                caliburn:Message.Attach="[Event Click] = [Action RemoveOrerItem($this)]"
+                                caliburn:Message.Attach="[Event Click] = [Action RemoveOrerItem()]"
                                Style="{StaticResource ButtonRightOrder}">
-                            <materialdesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
+                            <materialdesign:PackIcon Kind="TrashCanOutline" Height="30"  Width="30"/>
                         </Button>
                         <Button Grid.Row="1" Foreground="#2496ed" Background="WhiteSmoke"
                                  IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource OrderItemToBoolConverter}}"
                                  Style="{StaticResource ButtonRightOrder}"
-                                 caliburn:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage($this)]">
-                            <materialdesign:PackIcon Kind="ShapePlus" Height="25"  Width="25"/>
+                                 caliburn:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage()]">
+                            <materialdesign:PackIcon Kind="ShapePlus" Height="30"  Width="30"/>
                         </Button>
                         <Button   Grid.Row="2" Foreground="#2496ed" Background="WhiteSmoke"
                                   IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
                                  Style="{StaticResource ButtonRightOrder}"
-                                 caliburn:Message.Attach="[Event Click] = [Action AddOneToQuantity($this)]">
-                            <materialdesign:PackIcon Kind="Plus" Height="25"  Width="25"/>
+                                 caliburn:Message.Attach="[Event Click] = [Action AddOneToQuantity()]">
+                            <materialdesign:PackIcon Kind="Plus" Height="30"  Width="30"/>
                         </Button>
                         <Button   Grid.Row="3" Foreground="#2496ed" Background="WhiteSmoke"
                                   IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
                                  Style="{StaticResource ButtonRightOrder}"
-                                 caliburn:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity($this)]">
-                            <materialdesign:PackIcon Kind="Minus" Height="25"  Width="25"/>
+                                 caliburn:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity()]">
+                            <materialdesign:PackIcon Kind="Minus" Height="30"  Width="30"/>
                         </Button>
                         <Button   Grid.Row="4" Foreground="#2496ed" Background="WhiteSmoke"
                                   IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
                                  Style="{StaticResource ButtonRightOrder}"
-                                 caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem($this)]">
+                                 caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]">
 
 
-                            <materialdesign:PackIcon Kind="Sale" Height="25"  Width="25"/>
+                            <materialdesign:PackIcon Kind="Sale" Height="30"  Width="30"/>
                         </Button>
 
                         <Button   Grid.Row="8" Foreground="#2496ed" Background="WhiteSmoke"
                                  IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
                                  Style="{StaticResource ButtonRightOrder}"
                                  caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]">
-                            <materialdesign:PackIcon Kind="ChevronDoubleDown" Height="25"  Width="25"/>
+                            <materialdesign:PackIcon Kind="ChevronDoubleDown" Height="30"  Width="30"/>
                         </Button>
 
                         <Button   Grid.Row="7" Foreground="#2496ed" Background="WhiteSmoke"
                                  Style="{StaticResource ButtonRightOrder}"
                                  caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]">
-                            <materialdesign:PackIcon Kind="ChevronDoubleUp" Height="25"  Width="25"/>
+                            <materialdesign:PackIcon Kind="ChevronDoubleUp" Height="30"  Width="30"/>
                         </Button>
                     </Grid>
 
                 </Grid>
+            
+            <materialdesign:DrawerHost IsTopDrawerOpen="{Binding IsTopDrawerOpen}"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                <materialdesign:DrawerHost.TopDrawerContent>
+                    <Grid>
+                        <StackPanel Height="200" Width="400" Margin="16" HorizontalAlignment="Center" Orientation="Vertical">
+                            <TextBlock Text="Tables" HorizontalAlignment="Center"/>
+
+                            <ListBox x:Name="ltab" materialdesign:HintAssist.Hint="Tables"   HorizontalContentAlignment="Center"
+                                  ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable,Mode=TwoWay}" >
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:Table}">
+                                        <RadioButton Content="{Binding Number}" GroupName="groupName"
+                                                     IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                     Style="{StaticResource ButtonTopOrderTable}">
+                                        </RadioButton>
+                                        
+                                        
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+
+                            </ListBox>
+                            
+                            <Button Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
+                            CommandParameter="{x:Static Dock.Top}"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Margin="4" VerticalAlignment="Center">
+                                CLOSE
+                            </Button>
+                        </StackPanel>
+
+                    </Grid>
+                </materialdesign:DrawerHost.TopDrawerContent>
             </materialdesign:DrawerHost>
+
             <Grid Grid.Column="0" Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -369,6 +366,8 @@
 
                         <Button  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"   Style="{StaticResource ButtonStyle18}"
                           Content="{materialdesign:PackIcon CashRegister, 30 }" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"/>
+                        <Button Grid.Row="3" Grid.Column="1" Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}" Style="{StaticResource ButtonStyle18}"
+                        caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
 
                         <Button Grid.Row="3" Grid.Column="0" Content="{materialdesign:PackIcon  Kind=DotsHorizontal, Size=30}"
                         Style="{StaticResource ButtonStyle18}" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Other')]"/>
@@ -396,7 +395,7 @@
 
                         <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]"/>
-                        <Button Content="{materialdesign:PackIcon FastFood, 30}"              Grid.Row="3" Grid.Column="1"  Style="{StaticResource ButtonStyle18}" 
+                        <Button Content="{materialdesign:PackIcon FastFood, 30}"              Grid.Row="2" Grid.Column="0"  Style="{StaticResource ButtonStyle18}" 
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SERVED')]"/>
 
                     </Grid>
@@ -408,7 +407,10 @@
 
             <Grid Grid.Column="1" Grid.Row="0">
 
-                <ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}"
+
+
+
+                <!--<ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}"
                     SelectedItem="{Binding DisplayedOrder}"
                     ItemTemplate="{StaticResource OrderButtonList_ItemTemplate}"
                     ItemContainerStyle="{StaticResource OrderButtonList_ItemStyle}"
@@ -419,7 +421,9 @@
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                </ListBox>
+                </ListBox>-->
+               
+                
                 <DockPanel Grid.Row="0" Grid.Column="1" Margin="0" LastChildFill="False">
 
 
@@ -433,9 +437,9 @@
                          Style="{StaticResource ButtonTopOrder}"
                          caliburn:Message.Attach="[Event Click] = [Action CloseCommand]" />
                     <Menu IsMainMenu="True"  DockPanel.Dock="Right">
-                        <MenuItem Height="30" Width="30" Margin="10" >
+                        <MenuItem Height="30" Width="30">
                             <MenuItem.Icon>
-                                <materialdesign:PackIcon Background="AliceBlue" Kind="CogOutline" Width="28" Height="28" Margin="-8" />
+                                <materialdesign:PackIcon Background="AliceBlue" Kind="CogOutline" Width="28" Height="28" />
                             </MenuItem.Icon>
                             <MenuItem Header="Offre">
                                 <MenuItem.Icon>
@@ -466,7 +470,7 @@
                
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="2" Margin="2">
+            <Grid Grid.Column="1" Grid.Row="2" Margin="2" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
@@ -527,8 +531,8 @@
                     </StackPanel>
                 </DockPanel>
 
-                <RadioButton Grid.Row="1" Width="90" Height="60" GroupName="BottomBtn"  
-                             Style="{StaticResource ButtonTabDesactive}" caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TABLES')]">
+                <RadioButton Grid.Row="1" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}" 
+                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TABLES')]">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="TableFurniture" Width="70" Height="60"/>
                         <Border Width="30" Height="30" CornerRadius="30"  Margin="-10 -30 0 0"  Background="#db2828"
@@ -538,9 +542,7 @@
                     </StackPanel>
                 </RadioButton>
                 
-                
-                <RadioButton Grid.Row="2" Width="90" Height="60"  GroupName="BottomBtn" IsChecked="True"
-                            Style="{StaticResource ButtonTabDesactive}"
+                <RadioButton Grid.Row="2" GroupName="BottomBtn" IsChecked="True" Style="{StaticResource ButtonTabDesactive}"
                              caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TAKEAWAY')]">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="BasketOutline"  Width="70" Height="60" />
@@ -551,8 +553,8 @@
                         </Border>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Grid.Row="3" Width="90" Height="60" GroupName="BottomBtn"
-                              Style="{StaticResource ButtonTabDesactive}"
+                
+                <RadioButton Grid.Row="3" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}"
                              caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('DELIVERY')]">
                     <StackPanel Orientation="Horizontal">
 
@@ -564,8 +566,8 @@
                         </Border>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Grid.Row="4" Width="90" Height="60" GroupName="BottomBtn"
-                              Style="{StaticResource ButtonTabDesactive}"
+               
+                <RadioButton Grid.Row="4" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}"
                              caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('WAITING')]">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="TimerOutline"  Width="70" Height="60" />
@@ -577,6 +579,7 @@
                         </Border>
                     </StackPanel>
                 </RadioButton>
+                
                 <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Content="{Binding ListedOrdersViewModel}" ContentTemplateSelector="{StaticResource tableViewSelector}"/>
             </Grid>
 

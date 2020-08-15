@@ -72,11 +72,11 @@
         </Grid.RowDefinitions>-->
 
 
-        <ListBox Name="tablesList" ItemsSource="{Binding Tables}"  SelectedItem="{Binding SelectedTable}" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray" Height="240">
+        <ListBox Name="tablesList" ItemsSource="{Binding Tables}"  SelectedItem="{Binding SelectedTable}" Grid.Row="1" Grid.ColumnSpan="2" Background="LightGray" Height="264">
 
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Table}">
-                    <Border  CornerRadius="10"  Height="125" Background="#c7b198" Margin="0">
+                    <Border  CornerRadius="10"  Height="115" Background="#c7b198" Margin="0">
                         <StackPanel>
                             <Border Width="40" Height="20" CornerRadius="0 0 90 90"  Margin="-2 0 0 0"  Background="#523906"  >
                                 <TextBlock Text="{Binding Number}"
