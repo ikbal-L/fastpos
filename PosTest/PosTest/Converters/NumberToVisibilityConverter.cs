@@ -14,11 +14,11 @@ namespace PosTest.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var threshold = parameter==null ? 0 : int.Parse((string)parameter);
-            if (value is decimal total && total >= 0)
+            if (value is decimal total && total <= threshold)
             {
                 return Visibility.Collapsed;
             }
-            if (value is int v && v == 0)
+            if (value is int v && v <= threshold)
             {
                 return Visibility.Collapsed;
             }

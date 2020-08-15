@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using Action = System.Action;
 
 namespace ServiceInterface.Model
 {
@@ -16,6 +17,7 @@ namespace ServiceInterface.Model
         private int _number;
         private IEnumerable<Order> _allOrders;
         private Order _selectedOrder;
+        
 
         public Table()
         {
@@ -65,28 +67,16 @@ namespace ServiceInterface.Model
             set;
         }
 
+        public Action SelectionChanged { get; set; }
         public Order SelectedOrder
         {
             get => _selectedOrder;
             set
             {
                 _selectedOrder = value;
-                
-                //foreach (var table in AllTables.Where(t => t!= this && t.Orders.Cast<Order>().Count()>0))
-                //{
-                //        table.SetSelectedAdditive(null);
-                //}
-
                 NotifyOfPropertyChange();
             }
         }
-
-        private void SetSelectedAdditive(Order order)
-        {
-            _selectedOrder = null;
-            NotifyOfPropertyChange(() => SelectedOrder);
-        }
-
 
         public int OrdersCount
         {

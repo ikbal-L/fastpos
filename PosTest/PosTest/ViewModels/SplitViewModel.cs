@@ -404,7 +404,7 @@ namespace PosTest.ViewModels
                     ReturnedAmount = SplittedOrder.ReturnedAmount;
                     if (CurrentOrder.OrderItems.Count == 0)
                     {
-                        Parent.RemoveCurrentOrder();
+                        Parent.RemoveCurrentOrderForOrdersList();
                         //BackFromSplitCommand();
                     }
                     break;

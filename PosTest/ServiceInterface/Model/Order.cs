@@ -38,6 +38,7 @@ namespace ServiceInterface.Model
                     NotifyOfPropertyChange(() => TotalDiscountAmount); 
                     NotifyOfPropertyChange(() => NewTotal); 
                 };
+            OrderTime = DateTime.Now;
         }
         public Order(string buyerId) : this()
         {
@@ -340,7 +341,7 @@ namespace ServiceInterface.Model
             foreach (var oitem in OrderItems) 
             { 
                 oitem.ProductId = (long)oitem.Product.Id; 
-                oitem.OrderId = (long)Id;            
+                oitem.OrderId =Id;            
             }
 
             this.TableId = Table?.Id;

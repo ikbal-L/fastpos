@@ -40,7 +40,7 @@ namespace ServiceInterface.Model
         public Order Order { get; set; }
         
         [DataMember]
-        public long OrderId { get; set; }
+        public long? OrderId { get; set; }
         
         [DataMember]
         public long ProductId { get; set; }

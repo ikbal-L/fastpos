@@ -237,10 +237,12 @@ namespace PosTest.ViewModels
             set
             {
                 _displayedOrder = value;
-                SetSelectedInListedOrdersDisplayedOrder();
+                
+                //SetSelectedInListedOrdersDisplayedOrder();
                 NotifyOfPropertyChange();
             }
         }
+
         private void SetSelectedInListedOrdersDisplayedOrder()
         {
             var table = Tables.Where(t => t.Orders.Contains(DisplayedOrder)).FirstOrDefault();
@@ -250,7 +252,7 @@ namespace PosTest.ViewModels
                 TablesViewModel.SelectedTable = table;
             }
             
-            foreach (var t in Tables.Where(t => !t.Orders.Contains(DisplayedOrder)))
+            foreach (var t in TablesViewModel.Tables.Where(tb => !tb.Orders.Contains(DisplayedOrder)))
             {
                 t.SelectedOrder = null;
                 if (TablesViewModel.SelectedTable == t)
@@ -259,6 +261,12 @@ namespace PosTest.ViewModels
                 }
             }
 
+            DelivereyViewModel.SelectedOrder = DelivereyViewModel.Orders.Cast<Order>().Where(o => o == DisplayedOrder).FirstOrDefault();
+
+            TakeAwayViewModel.SelectedOrder = TakeAwayViewModel.Orders.Cast<Order>().Where(o => o == DisplayedOrder).FirstOrDefault();
+            
+            WaitingViewModel.SelectedOrder= WaitingViewModel.Orders.Cast<Order>().Where(o => o == DisplayedOrder).FirstOrDefault();
+            
         }
 
         public BindableCollection<Category> Categories { get; set; }
@@ -276,8 +284,8 @@ namespace PosTest.ViewModels
                 }
                 else
                 {
-                    _currentOrder = value;            
-
+                    _currentOrder = value;
+                    _displayedOrder = value;
                 }
                 SetSelectedInListedOrdersDisplayedOrder();
                 NotifyOfPropertyChange(() => CurrentOrder);
@@ -350,8 +358,6 @@ namespace PosTest.ViewModels
             set
             {
                 TableAction(value.Number);
-                _selectedTable = value;
-                NotifyOfPropertyChange();
             }
         }
 
@@ -455,7 +461,7 @@ namespace PosTest.ViewModels
                         CurrentOrder.State == OrderState.Canceled ||
                         CurrentOrder.State == OrderState.Removed)
                     {
-                        RemoveCurrentOrder();
+                        RemoveCurrentOrderForOrdersList();
                     }
                     else
                     {
@@ -506,17 +512,27 @@ namespace PosTest.ViewModels
             CurrentOrder = new Order(this.Orders);
             DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
-            CurrentOrder.OrderTime = DateTime.Now;
-            SetCurrentOrderType(OrderType.InWaiting);
+            //CurrentOrder.OrderTime = DateTime.Now;
+            SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
+            GivenAmount = 0;
+            ReturnedAmount = 0;
         }
 
         FilterEventHandler TableOrdersFilter;
-        private void SetCurrentOrderType(OrderType orderType, Table table=null)
-        { 
-            CurrentOrder.Type = orderType;
-            if (orderType == OrderType.OnTable)
+        private void SetCurrentOrderTypeAndRefreshOrdersLists(OrderType? orderType, Table table=null)
+        {
+
+            if (CurrentOrder != null)
             {
-                CurrentOrder.Table = table;
+                CurrentOrder.Type = orderType;
+                if (orderType == OrderType.OnTable)
+                {
+                    CurrentOrder.Table = table;
+                }
+                else
+                {
+                    CurrentOrder.Table = null;
+                }
             }
             
             DelivereyViewModel.OrderViewSource.Filter -= DelivereyViewModel.OrderTypeFilter;
@@ -557,6 +573,14 @@ namespace PosTest.ViewModels
             TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
 
+        public void NewTotalToNumericZone()
+        {
+            if (CurrentOrder == null || CurrentOrder.NewTotal==0)
+            {
+                return;
+            }
+            NumericZone = CurrentOrder.NewTotal.ToString();
+        }
         public void SetNullCurrentOrder()
         {
             if (CurrentOrder != null)
@@ -566,10 +590,10 @@ namespace PosTest.ViewModels
             CategorieFiltering("Home");
             _currentOrder = null;
             DisplayedOrder = null;
-            //SetSelectedInListedOrdersDisplayedOrder();
+            SetSelectedInListedOrdersDisplayedOrder();
         }
 
-        public void RemoveCurrentOrder()
+        public void RemoveCurrentOrderForOrdersList()
         {
             if (CurrentOrder==null || Orders==null)
             {
@@ -578,7 +602,8 @@ namespace PosTest.ViewModels
             Orders.Remove(CurrentOrder);
 
             CurrentOrder = null;
-            TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
+            SetCurrentOrderTypeAndRefreshOrdersLists(null);
+            //TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
             //saved in the DB as removed or canceled and remove it for Orders List
         }
 
@@ -849,13 +874,25 @@ namespace PosTest.ViewModels
                     }
                     break;
                 case ActionButton.Deliverey:
-                    SetCurrentOrderType(OrderType.Delivery);
+                    if (CurrentOrder == null)
+                    {
+                        NewOrder();
+                    }
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
                     break;
 
                 case ActionButton.Takeaway:
-                    SetCurrentOrderType(OrderType.Takeaway);
+                    if (CurrentOrder == null)
+                    {
+                        NewOrder();
+                    }
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Takeaway);
                     break;
                 case ActionButton.Served:
+                    if (CurrentOrder == null)
+                    {
+                        return;
+                    }
                     CurrentOrder.State = OrderState.Served;
                     break;
 
@@ -891,6 +928,8 @@ namespace PosTest.ViewModels
             CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
             CurrentOrder.State = OrderState.Payed;
             NumericZone = "";
+            GivenAmount = CurrentOrder.GivenAmount;
+            ReturnedAmount = CurrentOrder.ReturnedAmount;
             SaveCurrentOrder();
         }
 
@@ -913,7 +952,7 @@ namespace PosTest.ViewModels
                     {
                         NewOrder();
                     }
-                    SetCurrentOrderType(OrderType.OnTable, table);
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable, table);
                     //case of table transfer
                     //if (CurrentOrder.Table!= null && TablesViewModel != null)
                     //{
@@ -930,6 +969,9 @@ namespace PosTest.ViewModels
                     //    TablesViewModel = new TablesViewModel(this);
                     //}
                     //TablesViewModel.Add(table);
+                    _selectedTable = table;
+                    NotifyOfPropertyChange(() => SelectedTable);
+
                     break;
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)

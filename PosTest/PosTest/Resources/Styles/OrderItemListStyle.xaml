@@ -17,12 +17,13 @@
     <Style TargetType="{x:Type ListBoxItem}" x:Key="OrderItems_ItemStyle" >
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Margin" Value="0"/>
         <Style.Triggers>
             <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                 <Setter Property="Background" Value="White"></Setter>
             </Trigger>
             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                <Setter Property="Background" Value="#dee2e6"></Setter>
+                <Setter Property="Background" Value="#cae9ff"></Setter>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Foreground" Value="Black"/>

@@ -107,7 +107,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="#FF03A9F4"/>
+                <Setter Property="Background" Value="#a5a5a5"/>
                 <Setter Property="Foreground" Value="White"/>
                
             </Trigger>
