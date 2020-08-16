@@ -55,9 +55,13 @@
                     Margin="4" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignFlatButton}"
                     Content="Products"/>
 
+                <Button cal:Message.Attach="[Event Click] = [Action CloseCommand]" 
+                    Margin="4" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignFlatButton}"
+                    Content="Close"/>
+
                 <Button Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}" 
                         Margin="4" HorizontalAlignment="Center" Style="{DynamicResource MaterialDesignFlatButton}"
-                        Content="CLOSE ALL"
+                        Content="Hide"
                         />
                 
             </StackPanel>

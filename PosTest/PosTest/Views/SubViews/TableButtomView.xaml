@@ -71,6 +71,7 @@
         </Grid.RowDefinitions>-->
 
 
+
         <ListBox Name="tablesList" ItemsSource="{Binding Tables}"  SelectedItem="{Binding SelectedTable}" 
                  Grid.Row="1" Grid.ColumnSpan="2" Background="#a5a5a5" Height="240">
 

@@ -56,7 +56,7 @@ namespace PosTest.ViewModels
         private TablesViewModel _tablesViewModel;
         private INotifyPropertyChanged _dialogViewModel;
         private decimal givenAmount;
-        private decimal returnedAmount;
+        private decimal _returnedAmount;
         private BindableCollection<Table> _tables;
         private Table _selectedTable;
         private INotifyPropertyChanged _listedOrdersViewModel;
@@ -406,8 +406,12 @@ namespace PosTest.ViewModels
 
         public decimal ReturnedAmount
         {
-            get => returnedAmount;
-            set { returnedAmount = value; NotifyOfPropertyChange(() => ReturnedAmount); }
+            get => _returnedAmount;
+            set 
+            { 
+                _returnedAmount = value; 
+                NotifyOfPropertyChange(() => ReturnedAmount); 
+            }
         }
 
 

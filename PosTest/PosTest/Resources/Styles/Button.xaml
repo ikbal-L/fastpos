@@ -16,6 +16,8 @@
 
     <Style x:Key="ButtonRightOrder" BasedOn="{StaticResource  MaterialDesignOutlinedButton}" TargetType="Button" >
         <Setter Property="FontSize" Value="16" />
+        <Setter Property="Width" Value="50" />
+        <Setter Property="Height" Value="50" />
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Margin" Value="2"/>
         <Setter Property="Padding" Value="0"/>
@@ -62,6 +64,9 @@
     </Style>
 
     <Style TargetType="ButtonBase" x:Key="ButtonTabActive" >
+        <Setter Property="Width" Value="90"/>
+        <Setter Property="Height" Value="70"/>
+        
         <Setter Property="BorderBrush" Value="#FF03A9F4"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="15"/>
@@ -96,7 +101,59 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="RadioButton" x:Key="ButtonTopOrderTable" >
+        <Setter Property="Width" Value="50"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+        <Setter Property="BorderBrush" Value="#FF03A9F4"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Background" Value="#FF03A9F4"/>
+        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}">
+                        <ContentPresenter 
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
    
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="Red"/>
+            </Trigger>
+        </Style.Triggers>
+
+
+
+    </Style>
+
     <Style BasedOn="{StaticResource ButtonTabActive}" TargetType="ToggleButton" x:Key="ButtonTabDesactive">
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Foreground" Value="Black"/>

@@ -7,6 +7,7 @@
 
     <local:NumberToVisibilityConverter x:Key="NumberToVisibility"/>
     <local:NumberToVisibilityConverter x:Key="DecimalToVisibility"/>
+    <local:NumberToVisibilityConverterVisibleHidden x:Key="NumberToVisibilityHidden"/>
 
     <DataTemplate x:Key="PlatterAdditives">
         <StackPanel Orientation="Horizontal">

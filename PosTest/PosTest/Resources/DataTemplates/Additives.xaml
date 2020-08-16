@@ -7,7 +7,7 @@
 
     <DataTemplate DataType="{x:Type src:Additive}">
         <StackPanel  Orientation="Vertical"  x:Name="AddivieTemplate" >
-            <Button x:Name="ProductClick" Height="50" Width="90" Style="{StaticResource MaterialDesignOutlinedButton}">
+            <Button x:Name="ProductClick" Height="50" Width="100" Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cal:ActionMessage MethodName="AddAditive">
@@ -15,9 +15,9 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <TextBlock Text="{Binding Path=Description}"   FontSize="12"  
+                <TextBlock Text="{Binding Path=Description}"   FontSize="16"  
                                    TextAlignment="Center" VerticalAlignment="Center" 
-                                   TextTrimming="WordEllipsis" FontWeight="Bold"/>
+                                   TextWrapping="WrapWithOverflow" FontWeight="Bold"/>
 
             </Button>
         </StackPanel>
