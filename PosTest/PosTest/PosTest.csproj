@@ -228,6 +228,7 @@
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\TakeawayViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
+    <Compile Include="ViewModels\SubViewModel\WarningViewModel.cs" />
     <Compile Include="ViewModels\TablesViewModel.cs" />
     <Compile Include="Views\CategoryTabView.xaml.cs">
       <DependentUpon>CategoryTabView.xaml</DependentUpon>
@@ -282,6 +283,9 @@
     </Compile>
     <Compile Include="Views\SubViews\WaitingView.xaml.cs">
       <DependentUpon>WaitingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubViews\WarningView.xaml.cs">
+      <DependentUpon>WarningView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TablesView.xaml.cs">
       <DependentUpon>TablesView.xaml</DependentUpon>
@@ -451,6 +455,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SubViews\WaitingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubViews\WarningView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
