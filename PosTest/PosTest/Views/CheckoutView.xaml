@@ -80,8 +80,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <!--Content="{Binding CurrentOrder.Table.Number,  FallbackValue=Tables,TargetNullValue=Tables}"-->
-                <Button Grid.Column="1" Style="{StaticResource ButtonTopOrder}" Content="{materialdesign:PackIcon DeleteOutline,30}" Padding="0"   caliburn:Message.Attach="[Event Click] = [Action CancelOrder()]"/>
-                <Button Grid.Column="0" Style="{StaticResource ButtonTopOrder}" Padding="0" Content="{materialdesign:PackIcon FileStarOutline,25}" caliburn:Message.Attach="[Event Click] = [Action NewOrder()]"/>
+                
+               
                 <Button  Grid.Column="2" Style="{StaticResource ButtonTopOrder}" caliburn:Message.Attach="[Event Click] = [Action ShowTablesCommand]">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="TableFurniture" Width="30" Height="30" />
@@ -92,7 +92,7 @@
                     <TextBlock Text="Abde el rahmen" TextWrapping="Wrap"></TextBlock>
                 </Button>
                 <Button Grid.Column="4" Style="{StaticResource ButtonTopOrder}"  Content="Livreur" caliburn:Message.Attach="[Event Click] = [Action ShowTablesCommand]"/>
-                <Button  Grid.Column="5" Style="{StaticResource ButtonTopOrder}" Content="Clients" caliburn:Message.Attach="[Event Click] = [Action ShowTablesCommand]"/>
+                
 
             </Grid>
 
@@ -174,7 +174,7 @@
                                   IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
                                  Style="{StaticResource ButtonRightOrder}"
                                  caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]">
-                            <materialdesign:PackIcon Kind="Sale" Height="30"  Width="30"/>
+                        <materialdesign:PackIcon Kind="TagMinus" Height="30"  Width="30"/>
                         </Button>
 
                         <Button   Grid.Row="8" Foreground="#2496ed" Background="WhiteSmoke"
@@ -184,11 +184,7 @@
                             <materialdesign:PackIcon Kind="ChevronDoubleDown" Height="30"  Width="30"/>
                         </Button>
 
-                        <Button   Grid.Row="7" Foreground="#2496ed" Background="WhiteSmoke"
-                                 Style="{StaticResource ButtonRightOrder}"
-                                 caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]">
-                            <materialdesign:PackIcon Kind="ChevronDoubleUp" Height="30"  Width="30"/>
-                        </Button>
+                   
                     </Grid>
 
                 </Grid>
@@ -395,22 +391,23 @@
 
                         <Button  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"   Style="{StaticResource ButtonStyle18}"
                           Content="{materialdesign:PackIcon CashRegister, 30 }" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"/>
-                        <Button Grid.Row="3" Grid.Column="1" Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}" Style="{StaticResource ButtonStyle18}"
-                        caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
+                        
 
                         <Button Grid.Row="3" Grid.Column="0" Content="{materialdesign:PackIcon  Kind=DotsHorizontal, Size=30}"
                         Style="{StaticResource ButtonStyle18}" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Other')]"/>
 
-                        <Button Grid.Row="3" Grid.Column="1" Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}" Style="{StaticResource ButtonStyle18}"
-                       caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
+                        <Button Grid.Row="1" Grid.Column="0" Content="{materialdesign:PackIcon DeleteOutline,30}" 
+                        Style="{StaticResource ButtonStyle18}" caliburn:Message.Attach="[Event Click] = [Action CancelOrder()]"/>
 
-                        <Button Grid.Row="3" Grid.Column="1" Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}" Style="{StaticResource ButtonStyle18}"
+
+
+                        <Button Grid.Row="2" Grid.Column="0" Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]"/>
 
                         <Button Grid.Row="0" Grid.Column="2"  Content="{materialdesign:PackIcon NoteOutline, 30}" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('NOTE')]"/>
 
-                        <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource ButtonStyle18}"
+                        <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource ButtonStyle18}"
                         Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]">
                         </Button>
@@ -418,8 +415,8 @@
                         <Button Grid.Row="3" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVEREY')]"/>
 
-                        <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource ButtonStyle18}"
-                        Content="{materialdesign:PackIcon SilverwareForkKnife, 30 }"
+                        <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource ButtonStyle18}"
+                        Content="{materialdesign:PackIcon ChefHat, 30 }"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('CMD')]"/>
 
                         <Button Grid.Row="2" Grid.Column="2" Content="{materialdesign:PackIcon BasketOutline,30}" Style="{StaticResource ButtonStyle18}"
@@ -427,7 +424,7 @@
 
                         <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}" Style="{StaticResource ButtonStyle18}"
                         caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]"/>
-                        <Button Content="{materialdesign:PackIcon FastFood, 30}"  Grid.Row="2" Grid.Column="0"  Style="{StaticResource ButtonStyle18}" 
+                        <Button Content="{materialdesign:PackIcon FastFood, 30}"  Grid.Row="2" Grid.Column="1"  Style="{StaticResource ButtonStyle18}" 
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SERVED')]"/>
 
                     </Grid>
@@ -455,7 +452,8 @@
 
                 <DockPanel Grid.Row="0" Grid.Column="1" Margin="0" LastChildFill="False">
 
-
+                    <Button   Style="{StaticResource ButtonTopOrder}" Content="Clients" caliburn:Message.Attach="[Event Click] = [Action ShowTablesCommand]"/>
+                    <Button Grid.Column="0" Style="{StaticResource ButtonTopOrder}" Padding="0" Content="{materialdesign:PackIcon FileStarOutline,25}" caliburn:Message.Attach="[Event Click] = [Action NewOrder()]"/>
                     <Button DockPanel.Dock="Right" Padding="0"
                         Content="{materialdesign:PackIcon AccountCircleOutline,30}"
                         Style="{StaticResource ButtonTopOrder}"
@@ -513,22 +511,22 @@
                 </Grid.RowDefinitions>
 
                 <DockPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="2 2 2 2" LastChildFill="False" >
-                    <Button DockPanel.Dock="Right" Height="35" Width="35" x:Name="NextPage" Style="{StaticResource ButtonStyle22}"
+                    <Button DockPanel.Dock="Right" Height="60" Width="35" x:Name="NextPage" Style="{StaticResource ButtonStyle22}"
                         caliburn:Message.Attach="[Event Click] = [Action PaginateProducts('NEXT')]"
                         Content="{materialdesign:PackIcon ChevronDoubleRight,30}" />
                     <!--Visibility="{Binding CanExecuteMext,Converter={StaticResource BoolToVisibility}}"-->
                     <!--Style="{StaticResource MaterialDesignFlatButton}"-->
                     <!--Visibility="{Binding CanExecutePrevious,Converter={StaticResource BoolToVisibility}}"-->
-                    <Button DockPanel.Dock="Right"  Height="35" Width="35" VerticalAlignment="Center"
+                    <Button DockPanel.Dock="Right"  Height="60" Width="35" VerticalAlignment="Center"
                         x:Name="PreviousPqge"  Style="{StaticResource ButtonStyle22}"
                         caliburn:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
                         Content="{materialdesign:PackIcon ChevronDoubleLeft,30}" />
 
-                    <Button DockPanel.Dock="Left" x:Name="Home" Padding="0"
+                    <Button DockPanel.Dock="Left" x:Name="Home" Padding="0" Height="60"
                         caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialdesign:PackIcon Home,Size=30}"/>
-                    <StackPanel Orientation="Horizontal" Margin="2 0 0 0" Height="30">
+                        Content="{materialdesign:PackIcon Home,Size=60}"/>
+                    <StackPanel Orientation="Horizontal" Margin="2 0 0 0" Height="60">
                         <ItemsControl x:Name="Stack" Grid.Column="0" ItemsSource="{Binding Categories}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -537,7 +535,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Category}">
-                                    <Button MinWidth="80" Background="{Binding Background}"
+                                    <Button MinWidth="80" Height="60" Background="{Binding Background}"
                                     Content="{Binding Name}"
                                     caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering($this)]"
                                     FontWeight="Bold"
@@ -561,55 +559,45 @@
                 </DockPanel>
 
 
-                <RadioButton x:Name="tableCheckBtn" Grid.Row="1" Width="90" Height="60" GroupName="BottomBtn"  
+                <RadioButton x:Name="tableCheckBtn" Grid.Row="1" GroupName="BottomBtn"  
                              Style="{StaticResource ButtonTabDesactive}" caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TABLES')]">
                     <StackPanel Orientation="Horizontal">
-                        <materialdesign:PackIcon Kind="TableFurniture" Width="70" Height="60"/>
-                        <Border Width="30" Height="30" CornerRadius="30"  Margin="-10 -30 0 0"  Background="#db2828"
-                                 Visibility="{Binding TablesViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
-                            <TextBlock  Foreground="White" Text="{Binding TablesViewModel.OrderCount}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <materialdesign:PackIcon Kind="TableFurniture"/>
+                        <Border Visibility="{Binding TablesViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
+                            <TextBlock Text="{Binding TablesViewModel.OrderCount}"/>
                         </Border>
                     </StackPanel>
                 </RadioButton>
 
-                <RadioButton x:Name="takeawayCheckBtn" Grid.Row="2" Width="90" Height="60"  GroupName="BottomBtn" IsChecked="True"
+                <RadioButton x:Name="takeawayCheckBtn" Grid.Row="2"  GroupName="BottomBtn"
                             Style="{StaticResource ButtonTabDesactive}"
-
                              caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TAKEAWAY')]">
                     <StackPanel Orientation="Horizontal">
-                        <materialdesign:PackIcon Kind="BasketOutline"  Width="70" Height="60" />
-                        <Border Width="30" Height="30" CornerRadius="30"  Margin="-10 -30 0 0"  Background="#db2828"
-                                Visibility="{Binding TakeAwayViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
-                            <TextBlock  Foreground="White" Text="{Binding TakeAwayViewModel.OrderCount}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+                        <materialdesign:PackIcon Kind="BasketOutline"/>
+                        <Border Visibility="{Binding TakeAwayViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
+                            <TextBlock Text="{Binding TakeAwayViewModel.OrderCount}" />
                         </Border>
                     </StackPanel>
                 </RadioButton>
 
-                <RadioButton x:Name="delivereyCheckBtn" Grid.Row="3" Width="90" Height="60" GroupName="BottomBtn"
+                <RadioButton x:Name="delivereyCheckBtn" Grid.Row="3" GroupName="BottomBtn"
                               Style="{StaticResource ButtonTabDesactive}"
                              caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('DELIVERY')]">
                     <StackPanel Orientation="Horizontal">
-
-                        <materialdesign:PackIcon Kind="Moped"  Width="70" Height="60" />
-                        <Border Width="30" Height="30" CornerRadius="30"   Margin="-10 -30 0 0" Background="#db2828"
-                                Visibility="{Binding DelivereyViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
-                            <TextBlock  Foreground="White" Text="{Binding DelivereyViewModel.OrderCount}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+                        <materialdesign:PackIcon Kind="Moped"/>
+                        <Border Visibility="{Binding DelivereyViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
+                            <TextBlock Text="{Binding DelivereyViewModel.OrderCount}"/>
                         </Border>
                     </StackPanel>
                 </RadioButton>
 
-                <RadioButton x:Name="waitingCheckBtn" Grid.Row="4" Width="90" Height="60" GroupName="BottomBtn"
-                              Style="{StaticResource ButtonTabDesactive}"
+                <RadioButton x:Name="waitingCheckBtn" Grid.Row="4" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}"
+                              IsChecked="True"
                              caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('WAITING')]">
                     <StackPanel Orientation="Horizontal">
-                        <materialdesign:PackIcon Kind="TimerOutline"  Width="70" Height="60" />
-
-                        <Border Width="30" Height="30" CornerRadius="30" Margin="-10 -30 0 0" Background="#db2828"
-                                Visibility="{Binding WaitingViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
-                            <TextBlock  Foreground="White" Text="{Binding WaitingViewModel.OrderCount}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
-
+                        <materialdesign:PackIcon Kind="TimerOutline"/>
+                        <Border Visibility="{Binding WaitingViewModel.OrderCount, Converter={StaticResource NumberToVisibility}}">
+                            <TextBlock Text="{Binding WaitingViewModel.OrderCount}"/>
                         </Border>
                     </StackPanel>
                 </RadioButton>

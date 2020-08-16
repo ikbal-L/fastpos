@@ -44,7 +44,7 @@
             <TextBlock     Grid.Column="3" 
                            Text="{Binding TotalDiscountAmount, StringFormat='-{0}'}" 
                            Visibility="{Binding TotalDiscountAmount, Converter={StaticResource NumberToVisibility}}"
-                           Background="#ff5722" HorizontalAlignment="Right"  FontSize="16" />
+                           Background="#FFE1BEE7" HorizontalAlignment="Right"  FontSize="16" />
             <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="16" />
 
             <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="16"
