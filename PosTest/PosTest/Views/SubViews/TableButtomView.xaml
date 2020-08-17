@@ -24,7 +24,7 @@
             <convert:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter"/>
             <convert:NumberToVisibilityConverter x:Key="NumberToVisibilityConverter"/>
             <Style TargetType="FrameworkElement" x:Key="tableOrderVisibility">
-                <Setter Property="Visibility" Value="{Binding Table.OrdersCount, Converter={StaticResource NumberToVisibilityConverter}, ConverterParameter=5}"/>
+                <Setter Property="Visibility" Value="{Binding Table.OrdersCount, Converter={StaticResource NumberToVisibilityConverter}, ConverterParameter='l5'}"/>
                 <!--<Style.Triggers>
                     <DataTrigger Binding="{Binding Table.OrdersCount}" Value="5">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
@@ -119,7 +119,6 @@
                                                 <TextBlock  Grid.Column="1" Grid.Row="1" Padding="0 0 2 5" Margin="0 -1 0 0"
                                                         Text="{Binding OrderItems.Count}" 
                                                         Style="{StaticResource tableOrderVisibility}"
-                                                        
                                                         HorizontalAlignment="Right"
                                                         FontSize="16" FontWeight="Bold"/>
                                             </Grid>

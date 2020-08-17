@@ -17,9 +17,9 @@ namespace PosTest.Views
     /// <summary>
     /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class Settings1View : UserControl
     {
-        public SettingsView()
+        public Settings1View()
         {
             InitializeComponent();
             

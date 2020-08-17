@@ -3,8 +3,7 @@
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:local="clr-namespace:PosTest.Converters"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
-                    >
+                    xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />

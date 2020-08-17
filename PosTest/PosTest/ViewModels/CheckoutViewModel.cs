@@ -56,7 +56,7 @@ namespace PosTest.ViewModels
         private TablesViewModel _tablesViewModel;
         private INotifyPropertyChanged _dialogViewModel;
         private decimal givenAmount;
-        private decimal _returnedAmount;
+        private decimal? _returnedAmount;
         private BindableCollection<Table> _tables;
         private Table _selectedTable;
         private INotifyPropertyChanged _listedOrdersViewModel;
@@ -382,12 +382,12 @@ namespace PosTest.ViewModels
             }
         }
 
-        public INotifyPropertyChanged ListedOrdersViewModel
+        public WarningViewModel WarningViewModel
         {
-            get => _listedOrdersViewModel;
+            get => _warningViewModel;
             set
             {
-                _listedOrdersViewModel = value;
+                _warningViewModel = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -404,7 +404,7 @@ namespace PosTest.ViewModels
         }
 
 
-        public decimal ReturnedAmount
+        public decimal? ReturnedAmount
         {
             get => _returnedAmount;
             set 
@@ -519,7 +519,7 @@ namespace PosTest.ViewModels
             //CurrentOrder.OrderTime = DateTime.Now;
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
-            ReturnedAmount = 0;
+            ReturnedAmount = null;
         }
 
         FilterEventHandler TableOrdersFilter;
@@ -617,20 +617,29 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-            /*if (CurrentOrder.OrderItems.Count == 0)
+
+            WarningViewModel = new WarningViewModel("Are you sure to delete this Order?", "Check", "Ok", "Close", "No",
+                o => CancelOrderAction(o), this, () => IsDialogOpen = false);
+            DialogViewModel = WarningViewModel;
+            IsDialogOpen = true;
+        }
+
+        public void DialogClosing()
+        {
+
+        }
+        public void CancelOrderAction(object param) {
+            var checkoutViewModel = param as CheckoutViewModel;
+            if (checkoutViewModel.CurrentOrder.State == null)
             {
-                RemoveCurrentOrder();
-                return;
-            }*/
-            if (CurrentOrder.State == null)
-            {
-                CurrentOrder.State = OrderState.Removed;
+                checkoutViewModel.CurrentOrder.State = OrderState.Removed;
             }
             else
             {
-                CurrentOrder.State = OrderState.Canceled;
+                checkoutViewModel.CurrentOrder.State = OrderState.Canceled;
             }
-            SaveCurrentOrder();
+            checkoutViewModel.SaveCurrentOrder();
+            IsDialogOpen = false;
             //RemoveCurrentOrder();
             //var i = Orders.IndexOf(CurrentOrder);
 
@@ -646,24 +655,24 @@ namespace PosTest.ViewModels
 
         public void SelectListedOrders(ListedOrdersType type)
         {
-            switch (type)
-            {
-                case ListedOrdersType.Takeaway:
-                    ListedOrdersViewModel = TakeAwayViewModel;
-                    break;
-                case ListedOrdersType.Delivery:
-                    ListedOrdersViewModel = DelivereyViewModel;
-                    break;
-                case ListedOrdersType.Tables:
-                    TablesViewModel.IsFullView = false;
-                    ListedOrdersViewModel = TablesViewModel;
-                    break;
-                case ListedOrdersType.Waiting:
-                    ListedOrdersViewModel = WaitingViewModel;
-                    break;
-                default:
-                    break;
-            }
+            //switch (type)
+            //{
+            //    case ListedOrdersType.Takeaway:
+            //        ListedOrdersViewModel = TakeAwayViewModel;
+            //        break;
+            //    case ListedOrdersType.Delivery:
+            //        ListedOrdersViewModel = DelivereyViewModel;
+            //        break;
+            //    case ListedOrdersType.Tables:
+            //        TablesViewModel.IsFullView = false;
+            //        ListedOrdersViewModel = TablesViewModel;
+            //        break;
+            //    case ListedOrdersType.Waiting:
+            //        ListedOrdersViewModel = WaitingViewModel;
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
 
         #region Filtering and pagination
@@ -1359,6 +1368,8 @@ namespace PosTest.ViewModels
         #endregion
 
         private bool _IsTopDrawerOpen;
+        private WarningViewModel _warningViewModel;
+
         public bool IsTopDrawerOpen {
             get => _IsTopDrawerOpen;
             set => Set(ref _IsTopDrawerOpen, value);

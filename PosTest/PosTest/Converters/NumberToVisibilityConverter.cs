@@ -13,17 +13,20 @@ namespace PosTest.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int threshold;
+            int threshold=0;
             string op=null;
-            if ((string)parameter == "#0")
+
+            if (parameter != null)
             {
-                threshold = 0;
-                op = "eq";
+                string p = parameter as string;
+                op = p[0].ToString();
+                threshold = System.Convert.ToInt32(p.Remove(0,1));
             }
-            else
-            {
-                threshold = parameter==null ? 0 : int.Parse((string)parameter);
-            }
+            //else
+            //{
+            //    threshold = 0;
+            //    op = "=";
+            //}
             decimal dvalue;
             try
             {
@@ -33,21 +36,20 @@ namespace PosTest.Converters
             {
                 return Visibility.Collapsed;
             }
-            if (op == "eq")
+            switch (op)
             {
-                if (dvalue == threshold)
-                {
-                    return Visibility.Collapsed;
-                }
+                case "=":
+                    return dvalue == threshold ? Visibility.Collapsed : Visibility.Visible;
+                    
+                case "l":
+                    return dvalue == threshold ? Visibility.Collapsed : Visibility.Visible;
+                    
+                case ">":
+                    
+                default:
+                    return dvalue <= threshold ? Visibility.Collapsed : Visibility.Visible;
+
             }
-            else
-            {
-                if (dvalue <= threshold)
-                {
-                    return Visibility.Collapsed;
-                }
-            }
-            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
