@@ -35,13 +35,19 @@ namespace PosTest.ViewModels
         [Import(typeof(IOrderService))]
         private IOrderService orderService;
 
+        [Import(typeof(IDelivereyService))]
+        private IDelivereyService delivereyService;
+
+        [Import(typeof(IWaiterService))]
+        private IWaiterService waiterService;
+
         //public String Username { get; set; }
         //public String Password { get; set; }
 
         protected override void OnActivate()
         {
             base.OnActivate();
-            this.Compose(); 
+            this.Compose();
         }
         public bool CanLogin()
         {
@@ -65,7 +71,7 @@ namespace PosTest.ViewModels
             CheckoutViewModel checkoutViewModel = 
                 new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage, 
                 productService, 
-                categorieService, orderService);
+                categorieService, orderService, waiterService, delivereyService);
 
             checkoutViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);

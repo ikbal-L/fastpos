@@ -21,8 +21,6 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <convert:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter"/>
-            <convert:NumberToVisibilityConverter x:Key="NumberToVisibilityConverter"/>
             <Style TargetType="FrameworkElement" x:Key="tableOrderVisibility">
                 <Setter Property="Visibility" Value="{Binding Table.OrdersCount, Converter={StaticResource NumberToVisibilityConverter}, ConverterParameter='l5'}"/>
                 <!--<Style.Triggers>

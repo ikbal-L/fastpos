@@ -118,8 +118,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ButtonBase">
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    Background="{TemplateBinding Background}">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="25">
                         <ContentPresenter 
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -146,7 +147,60 @@
    
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="Red"/>
+                <Setter Property="Background" Value="#ffd23f"/>
+                <Setter Property="Foreground" Value="#FF03A9F4"/>
+            </Trigger>
+        </Style.Triggers>
+
+
+
+    </Style><Style TargetType="RadioButton" x:Key="ButtonTopOrderDelivereyman" >
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+        <Setter Property="BorderBrush" Value="#FF03A9F4"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Background" Value="#FF03A9F4"/>
+        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Border Name="border"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="10">
+                        <ContentPresenter 
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+   
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <!--<Setter Property="Background" Value="Red"/>-->
+                <Setter Property="BorderBrush" Value="#ffd23f"/>
+                <Setter Property="BorderThickness" Value="3.5"/>
             </Trigger>
         </Style.Triggers>
 

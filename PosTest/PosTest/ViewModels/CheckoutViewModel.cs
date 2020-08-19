@@ -33,11 +33,11 @@ namespace PosTest.ViewModels
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
                        a => a.FullName.StartsWith("XUnitTesting"));
-        [Import(typeof(IProductService))]
+        //[Import(typeof(IProductService))]
         private IProductService _productsService;
-        [Import(typeof(ICategoryService))]
+        //[Import(typeof(ICategoryService))]
         private ICategoryService _categoriesService;
-        [Import(typeof(IOrderService))]
+        //[Import(typeof(IOrderService))]
         private IOrderService _orderService;
         private Category _currantCategory;
         private bool _productsVisibility;
@@ -105,7 +105,9 @@ namespace PosTest.ViewModels
         }
         public CheckoutViewModel(int pageSize, IProductService productsService, 
             ICategoryService categoriesService,
-            IOrderService orderService) : this()
+            IOrderService orderService,
+            IWaiterService waiterService,
+            IDelivereyService delivereyService) : this()
         {
             IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
             {
@@ -129,8 +131,7 @@ namespace PosTest.ViewModels
             _categoriesService = categoriesService;
             _orderService = orderService;
 
-            int getProductsStatusCode = 0,
-                getCategoriesStatusCode = 0;
+            int getProductsStatusCode = 0;
             AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
             FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
             MaxProductPageSize = pageSize;
@@ -138,6 +139,13 @@ namespace PosTest.ViewModels
             AdditivesVisibility = false;
             CategorieFiltering("Home");
             Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts)); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
+            var code = 0;
+            var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
+            Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);
+
+            var waiter = waiterService.GetAllActiveWaiters(ref code);
+            Waiters = new BindableCollection<Waiter>(waiter);
+
             var status = 0;
             var tables = _orderService.GeAlltTables(ref status);
             Tables = new BindableCollection<Table>(tables);
@@ -357,7 +365,8 @@ namespace PosTest.ViewModels
             get => _selectedTable;
             set
             {
-                TableAction(value.Number);
+                TableAction(value);
+                Set(ref _selectedTable, value);
             }
         }
 
@@ -532,6 +541,7 @@ namespace PosTest.ViewModels
                 if (orderType == OrderType.OnTable)
                 {
                     CurrentOrder.Table = table;
+                    SelectedDelivereyman = null;
                 }
                 else
                 {
@@ -982,8 +992,8 @@ namespace PosTest.ViewModels
                     //    TablesViewModel = new TablesViewModel(this);
                     //}
                     //TablesViewModel.Add(table);
-                    _selectedTable = table;
-                    NotifyOfPropertyChange(() => SelectedTable);
+                    //_selectedTable = table;
+                    //NotifyOfPropertyChange(() => SelectedTable);
 
                     break;
                 case 400:
@@ -1007,6 +1017,20 @@ namespace PosTest.ViewModels
                     break;
             }
             NumericZone = "";
+        }
+        private void TableAction(Table table)
+        {
+             if (table == null)
+            {
+                return;
+            }
+            
+            if (CurrentOrder == null)
+            {
+                NewOrder();
+            }
+            SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable, table);
+            
         }
 
         private Table LookForTableInOrders(int tableNumber)
@@ -1252,9 +1276,9 @@ namespace PosTest.ViewModels
             item.Quantity -= 1;
         }
 
-        public void DiscountOnOrderItem()
+        public void DiscountOnOrderItem(int param)
         {
-            if (String.IsNullOrEmpty(NumericZone))
+            if (String.IsNullOrEmpty(NumericZone) && param!=0)
                 return;
 
             if (CurrentOrder.SelectedOrderItem == null)
@@ -1263,6 +1287,13 @@ namespace PosTest.ViewModels
             }
 
             var item = CurrentOrder.SelectedOrderItem;
+
+            if (param == 0)
+            {
+                item.DiscountAmount = item.Product.Price;
+                return;
+            }
+
             var discountPercent = -1m;
             var discountAmount = -1m;
             var discount = 0m;
@@ -1369,20 +1400,70 @@ namespace PosTest.ViewModels
 
         private bool _IsTopDrawerOpen;
         private WarningViewModel _warningViewModel;
+        private ListKind _listKind;
+        private Delivereyman _selectedDelivereyman;
+        private Waiter _selectedWaiter;
 
         public bool IsTopDrawerOpen {
             get => _IsTopDrawerOpen;
             set => Set(ref _IsTopDrawerOpen, value);
         }
+        public BindableCollection<Delivereyman> Delivereymen { get; set; }
+        public BindableCollection<Waiter> Waiters { get; private set; }
+        public Delivereyman SelectedDelivereyman 
+        { 
+            get => _selectedDelivereyman;
+            set
+            {
+                if(CurrentOrder == null)
+                {
+                    NewOrder();
+                }
+                Set(ref _selectedDelivereyman, value);
+                CurrentOrder.Delivereyman = value;
+                IsTopDrawerOpen = false;
+                if (value != null)
+                {
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
+                }
+            }
+        }
+ 
+        public Waiter SelectedWaiter
+        { 
+            get => _selectedWaiter;
+            set
+            {
+                if(CurrentOrder == null)
+                {
+                    NewOrder();
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
+                }
+                Set(ref _selectedWaiter, value);
+                CurrentOrder.Waiter = value;
+                IsTopDrawerOpen = false;
+            }
+        }
+        public ListKind ListKind 
+        { 
+            get => _listKind;
+            set
+            {
+                _listKind = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
-        public void ShowTablesCommand()
+
+        public void ShowDrawer(ListKind listKind)
         {
+            ListKind = listKind;
             IsTopDrawerOpen = true;
         }
 
 
 
-        }
+    }
 
 
     static class ToastNotification
@@ -1499,4 +1580,12 @@ namespace PosTest.ViewModels
         Tables,
         Waiting
     }
+
+    public enum ListKind
+    {
+        Table,
+        Waiter,
+        Deliverey
+    }
 }
+

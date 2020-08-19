@@ -67,7 +67,34 @@ namespace ServiceInterface.StaticValues
             public static string GetTable = hostname1 + "table/get/";
             public static string SaveTable = hostname1 + "table/save";
             public static string GetAllTables = hostname1 + "table/getall";
+        } 
+        
+        public static class DelivereyUrl
+        {
+            static string hostname = "http://192.168.1.102:5000/";
+
+            public static string GetAllDeliverymen = hostname1 + "deliveryman/getall";
+            public static string GetAllActiveDeliverymen = hostname1 + "deliveryman/getallactive";
+            public static string GetDeliveryman = hostname1 + "deliveryman/get/";
+            public static string DeleteDeliveryman = hostname1 + "deliveryman/delete/";
+            public static string UpdateDeliveryman = hostname1 + "deliveryman/update";
+            public static string SaveDeliveryman = hostname1 + "deliveryman/save";
+            public static string GetDeliverymen = hostname1 + "deliveryman/get/";
         }
+
+        public static class WaiterUrl
+        {
+            static string hostname = "http://192.168.1.102:5000/";
+
+            public static string GetAllWaiters = hostname1 + "waiter/getall";
+            public static string GetAllActiveWaiters = hostname1 + "waiter/getallactive";
+            public static string GetWaiter = hostname1 + "waiter/get/";
+            public static string DeleteWaiter = hostname1 + "waiter/delete/";
+            public static string UpdateWaiter = hostname1 + "waiter/update";
+            public static string SaveWaiter = hostname1 + "waiter/save";
+            public static string GetWaiters = hostname1 + "waiter/get/";
+        }
+
 
         public static class AuthUrl
         {

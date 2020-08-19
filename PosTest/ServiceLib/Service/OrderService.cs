@@ -104,7 +104,7 @@ namespace ServiceLib.Service
         public Order GetOrder(long id, ref int statusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
-            var client = new RestClient(UrlConfig.OrderUrl.GetOrder+id.ToString());
+            var client = new RestClient(UrlConfig.OrderUrl.GetOrder + id.ToString());
             var request = new RestRequest(Method.GET);
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
@@ -244,7 +244,7 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-       public Table GetTable(int id, ref int statusCode)
+        public Table GetTable(int id, ref int statusCode)
         {
             return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
         }
@@ -260,6 +260,74 @@ namespace ServiceLib.Service
         }
 
         public IEnumerable<Table> GeAlltTables(ref int statusCode)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+    [Export(typeof(IDelivereyService))]
+    public class DelivereyService : IDelivereyService
+    {
+        public int DeleteDelivereyman(long orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Delivereyman> GetAllActiveDelivereymen(ref int statusCode)
+        {
+            return GenericRest.GetThing<IEnumerable<Delivereyman>>(UrlConfig.DelivereyUrl.GetAllActiveDeliverymen, ref statusCode);
+        }
+
+        public IEnumerable<Delivereyman> GetAllDelivereymen(ref int statusCode)
+        {
+            return GenericRest.GetThing<IEnumerable<Delivereyman>>(UrlConfig.DelivereyUrl.GetAllDeliverymen, ref statusCode);
+        }
+
+        public Delivereyman GetDelivereyman(int id, ref int statusCode)
+        {
+            return GenericRest.GetThing<Delivereyman>(UrlConfig.DelivereyUrl.GetDeliverymen+id.ToString(), ref statusCode);
+        }
+
+        public int SaveDelivereyman(Delivereyman delivereyman)
+        {
+            return GenericRest.SaveThing(delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman);
+        }
+
+        public int UpdateDelivereyman(Delivereyman delivereyman)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [Export(typeof(IWaiterService))]
+    public class WaiterService : IWaiterService
+    {
+        public int DeleteWaiter(long orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Waiter> GetAllActiveWaiters(ref int statusCode)
+        {
+            return GenericRest.GetThing<IEnumerable<Waiter>>(UrlConfig.WaiterUrl.GetAllActiveWaiters, ref statusCode);
+        }
+
+        public IEnumerable<Waiter> GetAllWaiters(ref int statusCode)
+        {
+            return GenericRest.GetThing<IEnumerable<Waiter>>(UrlConfig.WaiterUrl.GetAllWaiters, ref statusCode);
+        }
+
+        public Waiter GetWaiters(int id, ref int statusCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SaveWaiter(Waiter Waiter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int UpdateWaiter(Waiter Waiter)
         {
             throw new NotImplementedException();
         }

@@ -94,6 +94,7 @@
     <Compile Include="Authorisation\VisibilityOrBool.cs" />
     <Compile Include="Interface\IAdditiveService.cs" />
     <Compile Include="Interface\IAuthentification.cs" />
+    <Compile Include="Interface\IDelivereyService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
     <Compile Include="Interface\IOrdreItemService.cs" />
     <Compile Include="Interface\IProductService.cs" />

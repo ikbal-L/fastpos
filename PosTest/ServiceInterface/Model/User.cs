@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -23,11 +25,34 @@ namespace ServiceInterface.Model
         public string Password { get; set; }
 
         [DataMember]
+        public string PinCode { get; set; }
+
+        [DataMember]
         public string PhoneNumber { get; set; }
 
         public List<Role> Roles { get; set; }
+
         [DataMember]
         public List<long> RoleIds { get; set; }
+
+        [DataMember]
+        public bool IsActive { get; set; }
+
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Descriptor Descriptor { get; set; } = Descriptor.User;
+    }
+
+    [DataContract]
+    public class Waiter : User
+    {
+ 
+    }
+    
+    [DataContract]
+    public class Delivereyman : User
+    {
+
     }
 
     [DataContract]
@@ -54,4 +79,14 @@ namespace ServiceInterface.Model
 
     }
 
+}
+
+namespace ServiceInterface
+{
+    public enum Descriptor
+    {
+        User,
+        Server,
+        Deliverymen
+    }
 }

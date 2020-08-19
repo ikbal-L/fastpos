@@ -38,6 +38,9 @@ namespace ConsoleApp
         [Import(typeof(IOrderService))]
         private IOrderService orderService = null;
 
+       [Import(typeof(IDelivereyService))]
+        private IDelivereyService delivereyService = null;
+
 
         static HttpClient client = new HttpClient();
 
@@ -108,8 +111,8 @@ namespace ConsoleApp
             //orderService.SaveOrder(o);
             var status = 0;
             //var prods = GenericRest.GetManyThings<Platter>(new List<long> { 1, 2, 3, 4 }, UrlConfig.ProductUrl.GetManyProducts, ref status);
-            var tabs = orderService.GeAlltTables(ref status);
-            Console.WriteLine(tabs.Count());
+            var men = delivereyService.GetAllActiveDelivereymen(ref status);
+            Console.WriteLine(men.Count());
             Console.ReadKey();
 
         }

@@ -26,6 +26,8 @@ namespace ServiceInterface.Model
         private OrderType? _type;
         private TimeSpan _elapsedTime;
         private BindableCollection<Order> _orders;
+        private Delivereyman _delivereyman;
+        private Waiter _waiter;
 
         public Order()
         {
@@ -61,6 +63,33 @@ namespace ServiceInterface.Model
         [DataMember]
         public DateTime OrderTime { get; set; }
 
+        public Delivereyman Delivereyman
+        {
+            get => _delivereyman;
+            set
+            {
+                Set(ref _delivereyman, value);
+                DelivereymanId = value?.Id;
+            }
+        }
+
+        [DataMember]
+        public long? DelivereymanId { get; set; }
+
+        public Waiter Waiter
+        {
+            get => _waiter;
+            set
+            {
+                Set(ref _waiter, value);
+                WaiterId = value?.Id;
+            }
+        }
+
+        [DataMember]
+        public long? WaiterId { get; set; }
+
+        [DataMember]
         public TimeSpan ElapsedTime
         {
             get => _elapsedTime;
@@ -72,6 +101,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         public OrderType? Type 
         {
             get => _type;

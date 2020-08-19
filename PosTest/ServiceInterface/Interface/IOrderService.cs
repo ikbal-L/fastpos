@@ -17,4 +17,5 @@ namespace ServiceInterface.Interface
 
         IEnumerable<Table> GeAlltTables(ref int statusCode);
     }
+
 }

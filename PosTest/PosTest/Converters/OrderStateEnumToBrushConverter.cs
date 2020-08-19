@@ -4,6 +4,7 @@ using System.Windows.Data;
 using System.Windows;
 using ServiceInterface.Model;
 using System.Windows.Media;
+using MaterialDesignThemes.Wpf;
 
 namespace PosTest.Converters
 {
@@ -27,6 +28,34 @@ namespace PosTest.Converters
                     return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3b5249")); //Brushes.Green; //#3b5249
                 default:
                     return Brushes.Gray;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    class OrderTypeEnumToMaterialDesignIcon : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return "Lastpass";
+            }
+            switch ((OrderType)value)
+            {
+                case OrderType.Delivery:
+                    return PackIconKind.Moped;
+                case OrderType.OnTable:
+                    return PackIconKind.TableFurniture;
+                case OrderType.Takeaway:
+                    return PackIconKind.BasketOutline;
+                case OrderType.InWaiting:
+                    return PackIconKind.TimerOutline;
+                default:
+                    return PackIconKind.Lastpass;
             }
         }
 

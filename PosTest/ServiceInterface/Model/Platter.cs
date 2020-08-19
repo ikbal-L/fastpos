@@ -32,7 +32,9 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Additives);
             }
         }
-        public int aaa { get => 100;  }
+
+
+
         [DataMember]
         public List<long> IdAdditives { get; set; }
 
