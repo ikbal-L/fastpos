@@ -107,6 +107,14 @@ namespace PosTest.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(paginationtesttViewModel);
         }
 
+        public void CheckoutSettings()
+        {
+            CheckoutSettingsViewModel checkoutSettingsViewModel =
+                    new CheckoutSettingsViewModel();
+            checkoutSettingsViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
+        }
+
         //This method load th DLL file containing the implemetation of IProductService 
         // and satisfay the import in this class
         private void Compose()

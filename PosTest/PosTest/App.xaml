@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialdesignextensions="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
+             
              xmlns:local="clr-namespace:PosTest">
     <Application.Resources>
         <ResourceDictionary>
@@ -12,9 +14,12 @@
                     <local:ShellBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>
                 <!--Mateirla design-->
-                <materialDesign:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
+                <materialdesign:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
+
                 <ResourceDictionary Source="/Resources/Styles/Brushes.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/AdditiveListStyle.xaml"/>
