@@ -529,6 +529,9 @@ namespace PosTest.ViewModels
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
             ReturnedAmount = null;
+            SelectedDelivereyman = null;
+            SelectedWaiter = null;
+
         }
 
         FilterEventHandler TableOrdersFilter;
@@ -545,7 +548,12 @@ namespace PosTest.ViewModels
                 }
                 else
                 {
+                    if (orderType == OrderType.Takeaway)
+                    {
+                        SelectedDelivereyman = null;
+                    }
                     CurrentOrder.Table = null;
+                    SelectedTable = null;
                 }
             }
             
@@ -604,6 +612,8 @@ namespace PosTest.ViewModels
             CategorieFiltering("Home");
             _currentOrder = null;
             DisplayedOrder = null;
+            SelectedDelivereyman = null;
+            SelectedWaiter = null;
             SetSelectedInListedOrdersDisplayedOrder();
         }
 

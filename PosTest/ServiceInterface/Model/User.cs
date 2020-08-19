@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Caliburn.Micro;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,17 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class User
+    public class User : PropertyChangedBase
     {
+        private string _backgroundString;
+        private Brush _background;
+        private Color? _backgroundColor;
+
         [DataMember]
         public long Id { get; set; }
 
@@ -41,6 +47,59 @@ namespace ServiceInterface.Model
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
         public Descriptor Descriptor { get; set; } = Descriptor.User;
+
+        [DataMember]
+        public string BackgroundString
+        {
+            get => _backgroundString ?? "#f39c12";
+            set
+            {
+                _backgroundString = value;
+                NotifyOfPropertyChange(nameof(Background));
+            }
+
+        }
+
+        public virtual Brush Background
+        {
+            get => _background ?? (_background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+            set
+            {
+                _background = (SolidColorBrush)value;
+            }
+        }
+
+        public virtual Color? BackgroundColor
+        {
+
+            get
+            {
+                if (_backgroundColor == null)
+                {
+                    _backgroundColor = (Color)ColorConverter.ConvertFromString(BackgroundString);
+                }
+                return _backgroundColor;
+            }
+            set
+            {
+                _backgroundColor = value;
+                BackgroundString = _backgroundColor.ToString();
+                Background = new SolidColorBrush((Color)_backgroundColor);
+                NotifyOfPropertyChange(() => IsDark);
+            }
+        }
+
+        public bool IsDark
+        {
+            get
+            {
+                var c = BackgroundColor.GetValueOrDefault();
+                var d = (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
+                return (5 * c.G + 2 * c.R + c.B) <= 8 * 140;
+            }
+        }
+
+
     }
 
     [DataContract]
