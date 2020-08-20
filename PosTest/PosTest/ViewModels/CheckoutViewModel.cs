@@ -145,7 +145,6 @@ namespace PosTest.ViewModels
 
             var waiter = waiterService.GetAllActiveWaiters(ref code);
             Waiters = new BindableCollection<Waiter>(waiter);
-
             var status = 0;
             var tables = _orderService.GeAlltTables(ref status);
             Tables = new BindableCollection<Table>(tables);

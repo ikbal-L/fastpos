@@ -9,14 +9,32 @@
         Title="MainWindow" Height="450" Width="800" >
     <Window.Resources>
         
-        <ControlTemplate x:Key="MyItemTemplate">
-            <TextBlock Text="{Binding Age}"/>
-        </ControlTemplate> 
-        <ControlTemplate x:Key="MyItemTemplate1">
+        <!--<ControlTemplate x:Key="MyItemTemplate">
+            <StackPanel>
+                <TextBlock Text="{Binding Age}"/>
+                <TextBlock Text="{Binding Name}"/>
+            </StackPanel>
+        </ControlTemplate>-->
+        <DataTemplate x:Key="MyItemDataTemplate">
+            <StackPanel>
+                <TextBlock Text="{Binding Age}"/>
+                <TextBlock Text="{Binding Name}"/>
+            </StackPanel>
+        </DataTemplate> 
+        <DataTemplate x:Key="MyItemDataTemplate2">
+            <StackPanel>
+                <TextBlock>
+                    <Run Text="{Binding Age}"/>
+                    <Run Text="  /  "/>
+                    <Run Text="{Binding Name}"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate> 
+        <!--<ControlTemplate x:Key="MyItemTemplate1">
             <TextBlock Text="{Binding Name}"/>
-        </ControlTemplate>
+        </ControlTemplate>-->
 
-        <DataTemplate x:Key="MyItemTemplate2">
+        <!--<DataTemplate x:Key="MyItemTemplate2">
             <Control x:Name="myControl" Template="{StaticResource MyItemTemplate1}" />
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding IsActive}" Value="True">
@@ -24,7 +42,7 @@
                     <Setter TargetName="myControl" Property="Background" Value="Aqua" />
                 </DataTrigger>
             </DataTemplate.Triggers>
-        </DataTemplate>
+        </DataTemplate>-->
 
         <GridView x:Key="lsitview">
             <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
@@ -58,21 +76,25 @@
                   Unchecked="tempcheck_Checked"
                   Grid.Row="0"/>
         <TextBlock Text="{Binding IsActivev}" Grid.Row="1" />
-        <ListView Grid.Row="2" Name="lvDataBinding" ItemsSource="{Binding Items}"
-                 ItemTemplate="{StaticResource MyItemTemplate2}"
-                 View="{StaticResource lsitview}"
-                 local:ListViewEx.IsWrapTemplate="{Binding IsActivev}"
-                 SelectionMode="Multiple"
+        <!--local:ListViewEx.IsWrapTemplate="{Binding IsActivev}"-->
+        <!--SelectionMode="Multiple"
                  local:ListBoxMultiSelectionEx.SelectedItems="{Binding SelectedItems}"
-                 local:ListBoxMultiSelectionEx.IsSorted="True"
-                  >
+                 local:ListBoxMultiSelectionEx.IsSorted="True"-->
+        <ListView Grid.Row="2" Name="lvDataBinding" ItemsSource="{Binding Items}"
+                 ItemTemplate="{StaticResource MyItemDataTemplate}">
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
+                    <Setter Property="View" Value="{DynamicResource lsitview}"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsActivev}" Value="True">
-                            <Setter Property="View" Value="{StaticResource lsitview}"/>
-                            <Setter Property="ItemsPanel" Value="{StaticResource itemspanletempl}"/>
-                            <Setter Property="Background" Value="Aqua"/>
+                            <Setter Property="ItemsPanel">
+                                <Setter.Value>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="View" Value="{x:Null}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -81,7 +103,7 @@
         </ListView>
 
         <ListView Grid.Row="3" Name="lvDataBinding1" ItemsSource="{Binding SelectedItems}"
-                 ItemTemplate="{StaticResource MyItemTemplate2}"
+                 ItemTemplate="{StaticResource MyItemDataTemplate2}"
                  SelectionMode="Multiple" 
                  />
 

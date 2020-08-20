@@ -151,18 +151,25 @@
                 <Setter Property="Foreground" Value="#FF03A9F4"/>
             </Trigger>
         </Style.Triggers>
+    </Style>
 
+    <LinearGradientBrush x:Key="Flat3DBorderBrush"
+                         StartPoint="0.499,0" EndPoint="0.501,1">
+        <GradientStop Color="#ffd23f" Offset="0" />
+        <GradientStop Color="#dc2f02" Offset="0.01" />
+        <GradientStop Color="#f6bd60" Offset="0.99" />
+        <GradientStop Color="Yellow" Offset="1" />
+    </LinearGradientBrush>
 
-
-    </Style><Style TargetType="RadioButton" x:Key="ButtonTopOrderDelivereyman" >
+    <Style TargetType="RadioButton" x:Key="ButtonTopOrderDelivereyman" >
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
 
         <Setter Property="BorderBrush" Value="#FF03A9F4"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Background" Value="#FF03A9F4"/>
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
+        <Setter Property="Foreground" Value="Black"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -171,7 +178,7 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}"
-                            CornerRadius="10">
+                            CornerRadius="0">
                         <ContentPresenter 
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -195,17 +202,18 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-   
+
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <!--<Setter Property="Background" Value="Red"/>-->
-                <Setter Property="BorderBrush" Value="#ffd23f"/>
-                <Setter Property="BorderThickness" Value="3.5"/>
+                <Setter Property="BorderBrush" Value= "{StaticResource Flat3DBorderBrush}"/>
+                <!--#ffd23f"/>-->
+                <Setter Property="BorderThickness" Value="5"/>
             </Trigger>
+            <DataTrigger Binding="{Binding IsDark}" Value="True">
+                <Setter Property="Foreground" Value="White"/>
+            </DataTrigger>
         </Style.Triggers>
-
-
-
     </Style>
 
     <Style BasedOn="{StaticResource ButtonTabActive}" TargetType="ToggleButton" x:Key="ButtonTabDesactive">
