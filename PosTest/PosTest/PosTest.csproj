@@ -218,6 +218,7 @@
     <Compile Include="SL.Controls\NumericKeypad.xaml.cs">
       <DependentUpon>NumericKeypad.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SL.Controls\VirtualizingWrapPanel.cs" />
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="ViewModels\ProductsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
+    <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\TakeawayViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
@@ -264,6 +266,9 @@
     </Compile>
     <Compile Include="Views\SubViews\CategoryEditView.xaml.cs">
       <DependentUpon>CategoryEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerView.xaml.cs">
+      <DependentUpon>CustomerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\DelivereyView.xaml.cs">
       <DependentUpon>DelivereyView.xaml</DependentUpon>
@@ -431,6 +436,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SubViews\CategoryEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Net.Http;
 using ServiceInterface.StaticValues;
+using PosTest.ViewModels.SubViewModel;
 
 namespace PosTest.ViewModels
 {
@@ -119,6 +120,13 @@ namespace PosTest.ViewModels
                     new CheckoutSettingsViewModel();
             checkoutSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
+        }  
+        
+        public void CustomersSettings()
+        {
+            CustomerViewModel customerViewModel = new CustomerViewModel();
+            customerViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(customerViewModel);
         }
 
         //This method load th DLL file containing the implemetation of IProductService 

@@ -23,6 +23,9 @@
             <Button x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
 
+            <Button x:Name="CustomersSettings" Content="CustomersSettings" Margin="5"
+                    Style="{StaticResource MaterialDesignFlatButton}"/>
+
 
             <!--<TextBlock Text="{res:Resources.HelloWorld,Converter={StaticResource}}"/>-->
         </StackPanel>
