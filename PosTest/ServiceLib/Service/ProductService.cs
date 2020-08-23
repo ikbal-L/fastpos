@@ -57,7 +57,7 @@ namespace ServiceLib.Service
                 return null;
             }
             var idProducts = new List<long>();
-            var idCategories = new HashSet<long>();
+            var idCategories = new HashSet<long?>();
             var idAdditivesOfAllProducts = new HashSet<long>();
             products.ToList().ForEach(p => idProducts.Add((long)p.Id));
             products.ToList().ForEach(p => idCategories.Add(p.CategorieId));
@@ -106,7 +106,7 @@ namespace ServiceLib.Service
             }
             int getAdditivestatusCode = 0,
                 getCategryStatusCode = 0;
-            var category = _restCategoryService.GetCategory(product.CategorieId, ref getCategryStatusCode);
+            var category = _restCategoryService.GetCategory((long)product.CategorieId, ref getCategryStatusCode);
             if (getCategryStatusCode != 200)
             {
                 throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getCategryStatusCode.ToString());
@@ -186,7 +186,8 @@ namespace ServiceLib.Service
                                 PictureUri = platProduct.PictureUri,
                                 Price = platProduct.Price,
                                 Type = platProduct.Type,
-                                Unit = platProduct.Unit
+                                Unit = platProduct.Unit,
+                                Rank = platProduct.Rank
                             };
                             products.Add(p);
                         }

@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
-    public class Product : PropertyChangedBase
+    public class Product : Ranked
     {
         private string _backgroundString = null;
         private long _categoryId;
@@ -35,6 +35,7 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Name);
             }
         }
+
         [DataMember]
         public string Description { 
             get => _description;
@@ -75,7 +76,7 @@ namespace ServiceInterface.Model
             }
         }
         [DataMember]
-        public long CategorieId
+        public long? CategorieId
         {
             get;
             set;
@@ -87,7 +88,18 @@ namespace ServiceInterface.Model
             set
             {
                 _category = value;
+                CategorieId = null;
                 NotifyOfPropertyChange(() => Category);
+            }
+        }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                NotifyOfPropertyChange();
             }
         }
 
@@ -104,11 +116,33 @@ namespace ServiceInterface.Model
         public int AvailableStock { get; set; }
 
         private Color? _backgroundColor;
+        private bool _isSelected;
+
+        public Product()
+        {
+
+        }
+        public Product(Product platProduct) :this()
+        {
+            AvailableStock = platProduct.AvailableStock;
+            BackgroundString = platProduct.BackgroundString;
+            CategorieId = platProduct.CategorieId;
+            Description = platProduct.Description;
+            Id = platProduct.Id;
+            IsMuchInDemand = platProduct.IsMuchInDemand;
+            Name = platProduct.Name;
+            PictureFileName = platProduct.PictureFileName;
+            PictureUri = platProduct.PictureUri;
+            Price = platProduct.Price;
+            Type = platProduct.Type;
+            Unit = platProduct.Unit;
+            Rank = platProduct.Rank;
+        }
 
         [DataMember]
         public string BackgroundString 
         { 
-            get => _backgroundString ?? "#f39c12";
+            get => _backgroundString ?? "#ffffff";
             set
             {
                 _backgroundString = value;

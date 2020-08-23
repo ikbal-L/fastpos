@@ -13,7 +13,7 @@ using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
-    public class Category : PropertyChangedBase
+    public class Category : Ranked
     {
         private string _backGroundString=null;
         private Brush _backGround;
@@ -33,13 +33,13 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Name);
             }
         }
-
+ 
         public string Description { get; set; }
 
         [DataMember]
         public string BackgroundString 
         { 
-            get => _backGroundString ?? "#f39c12";
+            get => _backGroundString ?? "#ffffff";
             set 
             { 
                 _backGroundString = value;
@@ -133,5 +133,21 @@ namespace ServiceInterface.Model
         }
     }
 
+    
+    public class Ranked : PropertyChangedBase
+    {
+        private int? _rank;
+
+        [DataMember]
+        public int? Rank
+        {
+            get => _rank;
+            set
+            {
+                _rank = value;
+                NotifyOfPropertyChange();
+            }
+        }
+    }
 
 }

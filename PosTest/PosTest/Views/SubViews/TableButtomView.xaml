@@ -140,7 +140,7 @@
                                                         </DataTrigger>
                                                         <DataTrigger Value="True">
                                                             <DataTrigger.Binding>
-                                                                <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                                <MultiBinding Converter="{StaticResource    }">
                                                                     <Binding ElementName="ordersList" Path="SelectedItem"/>
                                                                     <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
                                                                 </MultiBinding>

@@ -17,7 +17,6 @@
              Background="{StaticResource MaterialDesignPaper}"
              DataContext="{Binding}"        
              mc:Ignorable="d"
-             
              d:DesignWidth="900">
     <FrameworkElement.Resources>
         <ResourceDictionary >

@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PosTest.ViewModels"
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+                    xmlns:caliburn="http://www.caliburnproject.org"
+                    xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:cal="http://www.caliburnproject.org" >
 
@@ -44,8 +46,89 @@
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
-
                         </TextBlock>
+                    </Border>
+                </DockPanel>
+            </Button>
+        </StackPanel>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
+        <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
+            <Button x:Name="ProductSettingsClick" Style="{StaticResource ButtonStyle1}" 
+                    caliburn:Message.Attach="[Event Click] = [Action SelectProdcut($this)]">
+
+                <DockPanel Height="70" Width="100" Background="{Binding Background}" >
+                    <Border DockPanel.Dock="Top" Height="40">
+                        <TextBlock Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+                    <Border  DockPanel.Dock="Bottom">
+                        <DockPanel >
+                            <Border Background="{DynamicResource PrimaryHueLightBrush}" CornerRadius="30" Width="25" Height="25">
+                                <materialdesign:PackIcon Kind="Done" Height="25" Width="25"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding ElementName="ProductSettingsList" Path="SelectedItem"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                         </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <TextBlock  FontSize="12" Width="52"
+                               TextAlignment="Center" VerticalAlignment="Center"  TextTrimming="WordEllipsis">
+                            <Run Text="{Binding Path=Price, StringFormat=' {0}  '}"/>
+                            <Run Text="{Binding Rank}"/>
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+
+                            </TextBlock>
+                            <Border  CornerRadius="30" Width="25" Height="25" DockPanel.Dock="Right">
+                                <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter1}">
+                                                        <Binding ElementName="ProductSettingsList" Path="Tag"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                        </DockPanel>
                     </Border>
                 </DockPanel>
             </Button>

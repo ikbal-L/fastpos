@@ -9,6 +9,7 @@
     <convert:NumberToVisibilityConverter x:Key="DecimalToVisibility"/>
     <convert:NumberToVisibilityConverterVisibleHidden x:Key="NumberToVisibilityHidden"/>
     <convert:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter"/>
+    <convert:MultiValueEqualityConverter1 x:Key="MultiValueEqualityConverter1"/>
     <convert:MultiValueEnumListKindConverter x:Key="MultiValueEnumListKindConverter"/>
     <convert:NumberToVisibilityConverter x:Key="NumberToVisibilityConverter"/>
 
