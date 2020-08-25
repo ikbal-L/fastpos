@@ -30,6 +30,7 @@
             <ListBox ItemsSource="{Binding ProductsPage}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                     ItemTemplate="{StaticResource CheckoutProduct}"
                  Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">

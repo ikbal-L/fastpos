@@ -95,8 +95,7 @@
                 Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" 
                 ItemsSource="{Binding Products, Mode=TwoWay}" 
                 SelectedItem="{Binding CurrentProduct}"
-                SelectedIndex="{Binding CurrentProductIndex}"
-                >
+                SelectedIndex="{Binding CurrentProductIndex}">
                 <ListView.View >
                     <GridView >
                         

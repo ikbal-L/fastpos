@@ -7,7 +7,12 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PosTest.ViewModels
 {
@@ -450,7 +455,6 @@ namespace PosTest.ViewModels
             SelectedProduct.Rank = null;
             SelectedProduct.Category = null;
             CurrentProducts[index] = new Product { Rank = rank };
-            SelectedProduct = null;
             //var freeProds = AllProducts.Where(p => p.CategorieId==null);
             //FreeProducts.Clear();
             FreeProducts.Add(freeProd);
@@ -609,6 +613,148 @@ namespace PosTest.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
 
+        private Point startPoint;
+        public void FreeProductsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Store the mouse position
+            startPoint = e.GetPosition(null);
+        }
+
+        public void FreeProductsList_MouseMove(object sender, MouseEventArgs e)
+        {
+            // Get the current mouse position
+            Point mousePos = e.GetPosition(null);
+            Vector diff = startPoint - mousePos;
+            //if (!(e.OriginalSource is ListBoxItem) || !(e.LeftButton == MouseButtonState.Pressed))
+            //{
+            //    Console.WriteLine((e.OriginalSource as DependencyObject).GetType().ToString());
+            //    return;
+            //}
+
+            if (e.LeftButton == MouseButtonState.Pressed /*&&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)*/)
+            {
+                // Get the dragged ListViewItem
+                ListBox listView = sender as ListBox;
+                ListBoxItem listBoxItem =
+                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+                // Find the data behind the ListViewItem
+                Product product = null;
+                if (listBoxItem != null)
+                {
+                    product = (Product)listView.ItemContainerGenerator.
+                    ItemFromContainer(listBoxItem);
+                    DataObject dragData = new DataObject("myFormat", product);
+                    DragDrop.AddQueryContinueDragHandler(listBoxItem, DragContrinueHandler);
+                    DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
+                }
+               
+
+                // Initialize the drag & drop operation
+            }
+        }
+        public void DragContrinueHandler(object sender, QueryContinueDragEventArgs e)
+        {
+            if (e.Action == DragAction.Continue && e.KeyStates != DragDropKeyStates.LeftMouseButton)
+            {
+                //_dragdropWindow.Close();
+            }
+        }
+
+        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            do
+            {
+                Console.WriteLine(current.GetType().ToString());
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
+        public void ProductsList_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent("myFormat") ||
+                    sender == e.Source)
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+        public void ProductsList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("myFormat"))
+            {
+                Product contact = e.Data.GetData("myFormat") as Product;
+                ListBox listView = sender as ListBox;
+                ListBoxItem listBoxItem =
+                   FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+                // Find the data behind the ListViewItem
+                Product product = (Product)listView.ItemContainerGenerator.
+                    ItemFromContainer(listBoxItem);
+
+                var productSrc = e.Data.GetData("myFormat") as Product;
+
+                if (productSrc == null) return;
+
+                if(productSrc.Rank == null)
+                {
+                    SelectedFreeProduct = productSrc;
+                    SelectedProduct = product;
+                    AttachProductToCategory();
+                }
+                else
+                {
+                    ProductToMove = productSrc;
+                    SelectedProduct = product;
+                    var index = CurrentProducts.IndexOf(ProductToMove);
+                    var prod = new Product { Rank = ProductToMove.Rank };
+                    if (SelectedProduct.Equals(ProductToMove))
+                    {
+                        ProductToMove = null;
+                        return;
+                    }
+                    PutProductInCellOf(SelectedProduct, ProductToMove);
+                    CurrentProducts[index] = prod;
+                    ProductToMove = null;
+                }
+            }
+        }
+        public void FreeProductsList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Handled)
+            {
+                return;
+            }
+            if (e.Data.GetDataPresent("myFormat"))
+            {
+                Product contact = e.Data.GetData("myFormat") as Product;
+                ListBox listView = sender as ListBox;
+                ListBoxItem listBoxItem =
+                   FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+                // Find the data behind the ListViewItem
+                var productSrc = e.Data.GetData("myFormat") as Product;
+                if (productSrc == null) return;
+                if (string.IsNullOrEmpty(productSrc.Name)) 
+                    return;
+                if (productSrc.Rank == null)
+                {
+                    return;
+                }
+
+
+                SelectedProduct = productSrc;
+                RemoveProductFromCategory();
+                
+            }
+        }
     }
 
     class Comparer<T> : IComparer<T> where T : Ranked

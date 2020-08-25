@@ -114,9 +114,6 @@
                              caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('CUSTOMER')]"/>
             </Grid>
 
-
-                
-
             <Grid Grid.Column="0" Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>

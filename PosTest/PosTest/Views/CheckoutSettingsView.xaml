@@ -24,9 +24,9 @@
                         <ColumnDefinition Width="0.5*"/>
                     </Grid.ColumnDefinitions>
                     <ToggleButton x:Name="checkToggle" Grid.Column="0"
-                                                VerticalAlignment="Center" Height="22" Width="22"
-                                                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
-                                                                AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                                  VerticalAlignment="Center" Height="22" Width="22"
+                                  IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                              AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
                                 <Setter Property="Background" Value="#90e0ef"/>
@@ -64,9 +64,9 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <ToggleButton x:Name="checkToggle" Grid.Column="0"  Grid.Row="1"
-                                                VerticalAlignment="Center" Height="22" Width="22"
-                                                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
-                                                                AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                                  VerticalAlignment="Center" Height="22" Width="22"
+                                  IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                  AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
                                 <Setter Property="Background" Value="#90e0ef"/>
@@ -131,7 +131,7 @@
 
         <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Style="{StaticResource MaterialDesignTabControl}" >
             <TabItem x:Name="CategoriesTabItem" Header="Categories" Tag="{Binding AllCategories}">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">
+                <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">-->
 
                     <Border BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="150" MinHeight="150" ClipToBounds="True">
@@ -145,7 +145,12 @@
                                 </ListBox>-->
                             <!-- and here's another -->
                             <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}" Grid.IsSharedSizeScope="True"
-                                      SelectedItem="{Binding SelectedFreeProduct}">
+                                      SelectedItem="{Binding SelectedFreeProduct}"
+                                     AllowDrop="True"
+                                     caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                                                              [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
+                                                              [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+                                                              [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
@@ -249,13 +254,13 @@
                             </Button>
                         </Grid>
                     </Border>
-                </ScrollViewer>
+                <!--</ScrollViewer>-->
             </TabItem>
             
             <TabItem Header="Produits">
 
 
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">
+                <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">-->
                     <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="150" MinHeight="150" ClipToBounds="True">
                         <Grid>
@@ -292,7 +297,7 @@
                             </Button>
                         </Grid>
                     </Border>
-                </ScrollViewer>
+                <!--</ScrollViewer>-->
 
 
 
@@ -307,8 +312,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="16"   Grid.Row="1" Grid.Column="1">
-                <Border BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+            <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="16"   Grid.Row="1" Grid.Column="1">-->
+            <Border  Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="40" MinHeight="100" ClipToBounds="True">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -316,10 +321,15 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <ListBox x:Name="ProductSettingsList" ItemsSource="{Binding CurrentProducts}"
+                                 AllowDrop="True"
                                  ItemTemplate="{StaticResource SettingsProduct}"
                                  SelectedItem="{Binding SelectedProduct}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+                                                           [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
+                                                           [Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                                                           [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)]"
                                  Tag="{Binding ClipboardProduct}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -387,16 +397,15 @@
 
                     </Grid>
                 </Border>
-            </ScrollViewer>
+            <!--</ScrollViewer>-->
 
 
 
 
         </Grid>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16"  Grid.Row="1" Grid.Column="1">
-            <Border BorderThickness="0
-                    " BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+        <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16"  Grid.Row="1" Grid.Column="1">-->
+        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}" 
                             MinWidth="40" MinHeight="100" ClipToBounds="True">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -491,7 +500,7 @@
                     </Button>
                 </Grid>
             </Border>
-        </ScrollViewer>
+        <!--</ScrollViewer>-->
 
         <materialdesign:DrawerHost Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" IsTopDrawerOpen="{Binding IsCategoryDetailsDrawerOpen}"  
                                    TopDrawerCloseOnClickAway="False" >
