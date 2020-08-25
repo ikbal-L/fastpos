@@ -51,7 +51,8 @@
             <helpers:TableViewTemplateSelector x:Key="tableViewSelector"
                                             TableFullView="{StaticResource tableFullView}"
                                             TableButtomView="{StaticResource tableButtomView}"/>
-            <convert:ObjectToBoolConverter x:Key="objectToBoolConverter"/>            <convert:OrderItemObjectToBoolConverter x:Key="OrderItemToBoolConverter"/>
+            <convert:ObjectToBoolConverter x:Key="objectToBoolConverter"/>            
+            <convert:OrderItemObjectToBoolConverter x:Key="OrderItemToBoolConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 

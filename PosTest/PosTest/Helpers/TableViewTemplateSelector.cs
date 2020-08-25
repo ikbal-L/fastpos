@@ -1,4 +1,5 @@
 ﻿using PosTest.ViewModels;
+using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,31 @@ namespace PosTest.Helpers
             else
             {
                 return TableButtomView;
+            }
+        }
+    }
+    
+    class SettingsFreeProductsTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate SeletedItemTemplate { get; set; }
+        public DataTemplate NotSeletedItemTemplate { get; set; }
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            // Null value can be passed by IDE designer
+            var product = item as Product;
+            if (product == null) 
+                return null;
+
+            // Select one of the DataTemplate objects, based on the 
+            // value that represents the view kid
+            if (product.IsSelected)
+            {
+                return SeletedItemTemplate;
+            }
+            else
+            {
+                return NotSeletedItemTemplate;
             }
         }
     }

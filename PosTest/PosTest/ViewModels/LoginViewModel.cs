@@ -80,7 +80,7 @@ namespace PosTest.ViewModels
         public void Settings()
         {
             authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService, categorieService, additiveService);
+            Settings1ViewModel settingsViewModel = new Settings1ViewModel(30, productService, categorieService, additiveService);
             settingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }

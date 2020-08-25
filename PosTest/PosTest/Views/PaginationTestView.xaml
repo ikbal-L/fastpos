@@ -15,8 +15,10 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="listbox" ex:ListPaginationEx.ItemsSource="{Binding Products}" 
-                 ex:ListPaginationEx.ItemsPerPage="5" Grid.RowSpan="2"
+        <ListBox x:Name="listbox" 
+                 Grid.RowSpan="2"
+                 ex:ListPaginationEx.ItemsPerPage="{Binding ProductPageSize}"
+                 ex:ListPaginationEx.ItemsSource="{Binding Products}" 
                  Width="200" Background="LightBlue">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type src:Product}">

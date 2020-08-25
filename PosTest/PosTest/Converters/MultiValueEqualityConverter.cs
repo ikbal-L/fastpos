@@ -24,21 +24,6 @@ namespace PosTest.Converters
             throw new NotImplementedException();
         }
     }
-    public class MultiValueEqualityConverter1 : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            //Console.Write(values[0]  + "   " + values[0]?.Equals(values[1]) + "   ");
-            Console.Write((values[0] as Product)?.Name + "   ");
-            Console.WriteLine((values[1] as Product)?.Name);
-            return values?.All(o => o?.Equals(values[0]) == true) == true;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
     public class MultiValueEnumListKindConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

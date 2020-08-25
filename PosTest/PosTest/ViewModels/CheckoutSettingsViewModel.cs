@@ -3,6 +3,7 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace PosTest.ViewModels
         private ICategoryService _categoriesService;
         //[Import(typeof(IOrderService))]
         private IOrderService _orderService;
- 
+
         private bool _IsCategoryDetailsDrawerOpen;
         private bool _IsProductDetailsDrawerOpen;
 
@@ -34,6 +35,8 @@ namespace PosTest.ViewModels
         private CollectionViewSource productsViewSource;
         private Product _selectedFreeProduct;
         private Product _clipboardProduct;
+        private Product _toMoveProduct;
+        private Category _categoryOfSelectFreeProduct;
 
         public CheckoutSettingsViewModel()
         {
@@ -84,9 +87,20 @@ namespace PosTest.ViewModels
             CurrentProducts = new BindableCollection<Product>();
             var freeProds = AllProducts.Where(p => p.Category == null);
             FreeProducts = new BindableCollection<Product>(freeProds);
+            ToSaveUpdate = new BindableCollection<object>();
+            ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             //productsViewSource = new CollectionViewSource();
             //NotAffectedToAnyCategoryProducts.Filter = (o) => (o as Product).CategorieId == null;
             //GenarateRanksForProducts();
+
+        }
+
+        private void ToSaveUpdateChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                var product = e.NewItems;
+            }
 
         }
 
@@ -108,6 +122,8 @@ namespace PosTest.ViewModels
         //}
 
         public BindableCollection<Product> FreeProducts { get; set; }
+        public BindableCollection<object> ToSaveUpdate { get; set; }
+        public BindableCollection<Product> ToDeletge { get; set; }
 
         void GenarateRanksForProducts()
         {
@@ -142,16 +158,14 @@ namespace PosTest.ViewModels
                     t[i++] = r;
                     end++;
                 }
-                
-
             }
             int j = 1;
             foreach (var prod in AllProducts)
             {
-                Console.WriteLine(j++ +" Done   --> " + prod.Rank);
+                Console.WriteLine(j++ + " Done   --> " + prod.Rank);
                 var code = _productsService.UpdateProduct(prod);
-                    Console.WriteLine(code);
-                if (code!=200)
+                Console.WriteLine(code);
+                if (code != 200)
                 {
 
                     Console.WriteLine(code);
@@ -159,11 +173,26 @@ namespace PosTest.ViewModels
 
             }
         }
-        
-        public List<Product> AllProducts { get;  }
-        public List<Category> AllCategories { get;  }
-        public int ProductPageSize { get; private set; }
-        public int CategoryPageSize { get; private set; }
+
+        public List<Product> AllProducts { get; }
+        public List<Category> AllCategories { get; }
+        public int ProductPageSize
+        {
+            get => _productPageSize;
+            set
+            {
+                Set(ref _productPageSize, value);
+            }
+        }
+
+        public int CategoryPageSize
+        {
+            get => _categpryPageSize;
+            set
+            {
+                Set(ref _categpryPageSize, value);
+            }
+        }
 
         public BindableCollection<Product> CurrentProducts
         {
@@ -193,37 +222,61 @@ namespace PosTest.ViewModels
         //    }
         //}
 
-        public Product SelectedProduct 
-        { 
+        public Product SelectedProduct
+        {
             get => _selectedProduct;
             set
             {
                 Set(ref _selectedProduct, value);
-            } 
+            }
         }
+
         public Product SelectedFreeProduct
-        { 
+        {
             get => _selectedFreeProduct;
             set
             {
+                if (_selectedFreeProduct != null && 
+                    !string.IsNullOrEmpty(_selectedFreeProduct.Name) && 
+                    SelectedFreeProductIsChanged)
+                {
+                    ToSaveUpdate.Add(_selectedFreeProduct);
+                    SelectedFreeProductIsChanged = false;
+                }
                 Set(ref _selectedFreeProduct, value);
-            } 
+            }
         }
         public Product ClipboardProduct
-        { 
+        {
             get => _clipboardProduct;
             set
             {
                 Set(ref _clipboardProduct, value);
-            } 
+            }
         }
-        public Category SelectedCategory 
-        { 
+        public Product ProductToMove
+        {
+            get => _toMoveProduct;
+            set
+            {
+                Set(ref _toMoveProduct, value);
+            }
+        }
+        public Category SelectedCategory
+        {
             get => _selectedCategory;
             set
             {
                 Set(ref _selectedCategory, value);
-            } 
+            }
+        }
+        public Category CategoryOfSelectFreeProduct
+        {
+            get => _categoryOfSelectFreeProduct;
+            set
+            {
+                Set(ref _categoryOfSelectFreeProduct, value);
+            }
         }
         public bool IsCategoryDetailsDrawerOpen
         {
@@ -247,30 +300,72 @@ namespace PosTest.ViewModels
             get => _IsDeleteProductDialogOpen;
             set => Set(ref _IsDeleteProductDialogOpen, value);
         }
+        public bool SelectedFreeProductIsChanged { get; private set; }
 
-        void LoadCategoryPages()
+        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size) where T : Ranked, new()
+        {
+            int icat = 0;
+            for (int i = 1; i <= size; i++)
+            {
+                T cat = default;
+                if (icat < source.Count)
+                {
+                    cat = source[icat];
+                }
+                else
+                {
+                    cat = default;
+                }
+
+                if (cat != null && cat.Rank == i)
+                {
+                    dest.Add(cat);
+                    icat++;
+                }
+                else
+                {
+                    dest.Add(new T { Rank = i });
+                }
+
+            }
+        }
+
+         void LoadCategoryPages()
         {
             var comparer = new Comparer<Category>();
             var categories = new List<Category>(AllCategories);
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
-            int nbpage = categories.Count / _categpryPageSize + categories.Count % _categpryPageSize == 0 ? 0 : 1;
+            var maxRank = (int)categories.Max(c => c.Rank);
+            int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;
-            int icat = 0;
-            for (int i = 1; i <= size; i++)
-            {
-                var cat = categories[icat];
-                if (cat.Rank == i)
-                {
-                    CurrentCategories.Add(cat);
-                    icat++;
-                }
-                else
-                {
-                    CurrentCategories.Add(new Category { Rank = i });
-                }
-            }
+
+            LoadPages(categories, CurrentCategories, size);
+
+            //int icat = 0;
+            //for (int i = 1; i <= size; i++)
+            //{
+            //    Category cat = null;
+            //    if (icat < categories.Count)
+            //    {
+            //        cat = categories[icat];
+            //    }
+            //    else
+            //    {
+            //        cat = null;
+            //    }
+
+            //    if (cat != null && cat.Rank == i)
+            //    {
+            //        CurrentCategories.Add(cat);
+            //        icat++;
+            //    }
+            //    else
+            //    {
+            //        CurrentCategories.Add(new Category { Rank = i });
+            //    }
+            //}
             //CurrentCategories.
         }
 
@@ -282,34 +377,54 @@ namespace PosTest.ViewModels
             var listOfFliteredProducts = filteredProducts.ToList();  //new List<Category>(AllCategories);
             listOfFliteredProducts.Sort(comparer);
             SelectedCategory = category;
-            var iprod = 0;
-            for (int i = 1; i <= _productPageSize; i++)
-            {
-                Product prod = null;
+            LoadPages(listOfFliteredProducts, CurrentProducts, ProductPageSize);
+            //var iprod = 0;
+            //for (int i = 1; i <= _productPageSize; i++)
+            //{
+            //    Product prod = null;
                  
-                if (iprod < listOfFliteredProducts.Count)
-                {
-                    prod = listOfFliteredProducts[iprod];
-                }
-                else
-                {
-                    prod = null;
-                }
-                if (prod != null && prod.Rank == i)
-                {
-                    CurrentProducts.Add(prod);
-                    iprod++;
-                }
-                else
-                {
-                    CurrentProducts.Add(new Product { Rank = i }) ;
-                }
-            }
+            //    if (iprod < listOfFliteredProducts.Count)
+            //    {
+            //        prod = listOfFliteredProducts[iprod];
+            //    }
+            //    else
+            //    {
+            //        prod = null;
+            //    }
+            //    if (prod != null && prod.Rank == i)
+            //    {
+            //        CurrentProducts.Add(prod);
+            //        iprod++;
+            //    }
+            //    else
+            //    {
+            //        CurrentProducts.Add(new Product { Rank = i }) ;
+            //    }
+            //}
         }
 
         public void SelectProdcut(Product product)
         {
             SelectedProduct = product;
+            if (ProductToMove !=null)
+            {
+                var index = CurrentProducts.IndexOf(ProductToMove);
+                var prod = new Product { Rank = ProductToMove.Rank };
+                if (SelectedProduct.Equals(ProductToMove))
+                {
+                    ProductToMove = null;
+                    return;
+                }
+                PutProductInCellOf(SelectedProduct, ProductToMove);
+                CurrentProducts[index] = prod;
+                ProductToMove = null;
+                return;
+            }
+
+            if (SelectedFreeProduct != null)
+            {
+                AttachProductToCategory();
+            }
            
         }
 
@@ -319,8 +434,16 @@ namespace PosTest.ViewModels
            
         }
 
+        public void ProductChanged(Product product)
+        {
+            SelectedFreeProductIsChanged = true;
+        }
         public void RemoveProductFromCategory()
         {
+            if (SelectedProduct == null)
+            {
+                return;
+            }
             var index = CurrentProducts.IndexOf(SelectedProduct);
             var rank = SelectedProduct.Rank;
             var freeProd = SelectedProduct;
@@ -331,6 +454,7 @@ namespace PosTest.ViewModels
             //var freeProds = AllProducts.Where(p => p.CategorieId==null);
             //FreeProducts.Clear();
             FreeProducts.Add(freeProd);
+            SelectedFreeProduct = null;
         }
 
         public void AttachProductToCategory()
@@ -341,22 +465,27 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var index = CurrentProducts.IndexOf(SelectedProduct);
-            SelectedFreeProduct.Rank = SelectedProduct.Rank;
-            SelectedFreeProduct.Category = SelectedCategory;
+            //var index = CurrentProducts.IndexOf(SelectedProduct);
+            //SelectedFreeProduct.Rank = SelectedProduct.Rank;
+            //SelectedFreeProduct.Category = SelectedCategory;
             
-            if (SelectedProduct.Category != null)
-            {
-                SelectedProduct.Rank = null;
-                SelectedProduct.Category = null;
-                FreeProducts.Add(SelectedProduct);
-            }
-            CurrentProducts[index] = SelectedFreeProduct;
+            //if (SelectedProduct.Category != null)
+            //{
+            //    SelectedProduct.Rank = null;
+            //    SelectedProduct.Category = null;
+            //    FreeProducts.Add(SelectedProduct);
+            //}
+            //CurrentProducts[index] = SelectedFreeProduct;
+            PutProductInCellOf(SelectedProduct, SelectedFreeProduct);
             FreeProducts.Remove(SelectedFreeProduct);
         }
 
         public void CopyProduct()
         {
+            if (SelectedProduct.Category == null)
+            {
+                ToastNotification.Notify("We can't copy empty product");
+            }
             ClipboardProduct = SelectedProduct;
             //if (SelectedProduct is Platter)
             //{
@@ -366,6 +495,21 @@ namespace PosTest.ViewModels
             //{
             //    ClipboardProduct = new Product(SelectedProduct);
             //}
+        }
+
+        private void PutProductInCellOf(Product sourceProduct, Product desProduct)
+        {
+            var index = CurrentProducts.IndexOf(sourceProduct);
+            
+            desProduct.Rank = sourceProduct.Rank;
+            desProduct.Category = SelectedCategory;
+            if (sourceProduct.Category != null)
+            {
+                sourceProduct.Rank = null;
+                sourceProduct.Category = null;
+                FreeProducts.Add(sourceProduct);
+            }
+            CurrentProducts[index] = desProduct;
         }
 
         public void PasteProduct()
@@ -380,18 +524,24 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("Selcect a zone to copy in");
                 return;
             }
-
-            var index = CurrentProducts.IndexOf(SelectedProduct);
-            var product = ClipboardProduct is Platter ? new Platter(ClipboardProduct as Platter) : new Product(ClipboardProduct);
-            product.Rank = SelectedProduct.Rank;
-            product.Category = SelectedCategory;
-            if (SelectedProduct.Category != null)
+            if (ClipboardProduct.Equals(SelectedProduct))
             {
-                SelectedProduct.Rank = null;
-                SelectedProduct.Category = null;
-                FreeProducts.Add(SelectedProduct);
+                return;
             }
-            CurrentProducts[index] = product;
+            var product = ClipboardProduct is Platter ? new Platter(ClipboardProduct as Platter) : new Product(ClipboardProduct);
+            PutProductInCellOf(SelectedProduct, product);
+
+            //var index = CurrentProducts.IndexOf(SelectedProduct);
+            //var product = ClipboardProduct is Platter ? new Platter(ClipboardProduct as Platter) : new Product(ClipboardProduct);
+            //product.Rank = SelectedProduct.Rank;
+            //product.Category = SelectedCategory;
+            //if (SelectedProduct.Category != null)
+            //{
+            //    SelectedProduct.Rank = null;
+            //    SelectedProduct.Category = null;
+            //    FreeProducts.Add(SelectedProduct);
+            //}
+            //CurrentProducts[index] = product;
         }
 
         public void MoveProductTo()
@@ -401,7 +551,8 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("Selcect a product to move");
                 return;
             }
-            ClipboardProduct = SelectedProduct;
+            ProductToMove = SelectedProduct;
+            
             //if (SelectedProduct is Platter)
             //{
             //    ClipboardProduct = new Platter(SelectedProduct as Platter);
@@ -412,6 +563,24 @@ namespace PosTest.ViewModels
             //}
         }
 
+        public void NewFreeProduct()
+        {
+            FreeProducts.Add(SelectedFreeProduct = new Platter());
+        }
+
+        public void CopyFreeProduct()
+        {
+            if (SelectedFreeProduct == null)
+            {
+                return;
+            }
+            var product = new Platter(SelectedFreeProduct as Platter) ;
+        }
+
+        public void CotegoryOfSelectFreeProductChanged(Category category)
+        {
+            ShowCategoryProducts(category);
+        }
         public void DetailsCategory()
         {
             IsCategoryDetailsDrawerOpen = true;
@@ -433,6 +602,12 @@ namespace PosTest.ViewModels
    
         }
 
+        public void Close()
+        {
+            LoginViewModel loginvm = new LoginViewModel();
+            loginvm.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+        }
 
     }
 
