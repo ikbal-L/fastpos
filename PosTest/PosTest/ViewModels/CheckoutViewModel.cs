@@ -20,10 +20,11 @@ using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
 using PosTest.ViewModels.SubViewModel;
 using System.Threading;
+using PosTest.Events;
 
 namespace PosTest.ViewModels
 {
-    public class CheckoutViewModel : Screen
+    public class CheckoutViewModel : Screen, IHandle<AssignOrderTypeEventArgs>
     {
         public void OrderSelectionChanged(Order order)
         {
@@ -1470,8 +1471,10 @@ namespace PosTest.ViewModels
             IsTopDrawerOpen = true;
         }
 
-
-
+        public void Handle(AssignOrderTypeEventArgs message)
+        {
+           
+        }
     }
 
 

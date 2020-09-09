@@ -715,6 +715,7 @@
                         caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
                         Style="{StaticResource MaterialDesignFlatButton}"
                         Content="{materialdesign:PackIcon Home,Size=60}"/>
+                    <!--CATEGORY NAVIGATION-->
                     <StackPanel Orientation="Horizontal" Margin="2 0 0 0" Height="60">
                         <ItemsControl x:Name="Stack" Grid.Column="0" ItemsSource="{Binding Categories}">
                             <ItemsControl.ItemsPanel>
@@ -747,7 +748,7 @@
                     </StackPanel>
                 </DockPanel>
 
-
+                <!--ORDER NAVIGATION-->
                 <RadioButton x:Name="tableCheckBtn" Grid.Row="1" GroupName="BottomBtn"  
                              Style="{StaticResource ButtonTabDesactive}" caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TABLES')]">
                     <StackPanel Orientation="Horizontal">
