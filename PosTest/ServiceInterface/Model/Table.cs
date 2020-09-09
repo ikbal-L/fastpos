@@ -21,7 +21,8 @@ namespace ServiceInterface.Model
 
         public Table()
         {
-
+            
+            
         }
         public Table(IEnumerable<Order> orders)
         {
@@ -29,6 +30,21 @@ namespace ServiceInterface.Model
             OrderViewSource.Source = orders;
             OrderViewSource.Filter += TableOrderFilter;
             Orders = OrderViewSource.View;// CollectionViewSource.GetDefaultView(Parent.Orders);
+            OrderViewSource.Filter += (s, e) =>
+            {
+                Order order = e.Item as Order;
+                if (order != null)
+                {
+                    if (order.Table == this)
+                    {
+                        e.Accepted = true;
+                    }
+                    else
+                    {
+                        e.Accepted = false;
+                    }
+                }
+            };
         }
 
         [DataMember]

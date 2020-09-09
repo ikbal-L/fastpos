@@ -576,23 +576,24 @@ namespace PosTest.ViewModels
             
             foreach (var t in Tables)
             {
-                TableOrdersFilter = (s, e) =>
-                {
-                    Order order = e.Item as Order;
-                    if (order != null)
-                    {
-                        if (order.Table == t)
-                        {
-                            e.Accepted = true;
-                        }
-                        else
-                        {
-                            e.Accepted = false;
-                        }
-                    }
-                };
-                t.OrderViewSource.Filter -= TableOrdersFilter;
-                t.OrderViewSource.Filter += TableOrdersFilter;
+                //TableOrdersFilter = (s, e) =>
+                //{
+                //    Order order = e.Item as Order;
+                //    if (order != null)
+                //    {
+                //        if (order.Table == t)
+                //        {
+                //            e.Accepted = true;
+                //        }
+                //        else
+                //        {
+                //            e.Accepted = false;
+                //        }
+                //    }
+                //};
+                t.OrderViewSource.View.Refresh();
+                //t.OrderViewSource.Filter -= TableOrdersFilter;
+                //t.OrderViewSource.Filter += TableOrdersFilter;
             }
             TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
