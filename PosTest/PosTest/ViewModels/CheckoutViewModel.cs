@@ -556,13 +556,19 @@ namespace PosTest.ViewModels
                     SelectedTable = null;
                 }
             }
-            
-            DelivereyViewModel.OrderViewSource.Filter -= DelivereyViewModel.OrderTypeFilter;
-            DelivereyViewModel.OrderViewSource.Filter += DelivereyViewModel.OrderTypeFilter;
-            WaitingViewModel.OrderViewSource.Filter -= WaitingViewModel.OrderTypeFilter;
-            WaitingViewModel.OrderViewSource.Filter += WaitingViewModel.OrderTypeFilter;
-            TakeAwayViewModel.OrderViewSource.Filter -= TakeAwayViewModel.OrderTypeFilter;
-            TakeAwayViewModel.OrderViewSource.Filter += TakeAwayViewModel.OrderTypeFilter;
+
+
+
+
+            DelivereyViewModel.OrderViewSource.View.Refresh();
+            //DelivereyViewModel.OrderViewSource.Filter -= DelivereyViewModel.OrderTypeFilter;
+            //DelivereyViewModel.OrderViewSource.Filter += DelivereyViewModel.OrderTypeFilter;
+            WaitingViewModel.OrderViewSource.View.Refresh();
+            //WaitingViewModel.OrderViewSource.Filter -= WaitingViewModel.OrderTypeFilter;
+            //WaitingViewModel.OrderViewSource.Filter += WaitingViewModel.OrderTypeFilter;
+            TakeAwayViewModel.OrderViewSource.View.Refresh();
+            //TakeAwayViewModel.OrderViewSource.Filter -= TakeAwayViewModel.OrderTypeFilter;
+            //TakeAwayViewModel.OrderViewSource.Filter += TakeAwayViewModel.OrderTypeFilter;
 
             DelivereyViewModel.NotifyOfPropertyChange(() => DelivereyViewModel.OrderCount);
             WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
