@@ -5,106 +5,259 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:helpers="clr-namespace:PosTest.Helpers"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ex="clr-namespace:PosTest.Extensions"
              xmlns:materialdesignextensions="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <DataTemplate x:Key="textBlockTempl" DataType="{x:Type models:Product}">
+                <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ActualWidth}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <ToggleButton x:Name="checkToggle" Grid.Column="0"
+                                  VerticalAlignment="Center" Height="22" Width="22"
+                                  IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                              AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
+                                <Setter Property="Background" Value="#90e0ef"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource SecondaryAccentBrush}"/>
+                                        <Setter Property="Foreground" Value="#ffffff"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <TextBlock  Grid.Column="1" FontWeight="Bold" Text="{Binding Name}" Margin="5 0 0 0" VerticalAlignment="Center"  />
+
+                    <TextBlock  Grid.Column="2" FontWeight="Bold" Text="{Binding Category.Name}" 
+                                                    VerticalAlignment="Center"/>
+
+                    <TextBlock  Grid.Column="3" FontWeight="Bold" Text="{Binding Price}" 
+                                                    HorizontalAlignment="Right" Margin="0 0 5 0" VerticalAlignment="Center"/>
+                    <!--{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}-->
+                    <Border Grid.Column="4" Background="{Binding Background}" Height="15"/>
+                </Grid>
+            </DataTemplate>
+        <DataTemplate x:Key="TextBoxTempl" DataType="{x:Type models:Product}">
+            <DockPanel LastChildFill="False">
+                <Grid DockPanel.Dock="Top" Width="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=ActualWidth}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <ToggleButton x:Name="checkToggle" Grid.Column="0"  Grid.Row="1"
+                                  VerticalAlignment="Center" Height="22" Width="22"
+                                  IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                  AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
+                                <Setter Property="Background" Value="#90e0ef"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource SecondaryAccentBrush}"/>
+                                        <Setter Property="Foreground" Value="#ffffff"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <TextBox x:Name="NameTxtBox" Grid.Column="1" FontWeight="Bold" Text="{Binding Name}" Panel.ZIndex="2"
+                        caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
+                        Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Margin="4 2 0 0"/>
+
+                    <ComboBox Grid.Column="2" Text="{Binding Category.Name}" materialdesign:HintAssist.Hint="Category" FontWeight="Bold"
+                          caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
+                         Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         ItemsSource="{Binding ElementName=CategoriesTabItem, Path=Tag, FallbackValue=Category}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:Category}">
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBox Grid.Column="3" Text="{Binding Price}" HorizontalAlignment="Right" Margin="0 1 5 0"
+                         caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
+                         Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <!--{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}-->
+                    <Border Grid.Column="4" Background="{Binding Background}" Height="15"/>
+                    <!--<Button Grid.Column="2"  Grid.Row="1" Content="Save"/>
+                    <Button Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" Content="Camcel"/>-->
+                </Grid>
+                <Button DockPanel.Dock="Right" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" 
+                        caliburn:Message.Attach="[Event Click] = [Action ProductChanged($this)]"
+                        Style="{StaticResource MaterialDesignFlatButton}" 
+                             Content="{materialdesign:PackIcon Kind=Disc, Size=30}"/>
+                <Button DockPanel.Dock="Right" Grid.Column="2"  Grid.Row="1"  
+                        Height="35"
+                        Style="{StaticResource MaterialDesignFlatButton}" 
+                             Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}"/>
+            </DockPanel>
+        </DataTemplate>
+        
+        <!--<helpers:SettingsFreeProductsTemplateSelector 
+            x:Key="FreeproductTemplateSelector"
+            SeletedItemTemplate="{StaticResource TextBoxTempl}"
+            NotSeletedItemTemplate="{StaticResource textBlockTempl}"/>-->
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3.5*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3.3*"/>
         </Grid.ColumnDefinitions>
-        
+
         <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Style="{StaticResource MaterialDesignTabControl}" >
-            <TabItem Header="Categories">
+            <TabItem x:Name="CategoriesTabItem" Header="Categories" Tag="{Binding AllCategories}">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">
 
-                    <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                    <Border BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="150" MinHeight="150" ClipToBounds="True">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <!--<ListBox x:Name="Categories">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <!--<ListBox x:Name="Categories">
                                     <ListBoxItem>Pizza</ListBoxItem>
                                 </ListBox>-->
                             <!-- and here's another -->
-                            <ItemsControl ItemsSource="{Binding Items2}" Grid.IsSharedSizeScope="True">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate  DataType="{x:Type Button}">
-                                        <!--domain:SelectableViewModel-->
-                                        <Border   x:Name="Border"
-                                                    Padding="8"
-                                                    BorderThickness="0 0 0 1"
-                                                    BorderBrush="{DynamicResource MaterialDesignDivider}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition
-                                                                 SharedSizeGroup="Checkerz" />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <ToggleButton
-                                                        VerticalAlignment="Center"
-                                                        IsChecked="{Binding IsSelected}"
-                                                        Style="{StaticResource MaterialDesignActionLightToggleButton}"
-                                                        Content="{Binding Code}" />
-                                                <StackPanel
-                                                            Margin="8 0 0 0"
-                                                            Grid.Column="1">
-                                                    <TextBlock
-                                                              FontWeight="Bold"
-                                                              Text="{Binding Name}" />          
-                                                    <TextBlock Text="{Binding Description}" />
-                                                </StackPanel>
-                                            </Grid>
-                                        </Border>
+                            <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}" Grid.IsSharedSizeScope="True"
+                                      SelectedItem="{Binding SelectedFreeProduct}"
+                                     AllowDrop="True" 
+                                     caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                                                              [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
+                                                              [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+                                                              [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
+                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:Product}">
+                                        <ContentControl x:Name="cc" Content="{Binding}" ContentTemplate="{DynamicResource textBlockTempl}"/>
+
                                         <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                <Setter
-                                                        TargetName="Border"
-                                                        Property="Background"
-                                                        Value="{DynamicResource MaterialDesignSelection}" />        
+                                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                                                <Setter TargetName="cc" Property="ContentTemplate" Value="{DynamicResource TextBoxTempl}"/>
                                             </DataTrigger>
                                         </DataTemplate.Triggers>
+
                                     </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                </ListBox.ItemTemplate>
+
+                            </ListBox>
+
+                            <!--domain:SelectableViewModel-->
+                            <!--<Border x:Name="Border" 
+                                                Padding="0 0 0 3"
+                                                BorderThickness="0 0 0 1"
+                                                
+                                                BorderBrush="{DynamicResource MaterialDesignDivider}">-->
+                            <!--<Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ActualWidth}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="3*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ToggleButton x:Name="checkToggle" Grid.Column="0"
+                                                        VerticalAlignment="Center" Height="22" Width="22"
+                                                              IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                                      AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                                                    <ToggleButton.Style>
+                                                        <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
+                                                            <Setter Property="Background" Value="#90e0ef"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter Property="Background" Value="{DynamicResource SecondaryAccentBrush}"/>
+                                                                    <Setter Property="Foreground" Value="#ffffff"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ToggleButton.Style>
+                                                </ToggleButton>
+                                                <TextBlock  Grid.Column="1" FontWeight="Bold" Text="{Binding Name}" Margin="5 0 0 0" VerticalAlignment="Center"  />
+                                                <TextBox x:Name="NameTxtBox" Grid.Column="1" FontWeight="Bold" Text="{Binding Name}" Panel.ZIndex="2"
+                                                         caliburn:Message.Attach="[Event OnMouseLeftButtonUp] = [Action SelectProduct($this)]"
+                                                         Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                         Margin="4 2 0 0"/>
+
+                                                <TextBlock  Grid.Column="2" FontWeight="Bold" Text="{Binding Category.Name}" 
+                                                            VerticalAlignment="Center"/>
+                                                <ComboBox Grid.Column="2" Text="{Binding Category.Name}" materialdesign:HintAssist.Hint="Category" FontWeight="Bold"
+                                                          Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                          ItemsSource="{Binding ElementName=CategoriesTabItem, Path=Tag, FallbackValue=Category}"
+                                                          caliburn:Message.Attach="[Event SelectionChanged] = [Action CotegoryOfSelectFreeProductChanged($this)]">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate DataType="{x:Type models:Category}">
+                                                            <TextBlock Text="{Binding Name}"/>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                                <TextBlock  Grid.Column="3" FontWeight="Bold" Text="{Binding Price}" 
+                                                            HorizontalAlignment="Right" Margin="0 0 5 0" VerticalAlignment="Center"/>
+                                                <TextBox Grid.Column="3" Text="{Binding Price}" HorizontalAlignment="Right" Margin="0 1 5 0"
+                                                         Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                -->
+                            <!--{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}-->
+                            <!--
+                                                <Border Grid.Column="4" Background="{Binding Background}" Height="15"/>
+                                            </Grid>-->
+                            <!--</Border>-->
 
                             <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
-                                    <TextBlock Margin="16">Gestion Des Categories</TextBlock>
-                                </materialdesign:ColorZone>
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                <TextBlock Margin="16">Gestion Des Categories</TextBlock>
+                            </materialdesign:ColorZone>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                         VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                                         Grid.Row="0" Margin="0 0 10 -20"
-                                        caliburn:Message.Attach="[Event Click] = [Action DetailsCategory]"
-                                        >
-                                    <materialdesign:PackIcon Kind="Plus" Height="22" Width="22"/>
-                                </Button>
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        caliburn:Message.Attach="[Event Click] = [Action NewFreeProduct]">
+                                <materialdesign:PackIcon Kind="Plus" Height="22" Width="22"/>
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                         VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                                         Grid.Row="0" Margin="0 0 60 -20"
                                         caliburn:Message.Attach="[Event Click] = [Action DetailsCategory]">
-                                    <materialdesign:PackIcon Kind="Edit" Height="22" Width="22"/>
-                                </Button>
+                                <materialdesign:PackIcon Kind="Edit" Height="22" Width="22"/>
+                            </Button>
 
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                         VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                                         Grid.Row="0" Margin="0 0 110 -20"
                                         caliburn:Message.Attach="[Event Click] = [Action DeleteCategory]">
-                                    <materialdesign:PackIcon Kind="Delete" Height="22" Width="22"/>
-                                </Button>
-                            </Grid>
-                        </Border>
-                        
-                    
+                                <materialdesign:PackIcon Kind="Delete" Height="22" Width="22"/>
+                            </Button>
+                        </Grid>
+                    </Border>
                 </ScrollViewer>
-            
             </TabItem>
+            
             <TabItem Header="Produits">
 
 
@@ -140,8 +293,7 @@
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                                     Grid.Row="0" Margin="0 0 110 -20"
-                                    caliburn:Message.Attach="[Event Click] = [Action DeleteProduct]"
-                                    >
+                                    caliburn:Message.Attach="[Event Click] = [Action DeleteProduct]">
                                 <materialdesign:PackIcon Kind="Delete" Height="22" Width="22"/>
                             </Button>
                         </Grid>
@@ -161,42 +313,89 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16"   Grid.Row="1" Grid.Column="1">
-                <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="16"   Grid.Row="1" Grid.Column="1">
+            <Border  Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="40" MinHeight="100" ClipToBounds="True">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <ListBox x:Name="PageProducts">
-                            <ListBoxItem>Pizza</ListBoxItem>
+                        <ListBox x:Name="ProductSettingsList" ItemsSource="{Binding CurrentProducts}"
+                                 AllowDrop="True"
+                                 ItemTemplate="{StaticResource SettingsProduct}"
+                                 SelectedItem="{Binding SelectedProduct}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                  caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+                                                           [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
+                                                           [Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                                                           [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)]"
+                                 Tag="{Binding ClipboardProduct}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <!--<Setter Property="Background" Value="{Binding Background}"/>-->
+                                    <!--<Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Black"/>
+                                        </Trigger>
+                                        
+                                    </Style.Triggers>-->
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
                         </ListBox>
                         <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
                             <TextBlock Margin="16">Gestion Du Menu Produits</TextBlock>
                         </materialdesign:ColorZone>
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                    Grid.Row="0" Margin="0 0 60 -20">
-                            <materialdesign:PackIcon Kind="Edit" Height="22" Width="22"/>
-                        </Button>
-                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                    Grid.Row="0" Margin="0 0 160 -20">
-                            <materialdesign:PackIcon Kind="Delete" Height="22" Width="22"/>
-                        </Button>
-
-                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                    Grid.Row="0" Margin="0 0 110 -20">
-                            <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22"/>
-                        </Button>  
-                        
-                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action AttachProductToCategory()]"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                                     Grid.Row="0" Margin="0 0 10 -20">
                             <materialdesign:PackIcon Kind="MoveResizeVariant" Height="22" Width="22"/>
                         </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                                    Grid.Row="0" Margin="0 0 60 -20">
+                            <materialdesign:PackIcon Kind="Edit" Height="22" Width="22"/>
+                        </Button>
+
+                        <Button x:Name="MoveButton" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action MoveProductTo()]"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                                    Grid.Row="0" Margin="0 0 110 -20" 
+                                Tag="{Binding ProductToMove}">
+                            <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22"/>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                                    Grid.Row="0" Margin="0 0 160 -20">
+                            <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22"/>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                                    Grid.Row="0" Margin="0 0 210 -20">
+                            <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22"/>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                                Grid.Row="0" Margin="0 0 260 -20">
+                            <materialdesign:PackIcon Kind="Delete" Height="22" Width="22"/>
+                        </Button>
+
                     </Grid>
                 </Border>
             </ScrollViewer>
@@ -207,16 +406,77 @@
         </Grid>
 
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16"  Grid.Row="1" Grid.Column="1">
-            <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}" 
                             MinWidth="40" MinHeight="100" ClipToBounds="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    
-                    
-                    
+
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Height="60" Width="35" x:Name="NextPage" Style="{StaticResource ButtonStyle22}"
+                                Command="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.NextCommand)}" 
+                                IsEnabled="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.CanExecuteMext)}"
+                                Content="{materialdesign:PackIcon ChevronDoubleRight,30}" />
+                                <!--Visibility="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.CanExecutePrevious), Converter={StaticResource BoolToVisibility}}"
+                                Visibility="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.CanExecuteMext),Converter={StaticResource BoolToVisibility}}"-->
+                        <Button DockPanel.Dock="Right"  Height="60" Width="35" VerticalAlignment="Center"
+                                x:Name="PreviousPqge"  Style="{StaticResource ButtonStyle22}"
+                                Command="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.PreviousCommand)}" 
+                                IsEnabled="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.CanExecutePrevious)}"
+                                Content="{materialdesign:PackIcon ChevronDoubleLeft,30}" />
+                        <Button DockPanel.Dock="Right"  Height="60" Width="35" VerticalAlignment="Center"
+                                x:Name="Close"  Style="{StaticResource ButtonStyle22}"
+                                Content="{materialdesign:PackIcon Kind=Close, Size=25}" />
+                        <ListBox DockPanel.Dock="Left" x:Name="CategoryList" Grid.Column="0" 
+                                 ex:ListPaginationEx.ItemsPerPage="{Binding CategoryPageSize}"
+                                 ex:ListPaginationEx.ItemsSource="{Binding CurrentCategories}"
+                                  SelectedItem="{Binding SelectedCategory}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:Category}">
+                                    <Button x:Name="catBtn" Width="80" Height="60" Background="{Binding Background}"
+                                    caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
+                                    FontWeight="Bold"
+                                    FontSize="16"
+                                    Padding="3 0 0 5"
+                                    Margin="3 0 0 0">
+                                        <TextBlock>
+                                        <Run Text="{Binding Name}"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding Rank}"/>
+                                        </TextBlock>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Aqua"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                        
+                    </DockPanel>
+
                     <!--<ListBox x:Name="MenuCategories">
                         <ListBoxItem>Pizza</ListBoxItem>
                     </ListBox>-->

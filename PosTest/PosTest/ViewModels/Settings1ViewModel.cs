@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PosTest.ViewModels
 {
-    public class SettingsViewModel : Screen
+    public class Settings1ViewModel : Screen
     {
         private int _pageSize;
         private IProductService _productService;
@@ -40,7 +40,7 @@ namespace PosTest.ViewModels
 
 
 
-        public SettingsViewModel()
+        public Settings1ViewModel()
         {
             CurrentView = new ProductsViewModel();
         }
@@ -58,7 +58,7 @@ namespace PosTest.ViewModels
             IsLeftDrawerOpen = false;
         }
 
-        public SettingsViewModel(int pageSize, 
+        public Settings1ViewModel(int pageSize, 
             IProductService productService, 
             ICategoryService categorieService,
             IAdditiveService additiveService

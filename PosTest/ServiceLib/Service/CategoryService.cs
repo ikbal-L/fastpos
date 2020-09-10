@@ -64,7 +64,7 @@ namespace ServiceLib.Service
 
         }
 
-        public IEnumerable<Category> GetManyCategories(IEnumerable<long> ids, ref int statusCode)
+        public IEnumerable<Category> GetManyCategories(IEnumerable<long?> ids, ref int statusCode)
         {
             throw new NotImplementedException();
         }
@@ -150,7 +150,7 @@ namespace ServiceLib.Service
             return category;
         }
 
-        public IEnumerable<Category> GetManyCategories(IEnumerable<long> ids, ref int StatusCode)
+        public IEnumerable<Category> GetManyCategories(IEnumerable<long?> ids, ref int StatusCode)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.CategoryUrl.GetManyCategories);

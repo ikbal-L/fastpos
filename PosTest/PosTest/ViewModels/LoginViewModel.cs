@@ -80,7 +80,7 @@ namespace PosTest.ViewModels
         public void Settings()
         {
             authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            SettingsViewModel settingsViewModel = new SettingsViewModel(30, productService, categorieService, additiveService);
+            Settings1ViewModel settingsViewModel = new Settings1ViewModel(30, productService, categorieService, additiveService);
             settingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
@@ -115,8 +115,20 @@ namespace PosTest.ViewModels
 
         public void CheckoutSettings()
         {
+            int resp;
+            try
+            {
+                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Check your server connection");
+                return;
+            }
+
             CheckoutSettingsViewModel checkoutSettingsViewModel =
-                    new CheckoutSettingsViewModel();
+                    new CheckoutSettingsViewModel(30, 6, productService,
+                categorieService, orderService, waiterService, delivereyService);
             checkoutSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
         }

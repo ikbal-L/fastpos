@@ -17,7 +17,6 @@
              Background="{StaticResource MaterialDesignPaper}"
              DataContext="{Binding}"        
              mc:Ignorable="d"
-             
              d:DesignWidth="900">
     <FrameworkElement.Resources>
         <ResourceDictionary >
@@ -52,7 +51,8 @@
             <helpers:TableViewTemplateSelector x:Key="tableViewSelector"
                                             TableFullView="{StaticResource tableFullView}"
                                             TableButtomView="{StaticResource tableButtomView}"/>
-            <convert:ObjectToBoolConverter x:Key="objectToBoolConverter"/>            <convert:OrderItemObjectToBoolConverter x:Key="OrderItemToBoolConverter"/>
+            <convert:ObjectToBoolConverter x:Key="objectToBoolConverter"/>            
+            <convert:OrderItemObjectToBoolConverter x:Key="OrderItemToBoolConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -113,9 +113,6 @@
                              Content="{materialdesign:PackIcon Kind=Account, Size=40}" 
                              caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('CUSTOMER')]"/>
             </Grid>
-
-
-                
 
             <Grid Grid.Column="0" Grid.Row="1">
                     <Grid.ColumnDefinitions>

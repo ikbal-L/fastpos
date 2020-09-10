@@ -19,6 +19,13 @@ namespace ServiceInterface.Model
         {
             IsPlatter = true;
         }
+
+        public Platter(Platter platter) : base(platter)
+        {
+            IsPlatter = true;
+
+        }
+
         [DataMember]
         public List<Ingredient> Ingredients { get; set; }
 

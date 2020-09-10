@@ -93,7 +93,6 @@ namespace PosTest.Extensions
             SetNumberOfPages(d, nbrPages);
             //listBox.ItemsSource = itemsSource;
             Paginate(d, NextOrPrevious.First);
-
         }
 
         private static void OnCurrentPageNumberChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -149,7 +148,7 @@ namespace PosTest.Extensions
 
         private static void OnNumberOfPagesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-           
+            SetNumberOfPages(d, (int)e.NewValue);
         }
 
         private static void OnCurrentPageItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -286,7 +285,7 @@ namespace PosTest.Extensions
         {
             return (ICommand)d.GetValue(PreviousCommandProperty);
         }
-        public static void SetPreviousCommand(DependencyObject d, ICommand value)
+        private static void SetPreviousCommand(DependencyObject d, ICommand value)
         {
             d.SetValue(PreviousCommandProperty, (ICommand)value);
         }
@@ -312,7 +311,7 @@ namespace PosTest.Extensions
         {
             return (bool)d.GetValue(CanExecuteMextProperty);
         }
-        public static void SetCanExecuteMext(DependencyObject d, bool value)
+        private static void SetCanExecuteMext(DependencyObject d, bool value)
         {
             d.SetValue(CanExecuteMextProperty, value);
         }
@@ -321,7 +320,7 @@ namespace PosTest.Extensions
         {
             return (bool)d.GetValue(CanExecutePreviousProperty);
         }
-        public static void SetCanExecutePrevious(DependencyObject d, bool value)
+        private static void SetCanExecutePrevious(DependencyObject d, bool value)
         {
             d.SetValue(CanExecutePreviousProperty, value);
         }

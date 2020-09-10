@@ -2,12 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PosTest.ViewModels"
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+                    xmlns:caliburn="http://www.caliburnproject.org"
+                    xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:cal="http://www.caliburnproject.org" >
 
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
-    <DataTemplate DataType="{x:Type src:Product}">
+    <DataTemplate DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
             <Button x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" >
                 <i:Interaction.Triggers>
@@ -44,11 +46,115 @@
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
-
                         </TextBlock>
                     </Border>
                 </DockPanel>
             </Button>
+        </StackPanel>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
+        <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
+            <Border x:Name="ProductSettingsClick"  BorderBrush="LightGray" BorderThickness="1"
+                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this)]">
+                <StackPanel>
+                    <DockPanel Height="70" Width="100" Background="{Binding Background}" >
+                        <Border DockPanel.Dock="Top" Height="48">
+                            <TextBlock Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+
+                        <DockPanel LastChildFill="False" >
+                            <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" CornerRadius="30" Width="20" Height="20">
+                                <materialdesign:PackIcon Kind="Done" Height="20" Width="20"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding ElementName="ProductSettingsList" Path="SelectedItem"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <!--<TextBlock DockPanel.Dock="Left" FontSize="12" Width="52"
+                                    TextAlignment="Center" VerticalAlignment="Center"  TextTrimming="WordEllipsis">
+                                <Run Text="{Binding Path=Price, StringFormat=' {0}  '}"/>
+                                -->
+                            <!--<Run Text="{Binding Rank}"/>-->
+                            <!--
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>-->
+                            <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right" >
+                                <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding ElementName="ProductSettingsList" Path="Tag"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <Border   Width="20" Height="20" DockPanel.Dock="Right">
+                                <materialdesign:PackIcon Height="20" Width="20"  Kind="ArrowExpandAll" Padding="0"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding ElementName="MoveButton" Path="Tag"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                        </DockPanel>
+
+                    </DockPanel>
+                    
+                </StackPanel>
+
+            </Border>
         </StackPanel>
     </DataTemplate>
 

@@ -68,8 +68,6 @@
             <RowDefinition/>
         </Grid.RowDefinitions>-->
 
-
-
         <ListBox Name="tablesList" ItemsSource="{Binding Tables}"  SelectedItem="{Binding SelectedTable}" 
                  Grid.Row="1" Grid.ColumnSpan="2" Background="#a5a5a5" Height="240">
 
@@ -147,7 +145,6 @@
                                                             </DataTrigger.Binding>
                                                             <Setter Property="BorderThickness" Value="1"></Setter>
                                                         </DataTrigger>
-
                                                     </Style.Triggers>
                                                 </Style>
                                             </Border.Style>
@@ -160,16 +157,15 @@
                                         <Setter Property="Margin" Value="1 1 1 1"/>
                                         <Setter Property="Padding" Value="0"/>
                                         <Setter Property="Foreground" Value="White"/>
-                                        <!--<Setter Property="Background" Value="{Binding State, Converter={StaticResource OrderStateEnumToBrush}}"/>-->
+                                        <Setter Property="Background" Value="{Binding State, Converter={StaticResource OrderStateEnumToBrush}}"/>
                                         <Style.Triggers>
                                             <Trigger Property="IsSelected" Value="True">
-                                                <!--<Setter Property="Background" Value="Red"/>-->
+                                                <Setter Property="Background" Value="Red"/>
                                                 <Setter Property="Foreground" Value="#ffd23f"/>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
                                 </ListBox.ItemContainerStyle>
-
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel />
