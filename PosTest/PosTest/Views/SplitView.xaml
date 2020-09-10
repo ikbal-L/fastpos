@@ -174,11 +174,9 @@
                          Margin="0 0 0 0"
                          Background="WhiteSmoke"
                          ItemsSource="{Binding CurrentOrder.OrderItems}"
-                         SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
                          ex:ListBoxMultiSelectionEx.SelectedItems="{Binding SplittedOrder.OrderItems, Mode=TwoWay}"
                          ex:ListBoxMultiSelectionEx.IsSorted="True"                  
                          ScrollViewer.VerticalScrollBarVisibility="Visible"
-                         cal:Message.Attach="[Event SelectionChanged] = [Action AddSplittedItemsCommand]"
                          SelectionMode="Multiple">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource SplittedOrderItems_ItemStyle}">

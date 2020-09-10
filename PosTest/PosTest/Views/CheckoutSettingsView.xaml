@@ -131,7 +131,7 @@
 
         <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Style="{StaticResource MaterialDesignTabControl}" >
             <TabItem x:Name="CategoriesTabItem" Header="Categories" Tag="{Binding AllCategories}">
-                <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">-->
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">
 
                     <Border BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="150" MinHeight="150" ClipToBounds="True">
@@ -146,11 +146,12 @@
                             <!-- and here's another -->
                             <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}" Grid.IsSharedSizeScope="True"
                                       SelectedItem="{Binding SelectedFreeProduct}"
-                                     AllowDrop="True"
+                                     AllowDrop="True" 
                                      caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
                                                               [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
                                                               [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
-                                                              [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];">
+                                                              [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
+                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
@@ -254,13 +255,13 @@
                             </Button>
                         </Grid>
                     </Border>
-                <!--</ScrollViewer>-->
+                </ScrollViewer>
             </TabItem>
             
             <TabItem Header="Produits">
 
 
-                <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">-->
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">
                     <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="150" MinHeight="150" ClipToBounds="True">
                         <Grid>
@@ -297,7 +298,7 @@
                             </Button>
                         </Grid>
                     </Border>
-                <!--</ScrollViewer>-->
+                </ScrollViewer>
 
 
 
@@ -312,7 +313,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="16"   Grid.Row="1" Grid.Column="1">-->
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="16"   Grid.Row="1" Grid.Column="1">
             <Border  Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             MinWidth="40" MinHeight="100" ClipToBounds="True">
                     <Grid>
@@ -329,7 +330,7 @@
                                   caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                            [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
                                                            [Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
-                                                           [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)]"
+                                                           [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)]"
                                  Tag="{Binding ClipboardProduct}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -397,14 +398,14 @@
 
                     </Grid>
                 </Border>
-            <!--</ScrollViewer>-->
+            </ScrollViewer>
 
 
 
 
         </Grid>
 
-        <!--<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16"  Grid.Row="1" Grid.Column="1">-->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16"  Grid.Row="1" Grid.Column="1">
         <Border Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}" 
                             MinWidth="40" MinHeight="100" ClipToBounds="True">
                 <Grid>
@@ -500,7 +501,7 @@
                     </Button>
                 </Grid>
             </Border>
-        <!--</ScrollViewer>-->
+        </ScrollViewer>
 
         <materialdesign:DrawerHost Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" IsTopDrawerOpen="{Binding IsCategoryDetailsDrawerOpen}"  
                                    TopDrawerCloseOnClickAway="False" >

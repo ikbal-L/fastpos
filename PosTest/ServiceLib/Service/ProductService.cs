@@ -387,7 +387,7 @@ namespace ServiceLib.Service
             string token = AuthProvider.Instance.AuthorizationToken;
             Product product=null;
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://192.168.1.102:5000/");
+            client.BaseAddress = new Uri("http://192.168.1.109:5000/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Authorization", token);

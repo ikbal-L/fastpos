@@ -193,6 +193,7 @@ namespace ServiceInterface.Model
             }
         }
 
+        
         public void MappingBeforeSending()
         {
             if (this.CategorieId <= 0 && this.Category != null)
@@ -256,6 +257,11 @@ namespace ServiceInterface.Model
                     }
                 }
             }
+        }
+
+        bool IsEquqlsTo(Product product)
+        {
+            throw new NotImplementedException();
         }
 
     }

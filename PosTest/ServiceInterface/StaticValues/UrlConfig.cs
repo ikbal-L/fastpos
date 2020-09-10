@@ -4,11 +4,11 @@ namespace ServiceInterface.StaticValues
 {
     public static class UrlConfig
     {
-        static string hostname1 = "http://192.168.1.102:5000/";
+        static string hostname1 = "http://192.168.1.109:5000/";
         //static string hostname1 = "http://127.0.0.1:5000/";
         public static class ProductUrl 
         {
-            static string hostname = "http://192.168.1.102:5000/";
+            static string hostname = "http://192.168.1.109:5000/";
 
             public static string GetAllProducts = hostname1+"product/getall";
             public static string SaveProduct = hostname1+"product/save";
@@ -22,7 +22,7 @@ namespace ServiceInterface.StaticValues
 
         public static class AdditiveUrl
         {
-            static string hostname = "http://192.168.1.102:5000/";
+            static string hostname = "http://192.168.1.109:5000/";
 
             public static string GetManyAdditives = hostname1 + "additive/getmany";
             public static string SaveAdditive = hostname1 + "additive/save";
@@ -38,7 +38,7 @@ namespace ServiceInterface.StaticValues
 
         public static class CategoryUrl
         {
-            static string hostname = "http://192.168.1.102:5000/";
+            static string hostname = "http://192.168.1.109:5000/";
             public static string GetAllCategories = hostname1 + "category/getall";
             public static string GetManyCategories = hostname1 + "category/getmany";
             public static string SaveCategory = hostname1 + "category/save";
@@ -52,7 +52,7 @@ namespace ServiceInterface.StaticValues
         
         public static class OrderUrl
         {
-            static string hostname = "http://192.168.1.102:5000/";
+            static string hostname = "http://192.168.1.109:5000/";
 
             public static string GetAllOrders = hostname1 + "order/getall";
             public static string GetManyOrders = hostname1 + "order/getmany";
@@ -71,7 +71,7 @@ namespace ServiceInterface.StaticValues
         
         public static class DelivereyUrl
         {
-            static string hostname = "http://192.168.1.102:5000/";
+            static string hostname = "http://192.168.1.109:5000/";
 
             public static string GetAllDeliverymen = hostname1 + "deliveryman/getall";
             public static string GetAllActiveDeliverymen = hostname1 + "deliveryman/getallactive";
@@ -84,7 +84,7 @@ namespace ServiceInterface.StaticValues
 
         public static class WaiterUrl
         {
-            static string hostname = "http://192.168.1.102:5000/";
+            static string hostname = "http://192.168.1.109:5000/";
 
             public static string GetAllWaiters = hostname1 + "waiter/getall";
             public static string GetAllActiveWaiters = hostname1 + "waiter/getallactive";
@@ -98,7 +98,7 @@ namespace ServiceInterface.StaticValues
 
         public static class AuthUrl
         {
-            static string hostname = "http://192.168.1.102:5000/";
+            static string hostname = "http://192.168.1.109:5000/";
             public static string Authenticate = hostname1 + "auth/login";
 
         }
