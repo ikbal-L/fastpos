@@ -156,7 +156,6 @@
                                      AllowDrop="True"
                                      caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
                                                               [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
-                                                              [Event TouchMove] = [Action FreeProductsList_TouchMove($source, $eventArgs)];
                                                               [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
                                                               [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];" >
@@ -342,7 +341,8 @@
                                  caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                            [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
                                                            [Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
-                                                           [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)]"
+                                                           [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];
+                                                             [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
                                  Tag="{Binding ClipboardProduct}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
