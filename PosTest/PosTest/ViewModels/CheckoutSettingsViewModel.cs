@@ -622,177 +622,83 @@ namespace PosTest.ViewModels
 
         public void FreeProductsList_MouseMove(object sender, MouseEventArgs e)
         {
-            ToastNotification.Notify(sender.ToString(),1);
-            // Get the current mouse position
-            //Point mousePos = e.GetPosition(null);
-            //Vector diff = startPoint - mousePos;
-            //if (!(e.OriginalSource is ListBoxItem) || !(e.LeftButton == MouseButtonState.Pressed))
-            //{
-            //    Console.WriteLine((e.OriginalSource as DependencyObject).GetType().ToString());
-            //    return;
-            //}
+            var key = "FreeProduct";
 
-            if (e.LeftButton == MouseButtonState.Pressed /*&&
-                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)*/)
-            {
-                // Get the dragged ListViewItem
-                ListBox listBox = sender as ListBox;
-                ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
-
-                // Find the data behind the ListViewItem
-                Product product;
-                if (listBoxItem != null)
-                {
-                    product = (Product)listBox.ItemContainerGenerator.
-                                        ItemFromContainer(listBoxItem);
-                    DataObject dragData = new DataObject("FreeProduct", product);
-                    DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
-                }
-                //else
-                //{
-                //    DataObject dragData = new DataObject("FreeProduct", null);
-                //}
-               
-
-                // Initialize the drag & drop operation
-            }
+            MouseMoveEventHandler(sender, e, key);
         }
 
+  
 
-       
 
         public void ProductsList_MouseMove(object sender, MouseEventArgs e)
         {
-            // Get the current mouse position
-            //Point mousePos = e.GetPosition(null);
-            //Vector diff = startPoint - mousePos;
-            //if (!(e.OriginalSource is ListBoxItem) || !(e.LeftButton == MouseButtonState.Pressed))
-            //{
-            //    Console.WriteLine((e.OriginalSource as DependencyObject).GetType().ToString());
-            //    return;
-            //}
+            var key = "Product";
+            MouseMoveEventHandler(sender, e, key);
+        }
 
-            if (e.LeftButton == MouseButtonState.Pressed /*&&
-                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)*/)
+        private static void MouseMoveEventHandler(object sender, MouseEventArgs e, string key)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                // Get the dragged ListViewItem
                 ListBox listBox = sender as ListBox;
                 ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
-
-                // Find the data behind the ListViewItem
+                    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
                 Product product;
                 if (listBoxItem != null)
                 {
-                    product = (Product)listBox.ItemContainerGenerator.
-                                        ItemFromContainer(listBoxItem);
+                    product = (Product) listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
                     if (product == null || product.Name == null)
                     {
                         return;
                     }
-                    DataObject dragData = new DataObject("Product", product);
+
+                    DataObject dragData = new DataObject(key, product);
                     DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
                 }
-               
-
-                // Initialize the drag & drop operation
             }
         }
 
 
-        
+
+        private static void ListTouchDownEventHandler(object sender, TouchEventArgs e, string key)
+        {
+            ListBox listView = sender as ListBox;
+            ListBoxItem listBoxItem =
+                FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+            // Find the data behind the ListViewItem
+            Product product;
+
+
+            if (listBoxItem != null)
+            {
+                product = (Product)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                if (product == null || product.Name == null)
+                {
+                    return;
+                }
+
+                DataObject dragData = new DataObject(key, product);
+                DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
+            }
+        }
 
         public void FreeProductsList_TouchDown(object sender, TouchEventArgs e)
         {
-
-            ToastNotification.Notify(e.OriginalSource.ToString());
-            //if (e.Handled)
-            //{
-            //    return;
-            //}
-            //// Get the current mouse position
-            ////Point mousePos = e.GetPosition(null);
-            ////Vector diff = startPoint - mousePos;
-
-
-            ////if (e.LeftButton == MouseButtonState.Pressed &&
-            ////    (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-            ////    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
-
-            // Get the dragged ListViewItem
-            ListBox listView = sender as ListBox;
-            ListBoxItem listBoxItem =
-                FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
-
-            // Find the data behind the ListViewItem
-            Product product = null;
-            if (listBoxItem != null)
-            {
-                product = (Product)listView.ItemContainerGenerator.
-                ItemFromContainer(listBoxItem);
-                DataObject dragData = new DataObject("FreeProduct", product);
-                DragDrop.AddQueryContinueDragHandler(listBoxItem, DragContrinueHandler);
-                DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
-            }
-
-            //using (System.IO.StreamWriter file =
-            //    new System.IO.StreamWriter(@"WriteLines2.txt"))
-            //{
-
-            //    file.WriteLine(product.Name);
-
-
-            //    // Initialize the drag & drop operation
-            //}
-            
+            var key = "FreeProduct";
+            ListTouchDownEventHandler(sender, e, key);
         }
 
-
+        
         public void ProductsList_TouchDown(object sender, TouchEventArgs e)
         {
-            //if (e.Handled)
-            //{
-            //    return;
-            //}
-            //// Get the current mouse position
-            ////Point mousePos = e.GetPosition(null);
-            ////Vector diff = startPoint - mousePos;
 
-
-            ////if (e.LeftButton == MouseButtonState.Pressed &&
-            ////    (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-            ////    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
-
-            // Get the dragged ListViewItem
-            ListBox listView = sender as ListBox;
-            ListBoxItem listBoxItem =
-                FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
-
-            // Find the data behind the ListViewItem
-            Product product = null;
-            if (listBoxItem != null)
-            {
-                product = (Product)listView.ItemContainerGenerator.
-                ItemFromContainer(listBoxItem);
-                DataObject dragData = new DataObject("Product", product);
-                DragDrop.AddQueryContinueDragHandler(listBoxItem, DragContrinueHandler);
-                DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
-            }
-
-            //using (System.IO.StreamWriter file =
-            //    new System.IO.StreamWriter(@"WriteLines2.txt"))
-            //{
-
-            //    file.WriteLine(product.Name);
-
-
-            //    // Initialize the drag & drop operation
-            //}
-            ToastNotification.Notify("Touch event fired-- Product list ");
+            var key = "Product"; 
+            ListTouchDownEventHandler(sender,e,key);
         }
+        
+        
+        
         public void DragContrinueHandler(object sender, QueryContinueDragEventArgs e)
         {
             if (e.Action == DragAction.Continue && e.KeyStates != DragDropKeyStates.LeftMouseButton)
