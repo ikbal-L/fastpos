@@ -658,6 +658,29 @@ namespace PosTest.ViewModels
                 // Initialize the drag & drop operation
             }
         }
+
+
+        public void FreeProductsList_TouchMove(object sender, TouchEventArgs e)
+        {
+
+                ToastNotification.Notify("Enter Touch Move event ");          
+                //// Get the dragged ListViewItem
+                //ListBox listBox = sender as ListBox;
+                //ListBoxItem listBoxItem =
+                //    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+                
+                //// Find the data behind the ListViewItem
+                //Product product;
+                //if (listBoxItem != null)
+                //{
+                //    product = (Product)listBox.ItemContainerGenerator.
+                //        ItemFromContainer(listBoxItem);
+                //    DataObject dragData = new DataObject("FreeProduct", product);
+                //    DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
+                //}
+               
+        }
+
         public void ProductsList_MouseMove(object sender, MouseEventArgs e)
         {
             // Get the current mouse position
@@ -696,7 +719,37 @@ namespace PosTest.ViewModels
                 // Initialize the drag & drop operation
             }
         }
-        public void FreeProductsList_TouchDown(object sender, MouseEventArgs e)
+
+
+        public void ProductsList_TouchMove(object sender, TouchEventArgs e)
+        {
+       
+
+                //// Get the dragged ListViewItem
+                //ListBox listBox = sender as ListBox;
+                //ListBoxItem listBoxItem =
+                //    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+                //// Find the data behind the ListViewItem
+                //Product product;
+                //if (listBoxItem != null)
+                //{
+                //    product = (Product)listBox.ItemContainerGenerator.
+                //        ItemFromContainer(listBoxItem);
+                //    if (product == null || product.Name == null)
+                //    {
+                //        return;
+                //}
+                //    DataObject dragData = new DataObject("Product", product);
+                //    DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
+                //}
+
+
+                // Initialize the drag & drop operation
+            
+        }
+
+        public void FreeProductsList_TouchDown(object sender, TouchEventArgs e)
         {
             //if (e.Handled)
             //{
@@ -711,31 +764,32 @@ namespace PosTest.ViewModels
             ////    (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
             ////    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
 
-            //    // Get the dragged ListViewItem
-            //ListBox listView = sender as ListBox;
-            //ListBoxItem listBoxItem =
-            //    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+            // Get the dragged ListViewItem
+            ListBox listView = sender as ListBox;
+            ListBoxItem listBoxItem =
+                FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
-            //    // Find the data behind the ListViewItem
-            //    Product product = null;
-            //    if (listBoxItem != null)
-            //    {
-            //        product = (Product)listView.ItemContainerGenerator.
-            //        ItemFromContainer(listBoxItem);
-            //        DataObject dragData = new DataObject("myFormat", product);
-            //        DragDrop.AddQueryContinueDragHandler(listBoxItem, DragContrinueHandler);
-            //        DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
-            //    }
+            // Find the data behind the ListViewItem
+            Product product = null;
+            if (listBoxItem != null)
+            {
+                product = (Product)listView.ItemContainerGenerator.
+                ItemFromContainer(listBoxItem);
+                DataObject dragData = new DataObject("myFormat", product);
+                DragDrop.AddQueryContinueDragHandler(listBoxItem, DragContrinueHandler);
+                DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
+            }
 
-            //    using (System.IO.StreamWriter file =
-            //        new System.IO.StreamWriter(@"WriteLines2.txt"))
-            //    {
+            using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(@"WriteLines2.txt"))
+            {
 
-            //         file.WriteLine(product.Name);
+                file.WriteLine(product.Name);
 
 
-            //    // Initialize the drag & drop operation
-            //}
+                // Initialize the drag & drop operation
+            }
+            ToastNotification.Notify("Touch event fired");
         }
         public void DragContrinueHandler(object sender, QueryContinueDragEventArgs e)
         {
