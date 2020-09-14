@@ -146,41 +146,11 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <!--<ListBox x:Name="Categories">
+                            <ListBox x:Name="Categories">
                                     <ListBoxItem>Pizza</ListBoxItem>
-                                </ListBox>-->
+                                </ListBox>
                             <!-- and here's another -->
-                            <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}"
-                                     Grid.IsSharedSizeScope="True"
-                                     SelectedItem="{Binding SelectedFreeProduct}"
-                                     AllowDrop="True"
-                                     caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
-                                                              [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
-                                                              [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
-                                                              [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
-                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];" >
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate >
-                                    <DataTemplate DataType="{x:Type models:Product}">
-                                        <ContentControl x:Name="cc" Content="{Binding}"
-                                                        ContentTemplate="{DynamicResource textBlockTempl}" />
-
-                                        <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
-                                                <Setter TargetName="cc" Property="ContentTemplate"
-                                                        Value="{DynamicResource TextBoxTempl}" />
-                                            </DataTrigger>
-                                        </DataTemplate.Triggers>
-
-                                    </DataTemplate>
-                                    
-                                </ListBox.ItemTemplate>
-
-                            </ListBox>
+                            
 
                             <!--domain:SelectableViewModel-->
                             <!--<Border x:Name="Border" 
@@ -273,41 +243,77 @@
 
 
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="16">
-                    <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                            MinWidth="150" MinHeight="150" ClipToBounds="True">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <ListBox x:Name="Produits">
-                                <ListBoxItem>Pizza Masion : Prix</ListBoxItem>
-                            </ListBox>
-                            <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1"
-                                                      Effect="{DynamicResource MaterialDesignShadowDepth5}">
-                                <TextBlock Margin="16">Gestion Des Produits</TextBlock>
-                            </materialdesign:ColorZone>
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    Grid.Row="0" Margin="0 0 10 -20"
-                                    caliburn:Message.Attach="[Event Click] = [Action DetailsProduct]">
-                                <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
-                            </Button>
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    Grid.Row="0" Margin="0 0 60 -20"
-                                    caliburn:Message.Attach="[Event Click] = [Action DetailsProduct]">
-                                <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
-                            </Button>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <!--<ListBox x:Name="Produits">
+                            <ListBoxItem>Pizza Masion : Prix</ListBoxItem>
+                        </ListBox>-->
 
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    Grid.Row="0" Margin="0 0 110 -20"
-                                    caliburn:Message.Attach="[Event Click] = [Action DeleteProduct]">
-                                <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
-                            </Button>
-                        </Grid>
-                    </Border>
+                        <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}"
+                                     Grid.IsSharedSizeScope="True"
+                                     SelectedItem="{Binding SelectedFreeProduct}"
+                                     AllowDrop="True"
+                                     caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                                                              [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
+                                                              [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+                                                              [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
+                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];" >
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate >
+                                <DataTemplate DataType="{x:Type models:Product}">
+                                    <ContentControl x:Name="cc" Content="{Binding}"
+                                                        ContentTemplate="{DynamicResource textBlockTempl}" />
+
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                                            <Setter TargetName="cc" Property="ContentTemplate"
+                                                        Value="{DynamicResource TextBoxTempl}" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+
+                                </DataTemplate>
+
+                            </ListBox.ItemTemplate>
+
+                        </ListBox>
+
+
+
+
+
+
+                        <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1"
+                                                  Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                            <TextBlock Margin="16">Gestion Des Produits</TextBlock>
+                        </materialdesign:ColorZone>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                Grid.Row="0" Margin="0 0 10 -20"
+                                caliburn:Message.Attach="[Event Click] = [Action DetailsProduct]">
+                            <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                Grid.Row="0" Margin="0 0 60 -20"
+                                caliburn:Message.Attach="[Event Click] = [Action DetailsProduct]">
+                            <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                Grid.Row="0" Margin="0 0 110 -20"
+                                caliburn:Message.Attach="[Event Click] = [Action DeleteProduct]">
+                            <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                        </Button>
+                    </Grid>
+
                 </ScrollViewer>
 
 
