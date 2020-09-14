@@ -973,7 +973,7 @@ namespace PosTest.ViewModels
                 {
                     SelectedFreeCategory = categorySrc;
                     SelectedCategory = category;
-                    AttachProductToCategory();
+                    
                 }
                 else
                 {
@@ -986,7 +986,7 @@ namespace PosTest.ViewModels
                         CategoryToMove = null;
                         return;
                     }
-                    PutProductInCellOf(SelectedProduct, ProductToMove);
+                    PutCategoryInCellOf(SelectedCategory, CategoryToMove);
                     CurrentCategories[index] = cat;
                     CategoryToMove = null;
                 }
