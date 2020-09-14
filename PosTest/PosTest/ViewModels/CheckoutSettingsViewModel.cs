@@ -95,6 +95,7 @@ namespace PosTest.ViewModels
             CurrentProducts = new BindableCollection<Product>();
             var freeProds = AllProducts.Where(p => p.Category == null);
             FreeProducts = new BindableCollection<Product>(freeProds);
+            FreeCategories = new BindableCollection<Category>();
             ToSaveUpdate = new BindableCollection<object>();
             ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             //productsViewSource = new CollectionViewSource();
@@ -745,17 +746,17 @@ namespace PosTest.ViewModels
         }
 
 
-        public void FreeCategoryList_MouseMove(object sender, MouseEventArgs e)
+        public void FreeCategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "FreeCategory";
 
-            MouseMoveEventHandler<Product>(sender, e, key);
+            MouseMoveEventHandler<Category>(sender, e, key);
         }
-        public void CategoryList_MouseMove(object sender, MouseEventArgs e)
+        public void CategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "Category";
 
-            MouseMoveEventHandler<Product>(sender, e, key);
+            MouseMoveEventHandler<Category>(sender, e, key);
         }
 
         private  void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key) where T:Ranked,new()
@@ -937,7 +938,7 @@ namespace PosTest.ViewModels
         }
 
 
-        public void CategoryList_Drop(object sender, DragEventArgs e)
+        public void CategoriesList_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent("FreeCategory") ||
                 e.Data.GetDataPresent("Category"))
@@ -979,15 +980,15 @@ namespace PosTest.ViewModels
                     CategoryToMove = categorySrc;
                     SelectedCategory = category;
                     var index = CurrentCategories.IndexOf(CategoryToMove);
-                    var cat = new Product { Rank = CategoryToMove.Rank };
+                    var cat = new Category() { Rank = CategoryToMove.Rank };
                     if (SelectedCategory.Equals(CategoryToMove))
                     {
                         CategoryToMove = null;
                         return;
                     }
                     PutProductInCellOf(SelectedProduct, ProductToMove);
-                    CurrentProducts[index] = cat;
-                    ProductToMove = null;
+                    CurrentCategories[index] = cat;
+                    CategoryToMove = null;
                 }
             }
         }

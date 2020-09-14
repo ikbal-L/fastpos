@@ -119,6 +119,109 @@
             </DockPanel>
         </DataTemplate>
 
+
+
+        <DataTemplate x:Key="freeCategoryListItemTemplate" DataType="{x:Type models:Category}">
+            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ActualWidth}" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.5*" />
+                </Grid.ColumnDefinitions>
+                <ToggleButton x:Name="checkToggle" Grid.Column="0"
+                              VerticalAlignment="Center" Height="22" Width="22"
+                              IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                              AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton"
+                               BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
+                            <Setter Property="Background" Value="#90e0ef" />
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource SecondaryAccentBrush}" />
+                                    <Setter Property="Foreground" Value="#ffffff" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+                <TextBlock Grid.Column="1" FontWeight="Bold" Text="{Binding Name}" Margin="5 0 0 0"
+                           VerticalAlignment="Center" />
+                <Border Grid.Column="4" Background="{Binding Background}" Height="15" />
+            </Grid>
+        </DataTemplate>
+
+
+
+        <DataTemplate x:Key="freeCategoryListSelectedItemTemplate" DataType="{x:Type models:Category}">
+            <DockPanel LastChildFill="False">
+                <Grid DockPanel.Dock="Top"
+                      Width="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=ActualWidth}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="0.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <ToggleButton x:Name="checkToggle" Grid.Column="0" Grid.Row="1"
+                                  VerticalAlignment="Center" Height="22" Width="22"
+                                  IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                  AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton"
+                                   BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
+                                <Setter Property="Background" Value="#90e0ef" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource SecondaryAccentBrush}" />
+                                        <Setter Property="Foreground" Value="#ffffff" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <TextBox x:Name="NameTxtBox" Grid.Column="1" FontWeight="Bold" Text="{Binding Name}"
+                             Panel.ZIndex="2"
+                             caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
+                             Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Margin="4 2 0 0" />
+
+                    <ComboBox Grid.Column="2" Text="{Binding Category.Name}" materialdesign:HintAssist.Hint="Category"
+                              FontWeight="Bold"
+                              caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
+                              Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              ItemsSource="{Binding ElementName=CategoriesTabItem, Path=Tag, FallbackValue=Category}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:Category}">
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBox Grid.Column="3" Text="{Binding Price}" HorizontalAlignment="Right" Margin="0 1 5 0"
+                             caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
+                             Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <!--{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}-->
+                    <Border Grid.Column="4" Background="{Binding Background}" Height="15" />
+                    <!--<Button Grid.Column="2"  Grid.Row="1" Content="Save"/>
+                    <Button Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" Content="Camcel"/>-->
+                </Grid>
+                <Button DockPanel.Dock="Right" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"
+                        caliburn:Message.Attach="[Event Click] = [Action ProductChanged($this)]"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="{materialdesign:PackIcon Kind=Disc, Size=30}" />
+                <Button DockPanel.Dock="Right" Grid.Column="2" Grid.Row="1"
+                        Height="35"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}" />
+            </DockPanel>
+        </DataTemplate>
+
         <!--<helpers:SettingsFreeProductsTemplateSelector 
             x:Key="FreeproductTemplateSelector"
             SeletedItemTemplate="{StaticResource TextBoxTempl}"
@@ -146,9 +249,43 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ListBox x:Name="Categories">
+                            <!--<ListBox x:Name="Categories">
                                     <ListBoxItem>Pizza</ListBoxItem>
-                                </ListBox>
+                                </ListBox>-->
+
+
+                            <ListBox x:Name="FreeCategorySettingsList" ItemsSource="{Binding FreeCategories}"
+                                     Grid.IsSharedSizeScope="True"
+                                     SelectedItem="{Binding SelectedFreeProduct}"
+                                     AllowDrop="True"
+                                     caliburn:Message.Attach="[Event MouseMove] = [Action FreeCategoriesList_MouseMove($source, $eventArgs)];
+                                                              [Event Drop] = [Action FreeCategoriesList_Drop($source, $eventArgs)];" >
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate >
+                                    <DataTemplate DataType="{x:Type models:Category}">
+                                        <ContentControl x:Name="cc" Content="{Binding}"
+                                                        ContentTemplate="{DynamicResource freeCategoryListItemTemplate}" />
+
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                                                <Setter TargetName="cc" Property="ContentTemplate"
+                                                        Value="{DynamicResource freeCategoryListSelectedItemTemplate}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+
+                                    </DataTemplate>
+
+                                </ListBox.ItemTemplate>
+
+                            </ListBox>
+
+
+
+
                             <!-- and here's another -->
                             
 
@@ -346,7 +483,6 @@
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                  caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                            [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
-                                                           [Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
                                                            [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];
                                                              [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
                                  Tag="{Binding ClipboardProduct}">
@@ -452,7 +588,10 @@
                         <ListBox DockPanel.Dock="Left" x:Name="CategoryList" Grid.Column="0"
                                  ex:ListPaginationEx.ItemsPerPage="{Binding CategoryPageSize}"
                                  ex:ListPaginationEx.ItemsSource="{Binding CurrentCategories}"
-                                 SelectedItem="{Binding SelectedCategory}">
+                                 SelectedItem="{Binding SelectedCategory}" 
+                                 AllowDrop="True"
+                                 caliburn:Message.Attach="[Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];
+                                 [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
