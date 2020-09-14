@@ -735,35 +735,46 @@ namespace PosTest.ViewModels
         {
             var key = "FreeProduct";
 
-            MouseMoveEventHandler(sender, e, key);
+            MouseMoveEventHandler<Product>(sender, e, key);
         }
-
-  
-
 
         public void ProductsList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "Product";
-            MouseMoveEventHandler(sender, e, key);
+            MouseMoveEventHandler<Product>(sender, e, key);
         }
 
-        private  void MouseMoveEventHandler(object sender, MouseEventArgs e, string key)
+
+        public void FreeCategoryList_MouseMove(object sender, MouseEventArgs e)
+        {
+            var key = "FreeCategory";
+
+            MouseMoveEventHandler<Product>(sender, e, key);
+        }
+        public void CategoryList_MouseMove(object sender, MouseEventArgs e)
+        {
+            var key = "Category";
+
+            MouseMoveEventHandler<Product>(sender, e, key);
+        }
+
+        private  void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key) where T:Ranked,new()
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 ListBox listBox = sender as ListBox;
                 ListBoxItem listBoxItem =
                     FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
-                Product product;
+                T t;
                 if (listBoxItem != null)
                 {
-                    product = (Product) listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-                    if (product == null || product.Name == null)
+                    t = (T) listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                    if (t == null || t.GetType().GetProperty("Name") == null)
                     {
                         return;
                     }
 
-                    DataObject dragData = new DataObject(key, product);
+                    DataObject dragData = new DataObject(key, t);
                     DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
                 }
             }
