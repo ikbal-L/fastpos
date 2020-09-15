@@ -115,7 +115,7 @@
                 <Button DockPanel.Dock="Right" Grid.Column="2" Grid.Row="1"
                         Height="35"
                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}" />
+                        Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}"   />
             </DockPanel>
         </DataTemplate>
 
@@ -577,9 +577,10 @@
                         <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
                                 x:Name="Close" Style="{StaticResource ButtonStyle22}"
                                 Content="{materialdesign:PackIcon Kind=Close, Size=25}" />
+                        <!--ex:ListPaginationEx.ItemsPerPage="{Binding CategoryPageSize}"-->
+                        <!--ex:ListPaginationEx.ItemsSource="{Binding CurrentCategories}"-->
                         <ListBox DockPanel.Dock="Left" x:Name="CategoryList" Grid.Column="0"
-                                 ex:ListPaginationEx.ItemsPerPage="{Binding CategoryPageSize}"
-                                 ex:ListPaginationEx.ItemsSource="{Binding CurrentCategories}"
+                                ItemsSource="{Binding CurrentCategories}"
                                  SelectedItem="{Binding SelectedCategory}"
                                  AllowDrop="True"
                                  caliburn:Message.Attach="[Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];

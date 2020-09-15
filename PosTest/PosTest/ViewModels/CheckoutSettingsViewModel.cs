@@ -13,6 +13,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using PosTest.Helpers;
 
 namespace PosTest.ViewModels
 {
@@ -101,8 +102,10 @@ namespace PosTest.ViewModels
             //productsViewSource = new CollectionViewSource();
             //NotAffectedToAnyCategoryProducts.Filter = (o) => (o as Product).CategorieId == null;
             //GenarateRanksForProducts();
-
+          
         }
+
+        
 
         private void ToSaveUpdateChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -267,6 +270,7 @@ namespace PosTest.ViewModels
             }
         }
 
+        public DelegateCommandBase SaveCommand { get; set; }
         public bool SelectedFreeCategoryIsChanged { get; private set; }
 
         public Product ClipboardProduct
@@ -471,7 +475,7 @@ namespace PosTest.ViewModels
         public void RemoveProductFromCategory()
         {
             var freep = SelectedFreeProduct;
-            RemoveTFromTList(SelectedProduct, ref freep, CurrentProducts, FreeProducts);
+            RemoveTElementFromTList(SelectedProduct, ref freep, CurrentProducts, FreeProducts);
             SelectedFreeProduct = freep;
             //if (SelectedProduct == null)
             //{
@@ -492,11 +496,11 @@ namespace PosTest.ViewModels
         public void RemoveCategoryFromList()
         {
             var freeCategory = SelectedFreeCategory;
-            RemoveTFromTList(SelectedCategory, ref freeCategory, CurrentCategories, FreeCategories);
+            RemoveTElementFromTList(SelectedCategory, ref freeCategory, CurrentCategories, FreeCategories);
             SelectedFreeCategory = freeCategory;
 
         }
-        public void RemoveTFromTList<T>(T SelectedT,ref T SelectedFreeT, 
+        public void RemoveTElementFromTList<T>(T SelectedT,ref T SelectedFreeT, 
             BindableCollection<T> CurrentTs, BindableCollection<T> FreeTs) where T : Ranked, new()
         {
             
@@ -515,10 +519,10 @@ namespace PosTest.ViewModels
             }
             CurrentTs[index] = new T { Rank = rank };
             FreeTs.Add(freeT);
-            SelectedFreeT = null;
+            //SelectedFreeT = null;
         }
 
-
+        
         public void RemoveCategory()
         {
             if (SelectedCategory == null)
@@ -579,49 +583,71 @@ namespace PosTest.ViewModels
             //}
         }
 
+        private void PutProductInCellOf(Product sourceProduct, Product desProduct)
+        {
+            var index = CurrentProducts.IndexOf(sourceProduct);
+
+            desProduct.Rank = sourceProduct.Rank;
+            desProduct.Category = SelectedCategory;
+            if (sourceProduct.Name != null)
+            {
+                sourceProduct.Rank = null;
+                sourceProduct.Category = null;
+                FreeProducts.Add(sourceProduct);
+            }
+            CurrentProducts[index] = desProduct;
+        }
+
+
         //private void PutProductInCellOf(Product sourceProduct, Product desProduct)
         //{
-        //    var index = CurrentProducts.IndexOf(sourceProduct);
-            
-        //    desProduct.Rank = sourceProduct.Rank;
-        //    desProduct.Category = SelectedCategory;
-        //    if (sourceProduct.Category != null)
-        //    {
-        //        sourceProduct.Rank = null;
-        //        sourceProduct.Category = null;
-        //        FreeProducts.Add(sourceProduct);
-        //    }
-        //    CurrentProducts[index] = desProduct;
+        //    PutTInCellOf(sourceProduct, desProduct, CurrentProducts, FreeProducts);
         //}
 
 
-        private void PutProductInCellOf(Product sourceProduct, Product desProduct)
-        {
-            PutTInCellOf(sourceProduct,desProduct,CurrentProducts,FreeProducts);
-        }
-
+        //private void PutCategoryInCellOf(Category sourceCategory, Category destinationCategory)
+        //{
+        //    PutTInCellOf(sourceCategory, destinationCategory, CurrentCategories, FreeCategories);
+        //}
 
         private void PutCategoryInCellOf(Category sourceCategory, Category destinationCategory)
         {
-            PutTInCellOf(sourceCategory, destinationCategory, CurrentCategories, FreeCategories);
-        }
 
+            var index = CurrentCategories.IndexOf(sourceCategory);
 
-
-        private void PutTInCellOf<T>(T sourceT, T destinationT,BindableCollection<T> currentTs, BindableCollection<T> freeTs) where T: Ranked,new()
-        {
-            var index = currentTs.IndexOf(sourceT);
-
-            destinationT.Rank = sourceT.Rank;
-            if (destinationT is Product destinationProduct && sourceT is Product sourceProduct)
+            destinationCategory.Rank = sourceCategory.Rank;
+            if (sourceCategory.Name != null)
             {
-                destinationProduct.Category = SelectedCategory;
-                sourceProduct.Category = null;
+                sourceCategory.Rank = null;
+                FreeCategories.Add(sourceCategory);
             }
-            sourceT.Rank = null;
-            freeTs.Add(sourceT);
-            currentTs[index] = destinationT;
+            CurrentCategories[index] = destinationCategory;
         }
+
+
+        //private void PutTInCellOf<T>(T sourceT, T destinationT,BindableCollection<T> currentTs, BindableCollection<T> freeTs) where T: Ranked,new()
+        //{
+        //    var index = currentTs.IndexOf(sourceT);
+
+        //    destinationT.Rank = sourceT.Rank;
+        //    if (destinationT is Product destinationProduct && sourceT is Product sourceProduct)
+        //    {
+        //        destinationProduct.Category = SelectedCategory;
+        //        if (sourceProduct.Category!=null)
+        //        {
+        //            sourceProduct.Category = null; 
+
+        //        }
+        //    }
+
+        //    if (sourceT.GetType().GetProperty("Name")!=null)
+        //    {
+
+        //        sourceT.Rank = null;
+        //        freeTs.Add(sourceT);
+        //    }
+        //    currentTs[index] = destinationT;
+        //}
         public void PasteProduct()
         {
             if (ClipboardProduct == null)
@@ -967,7 +993,7 @@ namespace PosTest.ViewModels
                 {
                     SelectedFreeCategory = categorySrc;
                     SelectedCategory = category;
-                    
+                    AttachCategoryToList();
                 }
                 else
                 {
@@ -986,6 +1012,19 @@ namespace PosTest.ViewModels
                 }
             }
         }
+
+        private void AttachCategoryToList()
+        {
+            if (SelectedFreeCategory == null || SelectedCategory == null)
+            {
+                ToastNotification.Notify("Select Both free product and category product");
+                return;
+            }
+
+            PutCategoryInCellOf(SelectedCategory, SelectedFreeCategory);
+            FreeCategories.Remove(SelectedFreeCategory);
+        }
+
         public void FreeCategoriesList_Drop(object sender, DragEventArgs e)
         {
             if (e.Handled)
