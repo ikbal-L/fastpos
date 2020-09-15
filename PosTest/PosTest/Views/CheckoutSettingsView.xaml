@@ -591,27 +591,26 @@
                             </ListBox.ItemsPanel>
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Category}">
-                                    <Button x:Name="catBtn" Width="80" Height="60" Background="{Binding Background}"
-                                            caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
-                                            FontWeight="Bold"
-                                            FontSize="16"
+                                    <Border x:Name="catBtn" Width="80" Height="60" Background="{Binding Background}"
+                                            caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]"
                                             Padding="3 0 0 5"
                                             Margin="3 0 0 0">
-                                        <TextBlock>
+                                        <TextBlock FontWeight="Bold"
+                                                   FontSize="16">
                                             <Run Text="{Binding Name}" />
                                             <Run Text=" " />
                                             <Run Text="{Binding Rank}" />
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                            <Setter Property="Foreground" Value="White" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
                                         </TextBlock>
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                                        <Setter Property="Foreground" Value="White" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
+                                    </Border>
 
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
