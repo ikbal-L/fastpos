@@ -97,6 +97,7 @@
     <Compile Include="Interface\IDelivereyService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
     <Compile Include="Interface\IOrdreItemService.cs" />
+    <Compile Include="Interface\ICustomerService.cs" />
     <Compile Include="Interface\IProductService.cs" />
     <Compile Include="Model\Additive.cs" />
     <Compile Include="Model\Annex.cs" />

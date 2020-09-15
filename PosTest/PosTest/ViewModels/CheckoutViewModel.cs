@@ -33,12 +33,13 @@ namespace PosTest.ViewModels
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
                        a => a.FullName.StartsWith("XUnitTesting"));
-        //[Import(typeof(IProductService))]
+
         private IProductService _productsService;
-        //[Import(typeof(ICategoryService))]
+
         private ICategoryService _categoriesService;
-        //[Import(typeof(IOrderService))]
+
         private IOrderService _orderService;
+        private ICustomerService _customerService;
         private Category _currantCategory;
         private bool _productsVisibility;
         private string _numericZone;
@@ -63,21 +64,28 @@ namespace PosTest.ViewModels
         private WaitingViewModel _waitingViewModel;
         private DelivereyViewModel _delivereyViewModel;
         private TakeawayViewModel _takeAwayViewModel;
+        private CustomerViewModel _customerViewModel;
+
         #endregion
 
         #region Constructors
-        public CheckoutViewModel() 
+        public CheckoutViewModel()
         {
             Orders = new BindableCollection<Order>();
+            Customers = new BindableCollection<Customer>();
+
             if (IsRunningFromXUnit)
             {
                 CurrentOrder = new Order();
                 Orders.Add(CurrentOrder);
             }
+
             TakeAwayViewModel = new TakeawayViewModel(this);
             DelivereyViewModel = new DelivereyViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
+            
             Task.Run(CalculateOrderElapsedTime);
+
         }
 
         void CalculateOrderElapsedTime()
@@ -107,7 +115,10 @@ namespace PosTest.ViewModels
             ICategoryService categoriesService,
             IOrderService orderService,
             IWaiterService waiterService,
-            IDelivereyService delivereyService) : this()
+            IDelivereyService delivereyService,
+            ICustomerService customerService
+
+            ) : this()
         {
             IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
             {
@@ -130,6 +141,7 @@ namespace PosTest.ViewModels
             _productsService = productsService;
             _categoriesService = categoriesService;
             _orderService = orderService;
+            _customerService = customerService;
 
             int getProductsStatusCode = 0;
             AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
@@ -145,6 +157,7 @@ namespace PosTest.ViewModels
 
             var waiter = waiterService.GetAllActiveWaiters(ref code);
             Waiters = new BindableCollection<Waiter>(waiter);
+
             var status = 0;
             var tables = _orderService.GeAlltTables(ref status);
             Tables = new BindableCollection<Table>(tables);
@@ -154,7 +167,10 @@ namespace PosTest.ViewModels
                 table.AllTables = Tables;
             }
             TablesViewModel = new TablesViewModel(this);
-            //InitCategoryColors();
+            var t = customerService.GetAllCustomers();
+            Customers = new BindableCollection<Customer>( customerService.GetAllCustomers());
+            
+            CustomerViewModel = new CustomerViewModel(this);
         }
         #endregion
 
@@ -279,6 +295,7 @@ namespace PosTest.ViewModels
         public BindableCollection<Category> Categories { get; set; }
 
         public BindableCollection<Order> Orders { get; set; }
+        public BindableCollection<Customer> Customers { get; set; }
 
         public Order CurrentOrder
         {
@@ -335,6 +352,15 @@ namespace PosTest.ViewModels
             set
             {
                 _waitingViewModel = value;
+                NotifyOfPropertyChange();
+            }
+        }
+        public CustomerViewModel CustomerViewModel
+        {
+            get => _customerViewModel;
+            set
+            {
+                _customerViewModel = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -530,6 +556,8 @@ namespace PosTest.ViewModels
             ReturnedAmount = null;
             SelectedDelivereyman = null;
             SelectedWaiter = null;
+            CustomerViewModel.SelectedCustomer = null;
+
 
         }
 
@@ -613,6 +641,7 @@ namespace PosTest.ViewModels
             DisplayedOrder = null;
             SelectedDelivereyman = null;
             SelectedWaiter = null;
+            CustomerViewModel.SelectedCustomer = null;
             SetSelectedInListedOrdersDisplayedOrder();
         }
 
@@ -1412,6 +1441,8 @@ namespace PosTest.ViewModels
         private ListKind _listKind;
         private Delivereyman _selectedDelivereyman;
         private Waiter _selectedWaiter;
+        
+
 
         public bool IsTopDrawerOpen {
             get => _IsTopDrawerOpen;
@@ -1419,6 +1450,7 @@ namespace PosTest.ViewModels
         }
         public BindableCollection<Delivereyman> Delivereymen { get; set; }
         public BindableCollection<Waiter> Waiters { get; private set; }
+        
         public Delivereyman SelectedDelivereyman 
         { 
             get => _selectedDelivereyman;
@@ -1453,6 +1485,11 @@ namespace PosTest.ViewModels
                 IsTopDrawerOpen = false;
             }
         }
+        
+
+                
+
+
         public ListKind ListKind 
         { 
             get => _listKind;
@@ -1469,9 +1506,6 @@ namespace PosTest.ViewModels
             ListKind = listKind;
             IsTopDrawerOpen = true;
         }
-
-
-
     }
 
 
@@ -1594,7 +1628,8 @@ namespace PosTest.ViewModels
     {
         Table,
         Waiter,
-        Deliverey
+        Deliverey,
+        Customer
     }
 }
 

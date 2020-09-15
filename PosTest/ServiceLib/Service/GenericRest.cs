@@ -3,6 +3,8 @@ using ServiceInterface.Authorisation;
 using System.Net;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ServiceInterface.Model;
+using System;
 
 namespace ServiceLib.Service
 {
@@ -15,6 +17,9 @@ namespace ServiceLib.Service
             T t = default;
             if (statusCode == (int)HttpStatusCode.OK)
             {
+                //string s = t.ToString();
+//                if (t.ToString() is Waiter)
+  //                  Console.WriteLine(s);
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
             return t;// ;products
