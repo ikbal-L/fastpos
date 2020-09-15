@@ -120,9 +120,8 @@
         </DataTemplate>
 
 
-
         <DataTemplate x:Key="freeCategoryListItemTemplate" DataType="{x:Type models:Category}">
-            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ActualWidth}" >
+            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ActualWidth}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="3*" />
@@ -152,7 +151,6 @@
                 <Border Grid.Column="4" Background="{Binding Background}" Height="15" />
             </Grid>
         </DataTemplate>
-
 
 
         <DataTemplate x:Key="freeCategoryListSelectedItemTemplate" DataType="{x:Type models:Category}">
@@ -259,13 +257,13 @@
                                      SelectedItem="{Binding SelectedFreeProduct}"
                                      AllowDrop="True"
                                      caliburn:Message.Attach="[Event MouseMove] = [Action FreeCategoriesList_MouseMove($source, $eventArgs)];
-                                                              [Event Drop] = [Action FreeCategoriesList_Drop($source, $eventArgs)];" >
+                                                              [Event Drop] = [Action FreeCategoriesList_Drop($source, $eventArgs)];">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                                     </Style>
                                 </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate >
+                                <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type models:Category}">
                                         <ContentControl x:Name="cc" Content="{Binding}"
                                                         ContentTemplate="{DynamicResource freeCategoryListItemTemplate}" />
@@ -284,10 +282,8 @@
                             </ListBox>
 
 
-
-
                             <!-- and here's another -->
-                            
+
 
                             <!--domain:SelectableViewModel-->
                             <!--<Border x:Name="Border" 
@@ -390,28 +386,28 @@
                         </ListBox>-->
 
                         <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}"
-                                     Grid.IsSharedSizeScope="True"
-                                     SelectedItem="{Binding SelectedFreeProduct}"
-                                     AllowDrop="True"
-                                     caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                                 Grid.IsSharedSizeScope="True"
+                                 SelectedItem="{Binding SelectedFreeProduct}"
+                                 AllowDrop="True"
+                                 caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
                                                               [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
                                                               [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
-                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];" >
+                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                                 </Style>
                             </ListBox.ItemContainerStyle>
-                            <ListBox.ItemTemplate >
+                            <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Product}">
                                     <ContentControl x:Name="cc" Content="{Binding}"
-                                                        ContentTemplate="{DynamicResource textBlockTempl}" />
+                                                    ContentTemplate="{DynamicResource textBlockTempl}" />
 
                                     <DataTemplate.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
                                             <Setter TargetName="cc" Property="ContentTemplate"
-                                                        Value="{DynamicResource TextBoxTempl}" />
+                                                    Value="{DynamicResource TextBoxTempl}" />
                                         </DataTrigger>
                                     </DataTemplate.Triggers>
 
@@ -420,10 +416,6 @@
                             </ListBox.ItemTemplate>
 
                         </ListBox>
-
-
-
-
 
 
                         <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1"
@@ -588,10 +580,10 @@
                         <ListBox DockPanel.Dock="Left" x:Name="CategoryList" Grid.Column="0"
                                  ex:ListPaginationEx.ItemsPerPage="{Binding CategoryPageSize}"
                                  ex:ListPaginationEx.ItemsSource="{Binding CurrentCategories}"
-                                 SelectedItem="{Binding SelectedCategory}" 
+                                 SelectedItem="{Binding SelectedCategory}"
                                  AllowDrop="True"
-                                 caliburn:Message.Attach="[Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];
-                                 [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];">
+                                 caliburn:Message.Attach="[Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];
+                                                              [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
@@ -599,27 +591,26 @@
                             </ListBox.ItemsPanel>
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Category}">
-                                    <Button x:Name="catBtn" Width="80" Height="60" Background="{Binding Background}"
-                                            caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
-                                            FontWeight="Bold"
-                                            FontSize="16"
+                                    <Border x:Name="catBtn" Width="80" Height="60" Background="{Binding Background}"
+                                            caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]"
                                             Padding="3 0 0 5"
                                             Margin="3 0 0 0">
-                                        <TextBlock>
+                                        <TextBlock FontWeight="Bold"
+                                                   FontSize="16">
                                             <Run Text="{Binding Name}" />
                                             <Run Text=" " />
                                             <Run Text="{Binding Rank}" />
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                            <Setter Property="Foreground" Value="White" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
                                         </TextBlock>
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                                        <Setter Property="Foreground" Value="White" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
+                                    </Border>
 
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

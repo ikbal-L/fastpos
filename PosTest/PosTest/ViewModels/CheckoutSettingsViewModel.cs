@@ -207,18 +207,12 @@ namespace PosTest.ViewModels
         public BindableCollection<Product> CurrentProducts
         {
             get => _currentProducts;
-            set
-            {
-                Set(ref _currentProducts, value);
-            }
+            set => Set(ref _currentProducts, value);
         }
         public BindableCollection<Category> CurrentCategories
         {
             get => _currentCategory;
-            set
-            {
-                Set(ref _currentCategory, value);
-            }
+            set => Set(ref _currentCategory, value);
         }
 
         //public CollectionViewSource ProductsViewSource { get; set; }
@@ -973,7 +967,7 @@ namespace PosTest.ViewModels
                 {
                     SelectedFreeCategory = categorySrc;
                     SelectedCategory = category;
-                    AttachProductToCategory();
+                    
                 }
                 else
                 {
@@ -986,7 +980,7 @@ namespace PosTest.ViewModels
                         CategoryToMove = null;
                         return;
                     }
-                    PutProductInCellOf(SelectedProduct, ProductToMove);
+                    PutCategoryInCellOf(SelectedCategory, CategoryToMove);
                     CurrentCategories[index] = cat;
                     CategoryToMove = null;
                 }
