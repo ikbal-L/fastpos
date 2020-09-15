@@ -42,6 +42,9 @@ namespace PosTest.ViewModels
         private Product _clipboardProduct;
         private Product _toMoveProduct;
         private Category _categoryOfSelectFreeProduct;
+        private Category _selectedFreeCategory;
+        private Category _categoryToMove;
+
 
         public CheckoutSettingsViewModel()
         {
@@ -92,6 +95,7 @@ namespace PosTest.ViewModels
             CurrentProducts = new BindableCollection<Product>();
             var freeProds = AllProducts.Where(p => p.Category == null);
             FreeProducts = new BindableCollection<Product>(freeProds);
+            FreeCategories = new BindableCollection<Category>();
             ToSaveUpdate = new BindableCollection<object>();
             ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             //productsViewSource = new CollectionViewSource();
@@ -127,6 +131,7 @@ namespace PosTest.ViewModels
         //}
 
         public BindableCollection<Product> FreeProducts { get; set; }
+        public BindableCollection<Category> FreeCategories { get; set; }
         public BindableCollection<object> ToSaveUpdate { get; set; }
         public BindableCollection<Product> ToDeletge { get; set; }
 
@@ -251,6 +256,25 @@ namespace PosTest.ViewModels
                 Set(ref _selectedFreeProduct, value);
             }
         }
+
+        public Category SelectedFreeCategory
+        {
+            get => _selectedFreeCategory;
+            set
+            {
+                if (_selectedFreeCategory != null &&
+                    !string.IsNullOrEmpty(_selectedFreeCategory.Name) &&
+                    SelectedFreeCategoryIsChanged)
+                {
+                    ToSaveUpdate.Add(_selectedFreeProduct);
+                    SelectedFreeProductIsChanged = false;
+                }
+                Set(ref _selectedFreeCategory, value);
+            }
+        }
+
+        public bool SelectedFreeCategoryIsChanged { get; private set; }
+
         public Product ClipboardProduct
         {
             get => _clipboardProduct;
@@ -267,6 +291,13 @@ namespace PosTest.ViewModels
                 Set(ref _toMoveProduct, value);
             }
         }
+
+        public Category CategoryToMove
+        {
+            get => _categoryToMove;
+            set { Set(ref _categoryToMove, value); }
+        }
+
         public Category SelectedCategory
         {
             get => _selectedCategory;
@@ -445,11 +476,62 @@ namespace PosTest.ViewModels
         }
         public void RemoveProductFromCategory()
         {
-            if (SelectedProduct == null)
+            var freep = SelectedFreeProduct;
+            RemoveTFromTList(SelectedProduct, ref freep, CurrentProducts, FreeProducts);
+            SelectedFreeProduct = freep;
+            //if (SelectedProduct == null)
+            //{
+            //    return;
+            //}
+            //var index = CurrentProducts.IndexOf(SelectedProduct);
+            //var rank = SelectedProduct.Rank;
+            //var freeProd = SelectedProduct;
+            //SelectedProduct.Rank = null;
+            //SelectedProduct.Category = null;
+            //CurrentProducts[index] = new Product { Rank = rank };
+            ////var freeProds = AllProducts.Where(p => p.CategorieId==null);
+            ////FreeProducts.Clear();
+            //FreeProducts.Add(freeProd);
+            //SelectedFreeProduct = null;
+        }
+
+        public void RemoveCategoryFromList()
+        {
+            var freeCategory = SelectedFreeCategory;
+            RemoveTFromTList(SelectedCategory, ref freeCategory, CurrentCategories, FreeCategories);
+            SelectedFreeCategory = freeCategory;
+
+        }
+        public void RemoveTFromTList<T>(T SelectedT,ref T SelectedFreeT, 
+            BindableCollection<T> CurrentTs, BindableCollection<T> FreeTs) where T : Ranked, new()
+        {
+            
+            if (SelectedT == null)
             {
                 return;
             }
-            var index = CurrentProducts.IndexOf(SelectedProduct);
+            var index = CurrentTs.IndexOf(SelectedT);
+            var rank = SelectedT.Rank;
+            var freeT = SelectedT;
+            SelectedT.Rank = null;
+            
+            if (SelectedT is Product selectedProduct)
+            {
+                selectedProduct.Category = null;
+            }
+            CurrentTs[index] = new T { Rank = rank };
+            FreeTs.Add(freeT);
+            SelectedFreeT = null;
+        }
+
+
+        public void RemoveCategory()
+        {
+            if (SelectedCategory == null)
+            {
+                return;
+            }
+            var index = CurrentCategories.IndexOf(SelectedCategory);
             var rank = SelectedProduct.Rank;
             var freeProd = SelectedProduct;
             SelectedProduct.Rank = null;
@@ -460,6 +542,8 @@ namespace PosTest.ViewModels
             FreeProducts.Add(freeProd);
             SelectedFreeProduct = null;
         }
+
+
 
         public void AttachProductToCategory()
         {
@@ -501,21 +585,49 @@ namespace PosTest.ViewModels
             //}
         }
 
+        //private void PutProductInCellOf(Product sourceProduct, Product desProduct)
+        //{
+        //    var index = CurrentProducts.IndexOf(sourceProduct);
+            
+        //    desProduct.Rank = sourceProduct.Rank;
+        //    desProduct.Category = SelectedCategory;
+        //    if (sourceProduct.Category != null)
+        //    {
+        //        sourceProduct.Rank = null;
+        //        sourceProduct.Category = null;
+        //        FreeProducts.Add(sourceProduct);
+        //    }
+        //    CurrentProducts[index] = desProduct;
+        //}
+
+
         private void PutProductInCellOf(Product sourceProduct, Product desProduct)
         {
-            var index = CurrentProducts.IndexOf(sourceProduct);
-            
-            desProduct.Rank = sourceProduct.Rank;
-            desProduct.Category = SelectedCategory;
-            if (sourceProduct.Category != null)
-            {
-                sourceProduct.Rank = null;
-                sourceProduct.Category = null;
-                FreeProducts.Add(sourceProduct);
-            }
-            CurrentProducts[index] = desProduct;
+            PutTInCellOf(sourceProduct,desProduct,CurrentProducts,FreeProducts);
         }
 
+
+        private void PutCategoryInCellOf(Category sourceCategory, Category destinationCategory)
+        {
+            PutTInCellOf(sourceCategory, destinationCategory, CurrentCategories, FreeCategories);
+        }
+
+
+
+        private void PutTInCellOf<T>(T sourceT, T destinationT,BindableCollection<T> currentTs, BindableCollection<T> freeTs) where T: Ranked,new()
+        {
+            var index = currentTs.IndexOf(sourceT);
+
+            destinationT.Rank = sourceT.Rank;
+            if (destinationT is Product destinationProduct && sourceT is Product sourceProduct)
+            {
+                destinationProduct.Category = SelectedCategory;
+                sourceProduct.Category = null;
+            }
+            sourceT.Rank = null;
+            freeTs.Add(sourceT);
+            currentTs[index] = destinationT;
+        }
         public void PasteProduct()
         {
             if (ClipboardProduct == null)
@@ -622,121 +734,94 @@ namespace PosTest.ViewModels
 
         public void FreeProductsList_MouseMove(object sender, MouseEventArgs e)
         {
-            // Get the current mouse position
-            //Point mousePos = e.GetPosition(null);
-            //Vector diff = startPoint - mousePos;
-            //if (!(e.OriginalSource is ListBoxItem) || !(e.LeftButton == MouseButtonState.Pressed))
-            //{
-            //    Console.WriteLine((e.OriginalSource as DependencyObject).GetType().ToString());
-            //    return;
-            //}
+            var key = "FreeProduct";
 
-            if (e.LeftButton == MouseButtonState.Pressed /*&&
-                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)*/)
-            {
-                // Get the dragged ListViewItem
-                ListBox listBox = sender as ListBox;
-                ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
-
-                // Find the data behind the ListViewItem
-                Product product;
-                if (listBoxItem != null)
-                {
-                    product = (Product)listBox.ItemContainerGenerator.
-                                        ItemFromContainer(listBoxItem);
-                    DataObject dragData = new DataObject("FreeProduct", product);
-                    DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
-                }
-                //else
-                //{
-                //    DataObject dragData = new DataObject("FreeProduct", null);
-                //}
-               
-
-                // Initialize the drag & drop operation
-            }
+            MouseMoveEventHandler<Product>(sender, e, key);
         }
+
         public void ProductsList_MouseMove(object sender, MouseEventArgs e)
         {
-            // Get the current mouse position
-            //Point mousePos = e.GetPosition(null);
-            //Vector diff = startPoint - mousePos;
-            //if (!(e.OriginalSource is ListBoxItem) || !(e.LeftButton == MouseButtonState.Pressed))
-            //{
-            //    Console.WriteLine((e.OriginalSource as DependencyObject).GetType().ToString());
-            //    return;
-            //}
+            var key = "Product";
+            MouseMoveEventHandler<Product>(sender, e, key);
+        }
 
-            if (e.LeftButton == MouseButtonState.Pressed /*&&
-                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)*/)
+
+        public void FreeCategoriesList_MouseMove(object sender, MouseEventArgs e)
+        {
+            var key = "FreeCategory";
+
+            MouseMoveEventHandler<Category>(sender, e, key);
+        }
+        public void CategoriesList_MouseMove(object sender, MouseEventArgs e)
+        {
+            var key = "Category";
+
+            MouseMoveEventHandler<Category>(sender, e, key);
+        }
+
+        private  void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key) where T:Ranked,new()
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                // Get the dragged ListViewItem
                 ListBox listBox = sender as ListBox;
                 ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
-
-                // Find the data behind the ListViewItem
-                Product product;
+                    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+                T t;
                 if (listBoxItem != null)
                 {
-                    product = (Product)listBox.ItemContainerGenerator.
-                                        ItemFromContainer(listBoxItem);
-                    if (product == null || product.Name == null)
+                    t = (T) listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                    if (t == null || t.GetType().GetProperty("Name") == null)
                     {
                         return;
                     }
-                    DataObject dragData = new DataObject("Product", product);
+
+                    DataObject dragData = new DataObject(key, t);
                     DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
                 }
-               
-
-                // Initialize the drag & drop operation
             }
         }
-        public void FreeProductsList_TouchDown(object sender, MouseEventArgs e)
+
+
+
+        private static void ListTouchDownEventHandler(object sender, TouchEventArgs e, string key)
         {
-            //if (e.Handled)
-            //{
-            //    return;
-            //}
-            //// Get the current mouse position
-            ////Point mousePos = e.GetPosition(null);
-            ////Vector diff = startPoint - mousePos;
+            ListBox listView = sender as ListBox;
+            ListBoxItem listBoxItem =
+                FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+            // Find the data behind the ListViewItem
+            Product product;
 
 
-            ////if (e.LeftButton == MouseButtonState.Pressed &&
-            ////    (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-            ////    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            if (listBoxItem != null)
+            {
+                product = (Product)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                if (product == null || product.Name == null)
+                {
+                    return;
+                }
 
-            //    // Get the dragged ListViewItem
-            //ListBox listView = sender as ListBox;
-            //ListBoxItem listBoxItem =
-            //    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
-
-            //    // Find the data behind the ListViewItem
-            //    Product product = null;
-            //    if (listBoxItem != null)
-            //    {
-            //        product = (Product)listView.ItemContainerGenerator.
-            //        ItemFromContainer(listBoxItem);
-            //        DataObject dragData = new DataObject("myFormat", product);
-            //        DragDrop.AddQueryContinueDragHandler(listBoxItem, DragContrinueHandler);
-            //        DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
-            //    }
-
-            //    using (System.IO.StreamWriter file =
-            //        new System.IO.StreamWriter(@"WriteLines2.txt"))
-            //    {
-
-            //         file.WriteLine(product.Name);
-
-
-            //    // Initialize the drag & drop operation
-            //}
+                DataObject dragData = new DataObject(key, product);
+                DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
+            }
         }
+
+        public void FreeProductsList_TouchDown(object sender, TouchEventArgs e)
+        {
+            var key = "FreeProduct";
+            ListTouchDownEventHandler(sender, e, key);
+        }
+
+        
+        public void ProductsList_TouchDown(object sender, TouchEventArgs e)
+        {
+
+            var key = "Product"; 
+            ListTouchDownEventHandler(sender,e,key);
+        }
+        
+        
+        
         public void DragContrinueHandler(object sender, QueryContinueDragEventArgs e)
         {
             if (e.Action == DragAction.Continue && e.KeyStates != DragDropKeyStates.LeftMouseButton)
@@ -823,6 +908,7 @@ namespace PosTest.ViewModels
         }
         public void FreeProductsList_Drop(object sender, DragEventArgs e)
         {
+            
             if (e.Handled)
             {
                 return;
@@ -848,6 +934,91 @@ namespace PosTest.ViewModels
                 SelectedProduct = productSrc;
                 RemoveProductFromCategory();
                 
+            }
+        }
+
+
+        public void CategoriesList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("FreeCategory") ||
+                e.Data.GetDataPresent("Category"))
+            {
+
+                ListBox listView = sender as ListBox;
+                ListBoxItem listBoxItem =
+                   FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+                if (listBoxItem == null)
+                {
+                    return;
+                }
+                // Find the data behind the ListViewItem
+                Category category = (Category)listView.ItemContainerGenerator.
+                    ItemFromContainer(listBoxItem);
+
+                Category categorySrc;
+
+                if (e.Data.GetDataPresent("FreeCategory"))
+                {
+                    categorySrc = e.Data.GetData("FreeCategory") as Category;
+                }
+                else
+                {
+                    categorySrc = e.Data.GetData("Category") as Category;
+                }
+
+                if (categorySrc == null || categorySrc.Name == null) return;
+
+                if (categorySrc.Rank == null)
+                {
+                    SelectedFreeCategory = categorySrc;
+                    SelectedCategory = category;
+                    AttachProductToCategory();
+                }
+                else
+                {
+                    CategoryToMove = categorySrc;
+                    SelectedCategory = category;
+                    var index = CurrentCategories.IndexOf(CategoryToMove);
+                    var cat = new Category() { Rank = CategoryToMove.Rank };
+                    if (SelectedCategory.Equals(CategoryToMove))
+                    {
+                        CategoryToMove = null;
+                        return;
+                    }
+                    PutProductInCellOf(SelectedProduct, ProductToMove);
+                    CurrentCategories[index] = cat;
+                    CategoryToMove = null;
+                }
+            }
+        }
+        public void FreeCategoriesList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Handled)
+            {
+                return;
+            }
+            if (e.Data.GetDataPresent("Category"))
+            {
+                Category contact = e.Data.GetData("Category") as Category;
+                ListBox listView = sender as ListBox;
+                ListBoxItem listBoxItem =
+                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+                // Find the data behind the ListViewItem
+                var categorySrc = e.Data.GetData("Category") as Category;
+                if (categorySrc == null) return;
+                if (string.IsNullOrEmpty(categorySrc.Name))
+                    return;
+                if (categorySrc.Rank == null)
+                {
+                    return;
+                }
+
+
+                SelectedCategory = categorySrc;
+                RemoveCategoryFromList();
+
             }
         }
     }
