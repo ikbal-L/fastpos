@@ -81,7 +81,7 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
 
             //Act
-            checkoutVM.RemoveOrerItem(null);
+            checkoutVM.RemoveOrerItem();
 
 
             //Assert
@@ -94,11 +94,13 @@ namespace XUnitTesting.CheckpointTesting
         {
             //Arrange
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id=2, Description="desc2", Name="awescome", Price=6};
+            var p = new Platter { Id=2, Description="desc2", Name= "awesome", Price=6};
             var orderItem = new OrderItem(p, 5, 120, new Order());
+            checkoutVM.CurrentOrder = new Order();
+            checkoutVM.CurrentOrder.SelectedOrderItem = orderItem;
 
             //Act
-            checkoutVM.RemoveOrerItem(orderItem);
+            checkoutVM.RemoveOrerItem();
 
             //Assert
             Assert.Single(checkoutVM.Orders);
@@ -112,6 +114,7 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             var p = new Platter { Id=2, Description="desc2", Name="awescome", Price=160};
             checkoutVM.AddOrderItem(p);
+           
 
             //Act
             Assert.Single(checkoutVM.CurrentOrder.OrderItems);
