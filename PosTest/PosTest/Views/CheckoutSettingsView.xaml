@@ -597,10 +597,8 @@
                                             Padding="3 0 0 5"
                                             Margin="3 0 0 0">
                                         <TextBlock FontWeight="Bold"
-                                                   FontSize="16">
-                                            <Run Text="{Binding Name}" />
-                                            <Run Text=" " />
-                                            <Run Text="{Binding Rank}" />
+                                                   FontSize="16"
+                                                   Text="{Binding Name}" >
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>

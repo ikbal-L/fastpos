@@ -105,7 +105,6 @@ namespace PosTest.ViewModels
           
         }
 
-        
 
         private void ToSaveUpdateChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
