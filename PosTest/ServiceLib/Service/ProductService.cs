@@ -90,8 +90,11 @@ namespace ServiceLib.Service
                 {
                     additives = GetAdditivesFromCollection(additivesOfAllProducts, plat.IdAdditives);
                 }
- 
-                p.MappingAfterReceiving(category, additives?.ToList());
+
+                if (category!=null)
+                {
+                    p.MappingAfterReceiving(category, additives?.ToList()); 
+                }
             }
 
             return products;

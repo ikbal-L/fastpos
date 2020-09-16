@@ -585,40 +585,40 @@
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="8 0 0 0" 
-                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
-                                    <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
+                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left"  caliburn:Message.Attach="[Event Click] = [Action SaveProduct()]">
+                                <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
                                 </Button>
                                 <TextBlock Margin="8 16 16 16">Product Details</TextBlock>
                             </StackPanel>
                             
                             <Label Grid.Row="1" Grid.Column="0" Content="Name"  />
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentProduct.Name}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedProduct.Name}" />
 
                             <Label Grid.Row="3" Grid.Column="0" Content="Price"  />
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentProduct.Price}" />
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SelectedProduct.Price}" />
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Unit"  />
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentProduct.Unit}" />
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProduct.Unit}" />
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Categories"  />
                             <ComboBox Grid.Row="5" Grid.Column="1"  
-                  ItemsSource="{Binding Categories}" 
+                  ItemsSource="{Binding CurrentCategories}" 
                   DisplayMemberPath="Name"
-                  SelectedValue ="{Binding CurrentProduct.Category }"
+                  SelectedValue ="{Binding SelectedProduct.Category }"
                   IsSynchronizedWithCurrentItem="True"/>
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Color"  />
-                            <Border Grid.Row="6" Grid.Column="2" Background="{Binding CurrentProduct.Background}"  >
-                                <TextBlock Text="{Binding CurrentProduct.Background}"/>
+                        <Border Grid.Row="6" Grid.Column="2" Background="{Binding SelectedProduct.Background}"  >
+                            <TextBlock Text="{Binding SelectedProduct.Background}"/>
                             </Border>
-                            <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding CurrentProduct.BackgroundColor}" />
+                        <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding SelectedProduct.BackgroundColor}" />
 
 
                             <Label Grid.Row="7" Grid.Column="0" Content="IsMuchInDemand"  />
-                            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CurrentProduct.IsMuchInDemand}"  />
+                        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding SelectedProduct.IsMuchInDemand}"  />
 
                             <TabControl Grid.Row="10" Grid.Column="0"  Grid.ColumnSpan="3" 
-                        Visibility="{Binding CurrentProduct.IsPlatter ,Converter={StaticResource BoolToVisibility}}">
+                        Visibility="{Binding SelectedProduct.IsPlatter ,Converter={StaticResource BoolToVisibility}}">
                                 <TabItem Header="Additives" >
                                     <StackPanel>
                                         <Grid>
@@ -635,7 +635,7 @@
                                 ItemTemplate="{StaticResource AdditiveSettingDataTemplate}"  Grid.Column="0"
                                 />
                                             <ListBox  
-                                ItemsSource="{Binding CurrentProduct.Additives}"  
+                                ItemsSource="{Binding SelectedProduct.Additives}"  
                                 SelectedItem="{Binding SelectedAddedAdditive}"
                                 ItemTemplate="{StaticResource AdditiveSettingDataTemplate}" Grid.Column="2" 
                                 materialdesign:ShadowAssist.ShadowDepth="Depth2"

@@ -269,7 +269,10 @@ namespace PosTest.ViewModels
             }
         }
 
-        public DelegateCommandBase SaveCommand { get; set; }
+        public void SaveProduct()
+        {
+            _productsService.UpdateProduct(_selectedProduct);
+        }
         public bool SelectedFreeCategoryIsChanged { get; private set; }
 
         public Product ClipboardProduct
