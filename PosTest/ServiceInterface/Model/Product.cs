@@ -23,7 +23,7 @@ namespace ServiceInterface.Model
         private Category _category;
         private SolidColorBrush _background;
 
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public long? Id { get; set; }
         [DataMember]
         public string Name

@@ -607,7 +607,15 @@ namespace PosTest.ViewModels
                 _productsService.UpdateProduct(sourceProduct);
             }
             CurrentProducts[index] = desProduct;
-            _productsService.UpdateProduct(desProduct);
+            if (desProduct.Id==null)
+            {
+                _productsService.SaveProduct(desProduct);
+            }
+            else
+            {
+                _productsService.UpdateProduct(desProduct);
+
+            }
         }
 
 
@@ -677,6 +685,8 @@ namespace PosTest.ViewModels
                 return;
             }
             var product = ClipboardProduct is Platter ? new Platter(ClipboardProduct as Platter) : new Product(ClipboardProduct);
+            product.Category = SelectedCategory;
+            product.Id = null;
             PutProductInCellOf(SelectedProduct, product);
 
             //var index = CurrentProducts.IndexOf(SelectedProduct);
