@@ -61,7 +61,7 @@ namespace PosTest.ViewModels
             IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
             {
                 var categories = new HashSet<Category>();
-                foreach (var p in products)
+                foreach (var p in products.Where(prod => prod.Category != null))
                 {
                     categories.Add(p.Category);
                     if (p.Category.Products == null)
@@ -102,7 +102,8 @@ namespace PosTest.ViewModels
             //productsViewSource = new CollectionViewSource();
             //NotAffectedToAnyCategoryProducts.Filter = (o) => (o as Product).CategorieId == null;
             //GenarateRanksForProducts();
-          
+            SelectedProduct = new Product();
+            SelectedProduct.PropertyChanged += (sender, args) => { UpdateProduct(); };
         }
 
 
@@ -476,6 +477,7 @@ namespace PosTest.ViewModels
             var freep = SelectedFreeProduct;
             RemoveTElementFromTList(SelectedProduct, ref freep, CurrentProducts, FreeProducts);
             SelectedFreeProduct = freep;
+            
             //if (SelectedProduct == null)
             //{
             //    return;
@@ -499,6 +501,12 @@ namespace PosTest.ViewModels
             SelectedFreeCategory = freeCategory;
 
         }
+
+        public void UpdateProduct()
+        {
+            ToastNotification.Notify("Updating Product",1);
+            _productsService.UpdateProduct(SelectedProduct);
+        }
         public void RemoveTElementFromTList<T>(T SelectedT,ref T SelectedFreeT, 
             BindableCollection<T> CurrentTs, BindableCollection<T> FreeTs) where T : Ranked, new()
         {
@@ -511,10 +519,12 @@ namespace PosTest.ViewModels
             var rank = SelectedT.Rank;
             var freeT = SelectedT;
             SelectedT.Rank = null;
-            
+           
+
             if (SelectedT is Product selectedProduct)
             {
                 selectedProduct.Category = null;
+                _productsService.UpdateProduct(selectedProduct);
             }
             CurrentTs[index] = new T { Rank = rank };
             FreeTs.Add(freeT);
@@ -563,6 +573,7 @@ namespace PosTest.ViewModels
             //CurrentProducts[index] = SelectedFreeProduct;
             PutProductInCellOf(SelectedProduct, SelectedFreeProduct);
             FreeProducts.Remove(SelectedFreeProduct);
+            //_productsService.UpdateProduct(SelectedProduct);
         }
 
         public void CopyProduct()
@@ -588,13 +599,15 @@ namespace PosTest.ViewModels
 
             desProduct.Rank = sourceProduct.Rank;
             desProduct.Category = SelectedCategory;
-            if (sourceProduct.Name != null)
+            if (sourceProduct. Category != null)
             {
                 sourceProduct.Rank = null;
                 sourceProduct.Category = null;
                 FreeProducts.Add(sourceProduct);
+                _productsService.UpdateProduct(sourceProduct);
             }
             CurrentProducts[index] = desProduct;
+            _productsService.UpdateProduct(desProduct);
         }
 
 
@@ -921,6 +934,7 @@ namespace PosTest.ViewModels
                     }
                     PutProductInCellOf(SelectedProduct, ProductToMove);
                     CurrentProducts[index] = prod;
+                    
                     ProductToMove = null;
                 }
             }
@@ -951,6 +965,7 @@ namespace PosTest.ViewModels
 
 
                 SelectedProduct = productSrc;
+                
                 RemoveProductFromCategory();
                 
             }
