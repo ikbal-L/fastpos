@@ -174,6 +174,7 @@ namespace ServiceInterface.Model
             {
                 _backgroundColor = value;
                 BackgroundString = _backgroundColor.ToString();
+                NotifyOfPropertyChange(nameof(BackgroundString));
                 Background = new SolidColorBrush((Color)_backgroundColor);
                 NotifyOfPropertyChange(() => IsDark);
             }

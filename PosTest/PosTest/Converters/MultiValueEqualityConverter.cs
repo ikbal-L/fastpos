@@ -24,6 +24,38 @@ namespace PosTest.Converters
             throw new NotImplementedException();
         }
     }
+    public class MultiValueEqualityConverterWithTestOfNotEmptyProdcut : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0]!=null && (values[0] as Product).Id != null)
+            {
+                return false;
+            }
+            return values?.All(o => o?.Equals(values[0]) == true) == true;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class MultiValueEqualityConverterWithTestOfEmptyProdcut : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0] != null && (values[0] as Product).Id == null)
+            {
+                return false;
+            }
+            return values?.All(o => o?.Equals(values[0]) == true) == true;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class MultiValueEnumListKindConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

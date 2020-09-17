@@ -45,6 +45,7 @@ namespace PosTest.ViewModels
         private Category _categoryOfSelectFreeProduct;
         private Category _selectedFreeCategory;
         private Category _categoryToMove;
+        private bool _isFlipped;
 
 
         public CheckoutSettingsViewModel()
@@ -103,7 +104,7 @@ namespace PosTest.ViewModels
             //NotAffectedToAnyCategoryProducts.Filter = (o) => (o as Product).CategorieId == null;
             //GenarateRanksForProducts();
             SelectedProduct = new Product();
-            SelectedProduct.PropertyChanged += (sender, args) => { UpdateProduct(); };
+            SelectedProduct.PropertyChanged += (sender, args) => { SaveProduct(); };
         }
 
 
@@ -137,7 +138,7 @@ namespace PosTest.ViewModels
         public BindableCollection<Category> FreeCategories { get; set; }
         public BindableCollection<object> ToSaveUpdate { get; set; }
         public BindableCollection<Product> ToDeletge { get; set; }
-
+        
         void GenarateRanksForProducts()
         {
             bool existsNumber(int[] tab, int value, int end)
@@ -316,6 +317,12 @@ namespace PosTest.ViewModels
         {
             get => _IsCategoryDetailsDrawerOpen;
             set => Set(ref _IsCategoryDetailsDrawerOpen, value);
+        }
+
+        public bool IsFlipped
+        {
+            get => _isFlipped;
+            set => Set(ref _isFlipped, value);
         }
         public bool IsProductDetailsDrawerOpen
         {
@@ -502,10 +509,20 @@ namespace PosTest.ViewModels
 
         }
 
-        public void UpdateProduct()
+        public void SaveProduct()
         {
             ToastNotification.Notify("Updating Product",1);
+            if (SelectedProduct.Id!=null)
+            {
             _productsService.UpdateProduct(SelectedProduct);
+
+            }
+            else
+            {
+                _productsService.SaveProduct(SelectedProduct);
+            }
+
+            IsFlipped = false;
         }
         public void RemoveTElementFromTList<T>(T SelectedT,ref T SelectedFreeT, 
             BindableCollection<T> CurrentTs, BindableCollection<T> FreeTs) where T : Ranked, new()
@@ -842,7 +859,11 @@ namespace PosTest.ViewModels
         }
 
 
-
+        public void CreateProduct()
+        {
+            ToastNotification.Notify("Open Form",1);
+            IsFlipped = true;
+        }
         private static void ListTouchDownEventHandler(object sender, TouchEventArgs e, string key)
         {
             ListBox listView = sender as ListBox;

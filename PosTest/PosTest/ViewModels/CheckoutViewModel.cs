@@ -139,7 +139,7 @@ namespace PosTest.ViewModels
             ProductsVisibility = true;
             AdditivesVisibility = false;
             CategorieFiltering("Home");
-            Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts)); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
+            Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts.Where(p=>p.CategorieId!=null))); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
             var code = 0;
             var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
             Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);

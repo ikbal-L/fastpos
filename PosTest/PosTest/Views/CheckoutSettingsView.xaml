@@ -450,7 +450,7 @@
 
         
 
-            <materialdesign:Flipper Grid.Row="1" Grid.Column="1">
+            <materialdesign:Flipper Grid.Row="1" Grid.Column="1" IsFlipped="{Binding IsFlipped}">
                 <materialdesign:Flipper.FrontContent>
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                         <Border Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}" MinWidth="40" MinHeight="100" ClipToBounds="True">
@@ -585,7 +585,7 @@
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="8 0 0 0" 
-                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left"  caliburn:Message.Attach="[Event Click] = [Action UpdateProduct()]"  >
+                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left"  caliburn:Message.Attach="[Event Click] = [Action SaveProduct()]"  >
                                     <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
                                 </Button>
                                 <TextBlock Margin="8 16 16 16">Product Details</TextBlock>
@@ -611,7 +611,7 @@
                             <Border Grid.Row="6" Grid.Column="2" Background="{Binding SelectedProduct.Background}"  >
                                 <TextBlock Text="{Binding SelectedProduct.Background}"/>
                             </Border>
-                            <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding SelectedProduct.BackgroundColor}" />
+                            <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding SelectedProduct.BackgroundColor}"  />
 
 
                             <Label Grid.Row="7" Grid.Column="0" Content="IsMuchInDemand"  />
