@@ -526,6 +526,13 @@ namespace PosTest.ViewModels
                 selectedProduct.Category = null;
                 _productsService.UpdateProduct(selectedProduct);
             }
+            if (SelectedT is Category selectedCategory)
+            {
+                
+                _categoriesService.UpdateCategory(selectedCategory);
+            }
+
+
             CurrentTs[index] = new T { Rank = rank };
             FreeTs.Add(freeT);
             //SelectedFreeT = null;
@@ -639,7 +646,18 @@ namespace PosTest.ViewModels
             if (sourceCategory.Name != null)
             {
                 sourceCategory.Rank = null;
+                _categoriesService.UpdateCategory(sourceCategory);
                 FreeCategories.Add(sourceCategory);
+                
+            }
+
+            if (destinationCategory.Id==null)
+            {
+                _categoriesService.SaveCategory(destinationCategory);
+            }
+            else
+            {
+                _categoriesService.UpdateCategory(destinationCategory);
             }
             CurrentCategories[index] = destinationCategory;
         }
