@@ -111,6 +111,7 @@
     <Compile Include="Model\Platter.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductMappingException.cs" />
+    <Compile Include="Model\Ranked.cs" />
     <Compile Include="Model\Restaurent.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Table.cs" />

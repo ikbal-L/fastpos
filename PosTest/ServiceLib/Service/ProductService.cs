@@ -83,7 +83,7 @@ namespace ServiceLib.Service
             }
             foreach (var p in products)
             {
-                Category category = categories.Where(c => c.Id == p.CategorieId).First() ;
+                Category category = categories.Where(c => c.Id == p.CategorieId).FirstOrDefault() ;
                 
                 IEnumerable<Additive> additives = null;
                 if (p is Platter plat && plat.IdAdditives != null)
@@ -343,7 +343,7 @@ namespace ServiceLib.Service
                             {
                                 NullValueHandling = NullValueHandling.Ignore
                             });
-
+            Console.WriteLine(json);
             var url = UrlConfig.ProductUrl.UpdateProduct;
             var client = new RestClient(url);
             var request = new RestRequest(Method.PUT);

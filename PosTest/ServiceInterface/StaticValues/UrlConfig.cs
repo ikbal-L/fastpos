@@ -4,11 +4,11 @@ namespace ServiceInterface.StaticValues
 {
     public static class UrlConfig
     {
-        static string hostname1 = "http://192.168.1.7:5000/";
+        static string hostname1 = "http://192.168.1.253:5000/";
         //static string hostname1 = "http://127.0.0.1:5000/";
         public static class ProductUrl 
         {
-            static string hostname = "http://192.168.1.7:5000/";
+            static string hostname = "http://192.168.1.100:5000/";
 
             public static string GetAllProducts = hostname1+"product/getall";
             public static string SaveProduct = hostname1+"product/save";
@@ -22,6 +22,7 @@ namespace ServiceInterface.StaticValues
 
         public static class AdditiveUrl
         {
+ 
             static string hostname = "http://192.168.1.7:5000/";
 
             public static string GetManyAdditives = hostname1 + "additive/getmany";
@@ -52,7 +53,7 @@ namespace ServiceInterface.StaticValues
         
         public static class OrderUrl
         {
-            static string hostname = "http://192.168.1.7:5000/";
+            static string hostname = "http://192.168.1.100:5000/";
 
             public static string GetAllOrders = hostname1 + "order/getall";
             public static string GetManyOrders = hostname1 + "order/getmany";
@@ -98,6 +99,7 @@ namespace ServiceInterface.StaticValues
 
         public static class AuthUrl
         {
+
             static string hostname = "http://192.168.1.7:5000/";
             public static string Authenticate = hostname1 + "auth/login";
 

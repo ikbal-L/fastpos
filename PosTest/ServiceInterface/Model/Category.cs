@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -132,22 +131,4 @@ namespace ServiceInterface.Model
             }
         }
     }
-
-    
-    public class Ranked : PropertyChangedBase
-    {
-        private int? _rank;
-
-        [DataMember]
-        public int? Rank
-        {
-            get => _rank;
-            set
-            {
-                _rank = value;
-                NotifyOfPropertyChange();
-            }
-        }
-    }
-
 }

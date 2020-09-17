@@ -586,7 +586,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="8 0 0 0" 
                                             Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left"  caliburn:Message.Attach="[Event Click] = [Action SaveProduct()]">
-                                <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
+                                    <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
                                 </Button>
                                 <TextBlock Margin="8 16 16 16">Product Details</TextBlock>
                             </StackPanel>
@@ -595,10 +595,10 @@
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedProduct.Name}" />
 
                             <Label Grid.Row="3" Grid.Column="0" Content="Price"  />
-                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SelectedProduct.Price}" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SelectedProduct.Price}" />
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Unit"  />
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProduct.Unit}" />
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProduct.Unit}" />
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Categories"  />
                             <ComboBox Grid.Row="5" Grid.Column="1"  
@@ -612,8 +612,6 @@
                             <TextBlock Text="{Binding SelectedProduct.Background}"/>
                             </Border>
                         <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding SelectedProduct.BackgroundColor}" />
-
-
                             <Label Grid.Row="7" Grid.Column="0" Content="IsMuchInDemand"  />
                         <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding SelectedProduct.IsMuchInDemand}"  />
 
@@ -681,7 +679,7 @@
                                         </StackPanel>
 
                                         <ListView Margin="2" 
-                                  ItemsSource="{Binding CurrentProduct.Ingredients}" 
+                                  ItemsSource="{Binding SelectedProduct.Ingredients}" 
                                   SelectedItem="{Binding SelectedIngredient}"
                                   DisplayMemberPath="Name"
                                  materialdesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="2" Grid.RowSpan="2">

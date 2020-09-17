@@ -20,9 +20,21 @@ namespace ServiceInterface.Model
             IsPlatter = true;
         }
 
-        public Platter(Platter platter) : base(platter)
+        public Platter(Platter platProduct) : base(platProduct)
         {
-            IsPlatter = true;
+            AvailableStock = platProduct.AvailableStock;
+            BackgroundString = platProduct.BackgroundString;
+            CategorieId = platProduct.CategorieId;
+            Description = platProduct.Description;
+            Id = platProduct.Id;
+            IsMuchInDemand = platProduct.IsMuchInDemand;
+            Name = platProduct.Name;
+            PictureFileName = platProduct.PictureFileName;
+            PictureUri = platProduct.PictureUri;
+            Price = platProduct.Price;
+            Type = platProduct.Type;
+            Unit = platProduct.Unit;
+            Rank = platProduct.Rank; IsPlatter = true;
 
         }
 

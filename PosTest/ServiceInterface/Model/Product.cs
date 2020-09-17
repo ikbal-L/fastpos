@@ -23,7 +23,7 @@ namespace ServiceInterface.Model
         private Category _category;
         private SolidColorBrush _background;
 
-        [DataMember(IsRequired = true)]
+        [DataMember]
         public long? Id { get; set; }
         [DataMember]
         public string Name
@@ -75,6 +75,7 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => IsMuchInDemand);
             }
         }
+
         [DataMember]
         public long? CategorieId
         {
@@ -88,7 +89,7 @@ namespace ServiceInterface.Model
             set
             {
                 _category = value;
-                CategorieId = null;
+                CategorieId = _category?.Id;
                 NotifyOfPropertyChange(() => Category);
             }
         }
@@ -232,14 +233,15 @@ namespace ServiceInterface.Model
 
         public void MappingAfterReceiving(Category category, List<Additive> additives)
         {
+            
             if (category != null && this.CategorieId == category.Id)
             {
                 this.Category = category;
             }
-            else
-            {
-                throw new MappingException("Id category different of CategoryId of the related Product");
-            }
+            //else
+            //{
+            //    throw new MappingException("Id category different of CategoryId of the related Product");
+            //}
             if (this is Platter plat &&
                 plat.IdAdditives != null && additives != null &&
                 additives.Count == plat.IdAdditives.Count)
