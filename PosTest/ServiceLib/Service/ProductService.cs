@@ -43,7 +43,7 @@ namespace ServiceLib.Service
             {
                 foreach (var id in idAdditves)
                 {
-                    var additive = additives.Where(a => a.Id == id).FirstOrDefault();
+                    var additive = additives.FirstOrDefault(a => a.Id == id);
                     if (additive != null)
                     {
                         yield return additive;
