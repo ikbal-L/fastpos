@@ -343,7 +343,7 @@ namespace PosTest.ViewModels
         }
         public bool SelectedFreeProductIsChanged { get; private set; }
 
-        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size) where T : Ranked, new()
+        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size, Category category=null) where T : Ranked, new()
         {
             int icat = 0;
             for (int i = 1; i <= size; i++)
@@ -365,7 +365,13 @@ namespace PosTest.ViewModels
                 }
                 else
                 {
-                    dest.Add(new T { Rank = i });
+                    var newT = new T {Rank = i};
+                    if (newT is Product product)
+                    {
+                        product.Category = category;
+                    }
+                    dest.Add(newT);
+
                 }
 
             }
@@ -418,7 +424,7 @@ namespace PosTest.ViewModels
             var listOfFliteredProducts = filteredProducts.ToList();  //new List<Category>(AllCategories);
             listOfFliteredProducts.Sort(comparer);
             SelectedCategory = category;
-            LoadPages(listOfFliteredProducts, CurrentProducts, ProductPageSize);
+            LoadPages(listOfFliteredProducts, CurrentProducts, ProductPageSize, category);
             //var iprod = 0;
             //for (int i = 1; i <= _productPageSize; i++)
             //{

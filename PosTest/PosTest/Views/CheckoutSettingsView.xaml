@@ -602,10 +602,10 @@
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Categories"  />
                             <ComboBox Grid.Row="5" Grid.Column="1"  
-                  ItemsSource="{Binding CurrentCategories}" 
-                  DisplayMemberPath="Name"
-                  SelectedValue ="{Binding SelectedProduct.Category }"
-                  IsSynchronizedWithCurrentItem="True"/>
+                                  ItemsSource="{Binding CurrentCategories}" 
+                                  DisplayMemberPath="Name"
+                                  SelectedValue ="{Binding SelectedProduct.Category }"
+                                  IsSynchronizedWithCurrentItem="True"/>
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Color"  />
                             <Border Grid.Row="6" Grid.Column="2" Background="{Binding SelectedProduct.Background}"  >
