@@ -235,7 +235,7 @@
                             </Grid.RowDefinitions>
                             <ListBox x:Name="FreeCategorySettingsList" ItemsSource="{Binding FreeCategories}"
                                      Grid.IsSharedSizeScope="True"
-                                     SelectedItem="{Binding SelectedFreeProduct}"
+                                     SelectedItem="{Binding SelectedFreeCategory}"
                                      AllowDrop="True"
                                      caliburn:Message.Attach="[Event MouseMove] = [Action FreeCategoriesList_MouseMove($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeCategoriesList_Drop($source, $eventArgs)];">

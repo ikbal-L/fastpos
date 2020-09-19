@@ -363,7 +363,10 @@ namespace PosTest.ViewModels
                     dest.Add(cat);
                     icat++;
                 }
-                else
+                else if (cat != null)
+                {
+                    icat++;
+                }else
                 {
                     var newT = new T {Rank = i};
                     if (newT is Product product)
@@ -627,7 +630,7 @@ namespace PosTest.ViewModels
         }
 
 
-        public void OpenProdcutDetail()
+        public void CreateProduct()
         {
             ToastNotification.Notify("Open Form", 1);
             IsFlipped = true;
@@ -802,8 +805,15 @@ namespace PosTest.ViewModels
         }     
         public void DeleteCategory()
         {
-            IsDeleteCategoryDialogOpen = true;
-   
+            //IsDeleteCategoryDialogOpen = true;
+            if (SelectedFreeCategory.Id != null)
+            {
+                _categoriesService.DeleteCategory((long)SelectedFreeCategory.Id);
+                AllCategories.Remove(SelectedFreeCategory);
+                FreeCategories.Remove(SelectedFreeCategory);
+                SelectedFreeCategory = null;
+            }
+
         }    
         
         public void DeleteProduct()
@@ -819,6 +829,8 @@ namespace PosTest.ViewModels
             }
 
         }
+
+       
 
         public void Close()
         {
