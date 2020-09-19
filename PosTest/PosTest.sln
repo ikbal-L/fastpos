@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlCustomKeypad", "SlCustomK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Globalization", "Globalization\Globalization.csproj", "{6280C81B-C240-4E3C-8FDE-D2846E858104}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scanner", "Scanner\Scanner.csproj", "{F1A98092-03C0-4826-A05E-138E72553C13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{6280C81B-C240-4E3C-8FDE-D2846E858104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6280C81B-C240-4E3C-8FDE-D2846E858104}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6280C81B-C240-4E3C-8FDE-D2846E858104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A98092-03C0-4826-A05E-138E72553C13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A98092-03C0-4826-A05E-138E72553C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A98092-03C0-4826-A05E-138E72553C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A98092-03C0-4826-A05E-138E72553C13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

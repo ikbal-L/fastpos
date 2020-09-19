@@ -51,8 +51,9 @@
             <helpers:TableViewTemplateSelector x:Key="tableViewSelector"
                                             TableFullView="{StaticResource tableFullView}"
                                             TableButtomView="{StaticResource tableButtomView}"/>
-            <convert:ObjectToBoolConverter x:Key="objectToBoolConverter"/>            
+            <convert:ObjectToBoolConverter x:Key="objectToBoolConverter"/>           
             <convert:OrderItemObjectToBoolConverter x:Key="OrderItemToBoolConverter"/>
+            <convert:ListKindToVisibilityConverter x:Key="listKindToVisibilityConverter"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -87,7 +88,8 @@
 
 
                 <Button Grid.Column="0" Style="{StaticResource ButtonTopOrder}" Padding="0" Content="{materialdesign:PackIcon FileStarOutline,40}" caliburn:Message.Attach="[Event Click] = [Action NewOrder()]"/>
-                <Button  Grid.Column="1" Style="{StaticResource ButtonTopOrder}" caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('TABLE')]">
+                <Button  Grid.Column="1" Style="{StaticResource ButtonTopOrder}" 
+                         caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('TABLE')]">
                     <StackPanel >
                         <TextBlock Text="{Binding SelectedTable.Number}" FontSize="18" FontWeight="Bold" Margin="0 0 0 -13" HorizontalAlignment="Center"
                                    Visibility="{Binding  SelectedTable, Converter={StaticResource ObjectToVisibility}}" />
@@ -209,26 +211,19 @@
 
                 </Grid>
             
-            <materialdesign:DrawerHost IsTopDrawerOpen="{Binding IsTopDrawerOpen}"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" >
+            <materialdesign:DrawerHost Panel.ZIndex="10" IsTopDrawerOpen="{Binding IsTopDrawerOpen}"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" >
                 <materialdesign:DrawerHost.TopDrawerContent>
-                    <Grid Width="400" Height="440">
+                    <Grid Width="400" 
+                          Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialdesign:DrawerHost}},Path=ActualHeight}">
                         <Grid.RowDefinitions>
-                            
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         
-                        <!--<TextBlock Text="Tables" HorizontalAlignment="Center"/>-->
-
                         <ListBox Grid.Row="0" x:Name="ltab"
-                                ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable,Mode=TwoWay}" >
-                            <ListBox.Visibility>
-                                <MultiBinding Converter="{StaticResource MultiValueEnumListKindConverter}">
-                                    <Binding Path="Tables" />
-                                    <Binding Path="ListKind" />
-                                </MultiBinding>
-                            </ListBox.Visibility>
+                                ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable,Mode=TwoWay}" 
+                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=tab}"
+                                 >
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Table}">
                                     <RadioButton Content="{Binding Number}" GroupName="groupName" FontSize="20" FontWeight="Bold"
@@ -245,13 +240,9 @@
                         </ListBox>
 
                         <ListBox Grid.Row="0" x:Name="lwaiter"
-                                ItemsSource="{Binding Waiters}" SelectedItem="{Binding SelectedWaiter, Mode=TwoWay}" >
-                            <ListBox.Visibility>
-                                <MultiBinding Converter="{StaticResource MultiValueEnumListKindConverter}">
-                                    <Binding Path="Waiters" />
-                                    <Binding Path="ListKind" />
-                                </MultiBinding>
-                            </ListBox.Visibility>
+                                ItemsSource="{Binding Waiters}" SelectedItem="{Binding SelectedWaiter, Mode=TwoWay}" 
+                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=waiter}"
+                                 >
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Waiter}">
                                     <RadioButton  GroupName="groupName1" Width="120" Height="70"
@@ -279,15 +270,11 @@
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
                         </ListBox>
-                        
-                        <ListBox Grid.Row="0" x:Name="ldelivrey"
-                                ItemsSource="{Binding Delivereymen}" SelectedItem="{Binding SelectedDelivereyman, Mode=TwoWay}" >
-                            <ListBox.Visibility>
-                                <MultiBinding Converter="{StaticResource MultiValueEnumListKindConverter}">
-                                    <Binding Path="Delivereymen" />
-                                    <Binding Path="ListKind" />
-                                </MultiBinding>
-                            </ListBox.Visibility>
+
+                        <ListBox Grid.Row="0" Grid.RowSpan="2" x:Name="ldelivrey"
+                                ItemsSource="{Binding Delivereymen}" SelectedItem="{Binding SelectedDelivereyman, Mode=TwoWay}" 
+                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter} , ConverterParameter=delivrey}"
+                                 >
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Delivereyman}">
                                     <RadioButton  GroupName="groupName2" Width="120" Height="70"
@@ -295,7 +282,6 @@
                                                  Style="{StaticResource ButtonTopOrderDelivereyman}"
                                                  Background="{Binding Background}">
                                         <DockPanel>
-                                            <!--<materialdesign:PackIcon DockPanel.Dock="Left" Kind="TruckFast" Width="20" Height="20"/>-->
                                             <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" TextWrapping="WrapWithOverflow" FontWeight="DemiBold"/>
                                             <materialdesign:PackIcon DockPanel.Dock="Left" Kind="Phone" Width="20" Height="20" VerticalAlignment="Center"/>
                                             <TextBlock DockPanel.Dock="Bottom" Text="{Binding PhoneNumber}"/>
@@ -316,12 +302,15 @@
                             </ListBox.ItemsPanel>
                         </ListBox>
 
-                        <Button Grid.Row="2" Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
+                        <Border Grid.Row="0" Grid.RowSpan="1" Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=customer}">
+                            <views:CustomerView  x:Name="lcustomer"  DataContext="{Binding CustomerViewModel}"/>
+                        </Border>
+
+                        <Button Grid.Row="1" Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
                                     CommandParameter="{x:Static Dock.Top}"
                                     Style="{DynamicResource MaterialDesignFlatButton}"
-                                    Margin="4" VerticalAlignment="Center">
-                            CLOSE
-                        </Button>
+                                    Margin="10" VerticalAlignment="Center" Content="CLOSE"/>
+
                     </Grid>
                 </materialdesign:DrawerHost.TopDrawerContent>
             </materialdesign:DrawerHost>
@@ -637,7 +626,9 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="Account" Width="20" Height="20" VerticalAlignment="Top" />
-                        <TextBlock Margin="-5 0 0 0" Width="100" Text="Clients" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Margin="-5 0 0 0" Width="100" 
+                                   Text="{Binding  CurrentOrder.Customer.Name}" FontSize="16" FontWeight="Bold" 
+                                   VerticalAlignment="Center"/>
                     </StackPanel>
 
                     <Button DockPanel.Dock="Right" Padding="0"

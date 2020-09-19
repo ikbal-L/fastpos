@@ -294,7 +294,18 @@ namespace ServiceInterface.Model
         [DataMember]
         public long SessionId { get; set; }
 
-        public Customer Customer { get; set; }
+        public Customer Customer
+        {
+            get => _customer;
+            set
+            {
+                _customer = value;
+                CustomerId = _customer?.Id;
+                NotifyOfPropertyChange(() => Customer);
+            }
+        }
+
+        private Customer _customer;
 
         [DataMember]
         public long? CustomerId { get; set; }

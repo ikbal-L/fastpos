@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Net.Http;
 using ServiceInterface.StaticValues;
+using PosTest.ViewModels.SubViewModel;
 
 namespace PosTest.ViewModels
 {
@@ -40,6 +41,9 @@ namespace PosTest.ViewModels
 
         [Import(typeof(IWaiterService))]
         private IWaiterService waiterService;
+
+        [Import(typeof(ICustomerService))]
+        private ICustomerService customerService;
 
         //public String Username { get; set; }
         //public String Password { get; set; }
@@ -71,7 +75,12 @@ namespace PosTest.ViewModels
             CheckoutViewModel checkoutViewModel = 
                 new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage, 
                 productService, 
-                categorieService, orderService, waiterService, delivereyService);
+                categorieService, 
+                orderService, 
+                waiterService, 
+                delivereyService,
+                customerService
+                );
 
             checkoutViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
@@ -131,6 +140,13 @@ namespace PosTest.ViewModels
                 categorieService, orderService, waiterService, delivereyService);
             checkoutSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
+        }  
+        
+        public void CustomersSettings()
+        {
+            CustomerViewModel customerViewModel = new CustomerViewModel(null);
+            customerViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(customerViewModel);
         }
 
         //This method load th DLL file containing the implemetation of IProductService 

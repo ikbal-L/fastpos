@@ -8,7 +8,7 @@ namespace ServiceInterface.StaticValues
         //static string hostname1 = "http://127.0.0.1:5000/";
         public static class ProductUrl 
         {
-            static string hostname = "http://192.168.1.100:5000/";
+            
 
             public static string GetAllProducts = hostname1+"product/getall";
             public static string SaveProduct = hostname1+"product/save";
@@ -24,7 +24,6 @@ namespace ServiceInterface.StaticValues
         {
  
             static string hostname = "http://192.168.1.7:5000/";
-
             public static string GetManyAdditives = hostname1 + "additive/getmany";
             public static string SaveAdditive = hostname1 + "additive/save";
             public static string SaveAdditives = hostname1 + "additive/savemany";
@@ -40,6 +39,7 @@ namespace ServiceInterface.StaticValues
         public static class CategoryUrl
         {
             static string hostname = "http://192.168.1.7:5000/";
+
             public static string GetAllCategories = hostname1 + "category/getall";
             public static string GetManyCategories = hostname1 + "category/getmany";
             public static string SaveCategory = hostname1 + "category/save";
@@ -73,7 +73,7 @@ namespace ServiceInterface.StaticValues
         public static class DelivereyUrl
         {
             static string hostname = "http://192.168.1.7:5000/";
-
+            
             public static string GetAllDeliverymen = hostname1 + "deliveryman/getall";
             public static string GetAllActiveDeliverymen = hostname1 + "deliveryman/getallactive";
             public static string GetDeliveryman = hostname1 + "deliveryman/get/";
@@ -95,12 +95,30 @@ namespace ServiceInterface.StaticValues
             public static string SaveWaiter = hostname1 + "waiter/save";
             public static string GetWaiters = hostname1 + "waiter/get/";
         }
+        
+        public static class CustomerUrl
+        {
+            
+
+            public static string GetAllCustomers = hostname1 + "customer/getall";
+            public static string GetManyCustomers = hostname1 + "customer/getmany";
+            public static string GetAllActiveCustomers = hostname1 + "customer/getallactive";
+            public static string GetCustomer = hostname1 + "customer/get/";
+            public static string DeleteCustomer = hostname1 + "customer/delete/";
+            public static string UpdateCustomer = hostname1 + "customer/update";
+            public static string SaveCustomer = hostname1 + "customer/save";
+            public static string SaveCustomers = hostname1 + "customer/savemany";
+            public static string GetCustomers = hostname1 + "customer/get/";
+            
+        }
+
 
 
         public static class AuthUrl
         {
 
             static string hostname = "http://192.168.1.7:5000/";
+
             public static string Authenticate = hostname1 + "auth/login";
 
         }
