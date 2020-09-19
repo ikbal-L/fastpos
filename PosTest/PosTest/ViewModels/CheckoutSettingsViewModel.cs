@@ -626,6 +626,12 @@ namespace PosTest.ViewModels
             //}
         }
 
+
+        public void OpenProdcutDetail()
+        {
+            ToastNotification.Notify("Open Form", 1);
+            IsFlipped = true;
+        }
         private void PutProductInCellOf(Product sourceProduct, Product desProduct)
         {
             var index = CurrentProducts.IndexOf(sourceProduct);

@@ -134,7 +134,9 @@ namespace PosTest.ViewModels
 
             int getProductsStatusCode = 0;
             AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
-            FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
+            CollectionViewSource filteredProductsViewSource = new CollectionViewSource();
+            filteredProductsViewSource.Source = AllProducts;
+            FilteredProducts = filteredProductsViewSource.View;// CollectionViewSource.GetDefaultView(AllProducts);
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
@@ -729,7 +731,7 @@ namespace PosTest.ViewModels
 
                         CurrentCategory = null;
                         var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
-                        FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
+                        FilteredProducts.Filter = (p) => (p as Product).IsMuchInDemand==true;
                         PaginateProducts(NextOrPrevious.First);
                     }
                     else // param == "ALL"
