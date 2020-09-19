@@ -305,7 +305,7 @@
                                                               [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
                                                               [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
-                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];">
+                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];" >
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
@@ -475,7 +475,7 @@
 
                                     <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
                                 x:Name="Close" Style="{StaticResource ButtonStyle22}"
-                                Content="{materialdesign:PackIcon Kind=Close, Size=25}" />
+                                Content="{materialdesign:PackIcon Kind=Close, Size=25}" caliburn:Message.Attach="[Event Click] = [Action Close()]" />
 
                         <!--ex:ListPaginationEx.ItemsPerPage="{Binding CategoryPageSize}"-->
                         <!--ex:ListPaginationEx.ItemsSource="{Binding CurrentCategories}"-->
@@ -535,7 +535,7 @@
                                               Effect="{DynamicResource MaterialDesignShadowDepth5}">
                                     <StackPanel Orientation="Horizontal">
                                         <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="8 0 0 0" 
-                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
+                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left" >
                                             <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
                                         </Button>
                                         <TextBlock Margin="8 16 16 16">Gestion Du Menu Categories</TextBlock>

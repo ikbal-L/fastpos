@@ -28,7 +28,7 @@ namespace PosTest.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0]!=null && (values[0] as Product).Id != null)
+            if (values[0]!=null && (values[0] as Product).Name != null)
             {
                 return false;
             }
@@ -44,7 +44,7 @@ namespace PosTest.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0] != null && (values[0] as Product).Id == null)
+            if (values[0] != null && (values[0] as Product).Name == null)
             {
                 return false;
             }

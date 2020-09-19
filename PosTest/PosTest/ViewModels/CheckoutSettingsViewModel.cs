@@ -450,8 +450,9 @@ namespace PosTest.ViewModels
             //}
         }
 
-        public void SelectProdcut(Product product)
+        public void SelectProdcut(Product product,MouseEventArgs e)
         {
+            
             SelectedProduct = product;
             if (ProductToMove !=null)
             {
@@ -525,7 +526,9 @@ namespace PosTest.ViewModels
             }
             else
             {
-                _productsService.SaveProduct(SelectedProduct);
+                long id= -1;
+                _productsService.SaveProduct(SelectedProduct,ref id);
+                SelectedProduct.Id = id;
             }
 
             IsFlipped = false;
@@ -639,7 +642,9 @@ namespace PosTest.ViewModels
             CurrentProducts[index] = desProduct;
             if (desProduct.Id==null)
             {
-                _productsService.SaveProduct(desProduct);
+                long id = -1;
+                _productsService.SaveProduct(desProduct,ref id);
+                desProduct.Id = id;
             }
             else
             {
@@ -797,8 +802,16 @@ namespace PosTest.ViewModels
         
         public void DeleteProduct()
         {
-            IsDeleteProductDialogOpen = true;
-   
+            //IsDeleteProductDialogOpen = true;
+
+            if (SelectedFreeProduct.Id!=null)
+            {
+                _productsService.DeleteProduct((long)SelectedFreeProduct.Id);
+                AllProducts.Remove(SelectedFreeProduct);
+                FreeProducts.Remove(SelectedFreeProduct);
+                SelectedFreeProduct = null; 
+            }
+
         }
 
         public void Close()
@@ -865,11 +878,7 @@ namespace PosTest.ViewModels
         }
 
 
-        public void CreateProduct()
-        {
-            ToastNotification.Notify("Open Form",1);
-            IsFlipped = true;
-        }
+        
         private static void ListTouchDownEventHandler(object sender, TouchEventArgs e, string key)
         {
             ListBox listView = sender as ListBox;

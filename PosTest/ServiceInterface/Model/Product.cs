@@ -143,7 +143,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public string BackgroundString 
         { 
-            get => _backgroundString ?? (_backgroundString = "#ffffff");
+            get => _backgroundString ?? (_backgroundString = "#ff12eaf3");
             set
             {
                 _backgroundString = value;
@@ -175,7 +175,6 @@ namespace ServiceInterface.Model
             {
                 _backgroundColor = value;
                 BackgroundString = _backgroundColor.ToString();
-                NotifyOfPropertyChange(nameof(BackgroundString));
                 Background = new SolidColorBrush((Color)_backgroundColor);
                 NotifyOfPropertyChange(() => IsDark);
             }

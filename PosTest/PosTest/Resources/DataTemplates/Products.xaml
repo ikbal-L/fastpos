@@ -57,7 +57,7 @@
     <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
             <Border x:Name="ProductSettingsClick"  BorderBrush="LightGray" BorderThickness="1" 
-                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this)]">
+                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this,$eventArgs)]">
                 <StackPanel>
                     <DockPanel Height="70" Width="100" Background="{Binding Background}" >
                         <Border DockPanel.Dock="Top" Height="48">
