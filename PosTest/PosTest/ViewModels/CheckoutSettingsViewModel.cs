@@ -368,7 +368,7 @@ namespace PosTest.ViewModels
          void LoadCategoryPages()
         {
             var comparer = new Comparer<Category>();
-            var categories = new List<Category>(AllCategories);
+            var categories = new List<Category>(AllCategories.Where(c=>c.Rank!=null));
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
             var maxRank = (int)categories.Max(c => c.Rank);
@@ -538,17 +538,19 @@ namespace PosTest.ViewModels
             if (SelectedT is Product selectedProduct)
             {
                 selectedProduct.Category = null;
+                selectedProduct.CategorieId = null;
                 _productsService.UpdateProduct(selectedProduct);
             }
             if (SelectedT is Category selectedCategory)
             {
-                foreach (var product in selectedCategory.Products)
-                {
-                    product.Rank = null;
-                    product.CategorieId = null;
-                    product.Category = null;
-                }
-                // implementing  update many products in the backend
+                //TODO Fixing removal of categories from the current Categories list
+                //foreach (var product in selectedCategory.Products)
+                //{
+                //    product.Rank = null;
+                //    product.CategorieId = null;
+                //    product.Category = null;
+                //}
+                //// implementing  update many products in the backend
 
                 _categoriesService.UpdateCategory(selectedCategory);
 
