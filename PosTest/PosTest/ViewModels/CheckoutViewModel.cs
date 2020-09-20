@@ -136,7 +136,7 @@ namespace PosTest.ViewModels
             AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
             CollectionViewSource filteredProductsViewSource = new CollectionViewSource();
             filteredProductsViewSource.Source = AllProducts;
-            FilteredProducts = filteredProductsViewSource.View;// CollectionViewSource.GetDefaultView(AllProducts);
+            FilteredProducts = /*filteredProductsViewSource.View;*/ CollectionViewSource.GetDefaultView(AllProducts);
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
@@ -716,7 +716,10 @@ namespace PosTest.ViewModels
                 if(CurrentCategory != null)
                     CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
                 CurrentCategory = category;
-                FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+                Predicate<object> filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+                FilteredProducts.Filter = filter;
+
+                    
 
                 PaginateProducts(NextOrPrevious.First);
             }
