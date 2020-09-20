@@ -10,6 +10,7 @@ namespace ServiceInterface.Interface
     public interface ICategoryService
     {
         IEnumerable<Category> GetAllCategories(ref int statusCode);
+        (IEnumerable<Category>, IEnumerable<Product>) GetAllCategoriesAndProducts(ref int categStatusCode, ref int prodStatusCode);
         IEnumerable<Category> GetManyCategories(IEnumerable<long?> ids, ref int statusCode);
         int SaveCategory(Category category);
         int UpdateCategory(Category category);
