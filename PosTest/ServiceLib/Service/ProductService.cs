@@ -128,14 +128,14 @@ namespace ServiceLib.Service
             return product;
         }
 
-        public int SaveProduct(Product product)
+        public int SaveProduct(Product product, ref long Id)
         {
             if (product == null)
             {
                 return -1;
             }
             product.MappingBeforeSending();
-            return _restProductService.SaveProduct(product);
+            return _restProductService.SaveProduct(product, ref  Id);
         }
 
         public int SaveProducts(IEnumerable<Product> products)
@@ -319,7 +319,7 @@ namespace ServiceLib.Service
             return products;
         }
 
-        public int SaveProduct(Product product)
+        public int SaveProduct(Product product, ref long Id)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             string json = JsonConvert.SerializeObject(product,
@@ -336,7 +336,10 @@ namespace ServiceLib.Service
 
             //if (response.IsSuccessStatusCode)
             //    return true;
-
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Id = long.Parse(response.Content.ReadAsStringAsync().Result);
+            }
             return (int)response.StatusCode;
         }
 

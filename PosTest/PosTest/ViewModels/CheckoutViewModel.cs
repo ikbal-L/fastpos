@@ -146,12 +146,14 @@ namespace PosTest.ViewModels
 
             int getProductsStatusCode = 0;
             AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
-            FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
+            CollectionViewSource filteredProductsViewSource = new CollectionViewSource();
+            filteredProductsViewSource.Source = AllProducts;
+            FilteredProducts = /*filteredProductsViewSource.View;*/ CollectionViewSource.GetDefaultView(AllProducts);
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
             CategorieFiltering("Home");
-            Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts)); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
+            Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts.Where(p=>p.CategorieId!=null))); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
             var code = 0;
             var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
             Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);
@@ -743,7 +745,10 @@ namespace PosTest.ViewModels
                 if(CurrentCategory != null)
                     CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
                 CurrentCategory = category;
-                FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+                Predicate<object> filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+                FilteredProducts.Filter = filter;
+
+                    
 
                 PaginateProducts(NextOrPrevious.First);
             }
@@ -758,7 +763,7 @@ namespace PosTest.ViewModels
 
                         CurrentCategory = null;
                         var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
-                        FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
+                        FilteredProducts.Filter = (p) => (p as Product).IsMuchInDemand==true;
                         PaginateProducts(NextOrPrevious.First);
                     }
                     else // param == "ALL"

@@ -149,7 +149,7 @@ namespace PosTest.ViewModels
                 var _nextId = Products.Count == 0 ? 0 : Products.Max(f => f.Id);
                 CurrentProduct.Id = _nextId + 1;
                 // Insert Product
-                _productsService.SaveProduct(CurrentProduct);
+                //_productsService.SaveProduct(CurrentProduct);
             }
             else
             {

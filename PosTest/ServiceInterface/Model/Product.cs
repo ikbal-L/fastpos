@@ -143,11 +143,11 @@ namespace ServiceInterface.Model
         [DataMember]
         public string BackgroundString 
         { 
-            get => _backgroundString ?? "#ffffff";
+            get => _backgroundString ?? (_backgroundString = "#ff12eaf3");
             set
             {
                 _backgroundString = value;
-                NotifyOfPropertyChange(nameof(Background));
+                NotifyOfPropertyChange();
             }
             
         }
@@ -157,6 +157,7 @@ namespace ServiceInterface.Model
             set
             {
                 _background = (SolidColorBrush)value;
+                NotifyOfPropertyChange();
             }
         }
 
@@ -179,6 +180,7 @@ namespace ServiceInterface.Model
             }
 
         }
+
         [DataMember]
         //[DefaultValue(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]

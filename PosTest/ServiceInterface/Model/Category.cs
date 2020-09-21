@@ -80,7 +80,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        public void MappingAfterReceiving(ICollection<Product> products)
+        public void MappingAfterReceiving(ref ICollection<Product> products)
         {
             if (ProductIds != null && products != null)
             {
@@ -90,6 +90,8 @@ namespace ServiceInterface.Model
                     var prod = products.Where(p => id == p.Id).FirstOrDefault();
                     if (prod != null)
                     {
+                        //since prod belongs to this category  
+                        prod.Category = this;
                         Products.Add(prod);
                     }
                     else

@@ -57,7 +57,7 @@
     <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
             <Border x:Name="ProductSettingsClick"  BorderBrush="LightGray" BorderThickness="1" 
-                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this)]">
+                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this,$eventArgs)]">
                 <StackPanel>
                     <DockPanel Height="70" Width="100" Background="{Binding Background}" >
                         <Border DockPanel.Dock="Top" Height="48">
@@ -82,9 +82,9 @@
                                     <Style TargetType="Border">
                                         <Setter Property="Visibility" Value="Hidden"/>
                                         <Style.Triggers>
-                                            <DataTrigger Value="True">
+                                            <DataTrigger Value="true">
                                                 <DataTrigger.Binding>
-                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverterWithTestOfEmptyProdcut}">
                                                         <Binding ElementName="ProductSettingsList" Path="SelectedItem"/>
                                                         <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
                                                     </MultiBinding>
@@ -95,6 +95,28 @@
                                     </Style>
                                 </Border.Style>
                             </Border>
+                            <Button DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" cal:Message.Attach="[Event Click] = [Action OpenProdcutDetail()]">
+                                <materialdesign:PackIcon Kind="Plus" Height="20" Width="20"/>
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <!--<Binding RelativeSource="{RelativeSource Self}" Converter="{StaticResource EntityIdValueConverter}" ></Binding>-->
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverterWithTestOfNotEmptyProdcut}">
+                                                        <Binding ElementName="ProductSettingsList" Path="SelectedItem"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+
                             <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right" >
                                 <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20"/>
                                 <Border.Style>

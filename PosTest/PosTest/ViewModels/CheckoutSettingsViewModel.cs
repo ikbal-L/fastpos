@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -45,6 +46,7 @@ namespace PosTest.ViewModels
         private Category _categoryOfSelectFreeProduct;
         private Category _selectedFreeCategory;
         private Category _categoryToMove;
+        private bool _isFlipped;
 
 
         public CheckoutSettingsViewModel()
@@ -58,52 +60,40 @@ namespace PosTest.ViewModels
             IWaiterService waiterService,
             IDelivereyService delivereyService) : this()
         {
-            IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
-            {
-                var categories = new HashSet<Category>();
-                foreach (var p in products.Where(prod => prod.Category != null))
-                {
-                    categories.Add(p.Category);
-                    if (p.Category.Products == null)
-                    {
-                        p.Category.Products = new List<Product>();
-                    }
-                    if (!p.Category.Products.Any(pr => pr == p))
-                    {
-                        p.Category.Products.Add(p);
-                    }
-                }
-                return categories;
-            }
+           
             _productPageSize = productPageSize;
             _categpryPageSize = categoryPageSize;
             _productsService = productsService;
             _categoriesService = categoriesService;
             _orderService = orderService;
 
-            int getProductsStatusCode = 0;
-            var allProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
-            if (getProductsStatusCode != 200)
-            {
-                ToastNotification.ErrorNotification(getProductsStatusCode);
-                return;
-            }
-            AllProducts = allProducts.Cast<Product>().ToList();
+          
+            //AllProducts = allProducts.Cast<Product>().ToList();
             ProductPageSize = productPageSize;
             CategoryPageSize = categoryPageSize;
-            AllCategories = RetrieveCategories(AllProducts).Cast<Category>().ToList();
+            int catStatusCode = 0, prodStatusCode = 0;
+
+            (IEnumerable<Category> categories,IEnumerable<Product> products) = _categoriesService.GetAllCategoriesAndProducts(ref catStatusCode, ref prodStatusCode);
+            if (catStatusCode!=200 &&prodStatusCode!=200) return;
+            AllProducts = products.ToList();
+            AllCategories = categories.ToList();
+
             LoadCategoryPages();
             CurrentProducts = new BindableCollection<Product>();
-            var freeProds = AllProducts.Where(p => p.Category == null);
+            // Temporary fix until DB is fixed correct predicate is p.CategorieId == null && p.Rank== null
+            var freeProds = AllProducts.Where(p => p.Rank== null);
+            var freeCategories = AllCategories.Where(c => c.Rank== null);
+
             FreeProducts = new BindableCollection<Product>(freeProds);
-            FreeCategories = new BindableCollection<Category>();
+            FreeCategories = new BindableCollection<Category>(freeCategories);
+
             ToSaveUpdate = new BindableCollection<object>();
             ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             //productsViewSource = new CollectionViewSource();
             //NotAffectedToAnyCategoryProducts.Filter = (o) => (o as Product).CategorieId == null;
             //GenarateRanksForProducts();
             SelectedProduct = new Product();
-            SelectedProduct.PropertyChanged += (sender, args) => { UpdateProduct(); };
+            SelectedProduct.PropertyChanged += (sender, args) => { SaveProduct(); };
         }
 
 
@@ -137,7 +127,7 @@ namespace PosTest.ViewModels
         public BindableCollection<Category> FreeCategories { get; set; }
         public BindableCollection<object> ToSaveUpdate { get; set; }
         public BindableCollection<Product> ToDeletge { get; set; }
-
+        
         void GenarateRanksForProducts()
         {
             bool existsNumber(int[] tab, int value, int end)
@@ -270,10 +260,6 @@ namespace PosTest.ViewModels
             }
         }
 
-        public void SaveProduct()
-        {
-            _productsService.UpdateProduct(_selectedProduct);
-        }
         public bool SelectedFreeCategoryIsChanged { get; private set; }
 
         public Product ClipboardProduct
@@ -320,6 +306,12 @@ namespace PosTest.ViewModels
             get => _IsCategoryDetailsDrawerOpen;
             set => Set(ref _IsCategoryDetailsDrawerOpen, value);
         }
+
+        public bool IsFlipped
+        {
+            get => _isFlipped;
+            set => Set(ref _isFlipped, value);
+        }
         public bool IsProductDetailsDrawerOpen
         {
             get => _IsProductDetailsDrawerOpen;
@@ -339,19 +331,19 @@ namespace PosTest.ViewModels
         }
         public bool SelectedFreeProductIsChanged { get; private set; }
 
-        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size) where T : Ranked, new()
+        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size, Category category=null) where T : Ranked, new()
         {
             int icat = 0;
             for (int i = 1; i <= size; i++)
             {
-                T cat = default;
+                T cat = null;
                 if (icat < source.Count)
                 {
                     cat = source[icat];
                 }
                 else
                 {
-                    cat = default;
+                    cat = null;
                 }
 
                 if (cat != null && cat.Rank == i)
@@ -361,7 +353,13 @@ namespace PosTest.ViewModels
                 }
                 else
                 {
-                    dest.Add(new T { Rank = i });
+                    var newT = new T {Rank = i};
+                    if (newT is Product product)
+                    {
+                        product.Category = category;
+                    }
+                    dest.Add(newT);
+
                 }
 
             }
@@ -370,7 +368,7 @@ namespace PosTest.ViewModels
          void LoadCategoryPages()
         {
             var comparer = new Comparer<Category>();
-            var categories = new List<Category>(AllCategories);
+            var categories = new List<Category>(AllCategories.Where(c=>c.Rank!=null));
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
             var maxRank = (int)categories.Max(c => c.Rank);
@@ -408,13 +406,13 @@ namespace PosTest.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
-            var filteredProducts = AllProducts.Where(p => p.Category == category);
+            var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank!=null);
             CurrentProducts.Clear();
             var comparer = new Comparer<Product>();
             var listOfFliteredProducts = filteredProducts.ToList();  //new List<Category>(AllCategories);
             listOfFliteredProducts.Sort(comparer);
             SelectedCategory = category;
-            LoadPages(listOfFliteredProducts, CurrentProducts, ProductPageSize);
+            LoadPages(listOfFliteredProducts, CurrentProducts, ProductPageSize, category);
             //var iprod = 0;
             //for (int i = 1; i <= _productPageSize; i++)
             //{
@@ -440,8 +438,9 @@ namespace PosTest.ViewModels
             //}
         }
 
-        public void SelectProdcut(Product product)
+        public void SelectProdcut(Product product,MouseEventArgs e)
         {
+            
             SelectedProduct = product;
             if (ProductToMove !=null)
             {
@@ -505,10 +504,22 @@ namespace PosTest.ViewModels
 
         }
 
-        public void UpdateProduct()
+        public void SaveProduct()
         {
             ToastNotification.Notify("Updating Product",1);
+            if (SelectedProduct.Id!=null)
+            {
             _productsService.UpdateProduct(SelectedProduct);
+
+            }
+            else
+            {
+                long id= -1;
+                _productsService.SaveProduct(SelectedProduct,ref id);
+                SelectedProduct.Id = id;
+            }
+
+            IsFlipped = false;
         }
         public void RemoveTElementFromTList<T>(T SelectedT,ref T SelectedFreeT, 
             BindableCollection<T> CurrentTs, BindableCollection<T> FreeTs) where T : Ranked, new()
@@ -527,8 +538,31 @@ namespace PosTest.ViewModels
             if (SelectedT is Product selectedProduct)
             {
                 selectedProduct.Category = null;
+                selectedProduct.CategorieId = null;
                 _productsService.UpdateProduct(selectedProduct);
             }
+            if (SelectedT is Category selectedCategory)
+            {
+                //TODO Fixing removal of categories from the current Categories list
+                foreach (var product in selectedCategory.Products)
+                {
+                    product.Rank = null;
+                    product.CategorieId = null;
+                    product.Category = null;
+                    _productsService.UpdateProduct(product);
+                    if (!FreeProducts.Contains(product))
+                    {
+                        FreeProducts.Add(product); 
+                    }
+                }
+                // implementing  update many products in the backend
+                CurrentProducts.Clear();
+                SelectedCategory = null;
+                _categoriesService.UpdateCategory(selectedCategory);
+
+            }
+
+
             CurrentTs[index] = new T { Rank = rank };
             FreeTs.Add(freeT);
             //SelectedFreeT = null;
@@ -586,7 +620,7 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("We can't copy empty product");
             }
             ClipboardProduct = SelectedProduct;
-            //if (SelectedProduct is Platter)
+            //if (SelectedProduct  is Platter)
             //{
             //    ClipboardProduct = new Platter(SelectedProduct as Platter);
             //}
@@ -596,29 +630,42 @@ namespace PosTest.ViewModels
             //}
         }
 
+
+        public void OpenProdcutDetail()
+        {
+            ToastNotification.Notify("Open Form", 1);
+            IsFlipped = true;
+        }
         private void PutProductInCellOf(Product sourceProduct, Product desProduct)
         {
             var index = CurrentProducts.IndexOf(sourceProduct);
 
             desProduct.Rank = sourceProduct.Rank;
             desProduct.Category = SelectedCategory;
+            desProduct.CategorieId = SelectedCategory.Id;
+            SelectedCategory.ProductIds.Add((long)desProduct.Id);
+            _categoriesService.UpdateCategory(SelectedCategory);
             if (sourceProduct. Category != null)
             {
                 sourceProduct.Rank = null;
                 sourceProduct.Category = null;
-                FreeProducts.Add(sourceProduct);
+                
                 _productsService.UpdateProduct(sourceProduct);
             }
+            
             CurrentProducts[index] = desProduct;
             if (desProduct.Id==null)
             {
-                _productsService.SaveProduct(desProduct);
+                long id = -1;
+                _productsService.SaveProduct(desProduct,ref id);
+                desProduct.Id = id;
             }
             else
             {
                 _productsService.UpdateProduct(desProduct);
 
             }
+
         }
 
 
@@ -642,7 +689,18 @@ namespace PosTest.ViewModels
             if (sourceCategory.Name != null)
             {
                 sourceCategory.Rank = null;
+                _categoriesService.UpdateCategory(sourceCategory);
                 FreeCategories.Add(sourceCategory);
+                
+            }
+
+            if (destinationCategory.Id==null)
+            {
+                _categoriesService.SaveCategory(destinationCategory);
+            }
+            else
+            {
+                _categoriesService.UpdateCategory(destinationCategory);
             }
             CurrentCategories[index] = destinationCategory;
         }
@@ -753,15 +811,32 @@ namespace PosTest.ViewModels
         }     
         public void DeleteCategory()
         {
-            IsDeleteCategoryDialogOpen = true;
-   
+            //IsDeleteCategoryDialogOpen = true;
+            if (SelectedFreeCategory.Id != null)
+            {
+                _categoriesService.DeleteCategory((long)SelectedFreeCategory.Id);
+                AllCategories.Remove(SelectedFreeCategory);
+                FreeCategories.Remove(SelectedFreeCategory);
+                SelectedFreeCategory = null;
+            }
+
         }    
         
         public void DeleteProduct()
         {
-            IsDeleteProductDialogOpen = true;
-   
+            //IsDeleteProductDialogOpen = true;
+
+            if (SelectedFreeProduct.Id!=null)
+            {
+                _productsService.DeleteProduct((long)SelectedFreeProduct.Id);
+                AllProducts.Remove(SelectedFreeProduct);
+                FreeProducts.Remove(SelectedFreeProduct);
+                SelectedFreeProduct = null; 
+            }
+
         }
+
+       
 
         public void Close()
         {
@@ -827,7 +902,7 @@ namespace PosTest.ViewModels
         }
 
 
-
+        
         private static void ListTouchDownEventHandler(object sender, TouchEventArgs e, string key)
         {
             ListBox listView = sender as ListBox;

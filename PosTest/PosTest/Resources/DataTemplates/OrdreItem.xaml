@@ -9,6 +9,9 @@
     <convert:NumberToVisibilityConverter x:Key="DecimalToVisibility"/>
     <convert:NumberToVisibilityConverterVisibleHidden x:Key="NumberToVisibilityHidden"/>
     <convert:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter"/>
+    <convert:MultiValueEqualityConverterWithTestOfNotEmptyProdcut x:Key="MultiValueEqualityConverterWithTestOfNotEmptyProdcut"/>
+    <convert:MultiValueEqualityConverterWithTestOfEmptyProdcut x:Key="MultiValueEqualityConverterWithTestOfEmptyProdcut"/>
+    <convert:EntityIdValueConverter x:Key="EntityIdValueConverter"/>
     <convert:MultiValueEnumListKindConverter x:Key="MultiValueEnumListKindConverter"/>
     <convert:NumberToVisibilityConverter x:Key="NumberToVisibilityConverter"/>
 

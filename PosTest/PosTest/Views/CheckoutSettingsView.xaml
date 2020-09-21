@@ -235,7 +235,7 @@
                             </Grid.RowDefinitions>
                             <ListBox x:Name="FreeCategorySettingsList" ItemsSource="{Binding FreeCategories}"
                                      Grid.IsSharedSizeScope="True"
-                                     SelectedItem="{Binding SelectedFreeProduct}"
+                                     SelectedItem="{Binding SelectedFreeCategory}"
                                      AllowDrop="True"
                                      caliburn:Message.Attach="[Event MouseMove] = [Action FreeCategoriesList_MouseMove($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeCategoriesList_Drop($source, $eventArgs)];">
@@ -305,7 +305,7 @@
                                                               [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
                                                               [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
-                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];">
+                                                              [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];" >
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
@@ -450,7 +450,7 @@
 
         
 
-            <materialdesign:Flipper Grid.Row="1" Grid.Column="1">
+            <materialdesign:Flipper Grid.Row="1" Grid.Column="1" IsFlipped="{Binding IsFlipped}">
                 <materialdesign:Flipper.FrontContent>
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                         <Border Grid.Row="1" Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource PrimaryHueMidBrush}" MinWidth="40" MinHeight="100" ClipToBounds="True">
@@ -475,7 +475,7 @@
 
                                     <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
                                 x:Name="Close" Style="{StaticResource ButtonStyle22}"
-                                Content="{materialdesign:PackIcon Kind=Close, Size=25}" />
+                                Content="{materialdesign:PackIcon Kind=Close, Size=25}" caliburn:Message.Attach="[Event Click] = [Action Close()]" />
 
                         <!--ex:ListPaginationEx.ItemsPerPage="{Binding CategoryPageSize}"-->
                         <!--ex:ListPaginationEx.ItemsSource="{Binding CurrentCategories}"-->
@@ -535,7 +535,7 @@
                                               Effect="{DynamicResource MaterialDesignShadowDepth5}">
                                     <StackPanel Orientation="Horizontal">
                                         <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="8 0 0 0" 
-                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
+                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left" >
                                             <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
                                         </Button>
                                         <TextBlock Margin="8 16 16 16">Gestion Du Menu Categories</TextBlock>
@@ -602,16 +602,17 @@
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Categories"  />
                             <ComboBox Grid.Row="5" Grid.Column="1"  
-                  ItemsSource="{Binding CurrentCategories}" 
-                  DisplayMemberPath="Name"
-                  SelectedValue ="{Binding SelectedProduct.Category }"
-                  IsSynchronizedWithCurrentItem="True"/>
+                                  ItemsSource="{Binding CurrentCategories}" 
+                                  DisplayMemberPath="Name"
+                                  SelectedValue ="{Binding SelectedProduct.Category }"
+                                  IsSynchronizedWithCurrentItem="True"/>
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Color"  />
                         <Border Grid.Row="6" Grid.Column="2" Background="{Binding SelectedProduct.Background}"  >
                             <TextBlock Text="{Binding SelectedProduct.Background}"/>
                             </Border>
-                        <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding SelectedProduct.BackgroundColor}" />
+
+                            <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding SelectedProduct.BackgroundColor}" />
                             <Label Grid.Row="7" Grid.Column="0" Content="IsMuchInDemand"  />
                         <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding SelectedProduct.IsMuchInDemand}"  />
 

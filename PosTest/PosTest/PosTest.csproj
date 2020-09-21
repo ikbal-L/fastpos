@@ -199,6 +199,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
+    <Compile Include="Converters\EntityIdValueConverter.cs" />
     <Compile Include="Converters\MultiValueEqualityConverter.cs" />
     <Compile Include="Converters\NumberToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />

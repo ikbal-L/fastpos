@@ -40,8 +40,23 @@ namespace ServiceLib.Service
             {
                 throw new MappingException("Error in GetAllProducts to map with products, StatusCode: " + code.ToString());
             }
-            categories.ToList().ForEach(c => c.MappingAfterReceiving(products));
+            categories.ToList().ForEach(c => c.MappingAfterReceiving(ref products));
             return categories;
+        }
+        public (IEnumerable<Category>, IEnumerable<Product>) GetAllCategoriesAndProducts( ref int categStatusCode, ref int prodStatusCode)
+        {
+            var categories = _restCategoryService.GetAllCategories(ref categStatusCode);
+           
+            var products = _restProductService.GetAllProducts(ref prodStatusCode);
+
+            if (categStatusCode != 200 && prodStatusCode!=200)
+            {
+                return (null, null);
+            }
+            categories.ToList().ForEach(c => c.MappingAfterReceiving(ref products));
+
+            var tuple = (categories, products);
+            return (categories, products);
         }
 
         public Category GetCategory(long id, ref int statusCode)
@@ -59,7 +74,7 @@ namespace ServiceLib.Service
             {
                 throw new MappingException("Error in GetManyProducts to map with products, StatusCode: " + getProductStatusCode.ToString());
             }
-            category.MappingAfterReceiving(products);
+            category.MappingAfterReceiving(ref products);
             return category;
 
         }
@@ -125,6 +140,11 @@ namespace ServiceLib.Service
             }
             statusCode = (int)response.StatusCode;
             return categories;
+        }
+
+        public (IEnumerable<Category>, IEnumerable<Product>) GetAllCategoriesAndProducts(ref int categStatusCode, ref int prodStatusCode)
+        {
+            throw new NotImplementedException();
         }
 
         //public ICollection<Category> GetAllCategories()
