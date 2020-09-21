@@ -407,7 +407,7 @@ namespace PosTest.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
-            var filteredProducts = AllProducts.Where(p => p.Category == category);
+            var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank!=null);
             CurrentProducts.Clear();
             var comparer = new Comparer<Product>();
             var listOfFliteredProducts = filteredProducts.ToList();  //new List<Category>(AllCategories);
@@ -650,14 +650,10 @@ namespace PosTest.ViewModels
             {
                 sourceProduct.Rank = null;
                 sourceProduct.Category = null;
-                FreeProducts.Add(sourceProduct);
+                
                 _productsService.UpdateProduct(sourceProduct);
             }
-            else
-            {
-                FreeProducts.Remove(SelectedFreeProduct);
-                SelectedFreeProduct = null;
-            }
+            
             CurrentProducts[index] = desProduct;
             if (desProduct.Id==null)
             {
