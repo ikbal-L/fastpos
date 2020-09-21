@@ -147,6 +147,13 @@ namespace ServiceLib.Service
             products.ToList().ForEach(p => p.MappingBeforeSending());
             return _restProductService.SaveProducts(products);
         }
+
+        public (IEnumerable<long>, int) UpdateManyProducts(IEnumerable<Product> products)
+        {
+            (int status, string idsListStr) = GenericRest.UpdateThing(products, UrlConfig.ProductUrl.UpdateManyProducts);
+            IEnumerable<long> updatedIds = JsonConvert.DeserializeObject<List<long>>(idsListStr);
+            return (updatedIds, status);
+        }
     }
 
 
@@ -422,6 +429,10 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
+        public (IEnumerable<long>, int) UpdateManyProducts(IEnumerable<Product> products)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

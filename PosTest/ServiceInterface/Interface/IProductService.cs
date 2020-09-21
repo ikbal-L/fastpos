@@ -15,5 +15,7 @@ namespace ServiceInterface.Interface
         int SaveProducts(IEnumerable<Product> products);
         Product GetProduct(long id, ref int statusCode);
         int DeleteProduct(long idProduct);
+
+        (IEnumerable<long>, int) UpdateManyProducts(IEnumerable<Product> products);
     }
 }

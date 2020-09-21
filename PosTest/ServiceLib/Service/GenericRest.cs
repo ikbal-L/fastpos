@@ -91,7 +91,7 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static int UpdateThing<T>(T t, string url)
+        public static (int, string) UpdateThing<T>(T t, string url)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
 
@@ -112,7 +112,7 @@ namespace ServiceLib.Service
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
 
-            return (int)response.StatusCode;
+            return ((int)response.StatusCode, response.Content);
         }
 
         public IRestResponse RestDelete(string path)
