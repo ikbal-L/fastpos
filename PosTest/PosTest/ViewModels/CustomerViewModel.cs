@@ -12,6 +12,7 @@ using System.Windows.Data;
 namespace PosTest.ViewModels
 {
     public class CustomerViewModel : Screen
+
     {
         private ICollectionView _CustomerView;
         private string _FilterString;

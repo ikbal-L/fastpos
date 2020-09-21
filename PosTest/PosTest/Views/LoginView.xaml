@@ -23,7 +23,9 @@
             <Button x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
 
-            <Button x:Name="CustomersSettings" Content="CustomersSettings" Margin="5"
+            <!--<Button x:Name="CustomersSettings" Content="CustomersSettings" Margin="5"
+                    Style="{StaticResource MaterialDesignFlatButton}"/>-->
+            <Button x:Name="AdditivesSettings" Content="AdditivesSettings" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>
 
 

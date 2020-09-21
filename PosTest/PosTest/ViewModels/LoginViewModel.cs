@@ -147,6 +147,13 @@ namespace PosTest.ViewModels
             CustomerViewModel customerViewModel = new CustomerViewModel(null);
             customerViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(customerViewModel);
+        }  
+        
+        public void AdditivesSettings()
+        {
+            AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel();
+            additivesSettingsViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
         }
 
         //This method load th DLL file containing the implemetation of IProductService 

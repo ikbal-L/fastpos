@@ -141,6 +141,110 @@
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
+        <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
+            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1" caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]">
+                <StackPanel>
+
+                    <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
+
+
+                        <Button  Width="30" Height="30"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="35 20">
+                            <materialdesign:PackIcon Kind="Plus" Height="20" Width="20" />
+                            <Button.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" TargetType="Button">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Border DockPanel.Dock="Top" Height="48">
+                            <TextBlock Text="{Binding Path=Description}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+                        <DockPanel LastChildFill="False" >
+                            <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" CornerRadius="30" Width="20" Height="20">
+                                <materialdesign:PackIcon Kind="Done" Height="20" Width="20"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding ElementName="AdditiveSettingsList" Path="SelectedItem"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right" >
+                                <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding ElementName="AdditiveSettingsList" Path="Tag"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <Border   Width="20" Height="20" DockPanel.Dock="Right">
+                                <materialdesign:PackIcon Height="20" Width="20"  Kind="ArrowExpandAll" Padding="0"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding ElementName="MoveButton" Path="Tag"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                        </DockPanel>
+
+                       
+                        
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type src:Product}" x:Key="ProductGridTemplate" >
         <StackPanel Orientation="Horizontal">
             <Button Content="{Binding Name}" Height="40"></Button>

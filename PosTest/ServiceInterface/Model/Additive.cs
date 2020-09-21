@@ -49,6 +49,10 @@ namespace ServiceInterface.Model
         public Brush Background
         {
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
+            set
+            {
+                _background = (SolidColorBrush)value;
+            }
         }
 
         /*bool IEquatable<Additive>.Equals(Additive additive)
@@ -70,6 +74,39 @@ namespace ServiceInterface.Model
                     additive.BackgroundString == BackgroundString;
             return result;
             //           return Equals(other as Additive);
+        }
+
+        private SolidColorBrush _background;
+        private Color? _backgroundColor;
+        public bool IsDark
+        {
+            get
+            {
+                var c = BackgroundColor.GetValueOrDefault();
+                var d = (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
+                return (5 * c.G + 2 * c.R + c.B) <= 8 * 140;
+            }
+        }
+
+        public virtual Color? BackgroundColor
+        {
+
+            get
+            {
+                if (_backgroundColor == null)
+                {
+                    _backgroundColor = (Color)ColorConverter.ConvertFromString(BackgroundString);
+                }
+                return _backgroundColor;
+            }
+            set
+            {
+                _backgroundColor = value;
+                BackgroundString = _backgroundColor.ToString();
+                Background = new SolidColorBrush((Color)_backgroundColor);
+                NotifyOfPropertyChange(() => IsDark);
+            }
+
         }
     }
 }
