@@ -80,7 +80,8 @@ namespace PosTest.ViewModels
 
             LoadCategoryPages();
             CurrentProducts = new BindableCollection<Product>();
-            var freeProds = AllProducts.Where(p => p.CategorieId == null && p.Rank== null);
+            // Temporary fix until DB is fixed correct predicate is p.CategorieId == null && p.Rank== null
+            var freeProds = AllProducts.Where(p => p.Rank== null);
             var freeCategories = AllCategories.Where(c => c.Rank== null);
 
             FreeProducts = new BindableCollection<Product>(freeProds);
@@ -544,14 +545,20 @@ namespace PosTest.ViewModels
             if (SelectedT is Category selectedCategory)
             {
                 //TODO Fixing removal of categories from the current Categories list
-                //foreach (var product in selectedCategory.Products)
-                //{
-                //    product.Rank = null;
-                //    product.CategorieId = null;
-                //    product.Category = null;
-                //}
-                //// implementing  update many products in the backend
-
+                foreach (var product in selectedCategory.Products)
+                {
+                    product.Rank = null;
+                    product.CategorieId = null;
+                    product.Category = null;
+                    _productsService.UpdateProduct(product);
+                    if (!FreeProducts.Contains(product))
+                    {
+                        FreeProducts.Add(product); 
+                    }
+                }
+                // implementing  update many products in the backend
+                CurrentProducts.Clear();
+                SelectedCategory = null;
                 _categoriesService.UpdateCategory(selectedCategory);
 
             }
@@ -636,12 +643,20 @@ namespace PosTest.ViewModels
 
             desProduct.Rank = sourceProduct.Rank;
             desProduct.Category = SelectedCategory;
+            desProduct.CategorieId = SelectedCategory.Id;
+            SelectedCategory.ProductIds.Add((long)desProduct.Id);
+            _categoriesService.UpdateCategory(SelectedCategory);
             if (sourceProduct. Category != null)
             {
                 sourceProduct.Rank = null;
                 sourceProduct.Category = null;
                 FreeProducts.Add(sourceProduct);
                 _productsService.UpdateProduct(sourceProduct);
+            }
+            else
+            {
+                FreeProducts.Remove(SelectedFreeProduct);
+                SelectedFreeProduct = null;
             }
             CurrentProducts[index] = desProduct;
             if (desProduct.Id==null)
@@ -655,6 +670,7 @@ namespace PosTest.ViewModels
                 _productsService.UpdateProduct(desProduct);
 
             }
+
         }
 
 
