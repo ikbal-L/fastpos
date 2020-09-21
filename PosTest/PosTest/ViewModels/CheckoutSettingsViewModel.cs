@@ -632,7 +632,7 @@ namespace PosTest.ViewModels
         }
 
 
-        public void CreateProduct()
+        public void OpenProdcutDetail()
         {
             ToastNotification.Notify("Open Form", 1);
             IsFlipped = true;
@@ -659,7 +659,6 @@ namespace PosTest.ViewModels
             {
                 long id = -1;
                 _productsService.SaveProduct(desProduct,ref id);
-                desProduct.Id = id;
             }
             else
             {
