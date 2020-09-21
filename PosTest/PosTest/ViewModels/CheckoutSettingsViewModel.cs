@@ -659,6 +659,7 @@ namespace PosTest.ViewModels
             {
                 long id = -1;
                 _productsService.SaveProduct(desProduct,ref id);
+                desProduct.Id = id;
             }
             else
             {
