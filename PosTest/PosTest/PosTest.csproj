@@ -217,6 +217,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="ShellBootstrapper.cs" />
+    <Compile Include="SL.Controls\ColorPalette.xaml.cs">
+      <DependentUpon>ColorPalette.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SL.Controls\NumericKeypad.xaml.cs">
       <DependentUpon>NumericKeypad.xaml</DependentUpon>
     </Compile>
@@ -403,6 +406,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Styles\OrderItemListStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SL.Controls\ColorPalette.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
