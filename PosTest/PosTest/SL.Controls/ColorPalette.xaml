@@ -86,8 +86,8 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Button  Height="40" Width="40"  Margin="0" Style="{x:Null}" Background="{Binding}">
-                    </Button>
+                    <Border  Height="40" Width="40"  Margin="0" Style="{x:Null}" Background="{Binding}">
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

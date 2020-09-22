@@ -23,7 +23,8 @@ namespace PosTest.SL.Controls
     {
         public static readonly DependencyProperty NumericValueProperty =
                    DependencyProperty.Register(
-                       nameof(NumericValue), typeof(string),
+                       nameof(NumericValue),
+                       typeof(string),
                        typeof(NumericKeypad), 
                        new FrameworkPropertyMetadata
                         {

@@ -26,13 +26,13 @@ namespace PosTest.SL.Controls
             set { SetValue(CPColorBrushProperty, value); }
         }
 
-        public static readonly DependencyProperty CPColorBrushProperty =
-            DependencyProperty.Register("CPColorBrush", typeof(string),
-                typeof(ColorPalette), new PropertyMetadata(""));
+        public static readonly DependencyProperty CPColorBrushProperty = 
+            DependencyProperty.Register("CPColorBrush", 
+                typeof(SolidColorBrush), typeof(ColorPalette), 
+                new FrameworkPropertyMetadata(default(object),FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public ColorPalette()
         {
             InitializeComponent();
-            this.DataContext = this;
         }
     }
 }
