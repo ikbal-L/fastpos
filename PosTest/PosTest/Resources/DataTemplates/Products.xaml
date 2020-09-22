@@ -149,16 +149,28 @@
                     <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
 
 
-                        <Button  Width="30" Height="30"
+                        <Button  Width="30" Height="30"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
+                                 
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="35 20">
                             <materialdesign:PackIcon Kind="Plus" Height="20" Width="20" />
                             <Button.Style>
+                                
                                 <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" TargetType="Button">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
+                                        <!--<MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Binding="{Binding Description}" Value="{x:Null}"/>
+                                                <Condition Property="Button.IsMouseOver" Value="True"/>
+                                            </MultiTrigger.Conditions>
+                                            <MultiTrigger.Setters>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </MultiTrigger.Setters>
+                                        </MultiTrigger>-->
                                         <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
+                                        
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
