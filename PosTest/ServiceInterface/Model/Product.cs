@@ -157,6 +157,7 @@ namespace ServiceInterface.Model
             set
             {
                 _background = (SolidColorBrush)value;
+                NotifyOfPropertyChange();
             }
         }
 

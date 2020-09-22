@@ -10,6 +10,7 @@
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
               xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:ex="clr-namespace:PosTest.Extensions"
+             xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
              xmlns:materialdesignextensions="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -467,7 +468,7 @@
                                 IsEnabled="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.CanExecuteMext)}"
                                 Content="{materialdesign:PackIcon ChevronDoubleRight,30}" />
 
-                                    <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
+                                <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
                                 x:Name="PreviousPqge" Style="{StaticResource ButtonStyle22}"
                                 Command="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.PreviousCommand)}"
                                 IsEnabled="{Binding ElementName=CategoryList, Path=(ex:ListPaginationEx.CanExecutePrevious)}"
@@ -565,23 +566,9 @@
                 <materialdesign:Flipper.BackContent>
                     <Grid Width="auto">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20*"/>
-                                <ColumnDefinition Width="70*"/>
-                                <ColumnDefinition Width="10*"/>
-                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="8 0 0 0" 
@@ -590,111 +577,9 @@
                                 </Button>
                                 <TextBlock Margin="8 16 16 16">Product Details</TextBlock>
                             </StackPanel>
-                            
-                            <Label Grid.Row="1" Grid.Column="0" Content="Name"  />
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedProduct.Name}" />
+                        <subviews:ProductEditView Grid.Row="1"/>
 
-                            <Label Grid.Row="3" Grid.Column="0" Content="Price"  />
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SelectedProduct.Price}" />
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Unit"  />
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedProduct.Unit}" />
-
-                            <Label Grid.Row="5" Grid.Column="0" Content="Categories"  />
-                            <ComboBox Grid.Row="5" Grid.Column="1"  
-                  ItemsSource="{Binding CurrentCategories}" 
-                  DisplayMemberPath="Name"
-                  SelectedValue ="{Binding SelectedProduct.Category }"
-                  IsSynchronizedWithCurrentItem="True"/>
-
-                            <Label Grid.Row="6" Grid.Column="0" Content="Color"  />
-                        <Border Grid.Row="6" Grid.Column="2" Background="{Binding SelectedProduct.Background}"  >
-                            <TextBlock Text="{Binding SelectedProduct.Background}"/>
-                            </Border>
-                        <materialdesign:ColorPicker Grid.Row="6" Grid.Column="1" Color="{Binding SelectedProduct.BackgroundColor}" />
-                            <Label Grid.Row="7" Grid.Column="0" Content="IsMuchInDemand"  />
-                        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding SelectedProduct.IsMuchInDemand}"  />
-
-                            <TabControl Grid.Row="10" Grid.Column="0"  Grid.ColumnSpan="3" 
-                        Visibility="{Binding SelectedProduct.IsPlatter ,Converter={StaticResource BoolToVisibility}}">
-                                <TabItem Header="Additives" >
-                                    <StackPanel>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="46*"/>
-                                                <ColumnDefinition Width="8*"/>
-                                                <ColumnDefinition Width="46*"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <ListBox 
-                                Background="Aqua"
-                                ItemsSource="{Binding AvailableAdditives}" 
-                                SelectedItem="{Binding SelectedAvailableAdditive}"
-                                ItemTemplate="{StaticResource AdditiveSettingDataTemplate}"  Grid.Column="0"
-                                />
-                                            <ListBox  
-                                ItemsSource="{Binding SelectedProduct.Additives}"  
-                                SelectedItem="{Binding SelectedAddedAdditive}"
-                                ItemTemplate="{StaticResource AdditiveSettingDataTemplate}" Grid.Column="2" 
-                                materialdesign:ShadowAssist.ShadowDepth="Depth2"
-                                AlternationCount="2"
-                                />
-
-
-                                            <StackPanel VerticalAlignment="Top" Grid.Row="0" Grid.Column="1">
-                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                        caliburn:Message.Attach="[Event Click] = [Action AddAllAdditivesCommand]" Margin="2" Content=">>"/>
-                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                        caliburn:Message.Attach="[Event Click] = [Action AddAdditiveCommand]" Margin="2" Content=">" />
-                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                        caliburn:Message.Attach="[Event Click] = [Action RemoveAdditiveCommand]" Margin="2" Content="-" />
-                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                        caliburn:Message.Attach="[Event Click] = [Action RemoveAllAdditivesCommand]" Margin="2" Content="-" />
-                                            </StackPanel>
-
-
-                                        </Grid>
-                                    </StackPanel>
-                                </TabItem>
-                                <TabItem Header="Ingredients">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="70*"/>
-                                            <RowDefinition Height="30*"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="38*"/>
-                                            <ColumnDefinition Width="2*"/>
-                                            <ColumnDefinition Width="60*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <ListBox Margin="2" 
-                                 ItemsSource="{Binding ProductsCanCompositIngredients}" 
-                                 SelectedItem="{Binding SelectedCompositProduct}"
-                                 DisplayMemberPath="Name"
-                                 materialdesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="0" />
-                                        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
-                                            <TextBox x:Name="Quantity" Text="10" Width="180"/>
-                                            <Button Content="+" caliburn:Message.Attach="[Event Click] = [Action addNewIngredientCommand(Quantity.Text)]" />
-                                        </StackPanel>
-
-                                        <ListView Margin="2" 
-                                  ItemsSource="{Binding SelectedProduct.Ingredients}" 
-                                  SelectedItem="{Binding SelectedIngredient}"
-                                  DisplayMemberPath="Name"
-                                 materialdesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="2" Grid.RowSpan="2">
-                                            <ListView.View >
-                                                <GridView >
-                                                    <GridViewColumn DisplayMemberBinding="{Binding Product.Name}" Header="Product" />
-                                                    <GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Quantity" />
-                                                </GridView >
-                                            </ListView.View >
-                                        </ListView>
-                                    </Grid>
-                                </TabItem>
-                            </TabControl>
-
-                        </Grid>
+                    </Grid>
 
                     </Grid>
                 </materialdesign:Flipper.BackContent>

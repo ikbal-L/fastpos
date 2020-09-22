@@ -9,7 +9,7 @@
              xmlns:slcontrole="clr-namespace:PosTest.SL.Controls"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="300" >
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100" >
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,9 +22,9 @@
     </FrameworkElement.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -38,6 +38,11 @@
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedProduct.Price}" />
         <Label Grid.Row="2" Grid.Column="0" Content="Unit"  />
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SelectedProduct.Unit}" />
-        <slcontrole:ColorPalette Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" CPColorBrush="{Binding SelectedProduct.Background}"></slcontrole:ColorPalette>
+        <slcontrole:ColorPalette  Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" CPColorBrush="{Binding SelectedProduct.Background}"></slcontrole:ColorPalette>
+        <!---->
+        <Border Grid.Row="3" Grid.Column="1" Background="{Binding SelectedProduct.Background}"  >
+            <TextBlock Text="{Binding SelectedProduct.Background}"/>
+        </Border>
+        
     </Grid>
 </UserControl>
