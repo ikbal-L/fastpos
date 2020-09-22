@@ -48,7 +48,8 @@ namespace ServiceLib.Service
 
         public IEnumerable<Additive> GetAllAdditives(ref int statusCode)
         {
-            throw new NotImplementedException();
+           return GenericRest.GetThing <IEnumerable<Additive>>(UrlConfig.AdditiveUrl.GetAllAdditives, ref statusCode);
+
         }
     }
 

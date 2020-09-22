@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
-    public class Additive : PropertyChangedBase //, IEquatable<Additive>
+    public class Additive : Ranked //, IEquatable<Additive>
     {
         private string _backgroundString = null;
 

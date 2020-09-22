@@ -879,7 +879,7 @@ namespace PosTest.ViewModels
             MouseMoveEventHandler<Category>(sender, e, key);
         }
 
-        private  void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key) where T:Ranked,new()
+        public static void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key) where T:Ranked,new()
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -903,25 +903,25 @@ namespace PosTest.ViewModels
 
 
         
-        private static void ListTouchDownEventHandler(object sender, TouchEventArgs e, string key)
+        public static void ListTouchDownEventHandler<T>(object sender, TouchEventArgs e, string key)
         {
-            ListBox listView = sender as ListBox;
+            ListBox listBox = sender as ListBox;
             ListBoxItem listBoxItem =
                 FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
             // Find the data behind the ListViewItem
-            Product product;
+            T t;
 
 
             if (listBoxItem != null)
             {
-                product = (Product)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-                if (product == null || product.Name == null)
+                t = (T)listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                if (t == null || t.GetType().GetProperty("Name") == null)
                 {
                     return;
                 }
 
-                DataObject dragData = new DataObject(key, product);
+                DataObject dragData = new DataObject(key, t);
                 DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
             }
         }
@@ -929,7 +929,7 @@ namespace PosTest.ViewModels
         public void FreeProductsList_TouchDown(object sender, TouchEventArgs e)
         {
             var key = "FreeProduct";
-            ListTouchDownEventHandler(sender, e, key);
+            ListTouchDownEventHandler<Product>(sender, e, key);
         }
 
         
@@ -937,7 +937,7 @@ namespace PosTest.ViewModels
         {
 
             var key = "Product"; 
-            ListTouchDownEventHandler(sender,e,key);
+            ListTouchDownEventHandler<Product>(sender,e,key);
         }
         
         
@@ -950,7 +950,7 @@ namespace PosTest.ViewModels
             }
         }
 
-        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        public static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
         {
             do
             {
@@ -972,6 +972,10 @@ namespace PosTest.ViewModels
                 e.Effects = DragDropEffects.None;
             }
         }
+        
+        
+        
+        
         public void ProductsList_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent("FreeProduct") ||
@@ -1158,7 +1162,7 @@ namespace PosTest.ViewModels
         }
     }
 
-    class Comparer<T> : IComparer<T> where T : Ranked
+    public class Comparer<T> : IComparer<T> where T : Ranked
     {
         public int Compare(T x, T y)
         {

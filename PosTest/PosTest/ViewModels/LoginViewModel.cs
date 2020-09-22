@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Net.Http;
 using ServiceInterface.StaticValues;
 using PosTest.ViewModels.SubViewModel;
+using ServiceLib.Service;
 
 namespace PosTest.ViewModels
 {
@@ -151,7 +152,9 @@ namespace PosTest.ViewModels
         
         public void AdditivesSettings()
         {
-            AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel();
+            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            additiveService = new AdditiveService();
+            AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(additiveService,30);
             additivesSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
         }

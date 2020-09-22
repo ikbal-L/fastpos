@@ -165,7 +165,7 @@
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
         <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
-            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1" caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]">
+            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1" >
                 <StackPanel>
 
                     <DockPanel Height="70" Width="100" Background="{Binding Background}"  >

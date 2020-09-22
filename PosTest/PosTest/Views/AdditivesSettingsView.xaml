@@ -28,7 +28,7 @@ caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($sou
 -->
                     <ListBox x:Name="AdditiveSettingsList" 
                                  AllowDrop="True"
-                                 ItemsSource="{Binding }"
+                                 ItemsSource="{Binding Additives }"
                                  ItemTemplate="{StaticResource SettingsAdditive}"
                                  SelectedItem="{Binding SelectedAdditive}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
