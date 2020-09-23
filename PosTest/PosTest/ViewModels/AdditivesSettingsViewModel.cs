@@ -85,7 +85,7 @@ namespace PosTest.ViewModels
             CheckoutSettingsViewModel.MouseMoveEventHandler<Additive>(sender, e, key);
         }
 
-        public void AdditivesList_TouchDown(object sender, MouseEventArgs e)
+        public void AdditivesList_TouchDown(object sender, TouchEventArgs e)
         {
             var key = "Additive";
 
