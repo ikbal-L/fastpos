@@ -178,7 +178,7 @@
                             <Button.Style>
 
                                 <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" TargetType="Button">
-                                    <Setter Property="Visibility" Value="Hidden"/>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
@@ -191,8 +191,8 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Border DockPanel.Dock="Top" Height="48">
-                            <TextBlock Text="{Binding Path=Description}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
+                        <Border DockPanel.Dock="Top" Height="48" >
+                            <TextBlock Text="{Binding Path=Description}"   FontSize="12"   TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">

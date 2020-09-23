@@ -43,7 +43,8 @@ namespace ServiceLib.Service
 
         public int UpdateAdditive(Additive additive)
         {
-            throw new NotImplementedException();
+            (var i,var s) = GenericRest.UpdateThing(additive, UrlConfig.AdditiveUrl.UpdateAdditive);
+            return i;
         }
 
         public IEnumerable<Additive> GetAllAdditives(ref int statusCode)
