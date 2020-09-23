@@ -89,7 +89,7 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border  Height="40" Width="40"  Margin="0" Style="{x:Null}" Background="{Binding}"> </Border>
+                    <Border  Height="30" Width="30"  Margin="0" Style="{x:Null}" Background="{Binding}"> </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

@@ -4,89 +4,133 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:controls="clr-namespace:PosTest.SL.Controls"
              xmlns:caliburn="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="455" d:DesignWidth="640">
-    <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
-            <Border Grid.Row="1" Grid.Column="1" BorderThickness="1"
-                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                        MinWidth="40" MinHeight="100" ClipToBounds="True">
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    
-<!--
-caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+             d:DesignHeight="610" d:DesignWidth="640">
+    <Grid >
+        <materialdesign:Flipper IsFlipped="False" >
+            <materialdesign:Flipper.FrontContent>
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
+                    <Border BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" MinWidth="40" MinHeight="100" ClipToBounds="True">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <!--
+                         caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                          [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
                          [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];
                          [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
-                         Tag="{Binding ClipboardProduct}"
+                         Tag="{Binding ClipboardProduct}
+                                SelectedItem="{Binding SelectedAdditive}""
 -->
-                    <ListBox x:Name="AdditiveSettingsList" 
+                            <ListBox x:Name="AdditiveSettingsList" d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
                                  AllowDrop="True"
                                  ItemsSource="{Binding Additives}"
                                  ItemTemplate="{StaticResource SettingsAdditive}"
-                                 SelectedItem="{Binding SelectedAdditive}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Padding" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                    </ListBox>
-                    <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
-                        <TextBlock Margin="16">Gestion Du Menu Additives</TextBlock>
-                    </materialdesign:ColorZone>
-<!--caliburn:Message.Attach="[Event Click] = [Action AttachProductToCategory()]"-->
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Margin" Value="0" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                            <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="10" Foreground="White"
+                                             
+                                            Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal" >
+                                            <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" Width="25" Height="25"/>
+                                            <TextBlock FontSize="16"> Gestion Du Menu Additives</TextBlock>
+                                        </StackPanel>
+                                    </Button>
+                                    
+                                    
+                                
+                                
+                                </StackPanel>    
+                                    
+                                
+                            </materialdesign:ColorZone>
+                            <!--caliburn:Message.Attach="[Event Click] = [Action AttachProductToCategory()]"-->
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 10 -20">
-                        <materialdesign:PackIcon Kind="MoveResizeVariant" Height="22" Width="22" />
-                    </Button>
+                                <materialdesign:PackIcon Kind="MoveResizeVariant" Height="22" Width="22" />
+                            </Button>
 
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 60 -20">
-                        <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
-                    </Button>
+                                <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
+                            </Button>
 
-<!--caliburn:Message.Attach="[Event Click] = [Action MoveProductTo()]"-->
-                    <Button x:Name="MoveButton"
+                            <!--caliburn:Message.Attach="[Event Click] = [Action MoveProductTo()]"-->
+                            <Button x:Name="MoveButton"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 110 -20" Tag="{Binding ProductToMove}">
-                        <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22" />
-                    </Button>
-                    
-<!--caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"-->
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                Grid.Row="0" Margin="0 0 110 -20" Tag="">
+                                <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22" />
+                            </Button>
+
+                            <!--caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"-->
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 160 -20">
-                        <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
-                    </Button>
-                    
-<!--caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"-->
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
+                            </Button>
+
+                            <!--caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"-->
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                 Grid.Row="0" Margin="0 0 210 -20">
-                        <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
-                    </Button>
+                                <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
+                            </Button>
 
-<!--caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]"-->
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <!--caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]"-->
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 260 -20">
-                        <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
-                    </Button>
+                                <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                            </Button>
+                        </Grid>
+                    </Border>
+                </ScrollViewer>
+            </materialdesign:Flipper.FrontContent>
+            <materialdesign:Flipper.BackContent>
+                <Border Width="450" Height="Auto" BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" ClipToBounds="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                        <Border Grid.Row="0"  Margin="10  10">
+                            <TextBox materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0"
+                                      FontSize="24" />
+                        </Border>
+                        
+                        <controls:ColorPalette CPColorBrush="AliceBlue"  Grid.Row="1" />
+                        <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
+                        <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
+                                    </StackPanel>
+                                </Button>
+                                        <TextBlock Text="Edit Aditives" FontSize="16" Margin="10"/>
+                        </StackPanel>
+                    </materialdesign:ColorZone>
                 </Grid>
-            </Border>
-        </ScrollViewer>
+                </Border>
+            </materialdesign:Flipper.BackContent>
+        </materialdesign:Flipper>
     </Grid>
 </UserControl>

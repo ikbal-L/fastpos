@@ -168,19 +168,21 @@
         <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
             <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1" caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]">
                 <StackPanel>
-
                     <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
 
 
-                        <Button  Width="30" Height="30"
+                        <Button  Width="30" Height="30"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
+                                 
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="35 20">
                             <materialdesign:PackIcon Kind="Plus" Height="20" Width="20" />
                             <Button.Style>
+
                                 <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" TargetType="Button">
                                     <Setter Property="Visibility" Value="Hidden"/>
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
+
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self },  Path=Parent.IsMouseOver}" Value="True"/>
                                                 <Condition Binding="{Binding Description}" Value="{x:Null}"/>
                                             </MultiDataTrigger.Conditions>

@@ -10,11 +10,10 @@ namespace PosTest.ViewModels
 {
     public class AdditivesSettingsViewModel: Screen
     {
-        
+
 
         public AdditivesSettingsViewModel( )
         {
-
             Additives = new BindableCollection<Additive>();
             Additives.Add(new Additive());
             Additives.Add(new Additive());
