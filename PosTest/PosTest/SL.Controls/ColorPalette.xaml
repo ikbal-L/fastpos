@@ -75,15 +75,18 @@
 
     </FrameworkElement.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" DataContext="{Binding ElementName=parent}">
-        <ListBox ItemsSource="{StaticResource slcolors}" 
-                 SelectedItem="{Binding Path=CPColorBrush, Mode=TwoWay}"
-                 
-                 >
+        <ListBox ItemsSource="{StaticResource slcolors}" SelectedItem="{Binding Path=CPColorBrush, Mode=TwoWay}" >
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel></WrapPanel>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="1" />
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border  Height="40" Width="40"  Margin="0" Style="{x:Null}" Background="{Binding}">
