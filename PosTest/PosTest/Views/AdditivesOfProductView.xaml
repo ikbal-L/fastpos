@@ -17,9 +17,9 @@
                     </Grid.RowDefinitions>
                     <ListBox x:Name="AdditiveSettingsList" 
                                  AllowDrop="True"
-                                 ItemsSource="{Binding }"
+                                 d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
+                                 ItemsSource="{Binding Additives}"
                                  ItemTemplate="{StaticResource AdditivesOfProductStyle}"
-                                 SelectedItem="{Binding SelectedAdditive}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
                         <ListBox.ItemContainerStyle>
