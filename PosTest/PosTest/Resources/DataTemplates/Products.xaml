@@ -54,6 +54,7 @@
             </Button>
         </StackPanel>
     </DataTemplate>
+   
     <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
             <Border x:Name="ProductSettingsClick"  BorderBrush="LightGray" BorderThickness="1" 
@@ -176,11 +177,15 @@
                             <materialdesign:PackIcon Kind="Plus" Height="20" Width="20" />
                             <Button.Style>
                                 <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" TargetType="Button">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Setter Property="Visibility" Value="Hidden"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Self },  Path=Parent.IsMouseOver}" Value="True"/>
+                                                <Condition Binding="{Binding Description}" Value="{x:Null}"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
@@ -261,6 +266,32 @@
 
                        
                         
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditivesOfProductStyle">
+        <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
+            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1">
+                <StackPanel>
+                    <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
+                            <TextBlock Text="{Binding Path=Description}"   FontSize="12"  TextWrapping="Wrap" 
+                                       TextAlignment="Center" DockPanel.Dock="Top" Margin="0 10"
+                                       VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        
+                        <ToggleButton  IsChecked="False" DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"/>
                     </DockPanel>
                 </StackPanel>
             </Border>

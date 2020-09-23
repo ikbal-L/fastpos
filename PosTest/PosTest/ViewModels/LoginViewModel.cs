@@ -155,6 +155,12 @@ namespace PosTest.ViewModels
             additivesSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
         }
+        public void AdditivesOfProduct()
+        {
+            AdditivesOfProductViewModel AdditivesOfProduct = new AdditivesOfProductViewModel ();
+            AdditivesOfProduct.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(AdditivesOfProduct);
+        }
 
         //This method load th DLL file containing the implemetation of IProductService 
         // and satisfay the import in this class

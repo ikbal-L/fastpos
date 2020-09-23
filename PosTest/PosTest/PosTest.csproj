@@ -225,6 +225,7 @@
       <DependentUpon>NumericKeypad.xaml</DependentUpon>
     </Compile>
     <Compile Include="SL.Controls\VirtualizingWrapPanel.cs" />
+    <Compile Include="ViewModels\AdditivesOfProductViewModel.cs" />
     <Compile Include="ViewModels\AdditivesSettingsViewModel.cs" />
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
@@ -244,6 +245,9 @@
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WarningViewModel.cs" />
     <Compile Include="ViewModels\TablesViewModel.cs" />
+    <Compile Include="Views\AdditivesOfProductView.xaml.cs">
+      <DependentUpon>AdditivesOfProductView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CategoryTabView.xaml.cs">
       <DependentUpon>CategoryTabView.xaml</DependentUpon>
     </Compile>
@@ -417,6 +421,10 @@
     <Page Include="SL.Controls\NumericKeypad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdditivesOfProductView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CategoryTabView.xaml">
       <SubType>Designer</SubType>
