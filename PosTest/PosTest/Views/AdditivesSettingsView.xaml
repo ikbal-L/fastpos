@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="610" d:DesignWidth="640">
     <Grid >
-        <materialdesign:Flipper IsFlipped="False" >
+        <materialdesign:Flipper IsFlipped="True" >
             <materialdesign:Flipper.FrontContent>
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
                     <Border BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" MinWidth="40" MinHeight="100" ClipToBounds="True">
@@ -112,9 +112,8 @@
                             <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                         <Border Grid.Row="0"  Margin="10  10">
-                            <TextBox materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" 
-                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0"
-                                      FontSize="24" />
+                            <TextBox materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24" />
                         </Border>
                         
                         <controls:ColorPalette CPColorBrush="AliceBlue"  Grid.Row="1" />

@@ -138,7 +138,7 @@ namespace PosTest.ViewModels
 
             CheckoutSettingsViewModel checkoutSettingsViewModel =
                     new CheckoutSettingsViewModel(30, 6, productService,
-                categorieService, orderService, waiterService, delivereyService);
+                categorieService);
             checkoutSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
         }  

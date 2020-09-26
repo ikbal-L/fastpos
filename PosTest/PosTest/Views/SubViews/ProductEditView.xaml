@@ -9,7 +9,7 @@
              xmlns:slcontrole="clr-namespace:PosTest.SL.Controls"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100" >
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="460" >
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,31 +18,39 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <convert:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="Name"  />
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedProduct.Name}" />
-        <Label Grid.Row="1" Grid.Column="0" Content="Price"  />
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedProduct.Price}" />
-        <Label Grid.Row="2" Grid.Column="0" Content="Unit"  />
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SelectedProduct.Unit}" />
-        <slcontrole:ColorPalette  Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" CPColorBrush="{Binding SelectedProduct.Background}"></slcontrole:ColorPalette>
-        <!---->
-        <Border Grid.Row="3" Grid.Column="1" Background="{Binding SelectedProduct.Background}"  >
-            <TextBlock Text="{Binding SelectedProduct.Background}"/>
+
+        <Border Grid.Row="0"  Margin="2">
+            <TextBox materialdesign:HintAssist.Hint="Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
+                     Text="{Binding SelectedProduct.Name}" />
+        </Border> 
+        
+        <Border Grid.Row="1"  Margin="2">
+            <TextBox materialdesign:HintAssist.Hint="Price" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
+                     Text="{Binding SelectedProduct.Price}" />
         </Border>
         
+        <Border Grid.Row="2"  Margin="2">
+            <TextBox materialdesign:HintAssist.Hint="Unit" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
+                     Text="{Binding SelectedProduct.Unit}" />
+        </Border>
+
+        <slcontrole:ColorPalette  Grid.Row="3" CPColorBrush="{Binding SelectedProduct.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>
+       
     </Grid>
 </UserControl>
