@@ -15,6 +15,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using PosTest.Helpers;
+using MaterialDesignThemes.Wpf;
+using System.Threading.Tasks;
 
 namespace PosTest.ViewModels
 {
@@ -253,6 +255,13 @@ namespace PosTest.ViewModels
         {
             get => _isFlipped;
             set => Set(ref _isFlipped, value);
+        }
+
+        public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
+
+        private void Notify(string Message)
+        {
+            Task.Factory.StartNew(() => MessageQueue.Enqueue(Message, null, null, null, false, true, TimeSpan.FromSeconds(1)));
         }
         public bool IsProductDetailsDrawerOpen
         {
@@ -634,8 +643,6 @@ namespace PosTest.ViewModels
 
         }
 
-       
-
         public void Close()
         {
             LoginViewModel loginvm = new LoginViewModel();
@@ -661,7 +668,6 @@ namespace PosTest.ViewModels
             var key = "Product";
             MouseMoveEventHandler<Product>(sender, e, key);
         }
-
 
         public void FreeCategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
@@ -697,8 +703,6 @@ namespace PosTest.ViewModels
             }
         }
 
-
-        
         public static void ListTouchDownEventHandler<T>(object sender, TouchEventArgs e, string key)
         {
             ListBox listBox = sender as ListBox;
@@ -722,14 +726,11 @@ namespace PosTest.ViewModels
             ListTouchDownEventHandler<Product>(sender, e, key);
         }
 
-        
         public void ProductsList_TouchDown(object sender, TouchEventArgs e)
         {
             var key = "Product"; 
             ListTouchDownEventHandler<Product>(sender,e,key);
         }
-        
-        
         
         public void DragContrinueHandler(object sender, QueryContinueDragEventArgs e)
         {
@@ -841,7 +842,6 @@ namespace PosTest.ViewModels
             }
         }
 
-
         public void CategoriesList_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent("FreeCategory") ||
@@ -943,6 +943,10 @@ namespace PosTest.ViewModels
         public void SavedProduct()
         {
             IsFlipped = false;
+            //IsSnack = true;
+            Notify("Product Saved");
+
+
         }
     }
 
