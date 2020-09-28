@@ -13,6 +13,7 @@
     <local:OrderItemObjectToVisibilityConverter x:Key="OrderItemToVisibility"/>
     <local:OrderStateEnumToBrushConverter x:Key="OrderStateEnumToBrush"/>
     <local:OrderTypeEnumToMaterialDesignIcon x:Key="OrderTypeEnumToMaterialDesignIcon"/>
+    <local:ObjectToBoolConverter   x:Key="ObjectToBoolConverter"/>
 
     <Style TargetType="{x:Type ListBoxItem}" x:Key="OrderItems_ItemStyle" >
         <Setter Property="Margin" Value="0"/>

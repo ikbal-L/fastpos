@@ -145,16 +145,7 @@
                         </StackPanel>
                     </RadioButton>
                 </Grid>
-                <Button Margin="5" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Stretch"
-                         cal:Message.Attach="[Event Click] = [Action ClearSplittedOrder]" 
-                        FontSize="15"
-                        Height="50"
-                        Style="{StaticResource MaterialDesignFlatButton}">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Broom" Width="30" Height="30"/>
-                        <TextBlock  VerticalAlignment="Center">Clean</TextBlock>
-                    </StackPanel>
-                </Button>
+               
 
                 <Button Margin="5" Height="50" Grid.Column="1"  Grid.Row="3"
                     cal:Message.Attach="[Event Click] = [Action BackFromSplitCommand]" 

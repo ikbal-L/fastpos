@@ -147,8 +147,8 @@
                         </ListBox>
                     </Grid>
                     <Grid Grid.Column="1" 
-                          Visibility="{Binding ElementName=OrderitemsList, 
-                            Path=SelectedItem, Converter={StaticResource ObjectToVisibility}}">
+                          IsEnabled="{Binding ElementName=OrderitemsList, 
+                            Path=SelectedItem, Converter={StaticResource ObjectToBoolConverter}}">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -490,9 +490,7 @@
                           Content="{materialdesign:PackIcon CashRegister, 30 }" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"/>
                         
 
-                        <Button Grid.Row="3" Grid.Column="0" Content="{materialdesign:PackIcon  Kind=DotsHorizontal, Size=30}"
-                        Style="{StaticResource ButtonStyle18}" caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Other')]"/>
-
+                       
                         <Button Grid.Row="1" Grid.Column="0" Content="{materialdesign:PackIcon DeleteOutline,30}" 
                         Style="{StaticResource ButtonStyle18}" caliburn:Message.Attach="[Event Click] = [Action CancelOrder()]"/>
 
@@ -698,11 +696,7 @@
                         x:Name="PreviousPqge"  Style="{StaticResource ButtonStyle22}"
                         caliburn:Message.Attach="[Event Click] = [Action PaginateProducts('PREVIOUS')]"
                         Content="{materialdesign:PackIcon ChevronDoubleLeft,30}" />
-
-                    <Button DockPanel.Dock="Left" x:Name="Home" Padding="0" Height="60"
-                        caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering('Home')]"
-                        Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialdesign:PackIcon Home,Size=60}"/>
+                    
                     <!--CATEGORY NAVIGATION-->
                     <StackPanel Orientation="Horizontal" Margin="2 0 0 0" Height="60">
                         <ItemsControl x:Name="Stack" Grid.Column="0" ItemsSource="{Binding Categories}">

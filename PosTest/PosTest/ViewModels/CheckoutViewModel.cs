@@ -152,7 +152,7 @@ namespace PosTest.ViewModels
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
-            CategorieFiltering("Home");
+            //CategorieFiltering("Home");
             Categories = new BindableCollection<Category>(RetrieveCategories(AllProducts.Where(p=>p.CategorieId!=null))); //(_categoriesService.GetAllCategories(ref getCategoriesStatusCode));
             var code = 0;
             var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
@@ -533,7 +533,7 @@ namespace PosTest.ViewModels
             CurrentCategory = CurrentOrder.ShownCategory;
             if (_currantCategory == null)
             {
-                CategorieFiltering("Home");
+                //CategorieFiltering("Home");
             }
             else
             {
@@ -549,7 +549,7 @@ namespace PosTest.ViewModels
             {
                 CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
             }
-            CategorieFiltering("Home");
+            //CategorieFiltering("Home");
             CurrentOrder = new Order(this.Orders);
             DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
@@ -646,7 +646,7 @@ namespace PosTest.ViewModels
             {
                 CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
             }
-            CategorieFiltering("Home");
+            //CategorieFiltering("Home");
             _currentOrder = null;
             DisplayedOrder = null;
             SelectedDelivereyman = null;
@@ -916,7 +916,7 @@ namespace PosTest.ViewModels
                         }
 
                         DialogViewModel = TablesViewModel;
-                        IsDialogOpen = true;
+                        //IsDialogOpen = true;
                         return;
                     }
                     try
