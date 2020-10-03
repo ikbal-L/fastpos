@@ -184,7 +184,7 @@
                         </DockPanel>
                         <DockPanel  Grid.Column="1" Grid.Row="1">
                             <Label Content="Returned" Foreground="#26ff26"  FontSize="15"  FontFamily="{StaticResource DigitalFontFamily}"/>
-                            <Label FontSize="30" FontWeight="Bold" Foreground="#26ff26"  FontFamily="{StaticResource DigitalFontFamily}">
+                            <Label FontSize="30" FontWeight="Bold" Foreground="#26ff26"  FontFamily="{StaticResource DigitalFontFamily}" HorizontalAlignment="Right">
                                 <Label.Style>
                                     <Style>
                                         <Style.Triggers>
