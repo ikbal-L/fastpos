@@ -315,6 +315,9 @@
     <Compile Include="Views\SubViews\WarningView.xaml.cs">
       <DependentUpon>WarningView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SwitchMenuView.xaml.cs">
+      <DependentUpon>SwitchMenuView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TablesView.xaml.cs">
       <DependentUpon>TablesView.xaml</DependentUpon>
     </Compile>
@@ -511,6 +514,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SubViews\WarningView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SwitchMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -49,6 +49,14 @@ namespace PosTest.ViewModels
         //public String Username { get; set; }
         //public String Password { get; set; }
 
+        private bool _IsDialogOpen;
+
+        public bool IsDialogOpen
+        {
+            get => _IsDialogOpen;
+            set => Set(ref _IsDialogOpen, value);
+        }
+
         protected override void OnActivate()
         {
             base.OnActivate();
@@ -73,12 +81,31 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            CheckoutViewModel checkoutViewModel = 
-                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage, 
-                productService, 
-                categorieService, 
-                orderService, 
-                waiterService, 
+            IsDialogOpen = true;
+
+            //CheckoutViewModel checkoutViewModel =
+            //    new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,
+            //    productService,
+            //    categorieService,
+            //    orderService,
+            //    waiterService,
+            //    delivereyService,
+            //    customerService
+            //    );
+
+            //checkoutViewModel.Parent = this.Parent;
+            //(this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+        }
+        
+        public void Checkout()
+        {
+            IsDialogOpen = false;
+            CheckoutViewModel checkoutViewModel =
+                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,
+                productService,
+                categorieService,
+                orderService,
+                waiterService,
                 delivereyService,
                 customerService
                 );
@@ -86,7 +113,7 @@ namespace PosTest.ViewModels
             checkoutViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
         }
-        
+
         public void Settings()
         {
             authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
@@ -125,6 +152,7 @@ namespace PosTest.ViewModels
 
         public void CheckoutSettings()
         {
+            IsDialogOpen = false;
             int resp;
             try
             {
