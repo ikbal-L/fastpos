@@ -20,24 +20,16 @@
 
             <TextBox x:Name="Username" Margin="5" Text="Admin"/>
             <PasswordBox x:Name="Password" Margin="5" />
-            <Button x:Name="Login" Content="Log-in" Margin="5"
-                    Style="{StaticResource MaterialDesignRaisedLightButton}"
-                    />
-            <Button x:Name="Settings" Content="Settings" Margin="5"
-                    Style="{StaticResource MaterialDesignFlatButton}"/>
-            <Button x:Name="Close" Content="Close" Margin="5"
-                    Style="{StaticResource MaterialDesignFlatButton}"/>
-            <Button x:Name="PaginationTest" Content="Pagination Test" Margin="5"
-                    Style="{StaticResource MaterialDesignFlatButton}"/>
-            <Button x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5"
-                    Style="{StaticResource MaterialDesignFlatButton}"/>
+            <Button x:Name="Login" Content="Log-in" Margin="5" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
+            <!--<Button x:Name="Settings" Content="Settings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
+            <Button x:Name="Close" Content="Close" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
+            <!--<Button x:Name="PaginationTest" Content="Pagination Test" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
+            <!--<Button x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
 
             <!--<Button x:Name="CustomersSettings" Content="CustomersSettings" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>-->
-            <Button x:Name="AdditivesSettings" Content="AdditivesSettings" Margin="5"
-                    Style="{StaticResource MaterialDesignFlatButton}"/>
-            <Button x:Name="AdditivesOfProduct" Content="AdditivesOfProduct" Margin="5"
-                    Style="{StaticResource MaterialDesignFlatButton}"/>
+            <Button x:Name="AdditivesSettings" Content="AdditivesSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
+            <Button x:Name="AdditivesOfProduct" Content="AdditivesOfProduct" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
 
 
             <!--<TextBlock Text="{res:Resources.HelloWorld,Converter={StaticResource}}"/>-->
