@@ -24,5 +24,6 @@ namespace PosTest.Views.SubViews
         {
             InitializeComponent();
         }
+
     }
 }

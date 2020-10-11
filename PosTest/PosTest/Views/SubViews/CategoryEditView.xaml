@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views.SubViews"
+             xmlns:slcontrole="clr-namespace:PosTest.SL.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              
-             xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:PosTest.Converters">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,7 +17,9 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
+            <converters:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
         </ResourceDictionary>
     </FrameworkElement.Resources>
     <StackPanel Margin="20" Width="600">
@@ -33,10 +37,10 @@
             <Label Grid.Row="0" Grid.Column="0" Content="Edit Category"  Background="AliceBlue" Grid.ColumnSpan="2"/>
 
             <Label Grid.Row="1" Grid.Column="0" Content="Name"  />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentCategory.Name}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EditCategoryViewModel.Category.Name}" />
 
             <Label Grid.Row="2" Grid.Column="0" Content="Description"  />
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentCategory.Description}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EditCategoryViewModel.Category.Description}" />
 
             <Label Grid.Row="3" Grid.Column="0" Content="Color"  />
             <Grid Grid.Row="3" Grid.Column="1">
@@ -44,24 +48,26 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="8*"/>
                 </Grid.ColumnDefinitions>
-                <Rectangle Grid.Column="0" Fill="{Binding CurrentCategory.BackGroundColor}"  />
-                <materialDesign:ColorPicker Grid.Column="1" Color="{Binding CurrentCategory.BackgroundColor}" />
+                <Rectangle Grid.Column="0" Fill="{Binding EditCategoryViewModel.Category.BackGroundColor}"  />
+                <!--<materialDesign:ColorPicker Grid.Column="1" Color="{Binding CurrentCategory.BackgroundColor}" />-->
+                <slcontrole:ColorPalette Grid.Column="1" CPColorBrush="{Binding EditCategoryViewModel.Category.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>
+
             </Grid>
             
         </Grid>
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right">
-            <Button Style="{StaticResource MaterialDesignFlatButton}"
+            <Button Style="{StaticResource MaterialDesignFlatButton}" DataContext="{Binding EditCategoryViewModel}"
                     IsDefault="True"
                     Margin="0 8 8 0"
-                    cal:Message.Attach="[Event Click] = [Action SaveCommand]"
+                    cal:Message.Attach="[Event Click] = [Action SaveCategory()]"
                     Content="SAVE"  >
             </Button>
             <Button Style="{StaticResource MaterialDesignFlatButton}"
                     IsCancel="True"
                     Margin="0 8 8 0"
-                    cal:Message.Attach="[Event Click] = [Action CancelCommand]"
+                    cal:Message.Attach="[Event Click] = [Action Cancel()]"  DataContext="{Binding EditCategoryViewModel}"
                     Content="CANCEL">
             </Button>
         </StackPanel>
