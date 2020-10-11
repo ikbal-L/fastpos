@@ -439,7 +439,8 @@
                                 </Button>
 
                                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 60 -20">
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 60 -20"
+                        caliburn:Message.Attach="[Event Click] = [Action EditCategory()]">
                                     <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
                                 </Button>
 
@@ -469,7 +470,8 @@
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
 
-                            <subviews:ProductEditView Grid.Row="0" />
+                            <subviews:ProductEditView Grid.Row="0"   />
+                            <subviews:CategoryEditView  Grid.Row="0" Visibility="{Binding IsCategory,Converter={StaticResource BooleanToVisibilityConverter}}" Background="White"></subviews:CategoryEditView>
 
                             <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="1" Margin="1">
                                 <StackPanel Orientation="Horizontal">

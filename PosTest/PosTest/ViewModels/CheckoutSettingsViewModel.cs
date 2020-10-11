@@ -17,6 +17,7 @@ using System.Windows.Media;
 using PosTest.Helpers;
 using MaterialDesignThemes.Wpf;
 using System.Threading.Tasks;
+using PosTest.ViewModels.SubViewModel;
 
 namespace PosTest.ViewModels
 {
@@ -42,7 +43,8 @@ namespace PosTest.ViewModels
         private Category _selectedFreeCategory;
         private Category _categoryToMove;
         private bool _isFlipped;
-
+        private EditCategoryViewModel _editCategoryViewModel;
+        private bool _isCategory;
 
         public CheckoutSettingsViewModel()
         {
@@ -56,6 +58,8 @@ namespace PosTest.ViewModels
             _categpryPageSize = categoryPageSize;
             _productsService = productsService;
             _categoriesService = categoriesService;
+
+            this.EditCategoryViewModel = new EditCategoryViewModel( ref this._selectedCategory,this._categoriesService);
 
 
             ProductPageSize = productPageSize;
@@ -95,7 +99,13 @@ namespace PosTest.ViewModels
         public BindableCollection<Category> FreeCategories { get; set; }
         public BindableCollection<object> ToSaveUpdate { get; set; }
         public BindableCollection<Product> ToDeletge { get; set; }
-        
+
+        public EditCategoryViewModel EditCategoryViewModel
+        {
+            get => _editCategoryViewModel;
+            set => Set(ref _editCategoryViewModel, value);
+        }
+
         void GenarateRanksForProducts()
         {
             bool existsNumber(int[] tab, int value, int end)
@@ -240,6 +250,9 @@ namespace PosTest.ViewModels
             set
             {
                 Set(ref _selectedCategory, value);
+                this.EditCategoryViewModel.Source = this.SelectedCategory;
+                NotifyOfPropertyChange(()=>EditCategoryViewModel);
+
             }
         }
         public Category CategoryOfSelectFreeProduct
@@ -255,6 +268,12 @@ namespace PosTest.ViewModels
         {
             get => _isFlipped;
             set => Set(ref _isFlipped, value);
+        }
+
+        public bool IsCategory
+        {
+            get => _isCategory;
+            set => Set(ref _isCategory,value);
         }
 
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
@@ -546,7 +565,9 @@ namespace PosTest.ViewModels
 
             if (destinationCategory.Id==null)
             {
-                _categoriesService.SaveCategory(destinationCategory);
+                long id = -1;
+                _categoriesService.SaveCategory(destinationCategory,ref id);
+                destinationCategory.Id = id;
             }
             else
             {
@@ -940,11 +961,22 @@ namespace PosTest.ViewModels
             IsFlipped = true;
         }
 
+        public void EditCategory()
+        {
+            IsCategory = true;
+            IsFlipped = true;
+            
+        }
         public void SavedProduct()
         {
             IsFlipped = false;
-            //IsSnack = true;
-            Notify("Product Saved");
+            IsCategory = false;
+            if (SelectedProduct?.Id!=null)
+            {
+               SaveProduct();
+               Notify("Product Saved");
+            }
+            
 
 
         }

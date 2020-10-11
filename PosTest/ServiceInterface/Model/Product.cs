@@ -157,7 +157,9 @@ namespace ServiceInterface.Model
             set
             {
                 _background = (SolidColorBrush)value;
-                NotifyOfPropertyChange();
+                this.BackgroundString = this._background.Color.ToString();
+                NotifyOfPropertyChange(()=>_background);
+                NotifyOfPropertyChange(() => _backgroundString);
             }
         }
 
@@ -175,6 +177,7 @@ namespace ServiceInterface.Model
             {
                 _backgroundColor = value;
                 BackgroundString = _backgroundColor.ToString();
+                NotifyOfPropertyChange(()=>BackgroundString);
                 Background = new SolidColorBrush((Color)_backgroundColor);
                 NotifyOfPropertyChange(() => IsDark);
             }
@@ -204,6 +207,7 @@ namespace ServiceInterface.Model
                 this.CategorieId = (long)this.Category.Id;
             }
 
+            
             if (this is Platter plat)
             {
                 if (plat.Additives != null)

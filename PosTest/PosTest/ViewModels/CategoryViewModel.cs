@@ -70,7 +70,7 @@ namespace PosTest.ViewModels
             {
                 var _nextId = Categories.Count == 0 ? 0 : Categories.Max(f => f.Id);
                 CurrentCategory.Id = _nextId + 1 ;
-                _categorieService.SaveCategory(CurrentCategory);
+                //_categorieService.SaveCategory(CurrentCategory);
             }
             else
             {
