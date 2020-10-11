@@ -519,6 +519,7 @@ namespace PosTest.ViewModels
         }
         private void PutProductInCellOf(Product sourceProduct, Product desProduct)
         {
+            
             var index = CurrentProducts.IndexOf(sourceProduct);
 
             desProduct.Rank = sourceProduct.Rank;
@@ -958,13 +959,16 @@ namespace PosTest.ViewModels
 
         public void EditProduct()
         {
+            if (SelectedCategory.Id==null)return;
             IsFlipped = true;
         }
 
         public void EditCategory()
         {
             IsCategory = true;
+            
             IsFlipped = true;
+
             
         }
         public void SavedProduct()

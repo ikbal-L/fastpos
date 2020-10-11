@@ -156,7 +156,8 @@ namespace ServiceInterface.Model
             get => _background ?? (_background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
             set
             {
-                _background = (SolidColorBrush)value;
+                
+                Set(ref _background, ((SolidColorBrush)value));
                 this.BackgroundString = this._background.Color.ToString();
                 NotifyOfPropertyChange(()=>_background);
                 NotifyOfPropertyChange(() => _backgroundString);
