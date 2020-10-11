@@ -681,7 +681,7 @@ namespace PosTest.ViewModels
             MouseMoveEventHandler<Category>(sender, e, key);
         }
 
-        public static void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key) where T:Ranked,new()
+        public static void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key, string requiredPropertyName = "Name") where T:Ranked,new()
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -692,7 +692,7 @@ namespace PosTest.ViewModels
                 if (listBoxItem != null)
                 {
                     t = (T) listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-                    if (t == null || t.GetType().GetProperty("Name") == null)
+                    if (t == null || t.GetType().GetProperty(requiredPropertyName) == null)
                     {
                         return;
                     }

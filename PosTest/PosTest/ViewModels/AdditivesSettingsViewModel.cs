@@ -77,13 +77,17 @@ namespace PosTest.ViewModels
                 }
 
             }
+            foreach (var additive in Additives)
+            {
+             Console.WriteLine(additive.Description);   
+            }
         }
 
         public void AdditivesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "Additive";
 
-            CheckoutSettingsViewModel.MouseMoveEventHandler<Additive>(sender, e, key);
+            CheckoutSettingsViewModel.MouseMoveEventHandler<Additive>(sender, e, key,nameof(Additive.Description));
         }
 
         public void AdditivesList_TouchDown(object sender, TouchEventArgs e)
@@ -95,45 +99,47 @@ namespace PosTest.ViewModels
 
 
 
-        public void ProductsList_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent("Addative"))
+        public void AdditivesList_Drop(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent("Additive"))
             {
 
                 ListBox listView = sender as ListBox;
-                ListBoxItem listBoxItem =
+                ListBoxItem target =
                    CheckoutSettingsViewModel.FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
-                if (listBoxItem == null)
+                if (target == null)
                 {
                     return;
                 }
                 // Find the data behind the ListViewItem
-                Additive additive = (Additive)listView.ItemContainerGenerator.
-                    ItemFromContainer(listBoxItem);
+                Additive targetAdditive = (Additive)listView.ItemContainerGenerator.
+                    ItemFromContainer(target);
 
-                Additive addativeSrc;
+                Additive receivedAdditive = e.Data.GetData("Additive") as Additive;
 
+                    if (receivedAdditive == null || receivedAdditive.Description == null) return;
+
+                Console.WriteLine(targetAdditive.GetHashCode());
+                Console.WriteLine(receivedAdditive.GetHashCode());
                 
-                    addativeSrc = e.Data.GetData("Addative") as Additive;
+                SelectedAdditive = targetAdditive;
+                //TODO Fix locating the index of empty additive
+                var indexOfReceived = Additives.IndexOf(receivedAdditive);
+                var indexOfTarget = Additives.IndexOf(targetAdditive);
+                if (SelectedAdditive.Equals(receivedAdditive))
+                {
+                    return;
+                }
 
-                    if (addativeSrc == null || addativeSrc.Description == null) return;
+                var targetRank = targetAdditive.Rank;
+                var receivedRank = receivedAdditive.Rank;
+                targetAdditive.Rank = receivedAdditive.Rank;
+                receivedAdditive.Rank = targetRank;
+                Additives[(int)targetRank-1] = receivedAdditive;
+                Additives[(int)receivedRank-1] = targetAdditive;
+                _additiveService.UpdateAdditive(receivedAdditive);
+                _additiveService.UpdateAdditive(targetAdditive);
 
-
-                    //ProductToMove = addativeSrc;
-                    //SelectedAdditive = additive;
-                    //var index = Additives.IndexOf(ProductToMove);
-                    //var prod = new Product { Rank = ProductToMove.Rank };
-                    //if (SelectedProduct.Equals(ProductToMove))
-                    //{
-                    //    ProductToMove = null;
-                    //    return;
-                    //}
-                    //PutProductInCellOf(SelectedProduct, ProductToMove);
-                    //CurrentProducts[index] = prod;
-
-                    //ProductToMove = null;
-                
             }
         }
 
