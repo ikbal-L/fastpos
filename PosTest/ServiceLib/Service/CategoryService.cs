@@ -90,10 +90,10 @@ namespace ServiceLib.Service
             return _restCategoryService.SaveCategories(categories);
         }
 
-        public int SaveCategory(Category category)
+        public int SaveCategory(Category category, ref long Id)
         {
             category.MappingBeforeSending();
-            return _restCategoryService.SaveCategory(category);
+            return _restCategoryService.SaveCategory(category, ref Id);
         }
 
         public int UpdateCategory(Category category)
@@ -225,7 +225,7 @@ namespace ServiceLib.Service
             return (int)response.StatusCode; ;
         }
 
-        public int SaveCategory(Category category)
+        public int SaveCategory(Category category ,ref long Id)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
@@ -247,6 +247,11 @@ namespace ServiceLib.Service
 
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Id = long.Parse(response.Content);
+            }
             return (int)response.StatusCode;
 
         }

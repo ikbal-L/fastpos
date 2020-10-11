@@ -12,7 +12,7 @@ namespace ServiceInterface.Interface
         IEnumerable<Category> GetAllCategories(ref int statusCode);
         (IEnumerable<Category>, IEnumerable<Product>) GetAllCategoriesAndProducts(ref int categStatusCode, ref int prodStatusCode);
         IEnumerable<Category> GetManyCategories(IEnumerable<long?> ids, ref int statusCode);
-        int SaveCategory(Category category);
+        int SaveCategory(Category category, ref long Id);
         int UpdateCategory(Category category);
         int SaveCategories(IEnumerable<Category> categories);
         Category GetCategory(long id, ref int statusCode);
