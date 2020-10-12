@@ -58,6 +58,7 @@ namespace ServiceInterface.Model
             {
                 Set(ref _backGround, (SolidColorBrush) value);
                 Set(ref _backGroundString, this._backGround.Color.ToString(), nameof(BackgroundString));
+                Set(ref _backgroundColor, ((SolidColorBrush)value).Color, nameof(BackgroundColor));
 
             }
         }
@@ -115,7 +116,7 @@ namespace ServiceInterface.Model
             }
             set
             {
-                _backgroundColor = value;
+                Set(ref _backgroundColor, value);
                 NotifyOfPropertyChange(() => IsDark);
             }
 

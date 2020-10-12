@@ -352,8 +352,10 @@ namespace PosTest.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
-            var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank!=null);
             CurrentProducts.Clear();
+            if (category.Id ==null) return;
+            var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank!=null);
+            
             var comparer = new Comparer<Product>();
             var listOfFliteredProducts = filteredProducts.ToList();
             listOfFliteredProducts.Sort(comparer);
@@ -525,8 +527,8 @@ namespace PosTest.ViewModels
             desProduct.Rank = sourceProduct.Rank;
             desProduct.Category = SelectedCategory;
             desProduct.CategorieId = SelectedCategory.Id;
-            SelectedCategory.ProductIds.Add((long)desProduct.Id);
-            _categoriesService.UpdateCategory(SelectedCategory);
+            
+            
             if (sourceProduct. Category != null)
             {
                 sourceProduct.Rank = null;
@@ -547,6 +549,8 @@ namespace PosTest.ViewModels
                 _productsService.UpdateProduct(desProduct);
 
             }
+            SelectedCategory.ProductIds.Add((long)desProduct.Id);
+            _categoriesService.UpdateCategory(SelectedCategory);
 
         }
 
@@ -601,7 +605,7 @@ namespace PosTest.ViewModels
 
         public void MoveProductTo()
         {
-            if (SelectedProduct == null || SelectedProduct.Category == null)
+            if (SelectedProduct?.Name == null || SelectedProduct.Category.Id == null)
             {
                 ToastNotification.Notify("Selcect a product to move");
                 return;
@@ -801,42 +805,40 @@ namespace PosTest.ViewModels
                     return;
                 }
                 // Find the data behind the ListViewItem
-                Product product = (Product)listView.ItemContainerGenerator.
+                Product targetProduct = (Product)listView.ItemContainerGenerator.
                     ItemFromContainer(listBoxItem);
 
-                Product productSrc;
+                Product receivedProduct;
 
                 if (e.Data.GetDataPresent("FreeProduct"))
                 {
-                    productSrc = e.Data.GetData("FreeProduct") as Product;
+                    receivedProduct = e.Data.GetData("FreeProduct") as Product;
                 }
                 else
                 {
-                    productSrc = e.Data.GetData("Product") as Product;
+                    receivedProduct = e.Data.GetData("Product") as Product;
                 }
 
-                if (productSrc == null || productSrc.Name == null) return;
+                if (receivedProduct == null || receivedProduct.Name == null) return;
 
-                if(productSrc.Rank == null)
+                if(receivedProduct.Rank == null)
                 {
-                    SelectedFreeProduct = productSrc;
-                    SelectedProduct = product;
+                    SelectedFreeProduct = receivedProduct;
+                    SelectedProduct = targetProduct;
                     AttachProductToCategory();
                 }
                 else
                 {
-                    ProductToMove = productSrc;
-                    SelectedProduct = product;
-                    var index = CurrentProducts.IndexOf(ProductToMove);
-                    var prod = new Product { Rank = ProductToMove.Rank };
-                    if (SelectedProduct.Equals(ProductToMove))
-                    {
-                        ProductToMove = null;
-                        return;
-                    }
-                    PutProductInCellOf(SelectedProduct, ProductToMove);
-                    CurrentProducts[index] = prod;
-                    ProductToMove = null;
+                    SelectedProduct = targetProduct;
+                    var targetRank = targetProduct.Rank;
+                    var receivedRank = receivedProduct.Rank;
+                    targetProduct.Rank = receivedProduct.Rank;
+                    receivedProduct.Rank = targetRank;
+                    CurrentProducts[(int)targetRank - 1] = receivedProduct;
+                    CurrentProducts[(int)receivedRank - 1] = targetProduct;
+                    _productsService.UpdateProduct(receivedProduct);
+                    _productsService.UpdateProduct(targetProduct);
+
                 }
             }
         }
