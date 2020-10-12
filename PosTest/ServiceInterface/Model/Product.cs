@@ -144,12 +144,7 @@ namespace ServiceInterface.Model
         public string BackgroundString 
         { 
             get => _backgroundString ?? (_backgroundString = "#ff12eaf3");
-            set
-            {
-                _backgroundString = value;
-                NotifyOfPropertyChange();
-            }
-            
+            set => Set(ref _backgroundString, value);
         }
 
         public virtual Brush Background { 
@@ -158,9 +153,7 @@ namespace ServiceInterface.Model
             {
                 
                 Set(ref _background, ((SolidColorBrush)value));
-                this.BackgroundString = this._background.Color.ToString();
-                NotifyOfPropertyChange(()=>_background);
-                NotifyOfPropertyChange(() => _backgroundString);
+                Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
             }
         }
 

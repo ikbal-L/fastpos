@@ -15,7 +15,7 @@ namespace ServiceInterface.Model
     public class Category : Ranked
     {
         private string _backGroundString=null;
-        private Brush _backGround;
+        private SolidColorBrush _backGround;
         private string _name;
         private Color? _backgroundColor;
 
@@ -57,9 +57,7 @@ namespace ServiceInterface.Model
             set
             {
                 Set(ref _backGround, (SolidColorBrush) value);
-                _backGroundString = ((SolidColorBrush) value).Color.ToString();
-                NotifyOfPropertyChange(() => Background);
-                NotifyOfPropertyChange(() => _backGroundString);
+                Set(ref _backGroundString, this._backGround.Color.ToString(), nameof(BackgroundString));
 
             }
         }
@@ -118,8 +116,6 @@ namespace ServiceInterface.Model
             set
             {
                 _backgroundColor = value;
-                BackgroundString = _backgroundColor.ToString();
-                Background = new SolidColorBrush((Color)_backgroundColor);
                 NotifyOfPropertyChange(() => IsDark);
             }
 

@@ -38,7 +38,8 @@ namespace PosTest.ViewModels.SubViewModel
         public void SaveCategory()
         {
             Clone(source:ref _category,target:ref this._source);
-            if (Category.Id != null)
+            NotifyOfPropertyChange(()=>Source);
+            if (Source.Id != null)
             {
                 _categoryService.UpdateCategory(this._source);
 
@@ -62,7 +63,6 @@ namespace PosTest.ViewModels.SubViewModel
         private static  void Clone(ref Category source, ref Category target)
         {
             if (source ==null) return;
-            target.Id = source.Id;
             target.Name = source.Name;
             target.Description = source.Description;
             target.Background = source.Background;
