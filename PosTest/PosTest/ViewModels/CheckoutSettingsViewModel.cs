@@ -787,6 +787,7 @@ namespace PosTest.ViewModels
         
         public void ProductsList_Drop(object sender, DragEventArgs e)
         {
+            if(SelectedCategory?.Id == null) return;
             if (e.Data.GetDataPresent("FreeProduct") ||
                 e.Data.GetDataPresent("Product"))
             {
