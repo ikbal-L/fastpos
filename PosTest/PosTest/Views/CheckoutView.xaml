@@ -705,10 +705,11 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
+                                <!--caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering($this)]"-->
                                 <DataTemplate DataType="{x:Type models:Category}">
                                     <Button MinWidth="80" Height="60" Background="{Binding Background}"
                                     Content="{Binding Name}"
-                                    caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering($this)]"
+                                    caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
                                     FontWeight="Bold"
                                     FontSize="16"
                                     Padding="3 0 0 5"
