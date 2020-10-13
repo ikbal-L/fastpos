@@ -22,6 +22,7 @@ namespace ServiceLib.Service
     {
         private RestCategoryService _restCategoryService = RestCategoryService.Instance;
         private RestProductService _restProductService = RestProductService.Instance;
+        private ProductService _productService = new ProductService();
         public int DeleteCategory(long id)
         {
             return _restCategoryService.DeleteCategory(id);
@@ -47,7 +48,7 @@ namespace ServiceLib.Service
         {
             var categories = _restCategoryService.GetAllCategories(ref categStatusCode);
            
-            var products = _restProductService.GetAllProducts(ref prodStatusCode);
+            var products = _productService.GetAllProducts(ref prodStatusCode);
 
             if (categStatusCode != 200 && prodStatusCode!=200)
             {
