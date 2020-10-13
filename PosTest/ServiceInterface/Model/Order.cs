@@ -325,7 +325,7 @@ namespace ServiceInterface.Model
         public long? TableId { get; set; }
 
         public Category ShownCategory { get; private set; }
-        public ICollectionView ShownAdditivesPage { get; set; }
+        public BindableCollection<Additive> ShownAdditivesPage { get; set; }
 
         public bool ProductsVisibility { get; set; }
         public bool AdditivesVisibility { get; set; }
@@ -407,7 +407,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        public void SaveScreenState(Category category, ICollectionView additives,
+        public void SaveScreenState(Category category, BindableCollection<Additive> additives,
             bool productsVisibility, bool additviesVisibility)
         {
             ShownCategory = category;
