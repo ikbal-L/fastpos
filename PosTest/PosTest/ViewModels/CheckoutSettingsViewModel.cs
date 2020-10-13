@@ -327,6 +327,7 @@ namespace PosTest.ViewModels
                     if (newT is Product product)
                     {
                         product.Category = category;
+                        product.CategorieId = category.Id;
                     }
                     dest.Add(newT);
 
@@ -535,7 +536,7 @@ namespace PosTest.ViewModels
             desProduct.CategorieId = SelectedCategory.Id;
             
             
-            if (sourceProduct. Category != null)
+            if (sourceProduct. Category != null && sourceProduct.Id!=null)
             {
                 sourceProduct.Rank = null;
                 sourceProduct.Category = null;
@@ -556,6 +557,7 @@ namespace PosTest.ViewModels
 
             }
             SelectedCategory.ProductIds.Add((long)desProduct.Id);
+            SelectedCategory.Products.Add(desProduct);
             _categoriesService.UpdateCategory(SelectedCategory);
 
         }
