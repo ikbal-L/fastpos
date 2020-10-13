@@ -793,6 +793,7 @@ namespace PosTest.ViewModels
             CurrentCategory = category;
             LoadPages(listOfFliteredProducts, ProductsPage, MaxProductPageSize);
         }
+
         public void ShowProductAdditives(Platter product)
         {
             AdditivesPage.Clear();
@@ -800,7 +801,7 @@ namespace PosTest.ViewModels
             var comparer = new Comparer<Additive>();
             var additives = product.Additives.ToList();
             additives.Sort(comparer);
-            
+
             LoadPages(additives, AdditivesPage, MaxProductPageSize);
         }
 
@@ -1548,7 +1549,6 @@ namespace PosTest.ViewModels
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
-                
                 //AdditivesPage = (selectedproduct as Platter).Additives;
                 ShowProductAdditives(selectedproduct as Platter);
                 ProductsVisibility = false;
@@ -1604,13 +1604,18 @@ namespace PosTest.ViewModels
             get => _selectedDelivereyman;
             set
             {
-                if (CurrentOrder == null)
+                if (CurrentOrder == null && value != null)
                 {
                     NewOrder();
                 }
 
                 Set(ref _selectedDelivereyman, value);
-                CurrentOrder.Delivereyman = value;
+
+                if (CurrentOrder != null)
+                {
+                    CurrentOrder.Delivereyman = value;
+                }
+
                 IsTopDrawerOpen = false;
                 if (value != null)
                 {
@@ -1624,14 +1629,18 @@ namespace PosTest.ViewModels
             get => _selectedWaiter;
             set
             {
-                if (CurrentOrder == null)
+                if (CurrentOrder == null && value != null)
                 {
                     NewOrder();
                     SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
                 }
 
                 Set(ref _selectedWaiter, value);
-                CurrentOrder.Waiter = value;
+                if (CurrentOrder != null)
+                {
+                    CurrentOrder.Waiter = value;
+                }
+
                 IsTopDrawerOpen = false;
             }
         }

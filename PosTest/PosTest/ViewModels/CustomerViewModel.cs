@@ -41,14 +41,18 @@ namespace PosTest.ViewModels
             }
             set 
             {
-                if (ParentChechoutVM.CurrentOrder == null)
+                if (ParentChechoutVM.CurrentOrder == null && value!=null)
                 {
                     ParentChechoutVM.NewOrder();
                 }
 
                 Set(ref _selectedCustomer, value);
                 _selectedCustomer = value;
-                ParentChechoutVM.CurrentOrder.Customer= value;
+
+                if (ParentChechoutVM.CurrentOrder!=null)
+                {
+                    ParentChechoutVM.CurrentOrder.Customer = value; 
+                }
                 
                 ParentChechoutVM.IsTopDrawerOpen = false;
             }
