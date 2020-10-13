@@ -446,9 +446,12 @@ namespace PosTest.ViewModels
 
             if (SelectedT is Product selectedProduct)
             {
+                selectedProduct.Category.ProductIds.Remove((long)selectedProduct.Id);
+                _categoriesService.UpdateCategory(selectedProduct.Category);
                 selectedProduct.Category = null;
                 selectedProduct.CategorieId = null;
                 _productsService.UpdateProduct(selectedProduct);
+                
             }
             if (SelectedT is Category selectedCategory)
             {
