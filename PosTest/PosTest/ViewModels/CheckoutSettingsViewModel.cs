@@ -470,6 +470,9 @@ namespace PosTest.ViewModels
                 // implementing  update many products in the backend
                 CurrentProducts.Clear();
                 SelectedCategory = null;
+
+                selectedCategory.Products.Clear();
+                selectedCategory.ProductIds.Clear();
                 _categoriesService.UpdateCategory(selectedCategory);
 
             }
