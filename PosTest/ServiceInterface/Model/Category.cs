@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
@@ -16,24 +18,26 @@ namespace ServiceInterface.Model
     {
         private string _backGroundString=null;
         private SolidColorBrush _backGround;
-        private string _name;
         private Color? _backgroundColor;
+        private string _name;
+        private string _description;
 
         [DataMember(IsRequired = true)]
         public long? Id { get; set; }
 
         [DataMember]
+        [Required(ErrorMessage = "Name must not be Null or Empty")]
         public string Name
         {
             get => _name;
-            set
-            {
-                _name = value;
-                NotifyOfPropertyChange(() => Name);
-            }
+            set { Set(ref _name, value); }
         }
- 
-        public string Description { get; set; }
+        [Required(ErrorMessage = "Description must not be Null or Empty")]
+        public string Description
+        {
+            get => _description;
+            set => Set(ref _description, value);
+        }
 
         [DataMember]
         public string BackgroundString 
@@ -131,5 +135,8 @@ namespace ServiceInterface.Model
                 return (5 * c.G + 2 * c.R + c.B) <= 8 * 140;
             }
         }
+
+        
+
     }
 }

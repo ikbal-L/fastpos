@@ -62,7 +62,8 @@
                     IsDefault="True"
                     Margin="0 8 8 0"
                     cal:Message.Attach="[Event Click] = [Action SaveCategory()]"
-                    Content="SAVE"  >
+                    Content="SAVE"
+                    IsEnabled="{Binding HasErrors}">
             </Button>
             <Button Style="{StaticResource MaterialDesignFlatButton}"
                     IsCancel="True"
