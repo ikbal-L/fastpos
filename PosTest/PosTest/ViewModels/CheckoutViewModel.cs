@@ -49,7 +49,7 @@ namespace PosTest.ViewModels
         private bool _canExecutePrevious;
         private Order _currentOrder;
         private bool _additivesVisibility;
-        private ICollectionView _additvesPage;
+        private BindableCollection<Additive> _additvesPage;
 
         private bool _IsDialogOpen;
         private SplitViewModel _splitViewModel;
@@ -122,19 +122,28 @@ namespace PosTest.ViewModels
             ICustomerService customerService
         ) : this()
         {
-           
-
             _productsService = productsService;
             _categoriesService = categoriesService;
             _orderService = orderService;
             _customerService = customerService;
 
-            int getProductsStatusCode = 0;
-            AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
+            //int getProductsStatusCode = 0;
+
+
+            int catStatusCode = 0;
+            int prodStatusCode = 0;
+            (IEnumerable<Category> categories, IEnumerable<Product> products) =
+                _categoriesService.GetAllCategoriesAndProducts(ref catStatusCode, ref prodStatusCode);
+            if (catStatusCode != 200 && prodStatusCode != 200) return;
+            AllProducts = products.ToList();
+            AllCategories = categories.ToList();
+
+            //AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
             ProductsPage = new BindableCollection<Product>();
+            AdditivesPage = new BindableCollection<Additive>();
             LoadCategoryPages();
             var code = 0;
             var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
@@ -158,6 +167,8 @@ namespace PosTest.ViewModels
 
             CustomerViewModel = new CustomerViewModel(this);
         }
+
+        public List<Category> AllCategories { get; set; }
 
         #endregion
 
@@ -230,15 +241,10 @@ namespace PosTest.ViewModels
             set => Set(ref _productsPage, value);
         }
 
-        public ICollectionView AdditivesPage
+        public BindableCollection<Additive> AdditivesPage
         {
             get => _additvesPage;
-            set
-            {
-                //_productsPage = value;
-                _additvesPage = value;
-                NotifyOfPropertyChange(() => AdditivesPage);
-            }
+            set => Set(ref _additvesPage, value);
         }
 
         public Order DisplayedOrder
@@ -531,10 +537,11 @@ namespace PosTest.ViewModels
             }
             else
             {
-                CategorieFiltering(CurrentCategory);
+                ShowCategoryProducts(CurrentCategory);
             }
 
             AdditivesPage = CurrentOrder.ShownAdditivesPage;
+
             ProductsVisibility = CurrentOrder.ProductsVisibility;
             AdditivesVisibility = CurrentOrder.AdditivesVisibility;
         }
@@ -735,6 +742,7 @@ namespace PosTest.ViewModels
         }
 
         #region Filtering and pagination
+
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {
             var categories = new HashSet<Category>();
@@ -754,15 +762,17 @@ namespace PosTest.ViewModels
 
             return categories;
         }
+
         void LoadCategoryPages()
         {
             var comparer = new Comparer<Category>();
-            var retrieveCategories = RetrieveCategories(AllProducts.Where(p =>
-                p.CategorieId != null));
+            //var retrieveCategories = RetrieveCategories(AllProducts.Where(p =>
+            //    p.CategorieId != null));
+            var retrieveCategories = AllCategories;
             var categories = new List<Category>(retrieveCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             Categories = new BindableCollection<Category>();
-            var maxRank = (int)categories.Max(c => c.Rank);
+            var maxRank = (int) categories.Max(c => c.Rank);
             int _categpryPageSize = 10;
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
@@ -781,81 +791,85 @@ namespace PosTest.ViewModels
             var listOfFliteredProducts = filteredProducts.ToList();
             listOfFliteredProducts.Sort(comparer);
             CurrentCategory = category;
-            LoadPages(listOfFliteredProducts, ProductsPage, MaxProductPageSize, category);
+            LoadPages(listOfFliteredProducts, ProductsPage, MaxProductPageSize);
+        }
+        public void ShowProductAdditives(Platter product)
+        {
+            AdditivesPage.Clear();
+            if (product == null) return;
+            var comparer = new Comparer<Additive>();
+            var additives = product.Additives.ToList();
+            additives.Sort(comparer);
+            
+            LoadPages(additives, AdditivesPage, MaxProductPageSize);
         }
 
 
-        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size, Category category = null)
+        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size)
             where T : Ranked, new()
         {
             int icat = 0;
             for (int i = 1; i <= size; i++)
             {
-                T cat = null;
+                T item = null;
                 if (icat < source.Count)
                 {
-                    cat = source[icat];
+                    item = source[icat];
                 }
                 else
                 {
-                    cat = null;
+                    item = null;
                 }
 
-                if (cat != null && cat.Rank == i)
+                if (item != null && item.Rank == i)
                 {
-                    dest.Add(cat);
+                    dest.Add(item);
                     icat++;
                 }
                 else
                 {
-                    //var newT = new T { Rank = i };
-                    //if (newT is Product product)
-                    //{
-                    //    product.Category = category;
-                    //}
-                    //dest.Add(newT);
                     dest.Add(null);
                 }
             }
         }
 
 
-        public void CategorieFiltering(object param)
-        {
-            AdditivesVisibility = false;
-            ProductsVisibility = true;
-            if (param is Category)
-            {
-                Category category = param as Category;
-                category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
-                if (CurrentCategory != null)
-                    CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
-                CurrentCategory = category;
-                Predicate<object> filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
-                FilteredProducts.Filter = filter;
+        //public void CategorieFiltering(object param)
+        //{
+        //    AdditivesVisibility = false;
+        //    ProductsVisibility = true;
+        //    if (param is Category)
+        //    {
+        //        Category category = param as Category;
+        //        category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
+        //        if (CurrentCategory != null)
+        //            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
+        //        CurrentCategory = category;
+        //        Predicate<object> filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+        //        FilteredProducts.Filter = filter;
 
 
-                //PaginateProducts(NextOrPrevious.First);
-            }
-            else if (param is string)
-                if ((param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
-                {
-                    FilteredProducts.Filter = null;
+        //        //PaginateProducts(NextOrPrevious.First);
+        //    }
+        //    else if (param is string)
+        //        if ((param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
+        //        {
+        //            FilteredProducts.Filter = null;
 
-                    if (CurrentCategory != null)
-                        CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
+        //            if (CurrentCategory != null)
+        //                CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
 
-                    CurrentCategory = null;
-                    var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
-                    FilteredProducts.Filter = (p) => (p as Product).IsMuchInDemand == true;
-                    //PaginateProducts(NextOrPrevious.First);
-                }
-                else // param == "ALL"
-                {
-                    FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
-                    //PaginateProducts(NextOrPrevious.First);
-                }
-        }
+        //            CurrentCategory = null;
+        //            var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
+        //            FilteredProducts.Filter = (p) => (p as Product).IsMuchInDemand == true;
+        //            //PaginateProducts(NextOrPrevious.First);
+        //        }
+        //        else // param == "ALL"
+        //        {
+        //            FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
+        //            //PaginateProducts(NextOrPrevious.First);
+        //        }
+        //}
 
         public void ProductFiltering(string text)
         {
@@ -1534,7 +1548,9 @@ namespace PosTest.ViewModels
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
-                AdditivesPage = CollectionViewSource.GetDefaultView((selectedproduct as Platter).Additives);
+                
+                //AdditivesPage = (selectedproduct as Platter).Additives;
+                ShowProductAdditives(selectedproduct as Platter);
                 ProductsVisibility = false;
                 AdditivesVisibility = true;
             }
@@ -1560,7 +1576,8 @@ namespace PosTest.ViewModels
             var oitem = CurrentOrder.SelectedOrderItem;
             AdditivesVisibility = true;
             ProductsVisibility = false;
-            AdditivesPage = CollectionViewSource.GetDefaultView((oitem.Product as Platter).Additives);
+            //AdditivesPage = (oitem.Product as Platter).Additives;
+            ShowProductAdditives(oitem.Product as Platter);
         }
 
         #endregion
