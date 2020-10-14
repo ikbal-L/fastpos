@@ -22,14 +22,30 @@ namespace PosTest.ViewModels.SubViewModel
         private readonly Dictionary<string, ICollection<string>> _validationErrors =
             new Dictionary<string, ICollection<string>>();
 
+        private string _name;
+
         public EditCategoryViewModel(ref Category sourceCategory, ICategoryService categoryService)
         {
-            _category = new Category();
-            Clone(source: ref sourceCategory, target: ref _category);
+            
+            
             this._source = sourceCategory;
-
+            _category = new Category();
+            _category = CloneFromSource();
             this._categoryService = categoryService;
         }
+
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                Set(ref _name, value);
+                Category.Name = _name;
+                ValidateModelProperty(Category,Category.Name,nameof(Category.Name));
+            }
+        }
+
 
         public Category Category
         {
@@ -38,10 +54,22 @@ namespace PosTest.ViewModels.SubViewModel
             {
                 _category = value;
                 Set(ref _category, value);
-                ValidateModelProperty(Category.Name, nameof(Category.Name));
-                ValidateModelProperty(Category.Description, nameof(Category.Description));
+                ValidateModelProperty(Category, Category.Name, nameof(Category.Name));
             }
         }
+
+
+        public Category Source
+        {
+            private get { return _source; }
+            set
+            {
+                Set(ref _source, value);
+                Category = CloneFromSource();
+                NotifyOfPropertyChange(() => this.Category);
+            }
+        }
+
 
         public void SaveCategory()
         {
@@ -75,21 +103,35 @@ namespace PosTest.ViewModels.SubViewModel
             target.BackgroundColor = source.BackgroundColor;
         }
 
-        public Category Source
+        public Category CloneFromSource()
         {
-            private get { return _source; }
-            set
+            if (_source!=null)
             {
-                Set(ref _source, value);
-                Clone(source: ref _source, target: ref _category);
-                NotifyOfPropertyChange(() => this.Category);
+                var category = new Category
+                {
+                    Name = _source.Name,
+                    Description = _source.Description,
+                    Background = _source.Background,
+                    BackgroundColor = _source.BackgroundColor
+                };
+                Set(ref _name, _source.Name);
+                return category;
+            }
+            else
+            {
+                return _source;
             }
         }
+
+        
+
+        
         private void RaiseErrorsChanged(string propertyName)
         {
             if (ErrorsChanged != null)
                 ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
         }
+
         public IEnumerable GetErrors(string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName)
@@ -106,14 +148,14 @@ namespace PosTest.ViewModels.SubViewModel
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        protected void ValidateModelProperty(object value, string propertyName)
+        protected void ValidateModelProperty(object instance, object value, string propertyName)
         {
             if (_validationErrors.ContainsKey(propertyName))
                 _validationErrors.Remove(propertyName);
 
             ICollection<ValidationResult> validationResults = new List<ValidationResult>();
             ValidationContext validationContext =
-                new ValidationContext(Category, null, null) { MemberName = propertyName };
+                new ValidationContext(instance, null, null) {MemberName = propertyName};
             if (!Validator.TryValidateProperty(value, validationContext, validationResults))
             {
                 _validationErrors.Add(propertyName, new List<string>());
@@ -122,6 +164,7 @@ namespace PosTest.ViewModels.SubViewModel
                     _validationErrors[propertyName].Add(validationResult.ErrorMessage);
                 }
             }
+
             RaiseErrorsChanged(propertyName);
         }
     }

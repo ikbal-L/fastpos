@@ -27,6 +27,9 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required(ErrorMessage = "Name must not be Null or Empty")]
+        [MaxLength(10,ErrorMessage = "Name must not exceed 10 characters ")]
+        [MinLength(5,ErrorMessage = "Name must not be under 5 characters ")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must only contain letters (a-z, A-Z).")]
         public string Name
         {
             get => _name;

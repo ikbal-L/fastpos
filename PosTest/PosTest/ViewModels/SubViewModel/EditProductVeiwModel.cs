@@ -1,14 +1,21 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Caliburn.Micro;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 
 namespace PosTest.ViewModels.SubViewModel
 {
-    public class EditProductVeiwModel: PropertyChangedBase
+    public class EditProductVeiwModel : PropertyChangedBase, INotifyDataErrorInfo
     {
         private Product _product;
         private IProductService _productService;
         private Product _source;
+
+        private readonly Dictionary<string, ICollection<string>> _validationErrors =
+            new Dictionary<string, ICollection<string>>();
 
         public EditProductVeiwModel(ref Product sourceProduct, IProductService productService)
         {
@@ -35,7 +42,6 @@ namespace PosTest.ViewModels.SubViewModel
             if (Product.Id != null)
             {
                 _productService.UpdateProduct(this._source);
-
             }
             else
             {
@@ -44,7 +50,6 @@ namespace PosTest.ViewModels.SubViewModel
                 Product.Id = id;
                 this._source.Id = id;
             }
-
         }
 
         public void Cancel()
@@ -73,5 +78,21 @@ namespace PosTest.ViewModels.SubViewModel
                 NotifyOfPropertyChange(() => this.Product);
             }
         }
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors
+        {
+            get { return _validationErrors.Count > 0; }
+        }
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
     }
 }
