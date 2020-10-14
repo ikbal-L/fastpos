@@ -180,7 +180,7 @@
                                   HorizontalContentAlignment="Right" Padding="1 -2 1 1"  FontWeight="Bold"     />
                         <DockPanel  Grid.Column="0" Grid.Row="1">
                             <materialdesign:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="25" Height="25" Padding="0" Foreground="#26ff26"/>
-                            <TextBlock Text="{Binding SplittedOrder.TotalDiscountAmount,StringFormat={}{0:#.##}}" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SplittedOrder.TotalDiscountAmount,StringFormat={}{0:#.##}}" FontSize="13" FontWeight="Bold" Foreground="#26ff26"/>
                         </DockPanel>
                         <DockPanel  Grid.Column="1" Grid.Row="1">
                             <Label Content="Returned" Foreground="#26ff26"  FontSize="15"  FontFamily="{StaticResource DigitalFontFamily}"/>
@@ -232,7 +232,7 @@
                                  GroupName="action"
                                  Style="{StaticResource ButtonStyle18radio}"
                                  IsChecked="{Binding IsPayementChecked}"
-                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('VALIDATE')]"
+                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"
                                  FontSize="15"
                                  >
                     <StackPanel Orientation="Vertical">

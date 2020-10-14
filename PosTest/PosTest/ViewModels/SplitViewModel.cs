@@ -122,10 +122,10 @@ namespace PosTest.ViewModels
             set
             {
                 _numericZone = value;
-                if (!CommandSwitched)
-                {
-                    KeypadEnteredValueChanged(ref _numericZone);
-                }
+                //if (!CommandSwitched)
+                //{
+                //    KeypadEnteredValueChanged(ref _numericZone);
+                //}
                 NotifyOfPropertyChange();
             }
         }
@@ -238,13 +238,14 @@ namespace PosTest.ViewModels
             {
                 order.DiscountAmount = order.Total - newTotal;// CurrentOrder.NewTotal;
                 order.DiscountPercentage = order.DiscountAmount * 100 / order.Total;
+                
             }
             else
             {
                 priceStr = priceStr.Remove(priceStr.Length - 1, 1);
                 ToastNotification.Notify("New price less than the total price");
             }
-            //priceStr = "";
+            priceStr = "";
 
         }
         public  void DiscAction(ref string discStr, Order order)
@@ -345,19 +346,31 @@ namespace PosTest.ViewModels
 
         public void ActionKeyboard(ActionButton cmd)
         {
-             switch (cmd)
+            if (string.IsNullOrEmpty(NumericZone)) return;
+            switch (cmd)
             {
                 case ActionButton.Price:
                     {
-                        if (IsTotalPriceChecked)
+                        //if (IsTotalPriceChecked)
+                        //{
+                        //    IsPercentKeyAllowed = false;
+                        //    NumericZone = SplittedOrder?.NewTotal.ToString();
+
+                        //}
+                        //else
+                        //{
+                        //    NumericZone = "";
+                        //}
+                        
+                        if (!NumericZone.Contains("%"))
                         {
-                            IsPercentKeyAllowed = false;
-                            NumericZone = SplittedOrder?.NewTotal.ToString();
+                            PriceAction(ref _numericZone, SplittedOrder); 
                         }
                         else
                         {
-                            NumericZone = "";
+                            DiscAction(ref _numericZone,SplittedOrder);
                         }
+                            NumericZone = _numericZone;
                         break;
                     }
 
@@ -388,17 +401,9 @@ namespace PosTest.ViewModels
                         break;
                     }
                 case ActionButton.Payment:
-                    if (IsPayementChecked)
-                    {
-                        IsPercentKeyAllowed = false;
-                        NumericZone = "";// SplitedOrder?.SelectedOrderItem?.UnitPrice.ToString();
-                    }
-                    else
-                    {
-                        NumericZone = "";
-                    }
-                    break;
-                case ActionButton.Validate:
+                    
+                    
+                    
                     PayementAction();
                     GivenAmount = SplittedOrder.GivenAmount;
                     ReturnedAmount = SplittedOrder.ReturnedAmount;
@@ -410,6 +415,11 @@ namespace PosTest.ViewModels
                     break;
             }
         }
+
+
+
+
+
 
        #region Split Commands
         public void BackFromSplitCommand()
