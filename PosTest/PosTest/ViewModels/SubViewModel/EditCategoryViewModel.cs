@@ -23,6 +23,8 @@ namespace PosTest.ViewModels.SubViewModel
             new Dictionary<string, ICollection<string>>();
 
         private string _name;
+        private string _description;
+        private bool _isSaveEnabled;
 
         public EditCategoryViewModel(ref Category sourceCategory, ICategoryService categoryService)
         {
@@ -32,6 +34,7 @@ namespace PosTest.ViewModels.SubViewModel
             _category = new Category();
             _category = CloneFromSource();
             this._categoryService = categoryService;
+            IsSaveEnabled = true;
         }
 
 
@@ -46,6 +49,16 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                Set(ref _description, value);
+                Category.Description = _description;
+                ValidateModelProperty(Category, Category.Description, nameof(Category.Description));
+            }
+        }
 
         public Category Category
         {
@@ -55,6 +68,7 @@ namespace PosTest.ViewModels.SubViewModel
                 _category = value;
                 Set(ref _category, value);
                 ValidateModelProperty(Category, Category.Name, nameof(Category.Name));
+                ValidateModelProperty(Category, Category.Description, nameof(Category.Description));
             }
         }
 
@@ -91,7 +105,11 @@ namespace PosTest.ViewModels.SubViewModel
         public void Cancel()
         {
             this.Category = new Category();
+            this.Name = null;
+            this.Description = null;
             NotifyOfPropertyChange(() => this.Category);
+            NotifyOfPropertyChange(() => this.Name);
+            NotifyOfPropertyChange(() => this.Description);
         }
 
         private static void Clone(ref Category source, ref Category target)
@@ -115,6 +133,7 @@ namespace PosTest.ViewModels.SubViewModel
                     BackgroundColor = _source.BackgroundColor
                 };
                 Set(ref _name, _source.Name);
+                Set(ref _description, _source.Description);
                 return category;
             }
             else
@@ -143,7 +162,16 @@ namespace PosTest.ViewModels.SubViewModel
 
         public bool HasErrors
         {
-            get { return _validationErrors.Count > 0; }
+            get
+            {
+                return _validationErrors.Count > 0;
+            }
+        }
+
+        public bool IsSaveEnabled
+        {
+            get => _isSaveEnabled;
+            set => Set(ref _isSaveEnabled, value);
         }
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -164,7 +192,8 @@ namespace PosTest.ViewModels.SubViewModel
                     _validationErrors[propertyName].Add(validationResult.ErrorMessage);
                 }
             }
-
+            IsSaveEnabled = _validationErrors.Count == 0;
+            NotifyOfPropertyChange(() => IsSaveEnabled);
             RaiseErrorsChanged(propertyName);
         }
     }
