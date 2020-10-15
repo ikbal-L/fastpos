@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -23,9 +24,13 @@ namespace ServiceInterface.Model
         private Category _category;
         private SolidColorBrush _background;
 
+        [DataMember] public long? Id { get; set; }
+
         [DataMember]
-        public long? Id { get; set; }
-        [DataMember]
+        [Required(ErrorMessage = "Product Name must not be Null or Empty")]
+        [MaxLength(10, ErrorMessage = "Product Name must not exceed 10 characters ")]
+        [MinLength(5, ErrorMessage = "Product Name must not be under 5 characters ")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Product Name must only contain letters (a-z, A-Z).")]
         public string Name
         {
             get => _name;
@@ -37,7 +42,12 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public string Description { 
+        [Required(ErrorMessage = "Product Description must not be Null or Empty")]
+        [MaxLength(10, ErrorMessage = "Product Description must not exceed 10 characters ")]
+        [MinLength(5, ErrorMessage = "Product Description must not be under 5 characters ")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Product Description must only contain letters (a-z, A-Z).")]
+        public string Description
+        {
             get => _description;
             set
             {
@@ -45,7 +55,10 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Description);
             }
         }
+
         [DataMember]
+        [Required(ErrorMessage = "Price is required")]
+        [RegularExpression(@"\-?\d+\.\d+",ErrorMessage = "Product Price must be a Decimal")]
         public decimal Price
         {
             get => _price;
@@ -55,7 +68,9 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Price);
             }
         }
+
         [DataMember]
+        [RegularExpression(@"[0-9]*$",ErrorMessage = "Product unit number must be a Number")]
         public string Unit
         {
             get => _unit;
@@ -65,8 +80,9 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Unit);
             }
         }
+
         [DataMember]
-        public bool IsMuchInDemand 
+        public bool IsMuchInDemand
         {
             get => _isMuchInDemand;
             set
@@ -76,12 +92,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        [DataMember]
-        public long? CategorieId
-        {
-            get;
-            set;
-        }
+        [DataMember] public long? CategorieId { get; set; }
 
         public Category Category
         {
@@ -104,26 +115,21 @@ namespace ServiceInterface.Model
             }
         }
 
-       
-        [DataMember]
-        public string Type { get; set; }
-        [DataMember]
-        public string Color { get; set; }
-        [DataMember]
-        public string PictureFileName { get; set; }
-        [DataMember]
-        public string PictureUri { get; set; }
-        [DataMember]
-        public int AvailableStock { get; set; }
+
+        [DataMember] public string Type { get; set; }
+        [DataMember] public string Color { get; set; }
+        [DataMember] public string PictureFileName { get; set; }
+        [DataMember] public string PictureUri { get; set; }
+        [DataMember] public int AvailableStock { get; set; }
 
         private Color? _backgroundColor;
         private bool _isSelected;
 
         public Product()
         {
-
         }
-        public Product(Product platProduct) :this()
+
+        public Product(Product platProduct) : this()
         {
             AvailableStock = platProduct.AvailableStock;
             BackgroundString = platProduct.BackgroundString;
@@ -141,41 +147,42 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public string BackgroundString 
-        { 
+        public string BackgroundString
+        {
             get => _backgroundString ?? (_backgroundString = "#ff12eaf3");
             set => Set(ref _backgroundString, value);
         }
 
-        public virtual Brush Background { 
-            get => _background ?? (_background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+        public virtual Brush Background
+        {
+            get => _background ?? (_background =
+                new SolidColorBrush((Color) ColorConverter.ConvertFromString(BackgroundString)));
             set
             {
-                
-                Set(ref _background, ((SolidColorBrush)value));
+                Set(ref _background, ((SolidColorBrush) value));
                 Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
             }
         }
 
-        public virtual Color? BackgroundColor {
-
+        public virtual Color? BackgroundColor
+        {
             get
             {
                 if (_backgroundColor == null)
                 {
-                    _backgroundColor = (Color)ColorConverter.ConvertFromString(BackgroundString);
+                    _backgroundColor = (Color) ColorConverter.ConvertFromString(BackgroundString);
                 }
+
                 return _backgroundColor;
             }
             set
             {
                 _backgroundColor = value;
                 BackgroundString = _backgroundColor.ToString();
-                NotifyOfPropertyChange(()=>BackgroundString);
-                Background = new SolidColorBrush((Color)_backgroundColor);
+                NotifyOfPropertyChange(() => BackgroundString);
+                Background = new SolidColorBrush((Color) _backgroundColor);
                 NotifyOfPropertyChange(() => IsDark);
             }
-
         }
 
         [DataMember]
@@ -183,9 +190,9 @@ namespace ServiceInterface.Model
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsPlatter { get; set; } = false;
 
-        public bool IsDark 
+        public bool IsDark
         {
-            get 
+            get
             {
                 var c = BackgroundColor.GetValueOrDefault();
                 var d = (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
@@ -193,15 +200,15 @@ namespace ServiceInterface.Model
             }
         }
 
-        
+
         public void MappingBeforeSending()
         {
             if (this.CategorieId <= 0 && this.Category != null)
             {
-                this.CategorieId = (long)this.Category.Id;
+                this.CategorieId = (long) this.Category.Id;
             }
 
-            
+
             if (this is Platter plat)
             {
                 if (plat.Additives != null)
@@ -214,6 +221,7 @@ namespace ServiceInterface.Model
                     {
                         plat.IdAdditives.Clear();
                     }
+
                     foreach (var a in plat.Additives)
                     {
                         plat.IdAdditives.Add(a.Id);
@@ -225,7 +233,7 @@ namespace ServiceInterface.Model
                     {
                         if (ing.Product != null)
                         {
-                            ing.ProductId = (long)ing.Product.Id;
+                            ing.ProductId = (long) ing.Product.Id;
                         }
                     }
             }
@@ -233,11 +241,11 @@ namespace ServiceInterface.Model
 
         public void MappingAfterReceiving(Category category, List<Additive> additives)
         {
-            
             if (category != null && this.CategorieId == category.Id)
             {
                 this.Category = category;
             }
+
             //else
             //{
             //    throw new MappingException("Id category different of CategoryId of the related Product");
@@ -265,6 +273,5 @@ namespace ServiceInterface.Model
         {
             throw new NotImplementedException();
         }
-
     }
 }

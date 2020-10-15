@@ -65,7 +65,6 @@ namespace PosTest.ViewModels.SubViewModel
             get => _category;
             set
             {
-                _category = value;
                 Set(ref _category, value);
                 ValidateModelProperty(Category, Category.Name, nameof(Category.Name));
                 ValidateModelProperty(Category, Category.Description, nameof(Category.Description));

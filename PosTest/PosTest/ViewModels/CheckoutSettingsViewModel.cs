@@ -45,6 +45,7 @@ namespace PosTest.ViewModels
         private bool _isFlipped;
         private EditCategoryViewModel _editCategoryViewModel;
         private bool _isCategory;
+        private EditProductViewModel _editProductViewModel;
 
         public CheckoutSettingsViewModel()
         {
@@ -60,6 +61,7 @@ namespace PosTest.ViewModels
             _categoriesService = categoriesService;
 
             this.EditCategoryViewModel = new EditCategoryViewModel( ref this._selectedCategory,this._categoriesService);
+            this.EditProductViewModel = new EditProductViewModel( ref this._selectedProduct,this._productsService);
 
 
             ProductPageSize = productPageSize;
@@ -104,6 +106,12 @@ namespace PosTest.ViewModels
         {
             get => _editCategoryViewModel;
             set => Set(ref _editCategoryViewModel, value);
+        }
+
+        public EditProductViewModel EditProductViewModel
+        {
+            get => _editProductViewModel;
+            set => Set(ref _editProductViewModel, value);
         }
 
         void GenarateRanksForProducts()
@@ -184,6 +192,8 @@ namespace PosTest.ViewModels
             set
             {
                 Set(ref _selectedProduct, value);
+                this.EditProductViewModel.Source = this.SelectedProduct;
+                NotifyOfPropertyChange(() => EditProductViewModel);
             }
         }
 

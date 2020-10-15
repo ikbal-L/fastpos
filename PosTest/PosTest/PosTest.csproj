@@ -245,7 +245,7 @@
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\EditCategoryViewModel.cs" />
-    <Compile Include="ViewModels\SubViewModel\EditProductVeiwModel.cs" />
+    <Compile Include="ViewModels\SubViewModel\EditProductViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\TakeawayViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WarningViewModel.cs" />
