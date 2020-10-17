@@ -237,6 +237,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OpenTableViewModel.cs" />
     <Compile Include="ViewModels\PaginationTestViewModel.cs" />
+    <Compile Include="ViewModels\PinLoginViewModel.cs" />
     <Compile Include="ViewModels\ProductEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\ProductsViewModel.cs" />
@@ -279,6 +280,9 @@
     </Compile>
     <Compile Include="Views\PinCodeView.xaml.cs">
       <DependentUpon>PinCodeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PinLoginView.xaml.cs">
+      <DependentUpon>PinLoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SplitView.xaml.cs">
       <DependentUpon>SplitView.xaml</DependentUpon>
@@ -469,6 +473,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PinCodeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PinLoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

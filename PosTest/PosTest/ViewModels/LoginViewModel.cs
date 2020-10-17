@@ -150,6 +150,22 @@ namespace PosTest.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(paginationtesttViewModel);
         }
 
+        public void LoginWithPin()
+        {
+            IsDialogOpen = false;
+            PinLoginViewModel pinLoginViewModel =
+                new PinLoginViewModel(
+                    productService,
+                    categorieService,
+                    orderService,
+                    waiterService,
+                    delivereyService,
+                    customerService
+                );
+            
+            pinLoginViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(pinLoginViewModel);
+        }
         public void CheckoutSettings()
         {
             IsDialogOpen = false;

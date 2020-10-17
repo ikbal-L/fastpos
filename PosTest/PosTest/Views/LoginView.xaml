@@ -31,10 +31,10 @@
             <Button x:Name="AdditivesSettings" Content="AdditivesSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
             <Button x:Name="AdditivesOfProduct" Content="AdditivesOfProduct" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
 
-
+                <Button x:Name="LoginWithPin" Content="Login with PIN" Margin="5" Style="{StaticResource MaterialDesignFlatButton}" > </Button>
             <!--<TextBlock Text="{res:Resources.HelloWorld,Converter={StaticResource}}"/>-->
         </StackPanel>
-            <local:PinCodeView Width="200"  Height="300" HorizontalAlignment="Left"/>
+            <!--<local:PinCodeView Width="200"  Height="300" HorizontalAlignment="Left"/>-->
         </Grid>
     </materialdesign:DialogHost>
     
