@@ -80,6 +80,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"  Margin="2">
@@ -101,6 +102,8 @@
         </Border>
 
         <slcontrole:ColorPalette  Grid.Row="3" CPColorBrush="{Binding EditProductViewModel.Product.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>
-       
+        
+        <!--List of additives-->
+        <local:AdditivesOfProductView Grid.Row="4"></local:AdditivesOfProductView>
     </Grid>
 </UserControl>

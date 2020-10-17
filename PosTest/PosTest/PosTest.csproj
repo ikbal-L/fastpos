@@ -200,6 +200,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
+    <Compile Include="Converters\CollectionContainsValueConverter.cs" />
     <Compile Include="Converters\EntityIdValueConverter.cs" />
     <Compile Include="Converters\MultiValueEqualityConverter.cs" />
     <Compile Include="Converters\NegateBooleanValueConverter.cs" />

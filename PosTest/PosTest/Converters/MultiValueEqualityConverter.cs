@@ -2,7 +2,7 @@
 using PosTest.ViewModels;
 using ServiceInterface.Model;
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Text;

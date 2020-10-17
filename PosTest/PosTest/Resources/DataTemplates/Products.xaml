@@ -5,11 +5,11 @@
                     xmlns:caliburn="http://www.caliburnproject.org"
                     xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                    
+                    xmlns:converters="clr-namespace:PosTest.Converters"
                     xmlns:cal="http://www.caliburnproject.org" >
 
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-    
+    <converters:CollectionContainsValueConverter x:Key="CollectionContainsValueConverter"></converters:CollectionContainsValueConverter>
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
@@ -293,7 +293,14 @@
                                 </TextBlock.Style>
                             </TextBlock>
                         
-                        <ToggleButton  IsChecked="False" DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"/>
+                        <ToggleButton  DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}">
+                          <ToggleButton.IsChecked>
+                                <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}" Mode="OneWay">
+                                    <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="DataContext.EditProductViewModel"/>
+                                    <Binding ></Binding>
+                                </MultiBinding>
+                          </ToggleButton.IsChecked>
+                        </ToggleButton>
                     </DockPanel>
                 </StackPanel>
             </Border>
