@@ -277,6 +277,9 @@
     <Compile Include="Views\PaginationTestView.xaml.cs">
       <DependentUpon>PaginationTestView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PinCodeView.xaml.cs">
+      <DependentUpon>PinCodeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SplitView.xaml.cs">
       <DependentUpon>SplitView.xaml</DependentUpon>
     </Compile>
@@ -462,6 +465,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PaginationTestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PinCodeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
