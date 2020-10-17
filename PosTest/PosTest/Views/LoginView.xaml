@@ -34,7 +34,8 @@
 
             <!--<TextBlock Text="{res:Resources.HelloWorld,Converter={StaticResource}}"/>-->
         </StackPanel>
-    </Grid>
+            <local:PinCodeView Width="200"  Height="300" HorizontalAlignment="Left"/>
+        </Grid>
     </materialdesign:DialogHost>
     
 </UserControl>
