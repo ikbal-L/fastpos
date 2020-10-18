@@ -258,8 +258,11 @@ namespace PosTest.ViewModels
             set
             {
                 Set(ref _selectedCategory, value);
-                this.EditCategoryViewModel.Source = this.SelectedCategory;
-                NotifyOfPropertyChange(() => EditCategoryViewModel);
+                if (EditCategoryViewModel != null)
+                {
+                    this.EditCategoryViewModel.Source = this.SelectedCategory;
+                    NotifyOfPropertyChange(() => EditCategoryViewModel);
+                }
             }
         }
 
