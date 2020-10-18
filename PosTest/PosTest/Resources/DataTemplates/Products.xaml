@@ -298,7 +298,7 @@
                                        >
                           <ToggleButton.IsChecked>
                                 <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}" Mode="OneWay">
-                                    <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="DataContext.Product"/>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="DataContext.Product.Additives"/>
                                     <Binding ></Binding>
                                 </MultiBinding>
                           </ToggleButton.IsChecked>
