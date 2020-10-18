@@ -12,13 +12,18 @@ namespace PosTest.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            ;
-            var editProductViewModel = values[0] as EditProductViewModel ;
-            var product =  (Platter)editProductViewModel.Sources;
-            var collection = product?.Additives;
+            var product = values[0] as Product; ;
+            if (!product.IsPlatter)
+            {
+                return false;
+            }
+
+            var platter = product as Platter;
+            var collection = platter.Additives;
             var item = values[1] as object;
 
-            return collection.ToList().Contains(item);
+            return collection.Contains(item);
+            //return true;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

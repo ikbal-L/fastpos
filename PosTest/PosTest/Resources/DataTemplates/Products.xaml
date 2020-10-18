@@ -275,7 +275,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditivesOfProductStyle">
-        <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
+        <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate"  >
             <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1">
                 <StackPanel>
                     <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
@@ -292,11 +292,13 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                        
-                        <ToggleButton  DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}">
+                        <!--caliburn:Message.Attach="
+                        [Event Click] = [Action CheckAdditive($source,$eventArgs,$this)];"-->
+                        <ToggleButton  DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" x:Name="ToggleButton" 
+                                       >
                           <ToggleButton.IsChecked>
                                 <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}" Mode="OneWay">
-                                    <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="DataContext.EditProductViewModel"/>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="DataContext.Product"/>
                                     <Binding ></Binding>
                                 </MultiBinding>
                           </ToggleButton.IsChecked>
