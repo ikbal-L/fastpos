@@ -12,22 +12,14 @@ namespace PosTest.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var product = values[0] as Product; ;
-            if (!product.IsPlatter)
-            {
-                return false;
-            }
-
-            var platter = product as Platter;
-            var collection = platter.Additives;
+            var collection = values[0] as IEnumerable<object>;
             if (collection==null)
             {
                 return false;
             }
             var item = values[1] as object;
 
-            return collection.Contains(item);
-            //return true;
+            return collection.ToList().Contains(item);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
