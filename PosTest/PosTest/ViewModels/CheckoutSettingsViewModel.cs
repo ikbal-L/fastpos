@@ -60,9 +60,6 @@ namespace PosTest.ViewModels
             _productsService = productsService;
             _categoriesService = categoriesService;
 
-            this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory, this._categoriesService);
-
-
             ProductPageSize = productPageSize;
             CategoryPageSize = categoryPageSize;
             int catStatusCode = 0, prodStatusCode = 0;
@@ -1002,13 +999,14 @@ namespace PosTest.ViewModels
 
         public void EditCategory()
         {
+            this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory, this._categoriesService);
             IsCategory = true;
-
             IsFlipped = true;
         }
 
         public void SavedProduct()
         {
+            EditProductViewModel = null;
             IsFlipped = false;
             IsCategory = false;
             if (SelectedProduct?.Id != null)

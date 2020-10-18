@@ -20,6 +20,10 @@ namespace PosTest.Converters
 
             var platter = product as Platter;
             var collection = platter.Additives;
+            if (collection==null)
+            {
+                return false;
+            }
             var item = values[1] as object;
 
             return collection.Contains(item);
