@@ -16,8 +16,10 @@
              xmlns:convert="clr-namespace:PosTest.Converters"
              Background="{StaticResource MaterialDesignPaper}"
              DataContext="{Binding}"        
-             mc:Ignorable="d"
-             d:DesignWidth="900">
+             mc:Ignorable="d" 
+             
+             d:DesignWidth="900" caliburn:Message.Attach="[Event TextInput] = [Action scanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action doneScan($source, $eventArgs)]"
+>
     <FrameworkElement.Resources>
         <ResourceDictionary >
             <DataTemplate DataType="{x:Type viewmodels:SplitViewModel}">

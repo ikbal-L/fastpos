@@ -19,6 +19,7 @@ using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
 using PosTest.ViewModels.SubViewModel;
 using System.Threading;
+using System.Windows.Input;
 using PosTest.Events;
 
 namespace PosTest.ViewModels
@@ -35,6 +36,7 @@ namespace PosTest.ViewModels
             AppDomain.CurrentDomain.GetAssemblies().Any(
                 a => a.FullName.StartsWith("XUnitTesting"));
 
+        private static string scanValue;
         private IProductService _productsService;
 
         private ICategoryService _categoriesService;
@@ -1529,6 +1531,27 @@ namespace PosTest.ViewModels
             }
         }
 
+        public void scanCodeBar(object sender, TextCompositionEventArgs e)
+        {
+            scanValue += e.Text;
+        }
+
+        public void doneScan(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ToastNotification.Notify(scanValue);
+                
+                if (scanValue.Contains("BON"))
+                {
+                    CurrentOrder.State = OrderState.Ordered;
+                    NotifyOfPropertyChange(()=>CurrentOrder);
+                }
+                scanValue = "";
+            }
+
+            
+        }
         public void AddOrderItem(Product selectedproduct)
         {
             //Product selectedproduct = (Product)sender;
