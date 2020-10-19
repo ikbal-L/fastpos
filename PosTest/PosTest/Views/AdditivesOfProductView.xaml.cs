@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PosTest.ViewModels.SubViewModel;
 
 namespace PosTest.Views
 {
@@ -23,6 +24,12 @@ namespace PosTest.Views
         public AdditivesOfProductView()
         {
             InitializeComponent();
+        }
+
+        public void onClickToggleButton(object sender, RoutedEventArgs args)
+        {
+            EditProductViewModel editProductViewModel = (EditProductViewModel) this.DataContext;
+            //editProductViewModel.CheckAdditive(sender,args,);
         }
     }
 }

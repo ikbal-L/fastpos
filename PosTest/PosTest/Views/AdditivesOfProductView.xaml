@@ -39,6 +39,7 @@
                                 <WrapPanel />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+
                     </ListBox>
                     <TextBlock Grid.Row="1"  Margin="16">Additives</TextBlock>
                 </Grid>

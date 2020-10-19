@@ -293,9 +293,10 @@
                                 </TextBlock.Style>
                             </TextBlock>
                         <!--caliburn:Message.Attach="
-                        [Event Click] = [Action CheckAdditive($source,$eventArgs,$this)];"-->
+                        [Event Click] = [Action onClickToggleButton($source,$eventArgs)];"-->
                         <ToggleButton  DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" x:Name="ToggleButton" 
-                                       >
+                                       
+                        >
                           <ToggleButton.IsChecked>
                                 <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}" Mode="OneWay">
                                     <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="DataContext.Product.Additives"/>
