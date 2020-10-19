@@ -2,13 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using Caliburn.Micro;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceLib.Service;
+using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace PosTest.ViewModels.SubViewModel
 {
+    [Export("EPVM", typeof(EditProductViewModel))]
     public class EditProductViewModel : PropertyChangedBase, INotifyDataErrorInfo
     {
         private Product _product;
@@ -22,6 +32,7 @@ namespace PosTest.ViewModels.SubViewModel
         private string _name;
         private decimal _price;
         private string _unit;
+        private IAdditiveService _additiveService;
 
         public EditProductViewModel(ref Product sourceProduct, IProductService productService)
         {
@@ -31,11 +42,13 @@ namespace PosTest.ViewModels.SubViewModel
 
             this._productService = productService;
 
-
+            this._additiveService = new AdditiveService();
+            int StatusCode = 0;
+            this.Additives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
             this._source = sourceProduct;
             _product = new Product();
             _product = CloneFromSource();
-            ;
+
             IsSaveEnabled = true;
         }
 
@@ -43,7 +56,7 @@ namespace PosTest.ViewModels.SubViewModel
         {
             if (_source != null)
             {
-                var product = new Product()
+                var product = new Platter()
                 {
                     Name = _source.Name,
                     Description = _source.Description,
@@ -52,6 +65,14 @@ namespace PosTest.ViewModels.SubViewModel
                     Price = _source.Price,
                     Unit = _source.Unit
                 };
+                if (Source is Platter)
+                {
+                    product.IsPlatter = Source.IsPlatter;
+                    product.Additives = (Source as Platter).Additives ;
+                    product.IdAdditives = (Source as Platter).IdAdditives ;
+                    
+
+                }
                 Set(ref _name, _source.Name);
                 Set(ref _price, _source.Price);
                 Set(ref _unit, _source.Unit);
@@ -96,6 +117,8 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
+        public ICollection<Additive> Additives { get; set; }
+
         public Product Product
         {
             get => _product;
@@ -125,6 +148,78 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
+        public void CheckAdditive(object sender, RoutedEventArgs e, object add)
+        {
+            ListBox listView = sender as ListBox;
+            ListBoxItem listBoxItem =
+                FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+
+            if (listBoxItem == null)
+            {
+                return;
+            }
+            Additive source = (Additive) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+
+
+            ContentPresenter myContentPresenter = FindVisualChild<ContentPresenter>(listBoxItem);
+
+            // Finding textBlock from the DataTemplate that is set on that ContentPresenter
+            DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
+            ToggleButton toggleButton = (ToggleButton)myDataTemplate.FindName("ToggleButton", myContentPresenter);
+
+
+            if ((Product as Platter).Additives.Contains(source)&& !(bool)toggleButton?.IsChecked)
+            {
+                ((Platter)Product).IdAdditives.Remove(source.Id);
+                ((Platter)Product).Additives.Remove(source);
+                return;
+            }
+            if (!(Product as Platter).Additives.Contains(source) && (bool)toggleButton?.IsChecked)
+            {
+                ((Platter)Product).IdAdditives.Add(source.Id);
+                ((Platter)Product).Additives.Add(source);
+                return;
+
+            }
+
+        }
+
+        private childItem FindVisualChild<childItem>(DependencyObject obj)
+            where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                {
+                    return (childItem)child;
+                }
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
+        }
+
+
+        public static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T) current;
+                }
+
+                current = VisualTreeHelper.GetParent(current);
+            } while (current != null);
+
+            return null;
+        }
+
         public void Cancel()
         {
             this.Product = new Product();
@@ -144,11 +239,16 @@ namespace PosTest.ViewModels.SubViewModel
             target.Price = source.Price;
             target.Background = source.Background;
             target.Unit = source.Unit;
+            if (target is Platter)
+            {
+                (target as Platter).IdAdditives = (source as Platter).IdAdditives;
+                (target as Platter).Additives = (source as Platter).Additives;
+            }
         }
 
         public Product Source
         {
-            private get { return _source; }
+            get { return _source; }
             set
             {
                 Set(ref _source, value);
@@ -207,7 +307,5 @@ namespace PosTest.ViewModels.SubViewModel
             NotifyOfPropertyChange(() => IsSaveEnabled);
             RaiseErrorsChanged(propertyName);
         }
-
-        
     }
 }

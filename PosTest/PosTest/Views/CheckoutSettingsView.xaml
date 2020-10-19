@@ -470,8 +470,10 @@
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
 
-                            <subviews:ProductEditView Grid.Row="0"   />
-                            <subviews:CategoryEditView  Grid.Row="0" Visibility="{Binding IsCategory,Converter={StaticResource BooleanToVisibilityConverter}}" Background="White"></subviews:CategoryEditView>
+                            <subviews:ProductEditView Grid.Row="0" DataContext="{Binding EditProductViewModel}"  />
+                            <!--Visibility="{Binding IsCategory}"-->
+                            <subviews:CategoryEditView  Grid.Row="0"  Background="White"
+                                                        DataContext="{Binding EditCategoryViewModel}" Visibility="Hidden" ></subviews:CategoryEditView>
 
                             <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="1" Margin="1">
                                 <StackPanel Orientation="Horizontal">

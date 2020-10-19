@@ -9,7 +9,7 @@
              xmlns:slcontrole="clr-namespace:PosTest.SL.Controls"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:PosTest.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="460" >
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="460"  >
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -80,27 +80,30 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"  Margin="2">
             <TextBox materialdesign:HintAssist.Hint="Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding EditProductViewModel.Name}" />
+                     Text="{Binding Name}" />
         </Border> 
         
         <Border Grid.Row="1"  Margin="2">
             <TextBox materialdesign:HintAssist.Hint="Price" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding EditProductViewModel.Price}" />
+                     Text="{Binding Price}" />
         </Border>
         
         <Border Grid.Row="2"  Margin="2">
             <TextBox materialdesign:HintAssist.Hint="Unit" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding EditProductViewModel.Unit}" />
+                     Text="{Binding Unit}" />
         </Border>
 
-        <slcontrole:ColorPalette  Grid.Row="3" CPColorBrush="{Binding EditProductViewModel.Product.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>
-       
+        <slcontrole:ColorPalette  Grid.Row="3" CPColorBrush="{Binding Product.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>
+        
+        <!--List of additives-->
+        <local:AdditivesOfProductView Grid.Row="4" Visibility="{Binding Product.Additives,Converter={StaticResource ObjectToVisibility}}"></local:AdditivesOfProductView>
     </Grid>
 </UserControl>

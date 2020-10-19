@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+             xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
+             xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              mc:Ignorable="d" 
              d:DesignHeight="455" d:DesignWidth="640">
+    
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
             <Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}" >
@@ -21,7 +25,9 @@
                                  
                                  ItemTemplate="{StaticResource AdditivesOfProductStyle}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                 caliburn:Message.Attach="[Event MouseDoubleClick] = [Action CheckAdditive($source,$eventArgs,$this)];"
+                                  >
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Padding" Value="0" />
@@ -33,6 +39,7 @@
                                 <WrapPanel />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+
                     </ListBox>
                     <TextBlock Grid.Row="1"  Margin="16">Additives</TextBlock>
                 </Grid>

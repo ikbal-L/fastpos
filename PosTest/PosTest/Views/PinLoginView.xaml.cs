@@ -12,24 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using PosTest.ViewModels.SubViewModel;
 
 namespace PosTest.Views
 {
     /// <summary>
-    /// Interaction logic for AdditivesSettingsView.xaml
+    /// Interaction logic for PinLoginView.xaml
     /// </summary>
-    public partial class AdditivesOfProductView : UserControl
+    public partial class PinLoginView : UserControl
     {
-        public AdditivesOfProductView()
+        public PinLoginView()
         {
             InitializeComponent();
-        }
-
-        public void onClickToggleButton(object sender, RoutedEventArgs args)
-        {
-            EditProductViewModel editProductViewModel = (EditProductViewModel) this.DataContext;
-            //editProductViewModel.CheckAdditive(sender,args,);
         }
     }
 }
