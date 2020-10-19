@@ -14,7 +14,7 @@ namespace PosTest.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if((bool)value == false)
+            if ((bool)value == false)
                 return Visibility.Hidden;
             return Visibility.Visible;
         }

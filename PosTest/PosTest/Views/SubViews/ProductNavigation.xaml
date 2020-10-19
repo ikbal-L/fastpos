@@ -26,7 +26,6 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Visibility="{Binding ProductsVisibility, Converter={StaticResource BoolToVisibility}}">
-
             <ListBox ItemsSource="{Binding ProductsPage}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -49,26 +48,29 @@
         <ListBox Grid.Row="0" BorderThickness="0" ItemsSource="{Binding AdditivesPage}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                 Visibility="{Binding AdditivesVisibility, Converter={StaticResource booleanToHiddenVisibilityConverter}}">
+                 Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}"
+                 ItemTemplate="{StaticResource AdditiveDataTemplate}"
+                 >
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding" Value="0"/>
                     <Setter Property="Margin" Value="2"/>
-                    <Setter Property="MaxWidth" Value="90"/>
+                    
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel/>
+                    <WrapPanel />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-
+        
+        
         <Button Grid.Row="1" 
                  Style="{StaticResource MaterialDesignOutlinedButton}"
                     Visibility="{Binding AdditivesVisibility, Converter={StaticResource BoolToVisibility}}"
-                    Width="270" Height="60"
-                    VerticalAlignment="Bottom" HorizontalAlignment="Left" 
+                    Width="200" Height="60"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Center" 
                     x:Name="ReturnFromAdditives"  
                     Margin="3"
                     cal:Message.Attach="[Event Click] = [Action ReturnFromAdditives()]"

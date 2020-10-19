@@ -5,9 +5,10 @@
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:local="clr-namespace:PosTest.Resources.DataTemplates">
 
-    <DataTemplate DataType="{x:Type src:Additive}">
-        <StackPanel  Orientation="Vertical"  x:Name="AddivieTemplate" >
-            <Button x:Name="ProductClick" Height="50" Width="100" Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
+    <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
+        <StackPanel  Orientation="Vertical"  x:Name="AddivieTemplate">
+            <Button x:Name="ProductClick" Height="55" Width="100"  
+                    Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cal:ActionMessage MethodName="AddAditive">

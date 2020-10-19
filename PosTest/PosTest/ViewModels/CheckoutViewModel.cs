@@ -724,23 +724,19 @@ namespace PosTest.ViewModels
         private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size)
             where T : Ranked, new()
         {
-            int icat = 0;
+            int nbitem = 0;
             for (int i = 1; i <= size; i++)
             {
                 T item = null;
-                if (icat < source.Count)
+                if (nbitem < source.Count)
                 {
-                    item = source[icat];
-                }
-                else
-                {
-                    item = null;
+                    item = source[nbitem];
                 }
 
                 if (item != null && item.Rank == i)
                 {
                     dest.Add(item);
-                    icat++;
+                    nbitem++;
                 }
                 else
                 {
