@@ -184,6 +184,27 @@ namespace PosTest.ViewModels.SubViewModel
 
         }
 
+        public void AdditiveCheked()
+        {
+            //if ((Product as Platter).Additives.Contains(source) && !(bool)toggleButton?.IsChecked)
+            //{
+            //    ((Platter)Product).IdAdditives.Remove(source.Id);
+            //    ((Platter)Product).Additives.Remove(source);
+            //    return;
+            //}
+        }
+
+        public void AdditiveUnCheked()
+        {
+            //if (!(Product as Platter).Additives.Contains(source) && (bool)toggleButton?.IsChecked)
+            //{
+            //    ((Platter)Product).IdAdditives.Add(source.Id);
+            //    ((Platter)Product).Additives.Add(source);
+            //    return;
+
+            //}
+        }
+
         private childItem FindVisualChild<childItem>(DependencyObject obj)
             where childItem : DependencyObject
         {

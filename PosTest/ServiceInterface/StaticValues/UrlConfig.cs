@@ -4,8 +4,8 @@ namespace ServiceInterface.StaticValues
 {
     public static class UrlConfig
     {
+        //static string hostname1 = "http://192.168.1.111:5000/";
         static string hostname1 = "http://127.0.0.1:5000/";
-        //static string hostname1 = "http://127.0.0.1:5000/";
         public static class ProductUrl 
         {
             public static string GetAllProducts = hostname1+"product/getall";
