@@ -15,6 +15,7 @@ using System.Net.Http;
 using ServiceInterface.StaticValues;
 using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
+using PosTest.Helpers;
 
 namespace PosTest.ViewModels
 {

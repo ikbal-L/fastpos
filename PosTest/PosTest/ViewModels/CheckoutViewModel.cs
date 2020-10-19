@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
+using PosTest.Enums;
 using PosTest.Events;
+using PosTest.Helpers;
 using PosTest.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -70,18 +72,6 @@ namespace PosTest.ViewModels
 
         public CheckoutViewModel()
         {
-            Orders = new BindableCollection<Order>();
-            Customers = new BindableCollection<Customer>();
-            TakeAwayViewModel = new TakeawayViewModel(this);
-            DelivereyViewModel = new DelivereyViewModel(this);
-            WaitingViewModel = new WaitingViewModel(this);
-
-            Task.Run(CalculateOrderElapsedTime);
-            if (IsRunningFromXUnit)
-            {
-                CurrentOrder = new Order();
-                Orders.Add(CurrentOrder);
-            }
         }
 
         void CalculateOrderElapsedTime()
@@ -119,6 +109,7 @@ namespace PosTest.ViewModels
             ICustomerService customerService
         ) : this()
         {
+            MaxProductPageSize = pageSize;
             _productsService = productsService;
             _categoriesService = categoriesService;
             _orderService = orderService;
@@ -126,38 +117,57 @@ namespace PosTest.ViewModels
 
             int catStatusCode = 0;
             int prodStatusCode = 0;
+
+            var code = 0;
+            var status = 0;
+            var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
+            var waiter = waiterService.GetAllActiveWaiters(ref code);
+            var tables = _orderService.GeAlltTables(ref status);
+            var customers = _customerService.GetAllCustomers();
+
+            Orders = new BindableCollection<Order>();
+            Customers = new BindableCollection<Customer>();
+            ProductsPage = new BindableCollection<Product>();
+            AdditivesPage = new BindableCollection<Additive>();
+            Waiters = new BindableCollection<Waiter>(waiter);
+            Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);
+            Tables = new BindableCollection<Table>(tables);
+            Customers = new BindableCollection<Customer>(customers);
+
+
+
+            Task.Run(CalculateOrderElapsedTime);
+            if (IsRunningFromXUnit)
+            {
+                CurrentOrder = new Order();
+                Orders.Add(CurrentOrder);
+            }
+
             (IEnumerable<Category> categories, IEnumerable<Product> products) =
                 _categoriesService.GetAllCategoriesAndProducts(ref catStatusCode, ref prodStatusCode);
+
             if (catStatusCode != 200 && prodStatusCode != 200) return;
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
-            MaxProductPageSize = pageSize;
-            ProductsVisibility = true;
-            AdditivesVisibility = false;
-            ProductsPage = new BindableCollection<Product>();
-            AdditivesPage = new BindableCollection<Additive>();
             LoadCategoryPages();
-            var code = 0;
-            var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
-            Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);
-
-            var waiter = waiterService.GetAllActiveWaiters(ref code);
-            Waiters = new BindableCollection<Waiter>(waiter);
-
-            var status = 0;
-            var tables = _orderService.GeAlltTables(ref status);
-            Tables = new BindableCollection<Table>(tables);
+            
             foreach (var table in Tables)
             {
                 table.AllOrders = Orders;
                 table.AllTables = Tables;
             }
 
+            ProductsVisibility = true;
+            AdditivesVisibility = false;
+
+            TakeAwayViewModel = new TakeawayViewModel(this);
+            DelivereyViewModel = new DelivereyViewModel(this);
+            WaitingViewModel = new WaitingViewModel(this);
+            CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
 
-            Customers = new BindableCollection<Customer>(customerService.GetAllCustomers());
-            CustomerViewModel = new CustomerViewModel(this);
+
         }
 
         public List<Category> AllCategories { get; set; }
@@ -1429,136 +1439,5 @@ namespace PosTest.ViewModels
         public void Handle(AssignOrderTypeEventArgs message)
         {
         }
-    }
-
-
-    static class ToastNotification
-    {
-        // https://github.com/rafallopatka/ToastNotifications
-        private static readonly bool IsRunningFromXUnit =
-            AppDomain.CurrentDomain.GetAssemblies().Any(
-                a => a.FullName.StartsWith("XUnitTesting"));
-
-        private static Notifier _notifier;
-
-        private static Notifier Instance
-        {
-            get => _notifier ??
-                   (_notifier = new Notifier(cfg =>
-                   {
-                       cfg.PositionProvider = new WindowPositionProvider(
-                           parentWindow: Application.Current.MainWindow,
-                           corner: Corner.BottomLeft,
-                           offsetX: 10,
-                           offsetY: 10);
-
-                       cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                           notificationLifetime: TimeSpan.FromSeconds(1.5),
-                           maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-                       cfg.Dispatcher = Application.Current.Dispatcher;
-                   }));
-        }
-
-        public static void Notify(string message, int type = -1)
-        {
-            Notifier notifier = Instance;
-            if (!IsRunningFromXUnit)
-            {
-                if (type == -1)
-                {
-                    notifier.ShowError(message);
-                }
-                else if (type == 1)
-                {
-                    notifier.ShowInformation(message);
-                }
-            }
-            else
-            {
-                if (type == -1)
-                {
-                    throw new Exception(message);
-                }
-            }
-        }
-
-        public static void ErrorNotification(int respStatusCode)
-        {
-            switch (respStatusCode)
-            {
-                case 401:
-                    ToastNotification.Notify("Database insertion error " + respStatusCode.ToString());
-                    break;
-                case 402:
-                    ToastNotification.Notify("Id exists in the database " + respStatusCode.ToString());
-                    break;
-                case 403:
-                    ToastNotification.Notify("Database access error " + respStatusCode.ToString());
-                    break;
-                case 404:
-                    ToastNotification.Notify("Bad request " + respStatusCode.ToString());
-                    break;
-                case 405:
-                    ToastNotification.Notify("Authentification error " + respStatusCode.ToString());
-                    break;
-                case 406:
-                    ToastNotification.Notify("Authentification error " + respStatusCode.ToString());
-                    break;
-                case 407:
-                    ToastNotification.Notify("Authentification error " + respStatusCode.ToString());
-                    break;
-                case 408:
-                    ToastNotification.Notify("Database error in Annex_id " + respStatusCode.ToString());
-                    break;
-                case 409:
-                    ToastNotification.Notify("Config Database error " + respStatusCode.ToString());
-                    break;
-                case 410:
-                    ToastNotification.Notify(" User or password error" + respStatusCode.ToString());
-                    break;
-            }
-        }
-    }
-
-    public enum NextOrPrevious
-    {
-        Next,
-        Previous,
-        First
-    }
-
-    public enum ActionButton
-    {
-        Del = 0,
-        Qty = 1,
-        Price = 2,
-        Disc = 3,
-        Cmd = 4,
-        Payment = 5,
-        Split = 6,
-        Table = 7,
-        SplittedPayment = 8,
-        Itemprice = 9,
-        Validate = 10,
-        Deliverey = 11,
-        Takeaway = 12,
-        Served = 13
-    }
-
-    public enum ListedOrdersType
-    {
-        Takeaway,
-        Delivery,
-        Tables,
-        Waiting
-    }
-
-    public enum ListKind
-    {
-        Table,
-        Waiter,
-        Deliverey,
-        Customer
     }
 }

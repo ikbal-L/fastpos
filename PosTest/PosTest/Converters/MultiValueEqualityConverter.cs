@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using PosTest.Enums;
 using PosTest.ViewModels;
 using ServiceInterface.Model;
 using System;

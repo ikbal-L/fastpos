@@ -4,6 +4,8 @@ using System.Linq;
 
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
+using PosTest.Enums;
+using PosTest.Helpers;
 
 namespace PosTest.ViewModels
 {

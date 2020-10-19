@@ -21,7 +21,7 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DockPanel Height="70" Width="100" Background="{Binding Background}" >
+                <DockPanel Height="74" Width="106" Background="{Binding Background}" >
                     <Border DockPanel.Dock="Top" Height="40">
                         <TextBlock Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">

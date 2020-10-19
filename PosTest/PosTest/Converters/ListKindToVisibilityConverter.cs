@@ -8,7 +8,7 @@ using System.Windows.Data;
 using System.Windows;
 using ServiceInterface.Model;
 using PosTest.ViewModels;
-
+using PosTest.Enums;
 
 namespace PosTest.Converters
 {
