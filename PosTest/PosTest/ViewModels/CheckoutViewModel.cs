@@ -47,7 +47,7 @@ namespace PosTest.ViewModels
 
         private Category _currantCategory;
         private Order _currentOrder;
-        private Order _displayedOrder;
+        //private Order _displayedOrder;
         private Table _selectedTable;
         private Delivereyman _selectedDelivereyman;
         private Waiter _selectedWaiter;
@@ -249,26 +249,26 @@ namespace PosTest.ViewModels
             set => Set(ref _additvesPage, value);
         }
 
-        public Order DisplayedOrder
-        {
-            get => _displayedOrder;
-            set
-            {
-                _displayedOrder = value;
-                NotifyOfPropertyChange();
-            }
-        }
+        //public Order DisplayedOrder
+        //{
+        //    get => _displayedOrder;
+        //    set
+        //    {
+        //        _displayedOrder = value;
+        //        NotifyOfPropertyChange();
+        //    }
+        //}
 
         private void SetSelectedInListedOrdersDisplayedOrder()
         {
-            var table = Tables.Where(t => t.Orders.Contains(DisplayedOrder)).FirstOrDefault();
+            var table = Tables.Where(t => t.Orders.Contains(CurrentOrder)).FirstOrDefault();
             if (table != null)
             {
-                table.SelectedOrder = DisplayedOrder;
+                table.SelectedOrder = CurrentOrder;
                 TablesViewModel.SelectedTable = table;
             }
 
-            foreach (var t in TablesViewModel.Tables.Where(tb => !tb.Orders.Contains(DisplayedOrder)))
+            foreach (var t in TablesViewModel.Tables.Where(tb => !tb.Orders.Contains(CurrentOrder)))
             {
                 t.SelectedOrder = null;
                 if (TablesViewModel.SelectedTable == t)
@@ -277,14 +277,14 @@ namespace PosTest.ViewModels
                 }
             }
 
-            DelivereyViewModel.SelectedOrder = DelivereyViewModel.Orders.Cast<Order>().Where(o => o == DisplayedOrder)
+            DelivereyViewModel.SelectedOrder = DelivereyViewModel.Orders.Cast<Order>().Where(o => o == CurrentOrder)
                 .FirstOrDefault();
 
-            TakeAwayViewModel.SelectedOrder = TakeAwayViewModel.Orders.Cast<Order>().Where(o => o == DisplayedOrder)
+            TakeAwayViewModel.SelectedOrder = TakeAwayViewModel.Orders.Cast<Order>().Where(o => o == CurrentOrder)
                 .FirstOrDefault();
 
             WaitingViewModel.SelectedOrder =
-                WaitingViewModel.Orders.Cast<Order>().Where(o => o == DisplayedOrder).FirstOrDefault();
+                WaitingViewModel.Orders.Cast<Order>().Where(o => o == CurrentOrder).FirstOrDefault();
         }
 
         public BindableCollection<Category> Categories { get; set; }
@@ -304,7 +304,7 @@ namespace PosTest.ViewModels
                 else
                 {
                     _currentOrder = value;
-                    _displayedOrder = value;
+                    //_displayedOrder = value;
                 }
 
                 SetSelectedInListedOrdersDisplayedOrder();
@@ -510,7 +510,7 @@ namespace PosTest.ViewModels
             }
 
             CurrentOrder = order;
-            DisplayedOrder = order;
+            //DisplayedOrder = order;
             CurrentCategory = CurrentOrder.ShownCategory;
             if (_currantCategory != null)
             {
@@ -531,7 +531,7 @@ namespace PosTest.ViewModels
             }
 
             CurrentOrder = new Order(this.Orders);
-            DisplayedOrder = CurrentOrder;
+            //DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
@@ -541,7 +541,7 @@ namespace PosTest.ViewModels
             CustomerViewModel.SelectedCustomer = null;
         }
 
-        FilterEventHandler TableOrdersFilter;
+        //FilterEventHandler TableOrdersFilter;
 
         private void SetCurrentOrderTypeAndRefreshOrdersLists(OrderType? orderType, Table table = null)
         {
@@ -602,7 +602,7 @@ namespace PosTest.ViewModels
             }
 
             _currentOrder = null;
-            DisplayedOrder = null;
+            //DisplayedOrder = null;
             SelectedDelivereyman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;

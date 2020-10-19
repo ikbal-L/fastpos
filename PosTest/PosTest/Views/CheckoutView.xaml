@@ -529,21 +529,6 @@
             </Grid>
 
             <Grid Grid.Column="1" Grid.Row="0">
-
-
-                <!--<ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}"
-                    SelectedItem="{Binding DisplayedOrder}"
-                    ItemTemplate="{StaticResource OrderButtonList_ItemTemplate}"
-                    ItemContainerStyle="{StaticResource OrderButtonList_ItemStyle}"
-                    
-                    >
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>-->
-
                 <DockPanel Grid.Row="0" Grid.Column="1" Margin="0" LastChildFill="False">
                     <Border Background="{Binding CurrentOrder.State, Converter={StaticResource OrderStateEnumToBrush}}"
                             Width="50" Padding="0 0 0 0"
