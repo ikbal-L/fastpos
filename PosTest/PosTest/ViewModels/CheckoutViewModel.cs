@@ -1,70 +1,68 @@
 ﻿using Caliburn.Micro;
+using PosTest.Events;
+using PosTest.ViewModels.SubViewModel;
+using ServiceInterface.Interface;
+using ServiceInterface.Model;
+using ServiceInterface.StaticValues;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ServiceInterface.Model;
-using System.Windows.Data;
-using System.Windows.Controls;
 using System.ComponentModel;
-using System.Windows.Media;
-using ServiceInterface.StaticValues;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.ComponentModel.Composition;
-using ServiceInterface.Interface;
+using System.Windows.Data;
 using ToastNotifications;
-using ToastNotifications.Position;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
-using PosTest.ViewModels.SubViewModel;
-using System.Threading;
-using PosTest.Events;
+using ToastNotifications.Position;
 
 namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen, IHandle<AssignOrderTypeEventArgs>
     {
-        public void OrderSelectionChanged(Order order)
-        {
-        }
 
-        #region private fields
+        #region Private fields
 
         private static readonly bool IsRunningFromXUnit =
-            AppDomain.CurrentDomain.GetAssemblies().Any(
-                a => a.FullName.StartsWith("XUnitTesting"));
+            AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.StartsWith("XUnitTesting"));
 
         private IProductService _productsService;
-
         private ICategoryService _categoriesService;
-
         private IOrderService _orderService;
         private ICustomerService _customerService;
-        private Category _currantCategory;
-        private bool _productsVisibility;
-        private string _numericZone;
-        private int _pageNumber = 0;
-        private bool _canExecuteNext;
-        private bool _canExecutePrevious;
-        private Order _currentOrder;
-        private bool _additivesVisibility;
-        private BindableCollection<Additive> _additvesPage;
 
-        private bool _IsDialogOpen;
-        private SplitViewModel _splitViewModel;
-        private Order _displayedOrder;
-        private TablesViewModel _tablesViewModel;
-        private INotifyPropertyChanged _dialogViewModel;
-        private decimal givenAmount;
-        private decimal? _returnedAmount;
+        private BindableCollection<Additive> _additvesPage;
         private BindableCollection<Table> _tables;
-        private Table _selectedTable;
-        private INotifyPropertyChanged _listedOrdersViewModel;
+        private BindableCollection<Product> _productsPage;
+
+        private WarningViewModel _warningViewModel;
+        private TablesViewModel _tablesViewModel;
         private WaitingViewModel _waitingViewModel;
         private DelivereyViewModel _delivereyViewModel;
         private TakeawayViewModel _takeAwayViewModel;
         private CustomerViewModel _customerViewModel;
+
+        private Category _currantCategory;
+        private Order _currentOrder;
+        private Order _displayedOrder;
+        private Table _selectedTable;
+        private Delivereyman _selectedDelivereyman;
+        private Waiter _selectedWaiter;
+        private ListKind _listKind;
+
+        private string _numericZone;
+
+        private bool _productsVisibility;
+        private bool _canExecuteNext;
+        private bool _canExecutePrevious;
+        private bool _additivesVisibility;
+        private bool _IsDialogOpen;
+        private bool _IsTopDrawerOpen;
+
+        private INotifyPropertyChanged _dialogViewModel;
+        private decimal givenAmount;
+        private decimal? _returnedAmount;
 
         #endregion
 
@@ -74,18 +72,16 @@ namespace PosTest.ViewModels
         {
             Orders = new BindableCollection<Order>();
             Customers = new BindableCollection<Customer>();
-
-            if (IsRunningFromXUnit)
-            {
-                CurrentOrder = new Order();
-                Orders.Add(CurrentOrder);
-            }
-
             TakeAwayViewModel = new TakeawayViewModel(this);
             DelivereyViewModel = new DelivereyViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
 
             Task.Run(CalculateOrderElapsedTime);
+            if (IsRunningFromXUnit)
+            {
+                CurrentOrder = new Order();
+                Orders.Add(CurrentOrder);
+            }
         }
 
         void CalculateOrderElapsedTime()
@@ -114,7 +110,8 @@ namespace PosTest.ViewModels
             }
         }
 
-        public CheckoutViewModel(int pageSize, IProductService productsService,
+        public CheckoutViewModel(int pageSize, 
+            IProductService productsService,
             ICategoryService categoriesService,
             IOrderService orderService,
             IWaiterService waiterService,
@@ -127,9 +124,6 @@ namespace PosTest.ViewModels
             _orderService = orderService;
             _customerService = customerService;
 
-            //int getProductsStatusCode = 0;
-
-
             int catStatusCode = 0;
             int prodStatusCode = 0;
             (IEnumerable<Category> categories, IEnumerable<Product> products) =
@@ -138,7 +132,6 @@ namespace PosTest.ViewModels
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
-            //AllProducts = _productsService.GetAllProducts(ref getProductsStatusCode);
             MaxProductPageSize = pageSize;
             ProductsVisibility = true;
             AdditivesVisibility = false;
@@ -162,9 +155,8 @@ namespace PosTest.ViewModels
             }
 
             TablesViewModel = new TablesViewModel(this);
-            var t = customerService.GetAllCustomers();
-            Customers = new BindableCollection<Customer>(customerService.GetAllCustomers());
 
+            Customers = new BindableCollection<Customer>(customerService.GetAllCustomers());
             CustomerViewModel = new CustomerViewModel(this);
         }
 
@@ -253,8 +245,6 @@ namespace PosTest.ViewModels
             set
             {
                 _displayedOrder = value;
-
-                //SetSelectedInListedOrdersDisplayedOrder();
                 NotifyOfPropertyChange();
             }
         }
@@ -322,16 +312,6 @@ namespace PosTest.ViewModels
             }
         }
 
-        //public SplitViewModel SplitViewModel
-        //{
-        //    get => _splitViewModel;
-        //    set
-        //    {
-        //        _splitViewModel = value;
-        //        NotifyOfPropertyChange(() => SplitViewModel);
-        //    }
-        //}
-
         public TablesViewModel TablesViewModel
         {
             get => _tablesViewModel;
@@ -392,7 +372,6 @@ namespace PosTest.ViewModels
             }
         }
 
-
         public BindableCollection<Table> Tables
         {
             get => _tables;
@@ -435,7 +414,6 @@ namespace PosTest.ViewModels
             }
         }
 
-
         public decimal? ReturnedAmount
         {
             get => _returnedAmount;
@@ -444,13 +422,6 @@ namespace PosTest.ViewModels
                 _returnedAmount = value;
                 NotifyOfPropertyChange(() => ReturnedAmount);
             }
-        }
-
-
-        internal void InitCategoryColors()
-        {
-            /*foreach (var category in Categories)
-                category.BackgroundString =  DefaultColors.Category_DefaultBackground.ToString();*/
         }
 
         #region Order Commands
@@ -531,13 +502,9 @@ namespace PosTest.ViewModels
             CurrentOrder = order;
             DisplayedOrder = order;
             CurrentCategory = CurrentOrder.ShownCategory;
-            if (_currantCategory == null)
+            if (_currantCategory != null)
             {
-                //CategorieFiltering("Home");
-            }
-            else
-            {
-                ShowCategoryProducts(CurrentCategory);
+               ShowCategoryProducts(CurrentCategory);
             }
 
             AdditivesPage = CurrentOrder.ShownAdditivesPage;
@@ -553,11 +520,9 @@ namespace PosTest.ViewModels
                 CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
             }
 
-            //CategorieFiltering("Home");
             CurrentOrder = new Order(this.Orders);
             DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
-            //CurrentOrder.OrderTime = DateTime.Now;
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
             ReturnedAmount = null;
@@ -592,44 +557,19 @@ namespace PosTest.ViewModels
 
 
             DelivereyViewModel.OrderViewSource.View.Refresh();
-            //DelivereyViewModel.OrderViewSource.Filter -= DelivereyViewModel.OrderTypeFilter;
-            //DelivereyViewModel.OrderViewSource.Filter += DelivereyViewModel.OrderTypeFilter;
             WaitingViewModel.OrderViewSource.View.Refresh();
-            //WaitingViewModel.OrderViewSource.Filter -= WaitingViewModel.OrderTypeFilter;
-            //WaitingViewModel.OrderViewSource.Filter += WaitingViewModel.OrderTypeFilter;
             TakeAwayViewModel.OrderViewSource.View.Refresh();
-            //TakeAwayViewModel.OrderViewSource.Filter -= TakeAwayViewModel.OrderTypeFilter;
-            //TakeAwayViewModel.OrderViewSource.Filter += TakeAwayViewModel.OrderTypeFilter;
-
             DelivereyViewModel.NotifyOfPropertyChange(() => DelivereyViewModel.OrderCount);
             WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
             TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
 
             foreach (var t in Tables)
             {
-                //TableOrdersFilter = (s, e) =>
-                //{
-                //    Order order = e.Item as Order;
-                //    if (order != null)
-                //    {
-                //        if (order.Table == t)
-                //        {
-                //            e.Accepted = true;
-                //        }
-                //        else
-                //        {
-                //            e.Accepted = false;
-                //        }
-                //    }
-                //};
                 t.OrderViewSource.View.Refresh();
-                //t.OrderViewSource.Filter -= TableOrdersFilter;
-                //t.OrderViewSource.Filter += TableOrdersFilter;
             }
 
             TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
-            //TablesViewModel.RefreshTables();
             SetSelectedInListedOrdersDisplayedOrder();
             TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
@@ -651,7 +591,6 @@ namespace PosTest.ViewModels
                 CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
             }
 
-            //CategorieFiltering("Home");
             _currentOrder = null;
             DisplayedOrder = null;
             SelectedDelivereyman = null;
@@ -666,13 +605,9 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-
             Orders.Remove(CurrentOrder);
-
             CurrentOrder = null;
             SetCurrentOrderTypeAndRefreshOrdersLists(null);
-            //TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
-            //saved in the DB as removed or canceled and remove it for Orders List
         }
 
         public void CancelOrder()
@@ -688,9 +623,6 @@ namespace PosTest.ViewModels
             IsDialogOpen = true;
         }
 
-        public void DialogClosing()
-        {
-        }
 
         public void CancelOrderAction(object param)
         {
@@ -706,8 +638,6 @@ namespace PosTest.ViewModels
 
             checkoutViewModel.SaveCurrentOrder();
             IsDialogOpen = false;
-            //RemoveCurrentOrder();
-            //var i = Orders.IndexOf(CurrentOrder);
         }
 
         #endregion
@@ -717,28 +647,6 @@ namespace PosTest.ViewModels
             LoginViewModel loginvm = new LoginViewModel();
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
-        }
-
-        public void SelectListedOrders(ListedOrdersType type)
-        {
-            //switch (type)
-            //{
-            //    case ListedOrdersType.Takeaway:
-            //        ListedOrdersViewModel = TakeAwayViewModel;
-            //        break;
-            //    case ListedOrdersType.Delivery:
-            //        ListedOrdersViewModel = DelivereyViewModel;
-            //        break;
-            //    case ListedOrdersType.Tables:
-            //        TablesViewModel.IsFullView = false;
-            //        ListedOrdersViewModel = TablesViewModel;
-            //        break;
-            //    case ListedOrdersType.Waiting:
-            //        ListedOrdersViewModel = WaitingViewModel;
-            //        break;
-            //    default:
-            //        break;
-            //}
         }
 
         #region Filtering and pagination
@@ -766,8 +674,6 @@ namespace PosTest.ViewModels
         void LoadCategoryPages()
         {
             var comparer = new Comparer<Category>();
-            //var retrieveCategories = RetrieveCategories(AllProducts.Where(p =>
-            //    p.CategorieId != null));
             var retrieveCategories = AllCategories;
             var categories = new List<Category>(retrieveCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
@@ -805,7 +711,6 @@ namespace PosTest.ViewModels
             LoadPages(additives, AdditivesPage, MaxProductPageSize);
         }
 
-
         private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size)
             where T : Ranked, new()
         {
@@ -834,97 +739,10 @@ namespace PosTest.ViewModels
             }
         }
 
-
-        //public void CategorieFiltering(object param)
-        //{
-        //    AdditivesVisibility = false;
-        //    ProductsVisibility = true;
-        //    if (param is Category)
-        //    {
-        //        Category category = param as Category;
-        //        category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
-        //        if (CurrentCategory != null)
-        //            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
-        //        CurrentCategory = category;
-        //        Predicate<object> filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
-        //        FilteredProducts.Filter = filter;
-
-
-        //        //PaginateProducts(NextOrPrevious.First);
-        //    }
-        //    else if (param is string)
-        //        if ((param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
-        //        {
-        //            FilteredProducts.Filter = null;
-
-        //            if (CurrentCategory != null)
-        //                CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
-
-        //            CurrentCategory = null;
-        //            var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
-        //            FilteredProducts.Filter = (p) => (p as Product).IsMuchInDemand == true;
-        //            //PaginateProducts(NextOrPrevious.First);
-        //        }
-        //        else // param == "ALL"
-        //        {
-        //            FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
-        //            //PaginateProducts(NextOrPrevious.First);
-        //        }
-        //}
-
         public void ProductFiltering(string text)
         {
             Console.WriteLine("Param=" + text);
         }
-
-        //public void PaginateProducts(NextOrPrevious nextOrprevious)
-        //{
-        //    if (nextOrprevious == NextOrPrevious.First)
-        //    {
-        //        _pageNumber = 0;
-        //        nextOrprevious = NextOrPrevious.Next;
-        //        CanExecuteMext = false;
-        //        CanExecutePrevious = false;
-        //    }
-
-        //    if (FilteredProducts.Cast<Product>().Count() <= MaxProductPageSize)
-        //    {
-        //        ProductsPage = FilteredProducts;
-        //        _pageNumber = 1;
-        //        CanExecuteMext = false;
-        //        CanExecutePrevious = false;
-        //        return;
-        //    }
-
-        //    var listProducts = FilteredProducts.Cast<Product>().ToList();
-        //    int lastIndexForThisPage = (_pageNumber + 1) * MaxProductPageSize;
-        //    if (nextOrprevious == NextOrPrevious.Next)
-        //    {
-        //        if (listProducts.Count > lastIndexForThisPage)
-        //        {
-        //            listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, MaxProductPageSize);
-        //            CanExecuteMext = true;
-        //        }
-        //        else
-        //        {
-        //            listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, listProducts.Count - (_pageNumber * MaxProductPageSize));
-        //            CanExecuteMext = false;
-        //        }
-        //        _pageNumber++;
-        //    }
-        //    else
-        //    {
-        //        if ((_pageNumber - 2) * MaxProductPageSize < 0)
-        //            return;
-        //        listProducts = listProducts.GetRange((_pageNumber - 2) * MaxProductPageSize, MaxProductPageSize);
-        //        _pageNumber--;
-        //        CanExecuteMext = true;
-
-        //    }
-        //    ProductsPage = CollectionViewSource.GetDefaultView(listProducts);
-
-        //    CanExecutePrevious = _pageNumber == 1 ? false : true;
-        //}
 
         #endregion
 
@@ -1102,10 +920,7 @@ namespace PosTest.ViewModels
 
             if (payedAmount < CurrentOrder.NewTotal)
             {
-                //NumericZone = "";
-                //Use Local to select message according to UI language
                 ToastNotification.Notify("Payed amount lower than total");
-                //CurrentOrder.DiscountAmount = 0;
                 return;
             }
 
@@ -1137,27 +952,7 @@ namespace PosTest.ViewModels
                     {
                         NewOrder();
                     }
-
                     SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable, table);
-                    //case of table transfer
-                    //if (CurrentOrder.Table!= null && TablesViewModel != null)
-                    //{
-                    //    var count = CurrentOrder.Table.RemoveOrder(CurrentOrder);
-                    //    if (count == 0)
-                    //    {
-                    //        TablesViewModel.RemoveTable(CurrentOrder.Table);
-                    //    }
-                    //}
-                    //CurrentOrder.Table = table;
-                    //table.AddOrder(CurrentOrder);
-                    //if (TablesViewModel == null)
-                    //{
-                    //    TablesViewModel = new TablesViewModel(this);
-                    //}
-                    //TablesViewModel.Add(table);
-                    //_selectedTable = table;
-                    //NotifyOfPropertyChange(() => SelectedTable);
-
                     break;
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
@@ -1214,14 +1009,6 @@ namespace PosTest.ViewModels
                 }
             }
 
-            /*foreach (var o in Orders)
-            {
-                if (o.Table != null && o.Table.Number == tableNumber)
-                {
-                    return o.Table;
-                } 
-            }
-*/
             return null;
         }
 
@@ -1249,7 +1036,6 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            //CurrentOrder.NewTotal
             var newTotal = price;
             if (newTotal <= order.Total)
             {
@@ -1332,7 +1118,6 @@ namespace PosTest.ViewModels
                 order.DiscountPercentage = discountPercent;
             }
 
-            //CurrentOrder.NewTotal = CurrentOrder.Total - CurrentOrder.DiscountAmount;
             discStr = "";
         }
 
@@ -1387,7 +1172,6 @@ namespace PosTest.ViewModels
         }
 
         #endregion
-
 
         #region Order Item commands
 
@@ -1531,17 +1315,12 @@ namespace PosTest.ViewModels
 
         public void AddOrderItem(Product selectedproduct)
         {
-            //Product selectedproduct = (Product)sender;
-            //Console.WriteLine();
             if (selectedproduct == null)
                 return;
 
             if (CurrentOrder == null)
             {
                 NewOrder();
-                /*CurrentOrder = new Order();
-                Orders.Add(CurrentOrder); 
-                CurrentOrder.OrderTime = DateTime.Now;*/
             }
 
             CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true,
@@ -1549,15 +1328,10 @@ namespace PosTest.ViewModels
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
-                //AdditivesPage = (selectedproduct as Platter).Additives;
-                ShowProductAdditives(selectedproduct as Platter);
+                 ShowProductAdditives(selectedproduct as Platter);
                 ProductsVisibility = false;
                 AdditivesVisibility = true;
             }
-
-            //Console.WriteLine(CurrentOrder.Items.Count);
-            //currentOrderitem = new BindableCollection<OrdreItem>(CurrentOrder.Items);
-            //Console.WriteLine(selectedproduct+"  |  "+ currentOrderitem);
         }
 
         public void ReturnFromAdditives()
@@ -1576,19 +1350,10 @@ namespace PosTest.ViewModels
             var oitem = CurrentOrder.SelectedOrderItem;
             AdditivesVisibility = true;
             ProductsVisibility = false;
-            //AdditivesPage = (oitem.Product as Platter).Additives;
             ShowProductAdditives(oitem.Product as Platter);
         }
 
         #endregion
-
-        private bool _IsTopDrawerOpen;
-        private WarningViewModel _warningViewModel;
-        private ListKind _listKind;
-        private Delivereyman _selectedDelivereyman;
-        private Waiter _selectedWaiter;
-        private BindableCollection<Product> _productsPage;
-
 
         public bool IsTopDrawerOpen
         {
@@ -1645,7 +1410,6 @@ namespace PosTest.ViewModels
             }
         }
 
-
         public ListKind ListKind
         {
             get => _listKind;
@@ -1655,7 +1419,6 @@ namespace PosTest.ViewModels
                 NotifyOfPropertyChange();
             }
         }
-
 
         public void ShowDrawer(ListKind listKind)
         {
@@ -1700,20 +1463,6 @@ namespace PosTest.ViewModels
         public static void Notify(string message, int type = -1)
         {
             Notifier notifier = Instance;
-            //    new Notifier(cfg =>
-            //{
-            //    cfg.PositionProvider = new WindowPositionProvider(
-            //        parentWindow: Application.Current.MainWindow,
-            //        corner: Corner.BottomLeft,
-            //        offsetX: 10,
-            //        offsetY: 10);
-
-            //    cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-            //        notificationLifetime: TimeSpan.FromSeconds(3),
-            //        maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-            //    cfg.Dispatcher = Application.Current.Dispatcher;
-            //});
             if (!IsRunningFromXUnit)
             {
                 if (type == -1)

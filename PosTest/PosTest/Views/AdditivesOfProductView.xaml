@@ -18,7 +18,7 @@
                     <ListBox x:Name="AdditiveSettingsList" 
                                  AllowDrop="True"
                                  d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
-                                 ItemsSource="{Binding Additives}"
+                                 
                                  ItemTemplate="{StaticResource AdditivesOfProductStyle}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled">

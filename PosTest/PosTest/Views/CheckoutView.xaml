@@ -732,7 +732,7 @@
 
                 <!--ORDER NAVIGATION-->
                 <RadioButton x:Name="tableCheckBtn" Grid.Row="1" GroupName="BottomBtn"  
-                             Style="{StaticResource ButtonTabDesactive}" caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TABLES')]">
+                             Style="{StaticResource ButtonTabDesactive}">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="TableFurniture"/>
                         <Border Visibility="{Binding TablesViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
@@ -742,8 +742,7 @@
                 </RadioButton>
 
                 <RadioButton x:Name="takeawayCheckBtn" Grid.Row="2"  GroupName="BottomBtn"
-                            Style="{StaticResource ButtonTabDesactive}"
-                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('TAKEAWAY')]">
+                            Style="{StaticResource ButtonTabDesactive}">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="BasketOutline"/>
                         <Border Visibility="{Binding TakeAwayViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
@@ -753,8 +752,7 @@
                 </RadioButton>
 
                 <RadioButton x:Name="delivereyCheckBtn" Grid.Row="3" GroupName="BottomBtn"
-                              Style="{StaticResource ButtonTabDesactive}"
-                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('DELIVERY')]">
+                              Style="{StaticResource ButtonTabDesactive}">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="Moped"/>
                         <Border Visibility="{Binding DelivereyViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
@@ -764,8 +762,7 @@
                 </RadioButton>
 
                 <RadioButton x:Name="waitingCheckBtn" Grid.Row="4" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}"
-                              IsChecked="True"
-                             caliburn:Message.Attach="[Event Click] = [Action SelectListedOrders('WAITING')]">
+                              IsChecked="True">
                     <StackPanel Orientation="Horizontal">
                         <materialdesign:PackIcon Kind="TimerOutline"/>
                         <Border Visibility="{Binding WaitingViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
