@@ -223,6 +223,7 @@
     <Compile Include="Extensions\ListPaginationEx.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
+    <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Helpers\ToastNotification.cs" />
     <Compile Include="Properties\Resources.en.Designer.cs">

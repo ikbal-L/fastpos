@@ -312,40 +312,6 @@ namespace PosTest.ViewModels
 
         public bool SelectedFreeProductIsChanged { get; private set; }
 
-        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size, Category category = null)
-            where T : Ranked, new()
-        {
-            int icat = 0;
-            for (int i = 1; i <= size; i++)
-            {
-                T cat = null;
-                if (icat < source.Count)
-                {
-                    cat = source[icat];
-                }
-                else
-                {
-                    cat = null;
-                }
-
-                if (cat != null && cat.Rank == i)
-                {
-                    dest.Add(cat);
-                    icat++;
-                }
-                else
-                {
-                    var newT = new T {Rank = i};
-                    if (newT is Product product)
-                    {
-                        product.Category = category;
-                        product.CategorieId = category.Id;
-                    }
-
-                    dest.Add(newT);
-                }
-            }
-        }
 
         void LoadCategoryPages()
         {
@@ -358,7 +324,7 @@ namespace PosTest.ViewModels
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;
 
-            LoadPages(categories, CurrentCategories, size);
+            RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: CurrentCategories, size: size);
         }
 
         public void ShowCategoryProducts(Category category)
@@ -371,7 +337,8 @@ namespace PosTest.ViewModels
             var listOfFliteredProducts = filteredProducts.ToList();
             listOfFliteredProducts.Sort(comparer);
             SelectedCategory = category;
-            LoadPages(listOfFliteredProducts, CurrentProducts, ProductPageSize, category);
+            RankedItemsCollectionHelper.LoadPagesFilled(source: listOfFliteredProducts, target: CurrentProducts,
+                size: ProductPageSize, parameter: category);
         }
 
         public void SelectProdcut(Product product, MouseEventArgs e)
