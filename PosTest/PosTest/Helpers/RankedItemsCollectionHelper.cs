@@ -37,6 +37,10 @@ namespace PosTest.Helpers
                             product.CategorieId = category.Id;
                         }
                     }
+                    else
+                    {
+                        item = null;
+                    }
 
                     target.Add(item);
                 }
@@ -49,7 +53,7 @@ namespace PosTest.Helpers
             LoadPages<T>(source: source, target: target, size: size, filled: true, parameter: parameter);
         }
 
-        public static void LoadPagesFilledNotFilled<T>(IList<T> source, ICollection<T> target, int size,
+        public static void LoadPagesNotFilled<T>(IList<T> source, ICollection<T> target, int size,
             object parameter = null) where T : Ranked, new()
         {
             LoadPages<T>(source: source, target: target, size: size, parameter: parameter);

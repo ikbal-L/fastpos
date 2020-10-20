@@ -695,7 +695,7 @@ namespace PosTest.ViewModels
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;
 
-            RankedItemsCollectionHelper.LoadPagesFilledNotFilled(source: categories, target: Categories, size: size);
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: categories, target: Categories, size: size);
         }
 
         public void ShowCategoryProducts(Category category)
@@ -708,7 +708,7 @@ namespace PosTest.ViewModels
             var listOfFliteredProducts = filteredProducts.ToList();
             listOfFliteredProducts.Sort(comparer);
             CurrentCategory = category;
-            RankedItemsCollectionHelper.LoadPagesFilledNotFilled(source: listOfFliteredProducts, target: ProductsPage,
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: listOfFliteredProducts, target: ProductsPage,
                 size: MaxProductPageSize);
         }
 
@@ -720,7 +720,7 @@ namespace PosTest.ViewModels
             var additives = product.Additives.ToList();
             additives.Sort(comparer);
 
-            RankedItemsCollectionHelper.LoadPagesFilledNotFilled(source: additives, target: AdditivesPage,
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: additives, target: AdditivesPage,
                 size: MaxProductPageSize);
         }
 

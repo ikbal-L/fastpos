@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Caliburn.Micro;
+using PosTest.Helpers;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
@@ -33,8 +34,10 @@ namespace PosTest.ViewModels.SubViewModel
         private decimal _price;
         private string _unit;
         private IAdditiveService _additiveService;
+        private int _additivesPageSize;
 
-        public EditProductViewModel(ref Product sourceProduct, IProductService productService)
+        public EditProductViewModel(ref Product sourceProduct, IProductService productService,
+            int additivesPageSize = 30)
         {
             _product = new Product();
             Clone(source: ref sourceProduct, target: ref _product);
@@ -43,8 +46,9 @@ namespace PosTest.ViewModels.SubViewModel
             this._productService = productService;
 
             this._additiveService = new AdditiveService();
-            int StatusCode = 0;
-            this.Additives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
+            this._additivesPageSize = additivesPageSize;
+            PopulateAdditivesPage();
+
             this._source = sourceProduct;
             _product = new Product();
             _product = CloneFromSource();
@@ -68,11 +72,10 @@ namespace PosTest.ViewModels.SubViewModel
                 if (Source is Platter)
                 {
                     product.IsPlatter = Source.IsPlatter;
-                    product.Additives = (Source as Platter).Additives ;
-                    product.IdAdditives = (Source as Platter).IdAdditives ;
-                    
-
+                    product.Additives = (Source as Platter).Additives;
+                    product.IdAdditives = (Source as Platter).IdAdditives;
                 }
+
                 Set(ref _name, _source.Name);
                 Set(ref _price, _source.Price);
                 Set(ref _unit, _source.Unit);
@@ -117,7 +120,7 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
-        public ICollection<Additive> Additives { get; set; }
+        public BindableCollection<Additive> Additives { get; set; }
 
         public Product Product
         {
@@ -130,6 +133,22 @@ namespace PosTest.ViewModels.SubViewModel
                 ValidateModelProperty(Product, Product.Price, nameof(Product.Price));
                 ValidateModelProperty(Product, Product.Unit, nameof(Product.Unit));
             }
+        }
+
+        private void PopulateAdditivesPage()
+        {
+            var comparer = new Comparer<Additive>();
+            int StatusCode = 0;
+            var allAdditives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
+            var filteredAdditives = new List<Additive>(allAdditives.Where(a => a.Rank != null));
+            filteredAdditives.Sort(comparer);
+            Additives = new BindableCollection<Additive>();
+            var maxRank = (int) filteredAdditives.Max(a => a.Rank);
+            int numberOfPages = (maxRank / _additivesPageSize) + (maxRank % _additivesPageSize == 0 ? 0 : 1);
+            numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
+            var size = numberOfPages * _additivesPageSize;
+
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: filteredAdditives, target: Additives, size: _additivesPageSize);
         }
 
         public void SaveProduct()
@@ -158,6 +177,7 @@ namespace PosTest.ViewModels.SubViewModel
             {
                 return;
             }
+
             Additive source = (Additive) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
 
 
@@ -165,23 +185,22 @@ namespace PosTest.ViewModels.SubViewModel
 
             // Finding textBlock from the DataTemplate that is set on that ContentPresenter
             DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
-            ToggleButton toggleButton = (ToggleButton)myDataTemplate.FindName("ToggleButton", myContentPresenter);
+            ToggleButton toggleButton = (ToggleButton) myDataTemplate.FindName("ToggleButton", myContentPresenter);
 
 
-            if ((Product as Platter).Additives.Contains(source)&& !(bool)toggleButton?.IsChecked)
+            if ((Product as Platter).Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
             {
-                ((Platter)Product).IdAdditives.Remove(source.Id);
-                ((Platter)Product).Additives.Remove(source);
+                ((Platter) Product).IdAdditives.Remove(source.Id);
+                ((Platter) Product).Additives.Remove(source);
                 return;
             }
-            if (!(Product as Platter).Additives.Contains(source) && (bool)toggleButton?.IsChecked)
+
+            if (!(Product as Platter).Additives.Contains(source) && (bool) toggleButton?.IsChecked)
             {
-                ((Platter)Product).IdAdditives.Add(source.Id);
-                ((Platter)Product).Additives.Add(source);
+                ((Platter) Product).IdAdditives.Add(source.Id);
+                ((Platter) Product).Additives.Add(source);
                 return;
-
             }
-
         }
 
         private childItem FindVisualChild<childItem>(DependencyObject obj)
@@ -192,7 +211,7 @@ namespace PosTest.ViewModels.SubViewModel
                 DependencyObject child = VisualTreeHelper.GetChild(obj, i);
                 if (child != null && child is childItem)
                 {
-                    return (childItem)child;
+                    return (childItem) child;
                 }
                 else
                 {
@@ -201,6 +220,7 @@ namespace PosTest.ViewModels.SubViewModel
                         return childOfChild;
                 }
             }
+
             return null;
         }
 
