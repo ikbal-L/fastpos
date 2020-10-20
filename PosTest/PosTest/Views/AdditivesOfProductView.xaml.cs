@@ -28,7 +28,7 @@ namespace PosTest.Views
 
         public void onClickToggleButton(object sender, RoutedEventArgs args)
         {
-            EditProductViewModel editProductViewModel = (EditProductViewModel) this.DataContext;
+            //EditProductViewModel editProductViewModel = (EditProductViewModel) this.DataContext;
             //editProductViewModel.CheckAdditive(sender,args,);
         }
     }

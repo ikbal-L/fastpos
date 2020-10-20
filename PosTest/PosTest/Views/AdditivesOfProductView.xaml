@@ -21,13 +21,10 @@
                     </Grid.RowDefinitions>
                     <ListBox x:Name="AdditiveSettingsList" 
                                  AllowDrop="True"
-                                 d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
                                  ItemsSource="{Binding Additives}"
                                  ItemTemplate="{StaticResource AdditivesOfProductStyle}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                                 caliburn:Message.Attach="[Event MouseDoubleClick] = [Action CheckAdditive($source,$eventArgs,$this)];"
-                                  >
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" >
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Padding" Value="0" />

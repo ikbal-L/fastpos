@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Caliburn.Micro;
+using PosTest.Helpers;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
@@ -184,7 +185,7 @@ namespace PosTest.ViewModels.SubViewModel
 
         }
 
-        public void AdditiveCheked()
+        public void AdditiveChecked()
         {
             //if ((Product as Platter).Additives.Contains(source) && !(bool)toggleButton?.IsChecked)
             //{
@@ -192,6 +193,7 @@ namespace PosTest.ViewModels.SubViewModel
             //    ((Platter)Product).Additives.Remove(source);
             //    return;
             //}
+            ToastNotification.Notify("hi");
         }
 
         public void AdditiveUnCheked()

@@ -295,14 +295,14 @@
                         <!--caliburn:Message.Attach="
                         [Event Click] = [Action onClickToggleButton($source,$eventArgs)];"-->
                         <ToggleButton  DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" x:Name="ToggleButton" 
-                                       
+                                       caliburn:Message.Attach="[Event Click] = [Action AdditiveChecked()];"
                         >
-                          <ToggleButton.IsChecked>
+                          <!--<ToggleButton.IsChecked>
                                 <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}" Mode="OneWay">
                                     <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="DataContext.Product.Additives"/>
                                     <Binding ></Binding>
                                 </MultiBinding>
-                          </ToggleButton.IsChecked>
+                          </ToggleButton.IsChecked>-->
                         </ToggleButton>
                     </DockPanel>
                 </StackPanel>

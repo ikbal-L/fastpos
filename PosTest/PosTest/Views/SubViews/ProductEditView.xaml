@@ -104,6 +104,9 @@
         <slcontrole:ColorPalette  Grid.Row="3" CPColorBrush="{Binding Product.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>
         
         <!--List of additives-->
-        <local:AdditivesOfProductView Grid.Row="4" Visibility="{Binding Product.Additives,Converter={StaticResource ObjectToVisibility}}"></local:AdditivesOfProductView>
+        <local:AdditivesOfProductView Grid.Row="4" 
+           DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Secren}}, Path=DataContext}"
+                                      Visibility="{Binding Product.Additives,Converter={StaticResource ObjectToVisibility}}">
+        </local:AdditivesOfProductView>
     </Grid>
 </UserControl>

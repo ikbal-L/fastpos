@@ -471,7 +471,7 @@
                             </Grid.RowDefinitions>
 
                             <subviews:ProductEditView Grid.Row="0" DataContext="{Binding EditProductViewModel}"  />
-                            <!--Visibility="{Binding IsCategory}"-->
+                            
                             <subviews:CategoryEditView  Grid.Row="0"  Background="White"
                                                         DataContext="{Binding EditCategoryViewModel}" Visibility="Hidden" ></subviews:CategoryEditView>
 
