@@ -56,6 +56,7 @@
             <convert:ObjectToBoolConverter x:Key="objectToBoolConverter" />
             <convert:OrderItemObjectToBoolConverter x:Key="OrderItemToBoolConverter" />
             <convert:ListKindToVisibilityConverter x:Key="listKindToVisibilityConverter" />
+            <convert:NotNullEqualToZeroMultiValueConverter x:Key="NotNullEqualToZeroMultiValueConverter"></convert:NotNullEqualToZeroMultiValueConverter>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -181,17 +182,12 @@
                         <materialdesign:PackIcon Kind="ShapePlus" Height="30" Width="30" />
                     </Button>
                     <Button Grid.Row="2" Foreground="#2496ed" Background="WhiteSmoke"
-                          
+                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
                             Style="{StaticResource ButtonRightOrder}"
                             caliburn:Message.Attach="[Event Click] = [Action AddOneToQuantity()]">
 
                         <materialdesign:PackIcon Kind="Plus" Height="30" Width="30" />
-                        <Button.IsEnabled>
-                            <MultiBinding>
-                                <Binding ElementName="OrderitemsList" Path="SelectedItem"></Binding>
-                                <Binding DisplayedOrder ></Binding>
-                            </MultiBinding>
-                        </Button.IsEnabled>
+                       
                     </Button>
                     <Button Grid.Row="3" Foreground="#2496ed" Background="WhiteSmoke"
                             IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
@@ -200,10 +196,17 @@
                         <materialdesign:PackIcon Kind="Minus" Height="30" Width="30" />
                     </Button>
                     <Button Grid.Row="4" Foreground="#2496ed" Background="WhiteSmoke"
-                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
+                          
                             Style="{StaticResource ButtonRightOrder}"
                             caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]">
                         <materialdesign:PackIcon Kind="TagMinus" Height="30" Width="30" />
+
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{StaticResource NotNullEqualToZeroMultiValueConverter}">
+                                <Binding ElementName="OrderitemsList" Path="SelectedItem"></Binding>
+                                <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="DataContext.CurrentOrder.TotalDiscountAmount"></Binding>
+                            </MultiBinding>
+                        </Button.IsEnabled>
                     </Button>
                     <Button Grid.Row="5" Foreground="#2496ed" Background="WhiteSmoke"
                             IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
