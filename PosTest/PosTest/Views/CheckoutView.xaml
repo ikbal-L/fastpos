@@ -57,6 +57,7 @@
             <convert:OrderItemObjectToBoolConverter x:Key="OrderItemToBoolConverter" />
             <convert:ListKindToVisibilityConverter x:Key="listKindToVisibilityConverter" />
             <convert:NotNullEqualToZeroMultiValueConverter x:Key="NotNullEqualToZeroMultiValueConverter"></convert:NotNullEqualToZeroMultiValueConverter>
+            <convert:NotCollectionItemAnyGreaterThanZeroValueConverter x:Key="NotCollectionItemAnyGreaterThanZeroValueConverter"></convert:NotCollectionItemAnyGreaterThanZeroValueConverter>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -204,7 +205,7 @@
                         <Button.IsEnabled>
                             <MultiBinding Converter="{StaticResource NotNullEqualToZeroMultiValueConverter}">
                                 <Binding ElementName="OrderitemsList" Path="SelectedItem"></Binding>
-                                <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="DataContext.CurrentOrder.TotalDiscountAmount"></Binding>
+                                <Binding RelativeSource="{RelativeSource AncestorType=UserControl}" Path="DataContext.CurrentOrder.DiscountAmount"></Binding>
                             </MultiBinding>
                         </Button.IsEnabled>
                     </Button>
@@ -471,7 +472,8 @@
                         <Button Grid.Row="1" Grid.Column="3"
                                 Content="{materialdesign:PackIcon  Kind=TagMinus, Size=30}"
                                 Style="{StaticResource ButtonStyle18}"
-                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]" />
+                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]" 
+                                IsEnabled="{Binding CurrentOrder.OrderItems,Converter={StaticResource NotCollectionItemAnyGreaterThanZeroValueConverter}}"/>
 
 
                         <Button Grid.Row="2" Grid.Column="0" Content="7" Style="{StaticResource ButtonStyle22}"

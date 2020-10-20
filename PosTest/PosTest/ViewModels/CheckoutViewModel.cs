@@ -1528,6 +1528,8 @@ namespace PosTest.ViewModels
             if (discountAmount >= 0)
             {
                 item.DiscountAmount = discountAmount;
+                NotifyOfPropertyChange(()=>CurrentOrder);
+                
             }
         }
 
