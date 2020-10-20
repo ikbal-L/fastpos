@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
@@ -29,6 +30,7 @@ namespace PosTest.ViewModels
         private static readonly bool IsRunningFromXUnit =
             AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.StartsWith("XUnitTesting"));
 
+        private static string scanValue;
         private IProductService _productsService;
         private ICategoryService _categoriesService;
         private IOrderService _orderService;
@@ -1316,9 +1318,32 @@ namespace PosTest.ViewModels
             if (discountAmount >= 0)
             {
                 item.DiscountAmount = discountAmount;
+                NotifyOfPropertyChange(()=>CurrentOrder);
+                
             }
         }
 
+        public void scanCodeBar(object sender, TextCompositionEventArgs e)
+        {
+            scanValue += e.Text;
+        }
+
+        public void doneScan(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ToastNotification.Notify(scanValue);
+                
+                if (scanValue.Contains("BON"))
+                {
+                    CurrentOrder.State = OrderState.Ordered;
+                    NotifyOfPropertyChange(()=>CurrentOrder);
+                }
+                scanValue = "";
+            }
+
+            
+        }
         public void AddOrderItem(Product selectedproduct)
         {
             if (selectedproduct == null)

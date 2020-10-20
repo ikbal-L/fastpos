@@ -201,9 +201,12 @@
     </Compile>
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\CollectionContainsValueConverter.cs" />
+    <Compile Include="Converters\NotCollectionItemAnyGreaterThanZeroValueConverter.cs" />
     <Compile Include="Converters\EntityIdValueConverter.cs" />
+    <Compile Include="Converters\LesserOrEqualToValueConverter.cs" />
     <Compile Include="Converters\MultiValueEqualityConverter.cs" />
     <Compile Include="Converters\NegateBooleanValueConverter.cs" />
+    <Compile Include="Converters\NotNullEqualToZeroMultiValueConverter.cs" />
     <Compile Include="Converters\NumberToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\ListKindToVisibilityConverter.cs" />
