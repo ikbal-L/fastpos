@@ -13,12 +13,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
 using ToastNotifications.Position;
+using Table = ServiceInterface.Model.Table;
 
 namespace PosTest.ViewModels
 {
@@ -1437,6 +1441,31 @@ namespace PosTest.ViewModels
 
         public void Handle(AssignOrderTypeEventArgs message)
         {
+        }
+
+        private void GenerateOrderReceipt()
+        {
+            FixedDocument document = new FixedDocument();
+            FixedPage fixedPage = new FixedPage();
+
+            DataTemplate dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
+
+            var contentOfPage = new UserControl();
+            contentOfPage.Content = CurrentOrder;
+
+            var conv = new LengthConverter();
+            contentOfPage.Width = (double)conv.ConvertFromString("15cm");
+            contentOfPage.Height = (double)conv.ConvertFromString("20cm");
+            contentOfPage.ContentTemplate = dt;
+
+            fixedPage.Width = contentOfPage.Width;
+            fixedPage.Height = contentOfPage.Height;
+            fixedPage.Children.Add(contentOfPage);
+
+            PageContent pageContent = new PageContent();
+            ((IAddChild)pageContent).AddChild(fixedPage);
+
+            document.Pages.Add(pageContent);
         }
     }
 }
