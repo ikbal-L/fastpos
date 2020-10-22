@@ -8,7 +8,7 @@
              xmlns:controls="clr-namespace:PosTest.SL.Controls"
              xmlns:local="clr-namespace:PosTest.Views.SubViews"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400">
+             d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUserControl">
     <Grid>
         <Grid.ColumnDefinitions/>
         <Grid.RowDefinitions>
@@ -101,9 +101,8 @@
             </StackPanel>
             </Grid>
         </materialdesign:ColorZone>
-       
-        <ListBox x:Name="lboxCustomers" ItemsSource="{Binding Customers}" Grid.Row="1" Margin="0" Visibility="Visible" Background="White"
-                 SelectedItem="{Binding SelectedCustomer}">
+        <!--SelectedItem="{Binding SelectedCustomer}" -->
+        <ListBox x:Name="lboxCustomers" ItemsSource="{Binding Customers}" Grid.Row="1" Margin="0" Visibility="Visible" Background="White">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <controls:VirtualizingWrapPanel ItemHeight="80" ItemWidth="125" />
@@ -111,11 +110,14 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel  Height="60" Width="120" Background="YellowGreen" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button 
+                            Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
+                        <StackPanel  Height="60" Width="120"  HorizontalAlignment="Center" VerticalAlignment="Center" >
                             <TextBlock FontSize="14" Text="{Binding Mobile}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                             <TextBlock FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                         </StackPanel>
-                    </DataTemplate>
+                    </Button>
+                </DataTemplate>
                 </ListBox.ItemTemplate>
         </ListBox>
     </Grid>

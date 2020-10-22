@@ -8,6 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
+using PosTest.Helpers;
 
 namespace PosTest.ViewModels
 {
@@ -24,6 +26,7 @@ namespace PosTest.ViewModels
             ParentChechoutVM = checkoutViewModel;
             _CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers.ToList());
             _CustomerView.Filter = CustomerFilter;
+            SelectCustomerCommand = new DelegateCommandBase(SelectCustomer,CanSelectCustomer);
 
         }
 
@@ -31,8 +34,9 @@ namespace PosTest.ViewModels
         public ICollectionView Customers
         {
             get => _CustomerView;
-        } 
-        
+        }
+
+        public ICommand SelectCustomerCommand { get; set; }
         public Customer SelectedCustomer
         {
             get
@@ -66,6 +70,25 @@ namespace PosTest.ViewModels
                 _CustomerView.Refresh(); 
             }
         }
+
+        public bool CanSelectCustomer(object customer)
+        {
+            return true;
+        }
+        public void SelectCustomer(object customer)
+        {
+            if(customer ==null) return;
+            var c = (customer as Customer);
+            if (c==SelectedCustomer)
+            {
+                SelectedCustomer = null;
+            }
+            else
+            {
+                SelectedCustomer = c;
+            }
+        }
+
 
         private bool CustomerFilter(object item)
         {
