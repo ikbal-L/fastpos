@@ -344,6 +344,9 @@
     <Compile Include="Views\TablesView.xaml.cs">
       <DependentUpon>TablesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TestRepTemp.xaml.cs">
+      <DependentUpon>TestRepTemp.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -414,6 +417,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\DataTemplates\Products.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\DataTemplates\Reports.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -553,6 +560,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TablesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TestRepTemp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
