@@ -35,7 +35,8 @@ namespace ServiceInterface.Model
             
             OrderItems.CollectionChanged += 
                 (s, e)=> 
-                { 
+                {
+                    if (OrderItems.Count == 0) this.DiscountAmount = 0;
                     NotifyOfPropertyChange(() => Total); 
                     NotifyOfPropertyChange(() => TotalDiscountAmount); 
                     NotifyOfPropertyChange(() => NewTotal); 
