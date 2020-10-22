@@ -9,7 +9,7 @@
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              mc:Ignorable="d" 
-             d:DesignHeight="455" d:DesignWidth="640">
+             d:DesignHeight="455" d:DesignWidth="640" x:Name="AdditivesOfProductViewUserControl">
     
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
@@ -19,13 +19,16 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    <!--caliburn:Message.Attach="[Event MouseDoubleClick] = [Action CheckAdditive($source,$eventArgs,$this)];"-->
                     <ListBox x:Name="AdditiveSettingsList" 
                                  AllowDrop="True"
 
                                  ItemsSource="{Binding Additives}"
                                  ItemTemplate="{StaticResource AdditivesOfProductStyle}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Padding" Value="0" />

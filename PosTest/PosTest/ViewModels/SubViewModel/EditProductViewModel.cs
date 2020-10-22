@@ -9,6 +9,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using PosTest.Helpers;
@@ -54,8 +55,8 @@ namespace PosTest.ViewModels.SubViewModel
             _product = CloneFromSource();
 
             IsSaveEnabled = true;
+            CheckAdditiveCommand = new DelegateCommandBase(CheckAdditive, CanCheckAdditive);
         }
-
         public Product CloneFromSource()
         {
             if (_source != null)
@@ -135,6 +136,7 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
+        public ICommand CheckAdditiveCommand { get; set; }
         private void PopulateAdditivesPage()
         {
             var comparer = new Comparer<Additive>();
@@ -167,26 +169,36 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
-        public void CheckAdditive(object sender, RoutedEventArgs e, object add)
+        private bool CanCheckAdditive(object arg)
         {
-            ListBox listView = sender as ListBox;
-            ListBoxItem listBoxItem =
-                FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+            return Product is Platter;
+        }
+        public void CheckAdditive(object sender)
+        {
+            //ListBox listView = sender as ListBox;
+            //ListBoxItem listBoxItem =
+            //    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
 
-            if (listBoxItem == null)
+            //if (listBoxItem == null)
+            //{
+            //    return;
+            //}
+
+            //Additive source = (Additive) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+
+
+            //ContentPresenter myContentPresenter = FindVisualChild<ContentPresenter>(listBoxItem);
+
+            //// Finding textBlock from the DataTemplate that is set on that ContentPresenter
+            //DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
+            //ToggleButton toggleButton = (ToggleButton) myDataTemplate.FindName("ToggleButton", myContentPresenter);
+            ToggleButton toggleButton = sender as ToggleButton;
+            Additive source = toggleButton.DataContext as Additive;
+            if (source==null)
             {
+                toggleButton.IsChecked = false;
                 return;
             }
-
-            Additive source = (Additive) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-
-
-            ContentPresenter myContentPresenter = FindVisualChild<ContentPresenter>(listBoxItem);
-
-            // Finding textBlock from the DataTemplate that is set on that ContentPresenter
-            DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
-            ToggleButton toggleButton = (ToggleButton) myDataTemplate.FindName("ToggleButton", myContentPresenter);
-
 
             if ((Product as Platter).Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
             {

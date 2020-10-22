@@ -295,7 +295,10 @@
                         <!--caliburn:Message.Attach="
                         [Event Click] = [Action onClickToggleButton($source,$eventArgs)];"-->
                         <ToggleButton  DockPanel.Dock="Bottom" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" x:Name="ToggleButton" 
-                                       caliburn:Message.Attach="[Event Click] = [Action AdditiveChecked()];"
+                                    Command="{Binding ElementName=AdditivesOfProductViewUserControl,Path=DataContext.CheckAdditiveCommand}" 
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Self} }"    
+                                    Visibility="{Binding Converter={StaticResource ObjectToVisibility}}"
+
                         >
                           <!--<ToggleButton.IsChecked>
                                 <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}" Mode="OneWay">
