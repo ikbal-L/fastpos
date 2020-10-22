@@ -201,9 +201,12 @@
     </Compile>
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\CollectionContainsValueConverter.cs" />
+    <Compile Include="Converters\NotCollectionItemAnyGreaterThanZeroValueConverter.cs" />
     <Compile Include="Converters\EntityIdValueConverter.cs" />
+    <Compile Include="Converters\LesserOrEqualToValueConverter.cs" />
     <Compile Include="Converters\MultiValueEqualityConverter.cs" />
     <Compile Include="Converters\NegateBooleanValueConverter.cs" />
+    <Compile Include="Converters\NotNullEqualToZeroMultiValueConverter.cs" />
     <Compile Include="Converters\NumberToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\ListKindToVisibilityConverter.cs" />
@@ -220,6 +223,7 @@
     <Compile Include="Extensions\ListPaginationEx.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
+    <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Helpers\ToastNotification.cs" />
     <Compile Include="Properties\Resources.en.Designer.cs">
@@ -240,6 +244,7 @@
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
+    <Compile Include="ViewModels\EditProductViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OpenTableViewModel.cs" />

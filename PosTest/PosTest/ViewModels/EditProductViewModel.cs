@@ -20,7 +20,7 @@ using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 namespace PosTest.ViewModels.SubViewModel
 {
     [Export("EPVM", typeof(EditProductViewModel))]
-    public class EditProductViewModel1 : PropertyChangedBase, INotifyDataErrorInfo
+    public class EditProductViewModel : PropertyChangedBase, INotifyDataErrorInfo
     {
         private Product _product;
         private IProductService _productService;
@@ -36,7 +36,7 @@ namespace PosTest.ViewModels.SubViewModel
         private IAdditiveService _additiveService;
         private int _additivesPageSize;
 
-        public EditProductViewModel1(ref Product sourceProduct, IProductService productService,
+        public EditProductViewModel(ref Product sourceProduct, IProductService productService,
             int additivesPageSize = 30)
         {
             _product = new Product();

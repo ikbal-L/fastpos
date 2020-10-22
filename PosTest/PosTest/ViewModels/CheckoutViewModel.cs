@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
@@ -23,12 +24,12 @@ namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen, IHandle<AssignOrderTypeEventArgs>
     {
-
         #region Private fields
 
         private static readonly bool IsRunningFromXUnit =
             AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.StartsWith("XUnitTesting"));
 
+        private static string scanValue;
         private IProductService _productsService;
         private ICategoryService _categoriesService;
         private IOrderService _orderService;
@@ -46,7 +47,9 @@ namespace PosTest.ViewModels
         private CustomerViewModel _customerViewModel;
 
         private Category _currantCategory;
+
         private Order _currentOrder;
+
         //private Order _displayedOrder;
         private Table _selectedTable;
         private Delivereyman _selectedDelivereyman;
@@ -100,7 +103,7 @@ namespace PosTest.ViewModels
             }
         }
 
-        public CheckoutViewModel(int pageSize, 
+        public CheckoutViewModel(int pageSize,
             IProductService productsService,
             ICategoryService categoriesService,
             IOrderService orderService,
@@ -135,7 +138,6 @@ namespace PosTest.ViewModels
             Customers = new BindableCollection<Customer>(customers);
 
 
-
             Task.Run(CalculateOrderElapsedTime);
             if (IsRunningFromXUnit)
             {
@@ -151,7 +153,7 @@ namespace PosTest.ViewModels
             AllCategories = categories.ToList();
 
             LoadCategoryPages();
-            
+
             foreach (var table in Tables)
             {
                 table.AllOrders = Orders;
@@ -166,8 +168,6 @@ namespace PosTest.ViewModels
             WaitingViewModel = new WaitingViewModel(this);
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
-
-
         }
 
         public List<Category> AllCategories { get; set; }
@@ -514,7 +514,7 @@ namespace PosTest.ViewModels
             CurrentCategory = CurrentOrder.ShownCategory;
             if (_currantCategory != null)
             {
-               ShowCategoryProducts(CurrentCategory);
+                ShowCategoryProducts(CurrentCategory);
             }
 
             AdditivesPage = CurrentOrder.ShownAdditivesPage;
@@ -615,6 +615,7 @@ namespace PosTest.ViewModels
             {
                 return;
             }
+
             Orders.Remove(CurrentOrder);
             CurrentOrder = null;
             SetCurrentOrderTypeAndRefreshOrdersLists(null);
@@ -694,7 +695,7 @@ namespace PosTest.ViewModels
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;
 
-            LoadPages(categories, Categories, size);
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: categories, target: Categories, size: size);
         }
 
         public void ShowCategoryProducts(Category category)
@@ -707,7 +708,8 @@ namespace PosTest.ViewModels
             var listOfFliteredProducts = filteredProducts.ToList();
             listOfFliteredProducts.Sort(comparer);
             CurrentCategory = category;
-            LoadPages(listOfFliteredProducts, ProductsPage, MaxProductPageSize);
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: listOfFliteredProducts, target: ProductsPage,
+                size: MaxProductPageSize);
         }
 
         public void ShowProductAdditives(Platter product)
@@ -718,32 +720,10 @@ namespace PosTest.ViewModels
             var additives = product.Additives.ToList();
             additives.Sort(comparer);
 
-            LoadPages(additives, AdditivesPage, MaxProductPageSize);
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: additives, target: AdditivesPage,
+                size: MaxProductPageSize);
         }
 
-        private static void LoadPages<T>(List<T> source, BindableCollection<T> dest, int size)
-            where T : Ranked, new()
-        {
-            int nbitem = 0;
-            for (int i = 1; i <= size; i++)
-            {
-                T item = null;
-                if (nbitem < source.Count)
-                {
-                    item = source[nbitem];
-                }
-
-                if (item != null && item.Rank == i)
-                {
-                    dest.Add(item);
-                    nbitem++;
-                }
-                else
-                {
-                    dest.Add(null);
-                }
-            }
-        }
 
         public void ProductFiltering(string text)
         {
@@ -958,6 +938,7 @@ namespace PosTest.ViewModels
                     {
                         NewOrder();
                     }
+
                     SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable, table);
                     break;
                 case 400:
@@ -1316,6 +1297,28 @@ namespace PosTest.ViewModels
             if (discountAmount >= 0)
             {
                 item.DiscountAmount = discountAmount;
+                NotifyOfPropertyChange(() => CurrentOrder);
+            }
+        }
+
+        public void scanCodeBar(object sender, TextCompositionEventArgs e)
+        {
+            scanValue += e.Text;
+        }
+
+        public void doneScan(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ToastNotification.Notify(scanValue);
+
+                if (scanValue.Contains("BON"))
+                {
+                    CurrentOrder.State = OrderState.Ordered;
+                    NotifyOfPropertyChange(() => CurrentOrder);
+                }
+
+                scanValue = "";
             }
         }
 
@@ -1334,7 +1337,7 @@ namespace PosTest.ViewModels
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
-                 ShowProductAdditives(selectedproduct as Platter);
+                ShowProductAdditives(selectedproduct as Platter);
                 ProductsVisibility = false;
                 AdditivesVisibility = true;
             }
