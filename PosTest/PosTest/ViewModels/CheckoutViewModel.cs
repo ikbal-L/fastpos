@@ -1443,7 +1443,7 @@ namespace PosTest.ViewModels
         {
         }
 
-        private void GenerateOrderReceipt()
+        private FixedDocument GenerateOrderReceipt()
         {
             FixedDocument document = new FixedDocument();
             FixedPage fixedPage = new FixedPage();
@@ -1451,12 +1451,13 @@ namespace PosTest.ViewModels
             DataTemplate dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
 
             var contentOfPage = new UserControl();
+            contentOfPage.ContentTemplate = dt;
             contentOfPage.Content = CurrentOrder;
 
             var conv = new LengthConverter();
             contentOfPage.Width = (double)conv.ConvertFromString("15cm");
             contentOfPage.Height = (double)conv.ConvertFromString("20cm");
-            contentOfPage.ContentTemplate = dt;
+            
 
             fixedPage.Width = contentOfPage.Width;
             fixedPage.Height = contentOfPage.Height;
@@ -1466,6 +1467,15 @@ namespace PosTest.ViewModels
             ((IAddChild)pageContent).AddChild(fixedPage);
 
             document.Pages.Add(pageContent);
+            return document;
+        }
+
+        public void PrintPreview()
+        {
+            var doc = GenerateOrderReceipt();
+            PrintViewModel pvm = new PrintViewModel(){Document = doc,PreviousScreen = this};
+            pvm.Parent = this.Parent;
+            (this.Parent as MainViewModel).ActivateItem(pvm);
         }
     }
 }

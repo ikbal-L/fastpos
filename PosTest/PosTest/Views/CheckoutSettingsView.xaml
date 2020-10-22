@@ -470,7 +470,7 @@
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
 
-                            <subviews:ProductEditView Grid.Row="0" caliburn:View.Model="{Binding ProductViewModel }"  />
+                            <subviews:ProductEditView Grid.Row="0" DataContext="{Binding EditProductViewModel }"  />
                             
                             <subviews:CategoryEditView  Grid.Row="0"  Background="White"
                                                         DataContext="{Binding EditCategoryViewModel}" Visibility="Hidden" ></subviews:CategoryEditView>

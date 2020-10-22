@@ -530,10 +530,10 @@
                                 Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}"
                                 Style="{StaticResource ButtonStyle18}"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]" />
-
+                        <!--caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('NOTE')]"-->
                         <Button Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon NoteOutline, 30}"
                                 Style="{StaticResource ButtonStyle18}"
-                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('NOTE')]" />
+                                caliburn:Message.Attach="[Event Click] = [Action PrintPreview()]" />
 
                         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ButtonStyle18}"
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"

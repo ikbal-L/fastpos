@@ -2,10 +2,85 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PosTest.Resources.DataTemplates"
                     
-                    xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
-                    >
+                    xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <DataTemplate DataType="{x:Type models:OrderItem}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Text="{Binding Quantity, StringFormat=' {0}x'}" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBlock Grid.Column="1" Text="{Binding Path=Product.Name}"  FontSize="16" />
+            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="16" />
+            <TextBlock     Grid.Column="3" 
+                           Text="{Binding Path=TotalDiscountAmount}" 
+                           Background="#FFE1BEE7" HorizontalAlignment="Right"  FontSize="16">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="{Binding TotalDiscountAmount, Converter={StaticResource NumberToVisibility}}"/>
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                        <Binding Path="TotalDiscountAmount"/>
+                                        <Binding Path="Product.Price"/>
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility" Value="Hidden"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <materialDesign:PackIcon  Kind="TagFaces" Grid.Column="3" Width="30" Height="25" 
+                                      Background="#FFE1BEE7"  HorizontalAlignment="Right">
+                <materialDesign:PackIcon.Style>
+                    <Style TargetType="materialDesign:PackIcon">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                        <Binding Path="TotalDiscountAmount"/>
+                                        <Binding Path="Product.Price"/>
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </materialDesign:PackIcon.Style>
+            </materialDesign:PackIcon>
+            <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="16" />
+
+            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="16"
+                     SelectedItem="{Binding SelectedAdditive}"
+                     ItemTemplate="{StaticResource PlatterAdditives}"
+                     Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
+                     Style="{StaticResource kidslist}"
+                     ItemContainerStyle="{StaticResource AdditiveItem}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
 
 
+
+        </Grid>
+    </DataTemplate>
     <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
         <Grid>
             <Grid.RowDefinitions>
@@ -44,19 +119,19 @@
             <Grid Grid.Row="1" Name="Body">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border BorderThickness="1"  BorderBrush="Black"/>
+                <Border BorderThickness="1"  BorderBrush="Black" Background="Black" Height="5" />
                 <DockPanel  Grid.Row="1">
                     <TextBlock Text="Product" DockPanel.Dock="Left"/>
                     <TextBlock Text="Total" DockPanel.Dock="Right"/>
                     <TextBlock Text="Qty" HorizontalAlignment="Center"/>
                 </DockPanel>
-                <ListBox Grid.Row="2" ItemsSource="{Binding Order.OrderItems}">
-                    <ListBox.ItemTemplate>
+                <ListView Grid.Row="2" ItemsSource="{Binding OrderItems}">
+                    <ListView.ItemTemplate>
                         <DataTemplate>
                             <DockPanel  >
                                 <TextBlock Text="{Binding OrderItem.Product.Name }" DockPanel.Dock="Left"/>
@@ -64,9 +139,9 @@
                                 <TextBlock Text="{Binding OrderItem.Quantity}" HorizontalAlignment="Center"/>
                             </DockPanel>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <Border  Grid.Row="3" BorderThickness="1"  BorderBrush="Black"/>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Border  Grid.Row="3" BorderThickness="1"  BorderBrush="Black" Background="Black" Height="5"/>
                 <StackPanel Grid.Row="4" HorizontalAlignment="Right" >
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -79,13 +154,13 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Total"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Order.OrderItems}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Total}"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Payed"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Order.OrderItems}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GivenAmount}"/>
 
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Returned"/>
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Order.OrderItems}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ReturnedAmount}"/>
                     </Grid>
                 </StackPanel>
                 
