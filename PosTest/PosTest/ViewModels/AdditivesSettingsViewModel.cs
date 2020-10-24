@@ -163,7 +163,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            if (SelectedAdditive == null|| SelectedAdditive.Id==null)
+            if (SelectedAdditive == null|| SelectedAdditive.Rank==null)
             {
                 ToastNotification.Notify("Select a zone to copy in first");
                 return;
