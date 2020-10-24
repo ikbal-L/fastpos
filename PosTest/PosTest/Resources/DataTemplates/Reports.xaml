@@ -84,9 +84,9 @@
     <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition/> <!--Header-->
-                <RowDefinition/> <!--Body-->
-                <RowDefinition/> <!--Footer-->
+                <RowDefinition Height="1*"/> <!--Header-->
+                <RowDefinition Height="8*"/> <!--Body-->
+                <RowDefinition Height="1*"/> <!--Footer-->
             </Grid.RowDefinitions>
 
 
@@ -119,7 +119,7 @@
             <Grid Grid.Row="1" Name="Body">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition />
+                    <RowDefinition Height="*" />
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -130,20 +130,32 @@
                     <TextBlock Text="Total" DockPanel.Dock="Right"/>
                     <TextBlock Text="Qty" HorizontalAlignment="Center"/>
                 </DockPanel>
-                <ListView Grid.Row="2" ItemsSource="{Binding OrderItems}">
+
+
+                <ListView  ItemsSource="{Binding OrderItems}" Grid.Row="2">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <DockPanel  >
-                                <TextBlock Text="{Binding OrderItem.Product.Name }" DockPanel.Dock="Left"/>
-                                <TextBlock Text="{Binding OrderItem.Total}" DockPanel.Dock="Right"/>
-                                <TextBlock Text="{Binding OrderItem.Quantity}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Product.Name }" DockPanel.Dock="Left"/>
+                                <TextBlock Text="{Binding Total}" DockPanel.Dock="Right"/>
+                                <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center"/>
                             </DockPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+
+                <!--<DataGrid ItemsSource="{Binding OrderItems}" Grid.Row="1" IsReadOnly="True"  AutoGenerateColumns="False" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Product" Binding="{Binding Product.Name}"  ></DataGridTextColumn>
+                            <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Total" Binding="{Binding Total}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                </DataGrid>-->
+
                 <Border  Grid.Row="3" BorderThickness="1"  BorderBrush="Black" Background="Black" Height="5"/>
                 <StackPanel Grid.Row="4" HorizontalAlignment="Right" >
-                    <Grid>
+                    <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="100"/>

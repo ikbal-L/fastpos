@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PosTest.ViewModels;
 
 namespace PosTest.Views
 {
@@ -24,5 +25,14 @@ namespace PosTest.Views
         {
             InitializeComponent();
         }
+
+        //protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        //{
+        //    if (e.Property.Name == nameof(DataContext)&& e.NewValue!=null&& e.NewValue is PrintViewModel)
+        //    {
+        //        Viewer.Document = (DataContext as PrintViewModel).Document;
+        //    }
+        //}
     }
+    
 }
