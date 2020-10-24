@@ -215,9 +215,9 @@
                                         <Style.Triggers>
                                             <DataTrigger Value="True">
                                                 <DataTrigger.Binding>
-                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
-                                                        <Binding ElementName="AdditiveSettingsList" Path="SelectedItem"/>
-                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}" >
+                                                        <Binding ElementName="AdditiveSettingsList" Path="SelectedItem.Rank"/>
+                                                        <Binding Path="Rank" />
                                                     </MultiBinding>
                                                 </DataTrigger.Binding>
                                                 <Setter Property="Visibility" Value="Visible"/>
