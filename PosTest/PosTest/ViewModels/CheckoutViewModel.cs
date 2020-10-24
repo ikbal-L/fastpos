@@ -1456,7 +1456,7 @@ namespace PosTest.ViewModels
 
             var conv = new LengthConverter();
             contentOfPage.Width = (double)conv.ConvertFromString("15cm");
-            contentOfPage.Height = (double)conv.ConvertFromString("20cm");
+            //contentOfPage.Height = (double)conv.ConvertFromString("20cm");
             
 
             fixedPage.Width = contentOfPage.Width;

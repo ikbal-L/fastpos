@@ -81,7 +81,12 @@
 
         </Grid>
     </DataTemplate>
-    <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
+
+    <Style TargetType="DataGrid" x:Key="printdatagrid">
+    </Style>
+    <Style TargetType="DataGrid" x:Key="print">
+    </Style>
+ <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/> <!--Header-->
@@ -118,21 +123,21 @@
 
             <Grid Grid.Row="1" Name="Body">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="*" />
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Border BorderThickness="1"  BorderBrush="Black" Background="Black" Height="5" />
-                <DockPanel  Grid.Row="1">
+                <!--<DockPanel  Grid.Row="1">
                     <TextBlock Text="Product" DockPanel.Dock="Left"/>
                     <TextBlock Text="Total" DockPanel.Dock="Right"/>
                     <TextBlock Text="Qty" HorizontalAlignment="Center"/>
-                </DockPanel>
+                </DockPanel>-->
 
 
-                <ListView  ItemsSource="{Binding OrderItems}" Grid.Row="2">
+                <!--<ListView  ItemsSource="{Binding OrderItems}" Grid.Row="2">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <DockPanel  >
@@ -142,17 +147,20 @@
                             </DockPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                </ListView>
+                </ListView>-->
 
 
-                <!--<DataGrid ItemsSource="{Binding OrderItems}" Grid.Row="1" IsReadOnly="True"  AutoGenerateColumns="False" >
+                <ScrollViewer Grid.Row="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                    <DataGrid ItemsSource="{Binding OrderItems}" Grid.Row="1" IsReadOnly="True"  AutoGenerateColumns="False" 
+                          Style="{StaticResource printdatagrid}"
+                          >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Product" Binding="{Binding Product.Name}"  ></DataGridTextColumn>
-                            <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total" Binding="{Binding Total}"></DataGridTextColumn>
+                            <DataGridTextColumn HeaderStyle="{x:Null}" Header="Product" Binding="{Binding Product.Name}"  ></DataGridTextColumn>
+                            <DataGridTextColumn HeaderStyle="{x:Null}" Header="Qty" Binding="{Binding Quantity}"></DataGridTextColumn>
+                            <DataGridTextColumn HeaderStyle="{x:Null}" Header="Total" Binding="{Binding Total}"></DataGridTextColumn>
                         </DataGrid.Columns>
-                </DataGrid>-->
-
+                    </DataGrid>
+                </ScrollViewer>
                 <Border  Grid.Row="3" BorderThickness="1"  BorderBrush="Black" Background="Black" Height="5"/>
                 <StackPanel Grid.Row="4" HorizontalAlignment="Right" >
                     <Grid >
