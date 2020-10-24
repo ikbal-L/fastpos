@@ -508,37 +508,37 @@ namespace PosTest.ViewModels
             IsFlipped = true;
         }
 
-        private void PutProductInCellOf(Product sourceProduct, Product desProduct)
+        private void PutProductInCellOf(Product targetProduct, Product sourceProduct)
         {
-            var index = CurrentProducts.IndexOf(sourceProduct);
+            var index = CurrentProducts.IndexOf(targetProduct);
 
-            desProduct.Rank = sourceProduct.Rank;
-            desProduct.Category = SelectedCategory;
-            desProduct.CategorieId = SelectedCategory.Id;
+            sourceProduct.Rank = targetProduct.Rank;
+            sourceProduct.Category = SelectedCategory;
+            sourceProduct.CategorieId = SelectedCategory.Id;
 
 
-            if (sourceProduct.Category != null && sourceProduct.Id != null)
+            if (targetProduct.Category != null && targetProduct.Id != null)
             {
-                sourceProduct.Rank = null;
-                sourceProduct.Category = null;
+                targetProduct.Rank = null;
+                targetProduct.Category = null;
 
-                _productsService.UpdateProduct(sourceProduct);
+                _productsService.UpdateProduct(targetProduct);
             }
 
-            CurrentProducts[index] = desProduct;
-            if (desProduct.Id == null)
+            CurrentProducts[index] = sourceProduct;
+            if (sourceProduct.Id == null)
             {
                 long id = -1;
-                _productsService.SaveProduct(desProduct, ref id);
-                desProduct.Id = id;
+                _productsService.SaveProduct(sourceProduct, ref id);
+                sourceProduct.Id = id;
             }
             else
             {
-                _productsService.UpdateProduct(desProduct);
+                _productsService.UpdateProduct(sourceProduct);
             }
 
-            SelectedCategory.ProductIds.Add((long) desProduct.Id);
-            SelectedCategory.Products.Add(desProduct);
+            SelectedCategory.ProductIds.Add((long) sourceProduct.Id);
+            SelectedCategory.Products.Add(sourceProduct);
             _categoriesService.UpdateCategory(SelectedCategory);
         }
 

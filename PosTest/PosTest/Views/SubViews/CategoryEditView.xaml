@@ -111,7 +111,7 @@
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="8*" />
                 </Grid.ColumnDefinitions>
-                <Rectangle Grid.Column="0" Fill="{Binding Category.BackGroundColor}" />
+                <Rectangle Grid.Column="0" Fill="{Binding Category.BackgroundColor}" />
                 <!--<materialDesign:ColorPicker Grid.Column="1" Color="{Binding CurrentCategory.BackgroundColor}" />-->
                 <slcontrole:ColorPalette Grid.Column="1"
                                          CPColorBrush="{Binding Category.Background,Converter={StaticResource scbtobrush}}" />
@@ -122,7 +122,7 @@
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right">
-            <Button Style="{StaticResource MaterialDesignFlatButton}" DataContext="{Binding EditCategoryViewModel}"
+            <Button Style="{StaticResource MaterialDesignFlatButton}" 
                     IsDefault="True"
                     Margin="0 8 8 0"
                     cal:Message.Attach="[Event Click] = [Action SaveCategory()]"

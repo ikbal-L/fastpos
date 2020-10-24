@@ -167,9 +167,9 @@
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
         <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
-            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1"  Background="{Binding Background}">
+            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1"  >
                 <StackPanel>
-                    <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
+                    <DockPanel Height="70" Width="100" Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}"  >
 
 
                         <Button  Width="30" Height="30"  Command="{x:Static materialdesign:Flipper.FlipCommand}"

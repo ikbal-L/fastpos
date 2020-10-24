@@ -92,14 +92,16 @@
 
                             <!--caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"-->
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 160 -20">
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 160 -20"
+                                caliburn:Message.Attach="[Event Click] = [Action PasteAdditive()]">
                                 <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
                             </Button>
 
                             <!--caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"-->
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 210 -20">
+                                Grid.Row="0" Margin="0 0 210 -20"
+                                caliburn:Message.Attach="[Event Click] = [Action CopyAdditive()]">
                                 <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
                             </Button>
 

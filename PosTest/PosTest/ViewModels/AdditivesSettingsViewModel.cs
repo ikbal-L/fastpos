@@ -22,6 +22,7 @@ namespace PosTest.ViewModels
         private List<Additive> _allAdditives;
         private int _additivePageSize;
         private bool _isEditing;
+        private Additive _clipBoardAdditive;
 
         public AdditivesSettingsViewModel(IAdditiveService additiveService, int additivePageSize)
         {
@@ -43,6 +44,12 @@ namespace PosTest.ViewModels
         {
             get => _selectedAdditive;
             set { Set(ref _selectedAdditive, value); }
+        }
+
+        public Additive ClipBoardAdditive
+        {
+            get => _clipBoardAdditive;
+            set => Set(ref _clipBoardAdditive, value);
         }
 
         public bool IsEditing
@@ -113,19 +120,18 @@ namespace PosTest.ViewModels
                     return;
                 }
 
-                var targetRank = targetAdditive.Rank;
-                var receivedRank = receivedAdditive.Rank;
-                targetAdditive.Rank = receivedAdditive.Rank;
-                receivedAdditive.Rank = targetRank;
-                Additives[(int) targetRank - 1] = receivedAdditive;
-                Additives[(int) receivedRank - 1] = targetAdditive;
-                _additiveService.UpdateAdditive(receivedAdditive);
-                _additiveService.UpdateAdditive(targetAdditive);
+                PutAdditiveInCellOf(targetAdditive, receivedAdditive);
             }
+        }
+
+        private void PutAdditiveInCellOf(Additive targetAdditive, Additive receivedAdditive)
+        {
+            
         }
 
         public void SaveAdditive()
         {
+            IsEditing = false;
             if (SelectedAdditive.Id==null)
             {
                 long id;
@@ -136,6 +142,58 @@ namespace PosTest.ViewModels
             {
                 _additiveService.UpdateAdditive(SelectedAdditive);
             }
+        }
+
+        public void CopyAdditive()
+        {
+            if (SelectedAdditive==null|| SelectedAdditive.Id==null)
+            {
+                ToastNotification.Notify("Select a Valid Additive to copy",1);
+                return;
+            }
+
+            ClipBoardAdditive = SelectedAdditive;
+        }
+
+        public void PasteAdditive()
+        {
+            if (ClipBoardAdditive == null)
+            {
+                ToastNotification.Notify("Copy an additive first");
+                return;
+            }
+
+            if (SelectedAdditive == null|| SelectedAdditive.Id==null)
+            {
+                ToastNotification.Notify("Select a zone to copy in first");
+                return;
+            }
+
+            if (ClipBoardAdditive.Equals(SelectedAdditive))
+            {
+                ToastNotification.Notify("You chose the same additive");
+                return;
+            }
+
+            int rank = (int)SelectedAdditive.Rank;
+            var additive = new Additive(ClipBoardAdditive);
+            additive.Rank = rank;
+            additive.Id = null;
+            if (_additiveService.SaveAdditive(additive, out var id)==200)
+            {
+                
+                additive.Id = id; 
+            }
+
+            Additives[rank - 1] = additive;
+
+
+
+        }
+
+        public object clone(object obj)
+        {
+            return obj;
         }
     }
 }
