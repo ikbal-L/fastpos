@@ -966,6 +966,7 @@ namespace PosTest.ViewModels
             if (SelectedCategory.Id == null) return;
             this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct, this._productsService);
             IsCategory = false;
+            NotifyOfPropertyChange((() => IsCategory));
             IsFlipped = true;
         }
 

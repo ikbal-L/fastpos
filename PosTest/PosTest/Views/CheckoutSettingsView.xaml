@@ -9,6 +9,7 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:ex="clr-namespace:PosTest.Extensions"
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
+             xmlns:converters="clr-namespace:PosTest.Converters"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
@@ -198,6 +199,7 @@
                         Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}" />
             </DockPanel>
         </DataTemplate>
+        <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToVisibilityConverter"></converters:BooleanToHiddenVisibilityConverter>
     </UserControl.Resources>
     
     <Grid>
@@ -473,7 +475,8 @@
                             <subviews:ProductEditView Grid.Row="0" DataContext="{Binding EditProductViewModel }"  />
                             
                             <subviews:CategoryEditView  Grid.Row="0"  Background="White"
-                                                        DataContext="{Binding EditCategoryViewModel}" Visibility="{Binding IsCategory}" ></subviews:CategoryEditView>
+                                                        Visibility="{Binding IsCategory,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        DataContext="{Binding EditCategoryViewModel}"  />
 
                             <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="1" Margin="1">
                                 <StackPanel Orientation="Horizontal">

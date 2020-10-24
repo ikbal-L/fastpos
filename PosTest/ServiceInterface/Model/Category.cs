@@ -105,7 +105,7 @@ namespace ServiceInterface.Model
                     }
                     else
                     {
-                        throw new MappingException("Product does not exist");
+                        
                     }
                 }
             }
