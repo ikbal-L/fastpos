@@ -202,14 +202,14 @@ namespace PosTest.ViewModels.SubViewModel
 
             if ((Product as Platter).Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Remove(source.Id);
+                ((Platter) Product).IdAdditives.Remove((long)source.Id);
                 ((Platter) Product).Additives.Remove(source);
                 return;
             }
 
             if (!(Product as Platter).Additives.Contains(source) && (bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Add(source.Id);
+                ((Platter) Product).IdAdditives.Add((long)source.Id);
                 ((Platter) Product).Additives.Add(source);
                 return;
             }

@@ -167,7 +167,7 @@
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
         <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
-            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1" >
+            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1"  Background="{Binding Background}">
                 <StackPanel>
                     <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
 

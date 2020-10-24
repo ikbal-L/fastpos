@@ -21,6 +21,7 @@ namespace PosTest.ViewModels
         private IAdditiveService _additiveService;
         private List<Additive> _allAdditives;
         private int _additivePageSize;
+        private bool _isEditing;
 
         public AdditivesSettingsViewModel(IAdditiveService additiveService, int additivePageSize)
         {
@@ -28,6 +29,7 @@ namespace PosTest.ViewModels
             _additivePageSize = additivePageSize;
             int additiveStatusCode = 0;
             _allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
+            _isEditing = false;
             PopulateAdditivesPage();
         }
 
@@ -41,6 +43,12 @@ namespace PosTest.ViewModels
         {
             get => _selectedAdditive;
             set { Set(ref _selectedAdditive, value); }
+        }
+
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set => Set(ref _isEditing, value);
         }
 
         private void PopulateAdditivesPage()
@@ -113,6 +121,20 @@ namespace PosTest.ViewModels
                 Additives[(int) receivedRank - 1] = targetAdditive;
                 _additiveService.UpdateAdditive(receivedAdditive);
                 _additiveService.UpdateAdditive(targetAdditive);
+            }
+        }
+
+        public void SaveAdditive()
+        {
+            if (SelectedAdditive.Id==null)
+            {
+                long id;
+                _additiveService.SaveAdditive(SelectedAdditive,out id);
+                SelectedAdditive.Id = id;
+            }
+            else
+            {
+                _additiveService.UpdateAdditive(SelectedAdditive);
             }
         }
     }

@@ -6,10 +6,14 @@
              xmlns:local="clr-namespace:PosTest.Views" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:PosTest.SL.Controls"
              xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:converters="clr-namespace:PosTest.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="610" d:DesignWidth="640">
+        <UserControl.Resources>
+            <converters:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
+    </UserControl.Resources>
     <Grid >
-        <materialdesign:Flipper IsFlipped="True" >
+        <materialdesign:Flipper IsFlipped="{Binding IsEditing}" >
             <materialdesign:Flipper.FrontContent>
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
                     <Border BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" MinWidth="40" MinHeight="100" ClipToBounds="True">
@@ -29,6 +33,7 @@
                             <ListBox x:Name="AdditiveSettingsList" d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
                                  AllowDrop="True"
                                  ItemsSource="{Binding Additives}"
+                                 SelectedItem="{Binding SelectedAdditive}"
                                  ItemTemplate="{StaticResource SettingsAdditive}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
@@ -98,7 +103,7 @@
                                 <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
                             </Button>
 
-                            <!--caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]"-->
+                            <!--caliburn:Message.Attach="[Event Click] = [Action SaveAdditive()]"-->
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 260 -20">
                                 <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
@@ -117,13 +122,14 @@
                     </Grid.RowDefinitions>
                         <Border Grid.Row="0"  Margin="10  10">
                             <TextBox materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
-                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24" />
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24" Text="{Binding SelectedAdditive.Description}" />
                         </Border>
-                        
-                        <controls:ColorPalette CPColorBrush="AliceBlue"  Grid.Row="1" />
+
+                        <controls:ColorPalette  Grid.Row="1" CPColorBrush="{Binding SelectedAdditive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>
                         <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
                         <StackPanel Orientation="Horizontal">
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}">
+                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}" 
+                                        caliburn:Message.Attach="[Event Click] = [Action SaveAdditive()]">
                                     <StackPanel Orientation="Horizontal">
                                         <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
                                     </StackPanel>

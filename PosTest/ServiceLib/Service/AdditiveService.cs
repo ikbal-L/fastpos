@@ -16,29 +16,22 @@ namespace ServiceLib.Service
     public class AdditiveService : IAdditiveService
     {
         private readonly RestAdditiveService _restAdditiveService = RestAdditiveService.Instance;
-        public int DeleteAdditive(long id)
-        {
-            return _restAdditiveService.DeleteAdditive(id);
-        }
-
         public Additive GetAdditive(long id, ref int statusCode)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids, ref int statusCode)
+        public int DeleteAdditive(long id)
         {
-            throw new NotImplementedException();
+            return _restAdditiveService.DeleteAdditive(id);
         }
 
-        public int SaveAdditive(Additive additive)
-        {
-            throw new NotImplementedException();
-        }
 
-        public int SaveAdditives(IEnumerable<Additive> additives)
+        public int SaveAdditive(Additive additive, out long id)
         {
-            throw new NotImplementedException();
+            id = -1;
+            if (additive == null) return -1;
+            return _restAdditiveService.SaveAdditive(additive, out id);
         }
 
         public int UpdateAdditive(Additive additive)
@@ -47,10 +40,20 @@ namespace ServiceLib.Service
             return i;
         }
 
+        public int SaveAdditives(IEnumerable<Additive> additives)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Additive> GetAllAdditives(ref int statusCode)
         {
            return GenericRest.GetThing <IEnumerable<Additive>>(UrlConfig.AdditiveUrl.GetAllAdditives, ref statusCode);
 
+        }
+
+        public IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids, ref int statusCode)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -124,8 +127,9 @@ namespace ServiceLib.Service
             return additives;
         }
 
-        public int SaveAdditive(Additive additive)
+        public int SaveAdditive(Additive additive, out long id)
         {
+            id = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(additive,
@@ -146,7 +150,10 @@ namespace ServiceLib.Service
 
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
-
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                id = long.Parse(response.Content);
+            }
             return (int)response.StatusCode;
         }
 

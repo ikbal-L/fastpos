@@ -224,7 +224,7 @@ namespace ServiceInterface.Model
 
                     foreach (var a in plat.Additives)
                     {
-                        plat.IdAdditives.Add(a.Id);
+                        plat.IdAdditives.Add((long)a.Id);
                     }
                 }
 

@@ -82,6 +82,8 @@ namespace PosTest.ViewModels
             ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             SelectedProduct = new Product();
             SelectedProduct.PropertyChanged += (sender, args) => { SaveProduct(); };
+            IsFlipped = false;
+            IsCategory = false;
         }
 
 
