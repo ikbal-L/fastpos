@@ -11,6 +11,7 @@
              d:DesignHeight="610" d:DesignWidth="640">
         <UserControl.Resources>
             <converters:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
+            
     </UserControl.Resources>
     <Grid >
         <materialdesign:Flipper IsFlipped="{Binding IsEditing}" >

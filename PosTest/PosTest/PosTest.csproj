@@ -201,6 +201,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\CollectionContainsValueConverter.cs" />
+    <Compile Include="Converters\EqualToSelectedAndNotEmptyMultiValueConverter.cs" />
     <Compile Include="Converters\NotCollectionItemAnyGreaterThanZeroValueConverter.cs" />
     <Compile Include="Converters\EntityIdValueConverter.cs" />
     <Compile Include="Converters\LesserOrEqualToValueConverter.cs" />

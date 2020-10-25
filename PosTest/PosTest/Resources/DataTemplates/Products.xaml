@@ -10,6 +10,7 @@
 
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     <converters:CollectionContainsValueConverter x:Key="CollectionContainsValueConverter"></converters:CollectionContainsValueConverter>
+    <converters:EqualToSelectedAndNotEmptyMultiValueConverter x:Key="EqualToSelectedAndNotEmptyMultiValueConverter"></converters:EqualToSelectedAndNotEmptyMultiValueConverter>
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
@@ -215,9 +216,10 @@
                                         <Style.Triggers>
                                             <DataTrigger Value="True">
                                                 <DataTrigger.Binding>
-                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}" >
+                                                    <MultiBinding Converter="{StaticResource EqualToSelectedAndNotEmptyMultiValueConverter}" >
                                                         <Binding ElementName="AdditiveSettingsList" Path="SelectedItem.Rank"/>
                                                         <Binding Path="Rank" />
+                                                        <Binding Path="Description" />
                                                     </MultiBinding>
                                                 </DataTrigger.Binding>
                                                 <Setter Property="Visibility" Value="Visible"/>
