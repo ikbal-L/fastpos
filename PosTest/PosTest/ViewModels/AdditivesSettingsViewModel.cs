@@ -23,6 +23,7 @@ namespace PosTest.ViewModels
         private int _additivePageSize;
         private bool _isEditing;
         private Additive _clipBoardAdditive;
+        private Additive _additiveToMove;
 
         public AdditivesSettingsViewModel(IAdditiveService additiveService, int additivePageSize)
         {
@@ -50,6 +51,12 @@ namespace PosTest.ViewModels
         {
             get => _clipBoardAdditive;
             set => Set(ref _clipBoardAdditive, value);
+        }
+
+        public Additive AdditiveToMove
+        {
+            get => _additiveToMove;
+            set => Set(ref _additiveToMove, value);
         }
 
         public bool IsEditing
@@ -121,21 +128,38 @@ namespace PosTest.ViewModels
                 }
 
                 PutAdditiveInCellOf(targetAdditive, receivedAdditive);
+                SelectedAdditive = targetAdditive;
             }
         }
 
         private void PutAdditiveInCellOf(Additive targetAdditive, Additive receivedAdditive)
         {
+            var targetRank = targetAdditive.Rank;
+            var receivedRank = receivedAdditive.Rank;
+            var targetIndex = Additives.IndexOf(targetAdditive);
+            var receivedIndex = Additives.IndexOf(receivedAdditive);
+            targetAdditive.Rank = receivedRank;
+            receivedAdditive.Rank = targetRank;
             
+            Additives[targetIndex] = receivedAdditive;
+            Additives[receivedIndex] = targetAdditive;
+            if (receivedAdditive.Id !=null)
+            {
+                _additiveService.UpdateAdditive(receivedAdditive); 
+            }
+            if (targetAdditive.Id != null)
+            {
+                _additiveService.UpdateAdditive(targetAdditive); 
+            }
         }
 
         public void SaveAdditive()
         {
             IsEditing = false;
-            if (SelectedAdditive.Id==null)
+            if (SelectedAdditive.Id == null)
             {
                 long id;
-                _additiveService.SaveAdditive(SelectedAdditive,out id);
+                _additiveService.SaveAdditive(SelectedAdditive, out id);
                 SelectedAdditive.Id = id;
             }
             else
@@ -146,9 +170,9 @@ namespace PosTest.ViewModels
 
         public void CopyAdditive()
         {
-            if (SelectedAdditive==null|| SelectedAdditive.Id==null)
+            if (SelectedAdditive == null || SelectedAdditive.Id == null)
             {
-                ToastNotification.Notify("Select a Valid Additive to copy",1);
+                ToastNotification.Notify("Select a Valid Additive to copy", 1);
                 return;
             }
 
@@ -163,7 +187,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            if (SelectedAdditive == null|| SelectedAdditive.Rank==null)
+            if (SelectedAdditive == null || SelectedAdditive.Rank == null)
             {
                 ToastNotification.Notify("Select a zone to copy in first");
                 return;
@@ -175,25 +199,36 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            int rank = (int)SelectedAdditive.Rank;
+            int rank = (int) SelectedAdditive.Rank;
             var additive = new Additive(ClipBoardAdditive);
             additive.Rank = rank;
             additive.Id = null;
-            if (_additiveService.SaveAdditive(additive, out var id)==200)
+            if (_additiveService.SaveAdditive(additive, out var id) == 200)
             {
-                
-                additive.Id = id; 
+                additive.Id = id;
             }
 
             Additives[rank - 1] = additive;
-
-
-
         }
 
-        public object clone(object obj)
+        public void MoveAdditive()
         {
-            return obj;
+            if (AdditiveToMove == null)
+            {
+                AdditiveToMove = SelectedAdditive;
+                return;
+            }
+
+            if (AdditiveToMove == SelectedAdditive)
+            {
+                ToastNotification.Notify("You selected the same additive");
+                AdditiveToMove = null;
+                SelectedAdditive = null;
+                return;
+            }
+
+            PutAdditiveInCellOf(SelectedAdditive, AdditiveToMove);
+            AdditiveToMove = null;
         }
     }
 }

@@ -75,7 +75,8 @@ namespace ServiceInterface.Model
             var result = additive != null &&
                     additive.Id == Id &&
                     additive.Description == Description &&
-                    additive.BackgroundString == BackgroundString;
+                    additive.BackgroundString == BackgroundString &&
+                    additive.Rank == Rank;
             return result;
             //           return Equals(other as Additive);
         }
