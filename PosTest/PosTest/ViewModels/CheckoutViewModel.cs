@@ -584,6 +584,7 @@ namespace PosTest.ViewModels
 
             TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
+            TablesViewModel.TablesView.Refresh();
             SetSelectedInListedOrdersDisplayedOrder();
             TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
