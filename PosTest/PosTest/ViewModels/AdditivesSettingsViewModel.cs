@@ -230,5 +230,22 @@ namespace PosTest.ViewModels
             PutAdditiveInCellOf(SelectedAdditive, AdditiveToMove);
             AdditiveToMove = null;
         }
+
+        public void DeleteAdditive()
+        {
+            if (SelectedAdditive == null||SelectedAdditive.Id==null)
+            {
+                ToastNotification.Notify("Select an Additive to delete first ");
+                return;
+            }
+
+            var selectedAdditiveId = (long)SelectedAdditive.Id;
+            if (_additiveService.DeleteAdditive(selectedAdditiveId)==200)
+            {
+                Additives.Remove(SelectedAdditive);
+                ToastNotification.Notify("Additive was deleted successfully",1);
+
+            }
+        }
     }
 }
