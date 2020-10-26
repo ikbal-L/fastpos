@@ -665,8 +665,6 @@ namespace PosTest.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
 
-        #region Filtering and pagination
-
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {
             var categories = new HashSet<Category>();
@@ -694,7 +692,7 @@ namespace PosTest.ViewModels
             var categories = new List<Category>(retrieveCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             Categories = new BindableCollection<Category>();
-            var maxRank = (int) categories.Max(c => c.Rank);
+            var maxRank = (int)categories.Max(c => c.Rank);
             int _categpryPageSize = 10;
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
@@ -728,6 +726,10 @@ namespace PosTest.ViewModels
             RankedItemsCollectionHelper.LoadPagesNotFilled(source: additives, target: AdditivesPage,
                 size: MaxProductPageSize);
         }
+
+        #region Filtering and pagination
+
+
 
 
         public void ProductFiltering(string text)
