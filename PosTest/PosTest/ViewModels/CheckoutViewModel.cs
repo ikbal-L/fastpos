@@ -168,7 +168,7 @@ namespace PosTest.ViewModels
             PaginatedCategories = new CollectionViewSource();
             PaginatedCategories.Source = Categories;
             CurrentCategoryPageIndex = 0;
-            itemsPerCategoryPage = 6;
+            itemsPerCategoryPage = 5;
             PaginatedCategories.Filter += new FilterEventHandler(PaginatedCategoriesOnFilter);
            
             CalculateTotalPages(Categories.Count);
@@ -716,13 +716,13 @@ namespace PosTest.ViewModels
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;
 
-            RankedItemsCollectionHelper.LoadPagesNotFilled(source: categories, target: Categories, size: size);
+            RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: Categories, size: size);
         }
 
         public void ShowCategoryProducts(Category category)
         {
             ProductsPage.Clear();
-            if (category == null) return;
+            if (category?.Id == null) return;
             var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
 
             var comparer = new Comparer<Product>();
@@ -1619,11 +1619,7 @@ namespace PosTest.ViewModels
         private void PaginatedCategoriesOnFilter(object sender, FilterEventArgs e)
         {
             Category category = (e.Item as Category);
-            if (category ==null)
-            {
-                e.Accepted = true;
-                return;
-            }
+
             int indexOfCategory = (int)category?.Rank - 1;
 
             if (indexOfCategory >= itemsPerCategoryPage * CurrentCategoryPageIndex && indexOfCategory < itemsPerCategoryPage * (CurrentCategoryPageIndex + 1))
