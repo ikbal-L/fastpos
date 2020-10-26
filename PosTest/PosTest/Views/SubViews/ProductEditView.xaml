@@ -20,10 +20,17 @@
             </ResourceDictionary.MergedDictionaries>
             <convert:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
 
-            <Style  TargetType="TextBox" >
+            <Style  TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" >
                 <Setter Property="Foreground" Value="#333333" />
                 <Setter Property="MaxLength" Value="40" />
                 <Setter Property="Width" Value="392" />
+                <!--<Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="true">
+                        <Setter Property="ToolTip"
+                                Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors)[0].ErrorContent}" />
+                    </Trigger>
+                </Style.Triggers>-->
 
                 <Setter Property="Validation.ErrorTemplate">
                     <Setter.Value>
@@ -67,6 +74,7 @@
 
 
             </Style>
+
         </ResourceDictionary>
 
 
@@ -86,19 +94,19 @@
         <Border Grid.Row="0"  Margin="2">
             <TextBox materialdesign:HintAssist.Hint="Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding Name}" />
+                     Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" />
         </Border> 
         
         <Border Grid.Row="1"  Margin="2">
             <TextBox materialdesign:HintAssist.Hint="Price" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding Price}" />
+                     Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" />
         </Border>
         
         <Border Grid.Row="2"  Margin="2">
             <TextBox materialdesign:HintAssist.Hint="Unit" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding Unit}" />
+                     Text="{Binding Unit,UpdateSourceTrigger=PropertyChanged}" />
         </Border>
 
         <slcontrole:ColorPalette  Grid.Row="3" CPColorBrush="{Binding Product.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>

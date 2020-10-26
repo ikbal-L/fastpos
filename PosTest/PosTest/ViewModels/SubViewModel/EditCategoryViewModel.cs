@@ -103,12 +103,15 @@ namespace PosTest.ViewModels.SubViewModel
 
         public void Cancel()
         {
-            this.Category = new Category();
-            this.Name = null;
-            this.Description = null;
-            NotifyOfPropertyChange(() => this.Category);
-            NotifyOfPropertyChange(() => this.Name);
-            NotifyOfPropertyChange(() => this.Description);
+            //this.Category = new Category();
+            //this.Name = null;
+            //this.Description = null;
+            //NotifyOfPropertyChange(() => this.Category);
+            //NotifyOfPropertyChange(() => this.Name);
+            //NotifyOfPropertyChange(() => this.Description);
+
+            Category = CloneFromSource();
+
         }
 
         private static void Clone(ref Category source, ref Category target)
@@ -133,6 +136,8 @@ namespace PosTest.ViewModels.SubViewModel
                 };
                 Set(ref _name, _source.Name);
                 Set(ref _description, _source.Description);
+                NotifyOfPropertyChange(() => this.Name);
+                NotifyOfPropertyChange(() => this.Description);
                 return category;
             }
             else

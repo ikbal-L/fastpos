@@ -483,9 +483,16 @@
                             <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="1" Margin="1">
                                 <StackPanel Orientation="Horizontal">
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
-                                            caliburn:Message.Attach="[Event Click] = [Action SavedProduct()]">
+                                            caliburn:Message.Attach="[Event Click] = [Action Save()]"
+                                            IsEnabled="{Binding IsSaveEnabled}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
+                                            caliburn:Message.Attach="[Event Click] = [Action Cancel()]"  Margin="10">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialdesign:PackIcon Kind="Cancel" HorizontalAlignment="Right" Width="25" Height="25" />
                                         </StackPanel>
                                     </Button>
                                     <TextBlock Text="Product Details" FontSize="24" Margin="10"/>
