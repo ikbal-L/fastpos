@@ -473,7 +473,7 @@
                             <subviews:ProductEditView Grid.Row="0" DataContext="{Binding EditProductViewModel }"  />
                             
                             <subviews:CategoryEditView  Grid.Row="0"  Background="White"
-                                                        DataContext="{Binding EditCategoryViewModel}" Visibility="Hidden" ></subviews:CategoryEditView>
+                                                        DataContext="{Binding EditCategoryViewModel}" Visibility="{Binding IsCategory}" ></subviews:CategoryEditView>
 
                             <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="1" Margin="1">
                                 <StackPanel Orientation="Horizontal">

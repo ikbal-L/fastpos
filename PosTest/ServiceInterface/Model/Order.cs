@@ -444,7 +444,8 @@ namespace ServiceInterface.Model
         Splitted, 
         Canceled,
         Removed,
-        Served
+        Served,
+        Changed
     }
     public enum OrderType
     {
