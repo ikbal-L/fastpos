@@ -603,9 +603,9 @@ namespace PosTest.ViewModels
 
 
             int targetCategoryRank = (int)targetCategory.Rank;
+            targetCategory.Rank = incomingCategory.Rank;
             if (incomingCategory.Rank!=null)
             {
-                targetCategory.Rank = incomingCategory.Rank;
                 CurrentCategories[indexOfIncomingCategory] = targetCategory;
             }
 
