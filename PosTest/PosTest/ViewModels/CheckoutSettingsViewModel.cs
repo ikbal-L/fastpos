@@ -594,30 +594,31 @@ namespace PosTest.ViewModels
             _categoriesService.UpdateCategory(SelectedCategory);
         }
 
-        private void PutCategoryInCellOf(Category sourceCategory, Category destinationCategory)
+        private void PutCategoryInCellOf(Category targetCategory, Category incomingCategory)
         {
-            var index = CurrentCategories.IndexOf(sourceCategory);
 
-            destinationCategory.Rank = sourceCategory.Rank;
-            if (sourceCategory.Name != null)
+            int indexOfTargetCategory = CurrentCategories.IndexOf(targetCategory);
+            int indexOfIncomingCategory = CurrentCategories.IndexOf(incomingCategory);
+
+
+
+            int targetCategoryRank = (int)targetCategory.Rank;
+            if (incomingCategory.Rank!=null)
             {
-                sourceCategory.Rank = null;
-                _categoriesService.UpdateCategory(sourceCategory);
-                FreeCategories.Add(sourceCategory);
+                targetCategory.Rank = incomingCategory.Rank;
+                CurrentCategories[indexOfIncomingCategory] = targetCategory;
             }
 
-            if (destinationCategory.Id == null)
+            incomingCategory.Rank = targetCategoryRank;
+            CurrentCategories[indexOfTargetCategory] = incomingCategory;
+
+            if (targetCategory.Id != null)
             {
-                long id = -1;
-                _categoriesService.SaveCategory(destinationCategory, ref id);
-                destinationCategory.Id = id;
-            }
-            else
-            {
-                _categoriesService.UpdateCategory(destinationCategory);
+                _categoriesService.UpdateCategory(targetCategory);
             }
 
-            CurrentCategories[index] = destinationCategory;
+            _categoriesService.UpdateCategory(incomingCategory);
+
         }
 
         public void PasteProduct()
@@ -934,28 +935,28 @@ namespace PosTest.ViewModels
                 // Find the data behind the ListViewItem
                 Category category = (Category) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
 
-                Category categorySrc;
+                Category incomingCategory;
 
                 if (e.Data.GetDataPresent("FreeCategory"))
                 {
-                    categorySrc = e.Data.GetData("FreeCategory") as Category;
+                    incomingCategory = e.Data.GetData("FreeCategory") as Category;
                 }
                 else
                 {
-                    categorySrc = e.Data.GetData("Category") as Category;
+                    incomingCategory = e.Data.GetData("Category") as Category;
                 }
 
-                if (categorySrc == null || categorySrc.Name == null) return;
+                if (incomingCategory == null || incomingCategory.Name == null) return;
 
-                if (categorySrc.Rank == null)
+                if (incomingCategory.Rank == null)
                 {
-                    SelectedFreeCategory = categorySrc;
+                    SelectedFreeCategory = incomingCategory;
                     SelectedCategory = category;
                     AttachCategoryToList();
                 }
                 else
                 {
-                    CategoryToMove = categorySrc;
+                    CategoryToMove = incomingCategory;
                     SelectedCategory = category;
                     var index = CurrentCategories.IndexOf(CategoryToMove);
                     var cat = new Category() {Rank = CategoryToMove.Rank};
@@ -966,8 +967,8 @@ namespace PosTest.ViewModels
                     }
 
                     PutCategoryInCellOf(SelectedCategory, CategoryToMove);
-                    CurrentCategories[index] = cat;
-                    CategoryToMove = null;
+                    //CurrentCategories[index] = cat;
+                    //CategoryToMove = null;
                 }
             }
         }
@@ -980,6 +981,12 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (SelectedCategory.Id != null)
+            {
+                ToastNotification.Notify("Must select an Empty Cell to drop Free Category");
+                return;
+            }
+            
             PutCategoryInCellOf(SelectedCategory, SelectedFreeCategory);
             FreeCategories.Remove(SelectedFreeCategory);
         }
