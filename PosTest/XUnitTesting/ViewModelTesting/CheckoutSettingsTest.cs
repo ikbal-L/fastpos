@@ -83,6 +83,21 @@ namespace XUnitTesting.ViewModelTesting
             Assert.Equal(27, targetCategory.Rank);
             Assert.Equal(8, incomingCategory.Rank);
         }
+        [Fact]
+        public void PutCategoryInCellOf_IncomingCategoryFromFreeCategoriesList_OverwriteTargetCategory()
+        {
+            Category targetCategory = _checkoutSettingsViewModel.CurrentCategories.First(category => category.Rank == 25); //Id null Rank 25
+            Category incomingCategory =
+                _checkoutSettingsViewModel.FreeCategories.First(category => category.Id == 19); // Id 19 Rank null 
+            
+
+            //Act
+            _checkoutSettingsViewModel.PutCategoryInCellOf(targetCategory, incomingCategory);
+
+            //Assert 
+            Assert.Equal(null,targetCategory.Rank);
+            Assert.Equal(25,incomingCategory.Rank);
+        }
 
 
     }
