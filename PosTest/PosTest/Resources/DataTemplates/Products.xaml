@@ -10,6 +10,7 @@
 
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     <converters:CollectionContainsValueConverter x:Key="CollectionContainsValueConverter"></converters:CollectionContainsValueConverter>
+    <converters:EqualToSelectedAndNotEmptyMultiValueConverter x:Key="EqualToSelectedAndNotEmptyMultiValueConverter"></converters:EqualToSelectedAndNotEmptyMultiValueConverter>
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <StackPanel  Orientation="Vertical"  x:Name="ProductTemplate">
@@ -167,9 +168,9 @@
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
         <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
-            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1" >
+            <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1"  >
                 <StackPanel>
-                    <DockPanel Height="70" Width="100" Background="{Binding Background}"  >
+                    <DockPanel Height="70" Width="100" Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}"  >
 
 
                         <Button  Width="30" Height="30"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
@@ -215,9 +216,10 @@
                                         <Style.Triggers>
                                             <DataTrigger Value="True">
                                                 <DataTrigger.Binding>
-                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
-                                                        <Binding ElementName="AdditiveSettingsList" Path="SelectedItem"/>
-                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
+                                                    <MultiBinding Converter="{StaticResource EqualToSelectedAndNotEmptyMultiValueConverter}" >
+                                                        <Binding ElementName="AdditiveSettingsList" Path="SelectedItem.Rank"/>
+                                                        <Binding Path="Rank" />
+                                                        <Binding Path="Description" />
                                                     </MultiBinding>
                                                 </DataTrigger.Binding>
                                                 <Setter Property="Visibility" Value="Visible"/>

@@ -80,6 +80,11 @@ namespace PosTest.ViewModels.SubViewModel
                 Set(ref _name, _source.Name);
                 Set(ref _price, _source.Price);
                 Set(ref _unit, _source.Unit);
+                NotifyOfPropertyChange(() => this.Product);
+                NotifyOfPropertyChange(() => this.Name);
+                NotifyOfPropertyChange(() => this.Price);
+                NotifyOfPropertyChange(() => this.Unit);
+
                 return product;
             }
             else
@@ -156,7 +161,7 @@ namespace PosTest.ViewModels.SubViewModel
         public void SaveProduct()
         {
             Clone(source: ref _product, target: ref this._source);
-            if (Product.Id != null)
+            if (Source.Id != null)
             {
                 _productService.UpdateProduct(this._source);
             }
@@ -175,23 +180,6 @@ namespace PosTest.ViewModels.SubViewModel
         }
         public void CheckAdditive(object sender)
         {
-            //ListBox listView = sender as ListBox;
-            //ListBoxItem listBoxItem =
-            //    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
-
-            //if (listBoxItem == null)
-            //{
-            //    return;
-            //}
-
-            //Additive source = (Additive) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-
-
-            //ContentPresenter myContentPresenter = FindVisualChild<ContentPresenter>(listBoxItem);
-
-            //// Finding textBlock from the DataTemplate that is set on that ContentPresenter
-            //DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
-            //ToggleButton toggleButton = (ToggleButton) myDataTemplate.FindName("ToggleButton", myContentPresenter);
             ToggleButton toggleButton = sender as ToggleButton;
             Additive source = toggleButton.DataContext as Additive;
             if (source==null)
@@ -202,40 +190,19 @@ namespace PosTest.ViewModels.SubViewModel
 
             if ((Product as Platter).Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Remove(source.Id);
+                ((Platter) Product).IdAdditives.Remove((long)source.Id);
                 ((Platter) Product).Additives.Remove(source);
                 return;
             }
 
             if (!(Product as Platter).Additives.Contains(source) && (bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Add(source.Id);
+                ((Platter) Product).IdAdditives.Add((long)source.Id);
                 ((Platter) Product).Additives.Add(source);
                 return;
             }
         }
 
-        public void AdditiveChecked()
-        {
-            //if ((Product as Platter).Additives.Contains(source) && !(bool)toggleButton?.IsChecked)
-            //{
-            //    ((Platter)Product).IdAdditives.Remove(source.Id);
-            //    ((Platter)Product).Additives.Remove(source);
-            //    return;
-            //}
-            ToastNotification.Notify("hi");
-        }
-
-        public void AdditiveUnCheked()
-        {
-            //if (!(Product as Platter).Additives.Contains(source) && (bool)toggleButton?.IsChecked)
-            //{
-            //    ((Platter)Product).IdAdditives.Add(source.Id);
-            //    ((Platter)Product).Additives.Add(source);
-            //    return;
-
-            //}
-        }
 
         private childItem FindVisualChild<childItem>(DependencyObject obj)
             where childItem : DependencyObject
@@ -276,14 +243,12 @@ namespace PosTest.ViewModels.SubViewModel
 
         public void Cancel()
         {
-            this.Product = new Product();
-            this.Name = null;
-            this.Price = 0;
-            this.Unit = null;
-            NotifyOfPropertyChange(() => this.Product);
-            NotifyOfPropertyChange(() => this.Name);
-            NotifyOfPropertyChange(() => this.Price);
-            NotifyOfPropertyChange(() => this.Unit);
+            //this.Product = new Product();
+            //this.Name = null;
+            //this.Price = 0;
+            //this.Unit = null;
+            Product = CloneFromSource();
+
         }
 
         private static void Clone(ref Product source, ref Product target)

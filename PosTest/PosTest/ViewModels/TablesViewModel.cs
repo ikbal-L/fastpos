@@ -22,7 +22,9 @@ namespace PosTest.ViewModels
             TablesViewSource = new CollectionViewSource();
             TablesViewSource.Source = Parent.Tables;
             TablesViewSource.Filter += TablesFilter;
-            TablesView = TablesViewSource.View;
+            //TablesView = TablesViewSource.View;
+            TablesView = CollectionViewSource.GetDefaultView(Parent.Tables);
+            TablesView.SortDescriptions.Add(new SortDescription("Number",ListSortDirection.Ascending));
             TablesView.CollectionChanged += TablesViewChanged;
             //TablesView.CurrentChanged += TablesViewCurrentChanged;
             Tables = new BindableCollection<Table>(TablesView.Cast<Table>());

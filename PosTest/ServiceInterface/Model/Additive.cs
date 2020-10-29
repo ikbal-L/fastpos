@@ -9,8 +9,11 @@ namespace ServiceInterface.Model
 {
     public class Additive : Ranked //, IEquatable<Additive>
     {
-        private string _backgroundString = null;
-
+        private string _description;
+        private string _backgroundString;
+        private SolidColorBrush _background;
+        private Color? _backgroundColor;
+        
         public Additive() { }
 
         public Additive(Additive additive)
@@ -22,10 +25,14 @@ namespace ServiceInterface.Model
             BackgroundString = additive.BackgroundString;
         }
         [DataMember]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [DataMember]
-        public string Description { get; set; }
+        public string Description
+        {
+            get => _description;
+            set => Set(ref _description, value);
+        }
 
         public List<Ingredient> Ingrediants { get; set; }
 
@@ -38,20 +45,17 @@ namespace ServiceInterface.Model
         public string BackgroundString
         {
             get => _backgroundString ?? "#00f39c12";
-          set
-            {
-                _backgroundString = value;
-                NotifyOfPropertyChange(nameof(Background));
-            }
+            set => Set(ref _backgroundString, value);
         }
 
-        [DataMember]
         public Brush Background
         {
             get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
             set
             {
-                _background = (SolidColorBrush)value;
+                Set(ref _background, (SolidColorBrush)value);
+                Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
+                Set(ref _backgroundColor, ((SolidColorBrush)value).Color, nameof(BackgroundColor));
             }
         }
 
@@ -71,13 +75,12 @@ namespace ServiceInterface.Model
             var result = additive != null &&
                     additive.Id == Id &&
                     additive.Description == Description &&
-                    additive.BackgroundString == BackgroundString;
+                    additive.BackgroundString == BackgroundString &&
+                    additive.Rank == Rank;
             return result;
             //           return Equals(other as Additive);
         }
 
-        private SolidColorBrush _background;
-        private Color? _backgroundColor;
         public bool IsDark
         {
             get
@@ -101,9 +104,7 @@ namespace ServiceInterface.Model
             }
             set
             {
-                _backgroundColor = value;
-                BackgroundString = _backgroundColor.ToString();
-                Background = new SolidColorBrush((Color)_backgroundColor);
+                Set(ref _backgroundColor, value);
                 NotifyOfPropertyChange(() => IsDark);
             }
 

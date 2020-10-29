@@ -72,6 +72,10 @@ namespace PosTest.ViewModels
         private INotifyPropertyChanged _dialogViewModel;
         private decimal givenAmount;
         private decimal? _returnedAmount;
+        private int _pageNumber;
+        private int itemsPerCategoryPage;
+        private int _categoryPageCount;
+        private int _currentCategoryPageIndex;
 
         #endregion
 
@@ -156,7 +160,20 @@ namespace PosTest.ViewModels
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
+             
+
             LoadCategoryPages();
+
+
+            PaginatedCategories = new CollectionViewSource();
+            PaginatedCategories.Source = Categories;
+            CurrentCategoryPageIndex = 0;
+            itemsPerCategoryPage = 5;
+            PaginatedCategories.Filter += new FilterEventHandler(PaginatedCategoriesOnFilter);
+           
+            CalculateTotalPages(Categories.Count);
+            
+            
 
             foreach (var table in Tables)
             {
@@ -293,6 +310,7 @@ namespace PosTest.ViewModels
 
         public BindableCollection<Category> Categories { get; set; }
 
+        public CollectionViewSource PaginatedCategories { get; set; }
         public BindableCollection<Order> Orders { get; set; }
         public BindableCollection<Customer> Customers { get; set; }
 
@@ -584,6 +602,7 @@ namespace PosTest.ViewModels
 
             TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
+            TablesViewModel.TablesView.Refresh();
             SetSelectedInListedOrdersDisplayedOrder();
             TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
@@ -664,8 +683,6 @@ namespace PosTest.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
 
-        #region Filtering and pagination
-
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {
             var categories = new HashSet<Category>();
@@ -693,19 +710,19 @@ namespace PosTest.ViewModels
             var categories = new List<Category>(retrieveCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             Categories = new BindableCollection<Category>();
-            var maxRank = (int) categories.Max(c => c.Rank);
+            var maxRank = (int)categories.Max(c => c.Rank);
             int _categpryPageSize = 10;
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;
 
-            RankedItemsCollectionHelper.LoadPagesNotFilled(source: categories, target: Categories, size: size);
+            RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: Categories, size: size);
         }
 
         public void ShowCategoryProducts(Category category)
         {
             ProductsPage.Clear();
-            if (category == null) return;
+            if (category?.Id == null) return;
             var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
 
             var comparer = new Comparer<Product>();
@@ -728,12 +745,96 @@ namespace PosTest.ViewModels
                 size: MaxProductPageSize);
         }
 
+        #region Filtering and pagination
+        //public void CategorieFiltering(object param)
+        //{
+        //    AdditivesVisibility = false;
+        //    ProductsVisibility = true;
+        //    if (param is Category)
+        //    {
+        //        Category category = param as Category;
+        //        category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
+        //        if (CurrentCategory != null)
+        //            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
+        //        CurrentCategory = category;
+        //        FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
 
-        public void ProductFiltering(string text)
-        {
-            Console.WriteLine("Param=" + text);
-        }
+        //        PaginateProducts(NextOrPrevious.First);
+        //    }
+        //    else
+        //        if (param is string)
+        //        if ((param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
+        //        {
+        //            FilteredProducts.Filter = null;
 
+        //            if (CurrentCategory != null)
+        //                CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
+
+        //            CurrentCategory = null;
+        //            var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
+        //            FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
+        //            PaginateProducts(NextOrPrevious.First);
+        //        }
+        //        else // param == "ALL"
+        //        {
+        //            FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
+        //            PaginateProducts(NextOrPrevious.First);
+        //        }
+        //}
+
+        //public void ProductFiltering(string text)
+        //{
+        //    Console.WriteLine("Param=" + text);
+        //}
+
+        //public void PaginateProducts(NextOrPrevious nextOrprevious)
+        //{
+        //    if (nextOrprevious == NextOrPrevious.First)
+        //    {
+        //        _pageNumber = 0;
+        //        nextOrprevious = NextOrPrevious.Next;
+        //        CanExecuteMext = false;
+        //        CanExecutePrevious = false;
+        //    }
+
+        //    if (FilteredProducts.Cast<Product>().Count() <= MaxProductPageSize)
+        //    {
+        //        ProductsPage = FilteredProducts;
+        //        _pageNumber = 1;
+        //        CanExecuteMext = false;
+        //        CanExecutePrevious = false;
+        //        return;
+        //    }
+
+        //    var listProducts = FilteredProducts.Cast<Product>().ToList();
+        //    int lastIndexForThisPage = (_pageNumber + 1) * MaxProductPageSize;
+        //    if (nextOrprevious == NextOrPrevious.Next)
+        //    {
+        //        if (listProducts.Count > lastIndexForThisPage)
+        //        {
+        //            listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, MaxProductPageSize);
+        //            CanExecuteMext = true;
+        //        }
+        //        else
+        //        {
+        //            listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, listProducts.Count - (_pageNumber * MaxProductPageSize));
+        //            CanExecuteMext = false;
+        //        }
+        //        _pageNumber++;
+        //    }
+        //    else
+        //    {
+        //        if ((_pageNumber - 2) * MaxProductPageSize < 0)
+        //            return;
+        //        listProducts = listProducts.GetRange((_pageNumber - 2) * MaxProductPageSize, MaxProductPageSize);
+        //        _pageNumber--;
+        //        CanExecuteMext = true;
+
+        //    }
+        //    ProductsPage = CollectionViewSource.GetDefaultView(listProducts);
+
+        //    CanExecutePrevious = _pageNumber == 1 ? false : true;
+        //}
         #endregion
 
         #region Command Buttons' Actions
@@ -1476,6 +1577,65 @@ namespace PosTest.ViewModels
             PrintViewModel pvm = new PrintViewModel(){Document = doc,PreviousScreen = this};
             pvm.Parent = this.Parent;
             (this.Parent as MainViewModel).ActivateItem(pvm);
+        }
+
+        public void PaginateCategories(NextOrPrevious nextOrPrevious)
+        {
+            if (nextOrPrevious == NextOrPrevious.Next)
+            {
+                if (CurrentCategoryPageIndex<CategoryPageCount-1)
+                {
+                    CurrentCategoryPageIndex++;
+                }
+            }
+
+            if (nextOrPrevious == NextOrPrevious.Previous)
+            {
+                if (CurrentCategoryPageIndex!=0)
+                {
+                    CurrentCategoryPageIndex--;
+                }
+            }
+            PaginatedCategories.View.Refresh();
+        }
+        private void CalculateTotalPages(int itemcount)
+        {
+            if (itemcount % itemsPerCategoryPage == 0)
+            {
+                CategoryPageCount = (itemcount / itemsPerCategoryPage);
+            }
+            else
+            {
+                CategoryPageCount = (itemcount / itemsPerCategoryPage) + 1;
+            }
+        }
+
+        public int CategoryPageCount
+        {
+            get => _categoryPageCount;
+            set => Set(ref _categoryPageCount, value);
+        }
+
+        private void PaginatedCategoriesOnFilter(object sender, FilterEventArgs e)
+        {
+            Category category = (e.Item as Category);
+
+            int indexOfCategory = (int)category?.Rank - 1;
+
+            if (indexOfCategory >= itemsPerCategoryPage * CurrentCategoryPageIndex && indexOfCategory < itemsPerCategoryPage * (CurrentCategoryPageIndex + 1))
+            {
+                e.Accepted = true;
+            }
+            else
+            {
+                e.Accepted = false;
+            }
+        }
+
+        public int CurrentCategoryPageIndex
+        {
+            get => _currentCategoryPageIndex;
+            set => Set(ref _currentCategoryPageIndex, value);
         }
     }
 }

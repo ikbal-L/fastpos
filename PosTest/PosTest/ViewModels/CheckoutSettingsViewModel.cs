@@ -81,9 +81,21 @@ namespace PosTest.ViewModels
             ToSaveUpdate = new BindableCollection<object>();
             ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             SelectedProduct = new Product();
-            SelectedProduct.PropertyChanged += (sender, args) => { SaveProduct(); };
+            SelectedProduct.PropertyChanged += (sender, args) => { Save(); };
+            IsFlipped = false;
+            IsCategory = false;
+            
         }
 
+        private void EditProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            NotifyOfPropertyChange(() => IsSaveEnabled);
+        }
+
+        private void EditCategoryViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            NotifyOfPropertyChange(() => IsSaveEnabled);
+        }
 
         private void ToSaveUpdateChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -108,6 +120,35 @@ namespace PosTest.ViewModels
         {
             get => _editProductViewModel;
             set => Set(ref _editProductViewModel, value);
+        }
+
+        public bool IsSaveEnabled
+        {
+            get
+            {
+                if (IsCategory)
+                {
+                    if (EditCategoryViewModel!=null)
+                    {
+                        return !EditCategoryViewModel.HasErrors;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (EditProductViewModel != null)
+                    {
+                        return !EditProductViewModel.HasErrors;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
         }
 
         void GenarateRanksForProducts()
@@ -390,21 +431,34 @@ namespace PosTest.ViewModels
             SelectedFreeCategory = freeCategory;
         }
 
-        public void SaveProduct()
+        public void Save()
         {
-            ToastNotification.Notify("Updating Product", 1);
-            if (SelectedProduct.Id != null)
+            if (IsCategory)
             {
-                _productsService.UpdateProduct(SelectedProduct);
+                EditCategoryViewModel.SaveCategory();
+                EditCategoryViewModel = null;
+                IsCategory = false;
             }
             else
             {
-                long id = -1;
-                _productsService.SaveProduct(SelectedProduct, ref id);
-                SelectedProduct.Id = id;
+                EditProductViewModel.SaveProduct();
+                EditProductViewModel = null;
             }
-
             IsFlipped = false;
+        }
+
+        public void Cancel()
+        {
+            if (IsCategory)
+            {
+                EditCategoryViewModel.Cancel();
+                //IsCategory = false;
+            }
+            else
+            {
+                EditProductViewModel.Cancel();
+            }
+            //IsFlipped = false;
         }
 
         public void RemoveTElementFromTList<T>(T SelectedT, ref T SelectedFreeT,
@@ -506,37 +560,37 @@ namespace PosTest.ViewModels
             IsFlipped = true;
         }
 
-        private void PutProductInCellOf(Product sourceProduct, Product desProduct)
+        private void PutProductInCellOf(Product targetProduct, Product sourceProduct)
         {
-            var index = CurrentProducts.IndexOf(sourceProduct);
+            var index = CurrentProducts.IndexOf(targetProduct);
 
-            desProduct.Rank = sourceProduct.Rank;
-            desProduct.Category = SelectedCategory;
-            desProduct.CategorieId = SelectedCategory.Id;
+            sourceProduct.Rank = targetProduct.Rank;
+            sourceProduct.Category = SelectedCategory;
+            sourceProduct.CategorieId = SelectedCategory.Id;
 
 
-            if (sourceProduct.Category != null && sourceProduct.Id != null)
+            if (targetProduct.Category != null && targetProduct.Id != null)
             {
-                sourceProduct.Rank = null;
-                sourceProduct.Category = null;
+                targetProduct.Rank = null;
+                targetProduct.Category = null;
 
-                _productsService.UpdateProduct(sourceProduct);
+                _productsService.UpdateProduct(targetProduct);
             }
 
-            CurrentProducts[index] = desProduct;
-            if (desProduct.Id == null)
+            CurrentProducts[index] = sourceProduct;
+            if (sourceProduct.Id == null)
             {
                 long id = -1;
-                _productsService.SaveProduct(desProduct, ref id);
-                desProduct.Id = id;
+                _productsService.SaveProduct(sourceProduct, ref id);
+                sourceProduct.Id = id;
             }
             else
             {
-                _productsService.UpdateProduct(desProduct);
+                _productsService.UpdateProduct(sourceProduct);
             }
 
-            SelectedCategory.ProductIds.Add((long) desProduct.Id);
-            SelectedCategory.Products.Add(desProduct);
+            SelectedCategory.ProductIds.Add((long) sourceProduct.Id);
+            SelectedCategory.Products.Add(sourceProduct);
             _categoriesService.UpdateCategory(SelectedCategory);
         }
 
@@ -963,13 +1017,16 @@ namespace PosTest.ViewModels
         {
             if (SelectedCategory.Id == null) return;
             this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct, this._productsService);
+            EditProductViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             IsCategory = false;
+            NotifyOfPropertyChange((() => IsCategory));
             IsFlipped = true;
         }
 
         public void EditCategory()
         {
             this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory, this._categoriesService);
+            EditCategoryViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
             IsCategory = true;
             IsFlipped = true;
         }
@@ -981,7 +1038,7 @@ namespace PosTest.ViewModels
             IsCategory = false;
             if (SelectedProduct?.Id != null)
             {
-                SaveProduct();
+                Save();
                 Notify("Product Saved");
             }
         }

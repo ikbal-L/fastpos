@@ -28,9 +28,9 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required(ErrorMessage = "Product Name must not be Null or Empty")]
-        [MaxLength(10, ErrorMessage = "Product Name must not exceed 10 characters ")]
+        [MaxLength(20, ErrorMessage = "Product Name must not exceed 10 characters ")]
         [MinLength(5, ErrorMessage = "Product Name must not be under 5 characters ")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Product Name must only contain letters (a-z, A-Z).")]
+        [RegularExpression(@"^[a-zA-Z0-9_ ]+$", ErrorMessage = "Product Name must only contain letters (a-z, A-Z).")]
         public string Name
         {
             get => _name;
@@ -224,7 +224,7 @@ namespace ServiceInterface.Model
 
                     foreach (var a in plat.Additives)
                     {
-                        plat.IdAdditives.Add(a.Id);
+                        plat.IdAdditives.Add((long)a.Id);
                     }
                 }
 

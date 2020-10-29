@@ -9,6 +9,7 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:ex="clr-namespace:PosTest.Extensions"
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
+             xmlns:converters="clr-namespace:PosTest.Converters"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
@@ -198,6 +199,7 @@
                         Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}" />
             </DockPanel>
         </DataTemplate>
+        <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToVisibilityConverter"></converters:BooleanToHiddenVisibilityConverter>
     </UserControl.Resources>
     
     <Grid>
@@ -471,16 +473,27 @@
                             </Grid.RowDefinitions>
 
                             <subviews:ProductEditView Grid.Row="0" DataContext="{Binding EditProductViewModel }"  />
-                            
-                            <subviews:CategoryEditView  Grid.Row="0"  Background="White"
-                                                        DataContext="{Binding EditCategoryViewModel}" Visibility="{Binding IsCategory}" ></subviews:CategoryEditView>
+
+                            <Grid Grid.Row="0"  Visibility="{Binding IsCategory,Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <subviews:CategoryEditView  Grid.Row="0"  Background="White"
+                                                       
+                                                        DataContext="{Binding EditCategoryViewModel}"  />
+                            </Grid>
+
 
                             <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="1" Margin="1">
                                 <StackPanel Orientation="Horizontal">
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
-                                            caliburn:Message.Attach="[Event Click] = [Action SavedProduct()]">
+                                            caliburn:Message.Attach="[Event Click] = [Action Save()]"
+                                            IsEnabled="{Binding IsSaveEnabled}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
+                                            caliburn:Message.Attach="[Event Click] = [Action Cancel()]"  Margin="10">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialdesign:PackIcon Kind="Cancel" HorizontalAlignment="Right" Width="25" Height="25" />
                                         </StackPanel>
                                     </Button>
                                     <TextBlock Text="Product Details" FontSize="24" Margin="10"/>
