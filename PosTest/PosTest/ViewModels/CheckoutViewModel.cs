@@ -1548,7 +1548,6 @@ namespace PosTest.ViewModels
         {
             FixedDocument document = new FixedDocument();
             FixedPage fixedPage = new FixedPage();
-
             DataTemplate dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
 
             var contentOfPage = new UserControl();
@@ -1556,14 +1555,12 @@ namespace PosTest.ViewModels
             contentOfPage.Content = CurrentOrder;
 
             var conv = new LengthConverter();
-            contentOfPage.Width = (double)conv.ConvertFromString("15cm");
-            //contentOfPage.Height = (double)conv.ConvertFromString("20cm");
+            contentOfPage.Width = (double)conv.ConvertFromString("8cm");
             
-
-            fixedPage.Width = contentOfPage.Width;
+            fixedPage.Width =  contentOfPage.Width;
             fixedPage.Height = contentOfPage.Height;
             fixedPage.Children.Add(contentOfPage);
-
+            
             PageContent pageContent = new PageContent();
             ((IAddChild)pageContent).AddChild(fixedPage);
 
