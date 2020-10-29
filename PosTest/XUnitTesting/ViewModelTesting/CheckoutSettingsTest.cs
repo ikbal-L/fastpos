@@ -117,5 +117,25 @@ namespace XUnitTesting.ViewModelTesting
 
             Assert.Equal(null, _checkoutSettingsViewModel.SelectedFreeCategory);
         }
+
+
+        [Fact]
+        public void RemoveCategoryFromTList_CategoryDoesNotEqualsNull_CategoryRemoved()
+        {
+            //Arrange
+            _checkoutSettingsViewModel.SelectedCategory =
+                _checkoutSettingsViewModel.CurrentCategories.First(category => category.Id == 5);
+            Category selectedCategory = _checkoutSettingsViewModel.SelectedCategory;
+            Category selectedFreeCategory = null;
+
+            //act
+            _checkoutSettingsViewModel.RemoveTElementFromTList(
+                _checkoutSettingsViewModel.SelectedCategory,
+                ref selectedFreeCategory, _checkoutSettingsViewModel.CurrentCategories,
+                _checkoutSettingsViewModel.FreeCategories);
+            //Assert 
+            Assert.Equal(null, _checkoutSettingsViewModel.SelectedCategory);
+            Assert.Equal(selectedCategory.Id,selectedFreeCategory.Id);
+        }
     }
 }

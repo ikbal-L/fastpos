@@ -487,29 +487,34 @@ namespace PosTest.ViewModels
             if (SelectedT is Category selectedCategory)
             {
                 //TODO Fixing removal of categories from the current Categories list
-                foreach (var product in selectedCategory.Products)
+                if (selectedCategory.Products!=null|| selectedCategory.Products?.Count>0)
                 {
-                    product.Rank = null;
-                    product.CategorieId = null;
-                    product.Category = null;
-                    _productsService.UpdateProduct(product);
-                    if (!FreeProducts.Contains(product))
+                    foreach (var product in selectedCategory.Products)
                     {
-                        FreeProducts.Add(product);
+                        product.Rank = null;
+                        product.CategorieId = null;
+                        product.Category = null;
+                        _productsService.UpdateProduct(product);
+                        if (!FreeProducts.Contains(product))
+                        {
+                            FreeProducts.Add(product);
+                        }
                     }
+                    selectedCategory.Products.Clear();
+                    selectedCategory.ProductIds.Clear();
                 }
 
                 // implementing  update many products in the backend
                 CurrentProducts.Clear();
                 SelectedCategory = null;
 
-                selectedCategory.Products.Clear();
-                selectedCategory.ProductIds.Clear();
+                
                 _categoriesService.UpdateCategory(selectedCategory);
             }
 
             CurrentTs[index] = new T {Rank = rank};
             FreeTs.Add(freeT);
+            SelectedFreeT = freeT;
         }
 
 
