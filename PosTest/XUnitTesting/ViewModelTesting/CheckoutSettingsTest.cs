@@ -73,7 +73,8 @@ namespace XUnitTesting.ViewModelTesting
         [Fact]
         public void PutCategoryInCellOf_BothCategoriesFromCurrentCategoriesList_PermutateCategories()
         {
-            Category targetCategory = _checkoutSettingsViewModel.CurrentCategories.First(category => category.Id == 5); //Rank 8
+            Category targetCategory =
+                _checkoutSettingsViewModel.CurrentCategories.First(category => category.Id == 5); //Rank 8
             Category incomingCategory =
                 _checkoutSettingsViewModel.CurrentCategories.First(category => category.Id == 23); //Rank 27 
 
@@ -83,22 +84,38 @@ namespace XUnitTesting.ViewModelTesting
             Assert.Equal(27, targetCategory.Rank);
             Assert.Equal(8, incomingCategory.Rank);
         }
+
         [Fact]
         public void PutCategoryInCellOf_IncomingCategoryFromFreeCategoriesList_OverwriteTargetCategory()
         {
-            Category targetCategory = _checkoutSettingsViewModel.CurrentCategories.First(category => category.Rank == 25); //Id null Rank 25
+            Category targetCategory =
+                _checkoutSettingsViewModel.CurrentCategories.First(category => category.Rank == 25); //Id null Rank 25
             Category incomingCategory =
                 _checkoutSettingsViewModel.FreeCategories.First(category => category.Id == 19); // Id 19 Rank null 
-            
+
 
             //Act
             _checkoutSettingsViewModel.PutCategoryInCellOf(targetCategory, incomingCategory);
 
             //Assert 
-            Assert.Equal(null,targetCategory.Rank);
-            Assert.Equal(25,incomingCategory.Rank);
+            Assert.Equal(null, targetCategory.Rank);
+            Assert.Equal(25, incomingCategory.Rank);
         }
 
+        [Fact]
+        public void RemoveCategoryFromTList_CategoryEqualsNull_Return()
+        {
+            _checkoutSettingsViewModel.SelectedCategory = null;
+            Category selectedFreeCategory = null;
 
+            //act
+            _checkoutSettingsViewModel.RemoveTElementFromTList(
+                _checkoutSettingsViewModel.SelectedCategory,
+                ref selectedFreeCategory, _checkoutSettingsViewModel.CurrentCategories,
+                _checkoutSettingsViewModel.FreeCategories);
+            //Assert
+
+            Assert.Equal(null, _checkoutSettingsViewModel.SelectedFreeCategory);
+        }
     }
 }
