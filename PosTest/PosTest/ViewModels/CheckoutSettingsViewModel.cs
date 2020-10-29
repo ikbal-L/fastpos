@@ -593,8 +593,8 @@ namespace PosTest.ViewModels
             SelectedCategory.Products.Add(sourceProduct);
             _categoriesService.UpdateCategory(SelectedCategory);
         }
-
-        private void PutCategoryInCellOf(Category targetCategory, Category incomingCategory)
+        //for test make it public 
+        public void PutCategoryInCellOf(Category targetCategory, Category incomingCategory)
         {
 
             int indexOfTargetCategory = CurrentCategories.IndexOf(targetCategory);
