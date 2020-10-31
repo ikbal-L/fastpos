@@ -58,5 +58,39 @@ namespace PosTest.Helpers
         {
             LoadPages<T>(source: source, target: target, size: size, parameter: parameter);
         }
+
+        public static void InsertTElementInPositionOf<T>(ref T incomingArg,ref T targetArg ,ref IList<T> list) where T : Ranked, new()
+        {
+            if (targetArg.GetType().GetProperty("Id")?.GetValue(targetArg) != null)
+            {
+                throw new InvalidOperationException("Must Select an empty target");
+            }
+
+            if (targetArg.Rank == null)
+            {
+                throw new NullReferenceException("Target Rank must not be Null");
+            }
+            int indexOfTarget = list.IndexOf(targetArg);
+            int indexOfIncomingArg = list.IndexOf(incomingArg);
+            
+            
+            int targetArgRank = (int)targetArg.Rank;
+            targetArg.Rank = incomingArg.Rank;
+            if (incomingArg.Rank != null)
+            {
+                list[indexOfIncomingArg] = targetArg;
+            }
+            else
+            {
+                if (incomingArg is Product incomingProduct && targetArg is Product targetProduct)
+                {
+                    incomingProduct.Category = targetProduct.Category;
+                }
+            }
+
+            incomingArg.Rank = targetArgRank;
+            list[indexOfTarget] = incomingArg;
+
+        }
     }
 }

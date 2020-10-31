@@ -55,10 +55,7 @@ namespace PosTest.Helpers
             }
             else
             {
-                if (type == -1)
-                {
-                    throw new Exception(message);
-                }
+                 throw new NotificationException(message);
             }
         }
 
@@ -97,6 +94,13 @@ namespace PosTest.Helpers
                     ToastNotification.Notify(" User or password error" + respStatusCode.ToString());
                     break;
             }
+        }
+    }
+
+    public class NotificationException : Exception
+    {
+        public NotificationException(string message) : base(message)
+        {
         }
     }
 }
