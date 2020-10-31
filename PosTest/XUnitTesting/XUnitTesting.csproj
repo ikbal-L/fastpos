@@ -81,10 +81,12 @@
     <Compile Include="CheckpointTesting\CheckpointBasicMethodTests.cs" />
     <Compile Include="CheckpointTesting\SplitTesting\CommandFunctionsTesting.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="HelpersTesting\RankedItemsCollectionHelperTest.cs" />
     <Compile Include="ProductsViewModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RESTTesting\ProductServicetesting.cs" />
     <Compile Include="ViewModelTesting\CheckoutSettingsTest.cs" />
+    <Compile Include="MockingHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
