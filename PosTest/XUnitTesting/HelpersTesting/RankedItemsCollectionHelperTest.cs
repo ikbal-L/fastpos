@@ -122,7 +122,7 @@ namespace XUnitTesting.HelpersTesting
         }
 
         [Fact]
-        public void LoadPagesFilled_SourceListNotEmptyNotEqualToNullAndSizeGreaterThanZero_TargetListFilledWithNullItems()
+        public void LoadPagesNotFilled_SourceListNotEmptyNotEqualToNullAndSizeGreaterThanZero_TargetListFilledWithNullItems()
         {
 
             //Arrange 
