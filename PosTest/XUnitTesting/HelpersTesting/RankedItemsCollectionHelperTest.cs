@@ -14,7 +14,7 @@ namespace XUnitTesting.HelpersTesting
     {
         
         [Fact]
-        public void InsertTElementInPositionOf_RankOfIncomingArgEqualsNullAndIdOfTargetArgNotEqualToNull_ThrowsInvalidOperationException()
+        public void InsertTElementInPositionOf_IncomingArgRankEqualsNullAndTargetArgIdNotEqualToNull_ThrowsInvalidOperationException()
         {
             //arrange
             IList<Category> list = MockingHelpers.GetAllCategories().ToList();
@@ -27,6 +27,25 @@ namespace XUnitTesting.HelpersTesting
             //assert
             var e =Assert.Throws<InvalidOperationException>(act);
             Assert.Equal("Must Select an empty target", e.Message);
+
+        }
+
+        [Fact]
+        public void InsertTElementInPositionOf_IncomingArgRankEqualsNullAndIdOfTargetArgEqualsNull_ReturnTargetArgEqualsNullAndIncomingArgRankUpdated()
+        {
+            //arrange
+            IList<Category> list = MockingHelpers.GetAllCategories().ToList();
+            list.Add(new Category(){Id = null,Rank = 22,Name = "Empty Category 1"});
+            list.Add(new Category(){Id = null,Rank = 21,Name = "Empty Category 2"});
+            Category incomingArg = new Category() { Id = 5, Rank = null };
+            Category targetArg = list.First(category => category.Rank == 21);//Id null Rank 21 Name Empty Category 2
+
+            //act
+            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg, ref list);
+
+            //assert
+            Assert.Null(targetArg);
+            Assert.Equal(21,incomingArg.Rank);
 
         }
 
