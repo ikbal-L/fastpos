@@ -145,7 +145,7 @@ namespace XUnitTesting.HelpersTesting
 
         //Testing the underlying private function, Not important if filled or not 
         [Fact]
-        public void LoadPagesFilled_TypeIsProductAndParameterEqualsNull_ThrowsNullReferenceException()
+        public void LoadPagesFilled_TypeOfTEqualsTypeOfProductAndParameterEqualsNull_ThrowsNullReferenceException()
         {
 
             //Arrange 
@@ -159,7 +159,7 @@ namespace XUnitTesting.HelpersTesting
 
             //Assert 
             var e =Assert.Throws<NullReferenceException>(act);
-            Assert.Equal("Parameter must not be null if T is a Product",e.Message);
+            Assert.Equal("Parameter must not be null if Type of T equals Type of  Product", e.Message);
 
         }
 
