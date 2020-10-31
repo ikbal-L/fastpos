@@ -31,7 +31,7 @@ namespace XUnitTesting.HelpersTesting
         }
 
         [Fact]
-        public void InsertTElementInPositionOf_IncomingArgRankEqualsNullAndIdOfTargetArgEqualsNull_ReturnTargetArgEqualsNullAndIncomingArgRankUpdated()
+        public void InsertTElementInPositionOf_IncomingArgRankEqualsNullAndTargetArgIdEqualsNull_ReturnTargetArgEqualsNullAndIncomingArgRankUpdated()
         {
             //arrange
             IList<Category> list = MockingHelpers.GetAllCategories().ToList();
