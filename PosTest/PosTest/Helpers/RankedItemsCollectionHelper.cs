@@ -61,6 +61,16 @@ namespace PosTest.Helpers
 
         public static void InsertTElementInPositionOf<T>(ref T incomingArg,ref T targetArg ,ref IList<T> list) where T : Ranked, new()
         {
+            if (incomingArg==null)
+            {
+                throw new NullReferenceException("Incoming Arg must not be null");
+            }
+
+            if (targetArg == null)
+            {
+                throw new NullReferenceException("Target Arg must not be null");
+            }
+
             if (targetArg.GetType().GetProperty("Id")?.GetValue(targetArg) != null && incomingArg.Rank ==null)
             {
                 throw new InvalidOperationException("Must Select an empty target");
@@ -86,6 +96,8 @@ namespace PosTest.Helpers
                 {
                     incomingProduct.Category = targetProduct.Category;
                 }
+
+                targetArg = null;
             }
 
             incomingArg.Rank = targetArgRank;
