@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PosTest.Helpers;
+using PosTest.ViewModels;
 using ServiceInterface.Model;
 using Xunit;
 using XUnitTesting.ViewModelTesting;
-
 namespace XUnitTesting.HelpersTesting
 {
     public class RankedItemsCollectionHelperTest
@@ -97,6 +97,27 @@ namespace XUnitTesting.HelpersTesting
             //assert
             var e = Assert.Throws<NullReferenceException>(act);
             Assert.Equal("Target Arg must not be null", e.Message);
+
+        }
+
+        [Fact]
+        public void LoadPagesFilled_SourceListNotEmptyNotEqualToNullAndSizeGreaterThanZero_TargetListFilledWithRankedEmptyItems()
+        {
+            
+            //Arrange 
+            List<Category> sourceList = MockingHelpers.GetAllCategories().Where(c => c.Rank != null).ToList();
+            var comparer = new PosTest.ViewModels.Comparer<Category>();
+            sourceList.Sort(comparer);
+            IList<Category> targetList = new List<Category>();
+
+            //Act 
+            RankedItemsCollectionHelper.LoadPagesFilled(sourceList,targetList,30);
+            
+            
+            //Assert 
+            //the other filled items that do not exist in source 
+            var filledItems = targetList.Where(c=>!sourceList.Contains(c));
+            Assert.All(filledItems,Assert.NotNull);
 
         }
 
