@@ -142,5 +142,26 @@ namespace XUnitTesting.HelpersTesting
 
         }
 
+
+        //Testing the underlying private function, Not important if filled or not 
+        [Fact]
+        public void LoadPagesFilled_TypeIsProductAndParameterEqualsNull_ThrowsNullReferenceException()
+        {
+
+            //Arrange 
+            List<Product> sourceList = MockingHelpers.GetAllProducts().Where(p => p.Rank != null).ToList();
+            var comparer = new PosTest.ViewModels.Comparer<Product>();
+            sourceList.Sort(comparer);
+            IList<Product> targetList = new List<Product>();
+
+            //Act 
+            Action act = () => RankedItemsCollectionHelper.LoadPagesFilled(sourceList, targetList, 30);
+
+            //Assert 
+            var e =Assert.Throws<NullReferenceException>(act);
+            Assert.Equal("Parameter must not be null if T is a Product",e.Message);
+
+        }
+
     }
 }
