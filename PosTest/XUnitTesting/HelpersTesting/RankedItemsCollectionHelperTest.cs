@@ -121,5 +121,26 @@ namespace XUnitTesting.HelpersTesting
 
         }
 
+        [Fact]
+        public void LoadPagesFilled_SourceListNotEmptyNotEqualToNullAndSizeGreaterThanZero_TargetListFilledWithNullItems()
+        {
+
+            //Arrange 
+            List<Category> sourceList = MockingHelpers.GetAllCategories().Where(c => c.Rank != null).ToList();
+            var comparer = new PosTest.ViewModels.Comparer<Category>();
+            sourceList.Sort(comparer);
+            IList<Category> targetList = new List<Category>();
+
+            //Act 
+            RankedItemsCollectionHelper.LoadPagesNotFilled(sourceList, targetList, 30);
+
+
+            //Assert 
+            //the other filled items that do not exist in source 
+            var filledItems = targetList.Where(c => !sourceList.Contains(c));
+            Assert.All(filledItems, Assert.Null);
+
+        }
+
     }
 }
