@@ -61,7 +61,7 @@ namespace PosTest.Helpers
 
         public static void InsertTElementInPositionOf<T>(ref T incomingArg,ref T targetArg ,ref IList<T> list) where T : Ranked, new()
         {
-            if (targetArg.GetType().GetProperty("Id")?.GetValue(targetArg) != null)
+            if (targetArg.GetType().GetProperty("Id")?.GetValue(targetArg) != null && incomingArg.Rank ==null)
             {
                 throw new InvalidOperationException("Must Select an empty target");
             }

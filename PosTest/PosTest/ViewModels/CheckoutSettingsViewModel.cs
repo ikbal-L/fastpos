@@ -938,7 +938,7 @@ namespace PosTest.ViewModels
                 }
 
                 // Find the data behind the ListViewItem
-                Category category = (Category) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                Category targetCategory = (Category) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
 
                 Category incomingCategory;
 
@@ -951,18 +951,18 @@ namespace PosTest.ViewModels
                     incomingCategory = e.Data.GetData("Category") as Category;
                 }
 
-                if (incomingCategory == null || incomingCategory.Name == null) return;
+                if (incomingCategory?.Id == null) return;
 
                 if (incomingCategory.Rank == null)
                 {
                     SelectedFreeCategory = incomingCategory;
-                    SelectedCategory = category;
+                    SelectedCategory = targetCategory;
                     AttachCategoryToList();
                 }
                 else
                 {
                     CategoryToMove = incomingCategory;
-                    SelectedCategory = category;
+                    SelectedCategory = targetCategory;
                     var index = CurrentCategories.IndexOf(CategoryToMove);
                     var cat = new Category() {Rank = CategoryToMove.Rank};
                     if (SelectedCategory.Equals(CategoryToMove))
@@ -971,7 +971,17 @@ namespace PosTest.ViewModels
                         return;
                     }
 
-                    PutCategoryInCellOf(SelectedCategory, CategoryToMove);
+                    //PutCategoryInCellOf(SelectedCategory, CategoryToMove);
+                    IList<Category> categories = CurrentCategories;
+                    RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory, ref categories);
+                    if (targetCategory.Id != null)
+                    {
+                        _categoriesService.UpdateCategory(targetCategory);
+                    }
+                    _categoriesService.UpdateCategory(incomingCategory);
+                    CurrentCategories = (BindableCollection<Category>)categories;
+                    CategoryToMove = null;
+                    SelectedCategory = incomingCategory;
                     //CurrentCategories[index] = cat;
                     //CategoryToMove = null;
                 }
@@ -992,7 +1002,19 @@ namespace PosTest.ViewModels
                 return;
             }
             
-            PutCategoryInCellOf(SelectedCategory, SelectedFreeCategory);
+            //PutCategoryInCellOf(SelectedCategory, SelectedFreeCategory);
+            Category incomingCategory = SelectedFreeCategory;
+            Category targetCategory = SelectedCategory;
+            IList<Category> categories = CurrentCategories;
+            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory,ref targetCategory,ref categories);
+            if (targetCategory.Id != null)
+            {
+                _categoriesService.UpdateCategory(targetCategory);
+            }
+
+            _categoriesService.UpdateCategory(incomingCategory);
+            CurrentCategories = (BindableCollection<Category>) categories;
+
             FreeCategories.Remove(SelectedFreeCategory);
         }
 
