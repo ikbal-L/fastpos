@@ -12,6 +12,11 @@ namespace PosTest.Helpers
         private static void LoadPages<T>(IList<T> source, ICollection<T> target, int size, bool filled = false,
             object parameter = null) where T : Ranked, new()
         {
+            if (typeof(T) == typeof(Product) && parameter == null)
+            {
+                throw new NullReferenceException("Parameter must not be null if Type of T equals Type of  Product");
+            }
+            
             int nbitem = 0;
             for (int i = 1; i <= size; i++)
             {
