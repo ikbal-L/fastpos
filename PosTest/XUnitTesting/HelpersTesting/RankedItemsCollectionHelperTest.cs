@@ -83,5 +83,22 @@ namespace XUnitTesting.HelpersTesting
 
         }
 
+        [Fact]
+        public void InsertTElementInPositionOf_TargetArgEqualsNull_ThrowsNullReferenceException()
+        {
+            //arrange
+            IList<Category> list = MockingHelpers.GetAllCategories().ToList();
+            Category incomingArg = list.First(category => category.Id == 5);//{Id = 05, Rank = 08, Name = "Cat1"}
+            Category targetArg = null;
+
+            //act
+            Action act = () => RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg, ref list);
+
+            //assert
+            var e = Assert.Throws<NullReferenceException>(act);
+            Assert.Equal("Target Arg must not be null", e.Message);
+
+        }
+
     }
 }
