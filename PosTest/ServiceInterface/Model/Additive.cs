@@ -109,5 +109,10 @@ namespace ServiceInterface.Model
             }
 
         }
+
+        public override string ToString()
+        {
+            return Description+" ";
+        }
     }
 }

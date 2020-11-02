@@ -5,12 +5,11 @@
                     xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <DataTemplate DataType="{x:Type models:OrderItem}">
+    <DataTemplate DataType="{x:Type models:OrderItem}" x:Key="OrderItemTicketDataTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
@@ -19,82 +18,35 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Quantity, StringFormat=' {0}x'}" HorizontalAlignment="Left" FontSize="16"/>
-            <TextBlock Grid.Column="1" Text="{Binding Path=Product.Name}"  FontSize="16" />
-            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="16" />
-            <TextBlock     Grid.Column="3" 
-                           Text="{Binding Path=TotalDiscountAmount}" 
-                           Background="#FFE1BEE7" HorizontalAlignment="Right"  FontSize="16">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Visibility" Value="{Binding TotalDiscountAmount, Converter={StaticResource NumberToVisibility}}"/>
-                        <Style.Triggers>
-                            <DataTrigger Value="True">
-                                <DataTrigger.Binding>
-                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
-                                        <Binding Path="TotalDiscountAmount"/>
-                                        <Binding Path="Product.Price"/>
-                                    </MultiBinding>
-                                </DataTrigger.Binding>
-                                <Setter Property="Visibility" Value="Hidden"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-            <materialDesign:PackIcon  Kind="TagFaces" Grid.Column="3" Width="30" Height="25" 
-                                      Background="#FFE1BEE7"  HorizontalAlignment="Right">
-                <materialDesign:PackIcon.Style>
-                    <Style TargetType="materialDesign:PackIcon">
-                        <Setter Property="Visibility" Value="Hidden"/>
-                        <Style.Triggers>
-                            <DataTrigger Value="True">
-                                <DataTrigger.Binding>
-                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
-                                        <Binding Path="TotalDiscountAmount"/>
-                                        <Binding Path="Product.Price"/>
-                                    </MultiBinding>
-                                </DataTrigger.Binding>
-                                <Setter Property="Visibility" Value="Visible"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </materialDesign:PackIcon.Style>
-            </materialDesign:PackIcon>
-            <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="16" />
+            <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}"  FontSize="10" />
+            <TextBlock Grid.Column="1" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left" FontSize="12"/>
+            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="12" />
+            <TextBlock  Grid.Column="3" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="12" />
 
-            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="16"
-                     SelectedItem="{Binding SelectedAdditive}"
-                     ItemTemplate="{StaticResource PlatterAdditives}"
+            <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="7" Margin="10 -4 0 0"
                      Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
-                     Style="{StaticResource kidslist}"
-                     ItemContainerStyle="{StaticResource AdditiveItem}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemsPanel>
+                <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel/>
                     </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
 
 
 
         </Grid>
     </DataTemplate>
 
-    <Style TargetType="DataGrid" x:Key="printdatagrid">
-    </Style>
-    <Style TargetType="DataGrid" x:Key="print">
-    </Style>
+ 
+
  <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
-        <Grid>
+        <Grid Margin="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/> <!--Header-->
                 <RowDefinition Height="8*"/> <!--Body-->
                 <RowDefinition Height="1*"/> <!--Footer-->
             </Grid.RowDefinitions>
-
-
             <Grid Grid.Row="0" Name="Headre">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />  
@@ -113,8 +65,8 @@
                             <TextBlock DockPanel.Dock="Right" Text="N:10"   />
                             <TextBlock/>
                         </DockPanel>
-                        
-                        <Image Grid.Row="1" Width="50" Height="50" Stretch="Fill" Source="https://upload.wikimedia.org/wikipedia/commons/3/30/Googlelogo.png" />
+
+                        <Image Grid.Row="1" Width="50" Height="50" Stretch="Fill" />
                         <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address"/>
                     </Grid>
                 </Border>
@@ -129,39 +81,30 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Border BorderThickness="1"  BorderBrush="Black" Background="Black" Height="5" />
-                <!--<DockPanel  Grid.Row="1">
-                    <TextBlock Text="Product" DockPanel.Dock="Left"/>
-                    <TextBlock Text="Total" DockPanel.Dock="Right"/>
-                    <TextBlock Text="Qty" HorizontalAlignment="Center"/>
-                </DockPanel>-->
 
 
-                <!--<ListView  ItemsSource="{Binding OrderItems}" Grid.Row="2">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel  >
-                                <TextBlock Text="{Binding Product.Name }" DockPanel.Dock="Left"/>
-                                <TextBlock Text="{Binding Total}" DockPanel.Dock="Right"/>
-                                <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center"/>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>-->
+                <Grid x:Name="HeadListLabels">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Text="Product"/>
+                    <TextBlock Grid.Column="1" Text="Qty"/>
+                    <TextBlock Grid.Column="2" Text="Price" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="Total" TextAlignment="Right"/>
+                    <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0.3"  BorderBrush="Black"/>
+                </Grid>
 
-
-                <ScrollViewer Grid.Row="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
-                    <DataGrid ItemsSource="{Binding OrderItems}" Grid.Row="1" IsReadOnly="True"  AutoGenerateColumns="False" 
-                          Style="{StaticResource printdatagrid}"
-                          >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn HeaderStyle="{x:Null}" Header="Product" Binding="{Binding Product.Name}"  ></DataGridTextColumn>
-                            <DataGridTextColumn HeaderStyle="{x:Null}" Header="Qty" Binding="{Binding Quantity}"></DataGridTextColumn>
-                            <DataGridTextColumn HeaderStyle="{x:Null}" Header="Total" Binding="{Binding Total}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <ScrollViewer Grid.Row="2"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                   <ItemsControl ItemsSource="{Binding OrderItems}" ItemTemplate="{StaticResource OrderItemTicketDataTemplate}" />
                 </ScrollViewer>
-                <Border  Grid.Row="3" BorderThickness="1"  BorderBrush="Black" Background="Black" Height="5"/>
+                <Border  Grid.Row="3" BorderThickness="0.3"  BorderBrush="Black" Background="Black" />
                 <StackPanel Grid.Row="4" HorizontalAlignment="Right" >
                     <Grid >
                         <Grid.ColumnDefinitions>
@@ -174,18 +117,14 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Total"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Total}"/>
-
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Total}" TextAlignment="Right"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Payed"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GivenAmount}"/>
-
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GivenAmount}" TextAlignment="Right"/>
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Returned"/>
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ReturnedAmount}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ReturnedAmount}" TextAlignment="Right"/>
                     </Grid>
                 </StackPanel>
-                
             </Grid>
-
             <Grid Grid.Row="2" Name="Footer">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -201,5 +140,4 @@
             </Grid>
         </Grid>
     </DataTemplate>
-
 </ResourceDictionary>
