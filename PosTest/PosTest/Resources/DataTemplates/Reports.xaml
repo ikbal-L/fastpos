@@ -66,7 +66,12 @@
                             <TextBlock/>
                         </DockPanel>
 
-                        <Image Grid.Row="1" Width="50" Height="50" Stretch="Fill" />
+                        <Rectangle Grid.Row="1" Width="50" Height="50" Stretch="Fill"   >
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="../logo.jpg"/>
+                            </Rectangle.Fill>
+
+                        </Rectangle>
                         <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address"/>
                     </Grid>
                 </Border>
