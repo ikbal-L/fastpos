@@ -730,7 +730,7 @@ namespace PosTest.ViewModels
             listOfFliteredProducts.Sort(comparer);
             CurrentCategory = category;
             RankedItemsCollectionHelper.LoadPagesNotFilled(source: listOfFliteredProducts, target: ProductsPage,
-                size: MaxProductPageSize);
+                size: MaxProductPageSize,parameter:category);
         }
 
         public void ShowProductAdditives(Platter product)
