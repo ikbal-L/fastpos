@@ -7,9 +7,12 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Printing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +21,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Xps;
+using System.Windows.Xps.Packaging;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
@@ -1571,10 +1576,69 @@ namespace PosTest.ViewModels
         public void PrintPreview()
         {
             var doc = GenerateOrderReceipt();
-            PrintViewModel pvm = new PrintViewModel(){Document = doc,PreviousScreen = this};
-            pvm.Parent = this.Parent;
-            (this.Parent as MainViewModel).ActivateItem(pvm);
+            //PrintViewModel pvm = new PrintViewModel(){Document = doc,PreviousScreen = this};
+            //pvm.Parent = this.Parent;
+            //(this.Parent as MainViewModel).ActivateItem(pvm);
+
+            var xpsDoc = GenerateXpsDocument("customerReceiptWithoutIMG");
+            WriteXpsDocument(doc, xpsDoc);
+            //PrintDocument();
         }
+
+
+        public XpsDocument GenerateXpsDocument(string name)
+        {
+            //XpsDocument document = new XpsDocument($"/Printing/{name}.xps",FileAccess.ReadWrite);
+            XpsDocument document = new XpsDocument($"{name}.xps",FileAccess.ReadWrite);
+            return document;
+        }
+
+        public void WriteXpsDocument(FixedDocument fixedDocument, XpsDocument xpsDocument)
+        {
+            PrintDialog printDialog = new PrintDialog();
+            if (printDialog.ShowDialog() == true)
+            {
+                fixedDocument.DocumentPaginator.PageSize = new Size(printDialog.PrintableAreaWidth, printDialog.PrintableAreaHeight);
+                PrintQueue queue = printDialog.PrintQueue;
+                XpsDocumentWriter docWriter = PrintQueue.CreateXpsDocumentWriter(queue);
+                docWriter.Write(fixedDocument.DocumentPaginator);
+            }
+
+
+            //XpsDocumentWriter xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
+            //xpsDocumentWriter.Write(fixedDocument);
+            //xpsDocument.Close();
+        }
+
+        public void PrintDocument()
+        {
+            LocalPrintServer localPrintServer = new LocalPrintServer();
+
+            // Retrieving collection of local printer on user machine
+            PrintQueueCollection localPrinterCollection =
+                localPrintServer.GetPrintQueues();
+
+            //foreach (var printQueue in localPrinterCollection)
+            //{
+            //    Console.WriteLine(printQueue.Name);
+            //}
+
+            PrintQueue pq = localPrintServer.GetPrintQueue("80mm Series Printer");
+            //PrintQueue pq = localPrintServer.GetPrintQueue("MF230 Series");
+
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.PrintQueue = pq;
+            DocumentPaginator documentPaginator = GenerateOrderReceipt().DocumentPaginator;
+            //documentPaginator.PageSize = new Size(printDialog.PrintableAreaWidth, printDialog.PrintableAreaHeight);
+            var conv = new LengthConverter();
+            double width = (double)conv.ConvertFromString("7cm");
+            double height = (double)conv.ConvertFromString("10cm");
+            documentPaginator.PageSize = new Size(width, height);
+            //printDialog.ShowDialog();
+            printDialog.PageRange = new PageRange(1,1);
+            printDialog.PrintDocument(documentPaginator,"SomeDoc");
+        }
+
 
         public void PaginateCategories(NextOrPrevious nextOrPrevious)
         {
