@@ -21,6 +21,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using ToastNotifications;
@@ -1560,12 +1561,15 @@ namespace PosTest.ViewModels
             contentOfPage.Content = CurrentOrder;
 
             var conv = new LengthConverter();
-            contentOfPage.Width = (double)conv.ConvertFromString("8cm");
             
+            //double width = (double)conv.ConvertFromString("8cm");
+            //double height = document.DocumentPaginator.PageSize.Height;
+
+            //document.DocumentPaginator.PageSize = new Size(width, height);
+
             fixedPage.Width =  contentOfPage.Width;
             fixedPage.Height = contentOfPage.Height;
             fixedPage.Children.Add(contentOfPage);
-            
             PageContent pageContent = new PageContent();
             ((IAddChild)pageContent).AddChild(fixedPage);
 
@@ -1576,13 +1580,15 @@ namespace PosTest.ViewModels
         public void PrintPreview()
         {
             var doc = GenerateOrderReceipt();
-            //PrintViewModel pvm = new PrintViewModel(){Document = doc,PreviousScreen = this};
+            //PrintViewModel pvm = new PrintViewModel() { Document = doc, PreviousScreen = this };
             //pvm.Parent = this.Parent;
             //(this.Parent as MainViewModel).ActivateItem(pvm);
 
-            var xpsDoc = GenerateXpsDocument("customerReceiptWithoutIMG");
-            WriteXpsDocument(doc, xpsDoc);
-            //PrintDocument();
+            //var xpsDoc = GenerateXpsDocument($"customerReceipt{DateTime.Now.ToFileTime()}");
+            //WriteXpsDocument(doc, xpsDoc);
+
+            PrintDocument();
+
         }
 
 
@@ -1595,48 +1601,23 @@ namespace PosTest.ViewModels
 
         public void WriteXpsDocument(FixedDocument fixedDocument, XpsDocument xpsDocument)
         {
-            PrintDialog printDialog = new PrintDialog();
-            if (printDialog.ShowDialog() == true)
-            {
-                fixedDocument.DocumentPaginator.PageSize = new Size(printDialog.PrintableAreaWidth, printDialog.PrintableAreaHeight);
-                PrintQueue queue = printDialog.PrintQueue;
-                XpsDocumentWriter docWriter = PrintQueue.CreateXpsDocumentWriter(queue);
-                docWriter.Write(fixedDocument.DocumentPaginator);
-            }
 
 
-            //XpsDocumentWriter xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
-            //xpsDocumentWriter.Write(fixedDocument);
-            //xpsDocument.Close();
+
+            XpsDocumentWriter xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
+            xpsDocumentWriter.Write(fixedDocument);
+            xpsDocument.Close();
         }
 
         public void PrintDocument()
         {
-            LocalPrintServer localPrintServer = new LocalPrintServer();
-
-            // Retrieving collection of local printer on user machine
-            PrintQueueCollection localPrinterCollection =
-                localPrintServer.GetPrintQueues();
-
-            //foreach (var printQueue in localPrinterCollection)
-            //{
-            //    Console.WriteLine(printQueue.Name);
-            //}
-
-            PrintQueue pq = localPrintServer.GetPrintQueue("80mm Series Printer");
-            //PrintQueue pq = localPrintServer.GetPrintQueue("MF230 Series");
-
-            PrintDialog printDialog = new PrintDialog();
-            printDialog.PrintQueue = pq;
-            DocumentPaginator documentPaginator = GenerateOrderReceipt().DocumentPaginator;
-            //documentPaginator.PageSize = new Size(printDialog.PrintableAreaWidth, printDialog.PrintableAreaHeight);
-            var conv = new LengthConverter();
-            double width = (double)conv.ConvertFromString("7cm");
-            double height = (double)conv.ConvertFromString("10cm");
-            documentPaginator.PageSize = new Size(width, height);
-            //printDialog.ShowDialog();
-            printDialog.PageRange = new PageRange(1,1);
-            printDialog.PrintDocument(documentPaginator,"SomeDoc");
+            
+            FixedDocument fixedDocument = GenerateOrderReceipt() ;
+            PrintDocumentImageableArea area = null;
+            XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(ref area);
+            Size size = new Size(area.MediaSizeWidth, area.MediaSizeHeight);
+            fixedDocument.DocumentPaginator.PageSize = size;
+            writer.Write(fixedDocument.DocumentPaginator);
         }
 
 
