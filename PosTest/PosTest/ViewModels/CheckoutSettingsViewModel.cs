@@ -973,7 +973,14 @@ namespace PosTest.ViewModels
 
                     //PutCategoryInCellOf(SelectedCategory, CategoryToMove);
                     IList<Category> categories = CurrentCategories;
-                    RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory, ref categories);
+                    try
+                    {
+                        RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory, ref categories);
+                    }
+                    catch (Exception)
+                    {
+                        //Logging 
+                    }
                     if (targetCategory.Id != null)
                     {
                         _categoriesService.UpdateCategory(targetCategory);

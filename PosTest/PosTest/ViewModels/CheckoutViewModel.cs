@@ -1580,14 +1580,14 @@ namespace PosTest.ViewModels
         public void PrintPreview()
         {
             var doc = GenerateOrderReceipt();
-            //PrintViewModel pvm = new PrintViewModel() { Document = doc, PreviousScreen = this };
-            //pvm.Parent = this.Parent;
-            //(this.Parent as MainViewModel).ActivateItem(pvm);
+            PrintViewModel pvm = new PrintViewModel() { Document = doc, PreviousScreen = this };
+            pvm.Parent = this.Parent;
+            (this.Parent as MainViewModel).ActivateItem(pvm);
 
             //var xpsDoc = GenerateXpsDocument($"customerReceipt{DateTime.Now.ToFileTime()}");
             //WriteXpsDocument(doc, xpsDoc);
 
-            PrintDocument();
+            //PrintDocument();
 
         }
 
