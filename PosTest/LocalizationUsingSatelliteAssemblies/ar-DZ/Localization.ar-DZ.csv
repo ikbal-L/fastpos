@@ -1,0 +1,47 @@
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Window_1:LocalizationUsingSatelliteAssemblies.MainWindow.$Content,None,True,True,,#Grid_1;
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.Title,Title,True,True,,MainWindow
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.Height,None,False,True,,450
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.Width,None,False,True,,800
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_1:System.Windows.Controls.Grid.Row,None,False,True,,0
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_1:System.Windows.FrameworkElement.Margin,None,False,True,,5
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,FirstNameTextBlock:System.Windows.Controls.TextBlock.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,FirstNameTextBlock:System.Windows.Controls.TextBlock.Text,Text,True,True,,الإسم
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,FirstNameTextBlock:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,FirstNameTextBox:System.Windows.Controls.TextBox.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,FirstNameTextBox:System.Windows.Controls.Grid.Column,None,False,True,,1
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_2:System.Windows.Controls.Grid.Row,None,False,True,,1
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_2:System.Windows.FrameworkElement.Margin,None,False,True,,5
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,LastNameTextBlock:System.Windows.Controls.TextBlock.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,LastNameTextBlock:System.Windows.Controls.TextBlock.Text,Text,True,True,,اللقب
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,LastNameTextBlock:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,LastNameTextBox:System.Windows.Controls.TextBox.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,LastNameTextBox:System.Windows.Controls.Grid.Column,None,False,True,,1
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,LastNameTextBox:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,LastNameTextBox:System.Windows.FrameworkElement.Height,None,False,True,,40
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_3:System.Windows.Controls.Grid.Row,None,False,True,,2
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_3:System.Windows.FrameworkElement.Margin,None,False,True,,5
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,PhoneTextBlock:System.Windows.Controls.TextBlock.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,PhoneTextBlock:System.Windows.Controls.TextBlock.Text,Text,True,True,,رقم الهاتف
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,PhoneTextBlock:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,PhoneTextBox:System.Windows.Controls.TextBox.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,PhoneTextBox:System.Windows.Controls.Grid.Column,None,False,True,,1
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_4:System.Windows.Controls.Grid.Row,None,False,True,,3
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Border_4:System.Windows.FrameworkElement.Margin,None,False,True,,5
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,AddressTextBlock:System.Windows.Controls.TextBlock.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,AddressTextBlock:System.Windows.Controls.TextBlock.Text,Text,True,True,,العنوان
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,AddressTextBlock:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,AddressTextBox:System.Windows.Controls.TextBox.$Content,Text,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,AddressTextBox:System.Windows.Controls.Grid.Column,None,False,True,,1
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Grid_6:System.Windows.Controls.Grid.Row,None,False,True,,4
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.FrameworkElement.HorizontalAlignment,None,False,True,,Center
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message1Button:System.Windows.Controls.Button.$Content,Button,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message1Button:System.Windows.FrameworkElement.Margin,None,False,True,,5
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message1Button:System.Windows.Controls.ContentControl.Content,Button,True,True,,رسالة رقم 1
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message2Button:System.Windows.Controls.Button.$Content,Button,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message2Button:System.Windows.FrameworkElement.Margin,None,False,True,,5
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message2Button:System.Windows.Controls.ContentControl.Content,Button,True,True,,رسالة رقم 2
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message3Button:System.Windows.Controls.Button.$Content,Button,True,True,,
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message3Button:System.Windows.FrameworkElement.Margin,None,False,True,,5
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:mainwindow.baml,Message3Button:System.Windows.Controls.ContentControl.Content,Button,True,True,,رسالة رقم 3
+LocalizationUsingSatelliteAssemblies.g.en-US.resources:app.baml,Application_1:LocalizationUsingSatelliteAssemblies.App.$Content,None,True,True,,
