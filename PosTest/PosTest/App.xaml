@@ -32,7 +32,7 @@
 
                 <!--ToastNotifications-->
                 <ResourceDictionary x:Uid="ResourceDictionary_15" Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
-
+                <ResourceDictionary x:Uid="ResourceDictionary_16" Source="i18n/Localization.xaml"></ResourceDictionary>
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />

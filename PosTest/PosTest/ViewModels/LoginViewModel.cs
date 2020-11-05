@@ -78,7 +78,8 @@ namespace PosTest.ViewModels
             }
             catch (AggregateException)
             {
-                ToastNotification.Notify("Check your server connection");
+                //ToastNotification.Notify("Check your server connection");
+                ToastNotification.Notify(NotificationHelper.CHECK_SERVER_CONNECTION);
                 return;
             }
 
