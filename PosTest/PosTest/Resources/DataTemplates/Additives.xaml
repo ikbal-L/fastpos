@@ -1,22 +1,22 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:local="clr-namespace:PosTest.Resources.DataTemplates">
 
-    <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
-        <StackPanel  Orientation="Vertical"  x:Name="AddivieTemplate">
-            <Button x:Name="ProductClick" Height="55" Width="100"  
+    <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
+        <StackPanel  x:Uid="AddivieTemplate" Orientation="Vertical"  x:Name="AddivieTemplate">
+            <Button x:Uid="ProductClick" x:Name="ProductClick" Height="55" Width="100"  
                     Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <cal:ActionMessage MethodName="AddAditive">
-                            <cal:Parameter Value="{Binding ElementName=AddivieTemplate, Path=DataContext}" />
+                    <i:EventTrigger x:Uid="i:EventTrigger_1" EventName="Click">
+                        <cal:ActionMessage x:Uid="cal:ActionMessage_1" MethodName="AddAditive">
+                            <cal:Parameter x:Uid="cal:Parameter_1" Value="{Binding ElementName=AddivieTemplate, Path=DataContext}" />
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <TextBlock Text="{Binding Path=Description}"   FontSize="16"  
+                <TextBlock x:Uid="TextBlock_1" Text="{Binding Path=Description}"   FontSize="16"  
                                    TextAlignment="Center" VerticalAlignment="Center" 
                                    TextWrapping="WrapWithOverflow" FontWeight="Bold"/>
 
@@ -24,9 +24,9 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="AdditiveSettingDataTemplate" DataType="{x:Type src:Additive}">
-        <Border>
-            <TextBlock Text="{Binding Path=Description}"/>
+    <DataTemplate x:Uid="DataTemplate_2" x:Key="AdditiveSettingDataTemplate" DataType="{x:Type src:Additive}">
+        <Border x:Uid="Border_1">
+            <TextBlock x:Uid="TextBlock_2" Text="{Binding Path=Description}"/>
         </Border>
     </DataTemplate>
 

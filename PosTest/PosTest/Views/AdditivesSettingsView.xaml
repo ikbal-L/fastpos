@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PosTest.Views.AdditivesSettingsView"
+﻿<UserControl x:Uid="UserControl_1" x:Class="PosTest.Views.AdditivesSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,18 +10,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="610" d:DesignWidth="640">
         <UserControl.Resources>
-            <converters:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
+            <converters:SolidColorBrushToBrushConverter x:Uid="converters:SolidColorBrushToBrushConverter_1" x:Key="scbtobrush"/>
             
     </UserControl.Resources>
-    <Grid >
-        <materialdesign:Flipper IsFlipped="{Binding IsEditing}" >
+    <Grid x:Uid="Grid_1" >
+        <materialdesign:Flipper x:Uid="materialdesign:Flipper_1" IsFlipped="{Binding IsEditing}" >
             <materialdesign:Flipper.FrontContent>
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
-                    <Border BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" MinWidth="40" MinHeight="100" ClipToBounds="True">
-                        <Grid>
+                <ScrollViewer x:Uid="ScrollViewer_1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
+                    <Border x:Uid="Border_1" BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" MinWidth="40" MinHeight="100" ClipToBounds="True">
+                        <Grid x:Uid="Grid_2">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition x:Uid="RowDefinition_1" Height="*" />
+                                <RowDefinition x:Uid="RowDefinition_2" Height="Auto" />
                             </Grid.RowDefinitions>
                             <!--
                          caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
@@ -31,7 +31,7 @@
                          Tag="{Binding ClipboardProduct}
                                 SelectedItem="{Binding SelectedAdditive}""
 -->
-                            <ListBox x:Name="AdditiveSettingsList" d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
+                            <ListBox x:Uid="AdditiveSettingsList" x:Name="AdditiveSettingsList" d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
                                  AllowDrop="True"
                                  ItemsSource="{Binding Additives}"
                                  SelectedItem="{Binding SelectedAdditive}"
@@ -43,25 +43,25 @@
                                      [Event Drop] = [Action AdditivesList_Drop($source, $eventArgs)];
                                      [Event TouchDown] = [Action  AdditivesList_TouchDown($source, $eventArgs)];">
                                 <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem">
-                                        <Setter Property="Padding" Value="0" />
-                                        <Setter Property="Margin" Value="0" />
+                                    <Style x:Uid="Style_1" TargetType="ListBoxItem">
+                                        <Setter x:Uid="Setter_1" Property="Padding" Value="0" />
+                                        <Setter x:Uid="Setter_2" Property="Margin" Value="0" />
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                                 <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
+                                    <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
+                                        <WrapPanel x:Uid="WrapPanel_1" />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
-                            <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="10" Foreground="White"
+                            <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                                <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
+                                    <Button x:Uid="Button_1" Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="10" Foreground="White"
                                              
                                             Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
-                                        <StackPanel Orientation="Horizontal" >
-                                            <materialdesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" Width="25" Height="25"/>
-                                            <TextBlock FontSize="16"> Gestion Du Menu Additives</TextBlock>
+                                        <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" >
+                                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_1" Kind="ArrowLeft" HorizontalAlignment="Right" Width="25" Height="25"/>
+                                            <TextBlock x:Uid="TextBlock_1" FontSize="16"> Gestion Du Menu Additives</TextBlock>
                                         </StackPanel>
                                     </Button>
                                     
@@ -73,73 +73,73 @@
                                 
                             </materialdesign:ColorZone>
                             <!--caliburn:Message.Attach="[Event Click] = [Action AttachProductToCategory()]"-->
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <Button x:Uid="Button_2" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 10 -20">
-                                <materialdesign:PackIcon Kind="MoveResizeVariant" Height="22" Width="22" />
+                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="MoveResizeVariant" Height="22" Width="22" />
                             </Button>
 
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
+                            <Button x:Uid="Button_3" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 60 -20">
-                                <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
+                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="Edit" Height="22" Width="22" />
                             </Button>
 
                             <!--caliburn:Message.Attach="[Event Click] = [Action MoveAdditive()]"-->
-                            <Button x:Name="MoveButton"
+                            <Button x:Uid="MoveButton" x:Name="MoveButton"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                 Grid.Row="0" Margin="0 0 110 -20" Tag=""
                                 caliburn:Message.Attach="[Event Click] = [Action MoveAdditive()]">
-                                <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22" />
+                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Kind="ArrowExpandAll" Height="22" Width="22" />
                             </Button>
 
                             <!--caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"-->
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <Button x:Uid="Button_4" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 160 -20"
                                 caliburn:Message.Attach="[Event Click] = [Action PasteAdditive()]">
-                                <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
+                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_5" Kind="ContentPaste" Height="22" Width="22" />
                             </Button>
 
                             <!--caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"-->
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <Button x:Uid="Button_5" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                 Grid.Row="0" Margin="0 0 210 -20"
                                 caliburn:Message.Attach="[Event Click] = [Action CopyAdditive()]">
-                                <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
+                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_6" Kind="ContentCopy" Height="22" Width="22" />
                             </Button>
 
                             <!--caliburn:Message.Attach="[Event Click] = [Action DeleteAdditive()]"-->
-                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <Button x:Uid="Button_6" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 260 -20"
                                 caliburn:Message.Attach="[Event Click] = [Action DeleteAdditive()]">
-                                <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_7" Kind="Delete" Height="22" Width="22" />
                             </Button>
                         </Grid>
                     </Border>
                 </ScrollViewer>
             </materialdesign:Flipper.FrontContent>
             <materialdesign:Flipper.BackContent>
-                <Border Width="450" Height="Auto" BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" ClipToBounds="True">
-                <Grid>
+                <Border x:Uid="Border_2" Width="450" Height="Auto" BorderThickness="1" Margin="20" BorderBrush="{DynamicResource PrimaryHueMidBrush}" ClipToBounds="True">
+                <Grid x:Uid="Grid_3">
                     <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition x:Uid="RowDefinition_3" Height="Auto" />
+                            <RowDefinition x:Uid="RowDefinition_4" Height="*" />
+                            <RowDefinition x:Uid="RowDefinition_5" Height="Auto" />
                     </Grid.RowDefinitions>
-                        <Border Grid.Row="0"  Margin="10  10">
-                            <TextBox materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                        <Border x:Uid="Border_3" Grid.Row="0"  Margin="10  10">
+                            <TextBox x:Uid="TextBox_1" materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24" Text="{Binding SelectedAdditive.Description}" />
                         </Border>
 
-                        <controls:ColorPalette  Grid.Row="1" CPColorBrush="{Binding SelectedAdditive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>
-                        <materialdesign:ColorZone  Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
-                        <StackPanel Orientation="Horizontal">
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}" 
+                        <controls:ColorPalette  x:Uid="controls:ColorPalette_1" Grid.Row="1" CPColorBrush="{Binding SelectedAdditive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>
+                        <materialdesign:ColorZone  x:Uid="materialdesign:ColorZone_2" Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
+                        <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                                <Button x:Uid="Button_7" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}" 
                                         caliburn:Message.Attach="[Event Click] = [Action SaveAdditive()]">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
+                                    <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal">
+                                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_8" Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
                                     </StackPanel>
                                 </Button>
-                                        <TextBlock Text="Edit Aditives" FontSize="16" Margin="10"/>
+                                        <TextBlock x:Uid="TextBlock_2" Text="Edit Aditives" FontSize="16" Margin="10"/>
                         </StackPanel>
                     </materialdesign:ColorZone>
                 </Grid>

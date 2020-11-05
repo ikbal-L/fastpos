@@ -1,61 +1,61 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     >
 
-    <Style x:Key="ButtonTopOrder" BasedOn="{StaticResource  MaterialDesignOutlinedButton}" TargetType="Button" >
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="MinWidth" Value="50"/>
-        <Setter Property="Margin" Value="1"/>
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="Height" Value="50"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Style x:Uid="Style_1" x:Key="ButtonTopOrder" BasedOn="{StaticResource  MaterialDesignOutlinedButton}" TargetType="Button" >
+        <Setter x:Uid="Setter_1" Property="FontSize" Value="16" />
+        <Setter x:Uid="Setter_2" Property="FontWeight" Value="Bold"/>
+        <Setter x:Uid="Setter_3" Property="MinWidth" Value="50"/>
+        <Setter x:Uid="Setter_4" Property="Margin" Value="1"/>
+        <Setter x:Uid="Setter_5" Property="Padding" Value="0"/>
+        <Setter x:Uid="Setter_6" Property="Height" Value="50"/>
+        <Setter x:Uid="Setter_7" Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter x:Uid="Setter_8" Property="HorizontalContentAlignment" Value="Center"/>
     </Style>
 
-    <Style x:Key="ButtonRightOrder" BasedOn="{StaticResource  MaterialDesignOutlinedButton}" TargetType="Button" >
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Width" Value="50" />
-        <Setter Property="Height" Value="50" />
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Margin" Value="2"/>
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Style x:Uid="Style_2" x:Key="ButtonRightOrder" BasedOn="{StaticResource  MaterialDesignOutlinedButton}" TargetType="Button" >
+        <Setter x:Uid="Setter_9" Property="FontSize" Value="16" />
+        <Setter x:Uid="Setter_10" Property="Width" Value="50" />
+        <Setter x:Uid="Setter_11" Property="Height" Value="50" />
+        <Setter x:Uid="Setter_12" Property="FontWeight" Value="Bold"/>
+        <Setter x:Uid="Setter_13" Property="Margin" Value="2"/>
+        <Setter x:Uid="Setter_14" Property="Padding" Value="0"/>
+        <Setter x:Uid="Setter_15" Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter x:Uid="Setter_16" Property="HorizontalContentAlignment" Value="Center"/>
     </Style>
 
     <!--Style="{StaticResource MaterialDesignOutlinedButton}"-->
-    <Style TargetType="ButtonBase" x:Key="ButtonStyle" >
-        <Setter Property="BorderBrush" Value="#666666"/>
-        <Setter Property="Margin" Value="1"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="FontSize" Value="22"/>
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
-        <Setter Property="Template">
+    <Style x:Uid="Style_3" TargetType="ButtonBase" x:Key="ButtonStyle" >
+        <Setter x:Uid="Setter_17" Property="BorderBrush" Value="#666666"/>
+        <Setter x:Uid="Setter_18" Property="Margin" Value="1"/>
+        <Setter x:Uid="Setter_19" Property="BorderThickness" Value="1"/>
+        <Setter x:Uid="Setter_20" Property="FontSize" Value="22"/>
+        <Setter x:Uid="Setter_21" Property="Background" Value="{StaticResource DefaultBackgroundBrush}"/>
+        <Setter x:Uid="Setter_22" Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
+        <Setter x:Uid="Setter_23" Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ButtonBase">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                <ControlTemplate x:Uid="ControlTemplate_1" TargetType="ButtonBase">
+                    <Border x:Uid="Border_1" BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     Background="{TemplateBinding Background}">
                         <ContentPresenter 
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                x:Uid="ContentPresenter_1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_1" Property="IsMouseOver" Value="True">
+                            <Setter x:Uid="Setter_24" Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_25" Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_2" Property="IsPressed" Value="True">
+                            <Setter x:Uid="Setter_26" Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_27" Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        <Trigger x:Uid="Trigger_3" Property="IsEnabled" Value="False">
+                            <Setter x:Uid="Setter_28" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
+                            <Setter x:Uid="Setter_29" Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -63,38 +63,38 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ButtonBase" x:Key="ButtonTabActive" >
-        <Setter Property="Width" Value="90"/>
-        <Setter Property="Height" Value="70"/>
+    <Style x:Uid="Style_4" TargetType="ButtonBase" x:Key="ButtonTabActive" >
+        <Setter x:Uid="Setter_30" Property="Width" Value="90"/>
+        <Setter x:Uid="Setter_31" Property="Height" Value="70"/>
         
-        <Setter Property="BorderBrush" Value="#FF03A9F4"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Background" Value="#FF03A9F4"/>
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
-        <Setter Property="Template">
+        <Setter x:Uid="Setter_32" Property="BorderBrush" Value="#FF03A9F4"/>
+        <Setter x:Uid="Setter_33" Property="BorderThickness" Value="0"/>
+        <Setter x:Uid="Setter_34" Property="FontSize" Value="15"/>
+        <Setter x:Uid="Setter_35" Property="Background" Value="#FF03A9F4"/>
+        <Setter x:Uid="Setter_36" Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
+        <Setter x:Uid="Setter_37" Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ButtonBase">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                <ControlTemplate x:Uid="ControlTemplate_2" TargetType="ButtonBase">
+                    <Border x:Uid="Border_2" BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     Background="{TemplateBinding Background}">
                         <ContentPresenter 
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                x:Uid="ContentPresenter_2" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_4" Property="IsMouseOver" Value="True">
+                            <Setter x:Uid="Setter_38" Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_39" Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_5" Property="IsPressed" Value="True">
+                            <Setter x:Uid="Setter_40" Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_41" Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        <Trigger x:Uid="Trigger_6" Property="IsEnabled" Value="False">
+                            <Setter x:Uid="Setter_42" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
+                            <Setter x:Uid="Setter_43" Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -102,42 +102,42 @@
         </Setter>
     </Style>
 
-    <Style TargetType="RadioButton" x:Key="ButtonTopOrderTable" >
-        <Setter Property="Width" Value="50"/>
-        <Setter Property="Height" Value="50"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Style x:Uid="Style_5" TargetType="RadioButton" x:Key="ButtonTopOrderTable" >
+        <Setter x:Uid="Setter_44" Property="Width" Value="50"/>
+        <Setter x:Uid="Setter_45" Property="Height" Value="50"/>
+        <Setter x:Uid="Setter_46" Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_47" Property="VerticalContentAlignment" Value="Center"/>
 
-        <Setter Property="BorderBrush" Value="#FF03A9F4"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Background" Value="#FF03A9F4"/>
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
+        <Setter x:Uid="Setter_48" Property="BorderBrush" Value="#FF03A9F4"/>
+        <Setter x:Uid="Setter_49" Property="BorderThickness" Value="1"/>
+        <Setter x:Uid="Setter_50" Property="FontSize" Value="15"/>
+        <Setter x:Uid="Setter_51" Property="Background" Value="#FF03A9F4"/>
+        <Setter x:Uid="Setter_52" Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
 
-        <Setter Property="Template">
+        <Setter x:Uid="Setter_53" Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ButtonBase">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                <ControlTemplate x:Uid="ControlTemplate_3" TargetType="ButtonBase">
+                    <Border x:Uid="Border_3" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}"
                             CornerRadius="25">
                         <ContentPresenter 
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                x:Uid="ContentPresenter_3" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_7" Property="IsMouseOver" Value="True">
+                            <Setter x:Uid="Setter_54" Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_55" Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_8" Property="IsPressed" Value="True">
+                            <Setter x:Uid="Setter_56" Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_57" Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        <Trigger x:Uid="Trigger_9" Property="IsEnabled" Value="False">
+                            <Setter x:Uid="Setter_58" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
+                            <Setter x:Uid="Setter_59" Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -146,56 +146,56 @@
         </Setter>
    
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="#ffd23f"/>
-                <Setter Property="Foreground" Value="#FF03A9F4"/>
+            <Trigger x:Uid="Trigger_10" Property="IsChecked" Value="True">
+                <Setter x:Uid="Setter_60" Property="Background" Value="#ffd23f"/>
+                <Setter x:Uid="Setter_61" Property="Foreground" Value="#FF03A9F4"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <LinearGradientBrush x:Key="Flat3DBorderBrush"
+    <LinearGradientBrush x:Uid="LinearGradientBrush_1" x:Key="Flat3DBorderBrush"
                          StartPoint="0.499,0" EndPoint="0.501,1">
-        <GradientStop Color="#ffd23f" Offset="0" />
-        <GradientStop Color="#dc2f02" Offset="0.01" />
-        <GradientStop Color="#f6bd60" Offset="0.99" />
-        <GradientStop Color="Yellow" Offset="1" />
+        <GradientStop x:Uid="GradientStop_1" Color="#ffd23f" Offset="0" />
+        <GradientStop x:Uid="GradientStop_2" Color="#dc2f02" Offset="0.01" />
+        <GradientStop x:Uid="GradientStop_3" Color="#f6bd60" Offset="0.99" />
+        <GradientStop x:Uid="GradientStop_4" Color="Yellow" Offset="1" />
     </LinearGradientBrush>
 
-    <Style TargetType="RadioButton" x:Key="ButtonTopOrderDelivereyman" >
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Style x:Uid="Style_6" TargetType="RadioButton" x:Key="ButtonTopOrderDelivereyman" >
+        <Setter x:Uid="Setter_62" Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_63" Property="VerticalContentAlignment" Value="Center"/>
 
-        <Setter Property="BorderBrush" Value="#FF03A9F4"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Background" Value="#FF03A9F4"/>
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter x:Uid="Setter_64" Property="BorderBrush" Value="#FF03A9F4"/>
+        <Setter x:Uid="Setter_65" Property="BorderThickness" Value="0"/>
+        <Setter x:Uid="Setter_66" Property="FontSize" Value="15"/>
+        <Setter x:Uid="Setter_67" Property="Background" Value="#FF03A9F4"/>
+        <Setter x:Uid="Setter_68" Property="Foreground" Value="Black"/>
 
-        <Setter Property="Template">
+        <Setter x:Uid="Setter_69" Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ButtonBase">
-                    <Border Name="border"
+                <ControlTemplate x:Uid="ControlTemplate_4" TargetType="ButtonBase">
+                    <Border x:Uid="border" Name="border"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}"
                             CornerRadius="0">
                         <ContentPresenter 
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                x:Uid="ContentPresenter_4" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Margin="{TemplateBinding Padding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_11" Property="IsMouseOver" Value="True">
+                            <Setter x:Uid="Setter_70" Property="Background" Value="{StaticResource ButtonMouseOverBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_71" Property="BorderBrush" Value="{StaticResource ButtonMouseOverBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
+                        <Trigger x:Uid="Trigger_12" Property="IsPressed" Value="True">
+                            <Setter x:Uid="Setter_72" Property="Background" Value="{StaticResource ButtonIsPressedBackgroundBrush}"/>
+                            <Setter x:Uid="Setter_73" Property="BorderBrush" Value="{StaticResource ButtonIsPressedBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        <Trigger x:Uid="Trigger_13" Property="IsEnabled" Value="False">
+                            <Setter x:Uid="Setter_74" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}"/>
+                            <Setter x:Uid="Setter_75" Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -204,55 +204,55 @@
         </Setter>
 
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
+            <Trigger x:Uid="Trigger_14" Property="IsChecked" Value="True">
                 <!--<Setter Property="Background" Value="Red"/>-->
-                <Setter Property="BorderBrush" Value= "{StaticResource Flat3DBorderBrush}"/>
+                <Setter x:Uid="Setter_76" Property="BorderBrush" Value= "{StaticResource Flat3DBorderBrush}"/>
                 <!--#ffd23f"/>-->
-                <Setter Property="BorderThickness" Value="5"/>
+                <Setter x:Uid="Setter_77" Property="BorderThickness" Value="5"/>
             </Trigger>
-            <DataTrigger Binding="{Binding IsDark}" Value="True">
-                <Setter Property="Foreground" Value="White"/>
+            <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding IsDark}" Value="True">
+                <Setter x:Uid="Setter_78" Property="Foreground" Value="White"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style BasedOn="{StaticResource ButtonTabActive}" TargetType="ToggleButton" x:Key="ButtonTabDesactive">
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Width" Value="60"/>
-        <Setter Property="Height" Value="60"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="#FFFFFFFF"/>
-        <Setter Property="BorderBrush" Value="#00000000"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Style x:Uid="Style_7" BasedOn="{StaticResource ButtonTabActive}" TargetType="ToggleButton" x:Key="ButtonTabDesactive">
+        <Setter x:Uid="Setter_79" Property="FontSize" Value="15"/>
+        <Setter x:Uid="Setter_80" Property="Width" Value="60"/>
+        <Setter x:Uid="Setter_81" Property="Height" Value="60"/>
+        <Setter x:Uid="Setter_82" Property="Foreground" Value="Black"/>
+        <Setter x:Uid="Setter_83" Property="Background" Value="#FFFFFFFF"/>
+        <Setter x:Uid="Setter_84" Property="BorderBrush" Value="#00000000"/>
+        <Setter x:Uid="Setter_85" Property="BorderThickness" Value="0"/>
+        <Setter x:Uid="Setter_86" Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_87" Property="VerticalContentAlignment" Value="Center"/>
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="#a5a5a5"/>
-                <Setter Property="Foreground" Value="White"/>
+            <Trigger x:Uid="Trigger_15" Property="IsChecked" Value="True">
+                <Setter x:Uid="Setter_88" Property="Background" Value="#a5a5a5"/>
+                <Setter x:Uid="Setter_89" Property="Foreground" Value="White"/>
                
             </Trigger>
         </Style.Triggers>
         <Style.Resources>
-            <Style TargetType="StackPanel">
+            <Style x:Uid="Style_8" TargetType="StackPanel">
                 <Style.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="Width" Value="30"/>
-                        <Setter Property="Height" Value="30"/>
-                        <Setter Property="CornerRadius" Value="30"/>
-                        <Setter Property="Background" Value="#db2828"/>
-                        <Setter Property="Margin" Value="-30 -30 0 0"/>
+                    <Style x:Uid="Style_9" TargetType="Border">
+                        <Setter x:Uid="Setter_90" Property="Width" Value="30"/>
+                        <Setter x:Uid="Setter_91" Property="Height" Value="30"/>
+                        <Setter x:Uid="Setter_92" Property="CornerRadius" Value="30"/>
+                        <Setter x:Uid="Setter_93" Property="Background" Value="#db2828"/>
+                        <Setter x:Uid="Setter_94" Property="Margin" Value="-30 -30 0 0"/>
                     </Style>
-                    <Style TargetType="materialdesign:PackIcon" BasedOn="{StaticResource {x:Type materialdesign:PackIcon}}">
-                        <Setter Property="Width" Value="60"/>
-                        <Setter Property="Height" Value="60"/>
+                    <Style x:Uid="Style_10" TargetType="materialdesign:PackIcon" BasedOn="{StaticResource {x:Type materialdesign:PackIcon}}">
+                        <Setter x:Uid="Setter_95" Property="Width" Value="60"/>
+                        <Setter x:Uid="Setter_96" Property="Height" Value="60"/>
                     </Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Style x:Uid="Style_11" TargetType="TextBlock">
+                        <Setter x:Uid="Setter_97" Property="Foreground" Value="White"/>
+                        <Setter x:Uid="Setter_98" Property="FontSize" Value="16"/>
+                        <Setter x:Uid="Setter_99" Property="FontWeight" Value="Bold"/>
+                        <Setter x:Uid="Setter_100" Property="HorizontalAlignment" Value="Center"/>
+                        <Setter x:Uid="Setter_101" Property="VerticalAlignment" Value="Center"/>
                     </Style>
                 </Style.Resources>
             </Style>
@@ -260,87 +260,87 @@
 
     </Style>
 
-    <Style BasedOn="{StaticResource ButtonStyle}"
+    <Style x:Uid="Style_12" BasedOn="{StaticResource ButtonStyle}"
            TargetType="Button"
            x:Key="ButtonStyle22">
-        <Setter Property="FontSize" Value="22"/>
+        <Setter x:Uid="Setter_102" Property="FontSize" Value="22"/>
     </Style>
-    <Style BasedOn="{StaticResource  ButtonStyle}"
+    <Style x:Uid="Style_13" BasedOn="{StaticResource  ButtonStyle}"
            TargetType="{x:Type ButtonBase}"
            x:Key="ButtonStyle18">
-        <Setter Property="FontSize" Value="18"/>
+        <Setter x:Uid="Setter_103" Property="FontSize" Value="18"/>
     </Style>  
-    <Style BasedOn="{StaticResource  ButtonStyle}"
+    <Style x:Uid="Style_14" BasedOn="{StaticResource  ButtonStyle}"
            TargetType="{x:Type ToggleButton}"
            x:Key="ButtonStyle18radio">
-        <Setter Property="FontSize" Value="18"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_104" Property="FontSize" Value="18"/>
+        <Setter x:Uid="Setter_105" Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_106" Property="VerticalContentAlignment" Value="Center"/>
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="Green"/>
+            <Trigger x:Uid="Trigger_16" Property="IsChecked" Value="True">
+                <Setter x:Uid="Setter_107" Property="Background" Value="Green"/>
             </Trigger>
         </Style.Triggers>
     </Style>  
-    <Style BasedOn="{StaticResource  ButtonStyle}"
+    <Style x:Uid="Style_15" BasedOn="{StaticResource  ButtonStyle}"
            TargetType="Button"
            x:Key="ButtonStyle16">
-        <Setter Property="FontSize" Value="12"/>
+        <Setter x:Uid="Setter_108" Property="FontSize" Value="12"/>
         
-        <Setter Property="Margin" Value="5,5,0,5"/>
-        <Setter Property="Padding" Value="0,0,0,0"/>
+        <Setter x:Uid="Setter_109" Property="Margin" Value="5,5,0,5"/>
+        <Setter x:Uid="Setter_110" Property="Padding" Value="0,0,0,0"/>
         
         
     </Style>
-    <Style x:Key="FocusVisual">
-        <Setter Property="Control.Template">
+    <Style x:Uid="Style_16" x:Key="FocusVisual">
+        <Setter x:Uid="Setter_111" Property="Control.Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                <ControlTemplate x:Uid="ControlTemplate_5">
+                    <Rectangle x:Uid="Rectangle_1" Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
-    <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
-    <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-    <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-    <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="1"/>
-        <Setter Property="Template">
+    <SolidColorBrush x:Uid="SolidColorBrush_1" x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_2" x:Key="Button.Static.Border" Color="#FF707070"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_3" x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_4" x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_5" x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_6" x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_7" x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_8" x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+    <SolidColorBrush x:Uid="SolidColorBrush_9" x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+    <Style x:Uid="Style_17" x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+        <Setter x:Uid="Setter_112" Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter x:Uid="Setter_113" Property="Background" Value="{StaticResource Button.Static.Background}"/>
+        <Setter x:Uid="Setter_114" Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+        <Setter x:Uid="Setter_115" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter x:Uid="Setter_116" Property="BorderThickness" Value="1"/>
+        <Setter x:Uid="Setter_117" Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_118" Property="VerticalContentAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_119" Property="Padding" Value="1"/>
+        <Setter x:Uid="Setter_120" Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                <ControlTemplate x:Uid="ControlTemplate_6" TargetType="{x:Type Button}">
+                    <Border x:Uid="Border_4" x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Uid="contentPresenter" x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        <Trigger x:Uid="Trigger_17" Property="IsDefaulted" Value="true">
+                            <Setter x:Uid="Setter_121" Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                         </Trigger>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                        <Trigger x:Uid="Trigger_18" Property="IsMouseOver" Value="true">
+                            <Setter x:Uid="Setter_122" Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            <Setter x:Uid="Setter_123" Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                        <Trigger x:Uid="Trigger_19" Property="IsPressed" Value="true">
+                            <Setter x:Uid="Setter_124" Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                            <Setter x:Uid="Setter_125" Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                        <Trigger x:Uid="Trigger_20" Property="IsEnabled" Value="false">
+                            <Setter x:Uid="Setter_126" Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <Setter x:Uid="Setter_127" Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                            <Setter x:Uid="Setter_128" Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

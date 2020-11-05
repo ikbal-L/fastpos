@@ -1,37 +1,37 @@
 ﻿<x:Array 
-    xmlns:si="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+    x:Uid="listadd" xmlns:si="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Type="si:Additive" x:Name="listadd" >
-    <si:Additive Id="1"  Description="Additive1 "/>
-    <si:Additive Id="2"  Description="Additive2 "/>
-    <si:Additive Id="3"  Description="Additive3 "/>
-    <si:Additive Id="4"  Description="Additive4 "/>
-    <si:Additive Id="5"  Description="Additive5 "/>
-    <si:Additive Id="6"  Description="Additive6 " />
-    <si:Additive Id="7"  Description="Additive7 " />
-    <si:Additive Id="8"  Description="Additive8 " />
-    <si:Additive Id="9"  Description="Additive9 " />
-    <si:Additive Id="10" Description="Additive10" />
-    <si:Additive Id="11" Description="Additive11" />
-    <si:Additive Id="12" Description="Additive12" />
-    <si:Additive Id="13" Description="Additive13" />
-    <si:Additive Id="14" Description="Additive14" />
-    <si:Additive Id="15" Description="Additive15" />
-    <si:Additive Id="16" Description="Additive16" />
-    <si:Additive Id="17" Description="Additive17" />
-    <si:Additive Id="18" Description="Additive18" />
-    <si:Additive Id="19" Description="Additive19" />
-    <si:Additive Id="20" Description="Additive20" />
-    <si:Additive Id="21" Description="Additive21" />
-    <si:Additive Id="22" Description="Additive22" />
-    <si:Additive Id="23" Description="Additive23" />
-    <si:Additive Id="24" Description="Additive24" />
-    <si:Additive Id="25" Description="Additive25" />
-    <si:Additive Id="26" Description="Additive26" />
-    <si:Additive Id="27" Description="Additive27" />
-    <si:Additive Id="28" Description="Additive28" />
-    <si:Additive Description="{x:Null}"/>
+    <si:Additive x:Uid="si:Additive_1" Id="1"  Description="Additive1 "/>
+    <si:Additive x:Uid="si:Additive_2" Id="2"  Description="Additive2 "/>
+    <si:Additive x:Uid="si:Additive_3" Id="3"  Description="Additive3 "/>
+    <si:Additive x:Uid="si:Additive_4" Id="4"  Description="Additive4 "/>
+    <si:Additive x:Uid="si:Additive_5" Id="5"  Description="Additive5 "/>
+    <si:Additive x:Uid="si:Additive_6" Id="6"  Description="Additive6 " />
+    <si:Additive x:Uid="si:Additive_7" Id="7"  Description="Additive7 " />
+    <si:Additive x:Uid="si:Additive_8" Id="8"  Description="Additive8 " />
+    <si:Additive x:Uid="si:Additive_9" Id="9"  Description="Additive9 " />
+    <si:Additive x:Uid="si:Additive_10" Id="10" Description="Additive10" />
+    <si:Additive x:Uid="si:Additive_11" Id="11" Description="Additive11" />
+    <si:Additive x:Uid="si:Additive_12" Id="12" Description="Additive12" />
+    <si:Additive x:Uid="si:Additive_13" Id="13" Description="Additive13" />
+    <si:Additive x:Uid="si:Additive_14" Id="14" Description="Additive14" />
+    <si:Additive x:Uid="si:Additive_15" Id="15" Description="Additive15" />
+    <si:Additive x:Uid="si:Additive_16" Id="16" Description="Additive16" />
+    <si:Additive x:Uid="si:Additive_17" Id="17" Description="Additive17" />
+    <si:Additive x:Uid="si:Additive_18" Id="18" Description="Additive18" />
+    <si:Additive x:Uid="si:Additive_19" Id="19" Description="Additive19" />
+    <si:Additive x:Uid="si:Additive_20" Id="20" Description="Additive20" />
+    <si:Additive x:Uid="si:Additive_21" Id="21" Description="Additive21" />
+    <si:Additive x:Uid="si:Additive_22" Id="22" Description="Additive22" />
+    <si:Additive x:Uid="si:Additive_23" Id="23" Description="Additive23" />
+    <si:Additive x:Uid="si:Additive_24" Id="24" Description="Additive24" />
+    <si:Additive x:Uid="si:Additive_25" Id="25" Description="Additive25" />
+    <si:Additive x:Uid="si:Additive_26" Id="26" Description="Additive26" />
+    <si:Additive x:Uid="si:Additive_27" Id="27" Description="Additive27" />
+    <si:Additive x:Uid="si:Additive_28" Id="28" Description="Additive28" />
+    <si:Additive x:Uid="si:Additive_29" Description="{x:Null}"/>
 </x:Array>
 
 
