@@ -82,7 +82,7 @@ namespace PosTest.ViewModels
         private int itemsPerCategoryPage;
         private int _categoryPageCount;
         private int _currentCategoryPageIndex;
-
+        private List<Order> _diff;
         #endregion
 
         #region Constructors
@@ -126,6 +126,7 @@ namespace PosTest.ViewModels
             ICustomerService customerService
         ) : this()
         {
+            _diff = new List<Order>();
             MaxProductPageSize = pageSize;
             _productsService = productsService;
             _categoriesService = categoriesService;
