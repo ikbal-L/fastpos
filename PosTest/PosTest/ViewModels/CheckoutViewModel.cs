@@ -126,7 +126,7 @@ namespace PosTest.ViewModels
             ICustomerService customerService
         ) : this()
         {
-            _diff = new List<Order>();
+            _diff = new List<OrderItem>();
             MaxProductPageSize = pageSize;
             _productsService = productsService;
             _categoriesService = categoriesService;
