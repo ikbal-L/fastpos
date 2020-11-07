@@ -15,7 +15,7 @@
              xmlns:helpers="clr-namespace:PosTest.Helpers"
              xmlns:convert="clr-namespace:PosTest.Converters"
              Background="{StaticResource MaterialDesignPaper}"
-             DataContext="{Binding}"
+             x:Name="CheckoutViewUserControl"
              mc:Ignorable="d"
 
              d:DesignWidth="900"
@@ -199,15 +199,16 @@
                     <Button x:Uid="Button_10" Grid.Row="4" Foreground="#2496ed" Background="WhiteSmoke"
                           
                             Style="{StaticResource ButtonRightOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]">
+                            caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]"
+                            IsEnabled="{Binding ElementName=OrderitemsList,Path=SelectedItem ,Converter={StaticResource ObjectToBoolConverter}}">
                         <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_6" Kind="TagMinus" Height="30" Width="30" />
 
-                        <Button.IsEnabled>
+                        <!--<Button.IsEnabled>
                             <MultiBinding x:Uid="MultiBinding_1" Converter="{StaticResource NotNullEqualToZeroMultiValueConverter}">
                                 <Binding x:Uid="Binding_1" ElementName="OrderitemsList" Path="SelectedItem"></Binding>
-                                <Binding x:Uid="Binding_2" RelativeSource="{RelativeSource AncestorType=UserControl}" Path="DataContext.CurrentOrder.DiscountAmount"></Binding>
+                                <Binding x:Uid="Binding_2" ElementName="CheckoutViewUserControl" Path="DataContext.CurrentOrder.DiscountAmount"></Binding>
                             </MultiBinding>
-                        </Button.IsEnabled>
+                        </Button.IsEnabled>-->
                     </Button>
                     <Button x:Uid="Button_11" Grid.Row="5" Foreground="#2496ed" Background="WhiteSmoke"
                             IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
