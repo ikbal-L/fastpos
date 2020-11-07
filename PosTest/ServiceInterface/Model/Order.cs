@@ -153,7 +153,7 @@ namespace ServiceInterface.Model
                 var sumItemTotals = 0m;
                 if (OrderItems != null)
                 {
-                    OrderItems.ToList().ForEach(item => sumItemTotals += item.Total);
+                    OrderItems.Where(i=>i.State!= OrderItemState.Removed).ToList().ForEach(item => sumItemTotals += item.Total);
                 }
                 return sumItemTotals;
             }
@@ -203,7 +203,7 @@ namespace ServiceInterface.Model
                 var sumItemDiscounts = 0m;
                 if (OrderItems != null)
                 {
-                    OrderItems.ToList().ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
+                    OrderItems.Where(i=>i.State!=OrderItemState.Removed).ToList().ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
                 }
                 //either _discountAmount==0 or _discountPercentage==0
                 var allDiscounts = _discountAmount + sumItemDiscounts + Total * _discountPercentage / 100;
@@ -334,15 +334,16 @@ namespace ServiceInterface.Model
         {
             OrderItem item;
             if ((product is Platter && (product as Platter).Additives !=null )  || 
-                !OrderItems.Any(p => p.Product.Equals(product)) || !groupByProduct)
+                !OrderItems.Any(p => p.Product.Id==product.Id) || !groupByProduct)
             {
-                item = new OrderItem(product, quantity, unitPrice, this);
+                item = new OrderItem(product, quantity, unitPrice, this){State = OrderItemState.Added};
+                item.TimeStamp = null;
                 OrderItems.Add(item);
                 
             }
             else
             {
-               item = OrderItems.FirstOrDefault(p => p.Product.Equals(product));
+               item = OrderItems.FirstOrDefault(p => p.Product.Id==product.Id);
                item.Quantity+=quantity;
             }
 
@@ -352,10 +353,11 @@ namespace ServiceInterface.Model
             }
         }
 
-        public void AddOrderItem(OrderItem orderItem)
+        public void AddOrderItem(OrderItem orderItem, bool setSelected = false)
         {
-            AddOrderItem(orderItem.Product, orderItem.UnitPrice, false, orderItem.Quantity);
+            AddOrderItem(orderItem.Product, orderItem.UnitPrice, setSelected, orderItem.Quantity);
         }
+
 
         public void RemoveEmptyItems()
         {
@@ -371,11 +373,19 @@ namespace ServiceInterface.Model
 
         public void RemoveOrderItem(OrderItem item)
         {
-            if (item == null)
-                return;
+            if (item == null) return;
+
             //Total -= item.Total;
-            
-            OrderItems.Remove(item);
+
+            if (item.TimeStamp ==null)
+            {
+                OrderItems.Remove(item); 
+            }
+            else
+            {
+                item.State = OrderItemState.Removed;
+            }
+
         }
 
         public void MappingBeforeSending()

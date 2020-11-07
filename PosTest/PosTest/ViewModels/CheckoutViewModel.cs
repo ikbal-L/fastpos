@@ -919,8 +919,12 @@ namespace PosTest.ViewModels
                         return;
                     }
 
-                    CurrentOrder.State = OrderState.Ordered;
+                    var stamp = DateTime.Now;
+
+
+                    StampAndSetOrderSate(stamp);
                     SaveCurrentOrder();
+                    _diff.Clear();
                     break;
 
                 case ActionButton.Table:
@@ -997,6 +1001,27 @@ namespace PosTest.ViewModels
                     CurrentOrder.State = OrderState.Served;
                     break;
             }
+        }
+
+        private void StampAndSetOrderSate(DateTime stamp)
+        {
+            CurrentOrder.OrderItems
+                .Where(i => _diff.Exists(d => d.ProductId==i.ProductId)).ToList()
+                .ForEach(i =>
+                {
+                    var refItem = _diff.First(d => d.ProductId== i.ProductId);
+                    if (i.Quantity > refItem.Quantity)
+                    {
+                        i.State = OrderItemState.IncrementedQuantity;
+                    }
+                    else if (i.Quantity < refItem.Quantity)
+                    {
+                        i.State = OrderItemState.DecrementedQuantity;
+                    }
+
+                    i.TimeStamp = stamp;
+                });
+            CurrentOrder.State = OrderState.Ordered;
         }
 
         private void PayementAction()
@@ -1333,10 +1358,11 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var item = CurrentOrder.SelectedOrderItem;
-            if (item.Quantity <= 1)
+            var orderItem = CurrentOrder.SelectedOrderItem;
+            if (orderItem.Quantity <= 1)
                 return;
-            item.Quantity -= 1;
+            orderItem.Quantity -= 1;
+           
         }
 
         public void DiscountOnOrderItem(int param)
@@ -1444,8 +1470,19 @@ namespace PosTest.ViewModels
                 NewOrder();
             }
 
-            CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true,
-                quantity: 1);
+            var item = CurrentOrder.OrderItems.FirstOrDefault(o => o.ProductId == selectedproduct.Id);
+            if (item ==null)
+            {
+                item = new OrderItem( selectedproduct, 1, selectedproduct.Price, CurrentOrder);
+            }
+            if (!_diff.Contains(item))
+            {
+                _diff.Add(item); 
+            }
+            
+            //CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true,
+            //    quantity: 1);
+            CurrentOrder.AddOrderItem(item,true);
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {

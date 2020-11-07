@@ -126,7 +126,7 @@ namespace ServiceInterface.Model
 
 
         [DataMember]
-        public DateTime TimeStamp
+        public DateTime? TimeStamp
         {
             get => _timeStamp;
             set => Set(ref _timeStamp, value);
@@ -164,7 +164,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public List<long> AdditiveIds;
         private decimal _totalDiscountAmount;
-        private DateTime _timeStamp;
+        private DateTime? _timeStamp;
         private OrderItemState _state;
 
         public BindableCollection<Additive> Additives 
