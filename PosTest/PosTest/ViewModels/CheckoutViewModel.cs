@@ -151,7 +151,9 @@ namespace PosTest.ViewModels
             Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);
             Tables = new BindableCollection<Table>(tables);
             Customers = new BindableCollection<Customer>(customers);
-
+            OrderItemsCollectionViewSource = new CollectionViewSource();
+            OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
+            OrderItemsCollectionViewSource.Filter+=OrderItemsCollectionViewSourceOnFilter;
 
             Task.Run(CalculateOrderElapsedTime);
             if (IsRunningFromXUnit)
@@ -196,6 +198,19 @@ namespace PosTest.ViewModels
             WaitingViewModel = new WaitingViewModel(this);
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
+        }
+
+        private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
+        {
+            var orderItem = e.Item as OrderItem;
+            if (orderItem.State==OrderItemState.Removed)
+            {
+                e.Accepted = false;
+            }
+            else
+            {
+                e.Accepted = true;
+            }
         }
 
         public List<Category> AllCategories { get; set; }
@@ -341,6 +356,8 @@ namespace PosTest.ViewModels
             }
         }
 
+
+        public CollectionViewSource OrderItemsCollectionViewSource;
         public string NumericZone
         {
             get => _numericZone;
