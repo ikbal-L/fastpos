@@ -82,7 +82,7 @@ namespace PosTest.ViewModels
         private int itemsPerCategoryPage;
         private int _categoryPageCount;
         private int _currentCategoryPageIndex;
-        private List<Order> _diff;
+        private List<OrderItem> _diff;
         #endregion
 
         #region Constructors

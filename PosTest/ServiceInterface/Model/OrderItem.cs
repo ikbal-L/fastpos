@@ -125,6 +125,19 @@ namespace ServiceInterface.Model
         }
 
 
+        [DataMember]
+        public DateTime TimeStamp
+        {
+            get => _timeStamp;
+            set => Set(ref _timeStamp, value);
+        }
+        [DataMember]
+        public OrderItemState State
+        {
+            get => _state;
+            set => Set(ref _state, value);
+        }
+
         public Additive SelectedAdditive 
         { 
             get => __selectedAdditive;
@@ -151,6 +164,8 @@ namespace ServiceInterface.Model
         [DataMember]
         public List<long> AdditiveIds;
         private decimal _totalDiscountAmount;
+        private DateTime _timeStamp;
+        private OrderItemState _state;
 
         public BindableCollection<Additive> Additives 
         { 
@@ -213,5 +228,10 @@ namespace ServiceInterface.Model
         }
 
         
+    }
+
+    public enum OrderItemState
+    {
+        Added,Removed,IncrementedQuantity,DecrementedQuantity
     }
 }
