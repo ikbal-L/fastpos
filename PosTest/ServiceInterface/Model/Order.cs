@@ -32,17 +32,18 @@ namespace ServiceInterface.Model
         public Order()
         {
             OrderItems = new BindableCollection<OrderItem>();
-            
-            OrderItems.CollectionChanged += 
-                (s, e)=> 
+
+            OrderItems.CollectionChanged +=
+                (s, e) =>
                 {
                     if (OrderItems.Count == 0) this.DiscountAmount = 0;
-                    NotifyOfPropertyChange(() => Total); 
-                    NotifyOfPropertyChange(() => TotalDiscountAmount); 
-                    NotifyOfPropertyChange(() => NewTotal); 
+                    NotifyOfPropertyChange(() => Total);
+                    NotifyOfPropertyChange(() => TotalDiscountAmount);
+                    NotifyOfPropertyChange(() => NewTotal);
                 };
             OrderTime = DateTime.Now;
         }
+
         public Order(string buyerId) : this()
         {
             BuyerId = buyerId;
@@ -55,14 +56,11 @@ namespace ServiceInterface.Model
 
         public BindableCollection<Order> Orders { get; set; }
 
-        [DataMember(IsRequired = true)]
-        public long? Id { get; set; }
+        [DataMember(IsRequired = true)] public long? Id { get; set; }
 
-        [DataMember]
-        public string BuyerId { get; set; }
+        [DataMember] public string BuyerId { get; set; }
 
-        [DataMember]
-        public DateTime OrderTime { get; set; }
+        [DataMember] public DateTime OrderTime { get; set; }
 
         public Delivereyman Delivereyman
         {
@@ -74,8 +72,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        [DataMember]
-        public long? DelivereymanId { get; set; }
+        [DataMember] public long? DelivereymanId { get; set; }
 
         public Waiter Waiter
         {
@@ -87,8 +84,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        [DataMember]
-        public long? WaiterId { get; set; }
+        [DataMember] public long? WaiterId { get; set; }
 
         [DataMember]
         public TimeSpan ElapsedTime
@@ -103,7 +99,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
-        public OrderType? Type 
+        public OrderType? Type
         {
             get => _type;
             set
@@ -130,9 +126,10 @@ namespace ServiceInterface.Model
                 {
                     OrderStates = new BindableCollection<OrderStateElement>();
                 }
+
                 OrderStates.Add(new OrderStateElement
                 {
-                    State = (OrderState)_state,
+                    State = (OrderState) _state,
                     StateTime = DateTime.Now,
                     SessionId = AuthProvider.Instance.SessionId
                 });
@@ -140,21 +137,23 @@ namespace ServiceInterface.Model
             }
         }
 
-        [DataMember]
-        public IList<OrderStateElement> OrderStates { get; set; }
+        [DataMember] public IList<OrderStateElement> OrderStates { get; set; }
+
         //get from state
         public string Color { get; set; }
 
         [DataMember]
-        public decimal Total 
+        public decimal Total
         {
             get
             {
                 var sumItemTotals = 0m;
                 if (OrderItems != null)
                 {
-                    OrderItems.Where(i=>i.State!= OrderItemState.Removed).ToList().ForEach(item => sumItemTotals += item.Total);
+                    OrderItems.Where(i => i.State != OrderItemState.Removed).ToList()
+                        .ForEach(item => sumItemTotals += item.Total);
                 }
+
                 return sumItemTotals;
             }
             /*set
@@ -163,8 +162,8 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => NewTotal);
                 NotifyOfPropertyChange(() => Total);
             }*/
-        } 
-        
+        }
+
         public Order SplittedFrom
         {
             get => _splittedFrom;
@@ -174,17 +173,12 @@ namespace ServiceInterface.Model
                 SplittedFromId = value.Id;
             }
         }
-            
-        [DataMember]
-        public long? SplittedFromId
-        {
-            get ;
-            set;
-        }
-            
+
+        [DataMember] public long? SplittedFromId { get; set; }
+
 
         [DataMember]
-        public decimal NewTotal 
+        public decimal NewTotal
         {
             get
             {
@@ -203,8 +197,10 @@ namespace ServiceInterface.Model
                 var sumItemDiscounts = 0m;
                 if (OrderItems != null)
                 {
-                    OrderItems.Where(i=>i.State!=OrderItemState.Removed).ToList().ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
+                    OrderItems.Where(i => i.State != OrderItemState.Removed).ToList()
+                        .ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
                 }
+
                 //either _discountAmount==0 or _discountPercentage==0
                 var allDiscounts = _discountAmount + sumItemDiscounts + Total * _discountPercentage / 100;
                 //NewTotal = Total - allDiscounts;
@@ -213,9 +209,9 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public decimal DiscountAmount 
+        public decimal DiscountAmount
         {
-            get =>  _discountAmount ;
+            get => _discountAmount;
             set
             {
                 _discountAmount = value;
@@ -227,7 +223,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public decimal DiscountPercentage 
+        public decimal DiscountPercentage
         {
             get => _discountPercentage;
             set
@@ -242,7 +238,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public decimal GivenAmount 
+        public decimal GivenAmount
         {
             get => _givenAmount;
             set
@@ -250,11 +246,11 @@ namespace ServiceInterface.Model
                 _givenAmount = value;
                 NotifyOfPropertyChange(() => GivenAmount);
             }
-                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
+            //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
 
         [DataMember]
-        public decimal ReturnedAmount 
+        public decimal ReturnedAmount
         {
             get => _returnedAmount;
             set
@@ -262,11 +258,11 @@ namespace ServiceInterface.Model
                 _returnedAmount = value;
                 NotifyOfPropertyChange(() => ReturnedAmount);
             }
-                //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
+            //OrderItems.Cast<OrderItem>().ToList().Sum(item => item.Total); 
         }
 
         //private readonly List<OrdreItem> _items = new List<OrdreItem>();
-        public OrderItem SelectedOrderItem 
+        public OrderItem SelectedOrderItem
         {
             get => _selectedOrderItem;
             set
@@ -292,8 +288,7 @@ namespace ServiceInterface.Model
 
         public Session Session { get; set; }
 
-        [DataMember]
-        public long SessionId { get; set; }
+        [DataMember] public long SessionId { get; set; }
 
         public Customer Customer
         {
@@ -308,54 +303,59 @@ namespace ServiceInterface.Model
 
         private Customer _customer;
 
-        [DataMember]
-        public long? CustomerId { get; set; }
+        [DataMember] public long? CustomerId { get; set; }
 
-        public Table Table 
+        public Table Table
         {
             get => _table;
             set
             {
                 _table = value;
                 TableId = _table?.Id;
-                NotifyOfPropertyChange(()=>Table);
+                NotifyOfPropertyChange(() => Table);
             }
         }
 
-        [DataMember]
-        public long? TableId { get; set; }
+        [DataMember] public long? TableId { get; set; }
 
         public Category ShownCategory { get; private set; }
         public BindableCollection<Additive> ShownAdditivesPage { get; set; }
 
         public bool ProductsVisibility { get; set; }
         public bool AdditivesVisibility { get; set; }
-        public void AddOrderItem(Product product, decimal unitPrice, bool setSelected, float quantity = 1, bool groupByProduct = true)
+
+        public OrderItem AddOrderItem(Product product, decimal unitPrice, bool setSelected, float quantity = 1,
+            bool groupByProduct = true)
         {
             OrderItem item;
-            if ((product is Platter && (product as Platter).Additives !=null )  || 
-                !OrderItems.Any(p => p.Product.Id==product.Id) || !groupByProduct)
+            if ((product is Platter && (product as Platter).Additives != null) || OrderItems.All(p => p.Product.Id != product.Id) ||
+                !groupByProduct ||
+                OrderItems.Where(oi =>
+                    oi.Product.Id == product.Id 
+                ).All(oi=> oi.State == OrderItemState.Removed)
+            )
             {
-                item = new OrderItem(product, quantity, unitPrice, this){State = OrderItemState.Added};
+                item = new OrderItem(product, quantity, unitPrice, this) {State = OrderItemState.Added};
                 item.TimeStamp = null;
                 OrderItems.Add(item);
-                
             }
             else
             {
-               item = OrderItems.FirstOrDefault(p => p.Product.Id==product.Id);
-               item.Quantity+=quantity;
+                item = OrderItems.FirstOrDefault(p => p.Product.Id == product.Id && p.State != OrderItemState.Removed);
+                item.Quantity += quantity;
             }
 
             if (setSelected)
             {
                 SelectedOrderItem = item;
             }
+
+            return item;
         }
 
-        public void AddOrderItem(OrderItem orderItem, bool setSelected = false)
+        public OrderItem AddOrderItem(OrderItem orderItem, bool setSelected = false)
         {
-            AddOrderItem(orderItem.Product, orderItem.UnitPrice, setSelected, orderItem.Quantity);
+            return AddOrderItem(orderItem.Product, orderItem.UnitPrice, setSelected, orderItem.Quantity);
         }
 
 
@@ -377,23 +377,23 @@ namespace ServiceInterface.Model
 
             //Total -= item.Total;
 
-            if (item.TimeStamp ==null)
+            if (item.TimeStamp == null)
             {
-                OrderItems.Remove(item); 
+                OrderItems.Remove(item);
+                
             }
             else
             {
                 item.State = OrderItemState.Removed;
             }
-
         }
 
         public void MappingBeforeSending()
         {
-            foreach (var oitem in OrderItems) 
-            { 
-                oitem.ProductId = (long)oitem.Product.Id; 
-                oitem.OrderId =Id;            
+            foreach (var oitem in OrderItems)
+            {
+                oitem.ProductId = (long) oitem.Product.Id;
+                oitem.OrderId = Id;
             }
 
             this.TableId = Table?.Id;
@@ -402,7 +402,7 @@ namespace ServiceInterface.Model
 
         public void MappingAfterReceiving(IEnumerable<Product> products)
         {
-            if (products==null)
+            if (products == null)
             {
                 throw new MappingException("Order mapping products is null");
             }
@@ -414,6 +414,7 @@ namespace ServiceInterface.Model
                 {
                     throw new MappingException("Order mapping product is null");
                 }
+
                 oit.Product = product;
             }
         }
@@ -431,12 +432,9 @@ namespace ServiceInterface.Model
     [DataContract]
     public class OrderStateElement
     {
+        [DataMember] public long SessionId { get; set; }
 
-        [DataMember]
-        public long SessionId { get; set; }
-
-        [DataMember]
-        public DateTime StateTime { get; set; }
+        [DataMember] public DateTime StateTime { get; set; }
 
 
         [DataMember]
@@ -444,19 +442,20 @@ namespace ServiceInterface.Model
         public OrderState State { get; set; }
     }
 
-    public enum OrderState 
+    public enum OrderState
     {
         Ordered,
         Prepared,
         Ready,
         Delivered,
         Payed,
-        Splitted, 
+        Splitted,
         Canceled,
         Removed,
         Served,
         Changed
     }
+
     public enum OrderType
     {
         Delivery,

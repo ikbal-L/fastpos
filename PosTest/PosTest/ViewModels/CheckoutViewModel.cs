@@ -82,7 +82,7 @@ namespace PosTest.ViewModels
         private int itemsPerCategoryPage;
         private int _categoryPageCount;
         private int _currentCategoryPageIndex;
-        private List<OrderItem> _diff;
+        private Dictionary<int,OrderItem> _diff;
         #endregion
 
         #region Constructors
@@ -126,7 +126,7 @@ namespace PosTest.ViewModels
             ICustomerService customerService
         ) : this()
         {
-            _diff = new List<OrderItem>();
+            _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
             _productsService = productsService;
             _categoriesService = categoriesService;
@@ -152,7 +152,8 @@ namespace PosTest.ViewModels
             Tables = new BindableCollection<Table>(tables);
             Customers = new BindableCollection<Customer>(customers);
             OrderItemsCollectionViewSource = new CollectionViewSource();
-            OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
+            
+            
             OrderItemsCollectionViewSource.Filter+=OrderItemsCollectionViewSourceOnFilter;
 
             Task.Run(CalculateOrderElapsedTime);
@@ -198,6 +199,15 @@ namespace PosTest.ViewModels
             WaitingViewModel = new WaitingViewModel(this);
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
+        }
+
+        private void CurrentOrder_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CurrentOrder.OrderItems))
+            {
+                OrderItemsCollectionViewSource.Source = CurrentOrder.OrderItems;
+                //OrderItemsCollectionViewSource.View.Refresh();
+            }
         }
 
         private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
@@ -352,12 +362,13 @@ namespace PosTest.ViewModels
                 }
 
                 SetSelectedInListedOrdersDisplayedOrder();
+                OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
                 NotifyOfPropertyChange(() => CurrentOrder);
             }
         }
 
 
-        public CollectionViewSource OrderItemsCollectionViewSource;
+        public CollectionViewSource OrderItemsCollectionViewSource { get; set; }
         public string NumericZone
         {
             get => _numericZone;
@@ -577,6 +588,9 @@ namespace PosTest.ViewModels
             }
 
             CurrentOrder = new Order(this.Orders);
+            OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
+            //OrderItemsCollectionViewSource.View.Refresh();
+            //CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
             //DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
@@ -1022,11 +1036,13 @@ namespace PosTest.ViewModels
 
         private void StampAndSetOrderSate(DateTime stamp)
         {
-            CurrentOrder.OrderItems
-                .Where(i => _diff.Exists(d => d.ProductId==i.ProductId)).ToList()
-                .ForEach(i =>
+            var orderitems = CurrentOrder.OrderItems
+                .Where(i => _diff.ContainsKey(i.GetHashCode())).ToList();
+            orderitems.ForEach(i =>
+            {
+                var refItem = _diff.First(d => d.Value.Product.Id == i.Product.Id && d.Key == i.GetHashCode()).Value;
+                if (i.TimeStamp!=null)
                 {
-                    var refItem = _diff.First(d => d.ProductId== i.ProductId);
                     if (i.Quantity > refItem.Quantity)
                     {
                         i.State = OrderItemState.IncrementedQuantity;
@@ -1036,8 +1052,10 @@ namespace PosTest.ViewModels
                         i.State = OrderItemState.DecrementedQuantity;
                     }
 
-                    i.TimeStamp = stamp;
-                });
+                }
+                i.TimeStamp = stamp;
+            });
+
             CurrentOrder.State = OrderState.Ordered;
         }
 
@@ -1353,6 +1371,8 @@ namespace PosTest.ViewModels
             }
 
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
+            TrackDiff(CurrentOrder.SelectedOrderItem);
+            OrderItemsCollectionViewSource.View.Refresh();
 
             AdditivesVisibility = false;
             ProductsVisibility = true;
@@ -1364,7 +1384,7 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-
+            TrackDiff(CurrentOrder.SelectedOrderItem);
             CurrentOrder.SelectedOrderItem.Quantity += 1;
         }
 
@@ -1378,10 +1398,20 @@ namespace PosTest.ViewModels
             var orderItem = CurrentOrder.SelectedOrderItem;
             if (orderItem.Quantity <= 1)
                 return;
+            TrackDiff(orderItem);
             orderItem.Quantity -= 1;
+
            
         }
 
+        public void TrackDiff(OrderItem item)
+        {
+            if (!_diff.ContainsKey(item.GetHashCode()))
+            {
+                var value = new OrderItem(item.Product, item.Quantity, item.UnitPrice, item.Order){TimeStamp = item.TimeStamp};
+                _diff.Add(item.GetHashCode(), value);
+            }
+        }
         public void DiscountOnOrderItem(int param)
         {
             if (String.IsNullOrEmpty(NumericZone) && param != 0)
@@ -1487,19 +1517,22 @@ namespace PosTest.ViewModels
                 NewOrder();
             }
 
-            var item = CurrentOrder.OrderItems.FirstOrDefault(o => o.ProductId == selectedproduct.Id);
-            if (item ==null)
+            var item = new OrderItem(selectedproduct, 1, selectedproduct.Price, CurrentOrder);
+
+            var fetch = CurrentOrder.OrderItems.FirstOrDefault(i =>
+                i.Product.Id == selectedproduct.Id && i.TimeStamp != null);
+            if (fetch!=null)
             {
-                item = new OrderItem( selectedproduct, 1, selectedproduct.Price, CurrentOrder);
+                TrackDiff(fetch);
             }
-            if (!_diff.Contains(item))
-            {
-                _diff.Add(item); 
-            }
-            
             //CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true,
             //    quantity: 1);
-            CurrentOrder.AddOrderItem(item,true);
+            OrderItem oi = CurrentOrder.AddOrderItem(item,true);
+            if ((fetch==null|| fetch.State == OrderItemState.Removed))
+            {
+                TrackDiff(oi);
+            }
+            //OrderItemsCollectionViewSource.View.Refresh();
 
             if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
             {
