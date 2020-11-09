@@ -19,12 +19,12 @@ namespace XUnitTesting.HelpersTesting
         {
             DateTime timeStamp = DateTime.Now;
             IEnumerable<OrderItem> orderItems = null;
-            Dictionary<int,OrderItem> diff = new Dictionary<int, OrderItem>();
-           
+            Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
+
             Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
 
-            var e = Assert.Throws<NullReferenceException>(act); 
-            Assert.Equal("OrderItems must not be null",e.Message);
+            var e = Assert.Throws<NullReferenceException>(act);
+            Assert.Equal("OrderItems must not be null", e.Message);
         }
 
         [Fact]
@@ -58,13 +58,13 @@ namespace XUnitTesting.HelpersTesting
         public void StampAndSetOrderState_NotAllItemsChanged_UnchangedItemsUnstampedWithTimeStampArg()
         {
             DateTime timeStamp = DateTime.Now;
-            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList();// length 7
+            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList(); // length 7
             Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
             MockingHelpers.ModifySomeItems(orderItems, diff);
 
             //act 
             OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
-            
+
             //Assert 
             var unchangedItems = orderItems.Where(i => !diff.ContainsKey(i.GetHashCode()));
             Assert.All(unchangedItems, item => Assert.NotEqual(timeStamp, item.TimeStamp));
@@ -74,7 +74,7 @@ namespace XUnitTesting.HelpersTesting
         public void StampAndSetOrderState_SomeItemsChanged_changedItemsStampedWithTimeStampArg()
         {
             DateTime timeStamp = DateTime.Now;
-            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList();// length 7
+            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList(); // length 7
             Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
             MockingHelpers.ModifySomeItems(orderItems, diff);
 
@@ -86,6 +86,24 @@ namespace XUnitTesting.HelpersTesting
             Assert.All(changedItems, item => Assert.Equal(timeStamp, item.TimeStamp));
         }
 
+        [Fact]
+        public void StampAndSetOrderState_ItemsWithIncreasedQuantity_StateSetToIncrementedQuantity()
+        {
+            DateTime timeStamp = DateTime.Now;
+            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList(); // length 7
+            Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
+            MockingHelpers.ModifySomeItems(orderItems, diff);
+            //act 
+            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
 
+            //Assert 
+            var itemsWithIncreasedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
+                                                                    &&
+                                                                    oi.Quantity > diff.First(d =>
+                                                                        d.Value.Product.Id == oi.Product.Id &&
+                                                                        d.Key == oi.GetHashCode()).Value.Quantity
+            );
+            Assert.All(itemsWithIncreasedQuantity, item => Assert.Equal(OrderItemState.IncrementedQuantity, item.State));
+        }
     }
 }
