@@ -199,6 +199,8 @@ namespace PosTest.ViewModels
             WaitingViewModel = new WaitingViewModel(this);
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
+            CurrentCategory = Categories.FirstOrDefault(c => c.Id==1);
+            ShowCategoryProducts(CurrentCategory);
         }
 
         private void CurrentOrder_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -1357,7 +1359,10 @@ namespace PosTest.ViewModels
             }
 
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
-            OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem,_diff);
+            if (CurrentOrder.SelectedOrderItem!=null)
+            {
+                OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff); 
+            }
             OrderItemsCollectionViewSource.View.Refresh();
 
             AdditivesVisibility = false;

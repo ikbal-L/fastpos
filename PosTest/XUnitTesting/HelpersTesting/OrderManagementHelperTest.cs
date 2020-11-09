@@ -157,5 +157,6 @@ namespace XUnitTesting.HelpersTesting
             Assert.All(itemsWithChangedQuantity,
                 item => Assert.Equal(OrderItemState.Added, item.State));
         }
+
     }
 }
