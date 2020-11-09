@@ -105,5 +105,25 @@ namespace XUnitTesting.HelpersTesting
             );
             Assert.All(itemsWithIncreasedQuantity, item => Assert.Equal(OrderItemState.IncrementedQuantity, item.State));
         }
+
+        [Fact]
+        public void StampAndSetOrderState_ItemsWithDecreasedQuantity_StateSetToDecrementedQuantity()
+        {
+            DateTime timeStamp = DateTime.Now;
+            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList(); // length 7
+            Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
+            MockingHelpers.ModifySomeItems(orderItems, diff);
+            //act 
+            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+
+            //Assert 
+            var itemsWithIncreasedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
+                                                                    &&
+                                                                    oi.Quantity < diff.First(d =>
+                                                                        d.Value.Product.Id == oi.Product.Id &&
+                                                                        d.Key == oi.GetHashCode()).Value.Quantity
+            );
+            Assert.All(itemsWithIncreasedQuantity, item => Assert.Equal(OrderItemState.DecrementedQuantity, item.State));
+        }
     }
 }
