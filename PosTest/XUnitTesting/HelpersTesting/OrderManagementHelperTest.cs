@@ -63,13 +63,29 @@ namespace XUnitTesting.HelpersTesting
             MockingHelpers.ModifySomeItems(orderItems, diff);
 
             //act 
-            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
             
             //Assert 
             var unchangedItems = orderItems.Where(i => !diff.ContainsKey(i.GetHashCode()));
             Assert.All(unchangedItems, item => Assert.NotEqual(timeStamp, item.TimeStamp));
         }
 
-        
+        [Fact]
+        public void StampAndSetOrderState_SomeItemsChanged_changedItemsStampedWithTimeStampArg()
+        {
+            DateTime timeStamp = DateTime.Now;
+            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList();// length 7
+            Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
+            MockingHelpers.ModifySomeItems(orderItems, diff);
+
+            //act 
+            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+
+            //Assert 
+            var changedItems = orderItems.Where(i => diff.ContainsKey(i.GetHashCode()));
+            Assert.All(changedItems, item => Assert.Equal(timeStamp, item.TimeStamp));
+        }
+
+
     }
 }
