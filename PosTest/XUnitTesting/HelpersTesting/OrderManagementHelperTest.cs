@@ -1,4 +1,9 @@
-﻿using PosTest.Helpers;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using PosTest.Helpers;
+using ServiceInterface.Model;
+using Xunit;
 
 namespace XUnitTesting.HelpersTesting
 {
@@ -6,8 +11,21 @@ namespace XUnitTesting.HelpersTesting
     {
         public OrderManagementHelperTest()
         {
-            OrderManagementHelper.StampAdditives();
         }
+
+        [Fact]
+        public void StampAndSetOrderState_OrderItemsEqualsNull_ThrowsNullReferenceException()
+        {
+            DateTime timeStamp = DateTime.Now;
+            IEnumerable<OrderItem> orderItems = null;
+            Dictionary<int,OrderItem> diff = new Dictionary<int, OrderItem>();
+           
+            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+
+            var e = Assert.Throws<NullReferenceException>(act); 
+            Assert.Equal("OrderItems must not be null",e.Message);
+        }
+
 
 
     }

@@ -7,9 +7,11 @@ namespace PosTest.Helpers
 {
     public class OrderManagementHelper
     {
-        public static void StampAndSetOrderState(DateTime stamp, IEnumerable<OrderItem> orderItems,
+        public static void StampAndSetOrderState(DateTime timeStamp, IEnumerable<OrderItem> orderItems,
             Dictionary<int, OrderItem> diff)
         {
+            if (orderItems == null) throw new NullReferenceException("OrderItems must not be null");
+            
             var items = orderItems
                 .Where(i => diff.ContainsKey(i.GetHashCode())).ToList();
             items.ForEach(i =>
@@ -27,7 +29,7 @@ namespace PosTest.Helpers
                     }
                 }
 
-                i.TimeStamp = stamp;
+                i.TimeStamp = timeStamp;
             });
         }
 
