@@ -103,7 +103,8 @@ namespace XUnitTesting.HelpersTesting
                                                                         d.Value.Product.Id == oi.Product.Id &&
                                                                         d.Key == oi.GetHashCode()).Value.Quantity
             );
-            Assert.All(itemsWithIncreasedQuantity, item => Assert.Equal(OrderItemState.IncrementedQuantity, item.State));
+            Assert.All(itemsWithIncreasedQuantity,
+                item => Assert.Equal(OrderItemState.IncrementedQuantity, item.State));
         }
 
         [Fact]
@@ -117,13 +118,44 @@ namespace XUnitTesting.HelpersTesting
             OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
 
             //Assert 
-            var itemsWithIncreasedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
+            var itemsWithDecreasedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
                                                                     &&
                                                                     oi.Quantity < diff.First(d =>
                                                                         d.Value.Product.Id == oi.Product.Id &&
                                                                         d.Key == oi.GetHashCode()).Value.Quantity
             );
-            Assert.All(itemsWithIncreasedQuantity, item => Assert.Equal(OrderItemState.DecrementedQuantity, item.State));
+            Assert.All(itemsWithDecreasedQuantity,
+                item => Assert.Equal(OrderItemState.DecrementedQuantity, item.State));
+        }
+
+
+        [Fact]
+        public void StampAndSetOrderState_ItemsNotStampedWithQuantityChanged_StateEqualsAdded()
+        {
+            DateTime timeStamp = DateTime.Now;
+            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList(); // length 7
+            Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
+            MockingHelpers.ModifySomeItems(orderItems, diff);
+            //act 
+            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+
+            //Assert 
+            var itemsWithChangedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
+                                                                  &&
+                                                                  (oi.Quantity < diff.First(d =>
+                                                                       d.Value.Product.Id == oi.Product.Id &&
+                                                                       d.Key == oi.GetHashCode()).Value.Quantity ||
+                                                                   oi.Quantity > diff.First(d =>
+                                                                       d.Value.Product.Id == oi.Product.Id &&
+                                                                       d.Key == oi.GetHashCode()).Value.Quantity)
+                                                                  &&
+                                                                  diff.First(d =>
+                                                                      d.Value.Product.Id == oi.Product.Id &&
+                                                                      d.Key == oi.GetHashCode()).Value.TimeStamp ==
+                                                                  null).ToList();
+            Assert.NotEmpty(itemsWithChangedQuantity);
+            Assert.All(itemsWithChangedQuantity,
+                item => Assert.Equal(OrderItemState.Added, item.State));
         }
     }
 }

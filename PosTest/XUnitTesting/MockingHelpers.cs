@@ -63,6 +63,12 @@ namespace XUnitTesting
             var item3 = orderItems[2];
             OrderManagementHelper.TrackItemForChange(item3, diff);
             item3.State = OrderItemState.Removed;
+            //Modify item 1
+            var item4 = orderItems[3];
+            item4.TimeStamp = null;
+            item4.State = OrderItemState.Added;
+            OrderManagementHelper.TrackItemForChange(item4, diff);
+            item4.Quantity++;
         }
         public static object GetRandomEnumValueFromEnumType(Type enumType)
         {
