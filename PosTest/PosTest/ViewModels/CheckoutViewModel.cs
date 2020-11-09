@@ -1646,7 +1646,8 @@ namespace PosTest.ViewModels
 
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
-            contentOfPage.Content = CurrentOrder;
+            //contentOfPage.Content = CurrentOrder;
+            contentOfPage.Content = GenerateContent(CurrentOrder);
 
             var conv = new LengthConverter();
             
@@ -1665,6 +1666,13 @@ namespace PosTest.ViewModels
             return document;
         }
 
+        public object GenerateContent(Order order)
+        {
+            DateTime? recent = CurrentOrder.OrderItems.Max(oi => oi.TimeStamp);
+            var value = new Order(order.Orders);
+            value.OrderItems = new BindableCollection<OrderItem>(order.OrderItems.Where(oi => oi.TimeStamp == recent));
+            return value;
+        }
         public void PrintPreview()
         {
             var doc = GenerateOrderReceipt();
