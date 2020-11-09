@@ -13,8 +13,12 @@ namespace ServiceInterface.Model
         private string _backgroundString;
         private SolidColorBrush _background;
         private Color? _backgroundColor;
-        
-        public Additive() { }
+        private AdditiveState _state;
+        private DateTime? _timeStamp;
+
+        public Additive()
+        {
+        }
 
         public Additive(Additive additive)
         {
@@ -23,9 +27,11 @@ namespace ServiceInterface.Model
             //Ingrediants = additive.Ingrediants;
             //ParentOrderItem = additive.ParentOrderItem;
             BackgroundString = additive.BackgroundString;
+            Rank = additive.Rank;
+            State = additive.State;
         }
-        [DataMember]
-        public long? Id { get; set; }
+
+        [DataMember] public long? Id { get; set; }
 
         [DataMember]
         public string Description
@@ -36,9 +42,8 @@ namespace ServiceInterface.Model
 
         public List<Ingredient> Ingrediants { get; set; }
 
-        [DataMember]
-        public List<long> IdIngrediants { get; set; }
-        
+        [DataMember] public List<long> IdIngrediants { get; set; }
+
         public OrderItem ParentOrderItem { get; set; }
 
         [DataMember]
@@ -50,12 +55,12 @@ namespace ServiceInterface.Model
 
         public Brush Background
         {
-            get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
+            get => new SolidColorBrush((Color) ColorConverter.ConvertFromString(BackgroundString));
             set
             {
-                Set(ref _background, (SolidColorBrush)value);
+                Set(ref _background, (SolidColorBrush) value);
                 Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
-                Set(ref _backgroundColor, ((SolidColorBrush)value).Color, nameof(BackgroundColor));
+                Set(ref _backgroundColor, ((SolidColorBrush) value).Color, nameof(BackgroundColor));
             }
         }
 
@@ -69,14 +74,27 @@ namespace ServiceInterface.Model
             return result;
         }*/
 
+        public AdditiveState State
+        {
+            get => _state;
+            set => Set(ref _state, value);
+        }
+
+        public DateTime? TimeStamp
+        {
+            get => _timeStamp;
+            set => Set(ref _timeStamp, value);
+        }
+
         public override bool Equals(object other)
         {
             var additive = other as Additive;
             var result = additive != null &&
-                    additive.Id == Id &&
-                    additive.Description == Description &&
-                    additive.BackgroundString == BackgroundString &&
-                    additive.Rank == Rank;
+                         additive.Id == Id &&
+                         additive.Description == Description &&
+                         additive.BackgroundString == BackgroundString &&
+                         additive.Rank == Rank &&
+                         additive.State == State;
             return result;
             //           return Equals(other as Additive);
         }
@@ -93,13 +111,13 @@ namespace ServiceInterface.Model
 
         public virtual Color? BackgroundColor
         {
-
             get
             {
                 if (_backgroundColor == null)
                 {
-                    _backgroundColor = (Color)ColorConverter.ConvertFromString(BackgroundString);
+                    _backgroundColor = (Color) ColorConverter.ConvertFromString(BackgroundString);
                 }
+
                 return _backgroundColor;
             }
             set
@@ -107,12 +125,17 @@ namespace ServiceInterface.Model
                 Set(ref _backgroundColor, value);
                 NotifyOfPropertyChange(() => IsDark);
             }
-
         }
 
         public override string ToString()
         {
-            return Description+" ";
+            return Description + " ";
         }
+    }
+
+    public enum AdditiveState
+    {
+        Added,
+        Removed
     }
 }

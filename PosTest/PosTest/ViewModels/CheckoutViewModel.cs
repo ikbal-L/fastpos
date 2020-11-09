@@ -953,7 +953,9 @@ namespace PosTest.ViewModels
                     var stamp = DateTime.Now;
 
 
-                    StampAndSetOrderSate(stamp);
+                    OrderManagementHelper.StampAndSetOrderState(stamp,CurrentOrder.OrderItems,_diff);
+                    OrderManagementHelper.StampAdditives(stamp,CurrentOrder.OrderItems);
+                    CurrentOrder.State = OrderState.Ordered;
                     SaveCurrentOrder();
                     _diff.Clear();
                     break;
@@ -1034,30 +1036,7 @@ namespace PosTest.ViewModels
             }
         }
 
-        private void StampAndSetOrderSate(DateTime stamp)
-        {
-            var orderitems = CurrentOrder.OrderItems
-                .Where(i => _diff.ContainsKey(i.GetHashCode())).ToList();
-            orderitems.ForEach(i =>
-            {
-                var refItem = _diff.First(d => d.Value.Product.Id == i.Product.Id && d.Key == i.GetHashCode()).Value;
-                if (i.TimeStamp!=null)
-                {
-                    if (i.Quantity > refItem.Quantity)
-                    {
-                        i.State = OrderItemState.IncrementedQuantity;
-                    }
-                    else if (i.Quantity < refItem.Quantity)
-                    {
-                        i.State = OrderItemState.DecrementedQuantity;
-                    }
-
-                }
-                i.TimeStamp = stamp;
-            });
-
-            CurrentOrder.State = OrderState.Ordered;
-        }
+        
 
         private void PayementAction()
         {
@@ -1359,7 +1338,14 @@ namespace PosTest.ViewModels
             if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
             {
                 CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
-                additive.ParentOrderItem.Additives.Remove(additive);
+                if (additive.TimeStamp==null)
+                {
+                    additive.ParentOrderItem.Additives.Remove(additive); 
+                }
+                else
+                {
+                    additive.State = AdditiveState.Removed;
+                }
             }
         }
 
@@ -1669,8 +1655,10 @@ namespace PosTest.ViewModels
         public object GenerateContent(Order order)
         {
             DateTime? recent = CurrentOrder.OrderItems.Max(oi => oi.TimeStamp);
-            var value = new Order(order.Orders);
-            value.OrderItems = new BindableCollection<OrderItem>(order.OrderItems.Where(oi => oi.TimeStamp == recent));
+            var value = new Order(order.Orders)
+            {
+                OrderItems = new BindableCollection<OrderItem>(order.OrderItems.Where(oi => oi.TimeStamp == recent))
+            };
             return value;
         }
         public void PrintPreview()

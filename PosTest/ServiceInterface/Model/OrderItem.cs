@@ -216,7 +216,8 @@ namespace ServiceInterface.Model
                 return false;
             }
             var additive1 = new Additive(additive);
-            additive1.ParentOrderItem = this; 
+            additive1.ParentOrderItem = this;
+            additive1.State = AdditiveState.Added;
             this.Additives.Add(additive1);
             return true;
         }
