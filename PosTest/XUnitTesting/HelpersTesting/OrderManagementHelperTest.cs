@@ -26,6 +26,21 @@ namespace XUnitTesting.HelpersTesting
             Assert.Equal("OrderItems must not be null",e.Message);
         }
 
+        [Fact]
+        public void StampAndSetOrderState_DiffEqualsNull_ThrowsNullReferenceException()
+        {
+            DateTime timeStamp = DateTime.Now;
+            IEnumerable<OrderItem> orderItems = MockingHelpers.GetOrderItems();
+            Dictionary<int, OrderItem> diff = null;
+
+            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+
+            var e = Assert.Throws<NullReferenceException>(act);
+            Assert.Equal("Diff must not be null", e.Message);
+        }
+
+
+
 
 
     }

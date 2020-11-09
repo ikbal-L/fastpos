@@ -11,6 +11,7 @@ namespace PosTest.Helpers
             Dictionary<int, OrderItem> diff)
         {
             if (orderItems == null) throw new NullReferenceException("OrderItems must not be null");
+            if (diff == null) throw new NullReferenceException("Diff must not be null");
             
             var items = orderItems
                 .Where(i => diff.ContainsKey(i.GetHashCode())).ToList();
