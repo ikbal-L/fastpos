@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PosTest.Helpers;
 using ServiceInterface.Model;
 using Xunit;
@@ -53,7 +54,22 @@ namespace XUnitTesting.HelpersTesting
             Assert.All(orderItems, item => Assert.NotEqual(timeStamp, item.TimeStamp));
         }
 
+        [Fact]
+        public void StampAndSetOrderState_NotAllItemsChanged_UnchangedItemsUnstampedWithTimeStampArg()
+        {
+            DateTime timeStamp = DateTime.Now;
+            List<OrderItem> orderItems = MockingHelpers.GetOrderItems().ToList();// length 7
+            Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
+            MockingHelpers.ModifySomeItems(orderItems, diff);
 
+            //act 
+            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            
+            //Assert 
+            var unchangedItems = orderItems.Where(i => !diff.ContainsKey(i.GetHashCode()));
+            Assert.All(unchangedItems, item => Assert.NotEqual(timeStamp, item.TimeStamp));
+        }
 
+        
     }
 }

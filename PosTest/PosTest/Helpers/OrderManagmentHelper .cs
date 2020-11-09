@@ -41,5 +41,14 @@ namespace PosTest.Helpers
                 item.Additives?.Where(a => a.TimeStamp == null || a.State == AdditiveState.Removed).ToList()
                     .ForEach(a => a.TimeStamp = timeStamp);
         }
+
+        public static void TrackItemForChange(OrderItem item,Dictionary<int,OrderItem> diff)
+        {
+            if (!diff.ContainsKey(item.GetHashCode()))
+            {
+                var value = new OrderItem(item.Product, item.Quantity, item.UnitPrice, item.Order) { TimeStamp = item.TimeStamp };
+                diff.Add(item.GetHashCode(), value);
+            }
+        }
     }
 }

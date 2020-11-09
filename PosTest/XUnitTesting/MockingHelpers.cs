@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Caliburn.Micro;
 using Castle.Components.DictionaryAdapter.Xml;
+using PosTest.Helpers;
 using ServiceInterface.Model;
 
 namespace XUnitTesting
@@ -48,7 +49,21 @@ namespace XUnitTesting
                 };
             }
         }
-
+        public static void ModifySomeItems(List<OrderItem> orderItems, Dictionary<int, OrderItem> diff)
+        {
+            //Modify item 1
+            var item1 = orderItems[0];
+            OrderManagementHelper.TrackItemForChange(item1, diff);
+            item1.Quantity++;
+            //Modify item 2 
+            var item2 = orderItems[1];
+            OrderManagementHelper.TrackItemForChange(item2, diff);
+            item2.Quantity--;
+            //Modify item 3 
+            var item3 = orderItems[2];
+            OrderManagementHelper.TrackItemForChange(item3, diff);
+            item3.State = OrderItemState.Removed;
+        }
         public static object GetRandomEnumValueFromEnumType(Type enumType)
         {
             Random random = new Random();

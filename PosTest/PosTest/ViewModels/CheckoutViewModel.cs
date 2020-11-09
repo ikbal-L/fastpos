@@ -1357,7 +1357,7 @@ namespace PosTest.ViewModels
             }
 
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
-            TrackDiff(CurrentOrder.SelectedOrderItem);
+            OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem,_diff);
             OrderItemsCollectionViewSource.View.Refresh();
 
             AdditivesVisibility = false;
@@ -1370,7 +1370,7 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-            TrackDiff(CurrentOrder.SelectedOrderItem);
+            OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem,_diff);
             CurrentOrder.SelectedOrderItem.Quantity += 1;
         }
 
@@ -1384,20 +1384,13 @@ namespace PosTest.ViewModels
             var orderItem = CurrentOrder.SelectedOrderItem;
             if (orderItem.Quantity <= 1)
                 return;
-            TrackDiff(orderItem);
+            OrderManagementHelper.TrackItemForChange(orderItem,_diff);
             orderItem.Quantity -= 1;
 
            
         }
 
-        public void TrackDiff(OrderItem item)
-        {
-            if (!_diff.ContainsKey(item.GetHashCode()))
-            {
-                var value = new OrderItem(item.Product, item.Quantity, item.UnitPrice, item.Order){TimeStamp = item.TimeStamp};
-                _diff.Add(item.GetHashCode(), value);
-            }
-        }
+        
         public void DiscountOnOrderItem(int param)
         {
             if (String.IsNullOrEmpty(NumericZone) && param != 0)
@@ -1509,14 +1502,14 @@ namespace PosTest.ViewModels
                 i.Product.Id == selectedproduct.Id && i.TimeStamp != null);
             if (fetch!=null)
             {
-                TrackDiff(fetch);
+                OrderManagementHelper.TrackItemForChange(fetch,_diff);
             }
             //CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true,
             //    quantity: 1);
             OrderItem oi = CurrentOrder.AddOrderItem(item,true);
             if ((fetch==null|| fetch.State == OrderItemState.Removed))
             {
-                TrackDiff(oi);
+                OrderManagementHelper.TrackItemForChange(oi,_diff);
             }
             //OrderItemsCollectionViewSource.View.Refresh();
 
