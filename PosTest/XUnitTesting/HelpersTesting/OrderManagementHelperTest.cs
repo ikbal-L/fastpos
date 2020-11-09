@@ -40,6 +40,18 @@ namespace XUnitTesting.HelpersTesting
         }
 
 
+        [Fact]
+        public void StampAndSetOrderState_DiffDoesNotReferenceItemsFromOrderItems_OrderItemsUnchanged()
+        {
+            DateTime timeStamp = DateTime.Now;
+            IEnumerable<OrderItem> orderItems = MockingHelpers.GetOrderItems();
+            Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
+
+            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+
+
+            Assert.All(orderItems, item => Assert.NotEqual(timeStamp, item.TimeStamp));
+        }
 
 
 

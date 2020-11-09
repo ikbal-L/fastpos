@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Caliburn.Micro;
 using Castle.Components.DictionaryAdapter.Xml;
 using ServiceInterface.Model;
 
@@ -31,7 +32,7 @@ namespace XUnitTesting
         public static IEnumerable<OrderItem> GetOrderItems()
         {
             Random ran = new Random();
-            var order = new Order();
+            var order = new Order(){OrderItems = new BindableCollection<OrderItem>(new OrderItem[]{})};
             DateTime from = DateTime.Now;
             DateTime to = from.AddMinutes(30).AddMilliseconds(500);
             foreach (var product in GetAllProducts())
@@ -39,10 +40,10 @@ namespace XUnitTesting
                 yield return new OrderItem()
                 {
                     Product = product,
+                    Order = order,
                     Quantity = ran.Next(0, 10),
                     UnitPrice = product.Price,
                     TimeStamp = RandomDateTimeValue(from,to),
-                    Order = order,
                     State = (OrderItemState)GetRandomEnumValueFromEnumType(typeof(OrderItemState))
                 };
             }
