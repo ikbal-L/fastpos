@@ -34,7 +34,7 @@ namespace PosTest.Helpers
 
                 i.TimeStamp = timeStamp;
             });
-            diff.Clear();
+            
             return true;
         }
 

@@ -964,6 +964,7 @@ namespace PosTest.ViewModels
                         OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
                     ;
                     CurrentOrder.State = OrderState.Ordered;
+                    _diff.Clear();
                     SaveCurrentOrder();
                     break;
 

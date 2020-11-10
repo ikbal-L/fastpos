@@ -13,10 +13,18 @@ namespace XUnitTesting
     {
         public static IEnumerable<Product> GetAllProducts()
         {
-            yield return new Product() {Id = 5, Rank = 6};
-            yield return new Product() {Id = 2, Rank = 18};
-            yield return new Product() {Id = 17, Rank = 6};
-            yield return new Product() {Id = 23, Rank = 27};
+            yield return new Product() {Id = 05, Name = "Product01", Rank = 06};
+            yield return new Product() {Id = 02, Name = "Product02", Rank = 18};
+            yield return new Product() {Id = 17, Name = "Product03", Rank = 19};
+            yield return new Product() {Id = 23, Name = "Product04", Rank = 27};
+            yield return new Product() {Id = 78, Name = "Product05", Rank = 03};
+            yield return new Product() {Id = 14, Name = "Product06", Rank = 16};
+            yield return new Product() {Id = 13, Name = "Product07", Rank = 28};
+            yield return new Product() {Id = 01, Name = "Product08", Rank = 04};
+            yield return new Product() {Id = 06, Name = "Product09", Rank = 05};
+            yield return new Product() {Id = 48, Name = "Product10", Rank = 24};
+            yield return new Product() {Id = 73, Name = "Product11", Rank = 15};
+            yield return new Product() {Id = 65, Name = "Product12", Rank = 07};
         }
 
         public static IEnumerable<Category> GetAllCategories()
@@ -38,19 +46,21 @@ namespace XUnitTesting
             DateTime to = from.AddMinutes(30).AddMilliseconds(500);
             foreach (var product in GetAllProducts())
             {
+                var (timeStamp, state) = GenerateRandomTimeStampAndState(from, to);
                 yield return new OrderItem()
                 {
                     Product = product,
                     Order = order,
                     Quantity = ran.Next(0, 10),
                     UnitPrice = product.Price,
-                    TimeStamp = RandomDateTimeValue(from,to),
-                    State = (OrderItemState)GetRandomEnumValueFromEnumType(typeof(OrderItemState))
+                    TimeStamp = timeStamp,
+                    State = state
                 };
             }
         }
         public static void ModifySomeItems(List<OrderItem> orderItems, Dictionary<int, OrderItem> diff)
         {
+            orderItems.Where(oi=> oi.TimeStamp==null).ToList().ForEach(oi=> OrderManagementHelper.TrackItemForChange(oi,diff));
             //Modify item 1
             var item1 = orderItems[0];
             OrderManagementHelper.TrackItemForChange(item1, diff);
@@ -75,7 +85,7 @@ namespace XUnitTesting
             Random random = new Random();
 
             Array values = enumType.GetEnumValues();
-            int index = random.Next(values.Length);
+            int index = random.Next(0,values.Length);
             return values.GetValue(index);
         }
 
@@ -96,6 +106,13 @@ namespace XUnitTesting
             var index =rnd.Next(value.Length);
             return (DateTime?)value[index];
 
+        }
+
+        public static (DateTime?, OrderItemState) GenerateRandomTimeStampAndState(DateTime from,DateTime to)
+        {
+            var state = (OrderItemState) GetRandomEnumValueFromEnumType(typeof(OrderItemState));
+            var timeStamp = state != OrderItemState.Added ? (DateTime?)RandomDateTime(from, to) : null;
+            return (timeStamp, state);
         }
     }
 }
