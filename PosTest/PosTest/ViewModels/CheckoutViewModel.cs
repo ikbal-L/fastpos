@@ -82,7 +82,8 @@ namespace PosTest.ViewModels
         private int itemsPerCategoryPage;
         private int _categoryPageCount;
         private int _currentCategoryPageIndex;
-        private Dictionary<int,OrderItem> _diff;
+        private Dictionary<int, OrderItem> _diff;
+
         #endregion
 
         #region Constructors
@@ -152,9 +153,9 @@ namespace PosTest.ViewModels
             Tables = new BindableCollection<Table>(tables);
             Customers = new BindableCollection<Customer>(customers);
             OrderItemsCollectionViewSource = new CollectionViewSource();
-            
-            
-            OrderItemsCollectionViewSource.Filter+=OrderItemsCollectionViewSourceOnFilter;
+
+
+            OrderItemsCollectionViewSource.Filter += OrderItemsCollectionViewSourceOnFilter;
 
             Task.Run(CalculateOrderElapsedTime);
             if (IsRunningFromXUnit)
@@ -170,7 +171,6 @@ namespace PosTest.ViewModels
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
-             
 
             LoadCategoryPages();
 
@@ -180,10 +180,9 @@ namespace PosTest.ViewModels
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
             PaginatedCategories.Filter += new FilterEventHandler(PaginatedCategoriesOnFilter);
-           
+
             CalculateTotalPages(Categories.Count);
-            
-            
+
 
             foreach (var table in Tables)
             {
@@ -199,7 +198,7 @@ namespace PosTest.ViewModels
             WaitingViewModel = new WaitingViewModel(this);
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
-            CurrentCategory = Categories.FirstOrDefault(c => c.Id==1);
+            CurrentCategory = Categories.FirstOrDefault(c => c.Id == 1);
             ShowCategoryProducts(CurrentCategory);
         }
 
@@ -215,7 +214,7 @@ namespace PosTest.ViewModels
         private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
         {
             var orderItem = e.Item as OrderItem;
-            if (orderItem.State==OrderItemState.Removed)
+            if (orderItem.State == OrderItemState.Removed)
             {
                 e.Accepted = false;
             }
@@ -371,6 +370,7 @@ namespace PosTest.ViewModels
 
 
         public CollectionViewSource OrderItemsCollectionViewSource { get; set; }
+
         public string NumericZone
         {
             get => _numericZone;
@@ -743,6 +743,8 @@ namespace PosTest.ViewModels
             return categories;
         }
 
+        public bool ChangesMade { get; set; }
+
         void LoadCategoryPages()
         {
             var comparer = new Comparer<Category>();
@@ -750,7 +752,7 @@ namespace PosTest.ViewModels
             var categories = new List<Category>(retrieveCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             Categories = new BindableCollection<Category>();
-            var maxRank = (int)categories.Max(c => c.Rank);
+            var maxRank = (int) categories.Max(c => c.Rank);
             int _categpryPageSize = 10;
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
@@ -770,7 +772,7 @@ namespace PosTest.ViewModels
             listOfFliteredProducts.Sort(comparer);
             CurrentCategory = category;
             RankedItemsCollectionHelper.LoadPagesNotFilled(source: listOfFliteredProducts, target: ProductsPage,
-                size: MaxProductPageSize,parameter:category);
+                size: MaxProductPageSize, parameter: category);
         }
 
         public void ShowProductAdditives(Platter product)
@@ -786,6 +788,7 @@ namespace PosTest.ViewModels
         }
 
         #region Filtering and pagination
+
         //public void CategorieFiltering(object param)
         //{
         //    AdditivesVisibility = false;
@@ -875,6 +878,7 @@ namespace PosTest.ViewModels
 
         //    CanExecutePrevious = _pageNumber == 1 ? false : true;
         //}
+
         #endregion
 
         #region Command Buttons' Actions
@@ -955,11 +959,12 @@ namespace PosTest.ViewModels
                     var stamp = DateTime.Now;
 
 
-                    OrderManagementHelper.StampAndSetOrderState(stamp,CurrentOrder.OrderItems,_diff);
-                    OrderManagementHelper.StampAdditives(stamp,CurrentOrder.OrderItems);
+                    ChangesMade =
+                        OrderManagementHelper.StampAndSetOrderItemState(stamp, CurrentOrder.OrderItems, _diff) ||
+                        OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
+                    ;
                     CurrentOrder.State = OrderState.Ordered;
                     SaveCurrentOrder();
-                    _diff.Clear();
                     break;
 
                 case ActionButton.Table:
@@ -1038,7 +1043,6 @@ namespace PosTest.ViewModels
             }
         }
 
-        
 
         private void PayementAction()
         {
@@ -1340,9 +1344,9 @@ namespace PosTest.ViewModels
             if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
             {
                 CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
-                if (additive.TimeStamp==null)
+                if (additive.TimeStamp == null)
                 {
-                    additive.ParentOrderItem.Additives.Remove(additive); 
+                    additive.ParentOrderItem.Additives.Remove(additive);
                 }
                 else
                 {
@@ -1359,10 +1363,11 @@ namespace PosTest.ViewModels
             }
 
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
-            if (CurrentOrder.SelectedOrderItem!=null)
+            if (CurrentOrder.SelectedOrderItem != null)
             {
-                OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff); 
+                OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff);
             }
+
             OrderItemsCollectionViewSource.View.Refresh();
 
             AdditivesVisibility = false;
@@ -1375,7 +1380,8 @@ namespace PosTest.ViewModels
             {
                 return;
             }
-            OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem,_diff);
+
+            OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff);
             CurrentOrder.SelectedOrderItem.Quantity += 1;
         }
 
@@ -1389,13 +1395,11 @@ namespace PosTest.ViewModels
             var orderItem = CurrentOrder.SelectedOrderItem;
             if (orderItem.Quantity <= 1)
                 return;
-            OrderManagementHelper.TrackItemForChange(orderItem,_diff);
+            OrderManagementHelper.TrackItemForChange(orderItem, _diff);
             orderItem.Quantity -= 1;
-
-           
         }
 
-        
+
         public void DiscountOnOrderItem(int param)
         {
             if (String.IsNullOrEmpty(NumericZone) && param != 0)
@@ -1505,16 +1509,17 @@ namespace PosTest.ViewModels
 
             var fetch = CurrentOrder.OrderItems.FirstOrDefault(i =>
                 i.Product.Id == selectedproduct.Id && i.TimeStamp != null);
-            if (fetch!=null)
+            if (fetch != null)
             {
-                OrderManagementHelper.TrackItemForChange(fetch,_diff);
+                OrderManagementHelper.TrackItemForChange(fetch, _diff);
             }
+
             //CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true,
             //    quantity: 1);
-            OrderItem oi = CurrentOrder.AddOrderItem(item,true);
-            if ((fetch==null|| fetch.State == OrderItemState.Removed))
+            OrderItem oi = CurrentOrder.AddOrderItem(item, true);
+            if ((fetch == null || fetch.State == OrderItemState.Removed))
             {
-                OrderManagementHelper.TrackItemForChange(oi,_diff);
+                OrderManagementHelper.TrackItemForChange(oi, _diff);
             }
             //OrderItemsCollectionViewSource.View.Refresh();
 
@@ -1634,17 +1639,17 @@ namespace PosTest.ViewModels
             contentOfPage.Content = GenerateContent(CurrentOrder);
 
             var conv = new LengthConverter();
-            
+
             //double width = (double)conv.ConvertFromString("8cm");
             //double height = document.DocumentPaginator.PageSize.Height;
 
             //document.DocumentPaginator.PageSize = new Size(width, height);
 
-            fixedPage.Width =  contentOfPage.Width;
+            fixedPage.Width = contentOfPage.Width;
             fixedPage.Height = contentOfPage.Height;
             fixedPage.Children.Add(contentOfPage);
             PageContent pageContent = new PageContent();
-            ((IAddChild)pageContent).AddChild(fixedPage);
+            ((IAddChild) pageContent).AddChild(fixedPage);
 
             document.Pages.Add(pageContent);
             return document;
@@ -1653,16 +1658,24 @@ namespace PosTest.ViewModels
         public object GenerateContent(Order order)
         {
             DateTime? recent = CurrentOrder.OrderItems.Max(oi => oi.TimeStamp);
+            if (!ChangesMade)
+            {
+                ToastNotification.Notify("You made no updates");
+            }
+
             var value = new Order(order.Orders)
             {
                 OrderItems = new BindableCollection<OrderItem>(order.OrderItems.Where(oi => oi.TimeStamp == recent))
             };
             return value;
         }
+
         public void PrintPreview()
         {
+            if (CurrentOrder == null) return;
+
             var doc = GenerateOrderReceipt();
-            PrintViewModel pvm = new PrintViewModel() { Document = doc, PreviousScreen = this };
+            PrintViewModel pvm = new PrintViewModel() {Document = doc, PreviousScreen = this};
             pvm.Parent = this.Parent;
             (this.Parent as MainViewModel).ActivateItem(pvm);
 
@@ -1670,22 +1683,18 @@ namespace PosTest.ViewModels
             //WriteXpsDocument(doc, xpsDoc);
 
             //PrintDocument();
-
         }
 
 
         public XpsDocument GenerateXpsDocument(string name)
         {
             //XpsDocument document = new XpsDocument($"/Printing/{name}.xps",FileAccess.ReadWrite);
-            XpsDocument document = new XpsDocument($"{name}.xps",FileAccess.ReadWrite);
+            XpsDocument document = new XpsDocument($"{name}.xps", FileAccess.ReadWrite);
             return document;
         }
 
         public void WriteXpsDocument(FixedDocument fixedDocument, XpsDocument xpsDocument)
         {
-
-
-
             XpsDocumentWriter xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
             xpsDocumentWriter.Write(fixedDocument);
             xpsDocument.Close();
@@ -1693,8 +1702,7 @@ namespace PosTest.ViewModels
 
         public void PrintDocument()
         {
-            
-            FixedDocument fixedDocument = GenerateOrderReceipt() ;
+            FixedDocument fixedDocument = GenerateOrderReceipt();
             PrintDocumentImageableArea area = null;
             XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(ref area);
             Size size = new Size(area.MediaSizeWidth, area.MediaSizeHeight);
@@ -1707,7 +1715,7 @@ namespace PosTest.ViewModels
         {
             if (nextOrPrevious == NextOrPrevious.Next)
             {
-                if (CurrentCategoryPageIndex<CategoryPageCount-1)
+                if (CurrentCategoryPageIndex < CategoryPageCount - 1)
                 {
                     CurrentCategoryPageIndex++;
                 }
@@ -1715,13 +1723,15 @@ namespace PosTest.ViewModels
 
             if (nextOrPrevious == NextOrPrevious.Previous)
             {
-                if (CurrentCategoryPageIndex!=0)
+                if (CurrentCategoryPageIndex != 0)
                 {
                     CurrentCategoryPageIndex--;
                 }
             }
+
             PaginatedCategories.View.Refresh();
         }
+
         private void CalculateTotalPages(int itemcount)
         {
             if (itemcount % itemsPerCategoryPage == 0)
@@ -1744,9 +1754,10 @@ namespace PosTest.ViewModels
         {
             Category category = (e.Item as Category);
 
-            int indexOfCategory = (int)category?.Rank - 1;
+            int indexOfCategory = (int) category?.Rank - 1;
 
-            if (indexOfCategory >= itemsPerCategoryPage * CurrentCategoryPageIndex && indexOfCategory < itemsPerCategoryPage * (CurrentCategoryPageIndex + 1))
+            if (indexOfCategory >= itemsPerCategoryPage * CurrentCategoryPageIndex &&
+                indexOfCategory < itemsPerCategoryPage * (CurrentCategoryPageIndex + 1))
             {
                 e.Accepted = true;
             }

@@ -21,7 +21,7 @@ namespace XUnitTesting.HelpersTesting
             IEnumerable<OrderItem> orderItems = null;
             Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
 
-            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            Action act = () => OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
             var e = Assert.Throws<NullReferenceException>(act);
             Assert.Equal("OrderItems must not be null", e.Message);
@@ -34,7 +34,7 @@ namespace XUnitTesting.HelpersTesting
             IEnumerable<OrderItem> orderItems = MockingHelpers.GetOrderItems();
             Dictionary<int, OrderItem> diff = null;
 
-            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            Action act = () => OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
             var e = Assert.Throws<NullReferenceException>(act);
             Assert.Equal("Diff must not be null", e.Message);
@@ -48,7 +48,7 @@ namespace XUnitTesting.HelpersTesting
             IEnumerable<OrderItem> orderItems = MockingHelpers.GetOrderItems();
             Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
 
-            Action act = () => OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            Action act = () => OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
 
             Assert.All(orderItems, item => Assert.NotEqual(timeStamp, item.TimeStamp));
@@ -63,7 +63,7 @@ namespace XUnitTesting.HelpersTesting
             MockingHelpers.ModifySomeItems(orderItems, diff);
 
             //act 
-            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
             //Assert 
             var unchangedItems = orderItems.Where(i => !diff.ContainsKey(i.GetHashCode()));
@@ -79,7 +79,7 @@ namespace XUnitTesting.HelpersTesting
             MockingHelpers.ModifySomeItems(orderItems, diff);
 
             //act 
-            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
             //Assert 
             var changedItems = orderItems.Where(i => diff.ContainsKey(i.GetHashCode()));
@@ -94,7 +94,7 @@ namespace XUnitTesting.HelpersTesting
             Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
             MockingHelpers.ModifySomeItems(orderItems, diff);
             //act 
-            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
             //Assert 
             var itemsWithIncreasedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
@@ -115,7 +115,7 @@ namespace XUnitTesting.HelpersTesting
             Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
             MockingHelpers.ModifySomeItems(orderItems, diff);
             //act 
-            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
             //Assert 
             var itemsWithDecreasedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
@@ -137,7 +137,7 @@ namespace XUnitTesting.HelpersTesting
             Dictionary<int, OrderItem> diff = new Dictionary<int, OrderItem>();
             MockingHelpers.ModifySomeItems(orderItems, diff);
             //act 
-            OrderManagementHelper.StampAndSetOrderState(timeStamp, orderItems, diff);
+            OrderManagementHelper.StampAndSetOrderItemState(timeStamp, orderItems, diff);
 
             //Assert 
             var itemsWithChangedQuantity = orderItems.Where(oi => diff.ContainsKey(oi.GetHashCode())
