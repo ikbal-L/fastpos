@@ -510,7 +510,7 @@ namespace PosTest.ViewModels
                 if (order.Id == null)
                 {
                     order.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(order);
+                    resp = _orderService.SaveOrder(order,out IEnumerable<string> errors);
                     if (resp != 200)
                     {
                         order.Id = null;
