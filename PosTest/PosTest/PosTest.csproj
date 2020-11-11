@@ -399,6 +399,7 @@
     </EmbeddedResource>
     <Resource Include="Fonts\digital-7.ttf" />
     <Resource Include="Fonts\DS-DIGI.ttf" />
+    <None Include="nlog.config" />
     <None Include="packages.config" />
     <None Include="PosTest_1_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\ServiceInterface.Model.Order.datasource" />
