@@ -46,10 +46,10 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public int SaveOrder(Order order)
+        public int SaveOrder(Order order, out IEnumerable<string> errors)
         {
             order.MappingBeforeSending();
-            return _restOrderService.SaveOrder(order);
+            return _restOrderService.SaveOrder(order,out errors);
         }
 
         public int UpdateOrder(Order order)
@@ -145,7 +145,7 @@ namespace ServiceLib.Service
             return orders;
         }
 
-        public int SaveOrder(Order order)
+        public int SaveOrder(Order order, out IEnumerable<string> errors)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
@@ -164,6 +164,17 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
+            errors = new List<string>();
+            try
+            {
+                errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+                ;
+            }
             return (int)response.StatusCode;
         }
 

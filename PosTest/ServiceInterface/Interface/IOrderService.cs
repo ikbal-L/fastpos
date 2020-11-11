@@ -7,7 +7,7 @@ namespace ServiceInterface.Interface
     {
         IEnumerable<Order> GetAllOrders(ref int statusCode);
         IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds, ref int statusCode);
-        int SaveOrder(Order order);
+        int SaveOrder(Order order,out IEnumerable<string> errors);
         int UpdateOrder(Order order);
         int DeleteOrder(long orderId);
         long? GetIdmax(ref int statusCode);
