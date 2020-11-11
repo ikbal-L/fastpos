@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Caliburn.Micro;
 using ServiceInterface.Model;
 
 namespace PosTest.Helpers
@@ -63,6 +64,25 @@ namespace PosTest.Helpers
                     {TimeStamp = item.TimeStamp};
                 diff.Add(item.GetHashCode(), value);
             }
+        }
+
+        public static Order GetChangesFromOrder(Order order,Dictionary<int,OrderItem> diff)
+        {
+            DateTime? recent = order.OrderItems.Max(oi => oi.TimeStamp);
+            var changedOrderItems = new List<OrderItem>();
+            var orderItems = order.OrderItems
+                .Where(oi =>
+                    oi.State == OrderItemState.IncrementedQuantity || oi.State == OrderItemState.DecrementedQuantity);
+            foreach (var orderItem in orderItems)
+            {
+                var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
+                changedOrderItems.Add(new OrderItem(orderItem.Product,orderItem.Quantity-refItem.Quantity,orderItem.UnitPrice,orderItem.Order));
+            }
+
+            changedOrderItems = changedOrderItems.Concat(order.OrderItems.Where(oi =>
+                oi.TimeStamp == recent && (oi.State == OrderItemState.Removed || oi.State == OrderItemState.Added))
+            ).ToList();
+            return  new Order(){OrderItems = new BindableCollection<OrderItem>(changedOrderItems)};
         }
     }
 }

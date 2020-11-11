@@ -83,6 +83,7 @@ namespace PosTest.ViewModels
         private int _categoryPageCount;
         private int _currentCategoryPageIndex;
         private Dictionary<int, OrderItem> _diff;
+        private Order _printOrder;
 
         #endregion
 
@@ -959,10 +960,12 @@ namespace PosTest.ViewModels
                     var stamp = DateTime.Now;
 
 
+                    _printOrder = null;
                     ChangesMade =
                         OrderManagementHelper.StampAndSetOrderItemState(stamp, CurrentOrder.OrderItems, _diff) ||
                         OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
                     ;
+                    _printOrder = OrderManagementHelper.GetChangesFromOrder(CurrentOrder, _diff);
                     CurrentOrder.State = OrderState.Ordered;
                     _diff.Clear();
                     SaveCurrentOrder();
@@ -1637,8 +1640,9 @@ namespace PosTest.ViewModels
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
             //contentOfPage.Content = CurrentOrder;
-            contentOfPage.Content = GenerateContent(CurrentOrder);
-
+            //contentOfPage.Content = GenerateContent(CurrentOrder);
+            contentOfPage.Content = _printOrder;
+            _diff.Clear();
             var conv = new LengthConverter();
 
             //double width = (double)conv.ConvertFromString("8cm");
@@ -1668,6 +1672,7 @@ namespace PosTest.ViewModels
             {
                 OrderItems = new BindableCollection<OrderItem>(order.OrderItems.Where(oi => oi.TimeStamp == recent))
             };
+            ;
             return value;
         }
 
