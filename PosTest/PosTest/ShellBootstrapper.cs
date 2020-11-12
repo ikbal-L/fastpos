@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using NLog;
 using PosTest.ViewModels;
 using PosTest.Views;
 using System;
@@ -15,7 +16,12 @@ namespace PosTest
     {
         public ShellBootstrapper()
         {
-            
+
+            var config = new NLog.Config.LoggingConfiguration();
+            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = "/logs/fastpos.txt" };
+            config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
+            NLog.LogManager.Configuration = config;
+
             Initialize();
         }
 

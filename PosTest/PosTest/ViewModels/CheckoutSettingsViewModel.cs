@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -17,6 +18,8 @@ using System.Windows.Media;
 using PosTest.Helpers;
 using MaterialDesignThemes.Wpf;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using NLog;
 using PosTest.ViewModels.SubViewModel;
 
 namespace PosTest.ViewModels
@@ -84,7 +87,6 @@ namespace PosTest.ViewModels
             SelectedProduct.PropertyChanged += (sender, args) => { Save(); };
             IsFlipped = false;
             IsCategory = false;
-            
         }
 
         private void EditProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
@@ -128,7 +130,7 @@ namespace PosTest.ViewModels
             {
                 if (IsCategory)
                 {
-                    if (EditCategoryViewModel!=null)
+                    if (EditCategoryViewModel != null)
                     {
                         return !EditCategoryViewModel.HasErrors;
                     }
@@ -444,6 +446,7 @@ namespace PosTest.ViewModels
                 EditProductViewModel.SaveProduct();
                 EditProductViewModel = null;
             }
+
             IsFlipped = false;
         }
 
@@ -458,6 +461,7 @@ namespace PosTest.ViewModels
             {
                 EditProductViewModel.Cancel();
             }
+
             //IsFlipped = false;
         }
 
@@ -477,29 +481,78 @@ namespace PosTest.ViewModels
 
             if (SelectedT is Product selectedProduct)
             {
-                selectedProduct.Category.ProductIds.Remove((long) selectedProduct.Id);
-                _categoriesService.UpdateCategory(selectedProduct.Category);
-                selectedProduct.Category = null;
-                selectedProduct.CategorieId = null;
-                _productsService.UpdateProduct(selectedProduct);
+                int categoryStatusCode = 0;
+                int productStatusCode = 0;
+                try
+                {
+                    selectedProduct.Category.ProductIds.Remove((long) selectedProduct.Id);
+                    categoryStatusCode = _categoriesService.UpdateCategory(selectedProduct.Category);
+                    selectedProduct.Category = null;
+                    selectedProduct.CategorieId = null;
+                    productStatusCode = _productsService.UpdateProduct(selectedProduct);
+
+                    if (categoryStatusCode != 200)
+                    {
+
+                        var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                        var args = new object[] { selectedProduct.Category.Name, categoryStatusCode, 300 };
+                        HandleStatusCodeErrors(categoryStatusCode, message, args);
+
+                    }
+
+
+                    if (productStatusCode != 200)
+                    {
+
+                        var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                        var args = new object[] { selectedProduct.Name, productStatusCode, 300 };
+                        HandleStatusCodeErrors(productStatusCode, message, args);
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    NLog.LogManager.GetCurrentClassLogger().Error(e.Message);
+                }
             }
 
             if (SelectedT is Category selectedCategory)
             {
                 //TODO Fixing removal of categories from the current Categories list
-                if (selectedCategory.Products!=null|| selectedCategory.Products?.Count>0)
+                if (selectedCategory.Products != null || selectedCategory.Products?.Count > 0)
                 {
                     foreach (var product in selectedCategory.Products)
                     {
                         product.Rank = null;
                         product.CategorieId = null;
                         product.Category = null;
-                        _productsService.UpdateProduct(product);
+                        int productStatusCode = 0;
+                        try
+                        {
+                            productStatusCode = _productsService.UpdateProduct(product);
+
+
+                            if (productStatusCode != 200)
+                            {
+
+                                var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                                var args = new object[] { product.Name, productStatusCode, 300 };
+                                HandleStatusCodeErrors(productStatusCode, message, args);
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            NLog.LogManager.GetCurrentClassLogger().Error(e.Message);
+                        }
+
+
                         if (!FreeProducts.Contains(product))
                         {
                             FreeProducts.Add(product);
                         }
                     }
+
                     selectedCategory.Products.Clear();
                     selectedCategory.ProductIds.Clear();
                 }
@@ -508,8 +561,26 @@ namespace PosTest.ViewModels
                 CurrentProducts.Clear();
                 SelectedCategory = null;
 
-                
-                _categoriesService.UpdateCategory(selectedCategory);
+
+                try
+                {
+                    int selectedCategoryStatusCode = _categoriesService.UpdateCategory(selectedCategory);
+                    if (selectedCategoryStatusCode!=200)
+                    {
+                        {
+
+                            var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                            var args = new object[] { selectedCategory.Name, selectedCategoryStatusCode, 300 };
+                            HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
 
             CurrentTs[index] = new T {Rank = rank};
@@ -574,42 +645,85 @@ namespace PosTest.ViewModels
             sourceProduct.CategorieId = SelectedCategory.Id;
 
 
-            if (targetProduct.Category != null && targetProduct.Id != null)
+            int selectedCategoryStatusCode = 0;
+            int sourceProductStatusCode = 0;
+            int targetProductStatusCode = 0;
+            try
             {
-                targetProduct.Rank = null;
-                targetProduct.Category = null;
+                if (targetProduct.Category != null && targetProduct.Id != null)
+                {
+                    targetProduct.Rank = null;
+                    targetProduct.Category = null;
 
-                _productsService.UpdateProduct(targetProduct);
+                    targetProductStatusCode = _productsService.UpdateProduct(targetProduct);
+                }
+
+                CurrentProducts[index] = sourceProduct;
+
+                if (sourceProduct.Id == null)
+                {
+                    long id = -1;
+                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, ref id);
+                    sourceProduct.Id = id;
+                }
+                else
+                {
+                    sourceProductStatusCode = _productsService.UpdateProduct(sourceProduct);
+                }
+
+                SelectedCategory.ProductIds.Add((long) sourceProduct.Id);
+                SelectedCategory.Products.Add(sourceProduct);
+                selectedCategoryStatusCode = _categoriesService.UpdateCategory(SelectedCategory);
+
+
+
+                if (sourceProductStatusCode != 200)
+                {
+
+                    var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] { sourceProduct.Name, selectedCategoryStatusCode, 300 };
+                    HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+
+                }
+
+
+                if (targetProductStatusCode != 200)
+                {
+
+                    var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
+                    HandleStatusCodeErrors(targetProductStatusCode, message, args);
+
+                }
+
+                if (selectedCategoryStatusCode != 200)
+                {
+
+                    var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] { SelectedCategory.Name, selectedCategoryStatusCode, 300 };
+                    HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+
+                }
+
             }
-
-            CurrentProducts[index] = sourceProduct;
-            if (sourceProduct.Id == null)
+            catch (Exception e)
             {
-                long id = -1;
-                _productsService.SaveProduct(sourceProduct, ref id);
-                sourceProduct.Id = id;
+                NLog.LogManager.GetCurrentClassLogger().Error(e);
             }
-            else
-            {
-                _productsService.UpdateProduct(sourceProduct);
-            }
-
-            SelectedCategory.ProductIds.Add((long) sourceProduct.Id);
-            SelectedCategory.Products.Add(sourceProduct);
-            _categoriesService.UpdateCategory(SelectedCategory);
         }
+
         //for test make it public 
+        //TODO replace in test
+        //DEPRECATED
         public void PutCategoryInCellOf(Category targetCategory, Category incomingCategory)
         {
-
             int indexOfTargetCategory = CurrentCategories.IndexOf(targetCategory);
             int indexOfIncomingCategory = CurrentCategories.IndexOf(incomingCategory);
 
 
-
-            int targetCategoryRank = (int)targetCategory.Rank;
+            int targetCategoryRank = (int) targetCategory.Rank;
             targetCategory.Rank = incomingCategory.Rank;
-            if (incomingCategory.Rank!=null)
+            if (incomingCategory.Rank != null)
             {
                 CurrentCategories[indexOfIncomingCategory] = targetCategory;
             }
@@ -623,7 +737,6 @@ namespace PosTest.ViewModels
             }
 
             _categoriesService.UpdateCategory(incomingCategory);
-
         }
 
         public void PasteProduct()
@@ -698,7 +811,25 @@ namespace PosTest.ViewModels
 
             if (SelectedFreeCategory.Id != null)
             {
-                _categoriesService.DeleteCategory((long) SelectedFreeCategory.Id);
+                
+                try
+                {
+                    int deletedCategoryStatusCode=0;
+                    deletedCategoryStatusCode = _categoriesService.DeleteCategory((long) SelectedFreeCategory.Id);
+                    if (deletedCategoryStatusCode!=200)
+                    {
+
+                        var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                        var args = new object[] { SelectedFreeProduct.Name, deletedCategoryStatusCode, 300 };
+                        HandleStatusCodeErrors(deletedCategoryStatusCode, message, args);
+
+                    }
+                }
+                catch (Exception e)
+                {
+
+                    NLog.LogManager.GetCurrentClassLogger().Error(e);
+                }
                 AllCategories.Remove(SelectedFreeCategory);
                 FreeCategories.Remove(SelectedFreeCategory);
                 SelectedFreeCategory = null;
@@ -714,7 +845,29 @@ namespace PosTest.ViewModels
 
             if (SelectedFreeProduct.Id != null)
             {
-                _productsService.DeleteProduct((long) SelectedFreeProduct.Id);
+                
+
+                int statusCode = 0;
+                try
+                {
+                    statusCode = _productsService.DeleteProduct((long)SelectedFreeProduct.Id);
+                    if (statusCode != 200)
+                    {
+
+                        var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                        var args = new object[] { SelectedFreeProduct.Name, statusCode, 300 };
+                        HandleStatusCodeErrors(statusCode, message, args);
+
+                    }
+                }
+                catch (Exception e)
+                {
+
+                    NLog.LogManager.GetCurrentClassLogger().Error(e);
+                }
+
+
+
                 AllProducts.Remove(SelectedFreeProduct);
                 FreeProducts.Remove(SelectedFreeProduct);
                 SelectedFreeProduct = null;
@@ -890,8 +1043,35 @@ namespace PosTest.ViewModels
                     receivedProduct.Rank = targetRank;
                     CurrentProducts[(int) targetRank - 1] = receivedProduct;
                     CurrentProducts[(int) receivedRank - 1] = targetProduct;
-                    _productsService.UpdateProduct(receivedProduct);
-                    _productsService.UpdateProduct(targetProduct);
+                    int receivedProductStatusCode = 0;
+                    int targetProductStatusCode = 0;
+                    try
+                    {
+                        receivedProductStatusCode = _productsService.UpdateProduct(receivedProduct);
+                        targetProductStatusCode = _productsService.UpdateProduct(targetProduct);
+
+                        if (receivedProductStatusCode != 200)
+                        {
+
+                            var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                            var args = new object[] { receivedProduct.Name, receivedProductStatusCode, 300 };
+                            HandleStatusCodeErrors(receivedProductStatusCode, message, args);
+
+                        }
+
+                        if (targetProductStatusCode != 200)
+                        {
+                       
+                            var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                            var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
+                            HandleStatusCodeErrors(targetProductStatusCode, message, args);
+
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        NLog.LogManager.GetCurrentClassLogger().Error(exception);
+                    }
                 }
             }
         }
@@ -975,18 +1155,47 @@ namespace PosTest.ViewModels
                     IList<Category> categories = CurrentCategories;
                     try
                     {
-                        RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory, ref categories);
+                        RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
+                            ref categories);
                     }
                     catch (Exception)
                     {
                         //Logging 
                     }
-                    if (targetCategory.Id != null)
+
+                    try
                     {
-                        _categoriesService.UpdateCategory(targetCategory);
+                        if (targetCategory.Id != null)
+                        {
+                           var targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory);
+                           if (targetCategoryStatusCode!=200)
+                           {
+
+                               var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                               var args = new object[] { targetCategory.Name, targetCategoryStatusCode, 300 };
+                               HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
+
+                           }
+                        }
+
+                        var incomingCategoryStatusCode=_categoriesService.UpdateCategory(incomingCategory);
+                        if (incomingCategoryStatusCode!=200)
+                        {
+                            {
+
+                                var message = "Failed To update Category {Category}   {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                                var args = new object[] { incomingCategory.Name, incomingCategoryStatusCode, 300 };
+                                HandleStatusCodeErrors(incomingCategoryStatusCode, message, args);
+
+                            }
+                        }
+                        CurrentCategories = (BindableCollection<Category>)categories;
                     }
-                    _categoriesService.UpdateCategory(incomingCategory);
-                    CurrentCategories = (BindableCollection<Category>)categories;
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
                     CategoryToMove = null;
                     SelectedCategory = incomingCategory;
                     //CurrentCategories[index] = cat;
@@ -1008,18 +1217,47 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("Must select an Empty Cell to drop Free Category");
                 return;
             }
-            
+
             //PutCategoryInCellOf(SelectedCategory, SelectedFreeCategory);
             Category incomingCategory = SelectedFreeCategory;
             Category targetCategory = SelectedCategory;
             IList<Category> categories = CurrentCategories;
-            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory,ref targetCategory,ref categories);
-            if (targetCategory.Id != null)
+            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
+                ref categories);
+            
+            try
             {
-                _categoriesService.UpdateCategory(targetCategory);
-            }
+                int targetCategoryStatusCode=0;
+                int incomingCategoryStatusCode=0;
+                if (targetCategory.Id != null)
+                {
+                    targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory);
+                }
 
-            _categoriesService.UpdateCategory(incomingCategory);
+                incomingCategoryStatusCode = _categoriesService.UpdateCategory(incomingCategory);
+                var logger = NLog.LogManager.GetCurrentClassLogger();
+                
+                if (targetCategoryStatusCode!=200)
+                {
+                    var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] { targetCategory.Name, targetCategoryStatusCode, 300 };
+                    HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
+                }
+
+                if (incomingCategoryStatusCode!=200)
+                {
+
+                   var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                   var args = new object[]{ incomingCategory.Name, incomingCategoryStatusCode, 300 };
+                    HandleStatusCodeErrors(incomingCategoryStatusCode,message, args);
+
+                }
+            }
+            catch (Exception e)
+            {
+
+                NLog.LogManager.GetCurrentClassLogger().Error(e);
+            }
             CurrentCategories = (BindableCollection<Category>) categories;
 
             FreeCategories.Remove(SelectedFreeCategory);
@@ -1088,8 +1326,22 @@ namespace PosTest.ViewModels
         //{
         //    ToastNotification.Notify("hi.cos");
         //}
-    }
 
+        public void HandleStatusCodeErrors(int httpStatusCode,string message,params object[] args)
+        {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            if (httpStatusCode != 200)
+            {
+#if DEBUG
+                throw new Exception($"{(HttpStatusCode)httpStatusCode}");
+#endif
+
+                logger.Info(message,args);
+
+            }
+        }
+    }
+    
     public class Comparer<T> : IComparer<T> where T : Ranked
     {
         public int Compare(T x, T y)

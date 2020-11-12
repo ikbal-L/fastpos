@@ -24,6 +24,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
+using Newtonsoft.Json;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
@@ -511,9 +512,27 @@ namespace PosTest.ViewModels
                 {
                     order.Id = _orderService.GetIdmax(ref status) + 1;
                     resp = _orderService.SaveOrder(order,out IEnumerable<string> errors);
+                    var logger = NLog.LogManager.GetCurrentClassLogger();
                     if (resp != 200)
                     {
                         order.Id = null;
+#if DEBUG
+                        var errorsString  = JsonConvert.SerializeObject(errors,
+                            Newtonsoft.Json.Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
+                        throw new Exception($"Errors: {errorsString} ");
+#else
+                        logger.Info("Failed To save {Order}  {ERRORCODE}, attempting to resave after {0} milliseconds ",-1,resp,300);
+#endif
+
+
+                    }
+                    else
+                    {
+                        logger.Info("Successfuly saved Order {Order} by User {User} for Customer {Customer}",order.Id,"Ali",order.CustomerId);
                     }
                 }
                 else
@@ -715,7 +734,7 @@ namespace PosTest.ViewModels
             IsDialogOpen = false;
         }
 
-        #endregion
+#endregion
 
         public void CloseCommand()
         {
@@ -788,7 +807,7 @@ namespace PosTest.ViewModels
                 size: MaxProductPageSize);
         }
 
-        #region Filtering and pagination
+#region Filtering and pagination
 
         //public void CategorieFiltering(object param)
         //{
@@ -880,9 +899,9 @@ namespace PosTest.ViewModels
         //    CanExecutePrevious = _pageNumber == 1 ? false : true;
         //}
 
-        #endregion
+#endregion
 
-        #region Command Buttons' Actions
+#region Command Buttons' Actions
 
         public void ActionKeyboard(ActionButton cmd)
         {
@@ -1319,9 +1338,9 @@ namespace PosTest.ViewModels
             NumericZone += number;
         }
 
-        #endregion
+#endregion
 
-        #region Order Item commands
+#region Order Item commands
 
         public void AddAditive(Additive additive)
         {
@@ -1554,7 +1573,7 @@ namespace PosTest.ViewModels
             ShowProductAdditives(oitem.Product as Platter);
         }
 
-        #endregion
+#endregion
 
         public bool IsTopDrawerOpen
         {
