@@ -168,10 +168,16 @@ namespace PosTest.ViewModels
                     }
                 }
             }
-            catch (Exception)
+            catch (AggregateException)
             {
-
+                ToastNotification.Notify("Problem connecting to server");
+            }
+            catch (Exception e)
+            {
+#if DEBUG
                 throw;
+#endif
+                NLog.LogManager.GetCurrentClassLogger().Error(e);
             }
         }
 
@@ -192,17 +198,24 @@ namespace PosTest.ViewModels
                     statusCode = _additiveService.UpdateAdditive(SelectedAdditive);
                 }
 
-                if (statusCode!=200)
+                if (statusCode != 200)
                 {
-                    var message = "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] { SelectedAdditive.Description, statusCode, 300 };
+                    var message =
+                        "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] {SelectedAdditive.Description, statusCode, 300};
                     ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
                 }
             }
-            catch (Exception)
+            catch (AggregateException)
             {
-
+                ToastNotification.Notify("Problem connecting to server ");
+            }
+            catch (Exception e)
+            {
+#if DEBUG
                 throw;
+#endif
+                NLog.LogManager.GetCurrentClassLogger().Error(e);
             }
         }
 
@@ -244,21 +257,28 @@ namespace PosTest.ViewModels
             try
             {
                 var statusCode = _additiveService.SaveAdditive(additive, out var id);
-                if ( statusCode== 200)
+                if (statusCode == 200)
                 {
                     additive.Id = id;
                 }
                 else
                 {
-                    var message = "Failed To save Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] { additive.Description, statusCode, 300 };
+                    var message =
+                        "Failed To save Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] {additive.Description, statusCode, 300};
                     ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
                 }
             }
-            catch (Exception)
+            catch (AggregateException)
             {
-
+                ToastNotification.Notify("Problem connecting to server");
+            }
+            catch (Exception e)
+            {
+#if DEBUG
                 throw;
+#endif
+                NLog.LogManager.GetCurrentClassLogger().Error(e);
             }
 
             Additives[rank - 1] = additive;

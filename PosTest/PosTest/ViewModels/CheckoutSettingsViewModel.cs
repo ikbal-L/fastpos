@@ -510,6 +510,10 @@ namespace PosTest.ViewModels
 
                     }
                 }
+                catch (AggregateException)
+                {
+                    ToastNotification.Notify("Problem connecting to server");
+                }
                 catch (Exception e)
                 {
                     NLog.LogManager.GetCurrentClassLogger().Error(e.Message);
@@ -543,7 +547,10 @@ namespace PosTest.ViewModels
                         }
                         catch (Exception e)
                         {
-                            NLog.LogManager.GetCurrentClassLogger().Error(e.Message);
+#if DEBUG
+                            throw;
+#endif
+                            NLog.LogManager.GetCurrentClassLogger().Error(e);
                         }
 
 
@@ -576,10 +583,16 @@ namespace PosTest.ViewModels
                         }
                     }
                 }
-                catch (Exception)
+                catch (AggregateException)
                 {
-
+                    ToastNotification.Notify("Problem connecting to server");
+                }
+                catch (Exception e)
+                {
+#if DEBUG
                     throw;
+#endif
+                    NLog.LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
 
@@ -706,8 +719,15 @@ namespace PosTest.ViewModels
                 }
 
             }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Problem connecting to server");
+            }
             catch (Exception e)
             {
+#if DEBUG
+                throw;
+#endif
                 NLog.LogManager.GetCurrentClassLogger().Error(e);
             }
         }
@@ -825,9 +845,15 @@ namespace PosTest.ViewModels
 
                     }
                 }
+                catch (AggregateException)
+                {
+                    ToastNotification.Notify("Problem connecting to server");
+                }
                 catch (Exception e)
                 {
-
+#if DEBUG
+                    throw;
+#endif
                     NLog.LogManager.GetCurrentClassLogger().Error(e);
                 }
                 AllCategories.Remove(SelectedFreeCategory);
@@ -860,9 +886,15 @@ namespace PosTest.ViewModels
 
                     }
                 }
+                catch (AggregateException)
+                {
+                    ToastNotification.Notify("Problem connecting to server");
+                }
                 catch (Exception e)
                 {
-
+#if DEBUG
+                    throw;
+#endif
                     NLog.LogManager.GetCurrentClassLogger().Error(e);
                 }
 
@@ -1068,9 +1100,16 @@ namespace PosTest.ViewModels
 
                         }
                     }
-                    catch (Exception exception)
+                    catch (AggregateException)
                     {
-                        NLog.LogManager.GetCurrentClassLogger().Error(exception);
+                        ToastNotification.Notify("Problem connecting to server");
+                    }
+                    catch (Exception ex)
+                    {
+#if DEBUG
+                        throw;
+#endif
+                        NLog.LogManager.GetCurrentClassLogger().Error(ex);
                     }
                 }
             }
@@ -1158,9 +1197,12 @@ namespace PosTest.ViewModels
                         RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
                             ref categories);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        //Logging 
+#if DEBUG
+                        throw;
+#endif
+                        NLog.LogManager.GetCurrentClassLogger().Error(ex);
                     }
 
                     try
@@ -1191,10 +1233,16 @@ namespace PosTest.ViewModels
                         }
                         CurrentCategories = (BindableCollection<Category>)categories;
                     }
-                    catch (Exception)
+                    catch (AggregateException)
                     {
-
+                        ToastNotification.Notify("Problem connecting to server");
+                    }
+                    catch (Exception exception)
+                    {
+#if DEBUG
                         throw;
+#endif
+                        NLog.LogManager.GetCurrentClassLogger().Error(exception);
                     }
                     CategoryToMove = null;
                     SelectedCategory = incomingCategory;
@@ -1253,9 +1301,15 @@ namespace PosTest.ViewModels
 
                 }
             }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Problem connecting to server");
+            }
             catch (Exception e)
             {
-
+#if DEBUG
+                throw;
+#endif
                 NLog.LogManager.GetCurrentClassLogger().Error(e);
             }
             CurrentCategories = (BindableCollection<Category>) categories;
