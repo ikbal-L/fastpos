@@ -12,7 +12,7 @@ namespace PosTest.Helpers
         public static void HandleStatusCodeErrors(int httpStatusCode, string message, params object[] args)
         {
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            if (httpStatusCode != 200)
+            if (httpStatusCode != 200&& httpStatusCode!=0)
             {
 #if DEBUG
                 throw new Exception($"{(HttpStatusCode)httpStatusCode}");
