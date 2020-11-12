@@ -496,7 +496,7 @@ namespace PosTest.ViewModels
 
                         var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                         var args = new object[] { selectedProduct.Category.Name, categoryStatusCode, 300 };
-                        HandleStatusCodeErrors(categoryStatusCode, message, args);
+                        ServiceHelper.HandleStatusCodeErrors(categoryStatusCode, message, args);
 
                     }
 
@@ -506,7 +506,7 @@ namespace PosTest.ViewModels
 
                         var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                         var args = new object[] { selectedProduct.Name, productStatusCode, 300 };
-                        HandleStatusCodeErrors(productStatusCode, message, args);
+                        ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
 
                     }
                 }
@@ -537,7 +537,7 @@ namespace PosTest.ViewModels
 
                                 var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                                 var args = new object[] { product.Name, productStatusCode, 300 };
-                                HandleStatusCodeErrors(productStatusCode, message, args);
+                                ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
 
                             }
                         }
@@ -571,7 +571,7 @@ namespace PosTest.ViewModels
 
                             var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                             var args = new object[] { selectedCategory.Name, selectedCategoryStatusCode, 300 };
-                            HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+                            ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
 
                         }
                     }
@@ -682,7 +682,7 @@ namespace PosTest.ViewModels
 
                     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                     var args = new object[] { sourceProduct.Name, selectedCategoryStatusCode, 300 };
-                    HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+                    ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
 
                 }
 
@@ -692,7 +692,7 @@ namespace PosTest.ViewModels
 
                     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                     var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
-                    HandleStatusCodeErrors(targetProductStatusCode, message, args);
+                    ServiceHelper.HandleStatusCodeErrors(targetProductStatusCode, message, args);
 
                 }
 
@@ -701,7 +701,7 @@ namespace PosTest.ViewModels
 
                     var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                     var args = new object[] { SelectedCategory.Name, selectedCategoryStatusCode, 300 };
-                    HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+                    ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
 
                 }
 
@@ -821,7 +821,7 @@ namespace PosTest.ViewModels
 
                         var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                         var args = new object[] { SelectedFreeProduct.Name, deletedCategoryStatusCode, 300 };
-                        HandleStatusCodeErrors(deletedCategoryStatusCode, message, args);
+                        ServiceHelper.HandleStatusCodeErrors(deletedCategoryStatusCode, message, args);
 
                     }
                 }
@@ -856,7 +856,7 @@ namespace PosTest.ViewModels
 
                         var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                         var args = new object[] { SelectedFreeProduct.Name, statusCode, 300 };
-                        HandleStatusCodeErrors(statusCode, message, args);
+                        ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
 
                     }
                 }
@@ -1055,7 +1055,7 @@ namespace PosTest.ViewModels
 
                             var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                             var args = new object[] { receivedProduct.Name, receivedProductStatusCode, 300 };
-                            HandleStatusCodeErrors(receivedProductStatusCode, message, args);
+                            ServiceHelper.HandleStatusCodeErrors(receivedProductStatusCode, message, args);
 
                         }
 
@@ -1064,7 +1064,7 @@ namespace PosTest.ViewModels
                        
                             var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                             var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
-                            HandleStatusCodeErrors(targetProductStatusCode, message, args);
+                            ServiceHelper.HandleStatusCodeErrors(targetProductStatusCode, message, args);
 
                         }
                     }
@@ -1173,7 +1173,7 @@ namespace PosTest.ViewModels
 
                                var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                                var args = new object[] { targetCategory.Name, targetCategoryStatusCode, 300 };
-                               HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
+                               ServiceHelper.HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
 
                            }
                         }
@@ -1185,7 +1185,7 @@ namespace PosTest.ViewModels
 
                                 var message = "Failed To update Category {Category}   {ERRORCODE}, attempting to resave after {0} milliseconds ";
                                 var args = new object[] { incomingCategory.Name, incomingCategoryStatusCode, 300 };
-                                HandleStatusCodeErrors(incomingCategoryStatusCode, message, args);
+                                ServiceHelper.HandleStatusCodeErrors(incomingCategoryStatusCode, message, args);
 
                             }
                         }
@@ -1241,7 +1241,7 @@ namespace PosTest.ViewModels
                 {
                     var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                     var args = new object[] { targetCategory.Name, targetCategoryStatusCode, 300 };
-                    HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
+                    ServiceHelper.HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
                 }
 
                 if (incomingCategoryStatusCode!=200)
@@ -1249,7 +1249,7 @@ namespace PosTest.ViewModels
 
                    var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                    var args = new object[]{ incomingCategory.Name, incomingCategoryStatusCode, 300 };
-                    HandleStatusCodeErrors(incomingCategoryStatusCode,message, args);
+                    ServiceHelper.HandleStatusCodeErrors(incomingCategoryStatusCode,message, args);
 
                 }
             }
@@ -1327,19 +1327,7 @@ namespace PosTest.ViewModels
         //    ToastNotification.Notify("hi.cos");
         //}
 
-        public void HandleStatusCodeErrors(int httpStatusCode,string message,params object[] args)
-        {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            if (httpStatusCode != 200)
-            {
-#if DEBUG
-                throw new Exception($"{(HttpStatusCode)httpStatusCode}");
-#endif
-
-                logger.Info(message,args);
-
-            }
-        }
+        
     }
     
     public class Comparer<T> : IComparer<T> where T : Ranked

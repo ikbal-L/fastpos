@@ -143,28 +143,66 @@ namespace PosTest.ViewModels
             
             Additives[targetIndex] = receivedAdditive;
             Additives[receivedIndex] = targetAdditive;
-            if (receivedAdditive.Id !=null)
+            try
             {
-                _additiveService.UpdateAdditive(receivedAdditive); 
+                if (receivedAdditive.Id != null)
+                {
+                    int receivedAdditiveStatusCode=_additiveService.UpdateAdditive(receivedAdditive);
+                    if (receivedAdditiveStatusCode!=200)
+                    {
+                        var message = "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                        var args = new object[] { receivedAdditive.Description, receivedAdditiveStatusCode, 300 };
+                        ServiceHelper.HandleStatusCodeErrors(receivedAdditiveStatusCode, message, args);
+                    }
+                }
+                if (targetAdditive.Id != null)
+                {
+                    int targetAdditiveStatusCode=_additiveService.UpdateAdditive(targetAdditive);
+                    if (targetAdditiveStatusCode!=200)
+                    {
+                        {
+                            var message = "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                            var args = new object[] { targetAdditive.Description, targetAdditiveStatusCode, 300 };
+                            ServiceHelper.HandleStatusCodeErrors(targetAdditiveStatusCode, message, args);
+                        }
+                    }
+                }
             }
-            if (targetAdditive.Id != null)
+            catch (Exception)
             {
-                _additiveService.UpdateAdditive(targetAdditive); 
+
+                throw;
             }
         }
 
         public void SaveAdditive()
         {
             IsEditing = false;
-            if (SelectedAdditive.Id == null)
+            try
             {
-                long id;
-                _additiveService.SaveAdditive(SelectedAdditive, out id);
-                SelectedAdditive.Id = id;
+                int statusCode = 0;
+                if (SelectedAdditive.Id == null)
+                {
+
+                    statusCode = _additiveService.SaveAdditive(SelectedAdditive, out long id);
+                    SelectedAdditive.Id = id;
+                }
+                else
+                {
+                    statusCode = _additiveService.UpdateAdditive(SelectedAdditive);
+                }
+
+                if (statusCode!=200)
+                {
+                    var message = "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] { SelectedAdditive.Description, statusCode, 300 };
+                    ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
+                }
             }
-            else
+            catch (Exception)
             {
-                _additiveService.UpdateAdditive(SelectedAdditive);
+
+                throw;
             }
         }
 
@@ -203,9 +241,24 @@ namespace PosTest.ViewModels
             var additive = new Additive(ClipBoardAdditive);
             additive.Rank = rank;
             additive.Id = null;
-            if (_additiveService.SaveAdditive(additive, out var id) == 200)
+            try
             {
-                additive.Id = id;
+                var statusCode = _additiveService.SaveAdditive(additive, out var id);
+                if ( statusCode== 200)
+                {
+                    additive.Id = id;
+                }
+                else
+                {
+                    var message = "Failed To save Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] { additive.Description, statusCode, 300 };
+                    ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             Additives[rank - 1] = additive;

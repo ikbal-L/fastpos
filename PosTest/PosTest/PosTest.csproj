@@ -245,6 +245,7 @@
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\OrderManagmentHelper .cs" />
     <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
+    <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Helpers\ToastNotification.cs" />
     <Compile Include="Properties\Resources.en.Designer.cs">
