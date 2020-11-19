@@ -60,7 +60,7 @@ namespace ServiceLib.Service
             var idCategories = new HashSet<long?>();
             var idAdditivesOfAllProducts = new HashSet<long>();
             products.ToList().ForEach(p => idProducts.Add((long)p.Id));
-            products.ToList().ForEach(p => idCategories.Add(p.CategorieId));
+            products.ToList().ForEach(p => idCategories.Add(p.CategoryId));
             foreach (var p in products)
             {
                 if (p is Platter plat && plat.IdAdditives != null)
@@ -71,29 +71,32 @@ namespace ServiceLib.Service
 
             int getAdditivestatusCode=0,
                 getCategriesStatusCode=0;
-            var additivesOfAllProducts = _restAdditiveService.GetManyAdditives(idAdditivesOfAllProducts, ref getAdditivestatusCode);
+            //TODO Implement /additive/getmany in backend
+            // var additivesOfAllProducts = _restAdditiveService.GetManyAdditives(idAdditivesOfAllProducts, ref getAdditivestatusCode);
+            var additivesOfAllProducts = _restAdditiveService.GetAllAdditives( ref getAdditivestatusCode);
             if (getAdditivestatusCode != 200)
             {
                 throw new MappingException("Error in GetManyAdditives to map with products, StatusCode: " + getAdditivestatusCode.ToString());
             }
+            
             var categories = _restCategoryService.GetManyCategories(idCategories, ref getCategriesStatusCode);
-            if (getCategriesStatusCode != 200)
-            {
-                throw new MappingException("Error in GetManyCategories to map with products, StatusCode: "+ getCategriesStatusCode.ToString());
-            }
+            // if (getCategriesStatusCode != 200)
+            // {
+            //     throw new MappingException("Error in GetManyCategories to map with products, StatusCode: "+ getCategriesStatusCode.ToString());
+            // }
             foreach (var p in products)
             {
-                Category category = categories.Where(c => c.Id == p.CategorieId).FirstOrDefault() ;
+                // Category category = categories.Where(c => c.Id == p.CategoryId).FirstOrDefault() ;
                 
                 IEnumerable<Additive> additives = null;
                 if (p is Platter plat && plat.IdAdditives != null)
                 {
                     additives = GetAdditivesFromCollection(additivesOfAllProducts, plat.IdAdditives);
                 }
-
-                if (category!=null)
+            
+                if (true)
                 {
-                    p.MappingAfterReceiving(category, additives?.ToList()); 
+                    p.MappingAfterReceiving(null, additives?.ToList()); 
                 }
             }
 
@@ -109,7 +112,7 @@ namespace ServiceLib.Service
             }
             int getAdditivestatusCode = 0,
                 getCategryStatusCode = 0;
-            var category = _restCategoryService.GetCategory((long)product.CategorieId, ref getCategryStatusCode);
+            var category = _restCategoryService.GetCategory((long)product.CategoryId, ref getCategryStatusCode);
             if (getCategryStatusCode != 200)
             {
                 throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getCategryStatusCode.ToString());
@@ -171,6 +174,7 @@ namespace ServiceLib.Service
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
             request.AddHeader("content-type", "application/json");
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
             IRestResponse response = client.Execute(request);
             ICollection<Product> products = null;
             if (response.StatusCode == HttpStatusCode.OK)
@@ -187,7 +191,7 @@ namespace ServiceLib.Service
                             {
                                 AvailableStock = platProduct.AvailableStock,
                                 BackgroundString = platProduct.BackgroundString,
-                                CategorieId = platProduct.CategorieId,
+                                CategoryId = platProduct.CategoryId,
                                 Description = platProduct.Description,
                                 Id = platProduct.Id,
                                 IsMuchInDemand = platProduct.IsMuchInDemand,
@@ -238,7 +242,7 @@ namespace ServiceLib.Service
                             {
                                 AvailableStock = platProduct.AvailableStock,
                                 BackgroundString = platProduct.BackgroundString,
-                                CategorieId = platProduct.CategorieId,
+                                CategoryId = platProduct.CategoryId,
                                 Description = platProduct.Description,
                                 Id = platProduct.Id,
                                 IsMuchInDemand = platProduct.IsMuchInDemand,
@@ -294,7 +298,7 @@ namespace ServiceLib.Service
                             {
                                 AvailableStock = platProduct.AvailableStock,
                                 BackgroundString = platProduct.BackgroundString,
-                                CategorieId = platProduct.CategorieId,
+                                CategoryId = platProduct.CategoryId,
                                 Description = platProduct.Description,
                                 Id = platProduct.Id,
                                 IsMuchInDemand = platProduct.IsMuchInDemand,
@@ -354,12 +358,13 @@ namespace ServiceLib.Service
                                 NullValueHandling = NullValueHandling.Ignore
                             });
             Console.WriteLine(json);
-            var url = UrlConfig.ProductUrl.UpdateProduct;
+            var url = UrlConfig.ProductUrl.UpdateProduct+product.Id;
             var client = new RestClient(url);
             var request = new RestRequest(Method.PUT);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
 
             IRestResponse response = client.Execute(request);
 

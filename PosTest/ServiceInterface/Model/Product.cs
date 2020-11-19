@@ -92,7 +92,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        [DataMember] public long? CategorieId { get; set; }
+        [DataMember] public long? CategoryId { get; set; }
 
         public Category Category
         {
@@ -100,7 +100,7 @@ namespace ServiceInterface.Model
             set
             {
                 _category = value;
-                CategorieId = _category?.Id;
+                CategoryId = _category?.Id;
                 NotifyOfPropertyChange(() => Category);
             }
         }
@@ -133,7 +133,7 @@ namespace ServiceInterface.Model
         {
             AvailableStock = platProduct.AvailableStock;
             BackgroundString = platProduct.BackgroundString;
-            CategorieId = platProduct.CategorieId;
+            CategoryId = platProduct.CategoryId;
             Description = platProduct.Description;
             Id = platProduct.Id;
             IsMuchInDemand = platProduct.IsMuchInDemand;
@@ -203,9 +203,9 @@ namespace ServiceInterface.Model
 
         public void MappingBeforeSending()
         {
-            if (this.CategorieId <= 0 && this.Category != null)
+            if (this.CategoryId <= 0 && this.Category != null)
             {
-                this.CategorieId = (long) this.Category.Id;
+                this.CategoryId = (long) this.Category.Id;
             }
 
 
@@ -241,7 +241,7 @@ namespace ServiceInterface.Model
 
         public void MappingAfterReceiving(Category category, List<Additive> additives)
         {
-            if (category != null && this.CategorieId == category.Id)
+            if (category != null && this.CategoryId == category.Id)
             {
                 this.Category = category;
             }

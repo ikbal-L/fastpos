@@ -131,13 +131,14 @@ namespace ServiceInterface.Model
                 {
                     State = (OrderState) _state,
                     StateTime = DateTime.Now,
-                    SessionId = AuthProvider.Instance.SessionId
+                    // SessionId = AuthProvider.Instance.SessionId
                 });
                 NotifyOfPropertyChange();
             }
         }
 
-        [DataMember] public IList<OrderStateElement> OrderStates { get; set; }
+        //TODO Check the necessity of managing order state history   
+        /*[DataMember]*/ public IList<OrderStateElement> OrderStates { get; set; }
 
         //get from state
         public string Color { get; set; }
@@ -288,7 +289,8 @@ namespace ServiceInterface.Model
 
         public Session Session { get; set; }
 
-        [DataMember] public long SessionId { get; set; }
+        // [DataMember]
+        public long SessionId { get; set; }
 
         public Customer Customer
         {

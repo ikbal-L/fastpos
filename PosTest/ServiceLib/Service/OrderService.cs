@@ -161,6 +161,7 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
             IRestResponse response = client.Execute(request);
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;

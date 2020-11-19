@@ -99,6 +99,7 @@ namespace ServiceLib.Service
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddHeader("content-type", "application/json");
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
             string json = JsonConvert.SerializeObject(
                            Newtonsoft.Json.Formatting.None,
                            new JsonSerializerSettings

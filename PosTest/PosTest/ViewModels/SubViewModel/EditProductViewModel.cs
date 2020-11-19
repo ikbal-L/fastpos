@@ -15,6 +15,7 @@ using Caliburn.Micro;
 using PosTest.Helpers;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
@@ -146,7 +147,12 @@ namespace PosTest.ViewModels.SubViewModel
         {
             var comparer = new Comparer<Additive>();
             int StatusCode = 0;
-            var allAdditives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
+            // var allAdditives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
+            var allAdditives = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives,out int status);
+            if (status!=200)
+            {
+                
+            }
             var filteredAdditives = new List<Additive>(allAdditives.Where(a => a.Rank != null));
             filteredAdditives.Sort(comparer);
             Additives = new BindableCollection<Additive>();

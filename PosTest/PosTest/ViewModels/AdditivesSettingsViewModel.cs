@@ -11,6 +11,8 @@ using System.Windows.Input;
 using PosTest.Helpers;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceInterface.StaticValues;
+using ServiceLib.Service;
 
 namespace PosTest.ViewModels
 {
@@ -30,7 +32,12 @@ namespace PosTest.ViewModels
             _additiveService = additiveService;
             _additivePageSize = additivePageSize;
             int additiveStatusCode = 0;
-            _allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
+            // _allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
+            _allAdditives = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives, out int status).ToList();
+            if (status!=200)
+            {
+                
+            }
             _isEditing = false;
             PopulateAdditivesPage();
         }

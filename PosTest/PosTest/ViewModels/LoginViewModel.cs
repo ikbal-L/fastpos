@@ -74,7 +74,8 @@ namespace PosTest.ViewModels
             int resp;
             try
             {
-                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                // resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             }
             catch (AggregateException)
             {
@@ -174,7 +175,8 @@ namespace PosTest.ViewModels
             int resp;
             try
             {
-                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             }
             catch (AggregateException)
             {
@@ -198,7 +200,8 @@ namespace PosTest.ViewModels
         
         public void AdditivesSettings()
         {
-            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            // authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             additiveService = new AdditiveService();
             AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(additiveService,30);
             additivesSettingsViewModel.Parent = this.Parent;

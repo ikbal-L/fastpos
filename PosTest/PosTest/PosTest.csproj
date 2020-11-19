@@ -244,6 +244,7 @@
     <Compile Include="Helpers\DelegateCommandBase.cs" />
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\OrderManagmentHelper .cs" />
+    <Compile Include="Helpers\ProductMapper.cs" />
     <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />

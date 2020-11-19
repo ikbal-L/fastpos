@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Type="si:Product" >
-    <si:Product x:Uid="Pizza Home" Id="1" Name="Pizza Home" Price="5" Unit="Unit" CategorieId="1"/>
-    <si:Product x:Uid="Cocacola" Id="2" Name="Cocacola" Price="20" Unit="Canette" CategorieId="2"/>
-    <si:Product x:Uid="Cocacola light" Id="3" Name="Cocacola light" Price="60" Unit="Canette" CategorieId="2"/>
-    <si:Product x:Uid="Cocacola zero" Id="4" Name="Cocacola zero" Price="65" Unit="Canette" CategorieId="2"/>
-    <si:Product x:Uid="orangina" Id="5" Name="orangina" Price="40" Unit="Canette" CategorieId="2"/>
-    <si:Product x:Uid="hamoude" Id="6" Name="hamoude" Price="40" Unit="Canette" CategorieId="2"/>
+    <si:Product x:Uid="Pizza Home" Id="1" Name="Pizza Home" Price="5" Unit="Unit" CategoryId="1"/>
+    <si:Product x:Uid="Cocacola" Id="2" Name="Cocacola" Price="20" Unit="Canette" CategoryId="2"/>
+    <si:Product x:Uid="Cocacola light" Id="3" Name="Cocacola light" Price="60" Unit="Canette" CategoryId="2"/>
+    <si:Product x:Uid="Cocacola zero" Id="4" Name="Cocacola zero" Price="65" Unit="Canette" CategoryId="2"/>
+    <si:Product x:Uid="orangina" Id="5" Name="orangina" Price="40" Unit="Canette" CategoryId="2"/>
+    <si:Product x:Uid="hamoude" Id="6" Name="hamoude" Price="40" Unit="Canette" CategoryId="2"/>
 </x:Array>
 
 

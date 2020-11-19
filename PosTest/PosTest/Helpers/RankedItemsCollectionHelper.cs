@@ -39,7 +39,7 @@ namespace PosTest.Helpers
                         if (item is Product product && parameter is Category category)
                         {
                             product.Category = category;
-                            product.CategorieId = category.Id;
+                            product.CategoryId = category.Id;
                         }
                     }
                     else

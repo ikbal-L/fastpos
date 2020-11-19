@@ -141,8 +141,10 @@ namespace PosTest.ViewModels
 
             var code = 0;
             var status = 0;
-            var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
-            var waiter = waiterService.GetAllActiveWaiters(ref code);
+            // var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
+            var deliveryMen = delivereyService.GetAllDelivereymen(ref code);
+            // var waiter = waiterService.GetAllActiveWaiters(ref code);
+            var waiter = waiterService.GetAllWaiters(ref code);
             var tables = _orderService.GeAlltTables(ref status);
             var customers = _customerService.GetAllCustomers();
 
@@ -510,7 +512,7 @@ namespace PosTest.ViewModels
                 var status = 0;
                 if (order.Id == null)
                 {
-                    order.Id = _orderService.GetIdmax(ref status) + 1;
+                    // order.Id = _orderService.GetIdmax(ref status) + 1;
                     resp = _orderService.SaveOrder(order,out IEnumerable<string> errors);
                     var logger = NLog.LogManager.GetCurrentClassLogger();
                     if (resp != 200)
@@ -820,7 +822,7 @@ namespace PosTest.ViewModels
         //        if (CurrentCategory != null)
         //            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
         //        CurrentCategory = category;
-        //        FilteredProducts.Filter = (p) => (p as Product).CategorieId.Equals(_currantCategory.Id);
+        //        FilteredProducts.Filter = (p) => (p as Product).CategoryId.Equals(_currantCategory.Id);
 
         //        PaginateProducts(NextOrPrevious.First);
         //    }

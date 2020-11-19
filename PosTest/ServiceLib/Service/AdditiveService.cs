@@ -36,7 +36,7 @@ namespace ServiceLib.Service
 
         public int UpdateAdditive(Additive additive)
         {
-            (var i,var s) = GenericRest.UpdateThing(additive, UrlConfig.AdditiveUrl.UpdateAdditive);
+            (var i,var s) = GenericRest.UpdateThing(additive, UrlConfig.AdditiveUrl.UpdateAdditive+additive.Id);
             return i;
         }
 
@@ -70,6 +70,7 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.DELETE);
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", token);
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
             //request.AddParameter("application/json", "{\n\"id\":1\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             //if (response.StatusCode == HttpStatusCode.OK)
@@ -108,6 +109,7 @@ namespace ServiceLib.Service
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddHeader("content-type", "application/json");
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
             string json = JsonConvert.SerializeObject(ids,
                            Newtonsoft.Json.Formatting.None,
                            new JsonSerializerSettings
@@ -145,12 +147,13 @@ namespace ServiceLib.Service
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
 
             IRestResponse response = client.Execute(request);
 
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.Created)
             {
                 id = long.Parse(response.Content);
             }
@@ -218,6 +221,7 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.GET);
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
             IRestResponse response = client.Execute(request);
             IEnumerable<Additive> additives = null;
             if (response.StatusCode == HttpStatusCode.OK)

@@ -33,6 +33,7 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.GET);
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
             IRestResponse response = client.Execute(request);
             return response;
         }
@@ -52,6 +53,8 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
+            
             IRestResponse response = client.Execute(request);
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
@@ -80,6 +83,7 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", token);
             request.AddHeader("content-type", "application/json");
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
             string json = JsonConvert.SerializeObject(objecToPost,
                            Newtonsoft.Json.Formatting.None,
                            new JsonSerializerSettings
@@ -106,7 +110,7 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.PUT);
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
-
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
             IRestResponse response = client.Execute(request);
 
             //if (response.StatusCode == HttpStatusCode.OK)
@@ -124,6 +128,19 @@ namespace ServiceLib.Service
             request.AddHeader("Authorization", token);
             IRestResponse response = client.Execute(request);
             return response;
+        }
+
+        public static IEnumerable<T> GetAll<T>(string url, out int status)
+        {
+            IRestResponse response = RestGet( url);
+
+            IEnumerable<T> collection = null;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                collection = JsonConvert.DeserializeObject<IEnumerable<T>>(response.Content);
+            }
+            status = (int)response.StatusCode;
+            return collection;
         }
     }
 }

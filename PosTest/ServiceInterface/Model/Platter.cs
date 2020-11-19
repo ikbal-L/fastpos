@@ -24,7 +24,7 @@ namespace ServiceInterface.Model
         {
             AvailableStock = platProduct.AvailableStock;
             BackgroundString = platProduct.BackgroundString;
-            CategorieId = platProduct.CategorieId;
+            CategoryId = platProduct.CategoryId;
             Description = platProduct.Description;
             Id = platProduct.Id;
             IsMuchInDemand = platProduct.IsMuchInDemand;

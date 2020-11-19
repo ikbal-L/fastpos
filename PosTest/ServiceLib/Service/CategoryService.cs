@@ -131,8 +131,9 @@ namespace ServiceLib.Service
             var client = new RestClient(UrlConfig.CategoryUrl.GetAllCategories);
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
-            request.AddHeader("authorization", token);
+            request.AddHeader("Authorization", token);
             request.AddHeader("accept", "application/json");
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
             IRestResponse response = client.Execute(request);
             IEnumerable<Category> categories = null;
             if (response.StatusCode == HttpStatusCode.OK)

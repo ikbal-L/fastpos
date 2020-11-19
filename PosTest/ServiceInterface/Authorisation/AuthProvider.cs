@@ -18,9 +18,9 @@ namespace ServiceInterface.Authorisation
 
         public abstract string AuthorizationToken { get; } 
         
-        public abstract long SessionId { get; }
+        // public abstract long SessionId { get; }
 
-
+        public abstract long AnnexId { get; }
         public static void Initialize<TProvider>() where TProvider : AuthProvider, new()
         {
             _instance = new TProvider();

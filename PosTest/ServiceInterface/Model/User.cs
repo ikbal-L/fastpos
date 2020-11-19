@@ -44,9 +44,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public bool IsActive { get; set; }
 
-        [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Descriptor Descriptor { get; set; } = Descriptor.User;
+        
 
         [DataMember]
         public string BackgroundString
@@ -140,12 +138,3 @@ namespace ServiceInterface.Model
 
 }
 
-namespace ServiceInterface
-{
-    public enum Descriptor
-    {
-        User,
-        Server,
-        Deliverymen
-    }
-}

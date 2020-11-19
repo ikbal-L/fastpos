@@ -67,7 +67,7 @@ namespace PosTest.ViewModels
             CategoryPageSize = categoryPageSize;
             int catStatusCode = 0, prodStatusCode = 0;
 
-            (IEnumerable<Category> categories, IEnumerable<Product> products) =
+            var (categories, products) =
                 _categoriesService.GetAllCategoriesAndProducts(ref catStatusCode, ref prodStatusCode);
             if (catStatusCode != 200 && prodStatusCode != 200) return;
             AllProducts = products.ToList();
@@ -485,17 +485,18 @@ namespace PosTest.ViewModels
                 int productStatusCode = 0;
                 try
                 {
+                    var selectedProductCategoryName = selectedProduct.Category.Name;
                     selectedProduct.Category.ProductIds.Remove((long) selectedProduct.Id);
                     categoryStatusCode = _categoriesService.UpdateCategory(selectedProduct.Category);
                     selectedProduct.Category = null;
-                    selectedProduct.CategorieId = null;
+                    selectedProduct.CategoryId = null;
                     productStatusCode = _productsService.UpdateProduct(selectedProduct);
 
                     if (categoryStatusCode != 200)
                     {
 
                         var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                        var args = new object[] { selectedProduct.Category.Name, categoryStatusCode, 300 };
+                        var args = new object[] { selectedProductCategoryName, categoryStatusCode, 300 };
                         ServiceHelper.HandleStatusCodeErrors(categoryStatusCode, message, args);
 
                     }
@@ -528,7 +529,7 @@ namespace PosTest.ViewModels
                     foreach (var product in selectedCategory.Products)
                     {
                         product.Rank = null;
-                        product.CategorieId = null;
+                        product.CategoryId = null;
                         product.Category = null;
                         int productStatusCode = 0;
                         try
@@ -655,7 +656,7 @@ namespace PosTest.ViewModels
 
             sourceProduct.Rank = targetProduct.Rank;
             sourceProduct.Category = SelectedCategory;
-            sourceProduct.CategorieId = SelectedCategory.Id;
+            sourceProduct.CategoryId = SelectedCategory.Id;
 
 
             int selectedCategoryStatusCode = 0;
@@ -690,33 +691,33 @@ namespace PosTest.ViewModels
 
 
 
-                if (sourceProductStatusCode != 200)
-                {
-
-                    var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] { sourceProduct.Name, selectedCategoryStatusCode, 300 };
-                    ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-
-                }
-
-
-                if (targetProductStatusCode != 200)
-                {
-
-                    var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
-                    ServiceHelper.HandleStatusCodeErrors(targetProductStatusCode, message, args);
-
-                }
-
-                if (selectedCategoryStatusCode != 200)
-                {
-
-                    var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] { SelectedCategory.Name, selectedCategoryStatusCode, 300 };
-                    ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-
-                }
+                // if (sourceProductStatusCode != 200)
+                // {
+                //
+                //     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                //     var args = new object[] { sourceProduct.Name, selectedCategoryStatusCode, 300 };
+                //     ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+                //
+                // }
+                //
+                //
+                // if (targetProductStatusCode != 200&&targetProductStatusCode!=0)
+                // {
+                //
+                //     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                //     var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
+                //     ServiceHelper.HandleStatusCodeErrors(targetProductStatusCode, message, args);
+                //
+                // }
+                //
+                // if (selectedCategoryStatusCode != 200)
+                // {
+                //
+                //     var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                //     var args = new object[] { SelectedCategory.Name, selectedCategoryStatusCode, 300 };
+                //     ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+                //
+                // }
 
             }
             catch (AggregateException)

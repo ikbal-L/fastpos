@@ -83,7 +83,7 @@ namespace ConsoleApp
             {
                 Id = 4,
                 Name = "prod1",
-                CategorieId = 11,
+                CategoryId = 11,
                 Price = 300.00m,
                 BackgroundString = "Green",
                 AvailableStock = 222,

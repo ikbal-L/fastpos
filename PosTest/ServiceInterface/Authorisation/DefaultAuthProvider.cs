@@ -12,15 +12,15 @@ namespace ServiceInterface.Authorisation
         private static User _user;
         private static string[] _userPermissions;
         private string _token;
-        private long _sessionId;
+        private long _annexId;
 
         /// <summary>
         /// Load the operation Access Control List (ACL)
         /// </summary>
-        public DefaultAuthProvider(User user, string token, long sessionId)
+        public DefaultAuthProvider(User user, string token, long annexId)
         {
             _token = token;
-            _sessionId = sessionId;
+            _annexId = annexId;
             _user = user;
             if (_user != null && _user.Roles != null)
             {
@@ -40,7 +40,7 @@ namespace ServiceInterface.Authorisation
 
         public override string AuthorizationToken => _token;
 
-        public override long SessionId => _sessionId;
+        public override long AnnexId => _annexId;
 
         /// <summary>
         /// This method determines whether the user is authorize to perform the requested operation
