@@ -98,7 +98,7 @@
                                 </Border.Style>
                             </Border>
                             <Button x:Uid="Button_1" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" 
-                                    cal:Message.Attach="[Event Click] = [Action OpenProdcutDetail()]">
+                                    cal:Message.Attach="[Event Click] = [Action EditProduct()]">
                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="Plus" Height="20" Width="20"/>
                                 <Button.Style>
                                     <Style x:Uid="Style_5" TargetType="Button">

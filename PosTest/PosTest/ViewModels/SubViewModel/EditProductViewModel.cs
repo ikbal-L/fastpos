@@ -41,8 +41,7 @@ namespace PosTest.ViewModels.SubViewModel
         public EditProductViewModel(ref Product sourceProduct, IProductService productService,
             int additivesPageSize = 30)
         {
-            _product = new Product();
-            Clone(source: ref sourceProduct, target: ref _product);
+            
             this._source = sourceProduct;
 
             this._productService = productService;
@@ -52,7 +51,7 @@ namespace PosTest.ViewModels.SubViewModel
             PopulateAdditivesPage();
 
             this._source = sourceProduct;
-            _product = new Product();
+            _product = new Platter();
             _product = CloneFromSource();
 
             IsSaveEnabled = true;
@@ -71,11 +70,23 @@ namespace PosTest.ViewModels.SubViewModel
                     Price = _source.Price,
                     Unit = _source.Unit
                 };
-                if (Source is Platter)
+                if (Source is Platter|| Source.Id==null)
                 {
-                    product.IsPlatter = Source.IsPlatter;
-                    product.Additives = (Source as Platter).Additives;
-                    product.IdAdditives = (Source as Platter).IdAdditives;
+                    
+                    // product.Additives = (Source as Platter).Additives;
+                    // product.IdAdditives = (Source as Platter).IdAdditives;
+
+                    if (Source.Id != null)
+                    {
+                        product.IsPlatter = Source.IsPlatter;
+                        product.IdAdditives = (Source as Platter).IdAdditives;
+                        product.Additives = (Source as Platter).Additives;
+                    }
+                    else
+                    {
+                        product.IdAdditives = new List<long>();
+                        product.Additives = new BindableCollection<Additive>();
+                    }
                 }
 
                 Set(ref _name, _source.Name);
@@ -266,9 +277,14 @@ namespace PosTest.ViewModels.SubViewModel
             target.Unit = source.Unit;
             if (target is Platter)
             {
-                (target as Platter).IdAdditives = (source as Platter).IdAdditives;
-                (target as Platter).Additives = (source as Platter).Additives;
+                
+                  (target as Platter).IdAdditives = (source as Platter).IdAdditives;
+                  (target as Platter).Additives = (source as Platter).Additives;
+                
+               
+
             }
+
         }
 
         public Product Source

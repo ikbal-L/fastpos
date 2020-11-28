@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ServiceInterface.Model
 {
-    public class OrderItem : PropertyChangedBase
+    public class OrderItem : PropertyChangedBase,IValidatableObject
     {
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
@@ -44,11 +45,19 @@ namespace ServiceInterface.Model
         
         [DataMember]
         public long ProductId { get; set; }
-        
+
+        public string ProductName
+        {
+            get => _productName;
+            set => Set(ref _productName, value);
+        }
+
         [DataMember]
+        [Range(0,double.MaxValue)]
         public decimal UnitPrice { get; set; }
 
         [DataMember]
+        [Range(1,float.MaxValue)]
         public float Quantity 
         { 
             get => _quantity;
@@ -67,6 +76,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
+        [Range(0, double.MaxValue)]
         public decimal Total {
             get => (decimal)Quantity * UnitPrice;          
         }
@@ -166,6 +176,7 @@ namespace ServiceInterface.Model
         private decimal _totalDiscountAmount;
         private DateTime? _timeStamp;
         private OrderItemState _state;
+        private string _productName;
 
         public BindableCollection<Additive> Additives 
         { 
@@ -228,7 +239,60 @@ namespace ServiceInterface.Model
            
         }
 
-        
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (UnitPrice<0)
+            {
+                yield return new ValidationResult(
+                    $"Unit price must be a positive number.",
+                    new[] { nameof(UnitPrice) });
+            }
+
+            if (Quantity<1)
+            {
+                yield return new ValidationResult(
+                    $"Quantity must be greater than or equal to 1.",
+                    new []{nameof(Quantity)});
+            }
+
+            if (Total < 0)
+            {
+                yield return new ValidationResult(
+                    $"Total must be a positive number.",
+                    new[] { nameof(UnitPrice) });
+            }
+
+            if (TotalDiscountAmount>UnitPrice)
+            {
+                yield return new ValidationResult(
+                    $"Total discount amount must not exceed the value of Unit price ",
+                    new []{nameof(TotalDiscountAmount)});
+            }
+
+            if (TotalDiscountAmount < 0)
+            {
+                yield return new ValidationResult(
+                    $"Total discount amount must be a positive number.",
+                    new[] { nameof(UnitPrice) });
+            }
+
+            if (DiscountPercentatge>100)
+            {
+                yield return new ValidationResult(
+                    $"Discount Percentage must not exceed 100%",
+                    new[] { nameof(TotalDiscountAmount) });
+            }
+
+            if (DiscountPercentatge <0)
+            {
+                yield return new ValidationResult(
+                    $"Discount Percentage must be a positive value",
+                    new[] { nameof(TotalDiscountAmount) });
+            }
+
+
+        }
     }
 
     public enum OrderItemState

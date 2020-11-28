@@ -29,14 +29,13 @@ namespace ServiceLib.Service
 
         public int SaveAdditive(Additive additive, out long id)
         {
-            id = -1;
-            if (additive == null) return -1;
-            return _restAdditiveService.SaveAdditive(additive, out id);
+            return GenericRest.SaveThing(additive, UrlConfig.AdditiveUrl.SaveAdditive, out id);
+            // return _restAdditiveService.SaveAdditive(additive, out id);
         }
 
         public int UpdateAdditive(Additive additive)
         {
-            (var i,var s) = GenericRest.UpdateThing(additive, UrlConfig.AdditiveUrl.UpdateAdditive+additive.Id);
+            var (i, s) = GenericRest.UpdateThing(additive, UrlConfig.AdditiveUrl.UpdateAdditive+additive.Id);
             return i;
         }
 

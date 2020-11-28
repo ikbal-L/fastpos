@@ -481,125 +481,138 @@ namespace PosTest.ViewModels
 
             if (SelectedT is Product selectedProduct)
             {
-                int categoryStatusCode = 0;
-                int productStatusCode = 0;
-                try
-                {
-                    var selectedProductCategoryName = selectedProduct.Category.Name;
-                    selectedProduct.Category.ProductIds.Remove((long) selectedProduct.Id);
-                    categoryStatusCode = _categoriesService.UpdateCategory(selectedProduct.Category);
-                    selectedProduct.Category = null;
-                    selectedProduct.CategoryId = null;
-                    productStatusCode = _productsService.UpdateProduct(selectedProduct);
-
-                    if (categoryStatusCode != 200)
-                    {
-
-                        var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                        var args = new object[] { selectedProductCategoryName, categoryStatusCode, 300 };
-                        ServiceHelper.HandleStatusCodeErrors(categoryStatusCode, message, args);
-
-                    }
-
-
-                    if (productStatusCode != 200)
-                    {
-
-                        var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                        var args = new object[] { selectedProduct.Name, productStatusCode, 300 };
-                        ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
-
-                    }
-                }
-                catch (AggregateException)
-                {
-                    ToastNotification.Notify("Problem connecting to server");
-                }
-                catch (Exception e)
-                {
-                    NLog.LogManager.GetCurrentClassLogger().Error(e.Message);
-                }
+                RemoveProductFromList<T>(selectedProduct);
             }
 
             if (SelectedT is Category selectedCategory)
             {
                 //TODO Fixing removal of categories from the current Categories list
-                if (selectedCategory.Products != null || selectedCategory.Products?.Count > 0)
-                {
-                    foreach (var product in selectedCategory.Products)
-                    {
-                        product.Rank = null;
-                        product.CategoryId = null;
-                        product.Category = null;
-                        int productStatusCode = 0;
-                        try
-                        {
-                            productStatusCode = _productsService.UpdateProduct(product);
 
 
-                            if (productStatusCode != 200)
-                            {
-
-                                var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                                var args = new object[] { product.Name, productStatusCode, 300 };
-                                ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
-
-                            }
-                        }
-                        catch (Exception e)
-                        {
-#if DEBUG
-                            throw;
-#endif
-                            NLog.LogManager.GetCurrentClassLogger().Error(e);
-                        }
-
-
-                        if (!FreeProducts.Contains(product))
-                        {
-                            FreeProducts.Add(product);
-                        }
-                    }
-
-                    selectedCategory.Products.Clear();
-                    selectedCategory.ProductIds.Clear();
-                }
-
-                // implementing  update many products in the backend
-                CurrentProducts.Clear();
-                SelectedCategory = null;
-
-
-                try
-                {
-                    int selectedCategoryStatusCode = _categoriesService.UpdateCategory(selectedCategory);
-                    if (selectedCategoryStatusCode!=200)
-                    {
-                        {
-
-                            var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                            var args = new object[] { selectedCategory.Name, selectedCategoryStatusCode, 300 };
-                            ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-
-                        }
-                    }
-                }
-                catch (AggregateException)
-                {
-                    ToastNotification.Notify("Problem connecting to server");
-                }
-                catch (Exception e)
-                {
-#if DEBUG
-                    throw;
-#endif
-                    NLog.LogManager.GetCurrentClassLogger().Error(e);
-                }
+                RemoveCategoryFromList<T>(selectedCategory);
             }
 
             CurrentTs[index] = new T {Rank = rank};
             FreeTs.Add(freeT);
             SelectedFreeT = freeT;
+        }
+
+        private void RemoveCategoryFromList<T>(Category selectedCategory) where T : Ranked, new()
+        {
+            ManageCategoryProductsForDeletion<T>(selectedCategory);
+
+            // implementing  update many products in the backend
+            CurrentProducts.Clear();
+            SelectedCategory = null;
+
+
+            try
+            {
+                int selectedCategoryStatusCode = _categoriesService.UpdateCategory(selectedCategory);
+                if (selectedCategoryStatusCode != 200)
+                {
+                    {
+                        var message =
+                            "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                        var args = new object[] {selectedCategory.Name, selectedCategoryStatusCode, 300};
+                        ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
+                    }
+                }
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Problem connecting to server");
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                throw;
+#endif
+                NLog.LogManager.GetCurrentClassLogger().Error(e);
+            }
+        }
+
+        private void RemoveProductFromList<T>(Product selectedProduct) where T : Ranked, new()
+        {
+            int categoryStatusCode = 0;
+            int productStatusCode = 0;
+            try
+            {
+                var selectedProductCategoryName = selectedProduct.Category.Name;
+                selectedProduct.Category.ProductIds.Remove((long) selectedProduct.Id);
+                categoryStatusCode = _categoriesService.UpdateCategory(selectedProduct.Category);
+                selectedProduct.Category = null;
+                selectedProduct.CategoryId = null;
+                productStatusCode = _productsService.UpdateProduct(selectedProduct);
+
+                if (categoryStatusCode != 200)
+                {
+                    var message =
+                        "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] {selectedProductCategoryName, categoryStatusCode, 300};
+                    ServiceHelper.HandleStatusCodeErrors(categoryStatusCode, message, args);
+                }
+
+
+                if (productStatusCode != 200)
+                {
+                    var message =
+                        "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                    var args = new object[] {selectedProduct.Name, productStatusCode, 300};
+                    ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
+                }
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Problem connecting to server");
+            }
+            catch (Exception e)
+            {
+                NLog.LogManager.GetCurrentClassLogger().Error(e.Message);
+            }
+        }
+
+        private void ManageCategoryProductsForDeletion<T>(Category selectedCategory) where T : Ranked, new()
+        {
+            if (selectedCategory.Products != null || selectedCategory.Products?.Count > 0)
+            {
+                foreach (var product in selectedCategory.Products)
+                {
+                    product.Rank = null;
+                    product.CategoryId = null;
+                    product.Category = null;
+                    int productStatusCode = 0;
+                    try
+                    {
+                        productStatusCode = _productsService.UpdateProduct(product);
+
+
+                        if (productStatusCode != 200)
+                        {
+                            var message =
+                                "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
+                            var args = new object[] {product.Name, productStatusCode, 300};
+                            ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+#if DEBUG
+                        throw;
+#endif
+                        NLog.LogManager.GetCurrentClassLogger().Error(e);
+                    }
+
+
+                    if (!FreeProducts.Contains(product))
+                    {
+                        FreeProducts.Add(product);
+                    }
+                }
+
+                selectedCategory.Products.Clear();
+                selectedCategory.ProductIds.Clear();
+            }
         }
 
 
@@ -1278,7 +1291,7 @@ namespace PosTest.ViewModels
             {
                 int targetCategoryStatusCode=0;
                 int incomingCategoryStatusCode=0;
-                if (targetCategory.Id != null)
+                if (targetCategory?.Id != null)
                 {
                     targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory);
                 }
@@ -1286,7 +1299,7 @@ namespace PosTest.ViewModels
                 incomingCategoryStatusCode = _categoriesService.UpdateCategory(incomingCategory);
                 var logger = NLog.LogManager.GetCurrentClassLogger();
                 
-                if (targetCategoryStatusCode!=200)
+                if (targetCategoryStatusCode!=200 && targetCategoryStatusCode!=0)
                 {
                     var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
                     var args = new object[] { targetCategory.Name, targetCategoryStatusCode, 300 };

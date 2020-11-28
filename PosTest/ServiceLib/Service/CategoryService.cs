@@ -91,10 +91,11 @@ namespace ServiceLib.Service
             return _restCategoryService.SaveCategories(categories);
         }
 
-        public int SaveCategory(Category category, ref long Id)
+        public int SaveCategory(Category category, out long id)
         {
             category.MappingBeforeSending();
-            return _restCategoryService.SaveCategory(category, ref Id);
+            return GenericRest.SaveThing(category,UrlConfig.CategoryUrl.SaveCategory,out id);
+            // return _restCategoryService.SaveCategory(category, ref id);
         }
 
         public int UpdateCategory(Category category)
@@ -227,8 +228,9 @@ namespace ServiceLib.Service
             return (int)response.StatusCode; ;
         }
 
-        public int SaveCategory(Category category ,ref long Id)
+        public int SaveCategory(Category category ,out long id)
         {
+            id = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(category,
@@ -252,7 +254,7 @@ namespace ServiceLib.Service
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                Id = long.Parse(response.Content);
+                id = long.Parse(response.Content);
             }
             return (int)response.StatusCode;
 
@@ -269,7 +271,7 @@ namespace ServiceLib.Service
                                 NullValueHandling = NullValueHandling.Ignore
                             });
 
-            var url = UrlConfig.CategoryUrl.UpdateCategory;
+            var url = UrlConfig.CategoryUrl.UpdateCategory+category.Id;
             var client = new RestClient(url);
             var request = new RestRequest(Method.PUT);
             request.AddHeader("cache-control", "no-cache");

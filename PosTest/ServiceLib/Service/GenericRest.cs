@@ -38,8 +38,9 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static int SaveThing<T>(T thing, string url)
+        public static int SaveThing<T>(T thing, string url, out long id)
         {
+            id = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(thing,
@@ -58,6 +59,10 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
+            if (response.StatusCode==HttpStatusCode.Created)
+            {
+                long.TryParse(response.Content,out id);
+            }
             return (int)response.StatusCode;
         }
 

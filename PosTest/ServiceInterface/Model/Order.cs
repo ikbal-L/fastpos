@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -60,7 +61,9 @@ namespace ServiceInterface.Model
 
         [DataMember] public string BuyerId { get; set; }
 
-        [DataMember] public DateTime OrderTime { get; set; }
+        [DataMember] 
+        [Required]
+        public DateTime OrderTime { get; set; }
 
         public Delivereyman Delivereyman
         {
@@ -87,6 +90,7 @@ namespace ServiceInterface.Model
         [DataMember] public long? WaiterId { get; set; }
 
         [DataMember]
+        [Required]
         public TimeSpan ElapsedTime
         {
             get => _elapsedTime;

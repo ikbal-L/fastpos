@@ -1126,7 +1126,7 @@ namespace PosTest.ViewModels
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
                     {
-                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber});
+                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber},out long id);
                         if (status2 == 200)
                         {
                             ToastNotification.Notify("Creation of virtual table", 1);

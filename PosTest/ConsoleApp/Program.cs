@@ -76,6 +76,7 @@ namespace ConsoleApp
 
         }
 
+
         void Run()
         {
             Compose();
@@ -89,33 +90,41 @@ namespace ConsoleApp
                 AvailableStock = 222,
                 IsNotifying = true
             };
+
             //var status = productService.SaveProduct(p);
-            var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id=1});
+            // var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id=1});
+            var token = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id=1});
             //var resp1 = productService.SaveProducts(FakeServices.Products);
             //var resp2 = categorieService.SaveCategories(FakeServices.Categories);
             //var resp3 = additiveService.SaveAdditives(FakeServices.Additives);
             int getProductsStatusCode = 0;
             //    getCategoriesStatusCode = 0, code = 0;
-            var prods =  productService.GetAllProducts(ref getProductsStatusCode);
-            //var cats = categorieService.GetAllCategories(ref getCategoriesStatusCode);
-            //var adds = additiveService.GetAllAdditives(ref code);
+            // var prods =  productService.GetAllProducts(ref getProductsStatusCode);
+            var t1 = DateTime.Now;
+            var savedCode = GenericRest.SaveThing(p, UrlConfig.ProductUrl.SaveProduct, out long id);
+            var t2 = DateTime.Now;
+            Console.WriteLine(t2-t1);
 
-            Order o = new Order
-            {
-                State = OrderState.Ready
-            };
-
-            int? a;
-
-
-            //orderService.SaveOrder(o);
-            var status = 0;
-            //var prods = GenericRest.GetManyThings<Platter>(new List<long> { 1, 2, 3, 4 }, UrlConfig.ProductUrl.GetManyProducts, ref status);
-            //var men = delivereyService.GetAllActiveDelivereymen(ref status);
-            //Console.WriteLine(men.Count());
-
-            (IEnumerable<long> ids, var status1) = productService.UpdateManyProducts(prods.Where(pr => pr.Id == 41 || pr.Id == 42));
-            Console.WriteLine(ids.Count());
+            
+            // //var cats = categorieService.GetAllCategories(ref getCategoriesStatusCode);
+            // //var adds = additiveService.GetAllAdditives(ref code);
+            //
+            // // Order o = new Order
+            // // {
+            // //     State = OrderState.Ready
+            // // };
+            // //
+            // // int? a;
+            //
+            //
+            // //orderService.SaveOrder(o);
+            // var status = 0;
+            // //var prods = GenericRest.GetManyThings<Platter>(new List<long> { 1, 2, 3, 4 }, UrlConfig.ProductUrl.GetManyProducts, ref status);
+            // //var men = delivereyService.GetAllActiveDelivereymen(ref status);
+            // //Console.WriteLine(men.Count());
+            //
+            // (IEnumerable<long> ids, var status1) = productService.UpdateManyProducts(prods.Where(pr => pr.Id == 41 || pr.Id == 42));
+            // Console.WriteLine(ids.Count());
             Console.ReadKey();
 
         }

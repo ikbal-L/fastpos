@@ -76,6 +76,11 @@ namespace PosTest.ViewModels
             {
                 // resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
                 resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                // resp = authService.Authenticate(new User(){Username = "admin",Password = "admin",Agent = Agent.Desktop});
+                int statusCode = 0;
+                
+               
+
             }
             catch (AggregateException)
             {

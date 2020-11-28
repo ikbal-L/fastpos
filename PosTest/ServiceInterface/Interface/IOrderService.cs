@@ -10,10 +10,9 @@ namespace ServiceInterface.Interface
         int SaveOrder(Order order,out IEnumerable<string> errors);
         int UpdateOrder(Order order);
         int DeleteOrder(long orderId);
-        long? GetIdmax(ref int statusCode);
         Table GetTableByNumber(int tableNumber, ref int statusCode);
         Table GetTable(int id, ref int statusCode);
-        int SaveTable(Table table);
+        int SaveTable(Table table ,out long id);
 
         IEnumerable<Table> GeAlltTables(ref int statusCode);
     }

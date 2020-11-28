@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -17,23 +18,29 @@ namespace ServiceInterface.Model
         private string _backgroundString;
         private Brush _background;
         private Color? _backgroundColor;
+        private Agent _agent;
+        private bool? _isActive;
 
         [DataMember]
         public long Id { get; set; }
 
         [DataMember]
+        [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
 
         [DataMember]
+        [Required(AllowEmptyStrings = false)]
         public string Username { get; set; }
 
         [DataMember]
+        [Required(AllowEmptyStrings = false)]
         public string Password { get; set; }
 
         [DataMember]
         public string PinCode { get; set; }
 
         [DataMember]
+        [Phone]
         public string PhoneNumber { get; set; }
 
         public List<Role> Roles { get; set; }
@@ -42,11 +49,15 @@ namespace ServiceInterface.Model
         public List<long> RoleIds { get; set; }
 
         [DataMember]
-        public bool IsActive { get; set; }
+        public bool IsActive
+        {
+            get { return (bool) (_isActive==null?true:_isActive); }
+            set => Set(ref _isActive, value);
+        }
 
-        
 
         [DataMember]
+        [Required(AllowEmptyStrings = false)]
         public string BackgroundString
         {
             get => _backgroundString ?? "#f39c12";
@@ -97,7 +108,11 @@ namespace ServiceInterface.Model
             }
         }
 
-
+        public Agent Agent
+        {
+            get => _agent;
+            set => Set(ref _agent, value);
+        }
     }
 
     [DataContract]
@@ -134,6 +149,11 @@ namespace ServiceInterface.Model
         [DataMember]
         public string[] Permissions { get; set; }
 
+    }
+
+    public enum Agent
+    {
+        Desktop,Mobile,Web
     }
 
 }

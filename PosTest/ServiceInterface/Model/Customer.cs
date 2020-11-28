@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -14,9 +15,11 @@ namespace ServiceInterface.Model
         public long Id { get; set; }
 
         [DataMember]
+        [Required(ErrorMessage = "Customer Name must not be null or empty",AllowEmptyStrings = false)]
         public string Name { get; set; }
 
         [DataMember]
+        [Phone(ErrorMessage = "Enter a valid phone number ")]
         public string Mobile { get; set; }
     }    
 }

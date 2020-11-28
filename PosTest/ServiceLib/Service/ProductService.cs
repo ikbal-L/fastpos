@@ -131,14 +131,15 @@ namespace ServiceLib.Service
             return product;
         }
 
-        public int SaveProduct(Product product, ref long Id)
+        public int SaveProduct(Product product, ref long id)
         {
             if (product == null)
             {
                 return -1;
             }
             product.MappingBeforeSending();
-            return _restProductService.SaveProduct(product, ref  Id);
+            return GenericRest.SaveThing(product,UrlConfig.ProductUrl.SaveProduct,out id);
+            // return _restProductService.SaveProduct(product, ref  Id);
         }
 
         public int SaveProducts(IEnumerable<Product> products)
@@ -371,7 +372,7 @@ namespace ServiceLib.Service
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
 
-            return (int)response.StatusCode;
+             return (int)response.StatusCode;
         }
 
         public int SaveProducts(IEnumerable<Product> products)

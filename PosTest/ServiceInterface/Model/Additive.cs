@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
 using System.Windows.Media;
@@ -34,6 +35,8 @@ namespace ServiceInterface.Model
         [DataMember] public long? Id { get; set; }
 
         [DataMember]
+        [Required(ErrorMessage = "Description must not be Null or Empty")]
+        [MinLength(5,ErrorMessage = "Description must not be under 5 charac")]
         public string Description
         {
             get => _description;

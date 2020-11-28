@@ -205,7 +205,7 @@ namespace PosTest.ViewModels
                     statusCode = _additiveService.UpdateAdditive(SelectedAdditive);
                 }
 
-                if (statusCode != 200)
+                if (statusCode != 200 && statusCode!=201)
                 {
                     var message =
                         "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";

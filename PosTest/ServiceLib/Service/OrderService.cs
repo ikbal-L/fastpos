@@ -30,17 +30,6 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public long? GetIdmax(ref int statusCode)
-        {
-
-            var idmax = _restOrderService.GetIdmax(ref statusCode);
-            /*if (idmax==null)
-            {
-                throw new ArgumentNullException("idmax is null");
-            }*/
-            return idmax;
-        }
-
         public IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds, ref int statusCode)
         {
             throw new NotImplementedException();
@@ -68,9 +57,9 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
         }
 
-        public int SaveTable(Table table)
+        public int SaveTable(Table table,out long id)
         {
-            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable);
+            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out  id);
         }
 
         public IEnumerable<Table> GeAlltTables(ref int statusCode)
@@ -266,9 +255,9 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
         }
 
-        public int SaveTable(Table table)
+        public int SaveTable(Table table,out long id)
         {
-            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable);
+            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out id);
         }
 
         public IEnumerable<Table> GeAlltTables(ref int statusCode)
@@ -300,9 +289,9 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<Delivereyman>(UrlConfig.DelivereyUrl.GetDeliverymen+id.ToString(), ref statusCode);
         }
 
-        public int SaveDelivereyman(Delivereyman delivereyman)
+        public int SaveDelivereyman(Delivereyman delivereyman,out long id)
         {
-            return GenericRest.SaveThing(delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman);
+            return GenericRest.SaveThing(delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman, out id);
         }
 
         public int UpdateDelivereyman(Delivereyman delivereyman)
@@ -334,9 +323,9 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public int SaveWaiter(Waiter Waiter)
+        public int SaveWaiter(Waiter waiter ,out long id)
         {
-            throw new NotImplementedException();
+            return GenericRest.SaveThing(UrlConfig.WaiterUrl.GetAllWaiters,UrlConfig.WaiterUrl.SaveWaiter,out id);
         }
 
         public int UpdateWaiter(Waiter Waiter)

@@ -242,6 +242,7 @@
     <Compile Include="Extensions\ListPaginationEx.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
+    <Compile Include="Helpers\EntityValidationHelper.cs" />
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\OrderManagmentHelper .cs" />
     <Compile Include="Helpers\ProductMapper.cs" />

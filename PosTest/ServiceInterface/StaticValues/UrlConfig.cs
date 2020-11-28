@@ -47,7 +47,7 @@ namespace ServiceInterface.StaticValues
             public static string GetCategory = hostname1 +CategoryApiUrl +"/get/";
 
             public static string DeleteCategory = hostname1 +CategoryApiUrl+ "/delete/";
-            public static string UpdateCategory = hostname1 +CategoryApiUrl +"/update";
+            public static string UpdateCategory = hostname1 +CategoryApiUrl +"/put/";
         }        
         
         public static class OrderUrl
@@ -114,6 +114,7 @@ namespace ServiceInterface.StaticValues
         {
             static string hostname = "http://192.168.1.7:5000/";
             // public static string Authenticate = hostname1 + "auth/login";
+            public static string GetUserAnnexesIds = hostname1 + "config/" + "user/getannexes/";
             public static string Authenticate = hostname1 + "login";
         }
     }

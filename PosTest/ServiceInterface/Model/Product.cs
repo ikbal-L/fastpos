@@ -15,7 +15,6 @@ namespace ServiceInterface.Model
     public class Product : Ranked
     {
         private string _backgroundString = null;
-        private long _categoryId;
         private bool _isMuchInDemand;
         private string _description;
         private string _name;
@@ -28,9 +27,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required(ErrorMessage = "Product Name must not be Null or Empty")]
-        [MaxLength(20, ErrorMessage = "Product Name must not exceed 10 characters ")]
         [MinLength(5, ErrorMessage = "Product Name must not be under 5 characters ")]
-        [RegularExpression(@"^[a-zA-Z0-9_ ]+$", ErrorMessage = "Product Name must only contain letters (a-z, A-Z).")]
         public string Name
         {
             get => _name;
@@ -42,10 +39,6 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        [Required(ErrorMessage = "Product Description must not be Null or Empty")]
-        [MaxLength(10, ErrorMessage = "Product Description must not exceed 10 characters ")]
-        [MinLength(5, ErrorMessage = "Product Description must not be under 5 characters ")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Product Description must only contain letters (a-z, A-Z).")]
         public string Description
         {
             get => _description;
@@ -57,8 +50,8 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        [Required(ErrorMessage = "Price is required")]
-        [RegularExpression(@"\-?\d+\.\d+",ErrorMessage = "Product Price must be a Decimal")]
+        // [Required(ErrorMessage = "Price is required")]
+        // [RegularExpression(@"\-?\d+\.\d+",ErrorMessage = "Product Price must be a Decimal")]
         public decimal Price
         {
             get => _price;
@@ -70,7 +63,6 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        [RegularExpression(@"[0-9]*$",ErrorMessage = "Product unit number must be a Number")]
         public string Unit
         {
             get => _unit;
@@ -92,7 +84,16 @@ namespace ServiceInterface.Model
             }
         }
 
-        [DataMember] public long? CategoryId { get; set; }
+        [DataMember]
+        public long? CategoryId
+        {
+            get => _categoryId;
+            set
+            {
+                Set(ref _categoryId, value);
+         
+            }
+        }
 
         public Category Category
         {
@@ -124,6 +125,7 @@ namespace ServiceInterface.Model
 
         private Color? _backgroundColor;
         private bool _isSelected;
+        private long? _categoryId;
 
         public Product()
         {
@@ -147,6 +149,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
+        [Required]
         public string BackgroundString
         {
             get => _backgroundString ?? (_backgroundString = "#ff12eaf3");
@@ -208,6 +211,8 @@ namespace ServiceInterface.Model
                 this.CategoryId = (long) this.Category.Id;
             }
 
+            
+
 
             if (this is Platter plat)
             {
@@ -237,6 +242,17 @@ namespace ServiceInterface.Model
                         }
                     }
             }
+
+
+            if (this.CategoryId == null)
+            {
+                this.Rank = null;
+            }
+
+            if (this.Rank == null)
+            {
+                this.CategoryId = null;
+            }
         }
 
         public void MappingAfterReceiving(Category category, List<Additive> additives)
@@ -244,6 +260,7 @@ namespace ServiceInterface.Model
             if (category != null && this.CategoryId == category.Id)
             {
                 this.Category = category;
+                this.CategoryId = category.Id;
             }
 
             //else
