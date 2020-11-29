@@ -27,9 +27,9 @@ namespace ServiceLib.Service
         }
 
 
-        public int SaveAdditive(Additive additive, out long id)
+        public int SaveAdditive(Additive additive, out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(additive, UrlConfig.AdditiveUrl.SaveAdditive, out id);
+            return GenericRest.SaveThing(additive, UrlConfig.AdditiveUrl.SaveAdditive, out id,out errors);
             // return _restAdditiveService.SaveAdditive(additive, out id);
         }
 
@@ -128,9 +128,10 @@ namespace ServiceLib.Service
             return additives;
         }
 
-        public int SaveAdditive(Additive additive, out long id)
+        public int SaveAdditive(Additive additive, out long id,out IEnumerable<string> errors)
         {
             id = -1;
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(additive,

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using ServiceInterface.Model;
 using System;
+using RestSharp.Serialization.Json;
 
 namespace ServiceLib.Service
 {
@@ -38,9 +39,10 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static int SaveThing<T>(T thing, string url, out long id)
+        public static int SaveThing<T>(T thing, string url, out long id,out IEnumerable<string> errors)
         {
             id = -1;
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(thing,
@@ -62,6 +64,12 @@ namespace ServiceLib.Service
             if (response.StatusCode==HttpStatusCode.Created)
             {
                 long.TryParse(response.Content,out id);
+                
+            }
+
+            if ((int)response.StatusCode == 422)
+            {
+                errors =JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
             }
             return (int)response.StatusCode;
         }

@@ -35,10 +35,12 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public int SaveOrder(Order order, out IEnumerable<string> errors)
+        public int SaveOrder(Order order,out long id ,out IEnumerable<string> errors)
         {
             order.MappingBeforeSending();
-            return _restOrderService.SaveOrder(order,out errors);
+            
+            return GenericRest.SaveThing(order,UrlConfig.OrderUrl.SaveOrder,out id,out errors);
+            // return _restOrderService.SaveOrder(order,out errors);
         }
 
         public int UpdateOrder(Order order)
@@ -57,9 +59,9 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
         }
 
-        public int SaveTable(Table table,out long id)
+        public int SaveTable(Table table,out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out  id);
+            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out  id,out errors);
         }
 
         public IEnumerable<Table> GeAlltTables(ref int statusCode)
@@ -134,8 +136,9 @@ namespace ServiceLib.Service
             return orders;
         }
 
-        public int SaveOrder(Order order, out IEnumerable<string> errors)
+        public int SaveOrder(Order order,out long id, out IEnumerable<string> errors)
         {
+            id = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(order,
@@ -255,9 +258,9 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
         }
 
-        public int SaveTable(Table table,out long id)
+        public int SaveTable(Table table,out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out id);
+            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out id,out errors);
         }
 
         public IEnumerable<Table> GeAlltTables(ref int statusCode)
@@ -289,9 +292,9 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<Delivereyman>(UrlConfig.DelivereyUrl.GetDeliverymen+id.ToString(), ref statusCode);
         }
 
-        public int SaveDelivereyman(Delivereyman delivereyman,out long id)
+        public int SaveDelivereyman(Delivereyman delivereyman,out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman, out id);
+            return GenericRest.SaveThing(delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman, out id,out errors);
         }
 
         public int UpdateDelivereyman(Delivereyman delivereyman)
@@ -323,9 +326,9 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public int SaveWaiter(Waiter waiter ,out long id)
+        public int SaveWaiter(Waiter waiter ,out long id, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(UrlConfig.WaiterUrl.GetAllWaiters,UrlConfig.WaiterUrl.SaveWaiter,out id);
+            return GenericRest.SaveThing(UrlConfig.WaiterUrl.GetAllWaiters,UrlConfig.WaiterUrl.SaveWaiter,out id, out errors);
         }
 
         public int UpdateWaiter(Waiter Waiter)

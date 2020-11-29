@@ -94,7 +94,7 @@ namespace ServiceLib.Service
         public int SaveCategory(Category category, out long id)
         {
             category.MappingBeforeSending();
-            return GenericRest.SaveThing(category,UrlConfig.CategoryUrl.SaveCategory,out id);
+            return GenericRest.SaveThing(category,UrlConfig.CategoryUrl.SaveCategory,out id, out IEnumerable<string> errors);
             // return _restCategoryService.SaveCategory(category, ref id);
         }
 

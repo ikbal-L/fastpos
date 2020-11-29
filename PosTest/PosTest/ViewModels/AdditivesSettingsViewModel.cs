@@ -197,7 +197,7 @@ namespace PosTest.ViewModels
                 if (SelectedAdditive.Id == null)
                 {
 
-                    statusCode = _additiveService.SaveAdditive(SelectedAdditive, out long id);
+                    statusCode = _additiveService.SaveAdditive(SelectedAdditive, out long id, out IEnumerable<string> errors);
                     SelectedAdditive.Id = id;
                 }
                 else
@@ -263,7 +263,7 @@ namespace PosTest.ViewModels
             additive.Id = null;
             try
             {
-                var statusCode = _additiveService.SaveAdditive(additive, out var id);
+                var statusCode = _additiveService.SaveAdditive(additive, out var id, out IEnumerable<string> errors);
                 if (statusCode == 200)
                 {
                     additive.Id = id;

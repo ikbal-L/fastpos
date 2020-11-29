@@ -7,7 +7,7 @@ namespace ServiceInterface.Interface
     {
         IEnumerable<Delivereyman> GetAllDelivereymen(ref int statusCode);
         IEnumerable<Delivereyman> GetAllActiveDelivereymen(ref int statusCode);
-        int SaveDelivereyman(Delivereyman delivereyman ,out long id);
+        int SaveDelivereyman(Delivereyman delivereyman ,out long id, out IEnumerable<string> errors);
         int UpdateDelivereyman(Delivereyman delivereyman);
         int DeleteDelivereyman(long orderId);
 
@@ -18,7 +18,7 @@ namespace ServiceInterface.Interface
     {
         IEnumerable<Waiter> GetAllWaiters(ref int statusCode);
         IEnumerable<Waiter> GetAllActiveWaiters(ref int statusCode);
-        int SaveWaiter(Waiter waiter ,out long id);
+        int SaveWaiter(Waiter waiter ,out long id ,out IEnumerable<string> errors);
         int UpdateWaiter(Waiter Waiter);
         int DeleteWaiter(long orderId);
 

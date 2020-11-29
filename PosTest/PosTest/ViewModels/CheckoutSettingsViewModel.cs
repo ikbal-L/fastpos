@@ -689,8 +689,8 @@ namespace PosTest.ViewModels
 
                 if (sourceProduct.Id == null)
                 {
-                    long id = -1;
-                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, ref id);
+                   
+                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, out long id, out IEnumerable<string> errors);
                     sourceProduct.Id = id;
                 }
                 else

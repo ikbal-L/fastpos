@@ -184,8 +184,7 @@ namespace PosTest.ViewModels.SubViewModel
             }
             else
             {
-                long id = -1;
-                _productService.SaveProduct(this._source, ref id);
+                _productService.SaveProduct(this._source, out long id, out IEnumerable<string> errors);
                 Product.Id = id;
                 this._source.Id = id;
             }

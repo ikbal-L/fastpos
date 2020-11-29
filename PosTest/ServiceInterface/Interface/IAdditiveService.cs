@@ -7,7 +7,7 @@ namespace ServiceInterface.Interface
     {
         IEnumerable<Additive> GetAllAdditives(ref int statusCode);
         IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids, ref int statusCode);
-        int SaveAdditive(Additive additive,out long id);
+        int SaveAdditive(Additive additive,out long id,out IEnumerable<string> errors);
         int UpdateAdditive(Additive additive);
         int SaveAdditives(IEnumerable<Additive> additives);
 

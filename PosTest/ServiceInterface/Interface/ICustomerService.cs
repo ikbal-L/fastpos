@@ -10,7 +10,7 @@ namespace ServiceInterface.Interface
     public interface ICustomerService
     {
         ICollection<Customer> GetAllCustomers();
-        int SaveCustomer(Customer customer, out long id);
+        int SaveCustomer(Customer customer, out long id, out IEnumerable<string> errors);
         int UpdateCustomer(Customer customer);
         int SaveCustomers(IEnumerable<Customer> customers);
         Customer GetCustomer(long id);

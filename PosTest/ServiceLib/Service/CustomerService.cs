@@ -32,9 +32,9 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public int SaveCustomer(Customer Customer, out long id)
+        public int SaveCustomer(Customer Customer, out long id, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(Customer, UrlConfig.CustomerUrl.SaveCustomer, out id);
+            return GenericRest.SaveThing(Customer, UrlConfig.CustomerUrl.SaveCustomer, out id,out errors);
         }
 
         public int SaveCustomers(IEnumerable<Customer> Customers)
@@ -166,9 +166,10 @@ namespace ServiceLib.Service
             return Customers.ToList();
         }
 
-        public int SaveCustomer(Customer Customer,out long id)
+        public int SaveCustomer(Customer Customer,out long id, out IEnumerable<string> errors)
         {
             id = -1;
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(Customer,

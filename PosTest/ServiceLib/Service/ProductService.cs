@@ -131,14 +131,16 @@ namespace ServiceLib.Service
             return product;
         }
 
-        public int SaveProduct(Product product, ref long id)
+        public int SaveProduct(Product product, out long id, out IEnumerable<string> errors)
         {
             if (product == null)
             {
+                id = -1;
+                errors= new List<string>();
                 return -1;
             }
             product.MappingBeforeSending();
-            return GenericRest.SaveThing(product,UrlConfig.ProductUrl.SaveProduct,out id);
+            return GenericRest.SaveThing(product,UrlConfig.ProductUrl.SaveProduct,out id,out errors);
             // return _restProductService.SaveProduct(product, ref  Id);
         }
 
@@ -324,8 +326,10 @@ namespace ServiceLib.Service
             return products;
         }
 
-        public int SaveProduct(Product product, ref long Id)
+        public int SaveProduct(Product product, out long id, out IEnumerable<string> errors)
         {
+            id = -1;
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             string json = JsonConvert.SerializeObject(product,
                             Newtonsoft.Json.Formatting.None,
@@ -343,7 +347,7 @@ namespace ServiceLib.Service
             //    return true;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                Id = long.Parse(response.Content.ReadAsStringAsync().Result);
+                id = long.Parse(response.Content.ReadAsStringAsync().Result);
             }
             return (int)response.StatusCode;
         }

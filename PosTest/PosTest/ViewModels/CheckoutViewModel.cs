@@ -513,28 +513,32 @@ namespace PosTest.ViewModels
                 if (order.Id == null)
                 {
                     // order.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(order,out IEnumerable<string> errors);
+                    resp = _orderService.SaveOrder(order,out long id,out IEnumerable<string> errors);
                     var logger = NLog.LogManager.GetCurrentClassLogger();
-                    if (resp != 200)
+                    if (resp!=200)
                     {
-                        order.Id = null;
-#if DEBUG
-                        var errorsString  = JsonConvert.SerializeObject(errors,
-                            Newtonsoft.Json.Formatting.None,
-                            new JsonSerializerSettings
-                            {
-                                NullValueHandling = NullValueHandling.Ignore
-                            });
-                        throw new Exception($"Errors: {errorsString} ");
-#else
-                        logger.Info("Failed To save {Order}  {ERRORCODE}, attempting to resave after {0} milliseconds ",-1,resp,300);
-#endif
 
 
-                    }
-                    else
-                    {
-                        logger.Info("Successfuly saved Order {Order} by User {User} for Customer {Customer}",order.Id,"Ali",order.CustomerId);
+                        string message;
+                            
+                        object [] args; 
+                        if (resp ==422)
+                        {
+                            message = "{ERROR CODE},Unable to save Order by  {Customer} due to the following validation {errors}:";
+                            var errorsString = JsonConvert.SerializeObject(errors,
+                                Newtonsoft.Json.Formatting.None,
+                                new JsonSerializerSettings
+                                {
+                                    NullValueHandling = NullValueHandling.Ignore
+                                });
+                            args = new Object[] {resp, order.Customer?.Name, errorsString};
+                        }
+                        else
+                        {
+                            message = "Failed To save Oder by {Customer}  {ERRORCODE}, reattempting to save after {0} milliseconds ";
+                            args = new object[] { order.Customer?.Name, resp, 300 };
+                        }
+                        ServiceHelper.HandleStatusCodeErrors(resp, message,args); 
                     }
                 }
                 else
@@ -1126,7 +1130,7 @@ namespace PosTest.ViewModels
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
                     {
-                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber},out long id);
+                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber},out long id,out IEnumerable<string> errors);
                         if (status2 == 200)
                         {
                             ToastNotification.Notify("Creation of virtual table", 1);
