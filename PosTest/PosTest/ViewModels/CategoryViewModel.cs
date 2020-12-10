@@ -74,7 +74,7 @@ namespace PosTest.ViewModels
             }
             else
             {
-                var t= _categorieService.UpdateCategory(CurrentCategory);
+                var t= _categorieService.UpdateCategory(CurrentCategory, out IEnumerable<string> errorsOfCurrentCategory);
             }
             IsDialogOpen = false;
         }

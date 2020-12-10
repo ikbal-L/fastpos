@@ -91,17 +91,25 @@ namespace ServiceLib.Service
             return _restCategoryService.SaveCategories(categories);
         }
 
-        public int SaveCategory(Category category, out long id)
+        public int SaveCategory(Category category, out long id,out IEnumerable<string> errors)
         {
             category.MappingBeforeSending();
-            return GenericRest.SaveThing(category,UrlConfig.CategoryUrl.SaveCategory,out id, out IEnumerable<string> errors);
+            errors = ValidationService.Validate(category);
+            if (errors.Any())
+            {
+                id = -1;
+                return 0;
+            }
+            return GenericRest.SaveThing(ref category,UrlConfig.CategoryUrl.SaveCategory,out id, out errors);
             // return _restCategoryService.SaveCategory(category, ref id);
         }
 
-        public int UpdateCategory(Category category)
+        public int UpdateCategory(Category category,out IEnumerable<string> errors)
         {
             category.MappingBeforeSending();
-            return _restCategoryService.UpdateCategory(category);
+            errors = ValidationService.Validate(category);
+            if (errors.Any()) return 0;
+            return _restCategoryService.UpdateCategory(category,out errors);
         }
     }
 
@@ -228,9 +236,10 @@ namespace ServiceLib.Service
             return (int)response.StatusCode; ;
         }
 
-        public int SaveCategory(Category category ,out long id)
+        public int SaveCategory(Category category ,out long id, out IEnumerable<string> errors)
         {
             id = -1;
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(category,
@@ -260,8 +269,9 @@ namespace ServiceLib.Service
 
         }
 
-        public int UpdateCategory(Category category)
+        public int UpdateCategory(Category category, out IEnumerable<string> errors)
         {
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(category,

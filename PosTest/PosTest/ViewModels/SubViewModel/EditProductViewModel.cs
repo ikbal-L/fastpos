@@ -180,7 +180,7 @@ namespace PosTest.ViewModels.SubViewModel
             Clone(source: ref _product, target: ref this._source);
             if (Source.Id != null)
             {
-                _productService.UpdateProduct(this._source);
+                _productService.UpdateProduct(this._source, out IEnumerable<string> errors);
             }
             else
             {

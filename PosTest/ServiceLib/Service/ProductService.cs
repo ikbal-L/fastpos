@@ -25,12 +25,6 @@ namespace ServiceLib.Service
         private RestAdditiveService _restAdditiveService = RestAdditiveService.Instance;
         private RestCategoryService _restCategoryService = RestCategoryService.Instance;
 
-        public int UpdateProduct(Product product)
-        {
-            product.MappingBeforeSending();
-            return _restProductService.UpdateProduct(product);
-
-        }
 
         public int DeleteProduct(long idProduct)
         {
@@ -139,8 +133,16 @@ namespace ServiceLib.Service
                 errors= new List<string>();
                 return -1;
             }
+
+            errors = ValidationService.Validate(product);
+            if (errors.Any())
+            {
+                id = -1;
+                return 0;
+            }
+
             product.MappingBeforeSending();
-            return GenericRest.SaveThing(product,UrlConfig.ProductUrl.SaveProduct,out id,out errors);
+            return GenericRest.SaveThing(ref product,UrlConfig.ProductUrl.SaveProduct,out id,out errors);
             // return _restProductService.SaveProduct(product, ref  Id);
         }
 
@@ -152,6 +154,16 @@ namespace ServiceLib.Service
             }
             products.ToList().ForEach(p => p.MappingBeforeSending());
             return _restProductService.SaveProducts(products);
+        }
+        public int UpdateProduct(Product product,out IEnumerable<string> errors)
+        {
+            product.MappingBeforeSending();
+
+            errors = ValidationService.Validate(product);
+            if (errors.Any()) return 0;
+
+            return _restProductService.UpdateProduct(product,out errors);
+
         }
 
         public (IEnumerable<long>, int) UpdateManyProducts(IEnumerable<Product> products)
@@ -352,8 +364,9 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public int UpdateProduct(Product product)
+        public int UpdateProduct(Product product, out IEnumerable<string> errors)
         {
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(product,

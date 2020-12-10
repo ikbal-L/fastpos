@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ServiceInterface.Model
 {
@@ -31,8 +33,11 @@ namespace ServiceInterface.Model
         {
             Order = order;
             Product = product;
+            ProductName = product?.Name;
             UnitPrice = unitPrice;
             Quantity = quantity;
+            OrderItemAdditives = new List<OrderItemAdditive>();
+            Additives = new BindableCollection<Additive>();
         }
 
         [DataMember]
@@ -46,6 +51,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public long ProductId { get; set; }
 
+        [DataMember]
         public string ProductName
         {
             get => _productName;
@@ -68,9 +74,9 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => Quantity);
                 NotifyOfPropertyChange(() => Total);
                 NotifyOfPropertyChange(nameof(TotalDiscountAmount));
-                Order.NotifyOfPropertyChange(nameof(Order.Total));
-                Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
-                Order.NotifyOfPropertyChange(nameof(TotalDiscountAmount));
+                Order?.NotifyOfPropertyChange(nameof(Order.Total));
+                Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
+                Order?.NotifyOfPropertyChange(nameof(TotalDiscountAmount));
                 //Order.Total = Order.Total + UnitPrice * (decimal)(_quantity - oldQuqntity);
             } 
         }
@@ -90,8 +96,8 @@ namespace ServiceInterface.Model
                 
                 //NotifyOfPropertyChange(() => DiscountAmount);
                 //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
-                Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
-                Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
+                Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
+                Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 return CalcTotalDiscount();
             }
         }
@@ -113,24 +119,24 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(() => DiscountAmount);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
                 //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
-                Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
-                Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
+                Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
+                Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }
         }
 
         [DataMember]
-        public decimal DiscountPercentatge
+        public decimal DiscountPercentage
         {
             get => _discountPercentage;
             set
             {
                 _discountPercentage = value;
                 _discountAmount = 0;
-                NotifyOfPropertyChange(() => DiscountPercentatge);
+                NotifyOfPropertyChange(() => DiscountPercentage);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
                 //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
-                Order.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
-                Order.NotifyOfPropertyChange(nameof(Order.NewTotal));
+                Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
+                Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }
         }
 
@@ -142,6 +148,7 @@ namespace ServiceInterface.Model
             set => Set(ref _timeStamp, value);
         }
         [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         public OrderItemState State
         {
             get => _state;
@@ -172,7 +179,8 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public List<long> AdditiveIds;
+        public List<OrderItemAdditive> OrderItemAdditives ;
+
         private decimal _totalDiscountAmount;
         private DateTime? _timeStamp;
         private OrderItemState _state;
@@ -228,15 +236,26 @@ namespace ServiceInterface.Model
             }
             var additive1 = new Additive(additive);
             additive1.ParentOrderItem = this;
-            additive1.State = AdditiveState.Added;
             this.Additives.Add(additive1);
+            if (additive1.Id != null) this.OrderItemAdditives.Add(new OrderItemAdditive(){AdditiveId = (long) additive1.Id,OrderItemId = this.Id,State = AdditiveState.Added});
             return true;
         }
 
         public void RemoveAdditive(Additive additive)
         {
+
             
-           
+            if (Order.Id==null)
+            {
+                
+                OrderItemAdditives.RemoveAll(orderItemAdditive => orderItemAdditive.AdditiveId == additive.Id);
+
+            }
+            else
+            {
+                OrderItemAdditives.Find(oia => oia.AdditiveId == additive.Id).State = AdditiveState.Removed;
+            }
+            Additives.Remove(additive);
         }
 
 
@@ -260,7 +279,7 @@ namespace ServiceInterface.Model
             {
                 yield return new ValidationResult(
                     $"Total must be a positive number.",
-                    new[] { nameof(UnitPrice) });
+                    new[] { nameof(Total) });
             }
 
             if (TotalDiscountAmount>UnitPrice)
@@ -274,21 +293,21 @@ namespace ServiceInterface.Model
             {
                 yield return new ValidationResult(
                     $"Total discount amount must be a positive number.",
-                    new[] { nameof(UnitPrice) });
+                    new[] { nameof(TotalDiscountAmount) });
             }
 
-            if (DiscountPercentatge>100)
+            if (DiscountPercentage>100)
             {
                 yield return new ValidationResult(
                     $"Discount Percentage must not exceed 100%",
-                    new[] { nameof(TotalDiscountAmount) });
+                    new[] { nameof(DiscountPercentage) });
             }
 
-            if (DiscountPercentatge <0)
+            if (DiscountPercentage <0)
             {
                 yield return new ValidationResult(
                     $"Discount Percentage must be a positive value",
-                    new[] { nameof(TotalDiscountAmount) });
+                    new[] { nameof(DiscountPercentage) });
             }
 
 
@@ -297,6 +316,9 @@ namespace ServiceInterface.Model
 
     public enum OrderItemState
     {
-        Added,Removed,IncrementedQuantity,DecrementedQuantity
+        Added,
+        Removed,
+        IncreasedQuantity,
+        DecreasedQuantity
     }
 }

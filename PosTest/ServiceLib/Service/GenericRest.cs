@@ -39,7 +39,7 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static int SaveThing<T>(T thing, string url, out long id,out IEnumerable<string> errors)
+        public static int SaveThing<T>(ref T thing, string url, out long id,out IEnumerable<string> errors)
         {
             id = -1;
             errors = new List<string>();
@@ -63,7 +63,16 @@ namespace ServiceLib.Service
             //    return true;
             if (response.StatusCode==HttpStatusCode.Created)
             {
-                long.TryParse(response.Content,out id);
+                
+                if (thing is Order order)
+                {
+                    thing =  JsonConvert.DeserializeObject<T>(response.Content);
+                }
+                else
+                {
+                    long.TryParse(response.Content, out id);
+                    
+                }
                 
             }
 
@@ -84,6 +93,11 @@ namespace ServiceLib.Service
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 things = JsonConvert.DeserializeObject<IEnumerable<T>>(response.Content);
+            }
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return Array.Empty<T>();
             }
             statusCode = (int)response.StatusCode;
             return things;
@@ -148,11 +162,19 @@ namespace ServiceLib.Service
             IRestResponse response = RestGet( url);
 
             IEnumerable<T> collection = null;
+
+
+            status = (int)response.StatusCode;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                collection = JsonConvert.DeserializeObject<IEnumerable<T>>(response.Content);
+                return collection = JsonConvert.DeserializeObject<IEnumerable<T>>(response.Content);
             }
-            status = (int)response.StatusCode;
+
+            if (response.StatusCode== HttpStatusCode.NoContent)
+            {
+                return Array.Empty<T>();
+            }
+            
             return collection;
         }
     }

@@ -5,7 +5,7 @@ namespace ServiceInterface.Interface
 {
     public interface IDelivereyService
     {
-        IEnumerable<Delivereyman> GetAllDelivereymen(ref int statusCode);
+        IEnumerable<Delivereyman> GetAllDeliverymen(out int statusCode);
         IEnumerable<Delivereyman> GetAllActiveDelivereymen(ref int statusCode);
         int SaveDelivereyman(Delivereyman delivereyman ,out long id, out IEnumerable<string> errors);
         int UpdateDelivereyman(Delivereyman delivereyman);

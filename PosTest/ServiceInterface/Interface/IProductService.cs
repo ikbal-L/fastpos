@@ -11,7 +11,7 @@ namespace ServiceInterface.Interface
     {
         ICollection<Product> GetAllProducts(ref int statusCode);
         int SaveProduct(Product product,out long id, out IEnumerable<string> errors);
-        int UpdateProduct(Product product);
+        int UpdateProduct(Product product, out IEnumerable<string> errors);
         int SaveProducts(IEnumerable<Product> products);
         Product GetProduct(long id, ref int statusCode);
         int DeleteProduct(long idProduct);

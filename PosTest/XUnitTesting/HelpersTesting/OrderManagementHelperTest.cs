@@ -110,7 +110,7 @@ namespace XUnitTesting.HelpersTesting
                                                                         d.Key == oi.GetHashCode()).Value.TimeStamp != null
             );
             Assert.All(itemsWithIncreasedQuantity,
-                item => Assert.Equal(OrderItemState.IncrementedQuantity, item.State));
+                item => Assert.Equal(OrderItemState.IncreasedQuantity, item.State));
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace XUnitTesting.HelpersTesting
                                                                         d.Key == oi.GetHashCode()).Value.Quantity
             );
             Assert.All(itemsWithDecreasedQuantity,
-                item => Assert.Equal(OrderItemState.DecrementedQuantity, item.State));
+                item => Assert.Equal(OrderItemState.DecreasedQuantity, item.State));
         }
 
 

@@ -90,12 +90,12 @@ namespace PosTest.ViewModels.SubViewModel
             NotifyOfPropertyChange(() => Source);
             if (Source.Id != null)
             {
-                _categoryService.UpdateCategory(this._source);
+                _categoryService.UpdateCategory(this._source, out IEnumerable<string> errors);
             }
             else
             {
                 
-                _categoryService.SaveCategory(this._source, out long id);
+                _categoryService.SaveCategory(this._source, out long id, out IEnumerable<string> errors);
                 Category.Id = id;
                 this._source.Id = id;
             }

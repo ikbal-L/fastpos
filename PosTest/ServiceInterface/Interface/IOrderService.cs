@@ -5,10 +5,10 @@ namespace ServiceInterface.Interface
 {
     public interface IOrderService 
     {
-        IEnumerable<Order> GetAllOrders(ref int statusCode);
+        IEnumerable<Order> GetAllOrders(out int statusCode,bool unprocessed = false);
         IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds, ref int statusCode);
-        int SaveOrder(Order order,out long id,out IEnumerable<string> errors);
-        int UpdateOrder(Order order);
+        int SaveOrder(ref Order order,out IEnumerable<string> errors);
+        int UpdateOrder(ref Order order, out IEnumerable<string> errors);
         int DeleteOrder(long orderId);
         Table GetTableByNumber(int tableNumber, ref int statusCode);
         Table GetTable(int id, ref int statusCode);

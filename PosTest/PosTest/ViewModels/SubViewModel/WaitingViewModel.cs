@@ -32,7 +32,9 @@ namespace PosTest.ViewModels.SubViewModel
             if (order != null)
             {
                 // Filter out products with price 25 or above
-                if (order.Type == OrderType.InWaiting)
+                OrderState? [] filteredStates = {OrderState.Canceled, OrderState.Payed, OrderState.Removed};
+
+                if (order.Type == OrderType.InWaiting && !filteredStates.Contains((order.State)))
                 {
                     e.Accepted = true;
                 }

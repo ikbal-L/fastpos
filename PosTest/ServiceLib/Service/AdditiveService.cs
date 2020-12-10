@@ -29,7 +29,7 @@ namespace ServiceLib.Service
 
         public int SaveAdditive(Additive additive, out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(additive, UrlConfig.AdditiveUrl.SaveAdditive, out id,out errors);
+            return GenericRest.SaveThing(ref additive, UrlConfig.AdditiveUrl.SaveAdditive, out id,out errors);
             // return _restAdditiveService.SaveAdditive(additive, out id);
         }
 

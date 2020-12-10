@@ -10,31 +10,36 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using PosTest.Helpers;
+using ServiceInterface.Interface;
 
 namespace PosTest.ViewModels
 {
     public class CustomerViewModel : Screen
 
     {
+        private readonly ICustomerService _customerService;
         private ICollectionView _CustomerView;
         private string _FilterString;
         private Customer _selectedCustomer;
         public CheckoutViewModel ParentChechoutVM { get; set; }
       
-        public CustomerViewModel(CheckoutViewModel checkoutViewModel)
+        public CustomerViewModel(CheckoutViewModel checkoutViewModel,ICustomerService customerService)
         {
+            _customerService = customerService;
             ParentChechoutVM = checkoutViewModel;
-            _CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers.ToList());
+
+            _CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers);
             _CustomerView.Filter = CustomerFilter;
             SelectCustomerCommand = new DelegateCommandBase(SelectCustomer,CanSelectCustomer);
 
         }
 
-
+        
         public ICollectionView Customers
         {
             get => _CustomerView;
         }
+
 
         public ICommand SelectCustomerCommand { get; set; }
         public Customer SelectedCustomer
@@ -109,10 +114,14 @@ namespace PosTest.ViewModels
         public void CreateAndSave()
         {
             string name= Regex.Replace(FilterString, @"\d", "");
-            string mobile = Regex.Replace(FilterString, @"\D", "");
+            string mobile = "+213"+Regex.Replace(FilterString, @"\D", "").Remove(0,1);
             Customer customer = new Customer { Name = name, Mobile = mobile };
+            _customerService.SaveCustomer(customer, out long id, out IEnumerable<string> errors);
+            customer.Id = id;
             ParentChechoutVM.Customers.Add(customer);
             
+            _CustomerView.Refresh();
+
             if (ParentChechoutVM.CurrentOrder == null)
             {
                 ParentChechoutVM.NewOrder();

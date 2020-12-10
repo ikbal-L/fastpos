@@ -191,7 +191,7 @@ namespace PosTest.ViewModels
             int j = 1;
             foreach (var prod in AllProducts)
             {
-                var code = _productsService.UpdateProduct(prod);
+                var code = _productsService.UpdateProduct(prod, out IEnumerable<string> errors);
                 if (code != 200)
                 {
                 }
@@ -372,6 +372,8 @@ namespace PosTest.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
+            //if ( category == SelectedCategory) return;
+            
             CurrentProducts.Clear();
             if (category.Id == null) return;
             var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
@@ -508,7 +510,7 @@ namespace PosTest.ViewModels
 
             try
             {
-                int selectedCategoryStatusCode = _categoriesService.UpdateCategory(selectedCategory);
+                int selectedCategoryStatusCode = _categoriesService.UpdateCategory(selectedCategory,out IEnumerable<string> errors);
                 if (selectedCategoryStatusCode != 200)
                 {
                     {
@@ -540,10 +542,10 @@ namespace PosTest.ViewModels
             {
                 var selectedProductCategoryName = selectedProduct.Category.Name;
                 selectedProduct.Category.ProductIds.Remove((long) selectedProduct.Id);
-                categoryStatusCode = _categoriesService.UpdateCategory(selectedProduct.Category);
+                categoryStatusCode = _categoriesService.UpdateCategory(selectedProduct.Category, out IEnumerable<string> errorsOfCategory);
                 selectedProduct.Category = null;
                 selectedProduct.CategoryId = null;
-                productStatusCode = _productsService.UpdateProduct(selectedProduct);
+                productStatusCode = _productsService.UpdateProduct(selectedProduct, out IEnumerable<string> errorsOfSelectedProduct);
 
                 if (categoryStatusCode != 200)
                 {
@@ -584,7 +586,7 @@ namespace PosTest.ViewModels
                     int productStatusCode = 0;
                     try
                     {
-                        productStatusCode = _productsService.UpdateProduct(product);
+                        productStatusCode = _productsService.UpdateProduct(product, out IEnumerable<string> errors);
 
 
                         if (productStatusCode != 200)
@@ -682,7 +684,7 @@ namespace PosTest.ViewModels
                     targetProduct.Rank = null;
                     targetProduct.Category = null;
 
-                    targetProductStatusCode = _productsService.UpdateProduct(targetProduct);
+                    targetProductStatusCode = _productsService.UpdateProduct(targetProduct, out IEnumerable<string> errorsOftargetProduct);
                 }
 
                 CurrentProducts[index] = sourceProduct;
@@ -690,17 +692,17 @@ namespace PosTest.ViewModels
                 if (sourceProduct.Id == null)
                 {
                    
-                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, out long id, out IEnumerable<string> errors);
+                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, out long id, out IEnumerable<string> errorsOfSourceProduct);
                     sourceProduct.Id = id;
                 }
                 else
                 {
-                    sourceProductStatusCode = _productsService.UpdateProduct(sourceProduct);
+                    sourceProductStatusCode = _productsService.UpdateProduct(sourceProduct, out IEnumerable<string> errorsOfSourceProduct);
                 }
 
                 SelectedCategory.ProductIds.Add((long) sourceProduct.Id);
                 SelectedCategory.Products.Add(sourceProduct);
-                selectedCategoryStatusCode = _categoriesService.UpdateCategory(SelectedCategory);
+                selectedCategoryStatusCode = _categoriesService.UpdateCategory(SelectedCategory,out IEnumerable<string> errorsOfCategory);
 
 
 
@@ -767,10 +769,10 @@ namespace PosTest.ViewModels
 
             if (targetCategory.Id != null)
             {
-                _categoriesService.UpdateCategory(targetCategory);
+                _categoriesService.UpdateCategory(targetCategory, out IEnumerable<string> errorsOfTargetCategory);
             }
 
-            _categoriesService.UpdateCategory(incomingCategory);
+            _categoriesService.UpdateCategory(incomingCategory, out IEnumerable<string> errorsOfIncomingCategory);
         }
 
         public void PasteProduct()
@@ -1093,8 +1095,8 @@ namespace PosTest.ViewModels
                     int targetProductStatusCode = 0;
                     try
                     {
-                        receivedProductStatusCode = _productsService.UpdateProduct(receivedProduct);
-                        targetProductStatusCode = _productsService.UpdateProduct(targetProduct);
+                        receivedProductStatusCode = _productsService.UpdateProduct(receivedProduct, out IEnumerable<string> errorsOfReceivedProduct);
+                        targetProductStatusCode = _productsService.UpdateProduct(targetProduct, out IEnumerable<string> errorsOfTargetProdcut);
 
                         if (receivedProductStatusCode != 200)
                         {
@@ -1223,7 +1225,7 @@ namespace PosTest.ViewModels
                     {
                         if (targetCategory.Id != null)
                         {
-                           var targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory);
+                           var targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory, out IEnumerable<string> errorsOfTargetCategory);
                            if (targetCategoryStatusCode!=200)
                            {
 
@@ -1234,7 +1236,7 @@ namespace PosTest.ViewModels
                            }
                         }
 
-                        var incomingCategoryStatusCode=_categoriesService.UpdateCategory(incomingCategory);
+                        var incomingCategoryStatusCode=_categoriesService.UpdateCategory(incomingCategory, out IEnumerable<string> errorsOfIncomingCategory);
                         if (incomingCategoryStatusCode!=200)
                         {
                             {
@@ -1293,10 +1295,10 @@ namespace PosTest.ViewModels
                 int incomingCategoryStatusCode=0;
                 if (targetCategory?.Id != null)
                 {
-                    targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory);
+                    targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory, out IEnumerable<string> errorsOfTargetCategory);
                 }
 
-                incomingCategoryStatusCode = _categoriesService.UpdateCategory(incomingCategory);
+                incomingCategoryStatusCode = _categoriesService.UpdateCategory(incomingCategory, out IEnumerable<string> errorsOfIncomingCategory);
                 var logger = NLog.LogManager.GetCurrentClassLogger();
                 
                 if (targetCategoryStatusCode!=200 && targetCategoryStatusCode!=0)

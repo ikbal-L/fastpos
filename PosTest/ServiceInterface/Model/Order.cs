@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 
 namespace ServiceInterface.Model
 {
-    public class Order : PropertyChangedBase
+    public class Order : PropertyChangedBase,IValidatableObject
     {
         private decimal _total;
         private OrderItem _selectedOrderItem;
@@ -53,6 +53,8 @@ namespace ServiceInterface.Model
         public Order(BindableCollection<Order> orders) : this()
         {
             this.Orders = orders;
+            ProductsVisibility = true;
+            ShownAdditivesPage = new BindableCollection<Additive>();
         }
 
         public BindableCollection<Order> Orders { get; set; }
@@ -71,11 +73,11 @@ namespace ServiceInterface.Model
             set
             {
                 Set(ref _delivereyman, value);
-                DelivereymanId = value?.Id;
+                DeliverymanId = value?.Id;
             }
         }
 
-        [DataMember] public long? DelivereymanId { get; set; }
+        [DataMember] public long? DeliverymanId { get; set; }
 
         public Waiter Waiter
         {
@@ -324,8 +326,8 @@ namespace ServiceInterface.Model
 
         [DataMember] public long? TableId { get; set; }
 
-        public Category ShownCategory { get; private set; }
-        public BindableCollection<Additive> ShownAdditivesPage { get; set; }
+        public Category ShownCategory { get; set; }
+        public BindableCollection<Additive> ShownAdditivesPage { get; set; } = new BindableCollection<Additive>();
 
         public bool ProductsVisibility { get; set; }
         public bool AdditivesVisibility { get; set; }
@@ -396,11 +398,15 @@ namespace ServiceInterface.Model
 
         public void MappingBeforeSending()
         {
-            foreach (var oitem in OrderItems)
+            foreach (var orderItem in OrderItems)
             {
-                oitem.ProductId = (long) oitem.Product.Id;
-                oitem.OrderId = Id;
+                if (orderItem.Product?.Id != null)
+                {
+                    orderItem.ProductId = (long)orderItem.Product?.Id; 
+                }
+                orderItem.OrderId = Id;
             }
+
 
             this.TableId = Table?.Id;
             this.CustomerId = Customer?.Id;
@@ -415,7 +421,7 @@ namespace ServiceInterface.Model
 
             foreach (var oit in OrderItems)
             {
-                var product = products.Where(p => p.Id == oit.ProductId).FirstOrDefault();
+                var product = products.FirstOrDefault(p => p.Id == oit.ProductId);
                 if (product == null)
                 {
                     throw new MappingException("Order mapping product is null");
@@ -432,6 +438,58 @@ namespace ServiceInterface.Model
             ShownAdditivesPage = additives;
             ProductsVisibility = productsVisibility;
             AdditivesVisibility = additviesVisibility;
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Type == OrderType.Delivery && Delivereyman == null)
+            {
+                yield return new ValidationResult(
+                    $"Delivery Man must not be null if Order Type is {OrderType.Delivery} ",
+                    new[] { nameof(Delivereyman) });
+            }
+
+            if (Type==OrderType.OnTable && Table == null)
+            {
+                yield return new ValidationResult(
+                    $"Table must not be null if Order Type is {OrderType.OnTable} ",
+                    new[] { nameof(Table) });
+            }
+
+            if (Total < 0)
+            {
+                yield return new ValidationResult(
+                    $"Total must be a positive number.",
+                    new[] { nameof(Total) });
+            }
+
+            if (TotalDiscountAmount > Total)
+            {
+                yield return new ValidationResult(
+                    $"Total discount amount must not exceed the value of Total.",
+                    new[] { nameof(TotalDiscountAmount) });
+            }
+
+            if (TotalDiscountAmount < 0)
+            {
+                yield return new ValidationResult(
+                    $"Total discount amount must be a positive number.",
+                    new[] { nameof(TotalDiscountAmount) });
+            }
+
+            if (DiscountPercentage > 100)
+            {
+                yield return new ValidationResult(
+                    $"Discount Percentage must not exceed 100%",
+                    new[] { nameof(DiscountPercentage) });
+            }
+
+            if (DiscountPercentage < 0)
+            {
+                yield return new ValidationResult(
+                    $"Discount Percentage must be a positive value",
+                    new[] { nameof(TotalDiscountAmount) });
+            }
         }
     }
 

@@ -4,6 +4,7 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using System;
+using System.Collections;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Web.ModelBinding;
 using Newtonsoft.Json.Linq;
 
 namespace ServiceLib.Service
@@ -25,9 +27,10 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Order> GetAllOrders(ref int statusCode)
+        public IEnumerable<Order> GetAllOrders(out int statusCode, bool unprocessed = false)
         {
-            throw new NotImplementedException();
+            string url = unprocessed ? UrlConfig.OrderUrl.GetAllUnprocessedOrders : UrlConfig.OrderUrl.GetAllOrders;
+            return GenericRest.GetAll<Order>(url, out statusCode);
         }
 
         public IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds, ref int statusCode)
@@ -35,18 +38,31 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public int SaveOrder(Order order,out long id ,out IEnumerable<string> errors)
+        public int SaveOrder(ref Order order,out IEnumerable<string> errors)
         {
             order.MappingBeforeSending();
-            
-            return GenericRest.SaveThing(order,UrlConfig.OrderUrl.SaveOrder,out id,out errors);
+            errors = ValidationService.Validate(order);
+            if (errors.Any())
+            {
+                // id = -1;
+                return 0;
+            }
+            return GenericRest.SaveThing(ref order,UrlConfig.OrderUrl.SaveOrder,out long id,out errors);
             // return _restOrderService.SaveOrder(order,out errors);
         }
 
-        public int UpdateOrder(Order order)
+        public int UpdateOrder(ref Order order,out IEnumerable<string> errors)
         {
             order.MappingBeforeSending();
-            return _restOrderService.UpdateOrder(order);
+            order.MappingBeforeSending();
+            errors = ValidationService.Validate(order);
+            if (errors.Count() > 0)
+            {
+                return 0;
+            }
+            var ( statusCode,content ) = GenericRest.UpdateThing(order,UrlConfig.OrderUrl.UpdateOrder+order.Id);
+            return statusCode;
+            // return _restOrderService.UpdateOrder(order);
         }
 
         public Table GetTable(int id, ref int statusCode)
@@ -61,7 +77,7 @@ namespace ServiceLib.Service
 
         public int SaveTable(Table table,out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out  id,out errors);
+            return GenericRest.SaveThing<Table>(ref table, UrlConfig.OrderUrl.SaveTable,out  id,out errors);
         }
 
         public IEnumerable<Table> GeAlltTables(ref int statusCode)
@@ -136,9 +152,9 @@ namespace ServiceLib.Service
             return orders;
         }
 
-        public int SaveOrder(Order order,out long id, out IEnumerable<string> errors)
+        public int SaveOrder(ref Order order/*,out long id*/, out IEnumerable<string> errors)
         {
-            id = -1;
+            // id = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(order,
@@ -171,8 +187,9 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public int UpdateOrder(Order order)
+        public int UpdateOrder(ref Order order, out IEnumerable<string> errors)
         {
+            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
 
             string json = JsonConvert.SerializeObject(order,
@@ -243,7 +260,7 @@ namespace ServiceLib.Service
             return idmax;
         }
 
-        public IEnumerable<Order> GetAllOrders(ref int statusCode)
+        public IEnumerable<Order> GetAllOrders(out int statusCode, bool unprocessed = false)
         {
             throw new NotImplementedException();
         }
@@ -260,7 +277,7 @@ namespace ServiceLib.Service
 
         public int SaveTable(Table table,out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out id,out errors);
+            return GenericRest.SaveThing<Table>(ref table, UrlConfig.OrderUrl.SaveTable,out id,out errors);
         }
 
         public IEnumerable<Table> GeAlltTables(ref int statusCode)
@@ -282,9 +299,9 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<IEnumerable<Delivereyman>>(UrlConfig.DelivereyUrl.GetAllActiveDeliverymen, ref statusCode);
         }
 
-        public IEnumerable<Delivereyman> GetAllDelivereymen(ref int statusCode)
+        public IEnumerable<Delivereyman> GetAllDeliverymen(out int statusCode)
         {
-            return GenericRest.GetThing<IEnumerable<Delivereyman>>(UrlConfig.DelivereyUrl.GetAllDeliverymen, ref statusCode);
+            return GenericRest.GetAll<Delivereyman>(UrlConfig.DelivereyUrl.GetAllDeliverymen, out statusCode);
         }
 
         public Delivereyman GetDelivereyman(int id, ref int statusCode)
@@ -294,7 +311,7 @@ namespace ServiceLib.Service
 
         public int SaveDelivereyman(Delivereyman delivereyman,out long id,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman, out id,out errors);
+            return GenericRest.SaveThing(ref delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman, out id,out errors);
         }
 
         public int UpdateDelivereyman(Delivereyman delivereyman)
@@ -328,7 +345,7 @@ namespace ServiceLib.Service
 
         public int SaveWaiter(Waiter waiter ,out long id, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(UrlConfig.WaiterUrl.GetAllWaiters,UrlConfig.WaiterUrl.SaveWaiter,out id, out errors);
+            return GenericRest.SaveThing(ref waiter,UrlConfig.WaiterUrl.SaveWaiter,out id, out errors);
         }
 
         public int UpdateWaiter(Waiter Waiter)

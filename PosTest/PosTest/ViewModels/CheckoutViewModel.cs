@@ -57,7 +57,6 @@ namespace PosTest.ViewModels
         private TakeawayViewModel _takeAwayViewModel;
         private CustomerViewModel _customerViewModel;
 
-        private Category _currantCategory;
 
         private Order _currentOrder;
 
@@ -85,6 +84,7 @@ namespace PosTest.ViewModels
         private int _currentCategoryPageIndex;
         private Dictionary<int, OrderItem> _diff;
         private Order _printOrder;
+        private Category _currentCategory;
 
         #endregion
 
@@ -139,17 +139,17 @@ namespace PosTest.ViewModels
             int catStatusCode = 0;
             int prodStatusCode = 0;
 
-            var code = 0;
+            
             var status = 0;
             // var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
-            var deliveryMen = delivereyService.GetAllDelivereymen(ref code);
+            var deliveryMen = delivereyService.GetAllDeliverymen(out int code);
             // var waiter = waiterService.GetAllActiveWaiters(ref code);
             var waiter = waiterService.GetAllWaiters(ref code);
             var tables = _orderService.GeAlltTables(ref status);
-            var customers = _customerService.GetAllCustomers();
-
-            Orders = new BindableCollection<Order>();
-            Customers = new BindableCollection<Customer>();
+            var customers = _customerService.GetAllCustomers(out int customerStatus);
+            var unprocessedOrders = _orderService.GetAllOrders(out int statusCode, unprocessed: true);
+            
+            Orders = new BindableCollection<Order>(unprocessedOrders);
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
@@ -200,9 +200,9 @@ namespace PosTest.ViewModels
             TakeAwayViewModel = new TakeawayViewModel(this);
             DelivereyViewModel = new DelivereyViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
-            CustomerViewModel = new CustomerViewModel(this);
+            CustomerViewModel = new CustomerViewModel(this,customerService);
             TablesViewModel = new TablesViewModel(this);
-            CurrentCategory = Categories.FirstOrDefault(c => c.Id == 1);
+            CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
         }
 
@@ -265,12 +265,8 @@ namespace PosTest.ViewModels
 
         public Category CurrentCategory
         {
-            get { return _currantCategory; }
-            set
-            {
-                _currantCategory = value;
-                NotifyOfPropertyChange(() => CurrentCategory);
-            }
+            get => _currentCategory;
+            set => Set(ref _currentCategory, value);
         }
 
         public int MaxProductPageSize { get; set; }
@@ -499,7 +495,7 @@ namespace PosTest.ViewModels
 
         #region Order Commands
 
-        public int? SaveOrder(Order order)
+        public int? SaveOrder(ref Order order)
         {
             if (IsRunningFromXUnit)
             {
@@ -513,9 +509,9 @@ namespace PosTest.ViewModels
                 if (order.Id == null)
                 {
                     // order.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(order,out long id,out IEnumerable<string> errors);
+                    resp = _orderService.SaveOrder(ref order/*,out long id*/,out IEnumerable<string> errors);
                     var logger = NLog.LogManager.GetCurrentClassLogger();
-                    if (resp!=200)
+                    if (resp!=200&& resp!=201)
                     {
 
 
@@ -540,10 +536,14 @@ namespace PosTest.ViewModels
                         }
                         ServiceHelper.HandleStatusCodeErrors(resp, message,args); 
                     }
+                    else
+                    {
+                        // order.Id = id;
+                    }
                 }
                 else
                 {
-                    resp = _orderService.UpdateOrder(order);
+                    resp = _orderService.UpdateOrder(ref order, out IEnumerable<string> errors);
                 }
             }
             catch (AggregateException)
@@ -557,10 +557,13 @@ namespace PosTest.ViewModels
 
         private void SaveCurrentOrder()
         {
-            var resp = SaveOrder(CurrentOrder);
+            var resp = SaveOrder(ref _currentOrder);
+            CurrentOrder = _currentOrder;
+            NotifyOfPropertyChange(() => CurrentOrder);
             switch (resp)
             {
                 case 200:
+                case 201:
                     if (CurrentOrder.State == OrderState.Payed ||
                         CurrentOrder.State == OrderState.Canceled ||
                         CurrentOrder.State == OrderState.Removed)
@@ -577,6 +580,11 @@ namespace PosTest.ViewModels
                 case null: break;
 
                 default:
+
+                    var message =
+                        $"Failed To update Oder by  {CurrentOrder.Customer}  {{ERRORCODE}}, reattempting to save after {{0}} milliseconds ";
+                    var args = new object[] { CurrentOrder?.Customer?.Name, resp, 300 };
+                    ServiceHelper.HandleStatusCodeErrors((int)resp, message,args);
                     ToastNotification.ErrorNotification((int) resp);
                     break;
             }
@@ -584,20 +592,23 @@ namespace PosTest.ViewModels
 
         public void ShowOrder(Order order)
         {
-            if (order == null)
-            {
-                return;
-            }
+            if (order == null|| order == CurrentOrder) return;
 
-            if (CurrentOrder != null)
-            {
-                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-            }
+
+            CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
             CurrentOrder = order;
             //DisplayedOrder = order;
-            CurrentCategory = CurrentOrder.ShownCategory;
-            if (_currantCategory != null)
+
+            if (order.ShownCategory==null&& order.Id!=null)
+            {
+                order.ShownCategory = CurrentCategory;
+                order.ProductsVisibility = ProductsVisibility;
+                order.AdditivesVisibility = AdditivesVisibility;
+            }
+            CurrentCategory = CurrentOrder.ShownCategory; 
+            
+            if (CurrentCategory != null&& ProductsPage.Any(p=>p?.Category!=CurrentCategory))
             {
                 ShowCategoryProducts(CurrentCategory);
             }
@@ -789,7 +800,11 @@ namespace PosTest.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
+
+            if (category == CurrentCategory&& !(ProductsPage.Count==0|| ProductsPage==null) ) return;
+            
             ProductsPage.Clear();
+            ProductsVisibility = true;
             if (category?.Id == null) return;
             var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
 
@@ -803,7 +818,7 @@ namespace PosTest.ViewModels
 
         public void ShowProductAdditives(Platter product)
         {
-            AdditivesPage.Clear();
+            AdditivesPage?.Clear();
             if (product == null) return;
             var comparer = new Comparer<Additive>();
             var additives = product.Additives.ToList();
@@ -972,6 +987,12 @@ namespace PosTest.ViewModels
                     break;
                 }
                 case ActionButton.Payment:
+                    if (CurrentOrder.Type== OrderType.InWaiting)
+                    {
+                        ToastNotification.Notify("Set order type first");
+                        return;
+                    }
+                    
                     PayementAction();
                     break;
 
@@ -986,10 +1007,12 @@ namespace PosTest.ViewModels
 
 
                     _printOrder = null;
-                    ChangesMade =
-                        OrderManagementHelper.StampAndSetOrderItemState(stamp, CurrentOrder.OrderItems, _diff) ||
-                        OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
-                    ;
+
+                    var b1 = OrderManagementHelper.StampAndSetOrderItemState(stamp, CurrentOrder.OrderItems, _diff);
+
+                    var b2 =OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
+                    ChangesMade = b1 || b2;
+                    
                     _printOrder = OrderManagementHelper.GetChangesFromOrder(CurrentOrder, _diff);
                     CurrentOrder.State = OrderState.Ordered;
                     _diff.Clear();
@@ -1373,14 +1396,7 @@ namespace PosTest.ViewModels
             if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
             {
                 CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
-                if (additive.TimeStamp == null)
-                {
-                    additive.ParentOrderItem.Additives.Remove(additive);
-                }
-                else
-                {
-                    additive.State = AdditiveState.Removed;
-                }
+                additive.ParentOrderItem.RemoveAdditive(additive);
             }
         }
 
@@ -1493,7 +1509,7 @@ namespace PosTest.ViewModels
 
             if (discountPercent >= 0)
             {
-                item.DiscountPercentatge = discountPercent;
+                item.DiscountPercentage = discountPercent;
             }
 
             if (discountAmount >= 0)

@@ -109,6 +109,7 @@
     <Compile Include="Model\Ingredient.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\OrderItem.cs" />
+    <Compile Include="Model\OrderItemAdditiveState.cs" />
     <Compile Include="Model\Place.cs" />
     <Compile Include="Model\Platter.cs" />
     <Compile Include="Model\Product.cs" />

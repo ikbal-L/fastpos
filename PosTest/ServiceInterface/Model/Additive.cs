@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
 using System.Windows.Media;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ServiceInterface.Model
 {
@@ -29,7 +31,6 @@ namespace ServiceInterface.Model
             //ParentOrderItem = additive.ParentOrderItem;
             BackgroundString = additive.BackgroundString;
             Rank = additive.Rank;
-            State = additive.State;
         }
 
         [DataMember] public long? Id { get; set; }
@@ -77,17 +78,7 @@ namespace ServiceInterface.Model
             return result;
         }*/
 
-        public AdditiveState State
-        {
-            get => _state;
-            set => Set(ref _state, value);
-        }
-
-        public DateTime? TimeStamp
-        {
-            get => _timeStamp;
-            set => Set(ref _timeStamp, value);
-        }
+        
 
         public override bool Equals(object other)
         {
@@ -96,8 +87,7 @@ namespace ServiceInterface.Model
                          additive.Id == Id &&
                          additive.Description == Description &&
                          additive.BackgroundString == BackgroundString &&
-                         additive.Rank == Rank &&
-                         additive.State == State;
+                         additive.Rank == Rank;
             return result;
             //           return Equals(other as Additive);
         }

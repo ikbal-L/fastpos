@@ -25,11 +25,11 @@ namespace PosTest.Helpers
                 {
                     if (i.Quantity > refItem.Quantity)
                     {
-                        i.State = OrderItemState.IncrementedQuantity;
+                        i.State = OrderItemState.IncreasedQuantity;
                     }
                     else if (i.Quantity < refItem.Quantity)
                     {
-                        i.State = OrderItemState.DecrementedQuantity;
+                        i.State = OrderItemState.DecreasedQuantity;
                     }
                 }
 
@@ -42,15 +42,15 @@ namespace PosTest.Helpers
         public static bool StampAdditives(DateTime timeStamp, IEnumerable<OrderItem> orderItems)
         {
             var items = orderItems;
-            var changedAdditives = new List<Additive>();
+            var changedAdditives = new List<OrderItemAdditive>();
                 
             foreach (var item in items)
             {
-                changedAdditives =changedAdditives.Concat(item.Additives?.Where(a => a.TimeStamp == null || a.State == AdditiveState.Removed) ?? Array.Empty<Additive>()).ToList();
+                changedAdditives =changedAdditives.Concat(item.OrderItemAdditives?.Where(a => a.Timestamp == null || a.State == AdditiveState.Removed) ?? Array.Empty<OrderItemAdditive>()).ToList();
             }
 
             if (changedAdditives.Count ==0) return false;
-            changedAdditives.ForEach(a => a.TimeStamp = timeStamp);
+            changedAdditives.ForEach(a => a.Timestamp = timeStamp);
             return true;
 
 
@@ -61,7 +61,7 @@ namespace PosTest.Helpers
             if (!diff.ContainsKey(item.GetHashCode()))
             {
                 var value = new OrderItem(item.Product, item.Quantity, item.UnitPrice, item.Order)
-                    {TimeStamp = item.TimeStamp};
+                    {TimeStamp = item.TimeStamp,ProductName = item.ProductName};
                 diff.Add(item.GetHashCode(), value);
             }
         }
@@ -72,7 +72,7 @@ namespace PosTest.Helpers
             var changedOrderItems = new List<OrderItem>();
             var orderItems = order.OrderItems
                 .Where(oi =>
-                    oi.State == OrderItemState.IncrementedQuantity || oi.State == OrderItemState.DecrementedQuantity);
+                    oi.State == OrderItemState.IncreasedQuantity || oi.State == OrderItemState.DecreasedQuantity);
             foreach (var orderItem in orderItems)
             {
                 var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;

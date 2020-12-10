@@ -55,11 +55,12 @@ namespace ServiceInterface.StaticValues
             static string hostname = "http://192.168.1.100:5000/";
             private static string OrderApiEndpoint = hostname1 + "api/order";
             public static string GetAllOrders = OrderApiEndpoint + "/getall";
+            public static string GetAllUnprocessedOrders = GetAllOrders+ "/unprocessed";
             public static string GetManyOrders = OrderApiEndpoint + "/getmany";
             public static string SaveOrders = OrderApiEndpoint + "/savemany";
             public static string GetOrder = OrderApiEndpoint + "/get/";
             public static string DeleteOrder = OrderApiEndpoint + "/delete/";
-            public static string UpdateOrder = OrderApiEndpoint + "/update";
+            public static string UpdateOrder = OrderApiEndpoint + "/put/";
             public static string SaveOrder = OrderApiEndpoint + "/save";
             public static string GetIdMax = OrderApiEndpoint + "/idmax";
 

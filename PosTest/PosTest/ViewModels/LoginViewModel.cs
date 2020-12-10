@@ -198,7 +198,7 @@ namespace PosTest.ViewModels
         
         public void CustomersSettings()
         {
-            CustomerViewModel customerViewModel = new CustomerViewModel(null);
+            CustomerViewModel customerViewModel = new CustomerViewModel(null,customerService);
             customerViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(customerViewModel);
         }  

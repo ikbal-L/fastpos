@@ -153,7 +153,7 @@ namespace PosTest.ViewModels
             }
             else
             {
-                _productsService.UpdateProduct(CurrentProduct);
+                _productsService.UpdateProduct(CurrentProduct, out IEnumerable<string> errors);
             }
             IsDialogOpen = false;
         }

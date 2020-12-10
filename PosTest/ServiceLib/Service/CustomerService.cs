@@ -14,6 +14,7 @@ using System.Text;
 
 namespace ServiceLib.Service
 {
+    [Export(typeof(ICustomerService))]
     public class CustomerService : ICustomerService
     {
         private readonly RestCustomerService _restCustomerService = RestCustomerService.Instance;
@@ -22,19 +23,19 @@ namespace ServiceLib.Service
             return _restCustomerService.DeleteCustomer(id);
         }
 
-        Customer ICustomerService.GetCustomer(long id)
+        public Customer GetCustomer(long id)
         {
             throw new NotImplementedException();
         }
 
-        ICollection<Customer> ICustomerService.GetAllCustomers()
+        public ICollection<Customer> GetAllCustomers(out int status)
         {
-            throw new NotImplementedException();
+            return GenericRest.GetAll<Customer>(UrlConfig.CustomerUrl.GetAllCustomers, out status).ToList();
         }
 
         public int SaveCustomer(Customer Customer, out long id, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(Customer, UrlConfig.CustomerUrl.SaveCustomer, out id,out errors);
+            return GenericRest.SaveThing(ref Customer, UrlConfig.CustomerUrl.SaveCustomer, out id,out errors);
         }
 
         public int SaveCustomers(IEnumerable<Customer> Customers)
@@ -48,7 +49,7 @@ namespace ServiceLib.Service
         }
     }
 
-    [Export(typeof(ICustomerService))]
+    
     public class RestCustomerService : ICustomerService
     {
         private static RestCustomerService _instance;
@@ -91,8 +92,9 @@ namespace ServiceLib.Service
             //return new Customer { Id=id};
         }
 
-        public ICollection<Customer> GetAllCustomers()
+        public ICollection<Customer> GetAllCustomers(out int status)
         {
+            status = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.CustomerUrl.GetManyCustomers);
             var request = new RestRequest(Method.POST);
@@ -116,51 +118,7 @@ namespace ServiceLib.Service
                 Customers = JsonConvert.DeserializeObject<IEnumerable<Customer>>(response.Content);
             }
 
-            Customers = new List<Customer>() 
-            { 
-                new Customer { Id = 1, Mobile = "0560202020", Name = "C.ustomer1" },
-                new Customer { Id = 1, Mobile = "0560202020", Name = "C.ustomer1" },
-                new Customer { Id = 2, Mobile = "0560202020", Name = "Customer2" },
-                new Customer { Id = 3, Mobile = "0560202020", Name = "Customer3" },
-                new Customer { Id = 4, Mobile = "0560202020", Name = "Customer4" },
-                new Customer { Id = 5, Mobile = "0560202020", Name = "Customer5" },
-                new Customer { Id = 6, Mobile = "0560202020", Name = "Customer6" },
-                new Customer { Id = 7, Mobile = "0560202020", Name = "Customer7" },
-                new Customer { Id = 8, Mobile = "0560202020", Name = "Customer8" },
-                new Customer { Id = 9, Mobile = "0560202020", Name = "Customer9" },
-                new Customer { Id = 10, Mobile = "022020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072080202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "072980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062980202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062920202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" },
-                new Customer { Id = 10, Mobile = "062020202", Name = "Customer10" }
-
-            };
+       
             
 
             return Customers.ToList();
@@ -248,7 +206,7 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public IEnumerable<Customer> GetAllCustomers(ref int statusCode)
+        public IEnumerable<Customer> GetAllCustomers( int statusCode)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.CustomerUrl.GetAllCustomers);

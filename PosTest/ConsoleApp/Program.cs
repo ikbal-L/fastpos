@@ -101,7 +101,7 @@ namespace ConsoleApp
             //    getCategoriesStatusCode = 0, code = 0;
             // var prods =  productService.GetAllProducts(ref getProductsStatusCode);
             var t1 = DateTime.Now;
-            var savedCode = GenericRest.SaveThing(p, UrlConfig.ProductUrl.SaveProduct, out long id);
+            var savedCode = GenericRest.SaveThing(ref p, UrlConfig.ProductUrl.SaveProduct, out long id,out IEnumerable<string> errors);
             var t2 = DateTime.Now;
             Console.WriteLine(t2-t1);
 

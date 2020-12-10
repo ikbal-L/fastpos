@@ -12,8 +12,8 @@ namespace ServiceInterface.Interface
         IEnumerable<Category> GetAllCategories(ref int statusCode);
         (IEnumerable<Category>, IEnumerable<Product>) GetAllCategoriesAndProducts(ref int categStatusCode, ref int prodStatusCode);
         IEnumerable<Category> GetManyCategories(IEnumerable<long?> ids, ref int statusCode);
-        int SaveCategory(Category category, out long id);
-        int UpdateCategory(Category category);
+        int SaveCategory(Category category, out long id,out IEnumerable<string> errors);
+        int UpdateCategory(Category category , out IEnumerable<string> errors);
         int SaveCategories(IEnumerable<Category> categories);
         Category GetCategory(long id, ref int statusCode);
         int DeleteCategory(long id);
