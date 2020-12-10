@@ -147,9 +147,20 @@ namespace PosTest.ViewModels
             var waiter = waiterService.GetAllWaiters(ref code);
             var tables = _orderService.GeAlltTables(ref status);
             var customers = _customerService.GetAllCustomers(out int customerStatus);
-            var unprocessedOrders = _orderService.GetAllOrders(out int statusCode, unprocessed: true);
-            
+            var unprocessedOrders = _orderService.GetAllOrders(out int statusCode, unprocessed: true).ToList();
+
+            var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
+            foreach (var table in tables.ToList())
+            {
+                var order = unprocessedTableOrders.FirstOrDefault(uo => uo.TableId == table.Id);
+                if (order!=null)
+                {
+                    order.Table = table;
+                }
+            }
+
             Orders = new BindableCollection<Order>(unprocessedOrders);
+            
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
