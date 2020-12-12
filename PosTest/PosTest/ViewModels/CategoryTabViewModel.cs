@@ -16,11 +16,11 @@ namespace PosTest.ViewModels
         {
 
             //currentOrderitem = new BindableCollection<OrdreItem>();
-            int getProductsStatusCode = 0,
-                getCategoriesStatusCode = 0;
+            int getProductsStatusCode = 0;
             
             var AllRequestedProducts = productService.GetAllProducts(ref getProductsStatusCode);
-            var Categories = new BindableCollection<Category>(categorieService.GetAllCategories(ref getCategoriesStatusCode));
+            var (getCategoriesStatusCode,categories) = categorieService.GetAllCategories( );
+            var Categories = new BindableCollection<Category>(categories);
             CategoriesTab = new BindableCollection<CategoryItem>();
 
             foreach (var p in AllRequestedProducts)

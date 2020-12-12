@@ -5,24 +5,24 @@ namespace ServiceInterface.Interface
 {
     public interface IDelivereyService
     {
-        IEnumerable<Delivereyman> GetAllDeliverymen(out int statusCode);
-        IEnumerable<Delivereyman> GetAllActiveDelivereymen(ref int statusCode);
-        int SaveDelivereyman(Delivereyman delivereyman ,out long id, out IEnumerable<string> errors);
-        int UpdateDelivereyman(Delivereyman delivereyman);
-        int DeleteDelivereyman(long orderId);
+        (int,IEnumerable<Delivereyman>) GetAllDeliverymen();
+        (int,IEnumerable<Delivereyman>) GetAllActiveDeliverymen();
+        int SaveDeliveryman(Delivereyman deliveryman, out IEnumerable<string> errors);
+        int UpdateDeliveryman(Delivereyman deliveryman);
+        int DeleteDeliveryman(long orderId);
 
-        Delivereyman GetDelivereyman(int id, ref int statusCode);
+        (int,Delivereyman) GetDeliveryman(int id);
     }
 
     public interface IWaiterService
     {
-        IEnumerable<Waiter> GetAllWaiters(ref int statusCode);
-        IEnumerable<Waiter> GetAllActiveWaiters(ref int statusCode);
-        int SaveWaiter(Waiter waiter ,out long id ,out IEnumerable<string> errors);
-        int UpdateWaiter(Waiter Waiter);
+        (int,IEnumerable<Waiter>) GetAllWaiters();
+        (int,IEnumerable<Waiter>) GetAllActiveWaiters();
+        int SaveWaiter(Waiter waiter ,out IEnumerable<string> errors);
+        int UpdateWaiter(Waiter waiter);
         int DeleteWaiter(long orderId);
 
-        Waiter GetWaiters(int id, ref int statusCode);
+        (int,Waiter) GetWaiters(int id);
     }
 
 }

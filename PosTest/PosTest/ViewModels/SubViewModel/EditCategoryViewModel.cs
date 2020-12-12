@@ -95,9 +95,8 @@ namespace PosTest.ViewModels.SubViewModel
             else
             {
                 
-                _categoryService.SaveCategory(this._source, out long id, out IEnumerable<string> errors);
-                Category.Id = id;
-                this._source.Id = id;
+                _categoryService.SaveCategory(this._source, out IEnumerable<string> errors);
+                Category.Id = this._source.Id;
             }
         }
 

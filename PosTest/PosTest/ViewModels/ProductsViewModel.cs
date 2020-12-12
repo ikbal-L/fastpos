@@ -100,12 +100,13 @@ namespace PosTest.ViewModels
             _additiveService = additiveService;
 
             int getProductsStatusCode = 0,
-                getCategoriesStatusCode = 0,
-                getAdditiveStatusCode = 0;
-            Products = new BindableCollection<Product>(_productsService.GetAllProducts(ref getProductsStatusCode));
+                getCategoriesStatusCode = 0;
+                Products = new BindableCollection<Product>(_productsService.GetAllProducts(ref getProductsStatusCode));
             ProductsCanCompositIngredients = new BindableCollection<Product>(Products.Where(p => p.IsPlatter == false));
-            Categories = new BindableCollection<Category>(_categorieService.GetAllCategories(ref getCategoriesStatusCode));
-            Additives = new BindableCollection<Additive>(_additiveService.GetAllAdditives(ref getAdditiveStatusCode));
+            var (status,categories)=_categorieService.GetAllCategories();
+            Categories = new BindableCollection<Category>(categories);
+            var (getAdditiveStatusCode, additives) = _additiveService.GetAllAdditives();
+            Additives = new BindableCollection<Additive>(additives);
 
             CurrentProduct = Products.Cast<Product>().FirstOrDefault();
         }

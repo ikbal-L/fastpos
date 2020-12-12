@@ -159,7 +159,7 @@ namespace PosTest.ViewModels.SubViewModel
             var comparer = new Comparer<Additive>();
             int StatusCode = 0;
             // var allAdditives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
-            var allAdditives = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives,out int status);
+            var (status,allAdditives) = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives);
             if (status!=200)
             {
                 
@@ -184,9 +184,8 @@ namespace PosTest.ViewModels.SubViewModel
             }
             else
             {
-                _productService.SaveProduct(this._source, out long id, out IEnumerable<string> errors);
-                Product.Id = id;
-                this._source.Id = id;
+                _productService.SaveProduct(this._source, out IEnumerable<string> errors);
+                Product.Id = this._source.Id;
             }
         }
 

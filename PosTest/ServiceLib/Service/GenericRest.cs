@@ -11,19 +11,18 @@ namespace ServiceLib.Service
 {
     public class GenericRest
     {
-        static public T GetThing<T>(string path, ref int statusCode)
+        static public (int,T) GetThing<T>(string path)
         {
             var resp = RestGet(path);
-            statusCode = (int)resp.StatusCode;
             T t = default;
-            if (statusCode == (int)HttpStatusCode.OK)
+            if (resp.StatusCode == HttpStatusCode.OK)
             {
                 //string s = t.ToString();
 //                if (t.ToString() is Waiter)
   //                  Console.WriteLine(s);
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
-            return t;// ;products
+            return ((int)resp.StatusCode,t);// ;products
 
         }
 
@@ -39,12 +38,9 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static int SaveThing<T>(ref T thing, string url, out long id,out IEnumerable<string> errors)
+        public static IRestResponse SaveThing<T>(T thing, string url)
         {
-            id = -1;
-            errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
-            //product = MapProduct.MapProductToSend(product);
             string json = JsonConvert.SerializeObject(thing,
                             Newtonsoft.Json.Formatting.None,
                             new JsonSerializerSettings
@@ -56,31 +52,30 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", token);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
-            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
+            //request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
             
             IRestResponse response = client.Execute(request);
-            //if (response.StatusCode == HttpStatusCode.OK)
-            //    return true;
-            if (response.StatusCode==HttpStatusCode.Created)
+            return response;
+        }
+        
+        public static (int status,T result) SaveThing<T>(T thing, string url,out IEnumerable<string> errors)
+        {
+            errors = new List<string>();
+            var response = SaveThing<T>(thing, url);
+            if (response.StatusCode == HttpStatusCode.Created)
             {
-                
-                if (thing is Order order)
-                {
-                    thing =  JsonConvert.DeserializeObject<T>(response.Content);
-                }
-                else
-                {
-                    long.TryParse(response.Content, out id);
-                    
-                }
-                
+
+                long.TryParse(response.Content, out long id);
+                thing.GetType().GetProperty("Id")?.SetValue(thing,id);
+
             }
 
             if ((int)response.StatusCode == 422)
             {
-                errors =JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
+                errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
             }
-            return (int)response.StatusCode;
+
+            return ((int) response.StatusCode, thing);
         }
 
         public static IEnumerable<T> GetManyThings<T>(IEnumerable<long> ids, string url, ref int statusCode)
@@ -157,25 +152,23 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static IEnumerable<T> GetAll<T>(string url, out int status)
+        public static (int,IEnumerable<T>) GetAll<T>(string url)
         {
             IRestResponse response = RestGet( url);
 
             IEnumerable<T> collection = null;
 
-
-            status = (int)response.StatusCode;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return collection = JsonConvert.DeserializeObject<IEnumerable<T>>(response.Content);
+                collection = JsonConvert.DeserializeObject<IEnumerable<T>>(response.Content);
             }
 
             if (response.StatusCode== HttpStatusCode.NoContent)
             {
-                return Array.Empty<T>();
+                collection = Array.Empty<T>();
             }
             
-            return collection;
+            return ((int)response.StatusCode,collection);
         }
     }
 }

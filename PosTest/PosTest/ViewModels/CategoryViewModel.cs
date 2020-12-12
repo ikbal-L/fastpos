@@ -48,11 +48,10 @@ namespace PosTest.ViewModels
             //_productsService = productsService;
             //Products = BindableCollection.GetDefaultView(_productsService.GetAllProducts());
             //Products = new BindableCollection<Product>( _productsService.GetAllProducts());
-            int getProductsStatusCode = 0,
-                getCategoriesStatusCode = 0;
             _pageSize = pageSize;
             _categorieService = categorieService;
-            Categories = new BindableCollection<Category>(_categorieService.GetAllCategories(ref getCategoriesStatusCode));
+            var(getCategoriesStatusCode ,allCategories) = _categorieService.GetAllCategories();
+            Categories = new BindableCollection<Category>(allCategories);
             CurrentCategory = Categories.Cast<Category>().FirstOrDefault();
 
         }

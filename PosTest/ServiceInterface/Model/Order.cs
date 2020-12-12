@@ -403,6 +403,7 @@ namespace ServiceInterface.Model
                 if (orderItem.Product?.Id != null)
                 {
                     orderItem.ProductId = (long)orderItem.Product?.Id; 
+
                 }
                 orderItem.OrderId = Id;
             }
@@ -410,6 +411,7 @@ namespace ServiceInterface.Model
 
             this.TableId = Table?.Id;
             this.CustomerId = Customer?.Id;
+            this.DeliverymanId = Delivereyman?.Id;
         }
 
         public void MappingAfterReceiving(IEnumerable<Product> products)

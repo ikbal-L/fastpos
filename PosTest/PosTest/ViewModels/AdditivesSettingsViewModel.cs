@@ -31,10 +31,10 @@ namespace PosTest.ViewModels
         {
             _additiveService = additiveService;
             _additivePageSize = additivePageSize;
-            int additiveStatusCode = 0;
+            
             // _allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
-            _allAdditives = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives, out int status).ToList();
-            if (status!=200)
+            var (additiveStatusCode, _allAdditives) = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives);
+            if (additiveStatusCode != 200)
             {
                 
             }
@@ -197,8 +197,8 @@ namespace PosTest.ViewModels
                 if (SelectedAdditive.Id == null)
                 {
 
-                    statusCode = _additiveService.SaveAdditive(SelectedAdditive, out long id, out IEnumerable<string> errors);
-                    SelectedAdditive.Id = id;
+                    statusCode = _additiveService.SaveAdditive(SelectedAdditive,out IEnumerable<string> errors);
+                    //SelectedAdditive.Id = id;
                 }
                 else
                 {
@@ -263,10 +263,10 @@ namespace PosTest.ViewModels
             additive.Id = null;
             try
             {
-                var statusCode = _additiveService.SaveAdditive(additive, out var id, out IEnumerable<string> errors);
+                var statusCode = _additiveService.SaveAdditive(additive, out IEnumerable<string> errors);
                 if (statusCode == 200)
                 {
-                    additive.Id = id;
+                    // additive = savedAdditive;
                 }
                 else
                 {

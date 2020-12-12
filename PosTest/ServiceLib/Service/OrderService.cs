@@ -27,18 +27,18 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Order> GetAllOrders(out int statusCode, bool unprocessed = false)
+        public (int,IEnumerable<Order>) GetAllOrders( bool unprocessed = false)
         {
             string url = unprocessed ? UrlConfig.OrderUrl.GetAllUnprocessedOrders : UrlConfig.OrderUrl.GetAllOrders;
-            return GenericRest.GetAll<Order>(url, out statusCode);
+            return GenericRest.GetAll<Order>(url);
         }
 
-        public IEnumerable<Order> GetManyOrders(IEnumerable<long> orderIds, ref int statusCode)
+        public (int,IEnumerable<Order>) GetManyOrders(IEnumerable<long> orderIds)
         {
             throw new NotImplementedException();
         }
 
-        public int SaveOrder(ref Order order,out IEnumerable<string> errors)
+        public int SaveOrder( Order order,out IEnumerable<string> errors)
         {
             order.MappingBeforeSending();
             errors = ValidationService.Validate(order);
@@ -47,14 +47,34 @@ namespace ServiceLib.Service
                 // id = -1;
                 return 0;
             }
-            return GenericRest.SaveThing(ref order,UrlConfig.OrderUrl.SaveOrder,out long id,out errors);
-            // return _restOrderService.SaveOrder(order,out errors);
+            var response = GenericRest.SaveThing(order,UrlConfig.OrderUrl.SaveOrder);
+            if (response.StatusCode == HttpStatusCode.Created|| response.StatusCode==HttpStatusCode.OK)
+            {
+
+                var deserializedOrder = JsonConvert.DeserializeObject<Order>(response.Content);
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    order.Id = deserializedOrder.Id; 
+                }
+
+                order.OrderItems = deserializedOrder.OrderItems;
+                deserializedOrder = null;
+
+
+            }
+            else
+            {
+                errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
+            }
+
+            return (int)response.StatusCode;
+
         }
 
         public int UpdateOrder(ref Order order,out IEnumerable<string> errors)
         {
             order.MappingBeforeSending();
-            order.MappingBeforeSending();
+            //order.MappingBeforeSending();
             errors = ValidationService.Validate(order);
             if (errors.Count() > 0)
             {
@@ -65,24 +85,24 @@ namespace ServiceLib.Service
             // return _restOrderService.UpdateOrder(order);
         }
 
-        public Table GetTable(int id, ref int statusCode)
+        public (int,Table) GetTable(int id)
         {
-            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString());
         }
 
-        public Table GetTableByNumber(int tableNumber, ref int statusCode)
+        public (int,Table) GetTableByNumber(int tableNumber)
         {
-            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString());
         }
 
-        public int SaveTable(Table table,out long id,out IEnumerable<string> errors)
+        public int SaveTable(Table table,out  IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<Table>(ref table, UrlConfig.OrderUrl.SaveTable,out  id,out errors);
+            return GenericRest.SaveThing<Table>(table, UrlConfig.OrderUrl.SaveTable,out errors).Item1;
         }
 
-        public IEnumerable<Table> GeAlltTables(ref int statusCode)
+        public (int,IEnumerable<Table>)  GeAllTables()
         {
-            return GenericRest.GetThing<IEnumerable<Table>>(UrlConfig.OrderUrl.GetAllTables, ref statusCode);
+            return GenericRest.GetThing<IEnumerable<Table>>(UrlConfig.OrderUrl.GetAllTables);
         }
     }
 
@@ -108,7 +128,7 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public Order GetOrder(long id, ref int statusCode)
+        public (int,Order) GetOrder(long id)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.OrderUrl.GetOrder + id.ToString());
@@ -121,13 +141,13 @@ namespace ServiceLib.Service
             {
                 order = JsonConvert.DeserializeObject<Order>(response.Content);
             }
-            statusCode = (int)response.StatusCode;
-            return order;// ;products
+
+            return ((int)response.StatusCode, order);// ;products
 
             //return new Additive { Id=id};
         }
 
-        public IEnumerable<Order> GetManyOrders(IEnumerable<long> ids, ref int statusCode)
+        public (int,IEnumerable<Order>) GetManyOrders(IEnumerable<long> ids)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.OrderUrl.GetManyOrders);
@@ -148,11 +168,11 @@ namespace ServiceLib.Service
             {
                 orders = JsonConvert.DeserializeObject<IEnumerable<Order>>(response.Content);
             }
-            statusCode = (int)response.StatusCode;
-            return orders;
+            
+            return ((int)response.StatusCode,orders);
         }
 
-        public int SaveOrder(ref Order order/*,out long id*/, out IEnumerable<string> errors)
+        public int SaveOrder(Order order/*,out long id*/, out IEnumerable<string> errors)
         {
             // id = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
@@ -241,80 +261,62 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public long? GetIdmax(ref int statusCode)
-        {
-            var response = GenericRest.RestGet(UrlConfig.OrderUrl.GetIdMax);
-            statusCode = (int)response.StatusCode;
-            long? idmax = null;
-            if (statusCode == (int)HttpStatusCode.OK)
-            {
-                try
-                {
-                    idmax = Convert.ToInt64(response.Content);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-            return idmax;
-        }
-
-        public IEnumerable<Order> GetAllOrders(out int statusCode, bool unprocessed = false)
+        
+        public (int,IEnumerable<Order>) GetAllOrders(bool unprocessed = false)
         {
             throw new NotImplementedException();
         }
 
-        public Table GetTable(int id, ref int statusCode)
+        public (int,Table) GetTable(int id)
         {
-            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString(), ref statusCode);
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTable + id.ToString());
         }
 
-        public Table GetTableByNumber(int tableNumber, ref int statusCode)
+        public (int status, Table table) GetTableByNumber(int tableNumber)
         {
-            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString(), ref statusCode);
+            return GenericRest.GetThing<Table>(UrlConfig.OrderUrl.GetTableByNumber + tableNumber.ToString());
         }
 
-        public int SaveTable(Table table,out long id,out IEnumerable<string> errors)
+        public int SaveTable(Table table,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<Table>(ref table, UrlConfig.OrderUrl.SaveTable,out id,out errors);
+            return GenericRest.SaveThing<Table>( table, UrlConfig.OrderUrl.SaveTable,out errors).Item1;
         }
 
-        public IEnumerable<Table> GeAlltTables(ref int statusCode)
+        public (int,IEnumerable<Table>) GeAllTables()
         {
             throw new NotImplementedException();
         }
 
     }
     [Export(typeof(IDelivereyService))]
-    public class DelivereyService : IDelivereyService
+    public class DeliveryService : IDelivereyService
     {
-        public int DeleteDelivereyman(long orderId)
+        public int DeleteDeliveryman(long orderId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Delivereyman> GetAllActiveDelivereymen(ref int statusCode)
+        public (int,IEnumerable<Delivereyman>) GetAllActiveDeliverymen()
         {
-            return GenericRest.GetThing<IEnumerable<Delivereyman>>(UrlConfig.DelivereyUrl.GetAllActiveDeliverymen, ref statusCode);
+            return GenericRest.GetThing<IEnumerable<Delivereyman>>(UrlConfig.DelivereyUrl.GetAllActiveDeliverymen);
         }
 
-        public IEnumerable<Delivereyman> GetAllDeliverymen(out int statusCode)
+        public (int,IEnumerable<Delivereyman>) GetAllDeliverymen()
         {
-            return GenericRest.GetAll<Delivereyman>(UrlConfig.DelivereyUrl.GetAllDeliverymen, out statusCode);
+            return GenericRest.GetAll<Delivereyman>(UrlConfig.DelivereyUrl.GetAllDeliverymen);
         }
 
-        public Delivereyman GetDelivereyman(int id, ref int statusCode)
+        public (int,Delivereyman) GetDeliveryman(int id)
         {
-            return GenericRest.GetThing<Delivereyman>(UrlConfig.DelivereyUrl.GetDeliverymen+id.ToString(), ref statusCode);
+            return GenericRest.GetThing<Delivereyman>(UrlConfig.DelivereyUrl.GetDeliverymen+id.ToString());
         }
 
-        public int SaveDelivereyman(Delivereyman delivereyman,out long id,out IEnumerable<string> errors)
+        public int SaveDeliveryman(Delivereyman deliveryman,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(ref delivereyman, UrlConfig.DelivereyUrl.SaveDeliveryman, out id,out errors);
+            return GenericRest.SaveThing(deliveryman, UrlConfig.DelivereyUrl.SaveDeliveryman,out errors).Item1;
         }
 
-        public int UpdateDelivereyman(Delivereyman delivereyman)
+        public int UpdateDeliveryman(Delivereyman deliveryman)
         {
             throw new NotImplementedException();
         }
@@ -328,27 +330,27 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Waiter> GetAllActiveWaiters(ref int statusCode)
+        public (int,IEnumerable<Waiter>) GetAllActiveWaiters()
         {
-            return GenericRest.GetThing<IEnumerable<Waiter>>(UrlConfig.WaiterUrl.GetAllActiveWaiters, ref statusCode);
+            return GenericRest.GetThing<IEnumerable<Waiter>>(UrlConfig.WaiterUrl.GetAllActiveWaiters);
         }
 
-        public IEnumerable<Waiter> GetAllWaiters(ref int statusCode)
+        public (int,IEnumerable<Waiter>) GetAllWaiters()
         {
-            return GenericRest.GetThing<IEnumerable<Waiter>>(UrlConfig.WaiterUrl.GetAllWaiters, ref statusCode);
+            return GenericRest.GetThing<IEnumerable<Waiter>>(UrlConfig.WaiterUrl.GetAllWaiters);
         }
 
-        public Waiter GetWaiters(int id, ref int statusCode)
+        public (int,Waiter) GetWaiters(int id)
         {
             throw new NotImplementedException();
         }
 
-        public int SaveWaiter(Waiter waiter ,out long id, out IEnumerable<string> errors)
+        public int SaveWaiter(Waiter waiter , out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(ref waiter,UrlConfig.WaiterUrl.SaveWaiter,out id, out errors);
+            return GenericRest.SaveThing(waiter,UrlConfig.WaiterUrl.SaveWaiter, out errors).Item1;
         }
 
-        public int UpdateWaiter(Waiter Waiter)
+        public int UpdateWaiter(Waiter waiter)
         {
             throw new NotImplementedException();
         }

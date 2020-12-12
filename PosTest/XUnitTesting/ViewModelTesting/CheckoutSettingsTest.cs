@@ -31,14 +31,8 @@ namespace XUnitTesting.ViewModelTesting
 
             _categoryService
                 .Setup((cs =>
-                    cs.GetAllCategoriesAndProducts(ref It.Ref<int>.IsAny, ref It.Ref<int>.IsAny)))
-                .Callback(new GetGetAllProductsCallback(
-                    (ref int categoryServiceStatusCode, ref int productServiceStatusCode) =>
-                    {
-                        categoryServiceStatusCode = 200;
-                        productServiceStatusCode = 200;
-                    }
-                )).Returns((MockingHelpers.GetAllCategories(), MockingHelpers.GetAllProducts()));
+                    cs.GetAllCategoriesAndProducts()))
+               .Returns(((200,200),(MockingHelpers.GetAllCategories(), MockingHelpers.GetAllProducts())));
 
 
             _productService.Setup((ps => ps.UpdateProduct(new Product()))).Returns(200);

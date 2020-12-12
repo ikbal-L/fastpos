@@ -5,9 +5,9 @@ namespace ServiceInterface.Interface
 {
     public interface IAdditiveService
     {
-        IEnumerable<Additive> GetAllAdditives(ref int statusCode);
+        (int,IEnumerable<Additive>) GetAllAdditives();
         IEnumerable<Additive> GetManyAdditives(IEnumerable<long> ids, ref int statusCode);
-        int SaveAdditive(Additive additive,out long id,out IEnumerable<string> errors);
+        int SaveAdditive(Additive additive, out IEnumerable<string> errors);
         int UpdateAdditive(Additive additive);
         int SaveAdditives(IEnumerable<Additive> additives);
 

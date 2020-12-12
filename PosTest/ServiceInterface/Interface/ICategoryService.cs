@@ -9,13 +9,13 @@ namespace ServiceInterface.Interface
 {
     public interface ICategoryService
     {
-        IEnumerable<Category> GetAllCategories(ref int statusCode);
-        (IEnumerable<Category>, IEnumerable<Product>) GetAllCategoriesAndProducts(ref int categStatusCode, ref int prodStatusCode);
-        IEnumerable<Category> GetManyCategories(IEnumerable<long?> ids, ref int statusCode);
-        int SaveCategory(Category category, out long id,out IEnumerable<string> errors);
+        (int Status,IEnumerable<Category> Categories)GetAllCategories();
+        ((int CategoryStatus,int ProductStatus),(IEnumerable<Category>, IEnumerable<Product>)) GetAllCategoriesAndProducts();
+        (int,IEnumerable<Category>) GetManyCategories(IEnumerable<long?> ids);
+        int SaveCategory(Category category,out IEnumerable<string> errors);
         int UpdateCategory(Category category , out IEnumerable<string> errors);
         int SaveCategories(IEnumerable<Category> categories);
-        Category GetCategory(long id, ref int statusCode);
+        (int,Category) GetCategory(long id);
         int DeleteCategory(long id);
     }
 }

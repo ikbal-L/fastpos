@@ -27,10 +27,9 @@ namespace ServiceLib.Service
         }
 
 
-        public int SaveAdditive(Additive additive, out long id,out IEnumerable<string> errors)
+        public int SaveAdditive(Additive additive,out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(ref additive, UrlConfig.AdditiveUrl.SaveAdditive, out id,out errors);
-            // return _restAdditiveService.SaveAdditive(additive, out id);
+            return GenericRest.SaveThing<Additive>( additive, UrlConfig.AdditiveUrl.SaveAdditive ,out errors).Item1;
         }
 
         public int UpdateAdditive(Additive additive)
@@ -44,9 +43,9 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Additive> GetAllAdditives(ref int statusCode)
+        public (int,IEnumerable<Additive>) GetAllAdditives()
         {
-           return GenericRest.GetThing <IEnumerable<Additive>>(UrlConfig.AdditiveUrl.GetAllAdditives, ref statusCode);
+           return GenericRest.GetThing <IEnumerable<Additive>>(UrlConfig.AdditiveUrl.GetAllAdditives);
 
         }
 
@@ -128,9 +127,9 @@ namespace ServiceLib.Service
             return additives;
         }
 
-        public int SaveAdditive(Additive additive, out long id,out IEnumerable<string> errors)
+        public int SaveAdditive(Additive additive, out IEnumerable<string> errors)
         {
-            id = -1;
+            
             errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
@@ -155,9 +154,10 @@ namespace ServiceLib.Service
             //    return true;
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                id = long.Parse(response.Content);
+                long id = long.Parse(response.Content);
+                additive.Id = id;
             }
-            return (int)response.StatusCode;
+            return ((int)response.StatusCode,additive).Item1;
         }
 
        public int UpdateAdditive(Additive additive)
@@ -214,7 +214,7 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
-        public IEnumerable<Additive> GetAllAdditives(ref int statusCode)
+        public (int,IEnumerable<Additive>) GetAllAdditives()
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(UrlConfig.AdditiveUrl.GetAllAdditives);
@@ -228,8 +228,7 @@ namespace ServiceLib.Service
             {
                 additives = JsonConvert.DeserializeObject<IEnumerable<Additive>>(response.Content);
             }
-            statusCode = (int)response.StatusCode;
-            return additives;
+            return ((int)response.StatusCode, additives);
         }
     }
 

@@ -136,31 +136,27 @@ namespace PosTest.ViewModels
             _orderService = orderService;
             _customerService = customerService;
 
-            int catStatusCode = 0;
-            int prodStatusCode = 0;
 
-            
-            var status = 0;
-            // var deliveryMen = delivereyService.GetAllActiveDelivereymen(ref code);
-            var deliveryMen = delivereyService.GetAllDeliverymen(out int code);
+            // var deliveryMen = delivereyService.GetAllActiveDeliverymen(ref code);
+            var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
             // var waiter = waiterService.GetAllActiveWaiters(ref code);
-            var waiter = waiterService.GetAllWaiters(ref code);
-            var tables = _orderService.GeAlltTables(ref status);
-            var customers = _customerService.GetAllCustomers(out int customerStatus);
-            var unprocessedOrders = _orderService.GetAllOrders(out int statusCode, unprocessed: true).ToList();
+            var (waiterStatusCode, waiter) = waiterService.GetAllWaiters();
+            var (tablesStatusCode, tables) = _orderService.GeAllTables();
+            var (customerStatusCode,customers) = _customerService.GetAllCustomers();
+            var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
 
             var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
             foreach (var table in tables.ToList())
             {
                 var order = unprocessedTableOrders.FirstOrDefault(uo => uo.TableId == table.Id);
-                if (order!=null)
+                if (order != null)
                 {
                     order.Table = table;
                 }
             }
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
-            
+
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
@@ -179,8 +175,8 @@ namespace PosTest.ViewModels
                 Orders.Add(CurrentOrder);
             }
 
-            (IEnumerable<Category> categories, IEnumerable<Product> products) =
-                _categoriesService.GetAllCategoriesAndProducts(ref catStatusCode, ref prodStatusCode);
+            var ((catStatusCode, prodStatusCode), (categories, products)) =
+                _categoriesService.GetAllCategoriesAndProducts();
 
             if (catStatusCode != 200 && prodStatusCode != 200) return;
             AllProducts = products.ToList();
@@ -211,7 +207,7 @@ namespace PosTest.ViewModels
             TakeAwayViewModel = new TakeawayViewModel(this);
             DelivereyViewModel = new DelivereyViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
-            CustomerViewModel = new CustomerViewModel(this,customerService);
+            CustomerViewModel = new CustomerViewModel(this, customerService);
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
@@ -520,18 +516,17 @@ namespace PosTest.ViewModels
                 if (order.Id == null)
                 {
                     // order.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(ref order/*,out long id*/,out IEnumerable<string> errors);
+                    resp = _orderService.SaveOrder(order /*,out long id*/, out IEnumerable<string> errors);
                     var logger = NLog.LogManager.GetCurrentClassLogger();
-                    if (resp!=200&& resp!=201)
+                    if (resp != 200 && resp != 201)
                     {
-
-
                         string message;
-                            
-                        object [] args; 
-                        if (resp ==422)
+
+                        object[] args;
+                        if (resp == 422)
                         {
-                            message = "{ERROR CODE},Unable to save Order by  {Customer} due to the following validation {errors}:";
+                            message =
+                                "{ERROR CODE},Unable to save Order by  {Customer} due to the following validation {errors}:";
                             var errorsString = JsonConvert.SerializeObject(errors,
                                 Newtonsoft.Json.Formatting.None,
                                 new JsonSerializerSettings
@@ -542,10 +537,12 @@ namespace PosTest.ViewModels
                         }
                         else
                         {
-                            message = "Failed To save Oder by {Customer}  {ERRORCODE}, reattempting to save after {0} milliseconds ";
-                            args = new object[] { order.Customer?.Name, resp, 300 };
+                            message =
+                                "Failed To save Oder by {Customer}  {ERRORCODE}, reattempting to save after {0} milliseconds ";
+                            args = new object[] {order.Customer?.Name, resp, 300};
                         }
-                        ServiceHelper.HandleStatusCodeErrors(resp, message,args); 
+
+                        ServiceHelper.HandleStatusCodeErrors(resp, message, args);
                     }
                     else
                     {
@@ -594,8 +591,8 @@ namespace PosTest.ViewModels
 
                     var message =
                         $"Failed To update Oder by  {CurrentOrder.Customer}  {{ERRORCODE}}, reattempting to save after {{0}} milliseconds ";
-                    var args = new object[] { CurrentOrder?.Customer?.Name, resp, 300 };
-                    ServiceHelper.HandleStatusCodeErrors((int)resp, message,args);
+                    var args = new object[] {CurrentOrder?.Customer?.Name, resp, 300};
+                    ServiceHelper.HandleStatusCodeErrors((int) resp, message, args);
                     ToastNotification.ErrorNotification((int) resp);
                     break;
             }
@@ -603,7 +600,7 @@ namespace PosTest.ViewModels
 
         public void ShowOrder(Order order)
         {
-            if (order == null|| order == CurrentOrder) return;
+            if (order == null || order == CurrentOrder) return;
 
 
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
@@ -611,15 +608,16 @@ namespace PosTest.ViewModels
             CurrentOrder = order;
             //DisplayedOrder = order;
 
-            if (order.ShownCategory==null&& order.Id!=null)
+            if (order.ShownCategory == null && order.Id != null)
             {
                 order.ShownCategory = CurrentCategory;
                 order.ProductsVisibility = ProductsVisibility;
                 order.AdditivesVisibility = AdditivesVisibility;
             }
-            CurrentCategory = CurrentOrder.ShownCategory; 
-            
-            if (CurrentCategory != null&& ProductsPage.Any(p=>p?.Category!=CurrentCategory))
+
+            CurrentCategory = CurrentOrder.ShownCategory;
+
+            if (CurrentCategory != null && ProductsPage.Any(p => p?.Category != CurrentCategory))
             {
                 ShowCategoryProducts(CurrentCategory);
             }
@@ -762,7 +760,7 @@ namespace PosTest.ViewModels
             IsDialogOpen = false;
         }
 
-#endregion
+        #endregion
 
         public void CloseCommand()
         {
@@ -811,9 +809,8 @@ namespace PosTest.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
+            if (category == CurrentCategory && !(ProductsPage.Count == 0 || ProductsPage == null)) return;
 
-            if (category == CurrentCategory&& !(ProductsPage.Count==0|| ProductsPage==null) ) return;
-            
             ProductsPage.Clear();
             ProductsVisibility = true;
             if (category?.Id == null) return;
@@ -839,7 +836,7 @@ namespace PosTest.ViewModels
                 size: MaxProductPageSize);
         }
 
-#region Filtering and pagination
+        #region Filtering and pagination
 
         //public void CategorieFiltering(object param)
         //{
@@ -931,9 +928,9 @@ namespace PosTest.ViewModels
         //    CanExecutePrevious = _pageNumber == 1 ? false : true;
         //}
 
-#endregion
+        #endregion
 
-#region Command Buttons' Actions
+        #region Command Buttons' Actions
 
         public void ActionKeyboard(ActionButton cmd)
         {
@@ -998,12 +995,12 @@ namespace PosTest.ViewModels
                     break;
                 }
                 case ActionButton.Payment:
-                    if (CurrentOrder.Type== OrderType.InWaiting)
+                    if (CurrentOrder.Type == OrderType.InWaiting)
                     {
                         ToastNotification.Notify("Set order type first");
                         return;
                     }
-                    
+
                     PayementAction();
                     break;
 
@@ -1021,9 +1018,9 @@ namespace PosTest.ViewModels
 
                     var b1 = OrderManagementHelper.StampAndSetOrderItemState(stamp, CurrentOrder.OrderItems, _diff);
 
-                    var b2 =OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
+                    var b2 = OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
                     ChangesMade = b1 || b2;
-                    
+
                     _printOrder = OrderManagementHelper.GetChangesFromOrder(CurrentOrder, _diff);
                     CurrentOrder.State = OrderState.Ordered;
                     _diff.Clear();
@@ -1150,7 +1147,7 @@ namespace PosTest.ViewModels
             var status = 200;
             Table table;
             if ((table = LookForTableInOrders(tableNumber)) == null)
-                table = _orderService.GetTableByNumber(tableNumber, ref status);
+               (status,table) = _orderService.GetTableByNumber(tableNumber);
             switch (status)
             {
                 case 200:
@@ -1164,7 +1161,8 @@ namespace PosTest.ViewModels
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
                     {
-                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber},out long id,out IEnumerable<string> errors);
+                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber},
+                            out IEnumerable<string> errors);
                         if (status2 == 200)
                         {
                             ToastNotification.Notify("Creation of virtual table", 1);
@@ -1378,9 +1376,9 @@ namespace PosTest.ViewModels
             NumericZone += number;
         }
 
-#endregion
+        #endregion
 
-#region Order Item commands
+        #region Order Item commands
 
         public void AddAditive(Additive additive)
         {
@@ -1606,7 +1604,7 @@ namespace PosTest.ViewModels
             ShowProductAdditives(oitem.Product as Platter);
         }
 
-#endregion
+        #endregion
 
         public bool IsTopDrawerOpen
         {

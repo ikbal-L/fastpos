@@ -116,8 +116,8 @@ namespace PosTest.ViewModels
             string name= Regex.Replace(FilterString, @"\d", "");
             string mobile = "+213"+Regex.Replace(FilterString, @"\D", "").Remove(0,1);
             Customer customer = new Customer { Name = name, Mobile = mobile };
-            _customerService.SaveCustomer(customer, out long id, out IEnumerable<string> errors);
-            customer.Id = id;
+            _customerService.SaveCustomer(customer, out IEnumerable<string> errors);
+            //customer.Id = id;
             ParentChechoutVM.Customers.Add(customer);
             
             _CustomerView.Refresh();

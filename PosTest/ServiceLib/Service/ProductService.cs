@@ -63,17 +63,15 @@ namespace ServiceLib.Service
                 }
             }
 
-            int getAdditivestatusCode=0,
-                getCategriesStatusCode=0;
             //TODO Implement /additive/getmany in backend
             // var additivesOfAllProducts = _restAdditiveService.GetManyAdditives(idAdditivesOfAllProducts, ref getAdditivestatusCode);
-            var additivesOfAllProducts = _restAdditiveService.GetAllAdditives( ref getAdditivestatusCode);
+            var (getAdditivestatusCode,additivesOfAllProducts) = _restAdditiveService.GetAllAdditives();
             if (getAdditivestatusCode != 200)
             {
                 throw new MappingException("Error in GetManyAdditives to map with products, StatusCode: " + getAdditivestatusCode.ToString());
             }
             
-            var categories = _restCategoryService.GetManyCategories(idCategories, ref getCategriesStatusCode);
+            var (getCategriesStatusCode,categories) = _restCategoryService.GetManyCategories(idCategories );
             // if (getCategriesStatusCode != 200)
             // {
             //     throw new MappingException("Error in GetManyCategories to map with products, StatusCode: "+ getCategriesStatusCode.ToString());
@@ -104,9 +102,10 @@ namespace ServiceLib.Service
             {
                 return null;
             }
-            int getAdditivestatusCode = 0,
-                getCategryStatusCode = 0;
-            var category = _restCategoryService.GetCategory((long)product.CategoryId, ref getCategryStatusCode);
+
+            int getAdditivestatusCode = 0;
+                
+            var (getCategryStatusCode, category) = _restCategoryService.GetCategory((long)product.CategoryId);
             if (getCategryStatusCode != 200)
             {
                 throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getCategryStatusCode.ToString());
@@ -125,11 +124,10 @@ namespace ServiceLib.Service
             return product;
         }
 
-        public int SaveProduct(Product product, out long id, out IEnumerable<string> errors)
+        public int SaveProduct(Product product ,out IEnumerable<string> errors)
         {
             if (product == null)
             {
-                id = -1;
                 errors= new List<string>();
                 return -1;
             }
@@ -137,12 +135,11 @@ namespace ServiceLib.Service
             errors = ValidationService.Validate(product);
             if (errors.Any())
             {
-                id = -1;
                 return 0;
             }
 
             product.MappingBeforeSending();
-            return GenericRest.SaveThing(ref product,UrlConfig.ProductUrl.SaveProduct,out id,out errors);
+            return GenericRest.SaveThing(product,UrlConfig.ProductUrl.SaveProduct,out errors).status;
             // return _restProductService.SaveProduct(product, ref  Id);
         }
 
@@ -338,9 +335,8 @@ namespace ServiceLib.Service
             return products;
         }
 
-        public int SaveProduct(Product product, out long id, out IEnumerable<string> errors)
+        public int SaveProduct(Product product, out IEnumerable<string> errors)
         {
-            id = -1;
             errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             string json = JsonConvert.SerializeObject(product,
@@ -359,7 +355,8 @@ namespace ServiceLib.Service
             //    return true;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                id = long.Parse(response.Content.ReadAsStringAsync().Result);
+                long.TryParse(response.Content.ReadAsStringAsync().Result,out long id);
+                product.Id = id;
             }
             return (int)response.StatusCode;
         }

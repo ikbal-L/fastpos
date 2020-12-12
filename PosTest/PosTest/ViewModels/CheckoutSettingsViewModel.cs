@@ -65,10 +65,9 @@ namespace PosTest.ViewModels
 
             ProductPageSize = productPageSize;
             CategoryPageSize = categoryPageSize;
-            int catStatusCode = 0, prodStatusCode = 0;
-
-            var (categories, products) =
-                _categoriesService.GetAllCategoriesAndProducts(ref catStatusCode, ref prodStatusCode);
+            
+            var ((catStatusCode, prodStatusCode),(categories, products)) =
+                _categoriesService.GetAllCategoriesAndProducts();
             if (catStatusCode != 200 && prodStatusCode != 200) return;
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
@@ -692,8 +691,8 @@ namespace PosTest.ViewModels
                 if (sourceProduct.Id == null)
                 {
                    
-                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, out long id, out IEnumerable<string> errorsOfSourceProduct);
-                    sourceProduct.Id = id;
+                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, out IEnumerable<string> errorsOfSourceProduct);
+                    //sourceProduct.Id = id;
                 }
                 else
                 {

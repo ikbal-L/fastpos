@@ -120,7 +120,7 @@ namespace ConsoleApp
             // //orderService.SaveOrder(o);
             // var status = 0;
             // //var prods = GenericRest.GetManyThings<Platter>(new List<long> { 1, 2, 3, 4 }, UrlConfig.ProductUrl.GetManyProducts, ref status);
-            // //var men = delivereyService.GetAllActiveDelivereymen(ref status);
+            // //var men = delivereyService.GetAllActiveDeliverymen(ref status);
             // //Console.WriteLine(men.Count());
             //
             // (IEnumerable<long> ids, var status1) = productService.UpdateManyProducts(prods.Where(pr => pr.Id == 41 || pr.Id == 42));

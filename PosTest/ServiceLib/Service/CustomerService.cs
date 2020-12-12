@@ -18,9 +18,9 @@ namespace ServiceLib.Service
     public class CustomerService : ICustomerService
     {
         private readonly RestCustomerService _restCustomerService = RestCustomerService.Instance;
-        public int DeleteCustomer(long id)
+        public int DeleteCustomer(long additiveId)
         {
-            return _restCustomerService.DeleteCustomer(id);
+            return _restCustomerService.DeleteCustomer(additiveId);
         }
 
         public Customer GetCustomer(long id)
@@ -28,22 +28,22 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public ICollection<Customer> GetAllCustomers(out int status)
+        public (int,IEnumerable<Customer>) GetAllCustomers()
         {
-            return GenericRest.GetAll<Customer>(UrlConfig.CustomerUrl.GetAllCustomers, out status).ToList();
+            return GenericRest.GetAll<Customer>(UrlConfig.CustomerUrl.GetAllCustomers);
         }
 
-        public int SaveCustomer(Customer Customer, out long id, out IEnumerable<string> errors)
+        public int SaveCustomer(Customer customer, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing(ref Customer, UrlConfig.CustomerUrl.SaveCustomer, out id,out errors);
+            return GenericRest.SaveThing(customer, UrlConfig.CustomerUrl.SaveCustomer, out errors).status;
         }
 
-        public int SaveCustomers(IEnumerable<Customer> Customers)
+        public int SaveCustomers(IEnumerable<Customer> customers)
         {
             throw new NotImplementedException();
         }
 
-        public int UpdateCustomer(Customer Customer)
+        public int UpdateCustomer(Customer customer)
         {
             throw new NotImplementedException();
         }
@@ -55,14 +55,14 @@ namespace ServiceLib.Service
         private static RestCustomerService _instance;
 
         public static RestCustomerService Instance => _instance ?? (_instance = new RestCustomerService());
-        public int DeleteCustomer(long additivdId)
+        public int DeleteCustomer(long additiveId)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
-            var client = new RestClient(UrlConfig.CustomerUrl.DeleteCustomer + $"{additivdId}");
+            var client = new RestClient(UrlConfig.CustomerUrl.DeleteCustomer + $"{additiveId}");
             var request = new RestRequest(Method.DELETE);
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", token);
-            //request.AddParameter("application/json", "{\n\"id\":1\n}", ParameterType.RequestBody);
+            //request.AddParameter("application/json", "{\n\"additiveId\":1\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             //if (response.StatusCode == HttpStatusCode.OK)
             //{
@@ -89,12 +89,11 @@ namespace ServiceLib.Service
 
             return Customer;// ;products
 
-            //return new Customer { Id=id};
+            //return new customer { Id=additiveId};
         }
 
-        public ICollection<Customer> GetAllCustomers(out int status)
+        public (int, IEnumerable<Customer>) GetAllCustomers()
         {
-            status = -1;
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(UrlConfig.CustomerUrl.GetManyCustomers);
             var request = new RestRequest(Method.POST);
@@ -121,12 +120,11 @@ namespace ServiceLib.Service
        
             
 
-            return Customers.ToList();
+            return ((int)response.StatusCode,Customers.ToList());
         }
 
-        public int SaveCustomer(Customer Customer,out long id, out IEnumerable<string> errors)
+        public int SaveCustomer(Customer Customer, out IEnumerable<string> errors)
         {
-            id = -1;
             errors = new List<string>();
             string token = AuthProvider.Instance.AuthorizationToken;
             //product = MapProduct.MapProductToSend(product);
