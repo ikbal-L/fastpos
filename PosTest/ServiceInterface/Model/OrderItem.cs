@@ -34,6 +34,7 @@ namespace ServiceInterface.Model
             Order = order;
             Product = product;
             ProductName = product?.Name;
+            ProductId =ProductId==0?(long)product?.Id:ProductId;
             UnitPrice = unitPrice;
             Quantity = quantity;
             OrderItemAdditives = new List<OrderItemAdditive>();

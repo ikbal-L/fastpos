@@ -151,7 +151,10 @@ namespace PosTest.ViewModels
                 var order = unprocessedTableOrders.FirstOrDefault(uo => uo.TableId == table.Id);
                 if (order != null)
                 {
+                    
                     order.Table = table;
+                    order.OrderItems.ToList().ForEach(oi=>oi.Additives
+                    = new BindableCollection<Additive>());
                 }
             }
 
@@ -688,7 +691,7 @@ namespace PosTest.ViewModels
 
             TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
             TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
-            TablesViewModel.TablesView.Refresh();
+            // TablesViewModel.TablesView.Refresh();
             SetSelectedInListedOrdersDisplayedOrder();
             TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
@@ -1562,7 +1565,7 @@ namespace PosTest.ViewModels
             var item = new OrderItem(selectedproduct, 1, selectedproduct.Price, CurrentOrder);
 
             var fetch = CurrentOrder.OrderItems.FirstOrDefault(i =>
-                i.Product.Id == selectedproduct.Id && i.TimeStamp != null);
+                i.ProductId == selectedproduct.Id && i.TimeStamp != null);
             if (fetch != null)
             {
                 OrderManagementHelper.TrackItemForChange(fetch, _diff);

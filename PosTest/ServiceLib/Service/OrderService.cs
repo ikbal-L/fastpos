@@ -57,6 +57,13 @@ namespace ServiceLib.Service
                     order.Id = deserializedOrder.Id; 
                 }
 
+                foreach (var newOrderItem in deserializedOrder.OrderItems)
+                {
+                    var oldOrderItem = order.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
+                    newOrderItem.Additives = oldOrderItem.Additives;
+                }
+
+                ;
                 order.OrderItems = deserializedOrder.OrderItems;
                 deserializedOrder = null;
 

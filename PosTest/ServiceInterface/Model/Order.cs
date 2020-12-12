@@ -336,10 +336,10 @@ namespace ServiceInterface.Model
             bool groupByProduct = true)
         {
             OrderItem item;
-            if ((product is Platter && (product as Platter).Additives != null) || OrderItems.All(p => p.Product.Id != product.Id) ||
+            if ((product is Platter && (product as Platter).Additives != null) || OrderItems.All(p => p.ProductId != product.Id) ||
                 !groupByProduct ||
                 OrderItems.Where(oi =>
-                    oi.Product.Id == product.Id 
+                    oi.ProductId == product.Id 
                 ).All(oi=> oi.State == OrderItemState.Removed)
             )
             {
@@ -349,7 +349,7 @@ namespace ServiceInterface.Model
             }
             else
             {
-                item = OrderItems.FirstOrDefault(p => p.Product.Id == product.Id && p.State != OrderItemState.Removed);
+                item = OrderItems.FirstOrDefault(orderItem => orderItem.ProductId == product.Id && orderItem.State != OrderItemState.Removed);
                 item.Quantity += quantity;
             }
 
