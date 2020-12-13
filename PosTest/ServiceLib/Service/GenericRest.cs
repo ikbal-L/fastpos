@@ -11,7 +11,7 @@ namespace ServiceLib.Service
 {
     public class GenericRest
     {
-        static public (int,T) GetThing<T>(string path)
+        public static (int status,T) GetThing<T>(string path)
         {
             var resp = RestGet(path);
             T t = default;
@@ -78,11 +78,11 @@ namespace ServiceLib.Service
             return ((int) response.StatusCode, thing);
         }
 
-        public static IEnumerable<T> GetManyThings<T>(IEnumerable<long> ids, string url, ref int statusCode)
+        public static (int Status ,IEnumerable<T> result) GetManyThings<T>(IEnumerable<long> ids, string url)
         {
             
             IRestResponse response = RestPost(ids, url);
-            statusCode = (int)response.StatusCode;
+            
 
             IEnumerable<T> things = null;
             if (response.StatusCode == HttpStatusCode.OK)
@@ -92,10 +92,10 @@ namespace ServiceLib.Service
 
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
-                return Array.Empty<T>();
+                things =  Array.Empty<T>();
             }
-            statusCode = (int)response.StatusCode;
-            return things;
+            
+            return ((int)response.StatusCode, things);
         }
 
         public static IRestResponse RestPost(object objecToPost, string url)
@@ -117,7 +117,7 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static (int, string) UpdateThing<T>(T t, string url)
+        public static (int status, string) UpdateThing<T>(T t, string url)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
 
@@ -141,7 +141,7 @@ namespace ServiceLib.Service
             return ((int)response.StatusCode, response.Content);
         }
 
-        public IRestResponse RestDelete(string path)
+        private static IRestResponse RestDelete(string path)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(path);
@@ -169,6 +169,14 @@ namespace ServiceLib.Service
             }
             
             return ((int)response.StatusCode,collection);
+        }
+
+        public static int Delete<T>(string url)
+        {
+            var resp = RestDelete(url);
+
+
+            return (int) resp.StatusCode;
         }
     }
 }

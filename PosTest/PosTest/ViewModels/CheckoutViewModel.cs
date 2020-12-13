@@ -547,10 +547,7 @@ namespace PosTest.ViewModels
 
                         ServiceHelper.HandleStatusCodeErrors(resp, message, args);
                     }
-                    else
-                    {
-                        // order.Id = id;
-                    }
+                    
                 }
                 else
                 {

@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using PosTest.Helpers;
 
 
 namespace ConsoleApp
@@ -58,11 +59,21 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            var date = "2020-06-06 15:16:12.343000";
-            DateTime oDate = Convert.ToDateTime(date);
-            Console.WriteLine(oDate);
-            Program p = new Program();
-            p.Run();
+            //var date = "2020-06-06 15:16:12.343000";
+            //DateTime oDate = Convert.ToDateTime(date);
+            //Console.WriteLine(oDate);
+            //Program p = new Program();
+            //p.Run();
+
+            Console.WriteLine(RestApis.Resource<Product>.GetAll());
+            Console.WriteLine(RestApis.Resource<Product>.Delete(5));
+            Console.WriteLine(RestApis.Resource<Category>.Delete(5));
+
+            var repo1  = new AdditiveRepository();
+            var repo2 = new TestRepository();
+            StateManager.Instance.Manage(repo1).Manage(repo2);
+            
+            var additives = StateManager.Get<Additive>();
         }
 
         private async void CallRestAsync()
@@ -101,7 +112,7 @@ namespace ConsoleApp
             //    getCategoriesStatusCode = 0, code = 0;
             // var prods =  productService.GetAllProducts(ref getProductsStatusCode);
             var t1 = DateTime.Now;
-            var savedCode = GenericRest.SaveThing(ref p, UrlConfig.ProductUrl.SaveProduct, out long id,out IEnumerable<string> errors);
+            //var savedCode = GenericRest.SaveThing(ref p, UrlConfig.ProductUrl.SaveProduct, out long id,out IEnumerable<string> errors);
             var t2 = DateTime.Now;
             Console.WriteLine(t2-t1);
 
