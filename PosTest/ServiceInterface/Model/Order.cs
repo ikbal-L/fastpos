@@ -202,14 +202,15 @@ namespace ServiceInterface.Model
             get
             {
                 var sumItemDiscounts = 0m;
-                if (OrderItems != null)
+                if ((DiscountAmount==0 && DiscountPercentage==0) && OrderItems != null)
                 {
                     OrderItems.Where(i => i.State != OrderItemState.Removed).ToList()
                         .ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
                 }
 
                 //either _discountAmount==0 or _discountPercentage==0
-                var allDiscounts = _discountAmount + sumItemDiscounts + Total * _discountPercentage / 100;
+                //var allDiscounts = _discountAmount + sumItemDiscounts + Total * _discountPercentage / 100;
+                var allDiscounts = _discountAmount + sumItemDiscounts;
                 //NewTotal = Total - allDiscounts;
                 return allDiscounts;
             }
@@ -222,7 +223,10 @@ namespace ServiceInterface.Model
             set
             {
                 _discountAmount = value;
-                _discountPercentage = 0;
+                if (Total>0)
+                {
+                    _discountPercentage = value * 100 / Total; 
+                }
                 NotifyOfPropertyChange(() => DiscountAmount);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
                 NotifyOfPropertyChange(() => NewTotal);
@@ -236,7 +240,7 @@ namespace ServiceInterface.Model
             set
             {
                 _discountPercentage = value;
-                _discountAmount = 0;
+                _discountAmount = (Total * value) / 100;
                 NotifyOfPropertyChange(() => DiscountPercentage);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
                 NotifyOfPropertyChange(() => NewTotal);
