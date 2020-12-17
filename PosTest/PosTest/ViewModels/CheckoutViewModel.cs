@@ -141,6 +141,9 @@ namespace PosTest.ViewModels
 
 
             StateManager.Instance.Fetch();
+            StateManager.Associate<Additive,Product>();
+            StateManager.Associate<Product,Category>();
+
             //var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
             var deliveryMen = StateManager.Get<Deliveryman>();
 

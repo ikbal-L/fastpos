@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Caliburn.Micro;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceLib.helpers;
+using Action = System.Action;
 
 namespace ServiceLib.Service
 {
@@ -10,7 +13,8 @@ namespace ServiceLib.Service
     {
         private static readonly IDictionary<Type, object> State;
         private static readonly IDictionary<Type, object> Service;
-        private Action OnfetchRequested; 
+        private Action OnfetchRequested;
+        private static Action<ICollection<object>, ICollection<object>> OnAssociationRequested;
         private static StateManager _instance;
 
         static StateManager()
@@ -89,6 +93,17 @@ namespace ServiceLib.Service
         public void Fetch()
         {
             OnfetchRequested();
+        }
+
+        public static void Associate<TMany,TOne>()
+        {
+            var keyOfTMany = typeof(TMany);
+            var keyOfTOne = typeof(TOne);
+            if (!State.ContainsKey(keyOfTMany)&& !State.ContainsKey(keyOfTOne)) return;
+            var collectionOfTMany = State[keyOfTMany] as ICollection<TMany>;
+            var collectionOfTOne = State[keyOfTOne] as ICollection<TOne>;
+            Action<ICollection<object>, ICollection<object>> association =  AssociationHelpers.GetAssociation<TMany, TOne>();
+            association((ICollection<object>)collectionOfTMany, (ICollection<object>)collectionOfTOne);
         }
 
         private void Flush()

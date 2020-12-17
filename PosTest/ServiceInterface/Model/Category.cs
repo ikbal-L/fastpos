@@ -88,23 +88,19 @@ namespace ServiceInterface.Model
             }
         }
 
-        public void MappingAfterReceiving(ref ICollection<Product> products)
+        public void MappingAfterReceiving( ICollection<Product> products)
         {
             if (ProductIds != null && products != null)
             {
                 Products = new List<Product>();
                 foreach (var id in ProductIds)
                 {
-                    var prod = products.Where(p => id == p.Id).FirstOrDefault();
+                    var prod = products.FirstOrDefault(p => id == p.Id);
                     if (prod != null)
                     {
                         //since prod belongs to this category  
                         prod.Category = this;
                         Products.Add(prod);
-                    }
-                    else
-                    {
-                        
                     }
                 }
             }
