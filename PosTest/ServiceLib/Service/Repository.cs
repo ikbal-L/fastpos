@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 
 namespace ServiceLib.Service
 {
-    public interface IRepository<TState, in TIdentifier> where TState : IState<TIdentifier> where TIdentifier : struct
-    {
-        (int status, TState) Get(TIdentifier id);
-        (int status, IEnumerable<TState>) Get();
-        (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids);
-        int Save(TState state, out IEnumerable<string> errors);
-        int Delete(TIdentifier id);
-        int Update(TState state);
-        int Update(IEnumerable<TState> state);
-    }
-
     public class Repository <TState, TIdentifier> : IRepository<TState, TIdentifier> where TState : IState<TIdentifier> where TIdentifier : struct
     {
 
@@ -28,6 +19,8 @@ namespace ServiceLib.Service
         {
             return GenericRest.GetAll<TState>(RestApis.Resource<TState>.GetAll());
         }
+
+
         public virtual (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids)
         {
             return GenericRest.GetManyThings<TState>((IEnumerable<long>)ids, RestApis.Resource<TState>.GetMany());
@@ -53,30 +46,70 @@ namespace ServiceLib.Service
         {
             return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.UpdateMany()).status;
         }
+
+        public virtual (int status, IEnumerable<TState>) Get(object param)
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public class TestModel : IState<Guid>
-    {
-        public Guid? Id { get; set; }
-    }
 
-    public interface ITestRepository : IRepository<TestModel, Guid>
-    {
 
-    }
 
-    public class TestRepository : Repository<TestModel, Guid>, ITestRepository
-    {
-
-    }
-
-    public interface IAdditiveRepository : IRepository<Additive, long>
-    {
-
-    }
-
+    [Export(typeof(IAdditiveRepository))]
     public class AdditiveRepository : Repository<Additive, long>, IAdditiveRepository
     {
 
     }
+
+    [Export(typeof(IProductRepository))]
+    public class ProductRepository : Repository<Product, long>, IProductRepository
+    {
+
+    }
+
+    [Export(typeof(ICategoryRepository))]
+    public class CategoryRepository : Repository<Category, long>, ICategoryRepository
+    {
+
+    }
+
+    [Export(typeof(IOrderRepository))]
+    public class OrderRepository : Repository<Order, long>, IOrderRepository
+    {
+        public override (int status, IEnumerable<Order>) Get(object unprocessed)
+        {
+            var suffix = "";
+            if (unprocessed is bool b && b)
+            {
+                suffix = nameof(unprocessed);
+            }
+            return GenericRest.GetAll<Order>(RestApis.Resource<Order>.GetAll()+suffix);
+        }
+    }
+
+    [Export(typeof(ITableRepository))]
+    public class TableRepository : Repository<Table, long>,ITableRepository
+    {
+
+    }
+
+    [Export(typeof(ICustomerRepository))]
+    public class CustomerRepository : Repository<Customer, long>, ICustomerRepository
+    {
+
+    }
+
+    [Export(typeof(IWaiterRepository))]
+    public class WaiterRepository : Repository<Waiter, long>, IWaiterRepository
+    {
+
+    }
+
+    [Export(typeof(IDeliverymanRepository))]
+    public class DeliverymanRepository : Repository<Deliveryman, long>, IDeliverymanRepository
+    {
+
+    }
+
 }

@@ -62,7 +62,7 @@ namespace PosTest.Converters
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if( (values[0] is BindableCollection<Table> && (ListKind)values[1]==ListKind.Table) ||
-                (values[0] is BindableCollection<Delivereyman> && (ListKind)values[1] == ListKind.Deliverey) ||
+                (values[0] is BindableCollection<Deliveryman> && (ListKind)values[1] == ListKind.Deliverey) ||
                 (values[0] is BindableCollection<Waiter> && (ListKind)values[1] == ListKind.Waiter)||
                 (values[0] is System.ComponentModel.ICollectionView && (ListKind)values[1] == ListKind.Customer)
                 

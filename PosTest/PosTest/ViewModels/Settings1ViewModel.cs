@@ -58,16 +58,16 @@ namespace PosTest.ViewModels
             IsLeftDrawerOpen = false;
         }
 
-        public Settings1ViewModel(int pageSize, 
+        public Settings1ViewModel(int pageSize/*, 
             IProductService productService, 
             ICategoryService categorieService,
-            IAdditiveService additiveService
+            IAdditiveService additiveService*/
             )
         {
             this._pageSize = pageSize;
-            this._productService = productService;
-            _categorieService = categorieService;
-            _additiveService = additiveService;
+            //this._productService = productService;
+            //_categorieService = categorieService;
+            //_additiveService = additiveService;
 
             ProductsTabCommand();
         }

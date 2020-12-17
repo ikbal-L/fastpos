@@ -23,20 +23,22 @@ namespace PosTest.ViewModels
         private readonly IDelivereyService _delivereyService;
         private readonly ICustomerService _customerService;
 
-        public PinLoginViewModel( IProductService productsService,
-            ICategoryService categoriesService,
-            IOrderService orderService,
-            IWaiterService waiterService,
-            IDelivereyService delivereyService,
-            ICustomerService customerService)
+        public PinLoginViewModel(
+            //IProductService productsService,
+            //ICategoryService categoriesService,
+            //IOrderService orderService,
+            //IWaiterService waiterService,
+            //IDelivereyService delivereyService,
+            //ICustomerService customerService
+            )
         {
             
-            _productsService = productsService;
-            _categoriesService = categoriesService;
-            _orderService = orderService;
-            _waiterService = waiterService;
-            _delivereyService = delivereyService;
-            _customerService = customerService;
+            //_productsService = productsService;
+            //_categoriesService = categoriesService;
+            //_orderService = orderService;
+            //_waiterService = waiterService;
+            //_delivereyService = delivereyService;
+            //_customerService = customerService;
         }
 
         public void PinKeyPadAction(object sender)
@@ -99,13 +101,14 @@ namespace PosTest.ViewModels
         {
             //IsDialogOpen = false;
             CheckoutViewModel checkoutViewModel =
-                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,
-                    _productsService,
-                    _categoriesService,
-                    _orderService,
-                    _waiterService,
-                    _delivereyService,
-                    _customerService
+                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage
+                    //,
+                    //_productsService,
+                    //_categoriesService,
+                    //_orderService,
+                    //_waiterService,
+                    //_delivereyService,
+                    //_customerService
                 );
 
             checkoutViewModel.Parent = this.Parent;

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class Customer
+    public class Customer : IState<long>
     {
         [DataMember]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [DataMember]
         [Required(ErrorMessage = "Customer Name must not be null or empty",AllowEmptyStrings = false)]

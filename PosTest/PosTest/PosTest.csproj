@@ -250,7 +250,6 @@
     <Compile Include="Helpers\ProductMapper.cs" />
     <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
-    <Compile Include="Helpers\StateManager.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Helpers\ToastNotification.cs" />
     <Compile Include="Properties\Resources.en.Designer.cs">

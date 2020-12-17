@@ -296,7 +296,7 @@
                                  SelectedItem="{Binding SelectedDelivereyman, Mode=TwoWay}"
                                  Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter} , ConverterParameter=delivrey}">
                             <ListBox.ItemTemplate>
-                                <DataTemplate x:Uid="DataTemplate_10" DataType="{x:Type models:Delivereyman}">
+                                <DataTemplate x:Uid="DataTemplate_10" DataType="{x:Type models:Deliveryman}">
                                     <RadioButton x:Uid="RadioButton_3" GroupName="groupName2" Width="120" Height="70"
                                                  IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
                                                  Style="{StaticResource ButtonTopOrderDelivereyman}"

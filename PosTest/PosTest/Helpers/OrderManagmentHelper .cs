@@ -20,7 +20,7 @@ namespace PosTest.Helpers
 
             items.ForEach(i =>
             {
-                var refItem = diff.First(d => d.Value.Product.Id == i.Product.Id && d.Key == i.GetHashCode()).Value;
+                var refItem = diff.First(d => d.Value.ProductId == i.ProductId && d.Key == i.GetHashCode()).Value;
                 if (i.TimeStamp != null)
                 {
                     if (i.Quantity > refItem.Quantity)

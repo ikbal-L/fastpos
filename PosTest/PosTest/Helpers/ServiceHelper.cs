@@ -30,7 +30,7 @@ namespace PosTest.Helpers
                 case 200: 
                 case 2001: break;
                 case 422: 
-                    throw new ValidationException();
+                    throw new ValidationException($"{(HttpStatusCode)status}");
                 default: throw new Exception($"{(HttpStatusCode) status}");
             }
         }

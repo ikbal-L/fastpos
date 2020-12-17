@@ -25,11 +25,13 @@ using System.Windows.Media;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using Newtonsoft.Json;
+using ServiceLib.Service;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
 using ToastNotifications.Position;
 using Table = ServiceInterface.Model.Table;
+using ValidationResult = System.Windows.Controls.ValidationResult;
 
 namespace PosTest.ViewModels
 {
@@ -62,7 +64,7 @@ namespace PosTest.ViewModels
 
         //private Order _displayedOrder;
         private Table _selectedTable;
-        private Delivereyman _selectedDelivereyman;
+        private Deliveryman _selectedDeliveryman;
         private Waiter _selectedWaiter;
         private ListKind _listKind;
 
@@ -120,30 +122,44 @@ namespace PosTest.ViewModels
             }
         }
 
-        public CheckoutViewModel(int pageSize,
-            IProductService productsService,
-            ICategoryService categoriesService,
-            IOrderService orderService,
-            IWaiterService waiterService,
-            IDelivereyService delivereyService,
-            ICustomerService customerService
+        public CheckoutViewModel(int pageSize
+            //,
+            //IProductService productsService,
+            //ICategoryService categoriesService,
+            //IOrderService orderService,
+            //IWaiterService waiterService,
+            //IDelivereyService delivereyService,
+            //ICustomerService customerService
         ) : this()
         {
             _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
-            _productsService = productsService;
-            _categoriesService = categoriesService;
-            _orderService = orderService;
-            _customerService = customerService;
+            //_productsService = productsService;
+            //_categoriesService = categoriesService;
+            //_orderService = orderService;
+            //_customerService = customerService;
 
 
-            // var deliveryMen = delivereyService.GetAllActiveDeliverymen(ref code);
-            var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
-            // var waiter = waiterService.GetAllActiveWaiters(ref code);
-            var (waiterStatusCode, waiter) = waiterService.GetAllWaiters();
-            var (tablesStatusCode, tables) = _orderService.GeAllTables();
-            var (customerStatusCode,customers) = _customerService.GetAllCustomers();
-            var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
+            StateManager.Instance.Fetch();
+            //var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
+            var deliveryMen = StateManager.Get<Deliveryman>();
+
+
+
+            //var (waiterStatusCode, waiter) = waiterService.GetAllWaiters();
+            var waiter = StateManager.Get<Waiter>();
+
+            //var (tablesStatusCode, tables) = _orderService.GeAllTables();
+            var tables = StateManager.Get<Table>();
+
+
+            //var (customerStatusCode,customers) = _customerService.GetAllCustomers();
+            var customers = StateManager.Get<Customer>();
+
+            //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
+            OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
+            var unprocessedOrders = StateManager.Get<Order>().Where(o => !filteredTypes.Contains((OrderState)o.State));
+
 
             var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
             foreach (var table in tables.ToList())
@@ -157,13 +173,13 @@ namespace PosTest.ViewModels
                     = new BindableCollection<Additive>());
                 }
             }
-
+            
             Orders = new BindableCollection<Order>(unprocessedOrders);
 
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
-            Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);
+            Delivereymen = new BindableCollection<Deliveryman>(deliveryMen);
             Tables = new BindableCollection<Table>(tables);
             Customers = new BindableCollection<Customer>(customers);
             OrderItemsCollectionViewSource = new CollectionViewSource();
@@ -178,10 +194,11 @@ namespace PosTest.ViewModels
                 Orders.Add(CurrentOrder);
             }
 
-            var ((catStatusCode, prodStatusCode), (categories, products)) =
-                _categoriesService.GetAllCategoriesAndProducts();
-
-            if (catStatusCode != 200 && prodStatusCode != 200) return;
+            //var ((catStatusCode, prodStatusCode), (categories, products)) =
+            //    _categoriesService.GetAllCategoriesAndProducts();
+            var products = StateManager.Get<Product>();
+            var categories = StateManager.Get<Category>();
+            //if (catStatusCode != 200 && prodStatusCode != 200) return;
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
@@ -193,7 +210,7 @@ namespace PosTest.ViewModels
             PaginatedCategories.Source = Categories;
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
-            PaginatedCategories.Filter += new FilterEventHandler(PaginatedCategoriesOnFilter);
+            PaginatedCategories.Filter += PaginatedCategoriesOnFilter;
 
             CalculateTotalPages(Categories.Count);
 
@@ -210,7 +227,7 @@ namespace PosTest.ViewModels
             TakeAwayViewModel = new TakeawayViewModel(this);
             DelivereyViewModel = new DelivereyViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
-            CustomerViewModel = new CustomerViewModel(this, customerService);
+            CustomerViewModel = new CustomerViewModel(this/*, customerService*/);
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
@@ -644,7 +661,7 @@ namespace PosTest.ViewModels
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
             ReturnedAmount = null;
-            SelectedDelivereyman = null;
+            SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
         }
@@ -659,13 +676,13 @@ namespace PosTest.ViewModels
                 if (orderType == OrderType.OnTable)
                 {
                     CurrentOrder.Table = table;
-                    SelectedDelivereyman = null;
+                    SelectedDeliveryman = null;
                 }
                 else
                 {
                     if (orderType == OrderType.Takeaway)
                     {
-                        SelectedDelivereyman = null;
+                        SelectedDeliveryman = null;
                     }
 
                     CurrentOrder.Table = null;
@@ -712,7 +729,7 @@ namespace PosTest.ViewModels
 
             _currentOrder = null;
             //DisplayedOrder = null;
-            SelectedDelivereyman = null;
+            SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
             SetSelectedInListedOrdersDisplayedOrder();
@@ -1612,12 +1629,12 @@ namespace PosTest.ViewModels
             set => Set(ref _IsTopDrawerOpen, value);
         }
 
-        public BindableCollection<Delivereyman> Delivereymen { get; set; }
+        public BindableCollection<Deliveryman> Delivereymen { get; set; }
         public BindableCollection<Waiter> Waiters { get; private set; }
 
-        public Delivereyman SelectedDelivereyman
+        public Deliveryman SelectedDeliveryman
         {
-            get => _selectedDelivereyman;
+            get => _selectedDeliveryman;
             set
             {
                 if (CurrentOrder == null && value != null)
@@ -1625,11 +1642,11 @@ namespace PosTest.ViewModels
                     NewOrder();
                 }
 
-                Set(ref _selectedDelivereyman, value);
+                Set(ref _selectedDeliveryman, value);
 
                 if (CurrentOrder != null)
                 {
-                    CurrentOrder.Delivereyman = value;
+                    CurrentOrder.Deliveryman = value;
                 }
 
                 IsTopDrawerOpen = false;

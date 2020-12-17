@@ -116,6 +116,7 @@
     <Compile Include="Service\ProductMappingException.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\Repository.cs" />
+    <Compile Include="Service\StateManager.cs" />
     <Compile Include="Service\ValidationService.cs" />
   </ItemGroup>
   <ItemGroup>

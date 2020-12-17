@@ -54,14 +54,15 @@ namespace PosTest.ViewModels
         {
         }
 
-        public CheckoutSettingsViewModel(int productPageSize, int categoryPageSize,
-            IProductService productsService,
-            ICategoryService categoriesService) : this()
+        public CheckoutSettingsViewModel(int productPageSize, int categoryPageSize
+            //,IProductService productsService,
+            //ICategoryService categoriesService
+            ) : this()
         {
             _productPageSize = productPageSize;
             _categpryPageSize = categoryPageSize;
-            _productsService = productsService;
-            _categoriesService = categoriesService;
+            //_productsService = productsService;
+            //_categoriesService = categoriesService;
 
             ProductPageSize = productPageSize;
             CategoryPageSize = categoryPageSize;

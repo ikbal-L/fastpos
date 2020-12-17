@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceLib.Service;
 
 namespace PosTest.ViewModels
 {
@@ -16,13 +17,14 @@ namespace PosTest.ViewModels
         private IOrderService orderService;
         private int _productPageSize;
 
-        public PaginationTestViewModel(IProductService productService, ICategoryService categorieService, IOrderService orderService)
+        public PaginationTestViewModel(/*IProductService productService, ICategoryService categorieService, IOrderService orderService*/)
         {
-            this.productService = productService;
-            this.categorieService = categorieService;
-            this.orderService = orderService;
+            //this.productService = productService;
+            //this.categorieService = categorieService;
+            //this.orderService = orderService;
             int getProductsStatusCode = 0;
-            var products = productService.GetAllProducts(ref getProductsStatusCode);
+            //var products = productService.GetAllProducts(ref getProductsStatusCode);
+            var products = StateManager.Get<Product,long>();
             Products = new BindableCollection<Product>(products);
             ProductPageSize = 6;
         }

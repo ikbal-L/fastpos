@@ -13,7 +13,7 @@ using System.Windows.Media;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class User : PropertyChangedBase
+    public class User : PropertyChangedBase,IState<long>
     {
         private string _backgroundString;
         private Brush _background;
@@ -22,7 +22,7 @@ namespace ServiceInterface.Model
         private bool? _isActive;
 
         [DataMember]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [DataMember]
         [Required(AllowEmptyStrings = false)]
@@ -122,7 +122,7 @@ namespace ServiceInterface.Model
     }
     
     [DataContract]
-    public class Delivereyman : User
+    public class Deliveryman : User
     {
 
     }

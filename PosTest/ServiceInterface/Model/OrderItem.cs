@@ -11,7 +11,7 @@ using Newtonsoft.Json.Converters;
 
 namespace ServiceInterface.Model
 {
-    public class OrderItem : PropertyChangedBase,IValidatableObject
+    public class OrderItem : PropertyChangedBase,IValidatableObject, IState<long>
     {
         private static readonly bool IsRunningFromXUnit =
                    AppDomain.CurrentDomain.GetAssemblies().Any(
@@ -34,7 +34,10 @@ namespace ServiceInterface.Model
             Order = order;
             Product = product;
             ProductName = product?.Name;
-            ProductId =ProductId==0?(long)product?.Id:ProductId;
+            if (product?.Id != null)
+            {
+                ProductId = (long)product?.Id ;
+            }
             UnitPrice = unitPrice;
             Quantity = quantity;
             OrderItemAdditives = new List<OrderItemAdditive>();
@@ -42,7 +45,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public long Id { set; get; }
+        public long? Id { set; get; }
 
         public Order Order { get; set; }
         
@@ -238,7 +241,7 @@ namespace ServiceInterface.Model
             var additive1 = new Additive(additive);
             additive1.ParentOrderItem = this;
             this.Additives.Add(additive1);
-            if (additive1.Id != null) this.OrderItemAdditives.Add(new OrderItemAdditive(){AdditiveId = (long) additive1.Id,OrderItemId = this.Id,State = AdditiveState.Added});
+            if (additive1.Id != null) this.OrderItemAdditives.Add(new OrderItemAdditive(){AdditiveId = (long) additive1.Id,OrderItemId = (long) this.Id,State = AdditiveState.Added});
             return true;
         }
 

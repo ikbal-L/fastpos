@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 
 namespace ServiceInterface.Model
 {
-    public class Order : PropertyChangedBase,IValidatableObject
+    public class Order : PropertyChangedBase,IValidatableObject, IState<long>
     {
         private decimal _total;
         private OrderItem _selectedOrderItem;
@@ -27,7 +27,7 @@ namespace ServiceInterface.Model
         private OrderType? _type;
         private TimeSpan _elapsedTime;
         private BindableCollection<Order> _orders;
-        private Delivereyman _delivereyman;
+        private Deliveryman _deliveryman;
         private Waiter _waiter;
 
         public Order()
@@ -59,7 +59,8 @@ namespace ServiceInterface.Model
 
         public BindableCollection<Order> Orders { get; set; }
 
-        [DataMember(IsRequired = true)] public long? Id { get; set; }
+        [DataMember(IsRequired = true)] 
+        public long? Id { get; set; }
 
         [DataMember] public string BuyerId { get; set; }
 
@@ -67,12 +68,12 @@ namespace ServiceInterface.Model
         [Required]
         public DateTime OrderTime { get; set; }
 
-        public Delivereyman Delivereyman
+        public Deliveryman Deliveryman
         {
-            get => _delivereyman;
+            get => _deliveryman;
             set
             {
-                Set(ref _delivereyman, value);
+                Set(ref _deliveryman, value);
                 DeliverymanId = value?.Id;
             }
         }
@@ -240,7 +241,10 @@ namespace ServiceInterface.Model
             set
             {
                 _discountPercentage = value;
-                _discountAmount = (Total * value) / 100;
+                if (Total>0)
+                {
+                    _discountAmount = (Total * value) / 100; 
+                }
                 NotifyOfPropertyChange(() => DiscountPercentage);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
                 NotifyOfPropertyChange(() => NewTotal);
@@ -415,7 +419,7 @@ namespace ServiceInterface.Model
 
             this.TableId = Table?.Id;
             this.CustomerId = Customer?.Id;
-            this.DeliverymanId = Delivereyman?.Id;
+            this.DeliverymanId = Deliveryman?.Id;
         }
 
         public void MappingAfterReceiving(IEnumerable<Product> products)
@@ -448,11 +452,11 @@ namespace ServiceInterface.Model
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (Type == OrderType.Delivery && Delivereyman == null)
+            if (Type == OrderType.Delivery && Deliveryman == null)
             {
                 yield return new ValidationResult(
                     $"Delivery Man must not be null if Order Type is {OrderType.Delivery} ",
-                    new[] { nameof(Delivereyman) });
+                    new[] { nameof(Deliveryman) });
             }
 
             if (Type==OrderType.OnTable && Table == null)

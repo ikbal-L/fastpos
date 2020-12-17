@@ -14,7 +14,7 @@ using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
-    public class Category : Ranked
+    public class Category : Ranked, IState<long>
     {
         private string _backGroundString=null;
         private SolidColorBrush _backGround;

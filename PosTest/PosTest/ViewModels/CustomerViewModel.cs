@@ -23,9 +23,9 @@ namespace PosTest.ViewModels
         private Customer _selectedCustomer;
         public CheckoutViewModel ParentChechoutVM { get; set; }
       
-        public CustomerViewModel(CheckoutViewModel checkoutViewModel,ICustomerService customerService)
+        public CustomerViewModel(CheckoutViewModel checkoutViewModel/*,ICustomerService customerService*/)
         {
-            _customerService = customerService;
+            //_customerService = customerService;
             ParentChechoutVM = checkoutViewModel;
 
             _CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers);
