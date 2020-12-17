@@ -27,7 +27,7 @@ namespace PosTest.Helpers
         {
             if (!State.ContainsKey(typeof(TState)))
             {
-                State.Add(typeof(TState),new Collection<TState>());
+                State.Add(typeof(TState),null);
             }
 
             if (!Service.ContainsKey(typeof(TState)))
@@ -50,6 +50,16 @@ namespace PosTest.Helpers
             return false;
         }
 
-        //public object this[Type key] => State[key];
+        private void Fetch<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
+        {
+            if (State[typeof(TState)] != null) return;
+            if (Service[typeof(TState)] is IRepository<TState, TIdentifier> service)
+            {
+                var (status, data) = service.Get();
+                //ServiceHelper.HandleStatusCodeErrors();
+                if (status != 200) return;
+                
+            }
+        }   
     }
 }
