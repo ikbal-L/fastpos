@@ -241,7 +241,7 @@ namespace ServiceInterface.Model
             var additive1 = new Additive(additive);
             additive1.ParentOrderItem = this;
             this.Additives.Add(additive1);
-            if (additive1.Id != null) this.OrderItemAdditives.Add(new OrderItemAdditive(){AdditiveId = (long) additive1.Id,OrderItemId = (long) this.Id,State = AdditiveState.Added});
+            if (additive1.Id != null) this.OrderItemAdditives.Add(new OrderItemAdditive(){AdditiveId = (long) additive1.Id,OrderItemId =  this.Id,State = AdditiveState.Added});
             return true;
         }
 

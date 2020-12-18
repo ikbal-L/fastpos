@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using Caliburn.Micro;
 using ServiceInterface.Interface;
@@ -63,7 +64,7 @@ namespace ServiceLib.Service
             if (State[key] == null) Fetch<TState, TIdentifier>();
 
 
-            return State[typeof(TState)] as ICollection<TState>;
+            return State[key] as ICollection<TState>;
         }
 
         public static ICollection<TState> Get<TState>() where TState : IState<long>
@@ -71,9 +72,41 @@ namespace ServiceLib.Service
             return Get<TState, long>();
         }
 
-        public bool Save<TState>()
+        public static bool Save<TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
         {
+            var key = typeof(TState);
+            var status = -1;
+            IEnumerable<string> errors = null;
+
+            if (Service[key] is IRepository<TState, TIdentifier> service)
+            {
+                if (state.Id == null)
+                {
+                    status = service.Save(state, out errors);
+                }
+                else
+                {
+                    status = service.Update(state, out errors);
+                }
+
+                if ((HttpStatusCode)status == HttpStatusCode.OK|| (HttpStatusCode)status == HttpStatusCode.Created)
+                {
+                    if (State[key] is ICollection<TState> tState)
+                    {
+                        if (!tState.Contains(state)) tState.Add(state);
+                    }
+                    return true;
+                }
+
+
+            }
+
             return false;
+        }
+
+        public static bool Save<TState>(TState state) where TState : IState<long>
+        {
+            return Save<TState, long>(state);
         }
 
         private static void Fetch<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct

@@ -21,7 +21,7 @@
                 <ResourceDictionary x:Uid="ResourceDictionary_5" Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
                 <ResourceDictionary x:Uid="ResourceDictionary_6" Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
 
-                <!--<ResourceDictionary x:Uid="ResourceDictionary_7" Source="/Resources/Styles/Brushes.xaml"/>-->
+                <ResourceDictionary x:Uid="ResourceDictionary_7" Source="/Resources/Styles/Brushes.xaml"/>
                 <ResourceDictionary x:Uid="ResourceDictionary_8" Source="/Resources/Styles/Button.xaml"/>
                 <ResourceDictionary x:Uid="ResourceDictionary_9" Source="/Resources/Styles/AdditiveListStyle.xaml"/>
                 <ResourceDictionary x:Uid="ResourceDictionary_10" Source="/Resources/Styles/OrderItemListStyle.xaml"/>

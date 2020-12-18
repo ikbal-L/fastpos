@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using Newtonsoft.Json;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Net;
 
 namespace ServiceLib.Service
 {
@@ -37,14 +40,14 @@ namespace ServiceLib.Service
         }
 
 
-        public virtual int Update(TState state) 
+        public virtual int Update(TState state, out IEnumerable<string> errors) 
         {
-            return GenericRest.UpdateThing<TState>(state,RestApis.Resource<TState>.Put<TIdentifier>((TIdentifier) state.Id)).status;
+            return GenericRest.UpdateThing<TState>(state,RestApis.Resource<TState>.Put<TIdentifier>((TIdentifier) state.Id),out errors).status;
         }
 
         public virtual int Update(IEnumerable<TState> state)
         {
-            return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.UpdateMany()).status;
+            return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.UpdateMany(),out _).status;
         }
 
         public virtual (int status, IEnumerable<TState>) Get(object param)
@@ -65,7 +68,12 @@ namespace ServiceLib.Service
     [Export(typeof(IProductRepository))]
     public class ProductRepository : Repository<Product, long>, IProductRepository
     {
-
+        public override (int status, IEnumerable<Product>) Get()
+        {
+            var result = GenericRest.GetAll<Platter>(RestApis.Resource<Product>.GetAll());
+            var products = result.Item2.Cast<Product>().ToList();
+            return (result.Item1,products ) ;
+        }
     }
 
     [Export(typeof(ICategoryRepository))]
@@ -84,8 +92,51 @@ namespace ServiceLib.Service
             {
                 suffix = nameof(unprocessed);
             }
-            return GenericRest.GetAll<Order>(RestApis.Resource<Order>.GetAll()+suffix);
+            return GenericRest.GetAll<Order>(RestApis.Resource<Order>.GetAll() + suffix);
         }
+
+        public override int Save(Order state, out IEnumerable<string> errors)
+        {
+            var response = GenericRest.SaveThing(state, RestApis.Resource<Order>.Save());
+            PatchOrder(state, response,out errors);
+            return (int)response.StatusCode;
+        }
+
+        public override int Update(Order state, out IEnumerable<string> errors)
+        {
+            var response = GenericRest.UpdateThing(state, RestApis.Resource<Order>.Save());
+            PatchOrder(state, response, out errors);
+            return (int)response.StatusCode;
+        }
+
+        private static void PatchOrder(Order state, RestSharp.IRestResponse response, out IEnumerable<string> errors)
+        {
+            errors = null;
+
+            if (response.StatusCode != HttpStatusCode.Created || response.StatusCode != HttpStatusCode.OK)
+            {
+                errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
+            }
+            else
+            {
+                var deserializedState = JsonConvert.DeserializeObject<Order>(response.Content);
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    state.Id = deserializedState.Id;
+                }
+
+                foreach (var newOrderItem in deserializedState.OrderItems)
+                {
+                    var oldOrderItem = state.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
+                    newOrderItem.Additives = oldOrderItem.Additives;
+                }
+                state.OrderItems = deserializedState.OrderItems;
+                deserializedState = null;
+            }
+
+
+        }
+
     }
 
     [Export(typeof(ITableRepository))]

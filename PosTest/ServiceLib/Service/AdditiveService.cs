@@ -34,7 +34,7 @@ namespace ServiceLib.Service
 
         public int UpdateAdditive(Additive additive)
         {
-            var (i, s) = GenericRest.UpdateThing(additive, UrlConfig.AdditiveUrl.UpdateAdditive+additive.Id);
+            var (i, s) = GenericRest.UpdateThing(additive, UrlConfig.AdditiveUrl.UpdateAdditive+additive.Id,out _);
             return i;
         }
 

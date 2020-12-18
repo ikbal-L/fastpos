@@ -7,7 +7,6 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -21,17 +20,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using Newtonsoft.Json;
 using ServiceLib.Service;
-using ToastNotifications;
-using ToastNotifications.Lifetime;
-using ToastNotifications.Messages;
-using ToastNotifications.Position;
 using Table = ServiceInterface.Model.Table;
-using ValidationResult = System.Windows.Controls.ValidationResult;
 
 namespace PosTest.ViewModels
 {
@@ -161,7 +154,8 @@ namespace PosTest.ViewModels
 
             //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
             OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
-            var unprocessedOrders = StateManager.Get<Order>();
+            //var unprocessedOrders = StateManager.Get<Order>();
+            var unprocessedOrders = Array.Empty<Order>();
 
 
             var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
@@ -525,54 +519,17 @@ namespace PosTest.ViewModels
 
         #region Order Commands
 
-        public int? SaveOrder(ref Order order)
+        public bool? SaveOrder(ref Order order)
         {
             if (IsRunningFromXUnit)
             {
                 return null;
             }
 
-            int resp;
+            bool resp;
             try
             {
-                var status = 0;
-                if (order.Id == null)
-                {
-                    // order.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(order /*,out long id*/, out IEnumerable<string> errors);
-                    var logger = NLog.LogManager.GetCurrentClassLogger();
-                    if (resp != 200 && resp != 201)
-                    {
-                        string message;
-
-                        object[] args;
-                        if (resp == 422)
-                        {
-                            message =
-                                "{ERROR CODE},Unable to save Order by  {Customer} due to the following validation {errors}:";
-                            var errorsString = JsonConvert.SerializeObject(errors,
-                                Newtonsoft.Json.Formatting.None,
-                                new JsonSerializerSettings
-                                {
-                                    NullValueHandling = NullValueHandling.Ignore
-                                });
-                            args = new Object[] {resp, order.Customer?.Name, errorsString};
-                        }
-                        else
-                        {
-                            message =
-                                "Failed To save Oder by {Customer}  {ERRORCODE}, reattempting to save after {0} milliseconds ";
-                            args = new object[] {order.Customer?.Name, resp, 300};
-                        }
-
-                        ServiceHelper.HandleStatusCodeErrors(resp, message, args);
-                    }
-                    
-                }
-                else
-                {
-                    resp = _orderService.UpdateOrder(ref order, out IEnumerable<string> errors);
-                }
+                resp = StateManager.Save<Order>(order);
             }
             catch (AggregateException)
             {
@@ -590,8 +547,8 @@ namespace PosTest.ViewModels
             NotifyOfPropertyChange(() => CurrentOrder);
             switch (resp)
             {
-                case 200:
-                case 201:
+
+                case true:
                     if (CurrentOrder.State == OrderState.Payed ||
                         CurrentOrder.State == OrderState.Canceled ||
                         CurrentOrder.State == OrderState.Removed)
@@ -605,15 +562,9 @@ namespace PosTest.ViewModels
 
                     break;
 
-                case null: break;
-
                 default:
 
-                    var message =
-                        $"Failed To update Oder by  {CurrentOrder.Customer}  {{ERRORCODE}}, reattempting to save after {{0}} milliseconds ";
-                    var args = new object[] {CurrentOrder?.Customer?.Name, resp, 300};
-                    ServiceHelper.HandleStatusCodeErrors((int) resp, message, args);
-                    ToastNotification.ErrorNotification((int) resp);
+                    ToastNotification.Notify("Unable to save order");
                     break;
             }
         }

@@ -12,7 +12,7 @@ namespace ServiceInterface.Model
         public long AdditiveId { get; set; }
 
         [DataMember]
-        public long OrderItemId { get; set; }
+        public long? OrderItemId { get; set; }
 
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]

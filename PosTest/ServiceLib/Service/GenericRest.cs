@@ -117,8 +117,9 @@ namespace ServiceLib.Service
             return response;
         }
 
-        public static (int status, string) UpdateThing<T>(T t, string url)
+        public static (int status, string) UpdateThing<T>(T t, string url, out IEnumerable<string> errors)
         {
+            errors = null;
             string token = AuthProvider.Instance.AuthorizationToken;
 
             string json = JsonConvert.SerializeObject(t,
@@ -139,6 +140,27 @@ namespace ServiceLib.Service
             //    return true;
 
             return ((int)response.StatusCode, response.Content);
+        }
+
+        public static IRestResponse UpdateThing<T>(T t, string url)
+        {
+            string token = AuthProvider.Instance.AuthorizationToken;
+
+            string json = JsonConvert.SerializeObject(t,
+                            Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
+
+            var client = new RestClient(url);
+            var request = new RestRequest(Method.PUT);
+            request.AddHeader("authorization", token);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+
+            IRestResponse response = client.Execute(request);
+
+            return response;
         }
 
         private static IRestResponse RestDelete(string path)

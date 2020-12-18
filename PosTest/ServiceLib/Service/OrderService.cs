@@ -87,7 +87,7 @@ namespace ServiceLib.Service
             {
                 return 0;
             }
-            var ( statusCode,content ) = GenericRest.UpdateThing(order,UrlConfig.OrderUrl.UpdateOrder+order.Id);
+            var ( statusCode,content ) = GenericRest.UpdateThing(order,UrlConfig.OrderUrl.UpdateOrder+order.Id,out _);
             return statusCode;
             // return _restOrderService.UpdateOrder(order);
         }
