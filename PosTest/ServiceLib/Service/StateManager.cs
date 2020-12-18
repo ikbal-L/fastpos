@@ -102,8 +102,8 @@ namespace ServiceLib.Service
             if (!State.ContainsKey(keyOfTMany)&& !State.ContainsKey(keyOfTOne)) return;
             var collectionOfTMany = State[keyOfTMany] as ICollection<TMany>;
             var collectionOfTOne = State[keyOfTOne] as ICollection<TOne>;
-            Action<ICollection<object>, ICollection<object>> association =  AssociationHelpers.GetAssociation<TMany, TOne>();
-            association((ICollection<object>)collectionOfTMany, (ICollection<object>)collectionOfTOne);
+            var association =  AssociationHelpers.GetAssociation<TMany, TOne>();
+            association(collectionOfTMany, collectionOfTOne);
         }
 
         private void Flush()

@@ -161,7 +161,7 @@ namespace PosTest.ViewModels
 
             //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
             OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
-            var unprocessedOrders = StateManager.Get<Order>().Where(o => !filteredTypes.Contains((OrderState)o.State));
+            var unprocessedOrders = StateManager.Get<Order>();
 
 
             var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();

@@ -129,7 +129,8 @@ namespace PosTest.ViewModels
                 //_deliverymanRepository,
                 //_customerService
                 );
-
+            //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            var resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             checkoutViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
         }
