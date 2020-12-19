@@ -1387,6 +1387,14 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (CurrentOrder.SelectedOrderItem.TimeStamp==null)
+            {
+                if (_diff.ContainsKey(CurrentOrder.SelectedOrderItem.GetHashCode()))
+                {
+                    _diff.Remove(CurrentOrder.SelectedOrderItem.GetHashCode());
+                }
+            }
+            
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
             if (CurrentOrder.SelectedOrderItem != null)
             {
