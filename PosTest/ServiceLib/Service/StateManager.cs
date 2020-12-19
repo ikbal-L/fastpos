@@ -231,6 +231,15 @@ namespace ServiceLib.Service
             {
                 Association[keyOfTOne] += act;
             }
+
+            if (!Association.ContainsKey(keyOfTMany))
+            {
+                Association.Add(keyOfTMany, act);
+            }
+            else
+            {
+                Association[keyOfTMany] += act;
+            }
             Association[keyOfTOne]();
         }
 
