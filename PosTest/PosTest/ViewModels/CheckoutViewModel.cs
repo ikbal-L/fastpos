@@ -1636,6 +1636,11 @@ namespace PosTest.ViewModels
                     CurrentOrder.Waiter = value;
                 }
 
+                if (value != null)
+                {
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable);
+                }
+
                 IsTopDrawerOpen = false;
             }
         }
