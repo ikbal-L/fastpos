@@ -34,6 +34,11 @@ namespace ServiceLib.Service
             return GenericRest.SaveThing<TState>(state, RestApis.Resource<TState>.Save(),out errors).status;
         }
 
+        public virtual int Save(IEnumerable<TState> state)
+        {
+            return GenericRest.SaveThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.SaveMany(),out _).status;
+        }
+
         public virtual int Delete(TIdentifier id)
         {
             return GenericRest.Delete<TState>(RestApis.Resource<TState>.Delete(id));

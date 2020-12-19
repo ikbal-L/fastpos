@@ -10,6 +10,7 @@ namespace ServiceInterface.Interface
         (int status, IEnumerable<TState>) Get(object param);
         (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids);
         int Save(TState state, out IEnumerable<string> errors);
+        int Save(IEnumerable<TState> state);
         int Delete(TIdentifier id);
         int Update(TState state, out IEnumerable<string> errors);
         int Update(IEnumerable<TState> state);

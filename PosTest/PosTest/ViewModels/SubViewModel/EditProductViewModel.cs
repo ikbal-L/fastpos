@@ -25,7 +25,6 @@ namespace PosTest.ViewModels.SubViewModel
     public class EditProductViewModel : PropertyChangedBase, INotifyDataErrorInfo
     {
         private Product _product;
-        private IProductService _productService;
         private Product _source;
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors =
@@ -38,13 +37,13 @@ namespace PosTest.ViewModels.SubViewModel
         private IAdditiveService _additiveService;
         private int _additivesPageSize;
 
-        public EditProductViewModel(ref Product sourceProduct, IProductService productService,
+        public EditProductViewModel(ref Product sourceProduct,
             int additivesPageSize = 30)
         {
             
             this._source = sourceProduct;
 
-            this._productService = productService;
+
 
             this._additiveService = new AdditiveService();
             this._additivesPageSize = additivesPageSize;
@@ -178,15 +177,7 @@ namespace PosTest.ViewModels.SubViewModel
         public void SaveProduct()
         {
             Clone(source: ref _product, target: ref this._source);
-            if (Source.Id != null)
-            {
-                _productService.UpdateProduct(this._source, out IEnumerable<string> errors);
-            }
-            else
-            {
-                _productService.SaveProduct(this._source, out IEnumerable<string> errors);
-                Product.Id = this._source.Id;
-            }
+            StateManager.Save<Product>(this._source);
         }
 
         private bool CanCheckAdditive(object arg)

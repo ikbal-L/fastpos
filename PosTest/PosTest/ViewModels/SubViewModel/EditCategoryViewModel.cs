@@ -16,7 +16,6 @@ namespace PosTest.ViewModels.SubViewModel
     public class EditCategoryViewModel : PropertyChangedBase, INotifyDataErrorInfo
     {
         private Category _category;
-        private ICategoryService _categoryService;
         private Category _source;
 
         private readonly Dictionary<string, ICollection<string>> _validationErrors =
@@ -26,14 +25,14 @@ namespace PosTest.ViewModels.SubViewModel
         private string _description;
         private bool _isSaveEnabled;
 
-        public EditCategoryViewModel(ref Category sourceCategory, ICategoryService categoryService)
+        public EditCategoryViewModel(ref Category sourceCategory)
         {
             
             
             this._source = sourceCategory;
             _category = new Category();
             _category = CloneFromSource();
-            this._categoryService = categoryService;
+           
             IsSaveEnabled = true;
         }
 
@@ -88,16 +87,7 @@ namespace PosTest.ViewModels.SubViewModel
         {
             Clone(source: ref _category, target: ref this._source);
             NotifyOfPropertyChange(() => Source);
-            if (Source.Id != null)
-            {
-                _categoryService.UpdateCategory(this._source, out IEnumerable<string> errors);
-            }
-            else
-            {
-                
-                _categoryService.SaveCategory(this._source, out IEnumerable<string> errors);
-                Category.Id = this._source.Id;
-            }
+            StateManager.Save<Category>(this._source);
         }
 
         public void Cancel()

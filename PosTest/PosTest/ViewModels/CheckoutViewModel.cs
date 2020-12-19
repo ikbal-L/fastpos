@@ -36,10 +36,7 @@ namespace PosTest.ViewModels
             AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.StartsWith("XUnitTesting"));
 
         private static string scanValue;
-        private IProductService _productsService;
-        private ICategoryService _categoriesService;
-        private IOrderService _orderService;
-        private ICustomerService _customerService;
+        
 
         private BindableCollection<Additive> _additvesPage;
         private BindableCollection<Table> _tables;
@@ -1118,7 +1115,9 @@ namespace PosTest.ViewModels
             var status = 200;
             Table table;
             if ((table = LookForTableInOrders(tableNumber)) == null)
-               (status,table) = _orderService.GetTableByNumber(tableNumber);
+               
+                //TODO introduce table by id method in table repository 
+                table =StateManager.Get<Table>(tableNumber);
             switch (status)
             {
                 case 200:
@@ -1132,16 +1131,15 @@ namespace PosTest.ViewModels
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
                     {
-                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber},
-                            out IEnumerable<string> errors);
-                        if (status2 == 200)
+                        
+                        if (StateManager.Save<Table>(new Table { IsVirtual = true, Number = tableNumber }))
                         {
                             ToastNotification.Notify("Creation of virtual table", 1);
                             NewOrder();
                         }
                         else
                         {
-                            ToastNotification.ErrorNotification(status2);
+                            //ToastNotification.ErrorNotification(status2);
                         }
                     }
 
