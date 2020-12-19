@@ -1627,7 +1627,7 @@ namespace PosTest.ViewModels
                 if (CurrentOrder == null && value != null)
                 {
                     NewOrder();
-                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable);
                 }
 
                 Set(ref _selectedWaiter, value);
@@ -1636,10 +1636,6 @@ namespace PosTest.ViewModels
                     CurrentOrder.Waiter = value;
                 }
 
-                if (value != null)
-                {
-                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable);
-                }
 
                 IsTopDrawerOpen = false;
             }
