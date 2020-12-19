@@ -60,6 +60,10 @@ namespace ServiceLib.Service
                 foreach (var newOrderItem in deserializedOrder.OrderItems)
                 {
                     var oldOrderItem = order.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
+                    foreach (var additive in oldOrderItem.Additives)
+                    {
+                        additive.ParentOrderItem = newOrderItem;
+                    }
                     newOrderItem.Additives = oldOrderItem.Additives;
                 }
 
