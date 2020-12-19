@@ -61,7 +61,7 @@ namespace PosTest.Helpers
             if (!diff.ContainsKey(item.GetHashCode()))
             {
                 var value = new OrderItem(item.Product, item.Quantity, item.UnitPrice, item.Order)
-                    {TimeStamp = item.TimeStamp,ProductName = item.ProductName};
+                    {TimeStamp = item.TimeStamp,ProductName = item.ProductName,ProductId = item.ProductId};
                 diff.Add(item.GetHashCode(), value);
             }
         }
