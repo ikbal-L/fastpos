@@ -293,7 +293,7 @@
 
                         <ListBox x:Uid="ldelivrey" Grid.Row="0" Grid.RowSpan="2" x:Name="ldelivrey"
                                  ItemsSource="{Binding Delivereymen}"
-                                 SelectedItem="{Binding SelectedDelivereyman, Mode=TwoWay}"
+                                 SelectedItem="{Binding SelectedDeliveryman, Mode=TwoWay}"
                                  Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter} , ConverterParameter=delivrey}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:Uid="DataTemplate_10" DataType="{x:Type models:Deliveryman}">
