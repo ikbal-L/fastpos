@@ -229,7 +229,10 @@ namespace ServiceLib.Service
             }
             else
             {
-                Association[keyOfTOne] += act;
+                if (Association[keyOfTOne].GetInvocationList().Contains(act))
+                {
+                    Association[keyOfTOne] += act; 
+                }
             }
 
             if (!Association.ContainsKey(keyOfTMany))
@@ -238,8 +241,12 @@ namespace ServiceLib.Service
             }
             else
             {
-                Association[keyOfTMany] += act;
+                if (!Association[keyOfTMany].GetInvocationList().Contains(act))
+                {
+                    Association[keyOfTMany] += act; 
+                }
             }
+
             Association[keyOfTOne]();
         }
 
