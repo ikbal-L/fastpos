@@ -17,6 +17,7 @@ namespace ServiceLib.Service
     {
         private static readonly IDictionary<Type, object> State;
         private static readonly IDictionary<Type, object> Service;
+        private static readonly IDictionary<Type, Action> Association;
         private static Action OnfetchRequested;
         private static bool RefreshRequested = false;
         private static Action<ICollection<object>, ICollection<object>> OnAssociationRequested;
@@ -26,6 +27,7 @@ namespace ServiceLib.Service
         {
             Service = new Dictionary<Type, object>();
             State = new Dictionary<Type, object>();
+            Association = new Dictionary<Type, Action>();
             _instance = new StateManager();
         }
 
@@ -220,10 +222,32 @@ namespace ServiceLib.Service
             var keyOfTMany = typeof(TMany);
             var keyOfTOne = typeof(TOne);
             if (!State.ContainsKey(keyOfTMany) && !State.ContainsKey(keyOfTOne)) return;
-            var collectionOfTMany = State[keyOfTMany] as ICollection<TMany>;
-            var collectionOfTOne = State[keyOfTOne] as ICollection<TOne>;
-            var association = AssociationHelpers.GetAssociation<TMany, TOne>();
-            association(collectionOfTMany, collectionOfTOne);
+            Action act = GetAssociation<TMany, TOne>();
+            if (!Association.ContainsKey(keyOfTOne))
+            {
+                Association.Add(keyOfTOne, act);
+            }
+            else
+            {
+                Association[keyOfTOne] += act;
+            }
+            Association[keyOfTOne]();
+        }
+
+        private static Action GetAssociation<TMany, TOne>()
+        {
+            return () =>
+            {
+                var keyOfTMany = typeof(TMany);
+                var keyOfTOne = typeof(TOne);
+
+                var collectionOfTMany = State[keyOfTMany] as ICollection<TMany>;
+                var collectionOfTOne = State[keyOfTOne] as ICollection<TOne>;
+
+                if (collectionOfTMany == null || collectionOfTOne == null) return;
+                var association = AssociationHelpers.GetAssociation<TMany, TOne>();
+                association(collectionOfTMany, collectionOfTOne);
+            };
         }
 
         public static void Flush()
@@ -253,6 +277,9 @@ namespace ServiceLib.Service
             RefreshRequested = true;
             Fetch<TState,TIdentifier>();
             RefreshRequested = false;
+
+            var key = typeof(TState);
+            Association[key]();
         }
 
         public static void Refresh<TState>() where TState : IState<long>
