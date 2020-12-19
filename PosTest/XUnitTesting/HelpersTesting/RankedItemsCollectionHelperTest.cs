@@ -106,7 +106,7 @@ namespace XUnitTesting.HelpersTesting
             
             //Arrange 
             List<Category> sourceList = MockingHelpers.GetAllCategories().Where(c => c.Rank != null).ToList();
-            var comparer = new PosTest.ViewModels.Comparer<Category>();
+            var comparer = new Comparer<Category>();
             sourceList.Sort(comparer);
             IList<Category> targetList = new List<Category>();
 
@@ -127,7 +127,7 @@ namespace XUnitTesting.HelpersTesting
 
             //Arrange 
             List<Category> sourceList = MockingHelpers.GetAllCategories().Where(c => c.Rank != null).ToList();
-            var comparer = new PosTest.ViewModels.Comparer<Category>();
+            var comparer = new Comparer<Category>();
             sourceList.Sort(comparer);
             IList<Category> targetList = new List<Category>();
 
@@ -150,7 +150,7 @@ namespace XUnitTesting.HelpersTesting
 
             //Arrange 
             List<Product> sourceList = MockingHelpers.GetAllProducts().Where(p => p.Rank != null).ToList();
-            var comparer = new PosTest.ViewModels.Comparer<Product>();
+            var comparer = new Comparer<Product>();
             sourceList.Sort(comparer);
             IList<Product> targetList = new List<Product>();
 
