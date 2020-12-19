@@ -16,6 +16,7 @@ namespace ServiceLib.Service
         private static readonly IDictionary<Type, object> State;
         private static readonly IDictionary<Type, object> Service;
         private static Action OnfetchRequested;
+        private static bool RefreshRequested = false;
         private static Action<ICollection<object>, ICollection<object>> OnAssociationRequested;
         private static StateManager _instance;
 
@@ -181,7 +182,7 @@ namespace ServiceLib.Service
         private static void Fetch<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
-            if (State[key] != null) return;
+            if (State[key] != null && !RefreshRequested) return;
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
                 var (status, data) = service.Get();
@@ -208,18 +209,37 @@ namespace ServiceLib.Service
             association(collectionOfTMany, collectionOfTOne);
         }
 
-        private void Flush()
+        private static void Flush()
         {
             State.Clear();
         }
 
-        private void Flush<TState>()
+        private static void Flush<TState>()
         {
             var key = typeof(TState);
             if (State.ContainsKey(key))
             {
                 (State[key] as ICollection<TState>)?.Clear();
             }
+        }
+
+        private static void Refresh()
+        {
+            RefreshRequested = true;
+            Fetch();
+            RefreshRequested = false;
+        }
+
+        private static void Refresh<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
+        {
+            RefreshRequested = true;
+            Fetch<TState,TIdentifier>();
+            RefreshRequested = false;
+        }
+
+        private static void Refresh<TState>() where TState : IState<long>
+        {
+            Refresh<TState, long>();
         }
     }
 }
