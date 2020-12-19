@@ -627,9 +627,9 @@
                         </TextBlock>
                     </StackPanel>
                     <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal" Width="120"
-                                Background="{Binding SelectedDelivereyman.Background}" Margin="4 0 0 3">
+                                Background="{Binding SelectedDeliveryman.Background}" Margin="4 0 0 3">
                         <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_14" Kind="TruckFast" Width="20" Height="20"
-                                                 Visibility="{Binding  SelectedDelivereyman, Converter={StaticResource ObjectToVisibility}}"
+                                                 Visibility="{Binding  SelectedDeliveryman, Converter={StaticResource ObjectToVisibility}}"
                                                  Foreground="{Binding ElementName=textblck, Path=Foreground}" />
 
                         <TextBlock x:Uid="textblck" x:Name="textblck" Width="120" Padding="2" Margin="-20 0 0 0"
@@ -637,12 +637,12 @@
                                    HorizontalAlignment="Left"
                                    TextWrapping="WrapWithOverflow">
                             <Run x:Uid="Run_3" Text="    " />
-                            <Run x:Uid="Run_4" Text="{Binding SelectedDelivereyman.Name}" />
+                            <Run x:Uid="Run_4" Text="{Binding SelectedDeliveryman.Name}" />
                             <TextBlock.Style>
                                 <Style x:Uid="Style_7" TargetType="TextBlock">
                                     <Setter x:Uid="Setter_13" Property="Foreground" Value="Black" />
                                     <Style.Triggers>
-                                        <DataTrigger x:Uid="DataTrigger_5" Binding="{Binding SelectedDelivereyman.IsDark}" Value="True">
+                                        <DataTrigger x:Uid="DataTrigger_5" Binding="{Binding SelectedDeliveryman.IsDark}" Value="True">
                                             <Setter x:Uid="Setter_14" Property="Foreground" Value="White" />
                                         </DataTrigger>
                                     </Style.Triggers>
