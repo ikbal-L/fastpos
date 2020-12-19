@@ -1630,9 +1630,10 @@ namespace PosTest.ViewModels
                     SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable);
                 }
 
-                Set(ref _selectedWaiter, value);
-                if (CurrentOrder != null)
+                
+                if (CurrentOrder != null && CurrentOrder.Type ==OrderType.OnTable)
                 {
+                    Set(ref _selectedWaiter, value);
                     CurrentOrder.Waiter = value;
                 }
 
