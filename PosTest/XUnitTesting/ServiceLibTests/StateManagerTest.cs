@@ -36,10 +36,16 @@ namespace XUnitTesting.ServiceLibTests
             //Arrange 
 
             //Act 
-            Action act = () => StateManager.Get<Table>();
+            Action act1 = () => StateManager.Get<Table>();
+            Action act2 = () => StateManager.Get<Table,long>();
+            Action act3 = () => StateManager.Get<Table>(1);
+            Action act4 = () => StateManager.Get<Table,long>(1);
 
             //Assert 
-            var e = Assert.Throws<StateNotManagedException<Table>>(act);
+            var ex1 = Assert.Throws<StateNotManagedException<Table>>(act1);
+            var ex2 = Assert.Throws<StateNotManagedException<Table>>(act2);
+            var ex3 = Assert.Throws<StateNotManagedException<Table>>(act3);
+            var ex4 = Assert.Throws<StateNotManagedException<Table>>(act4);
         }
     }
 }

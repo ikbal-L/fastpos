@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -59,10 +60,7 @@ namespace ServiceLib.Service
         public static ICollection<TState> Get<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct 
         {
             var key = typeof(TState);
-            if (!State.ContainsKey(key))
-            {
-                throw new StateNotManagedException<TState>();
-            }
+            IsStateManaged<TState, TIdentifier>(key);
 
             if (State[key] == null) Fetch<TState, TIdentifier>();
 
@@ -88,6 +86,8 @@ namespace ServiceLib.Service
         public static bool Save<TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
+            IsStateManaged<TState, TIdentifier>(key);
+
             var status = -1;
             IEnumerable<string> errors = null;
 
@@ -194,6 +194,22 @@ namespace ServiceLib.Service
             }
         }
 
+        [Conditional("DEBUG")]
+        private static void IsStateManaged<TState, TIdentifier>(Type key) where TState : IState<TIdentifier> where TIdentifier : struct
+        {
+            if (!State.ContainsKey(key))
+            {
+                throw new StateNotManagedException<TState>();
+            }
+        }
+
+        private static void IsStateManaged<TState>(Type key) where TState : IState<long>
+        {
+            IsStateManaged<TState, long>(key);
+        }
+
+
+
         public static void Fetch()
         {
             OnfetchRequested();
@@ -210,35 +226,36 @@ namespace ServiceLib.Service
             association(collectionOfTMany, collectionOfTOne);
         }
 
-        private static void Flush()
+        public static void Flush()
         {
             State.Clear();
         }
 
-        private static void Flush<TState>()
+        public static void Flush<TState>() where TState:IState<long>
         {
             var key = typeof(TState);
+            IsStateManaged<TState>(key);
             if (State.ContainsKey(key))
             {
                 (State[key] as ICollection<TState>)?.Clear();
             }
         }
 
-        private static void Refresh()
+        public static void Refresh()
         {
             RefreshRequested = true;
             Fetch();
             RefreshRequested = false;
         }
 
-        private static void Refresh<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
+        public static void Refresh<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
         {
             RefreshRequested = true;
             Fetch<TState,TIdentifier>();
             RefreshRequested = false;
         }
 
-        private static void Refresh<TState>() where TState : IState<long>
+        public static void Refresh<TState>() where TState : IState<long>
         {
             Refresh<TState, long>();
         }
