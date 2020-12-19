@@ -15,7 +15,7 @@ namespace ServiceLib.Service
     {
         private static readonly IDictionary<Type, object> State;
         private static readonly IDictionary<Type, object> Service;
-        private Action OnfetchRequested;
+        private static Action OnfetchRequested;
         private static Action<ICollection<object>, ICollection<object>> OnAssociationRequested;
         private static StateManager _instance;
 
@@ -192,7 +192,7 @@ namespace ServiceLib.Service
             }
         }
 
-        public void Fetch()
+        public static void Fetch()
         {
             OnfetchRequested();
         }

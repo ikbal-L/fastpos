@@ -68,6 +68,9 @@ namespace PosTest.ViewModels
             var products = StateManager.Get<Product>();
             var categories = StateManager.Get<Category>();
 
+            StateManager.Associate<Additive, Product>();
+            StateManager.Associate<Product, Category>();
+
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 

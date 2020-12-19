@@ -130,7 +130,7 @@ namespace PosTest.ViewModels
             //_customerService = customerService;
 
 
-            StateManager.Instance.Fetch();
+            StateManager.Fetch();
             StateManager.Associate<Additive,Product>();
             StateManager.Associate<Product,Category>();
 
