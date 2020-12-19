@@ -32,12 +32,14 @@ namespace ServiceInterface.StaticValues
         {
             static Resource()
             {
-                _resource = typeof(T).Name.ToLowerInvariant();
+                
             }
 
             private static void SetPath([CallerMemberName] string endpoint = "",string pathVariable = "")
             {
+                _resource = typeof(T).Name.ToLowerInvariant();
                 _endpoint = endpoint;
+                
                 var path = $"{_prefix}/{_resource}/{_endpoint.ToLowerInvariant()}/{pathVariable}";
                 if (string.IsNullOrEmpty(pathVariable))
                 {

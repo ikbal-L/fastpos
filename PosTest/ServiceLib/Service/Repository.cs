@@ -104,7 +104,7 @@ namespace ServiceLib.Service
 
         public override int Update(Order state, out IEnumerable<string> errors)
         {
-            var response = GenericRest.UpdateThing(state, RestApis.Resource<Order>.Save());
+            var response = GenericRest.UpdateThing(state, RestApis.Resource<Order>.Put(state.Id));
             PatchOrder(state, response, out errors);
             return (int)response.StatusCode;
         }
@@ -113,7 +113,7 @@ namespace ServiceLib.Service
         {
             errors = null;
 
-            if (response.StatusCode != HttpStatusCode.Created || response.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.OK)
             {
                 errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
             }
