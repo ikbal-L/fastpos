@@ -6,6 +6,7 @@ using System.Reflection;
 using Caliburn.Micro;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceLib.Exceptions;
 using ServiceLib.helpers;
 using Action = System.Action;
 
@@ -55,12 +56,12 @@ namespace ServiceLib.Service
 
         public static StateManager Instance => _instance ??= new StateManager();
 
-        public static ICollection<TState> Get<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
+        public static ICollection<TState> Get<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct 
         {
             var key = typeof(TState);
             if (!State.ContainsKey(key))
             {
-                throw new KeyNotFoundException($"Must manage type {typeof(TState)} using a repository of type IRepository<{typeof(TState)},{typeof(TIdentifier)}>");
+                throw new StateNotManagedException<TState>();
             }
 
             if (State[key] == null) Fetch<TState, TIdentifier>();

@@ -1,6 +1,7 @@
 ﻿using Moq;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceLib.Exceptions;
 using ServiceLib.Service;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using Xunit;
 
 namespace XUnitTesting.ServiceLibTests
 {
-    public class StateManagerTest
+    public class StateManagerTest 
     {
         private Mock<IProductRepository> _productRepository;
         private Mock<ICategoryRepository> _categoryRepositroy;
@@ -30,7 +31,7 @@ namespace XUnitTesting.ServiceLibTests
         }
 
         [Fact]
-        public void Get_TStateIsUmmangedState_ThrowsException()
+        public void GetTState_TStateIsUmmangedState_ThrowsStateNotManagedExceptionTState()
         {
             //Arrange 
 
@@ -38,7 +39,7 @@ namespace XUnitTesting.ServiceLibTests
             Action act = () => StateManager.Get<Table>();
 
             //Assert 
-            var e = Assert.Throws<KeyNotFoundException>(act);
+            var e = Assert.Throws<StateNotManagedException<Table>>(act);
         }
     }
 }
