@@ -11,13 +11,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using PosTest.Helpers;
 using ServiceInterface.Interface;
+using ServiceLib.Service;
 
 namespace PosTest.ViewModels
 {
     public class CustomerViewModel : Screen
 
     {
-        private readonly ICustomerService _customerService;
         private ICollectionView _CustomerView;
         private string _FilterString;
         private Customer _selectedCustomer;
@@ -116,7 +116,7 @@ namespace PosTest.ViewModels
             string name= Regex.Replace(FilterString, @"\d", "");
             string mobile = "+213"+Regex.Replace(FilterString, @"\D", "").Remove(0,1);
             Customer customer = new Customer { Name = name, Mobile = mobile };
-            _customerService.SaveCustomer(customer, out IEnumerable<string> errors);
+            StateManager.Save(customer);
             //customer.Id = id;
             ParentChechoutVM.Customers.Add(customer);
             

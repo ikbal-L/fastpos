@@ -73,10 +73,13 @@ namespace PosTest.Helpers
             var orderItems = order.OrderItems
                 .Where(oi =>
                     oi.State == OrderItemState.IncreasedQuantity || oi.State == OrderItemState.DecreasedQuantity);
-            foreach (var orderItem in orderItems)
+            if (orderItems != null)
             {
-                var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
-                changedOrderItems.Add(new OrderItem(orderItem.Product,orderItem.Quantity-refItem.Quantity,orderItem.UnitPrice,orderItem.Order));
+                foreach (var orderItem in orderItems)
+                {
+                    var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
+                    changedOrderItems.Add(new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.UnitPrice, orderItem.Order));
+                } 
             }
 
             changedOrderItems = changedOrderItems.Concat(order.OrderItems.Where(oi =>
