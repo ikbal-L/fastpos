@@ -165,7 +165,7 @@ namespace ServiceLib.Service
 
         public (IEnumerable<long>, int) UpdateManyProducts(IEnumerable<Product> products)
         {
-            (int status, string idsListStr) = GenericRest.UpdateThing(products, UrlConfig.ProductUrl.UpdateManyProducts);
+            (int status, string idsListStr) = GenericRest.UpdateThing(products, UrlConfig.ProductUrl.UpdateManyProducts,out _);
             IEnumerable<long> updatedIds = JsonConvert.DeserializeObject<List<long>>(idsListStr);
             return (updatedIds, status);
         }

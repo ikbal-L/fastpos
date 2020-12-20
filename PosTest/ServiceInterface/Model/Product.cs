@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace ServiceInterface.Model
 {
-    public class Product : Ranked
+    public class Product : Ranked,IState<long>
     {
         private string _backgroundString = null;
         private bool _isMuchInDemand;

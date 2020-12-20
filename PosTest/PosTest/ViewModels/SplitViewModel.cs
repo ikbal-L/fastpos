@@ -467,7 +467,7 @@ namespace PosTest.ViewModels
 
         private void SaveSplittedOrder()
         {
-            int? resp1=200;
+            bool? resp1=false;
             if (Parent.CurrentOrder.Id == null)
             {
                  Parent.CurrentOrder.State = OrderState.Splitted;
@@ -478,7 +478,7 @@ namespace PosTest.ViewModels
             }
             switch (resp1)
             {
-                case 200:
+                case true:
                     SplittedOrder.SplittedFrom = Parent.CurrentOrder;
                     
                     var resp2 = Parent.SaveOrder(ref _splitedOrder);
@@ -487,8 +487,9 @@ namespace PosTest.ViewModels
 
                     switch (resp2)
                     {
-                        case 200:
+                        case true:
                             CurrentOrder.OrderItems.RemoveRange(SplittedOrder.OrderItems);
+                            //TODO Fix Issue! Remove range not removing SplittedOrder.OrderItems from Parent.CurrentOrder.OrderItems 
                             Parent.CurrentOrder.OrderItems.RemoveRange(SplittedOrder.OrderItems);
                             SplittedOrder.OrderItems.Clear();
                             SplittedOrder.Id = null;
@@ -497,7 +498,8 @@ namespace PosTest.ViewModels
                         case null: break;
 
                         default:
-                            ToastNotification.ErrorNotification((int)resp2);
+                            //false
+                            ToastNotification.ErrorNotification(0);
                             break;
                     }
 
@@ -506,7 +508,8 @@ namespace PosTest.ViewModels
                 case null: break;
 
                 default:
-                    ToastNotification.ErrorNotification((int)resp1);
+                    // false or null
+                    ToastNotification.ErrorNotification(0);
                     break;
             }
             

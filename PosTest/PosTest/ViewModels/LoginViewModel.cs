@@ -23,29 +23,32 @@ namespace PosTest.ViewModels
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        [Import(typeof(IProductService))]
-        private IProductService productService = null;
+        [Import(typeof(IProductRepository))]
+        private IProductRepository _productRepository= null;
 
-        [Import(typeof(ICategoryService))]
-        private ICategoryService categorieService = null;
+        [Import(typeof(ICategoryRepository))]
+        private ICategoryRepository _categoryRepository =  null;
                 
-        [Import(typeof(IAdditiveService))]
-        private IAdditiveService additiveService = null;
+        [Import(typeof(IAdditiveRepository))]
+        private IAdditiveRepository _additiveRepository = null;
 
         [Import(typeof(IAuthentification))]
-        private IAuthentification authService = null;
+        private IAuthentification _authService = null;
 
-        [Import(typeof(IOrderService))]
-        private IOrderService orderService;
+        [Import(typeof(IOrderRepository))]
+        private IOrderRepository _orderRepository;
 
-        [Import(typeof(IDelivereyService))]
-        private IDelivereyService delivereyService;
+        [Import(typeof(ITableRepository))]
+        private ITableRepository _tableRepository;
 
-        [Import(typeof(IWaiterService))]
-        private IWaiterService waiterService;
+        [Import(typeof(IDeliverymanRepository))]
+        private IDeliverymanRepository _deliverymanRepository;
 
-        [Import(typeof(ICustomerService))]
-        private ICustomerService customerService;
+        [Import(typeof(IWaiterRepository))]
+        private IWaiterRepository _waiterRepository;
+
+        [Import(typeof(ICustomerRepository))]
+        private ICustomerRepository _customerRepository;
 
         //public String Username { get; set; }
         //public String Password { get; set; }
@@ -62,6 +65,15 @@ namespace PosTest.ViewModels
         {
             base.OnActivate();
             this.Compose();
+            StateManager.Instance
+                .Manage(_productRepository)
+                .Manage(_categoryRepository)
+                .Manage(_additiveRepository)
+                .Manage(_orderRepository)
+                .Manage(_tableRepository)
+                .Manage(_customerRepository)
+                .Manage(_waiterRepository)
+                .Manage(_deliverymanRepository);
         }
         public bool CanLogin()
         {
@@ -75,7 +87,7 @@ namespace PosTest.ViewModels
             try
             {
                 // resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-                resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
                 // resp = authService.Authenticate(new User(){Username = "admin",Password = "admin",Agent = Agent.Desktop});
                 int statusCode = 0;
                 
@@ -109,23 +121,24 @@ namespace PosTest.ViewModels
         {
             IsDialogOpen = false;
             CheckoutViewModel checkoutViewModel =
-                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,
-                productService,
-                categorieService,
-                orderService,
-                waiterService,
-                delivereyService,
-                customerService
+                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage
+                //,_productService,
+                //_categorieService,
+                //_orderRepository,
+                //_waiterService,
+                //_deliverymanRepository,
+                //_customerService
                 );
-
+            //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+           
             checkoutViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
         }
 
         public void Settings()
         {
-            authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            Settings1ViewModel settingsViewModel = new Settings1ViewModel(30, productService, categorieService, additiveService);
+            _authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            Settings1ViewModel settingsViewModel = new Settings1ViewModel(30/*, _productService, _categorieService, _additiveService*/);
             settingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
@@ -140,7 +153,7 @@ namespace PosTest.ViewModels
             int resp;
             try
             {
-                resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                resp = _authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
             }
             catch (AggregateException)
             {
@@ -150,9 +163,10 @@ namespace PosTest.ViewModels
 
             PaginationTestViewModel paginationtesttViewModel =
                 new PaginationTestViewModel(
-                        productService,
-                        categorieService, 
-                        orderService);
+                        //_productService,
+                        //_categorieService, 
+                        //_orderRepository
+                        );
 
             paginationtesttViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(paginationtesttViewModel);
@@ -163,12 +177,12 @@ namespace PosTest.ViewModels
             IsDialogOpen = false;
             PinLoginViewModel pinLoginViewModel =
                 new PinLoginViewModel(
-                    productService,
-                    categorieService,
-                    orderService,
-                    waiterService,
-                    delivereyService,
-                    customerService
+                    //_productService,
+                    //_categorieService,
+                    //_orderRepository,
+                    //_waiterService,
+                    //_deliverymanRepository,
+                    //_customerService
                 );
             
             pinLoginViewModel.Parent = this.Parent;
@@ -181,7 +195,7 @@ namespace PosTest.ViewModels
             try
             {
                 //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-                resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             }
             catch (AggregateException)
             {
@@ -190,15 +204,17 @@ namespace PosTest.ViewModels
             }
 
             CheckoutSettingsViewModel checkoutSettingsViewModel =
-                    new CheckoutSettingsViewModel(30, 8, productService,
-                categorieService);
+                    new CheckoutSettingsViewModel(30, 8
+                //        , _productService,
+                //_categorieService
+                      );
             checkoutSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
         }  
         
         public void CustomersSettings()
         {
-            CustomerViewModel customerViewModel = new CustomerViewModel(null,customerService);
+            CustomerViewModel customerViewModel = new CustomerViewModel(null/*,_customerService*/);
             customerViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(customerViewModel);
         }  
@@ -206,9 +222,9 @@ namespace PosTest.ViewModels
         public void AdditivesSettings()
         {
             // authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            additiveService = new AdditiveService();
-            AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(additiveService,30);
+            _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            //_additiveService = new AdditiveService();
+            AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(/*_additiveService,*/30);
             additivesSettingsViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
         }

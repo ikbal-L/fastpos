@@ -5,13 +5,13 @@ namespace ServiceInterface.Interface
 {
     public interface IDelivereyService
     {
-        (int,IEnumerable<Delivereyman>) GetAllDeliverymen();
-        (int,IEnumerable<Delivereyman>) GetAllActiveDeliverymen();
-        int SaveDeliveryman(Delivereyman deliveryman, out IEnumerable<string> errors);
-        int UpdateDeliveryman(Delivereyman deliveryman);
+        (int,IEnumerable<Deliveryman>) GetAllDeliverymen();
+        (int,IEnumerable<Deliveryman>) GetAllActiveDeliverymen();
+        int SaveDeliveryman(Deliveryman deliveryman, out IEnumerable<string> errors);
+        int UpdateDeliveryman(Deliveryman deliveryman);
         int DeleteDeliveryman(long orderId);
 
-        (int,Delivereyman) GetDeliveryman(int id);
+        (int,Deliveryman) GetDeliveryman(int id);
     }
 
     public interface IWaiterService

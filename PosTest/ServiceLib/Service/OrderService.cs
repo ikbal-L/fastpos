@@ -60,6 +60,10 @@ namespace ServiceLib.Service
                 foreach (var newOrderItem in deserializedOrder.OrderItems)
                 {
                     var oldOrderItem = order.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
+                    foreach (var additive in oldOrderItem.Additives)
+                    {
+                        additive.ParentOrderItem = newOrderItem;
+                    }
                     newOrderItem.Additives = oldOrderItem.Additives;
                 }
 
@@ -87,7 +91,7 @@ namespace ServiceLib.Service
             {
                 return 0;
             }
-            var ( statusCode,content ) = GenericRest.UpdateThing(order,UrlConfig.OrderUrl.UpdateOrder+order.Id);
+            var ( statusCode,content ) = GenericRest.UpdateThing(order,UrlConfig.OrderUrl.UpdateOrder+order.Id,out _);
             return statusCode;
             // return _restOrderService.UpdateOrder(order);
         }
@@ -303,27 +307,27 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public (int,IEnumerable<Delivereyman>) GetAllActiveDeliverymen()
+        public (int,IEnumerable<Deliveryman>) GetAllActiveDeliverymen()
         {
-            return GenericRest.GetThing<IEnumerable<Delivereyman>>(UrlConfig.DelivereyUrl.GetAllActiveDeliverymen);
+            return GenericRest.GetThing<IEnumerable<Deliveryman>>(UrlConfig.DelivereyUrl.GetAllActiveDeliverymen);
         }
 
-        public (int,IEnumerable<Delivereyman>) GetAllDeliverymen()
+        public (int,IEnumerable<Deliveryman>) GetAllDeliverymen()
         {
-            return GenericRest.GetAll<Delivereyman>(UrlConfig.DelivereyUrl.GetAllDeliverymen);
+            return GenericRest.GetAll<Deliveryman>(UrlConfig.DelivereyUrl.GetAllDeliverymen);
         }
 
-        public (int,Delivereyman) GetDeliveryman(int id)
+        public (int,Deliveryman) GetDeliveryman(int id)
         {
-            return GenericRest.GetThing<Delivereyman>(UrlConfig.DelivereyUrl.GetDeliverymen+id.ToString());
+            return GenericRest.GetThing<Deliveryman>(UrlConfig.DelivereyUrl.GetDeliverymen+id.ToString());
         }
 
-        public int SaveDeliveryman(Delivereyman deliveryman,out IEnumerable<string> errors)
+        public int SaveDeliveryman(Deliveryman deliveryman,out IEnumerable<string> errors)
         {
             return GenericRest.SaveThing(deliveryman, UrlConfig.DelivereyUrl.SaveDeliveryman,out errors).Item1;
         }
 
-        public int UpdateDeliveryman(Delivereyman deliveryman)
+        public int UpdateDeliveryman(Deliveryman deliveryman)
         {
             throw new NotImplementedException();
         }

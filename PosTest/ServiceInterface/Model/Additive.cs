@@ -8,9 +8,10 @@ using System.Windows.Media;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
+
 namespace ServiceInterface.Model
 {
-    public class Additive : Ranked //, IEquatable<Additive>
+    public class Additive : Ranked, IState<long> //, IEquatable<Additive>
     {
         private string _description;
         private string _backgroundString;

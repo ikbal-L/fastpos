@@ -20,7 +20,7 @@ namespace PosTest.Helpers
 
             items.ForEach(i =>
             {
-                var refItem = diff.First(d => d.Value.Product.Id == i.Product.Id && d.Key == i.GetHashCode()).Value;
+                var refItem = diff.First(d => d.Value.ProductId == i.ProductId && d.Key == i.GetHashCode()).Value;
                 if (i.TimeStamp != null)
                 {
                     if (i.Quantity > refItem.Quantity)
@@ -61,7 +61,7 @@ namespace PosTest.Helpers
             if (!diff.ContainsKey(item.GetHashCode()))
             {
                 var value = new OrderItem(item.Product, item.Quantity, item.UnitPrice, item.Order)
-                    {TimeStamp = item.TimeStamp,ProductName = item.ProductName};
+                    {TimeStamp = item.TimeStamp,ProductName = item.ProductName,ProductId = item.ProductId};
                 diff.Add(item.GetHashCode(), value);
             }
         }
@@ -73,10 +73,13 @@ namespace PosTest.Helpers
             var orderItems = order.OrderItems
                 .Where(oi =>
                     oi.State == OrderItemState.IncreasedQuantity || oi.State == OrderItemState.DecreasedQuantity);
-            foreach (var orderItem in orderItems)
+            if (orderItems != null)
             {
-                var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
-                changedOrderItems.Add(new OrderItem(orderItem.Product,orderItem.Quantity-refItem.Quantity,orderItem.UnitPrice,orderItem.Order));
+                foreach (var orderItem in orderItems)
+                {
+                    var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
+                    changedOrderItems.Add(new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.UnitPrice, orderItem.Order));
+                } 
             }
 
             changedOrderItems = changedOrderItems.Concat(order.OrderItems.Where(oi =>

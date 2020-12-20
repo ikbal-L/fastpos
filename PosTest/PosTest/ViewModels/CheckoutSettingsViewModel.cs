@@ -21,15 +21,14 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
 using PosTest.ViewModels.SubViewModel;
+using ServiceLib.Service;
 
 namespace PosTest.ViewModels
 {
     public class CheckoutSettingsViewModel : Screen
     {
-        private IProductService _productsService;
-        private ICategoryService _categoriesService;
-
-
+        //private IProductService _productsService;
+        //private ICategoryService _categoriesService;
         private bool _IsProductDetailsDrawerOpen;
         private bool _IsDeleteCategoryDialogOpen;
         private bool _IsDeleteProductDialogOpen;
@@ -54,21 +53,24 @@ namespace PosTest.ViewModels
         {
         }
 
-        public CheckoutSettingsViewModel(int productPageSize, int categoryPageSize,
-            IProductService productsService,
-            ICategoryService categoriesService) : this()
+        public CheckoutSettingsViewModel(int productPageSize, int categoryPageSize
+            ) : this()
         {
             _productPageSize = productPageSize;
             _categpryPageSize = categoryPageSize;
-            _productsService = productsService;
-            _categoriesService = categoriesService;
+
 
             ProductPageSize = productPageSize;
             CategoryPageSize = categoryPageSize;
-            
-            var ((catStatusCode, prodStatusCode),(categories, products)) =
-                _categoriesService.GetAllCategoriesAndProducts();
-            if (catStatusCode != 200 && prodStatusCode != 200) return;
+
+
+
+            var products = StateManager.Get<Product>();
+            var categories = StateManager.Get<Category>();
+
+            StateManager.Associate<Additive, Product>();
+            StateManager.Associate<Product, Category>();
+
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
@@ -152,50 +154,50 @@ namespace PosTest.ViewModels
             }
         }
 
-        void GenarateRanksForProducts()
-        {
-            bool existsNumber(int[] tab, int value, int end)
-            {
-                for (int i = 0; i < end; i++)
-                {
-                    if (tab[i] == value)
-                    {
-                        return true;
-                    }
-                }
+        //void GenarateRanksForProducts()
+        //{
+        //    bool existsNumber(int[] tab, int value, int end)
+        //    {
+        //        for (int i = 0; i < end; i++)
+        //        {
+        //            if (tab[i] == value)
+        //            {
+        //                return true;
+        //            }
+        //        }
 
-                return false;
-            }
+        //        return false;
+        //    }
 
-            foreach (var cat in AllCategories)
-            {
-                var random = new Random();
-                var catProducts = AllProducts.Where(p => p.Category == cat);
-                var t = new int[20];
-                int i = 0, end = 1;
-                foreach (var prod in catProducts)
-                {
-                    var r = random.Next(1, 21);
-                    while (existsNumber(t, r, end))
-                    {
-                        r = random.Next(1, 21);
-                    }
+        //    foreach (var cat in AllCategories)
+        //    {
+        //        var random = new Random();
+        //        var catProducts = AllProducts.Where(p => p.Category == cat);
+        //        var t = new int[20];
+        //        int i = 0, end = 1;
+        //        foreach (var prod in catProducts)
+        //        {
+        //            var r = random.Next(1, 21);
+        //            while (existsNumber(t, r, end))
+        //            {
+        //                r = random.Next(1, 21);
+        //            }
 
-                    prod.Rank = r;
-                    t[i++] = r;
-                    end++;
-                }
-            }
+        //            prod.Rank = r;
+        //            t[i++] = r;
+        //            end++;
+        //        }
+        //    }
 
-            int j = 1;
-            foreach (var prod in AllProducts)
-            {
-                var code = _productsService.UpdateProduct(prod, out IEnumerable<string> errors);
-                if (code != 200)
-                {
-                }
-            }
-        }
+        //    int j = 1;
+        //    foreach (var prod in AllProducts)
+        //    {
+        //        var code = _productsService.UpdateProduct(prod, out IEnumerable<string> errors);
+        //        if (code != 200)
+        //        {
+        //        }
+        //    }
+        //}
 
         public List<Product> AllProducts { get; }
         public List<Category> AllCategories { get; }
@@ -361,7 +363,7 @@ namespace PosTest.ViewModels
             var categories = new List<Category>(AllCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
-            var maxRank = (int) categories.Max(c => c.Rank);
+            var maxRank = (int)categories.Max(c => c.Rank);
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;
@@ -372,7 +374,7 @@ namespace PosTest.ViewModels
         public void ShowCategoryProducts(Category category)
         {
             //if ( category == SelectedCategory) return;
-            
+
             CurrentProducts.Clear();
             if (category.Id == null) return;
             var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
@@ -391,7 +393,7 @@ namespace PosTest.ViewModels
             if (ProductToMove != null)
             {
                 var index = CurrentProducts.IndexOf(ProductToMove);
-                var prod = new Product {Rank = ProductToMove.Rank};
+                var prod = new Product { Rank = ProductToMove.Rank };
                 if (SelectedProduct.Equals(ProductToMove))
                 {
                     ProductToMove = null;
@@ -493,7 +495,7 @@ namespace PosTest.ViewModels
                 RemoveCategoryFromList<T>(selectedCategory);
             }
 
-            CurrentTs[index] = new T {Rank = rank};
+            CurrentTs[index] = new T { Rank = rank };
             FreeTs.Add(freeT);
             SelectedFreeT = freeT;
         }
@@ -502,23 +504,15 @@ namespace PosTest.ViewModels
         {
             ManageCategoryProductsForDeletion<T>(selectedCategory);
 
-            // implementing  update many products in the backend
+
             CurrentProducts.Clear();
             SelectedCategory = null;
 
 
             try
             {
-                int selectedCategoryStatusCode = _categoriesService.UpdateCategory(selectedCategory,out IEnumerable<string> errors);
-                if (selectedCategoryStatusCode != 200)
-                {
-                    {
-                        var message =
-                            "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                        var args = new object[] {selectedCategory.Name, selectedCategoryStatusCode, 300};
-                        ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-                    }
-                }
+                bool saved = StateManager.Save(selectedCategory);
+
             }
             catch (AggregateException)
             {
@@ -535,86 +529,47 @@ namespace PosTest.ViewModels
 
         private void RemoveProductFromList<T>(Product selectedProduct) where T : Ranked, new()
         {
-            int categoryStatusCode = 0;
-            int productStatusCode = 0;
             try
             {
-                var selectedProductCategoryName = selectedProduct.Category.Name;
-                selectedProduct.Category.ProductIds.Remove((long) selectedProduct.Id);
-                categoryStatusCode = _categoriesService.UpdateCategory(selectedProduct.Category, out IEnumerable<string> errorsOfCategory);
+
+                selectedProduct.Category.ProductIds.Remove((long)selectedProduct.Id);
+                StateManager.Save<Category>(selectedProduct.Category);
+
                 selectedProduct.Category = null;
                 selectedProduct.CategoryId = null;
-                productStatusCode = _productsService.UpdateProduct(selectedProduct, out IEnumerable<string> errorsOfSelectedProduct);
-
-                if (categoryStatusCode != 200)
-                {
-                    var message =
-                        "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] {selectedProductCategoryName, categoryStatusCode, 300};
-                    ServiceHelper.HandleStatusCodeErrors(categoryStatusCode, message, args);
-                }
-
-
-                if (productStatusCode != 200)
-                {
-                    var message =
-                        "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] {selectedProduct.Name, productStatusCode, 300};
-                    ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
-                }
+                StateManager.Save<Product>(selectedProduct);
             }
             catch (AggregateException)
             {
                 ToastNotification.Notify("Problem connecting to server");
             }
-            catch (Exception e)
-            {
-                NLog.LogManager.GetCurrentClassLogger().Error(e.Message);
-            }
+
         }
 
         private void ManageCategoryProductsForDeletion<T>(Category selectedCategory) where T : Ranked, new()
         {
             if (selectedCategory.Products != null || selectedCategory.Products?.Count > 0)
             {
-                foreach (var product in selectedCategory.Products)
+
+                selectedCategory.Products.ForEach(product =>
                 {
                     product.Rank = null;
                     product.CategoryId = null;
                     product.Category = null;
-                    int productStatusCode = 0;
-                    try
-                    {
-                        productStatusCode = _productsService.UpdateProduct(product, out IEnumerable<string> errors);
-
-
-                        if (productStatusCode != 200)
-                        {
-                            var message =
-                                "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                            var args = new object[] {product.Name, productStatusCode, 300};
-                            ServiceHelper.HandleStatusCodeErrors(productStatusCode, message, args);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-#if DEBUG
-                        throw;
-#endif
-                        NLog.LogManager.GetCurrentClassLogger().Error(e);
-                    }
-
 
                     if (!FreeProducts.Contains(product))
                     {
                         FreeProducts.Add(product);
                     }
-                }
+                });
+                StateManager.Save<Product>(selectedCategory.Products);
 
-                selectedCategory.Products.Clear();
-                selectedCategory.ProductIds.Clear();
             }
+
+            selectedCategory.Products.Clear();
+            selectedCategory.ProductIds.Clear();
         }
+
 
 
         public void RemoveCategory()
@@ -629,7 +584,7 @@ namespace PosTest.ViewModels
             var freeProd = SelectedProduct;
             SelectedProduct.Rank = null;
             SelectedProduct.Category = null;
-            CurrentProducts[index] = new Product {Rank = rank};
+            CurrentProducts[index] = new Product { Rank = rank };
             FreeProducts.Add(freeProd);
             SelectedFreeProduct = null;
         }
@@ -683,25 +638,16 @@ namespace PosTest.ViewModels
                     targetProduct.Rank = null;
                     targetProduct.Category = null;
 
-                    targetProductStatusCode = _productsService.UpdateProduct(targetProduct, out IEnumerable<string> errorsOftargetProduct);
+                    StateManager.Save<Product>(targetProduct);
                 }
 
                 CurrentProducts[index] = sourceProduct;
 
-                if (sourceProduct.Id == null)
-                {
-                   
-                    sourceProductStatusCode = _productsService.SaveProduct(sourceProduct, out IEnumerable<string> errorsOfSourceProduct);
-                    //sourceProduct.Id = id;
-                }
-                else
-                {
-                    sourceProductStatusCode = _productsService.UpdateProduct(sourceProduct, out IEnumerable<string> errorsOfSourceProduct);
-                }
+                StateManager.Save<Product>(sourceProduct);
 
-                SelectedCategory.ProductIds.Add((long) sourceProduct.Id);
+                SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
                 SelectedCategory.Products.Add(sourceProduct);
-                selectedCategoryStatusCode = _categoriesService.UpdateCategory(SelectedCategory,out IEnumerable<string> errorsOfCategory);
+                StateManager.Save<Category>(SelectedCategory);
 
 
 
@@ -756,7 +702,7 @@ namespace PosTest.ViewModels
             int indexOfIncomingCategory = CurrentCategories.IndexOf(incomingCategory);
 
 
-            int targetCategoryRank = (int) targetCategory.Rank;
+            int targetCategoryRank = (int)targetCategory.Rank;
             targetCategory.Rank = incomingCategory.Rank;
             if (incomingCategory.Rank != null)
             {
@@ -766,12 +712,9 @@ namespace PosTest.ViewModels
             incomingCategory.Rank = targetCategoryRank;
             CurrentCategories[indexOfTargetCategory] = incomingCategory;
 
-            if (targetCategory.Id != null)
-            {
-                _categoriesService.UpdateCategory(targetCategory, out IEnumerable<string> errorsOfTargetCategory);
-            }
+            StateManager.Save(targetCategory);
 
-            _categoriesService.UpdateCategory(incomingCategory, out IEnumerable<string> errorsOfIncomingCategory);
+            StateManager.Save(incomingCategory);
         }
 
         public void PasteProduct()
@@ -846,31 +789,22 @@ namespace PosTest.ViewModels
 
             if (SelectedFreeCategory.Id != null)
             {
-                
+
                 try
                 {
-                    int deletedCategoryStatusCode=0;
-                    deletedCategoryStatusCode = _categoriesService.DeleteCategory((long) SelectedFreeCategory.Id);
-                    if (deletedCategoryStatusCode!=200)
+
+
+                    if (StateManager.Delete(SelectedFreeCategory))
                     {
-
-                        var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                        var args = new object[] { SelectedFreeProduct.Name, deletedCategoryStatusCode, 300 };
-                        ServiceHelper.HandleStatusCodeErrors(deletedCategoryStatusCode, message, args);
-
+                        ToastNotification.Notify($"{SelectedFreeCategory.Name} {SelectedFreeCategory.GetType().Name}");
                     }
+                    
                 }
                 catch (AggregateException)
                 {
                     ToastNotification.Notify("Problem connecting to server");
                 }
-                catch (Exception e)
-                {
-#if DEBUG
-                    throw;
-#endif
-                    NLog.LogManager.GetCurrentClassLogger().Error(e);
-                }
+                
                 AllCategories.Remove(SelectedFreeCategory);
                 FreeCategories.Remove(SelectedFreeCategory);
                 SelectedFreeCategory = null;
@@ -886,20 +820,12 @@ namespace PosTest.ViewModels
 
             if (SelectedFreeProduct.Id != null)
             {
-                
 
-                int statusCode = 0;
+
+                
                 try
                 {
-                    statusCode = _productsService.DeleteProduct((long)SelectedFreeProduct.Id);
-                    if (statusCode != 200)
-                    {
-
-                        var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                        var args = new object[] { SelectedFreeProduct.Name, statusCode, 300 };
-                        ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
-
-                    }
+                    StateManager.Delete(SelectedFreeProduct);
                 }
                 catch (AggregateException)
                 {
@@ -967,11 +893,11 @@ namespace PosTest.ViewModels
             {
                 ListBox listBox = sender as ListBox;
                 ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
                 T t;
                 if (listBoxItem != null)
                 {
-                    t = (T) listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                    t = (T)listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
                     if (t == null || t.GetType().GetProperty(requiredPropertyName) == null)
                     {
                         return;
@@ -986,10 +912,10 @@ namespace PosTest.ViewModels
         public static void ListTouchDownEventHandler<T>(object sender, TouchEventArgs e, string key)
         {
             ListBox listBox = sender as ListBox;
-            ListBoxItem listBoxItem = FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+            ListBoxItem listBoxItem = FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
             if (listBoxItem != null)
             {
-                T t = (T) listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                T t = (T)listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
                 if (t == null || t.GetType().GetProperty("Name") == null)
                 {
                     return;
@@ -1025,7 +951,7 @@ namespace PosTest.ViewModels
             {
                 if (current is T)
                 {
-                    return (T) current;
+                    return (T)current;
                 }
 
                 current = VisualTreeHelper.GetParent(current);
@@ -1052,7 +978,7 @@ namespace PosTest.ViewModels
             {
                 ListBox listView = sender as ListBox;
                 ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
                 if (listBoxItem == null)
                 {
@@ -1060,7 +986,7 @@ namespace PosTest.ViewModels
                 }
 
                 // Find the data behind the ListViewItem
-                Product targetProduct = (Product) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                Product targetProduct = (Product)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
 
                 Product receivedProduct;
 
@@ -1088,43 +1014,19 @@ namespace PosTest.ViewModels
                     var receivedRank = receivedProduct.Rank;
                     targetProduct.Rank = receivedProduct.Rank;
                     receivedProduct.Rank = targetRank;
-                    CurrentProducts[(int) targetRank - 1] = receivedProduct;
-                    CurrentProducts[(int) receivedRank - 1] = targetProduct;
-                    int receivedProductStatusCode = 0;
-                    int targetProductStatusCode = 0;
+                    CurrentProducts[(int)targetRank - 1] = receivedProduct;
+                    CurrentProducts[(int)receivedRank - 1] = targetProduct;
+                    
                     try
                     {
-                        receivedProductStatusCode = _productsService.UpdateProduct(receivedProduct, out IEnumerable<string> errorsOfReceivedProduct);
-                        targetProductStatusCode = _productsService.UpdateProduct(targetProduct, out IEnumerable<string> errorsOfTargetProdcut);
+                        StateManager.Save(receivedProduct);
+                        StateManager.Save(targetProduct);
 
-                        if (receivedProductStatusCode != 200)
-                        {
-
-                            var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                            var args = new object[] { receivedProduct.Name, receivedProductStatusCode, 300 };
-                            ServiceHelper.HandleStatusCodeErrors(receivedProductStatusCode, message, args);
-
-                        }
-
-                        if (targetProductStatusCode != 200)
-                        {
                        
-                            var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                            var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
-                            ServiceHelper.HandleStatusCodeErrors(targetProductStatusCode, message, args);
-
-                        }
                     }
                     catch (AggregateException)
                     {
                         ToastNotification.Notify("Problem connecting to server");
-                    }
-                    catch (Exception ex)
-                    {
-#if DEBUG
-                        throw;
-#endif
-                        NLog.LogManager.GetCurrentClassLogger().Error(ex);
                     }
                 }
             }
@@ -1141,7 +1043,7 @@ namespace PosTest.ViewModels
             {
                 Product contact = e.Data.GetData("Product") as Product;
                 ListBox listView = sender as ListBox;
-                ListBoxItem listBoxItem = FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+                ListBoxItem listBoxItem = FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
                 var productSrc = e.Data.GetData("Product") as Product;
                 if (productSrc == null) return;
@@ -1164,7 +1066,7 @@ namespace PosTest.ViewModels
             {
                 ListBox listView = sender as ListBox;
                 ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
                 if (listBoxItem == null)
                 {
@@ -1172,7 +1074,7 @@ namespace PosTest.ViewModels
                 }
 
                 // Find the data behind the ListViewItem
-                Category targetCategory = (Category) listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
+                Category targetCategory = (Category)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
 
                 Category incomingCategory;
 
@@ -1198,7 +1100,7 @@ namespace PosTest.ViewModels
                     CategoryToMove = incomingCategory;
                     SelectedCategory = targetCategory;
                     var index = CurrentCategories.IndexOf(CategoryToMove);
-                    var cat = new Category() {Rank = CategoryToMove.Rank};
+                    var cat = new Category() { Rank = CategoryToMove.Rank };
                     if (SelectedCategory.Equals(CategoryToMove))
                     {
                         CategoryToMove = null;
@@ -1224,40 +1126,15 @@ namespace PosTest.ViewModels
                     {
                         if (targetCategory.Id != null)
                         {
-                           var targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory, out IEnumerable<string> errorsOfTargetCategory);
-                           if (targetCategoryStatusCode!=200)
-                           {
-
-                               var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                               var args = new object[] { targetCategory.Name, targetCategoryStatusCode, 300 };
-                               ServiceHelper.HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
-
-                           }
+                            StateManager.Save(targetCategory);
                         }
 
-                        var incomingCategoryStatusCode=_categoriesService.UpdateCategory(incomingCategory, out IEnumerable<string> errorsOfIncomingCategory);
-                        if (incomingCategoryStatusCode!=200)
-                        {
-                            {
-
-                                var message = "Failed To update Category {Category}   {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                                var args = new object[] { incomingCategory.Name, incomingCategoryStatusCode, 300 };
-                                ServiceHelper.HandleStatusCodeErrors(incomingCategoryStatusCode, message, args);
-
-                            }
-                        }
+                        StateManager.Save(incomingCategory);
                         CurrentCategories = (BindableCollection<Category>)categories;
                     }
                     catch (AggregateException)
                     {
                         ToastNotification.Notify("Problem connecting to server");
-                    }
-                    catch (Exception exception)
-                    {
-#if DEBUG
-                        throw;
-#endif
-                        NLog.LogManager.GetCurrentClassLogger().Error(exception);
                     }
                     CategoryToMove = null;
                     SelectedCategory = incomingCategory;
@@ -1287,47 +1164,23 @@ namespace PosTest.ViewModels
             IList<Category> categories = CurrentCategories;
             RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
                 ref categories);
-            
+
             try
             {
-                int targetCategoryStatusCode=0;
-                int incomingCategoryStatusCode=0;
+
                 if (targetCategory?.Id != null)
                 {
-                    targetCategoryStatusCode = _categoriesService.UpdateCategory(targetCategory, out IEnumerable<string> errorsOfTargetCategory);
+                    StateManager.Save(targetCategory);
                 }
 
-                incomingCategoryStatusCode = _categoriesService.UpdateCategory(incomingCategory, out IEnumerable<string> errorsOfIncomingCategory);
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                
-                if (targetCategoryStatusCode!=200 && targetCategoryStatusCode!=0)
-                {
-                    var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] { targetCategory.Name, targetCategoryStatusCode, 300 };
-                    ServiceHelper.HandleStatusCodeErrors(targetCategoryStatusCode, message, args);
-                }
-
-                if (incomingCategoryStatusCode!=200)
-                {
-
-                   var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                   var args = new object[]{ incomingCategory.Name, incomingCategoryStatusCode, 300 };
-                    ServiceHelper.HandleStatusCodeErrors(incomingCategoryStatusCode,message, args);
-
-                }
+                StateManager.Save(incomingCategory);
+       
             }
             catch (AggregateException)
             {
                 ToastNotification.Notify("Problem connecting to server");
             }
-            catch (Exception e)
-            {
-#if DEBUG
-                throw;
-#endif
-                NLog.LogManager.GetCurrentClassLogger().Error(e);
-            }
-            CurrentCategories = (BindableCollection<Category>) categories;
+            CurrentCategories = (BindableCollection<Category>)categories;
 
             FreeCategories.Remove(SelectedFreeCategory);
         }
@@ -1344,7 +1197,7 @@ namespace PosTest.ViewModels
                 Category contact = e.Data.GetData("Category") as Category;
                 ListBox listView = sender as ListBox;
                 ListBoxItem listBoxItem =
-                    FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+                    FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
                 // Find the data behind the ListViewItem
                 var categorySrc = e.Data.GetData("Category") as Category;
@@ -1364,7 +1217,7 @@ namespace PosTest.ViewModels
         public void EditProduct()
         {
             if (SelectedCategory.Id == null) return;
-            this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct, this._productsService);
+            this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct);
             EditProductViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             IsCategory = false;
             NotifyOfPropertyChange((() => IsCategory));
@@ -1373,7 +1226,7 @@ namespace PosTest.ViewModels
 
         public void EditCategory()
         {
-            this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory, this._categoriesService);
+            this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory);
             EditCategoryViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
             IsCategory = true;
             IsFlipped = true;
@@ -1396,26 +1249,26 @@ namespace PosTest.ViewModels
         //    ToastNotification.Notify("hi.cos");
         //}
 
-        
-    }
-    
-    public class Comparer<T> : IComparer<T> where T : Ranked
-    {
-        public int Compare(T x, T y)
-        {
-            if (x.Equals(y))
-            {
-                return 0;
-            }
 
-            if (x.Rank > y.Rank)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
+    }
+}
+
+public class Comparer<T> : IComparer<T> where T : Ranked
+{
+    public int Compare(T x, T y)
+    {
+        if (x.Equals(y))
+        {
+            return 0;
+        }
+
+        if (x.Rank > y.Rank)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
         }
     }
 }

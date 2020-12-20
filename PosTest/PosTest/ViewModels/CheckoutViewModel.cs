@@ -7,7 +7,6 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -21,14 +20,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using Newtonsoft.Json;
-using ToastNotifications;
-using ToastNotifications.Lifetime;
-using ToastNotifications.Messages;
-using ToastNotifications.Position;
+using ServiceLib.Service;
 using Table = ServiceInterface.Model.Table;
 
 namespace PosTest.ViewModels
@@ -41,10 +36,7 @@ namespace PosTest.ViewModels
             AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.StartsWith("XUnitTesting"));
 
         private static string scanValue;
-        private IProductService _productsService;
-        private ICategoryService _categoriesService;
-        private IOrderService _orderService;
-        private ICustomerService _customerService;
+        
 
         private BindableCollection<Additive> _additvesPage;
         private BindableCollection<Table> _tables;
@@ -62,7 +54,7 @@ namespace PosTest.ViewModels
 
         //private Order _displayedOrder;
         private Table _selectedTable;
-        private Delivereyman _selectedDelivereyman;
+        private Deliveryman _selectedDeliveryman;
         private Waiter _selectedWaiter;
         private ListKind _listKind;
 
@@ -120,30 +112,48 @@ namespace PosTest.ViewModels
             }
         }
 
-        public CheckoutViewModel(int pageSize,
-            IProductService productsService,
-            ICategoryService categoriesService,
-            IOrderService orderService,
-            IWaiterService waiterService,
-            IDelivereyService delivereyService,
-            ICustomerService customerService
+        public CheckoutViewModel(int pageSize
+            //,
+            //IProductService productsService,
+            //ICategoryService categoriesService,
+            //IOrderService orderService,
+            //IWaiterService waiterService,
+            //IDelivereyService delivereyService,
+            //ICustomerService customerService
         ) : this()
         {
             _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
-            _productsService = productsService;
-            _categoriesService = categoriesService;
-            _orderService = orderService;
-            _customerService = customerService;
+            //_productsService = productsService;
+            //_categoriesService = categoriesService;
+            //_orderService = orderService;
+            //_customerService = customerService;
 
 
-            // var deliveryMen = delivereyService.GetAllActiveDeliverymen(ref code);
-            var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
-            // var waiter = waiterService.GetAllActiveWaiters(ref code);
-            var (waiterStatusCode, waiter) = waiterService.GetAllWaiters();
-            var (tablesStatusCode, tables) = _orderService.GeAllTables();
-            var (customerStatusCode,customers) = _customerService.GetAllCustomers();
-            var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
+            StateManager.Fetch();
+            StateManager.Associate<Additive,Product>();
+            StateManager.Associate<Product,Category>();
+
+            //var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
+            var deliveryMen = StateManager.Get<Deliveryman>();
+
+
+
+            //var (waiterStatusCode, waiter) = waiterService.GetAllWaiters();
+            var waiter = StateManager.Get<Waiter>();
+
+            //var (tablesStatusCode, tables) = _orderService.GeAllTables();
+            var tables = StateManager.Get<Table>();
+
+
+            //var (customerStatusCode,customers) = _customerService.GetAllCustomers();
+            var customers = StateManager.Get<Customer>();
+
+            //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
+            OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
+            //var unprocessedOrders = StateManager.Get<Order>();
+            var unprocessedOrders = Array.Empty<Order>();
+
 
             var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
             foreach (var table in tables.ToList())
@@ -157,13 +167,13 @@ namespace PosTest.ViewModels
                     = new BindableCollection<Additive>());
                 }
             }
-
+            
             Orders = new BindableCollection<Order>(unprocessedOrders);
 
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
-            Delivereymen = new BindableCollection<Delivereyman>(deliveryMen);
+            Delivereymen = new BindableCollection<Deliveryman>(deliveryMen);
             Tables = new BindableCollection<Table>(tables);
             Customers = new BindableCollection<Customer>(customers);
             OrderItemsCollectionViewSource = new CollectionViewSource();
@@ -178,10 +188,11 @@ namespace PosTest.ViewModels
                 Orders.Add(CurrentOrder);
             }
 
-            var ((catStatusCode, prodStatusCode), (categories, products)) =
-                _categoriesService.GetAllCategoriesAndProducts();
-
-            if (catStatusCode != 200 && prodStatusCode != 200) return;
+            //var ((catStatusCode, prodStatusCode), (categories, products)) =
+            //    _categoriesService.GetAllCategoriesAndProducts();
+            var products = StateManager.Get<Product>();
+            var categories = StateManager.Get<Category>();
+            //if (catStatusCode != 200 && prodStatusCode != 200) return;
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
@@ -193,7 +204,7 @@ namespace PosTest.ViewModels
             PaginatedCategories.Source = Categories;
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
-            PaginatedCategories.Filter += new FilterEventHandler(PaginatedCategoriesOnFilter);
+            PaginatedCategories.Filter += PaginatedCategoriesOnFilter;
 
             CalculateTotalPages(Categories.Count);
 
@@ -210,7 +221,7 @@ namespace PosTest.ViewModels
             TakeAwayViewModel = new TakeawayViewModel(this);
             DelivereyViewModel = new DelivereyViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
-            CustomerViewModel = new CustomerViewModel(this, customerService);
+            CustomerViewModel = new CustomerViewModel(this/*, customerService*/);
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
@@ -505,57 +516,17 @@ namespace PosTest.ViewModels
 
         #region Order Commands
 
-        public int? SaveOrder(ref Order order)
+        public bool? SaveOrder(ref Order order)
         {
             if (IsRunningFromXUnit)
             {
                 return null;
             }
 
-            int resp;
+            bool resp;
             try
             {
-                var status = 0;
-                if (order.Id == null)
-                {
-                    // order.Id = _orderService.GetIdmax(ref status) + 1;
-                    resp = _orderService.SaveOrder(order /*,out long id*/, out IEnumerable<string> errors);
-                    var logger = NLog.LogManager.GetCurrentClassLogger();
-                    if (resp != 200 && resp != 201)
-                    {
-                        string message;
-
-                        object[] args;
-                        if (resp == 422)
-                        {
-                            message =
-                                "{ERROR CODE},Unable to save Order by  {Customer} due to the following validation {errors}:";
-                            var errorsString = JsonConvert.SerializeObject(errors,
-                                Newtonsoft.Json.Formatting.None,
-                                new JsonSerializerSettings
-                                {
-                                    NullValueHandling = NullValueHandling.Ignore
-                                });
-                            args = new Object[] {resp, order.Customer?.Name, errorsString};
-                        }
-                        else
-                        {
-                            message =
-                                "Failed To save Oder by {Customer}  {ERRORCODE}, reattempting to save after {0} milliseconds ";
-                            args = new object[] {order.Customer?.Name, resp, 300};
-                        }
-
-                        ServiceHelper.HandleStatusCodeErrors(resp, message, args);
-                    }
-                    else
-                    {
-                        // order.Id = id;
-                    }
-                }
-                else
-                {
-                    resp = _orderService.UpdateOrder(ref order, out IEnumerable<string> errors);
-                }
+                resp = StateManager.Save<Order>(order);
             }
             catch (AggregateException)
             {
@@ -573,8 +544,8 @@ namespace PosTest.ViewModels
             NotifyOfPropertyChange(() => CurrentOrder);
             switch (resp)
             {
-                case 200:
-                case 201:
+
+                case true:
                     if (CurrentOrder.State == OrderState.Payed ||
                         CurrentOrder.State == OrderState.Canceled ||
                         CurrentOrder.State == OrderState.Removed)
@@ -588,15 +559,9 @@ namespace PosTest.ViewModels
 
                     break;
 
-                case null: break;
-
                 default:
 
-                    var message =
-                        $"Failed To update Oder by  {CurrentOrder.Customer}  {{ERRORCODE}}, reattempting to save after {{0}} milliseconds ";
-                    var args = new object[] {CurrentOrder?.Customer?.Name, resp, 300};
-                    ServiceHelper.HandleStatusCodeErrors((int) resp, message, args);
-                    ToastNotification.ErrorNotification((int) resp);
+                    ToastNotification.Notify("Unable to save order");
                     break;
             }
         }
@@ -647,7 +612,7 @@ namespace PosTest.ViewModels
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
             ReturnedAmount = null;
-            SelectedDelivereyman = null;
+            SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
         }
@@ -662,13 +627,13 @@ namespace PosTest.ViewModels
                 if (orderType == OrderType.OnTable)
                 {
                     CurrentOrder.Table = table;
-                    SelectedDelivereyman = null;
+                    SelectedDeliveryman = null;
                 }
                 else
                 {
                     if (orderType == OrderType.Takeaway)
                     {
-                        SelectedDelivereyman = null;
+                        SelectedDeliveryman = null;
                     }
 
                     CurrentOrder.Table = null;
@@ -715,7 +680,7 @@ namespace PosTest.ViewModels
 
             _currentOrder = null;
             //DisplayedOrder = null;
-            SelectedDelivereyman = null;
+            SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
             SetSelectedInListedOrdersDisplayedOrder();
@@ -1150,7 +1115,9 @@ namespace PosTest.ViewModels
             var status = 200;
             Table table;
             if ((table = LookForTableInOrders(tableNumber)) == null)
-               (status,table) = _orderService.GetTableByNumber(tableNumber);
+               
+                //TODO introduce table by id method in table repository 
+                table =StateManager.Get<Table>(tableNumber);
             switch (status)
             {
                 case 200:
@@ -1164,16 +1131,15 @@ namespace PosTest.ViewModels
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
                     {
-                        var status2 = _orderService.SaveTable(new Table {IsVirtual = true, Number = tableNumber},
-                            out IEnumerable<string> errors);
-                        if (status2 == 200)
+                        
+                        if (StateManager.Save<Table>(new Table { IsVirtual = true, Number = tableNumber }))
                         {
                             ToastNotification.Notify("Creation of virtual table", 1);
                             NewOrder();
                         }
                         else
                         {
-                            ToastNotification.ErrorNotification(status2);
+                            //ToastNotification.ErrorNotification(status2);
                         }
                     }
 
@@ -1419,6 +1385,14 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (CurrentOrder.SelectedOrderItem.TimeStamp==null)
+            {
+                if (_diff.ContainsKey(CurrentOrder.SelectedOrderItem.GetHashCode()))
+                {
+                    _diff.Remove(CurrentOrder.SelectedOrderItem.GetHashCode());
+                }
+            }
+            
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
             if (CurrentOrder.SelectedOrderItem != null)
             {
@@ -1615,12 +1589,12 @@ namespace PosTest.ViewModels
             set => Set(ref _IsTopDrawerOpen, value);
         }
 
-        public BindableCollection<Delivereyman> Delivereymen { get; set; }
+        public BindableCollection<Deliveryman> Delivereymen { get; set; }
         public BindableCollection<Waiter> Waiters { get; private set; }
 
-        public Delivereyman SelectedDelivereyman
+        public Deliveryman SelectedDeliveryman
         {
-            get => _selectedDelivereyman;
+            get => _selectedDeliveryman;
             set
             {
                 if (CurrentOrder == null && value != null)
@@ -1628,11 +1602,11 @@ namespace PosTest.ViewModels
                     NewOrder();
                 }
 
-                Set(ref _selectedDelivereyman, value);
+                Set(ref _selectedDeliveryman, value);
 
                 if (CurrentOrder != null)
                 {
-                    CurrentOrder.Delivereyman = value;
+                    CurrentOrder.Deliveryman = value;
                 }
 
                 IsTopDrawerOpen = false;
@@ -1651,14 +1625,16 @@ namespace PosTest.ViewModels
                 if (CurrentOrder == null && value != null)
                 {
                     NewOrder();
-                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable);
                 }
 
-                Set(ref _selectedWaiter, value);
-                if (CurrentOrder != null)
+                
+                if (CurrentOrder != null && CurrentOrder.Type ==OrderType.OnTable)
                 {
+                    Set(ref _selectedWaiter, value);
                     CurrentOrder.Waiter = value;
                 }
+
 
                 IsTopDrawerOpen = false;
             }

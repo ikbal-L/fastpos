@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using PosTest.Helpers;
 
 
 namespace ConsoleApp
@@ -30,7 +31,7 @@ namespace ConsoleApp
         private ICategoryService categorieService = null;
 
         [Import(typeof(IAuthentification))]
-        private IAuthentification authService = null;
+        private  IAuthentification authService = null;
 
         [Import(typeof(IAdditiveService))]
         private IAdditiveService additiveService = null;
@@ -58,11 +59,13 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            var date = "2020-06-06 15:16:12.343000";
-            DateTime oDate = Convert.ToDateTime(date);
-            Console.WriteLine(oDate);
+            //var date = "2020-06-06 15:16:12.343000";
+            //DateTime oDate = Convert.ToDateTime(date);
+            //Console.WriteLine(oDate);
             Program p = new Program();
             p.Run();
+
+
         }
 
         private async void CallRestAsync()
@@ -101,11 +104,29 @@ namespace ConsoleApp
             //    getCategoriesStatusCode = 0, code = 0;
             // var prods =  productService.GetAllProducts(ref getProductsStatusCode);
             var t1 = DateTime.Now;
-            var savedCode = GenericRest.SaveThing(ref p, UrlConfig.ProductUrl.SaveProduct, out long id,out IEnumerable<string> errors);
+            //var savedCode = GenericRest.SaveThing(ref p, UrlConfig.ProductUrl.SaveProduct, out long id,out IEnumerable<string> errors);
             var t2 = DateTime.Now;
             Console.WriteLine(t2-t1);
 
-            
+
+            Console.WriteLine("------------------------------------------------------------");
+            Console.WriteLine(RestApis.Resource<Product>.GetAll());
+            Console.WriteLine(RestApis.Resource<Product>.Delete(5));
+            Console.WriteLine(RestApis.Resource<Category>.Delete(5));
+
+            var repo1 = new AdditiveRepository();
+            var repo2 = new ProductRepository();
+            var repo3 = new CategoryRepository();
+            var repo4 = new OrderRepository();
+            //StateManager.Instance.Manage<Additive>(repo1).Manage<Product>(repo2);
+
+            StateManager.Instance.Manage(repo1).Manage(repo2).Manage(repo3).Manage(repo4);
+
+            //StateManager.Get<Category>(); throws exception because type category is not managed 
+
+
+            var additives = StateManager.Get<Additive>();
+
             // //var cats = categorieService.GetAllCategories(ref getCategoriesStatusCode);
             // //var adds = additiveService.GetAllAdditives(ref code);
             //
@@ -129,7 +150,7 @@ namespace ConsoleApp
 
         }
 
-        private void Compose()
+        private  void Compose()
         {
             //AssemblyCatalog catalog1 = new AssemblyCatalog(System.Reflection.Assembly.GetExecutingAssembly());
            /* AssemblyCatalog catalog = new AssemblyCatalog("ServiceLib.dll");

@@ -27,17 +27,15 @@ namespace PosTest.ViewModels
         private Additive _clipBoardAdditive;
         private Additive _additiveToMove;
 
-        public AdditivesSettingsViewModel(IAdditiveService additiveService, int additivePageSize)
+        public AdditivesSettingsViewModel(/*IAdditiveService additiveService,*/ int additivePageSize)
         {
-            _additiveService = additiveService;
+            //_additiveService = additiveService;
             _additivePageSize = additivePageSize;
             
-            // _allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
-            var (additiveStatusCode, _allAdditives) = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives);
-            if (additiveStatusCode != 200)
-            {
-                
-            }
+             //_allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
+
+            //var (additiveStatusCode, _allAdditives) = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives);
+            _allAdditives = StateManager.Get<Additive>().ToList();
             _isEditing = false;
             PopulateAdditivesPage();
         }

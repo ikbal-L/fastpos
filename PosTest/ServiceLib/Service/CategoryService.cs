@@ -41,7 +41,7 @@ namespace ServiceLib.Service
             {
                 throw new MappingException("Error in GetAllProducts to map with products, StatusCode: " + code.ToString());
             }
-            categories.ToList().ForEach(c => c.MappingAfterReceiving(ref products));
+            categories.ToList().ForEach(c => c.MappingAfterReceiving( products));
             return (Status:statusCode,Categories:categories);
         }
         public ((int,int),(IEnumerable<Category>, IEnumerable<Product>)) GetAllCategoriesAndProducts()
@@ -55,7 +55,7 @@ namespace ServiceLib.Service
             {
                 return ((categStatusCode,prodStatusCode),(null, null));
             }
-            categories.ToList().ForEach(c => c.MappingAfterReceiving(ref products));
+            categories.ToList().ForEach(c => c.MappingAfterReceiving( products));
 
             var tuple = (categories, products);
             return ((categStatusCode,prodStatusCode),(categories, products));
@@ -76,7 +76,7 @@ namespace ServiceLib.Service
             {
                 throw new MappingException("Error in GetManyProducts to map with products, StatusCode: " + getProductStatusCode.ToString());
             }
-            category.MappingAfterReceiving(ref products);
+            category.MappingAfterReceiving( products);
             return (statusCode,category);
 
         }

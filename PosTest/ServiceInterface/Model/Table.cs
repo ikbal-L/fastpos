@@ -13,7 +13,7 @@ using Action = System.Action;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class Table : PropertyChangedBase
+    public class Table : PropertyChangedBase,IState<long>
     {
         private int _number;
         private IEnumerable<Order> _allOrders;
