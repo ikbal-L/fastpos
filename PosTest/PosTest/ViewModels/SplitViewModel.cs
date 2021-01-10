@@ -488,9 +488,9 @@ namespace PosTest.ViewModels
                     switch (resp2)
                     {
                         case true:
-                            CurrentOrder.OrderItems.RemoveRange(SplittedOrder.OrderItems);
+                            CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());
                             //TODO Fix Issue! Remove range not removing SplittedOrder.OrderItems from Parent.CurrentOrder.OrderItems 
-                            Parent.CurrentOrder.OrderItems.RemoveRange(SplittedOrder.OrderItems);
+                            Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId==x.ProductId)).ToList());
                             SplittedOrder.OrderItems.Clear();
                             SplittedOrder.Id = null;
                             break;
