@@ -90,19 +90,12 @@ namespace ServiceLib.Service
             var key = typeof(TState);
             IsStateManaged<TState, TIdentifier>(key);
 
-            var status = -1;
             IEnumerable<string> errors = null;
 
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-                if (state.Id == null)
-                {
-                    status = service.Save(state, out errors);
-                }
-                else
-                {
-                    status = service.Update(state, out errors);
-                }
+                var status = -1;
+                status = state.Id == null ? service.Save(state, out errors) : service.Update(state, out errors);
 
                 if ((HttpStatusCode)status == HttpStatusCode.OK || (HttpStatusCode)status == HttpStatusCode.Created)
                 {
@@ -127,13 +120,11 @@ namespace ServiceLib.Service
         public static bool Save<TState, TIdentifier>(IEnumerable<TState> state) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
-            var status = -1;
             IEnumerable<string> errors = null;
 
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-
-                status = service.Update(state);
+                var status = service.Update(state);
 
                 if ((HttpStatusCode)status == HttpStatusCode.OK || (HttpStatusCode)status == HttpStatusCode.Created) return true;
             }
@@ -149,11 +140,11 @@ namespace ServiceLib.Service
         public static bool Delete<TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
-            var status = -1;
             IEnumerable<string> errors = null;
 
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
+                var status = -1;
                 if (state.Id == null)
                 {
                     throw new InvalidOperationException("State must have an Id");

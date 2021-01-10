@@ -1116,10 +1116,15 @@ namespace PosTest.ViewModels
 
             var status = 200;
             Table table;
-            if ((table = LookForTableInOrders(tableNumber)) == null)
+            if ((table = Tables.FirstOrDefault(t=>t.Number==tableNumber)) == null)
                
                 //TODO introduce table by id method in table repository 
                 table =StateManager.Get<Table>(tableNumber);
+            if (table == null)
+            {
+                ToastNotification.Notify("Table not found");
+                return;
+            }
             switch (status)
             {
                 case 200:
@@ -1627,10 +1632,10 @@ namespace PosTest.ViewModels
                 if (CurrentOrder == null && value != null)
                 {
                     NewOrder();
-                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable);
                 }
 
-                
+                Set(ref _selectedWaiter, value);
+
                 if (CurrentOrder != null && CurrentOrder.Type ==OrderType.OnTable)
                 {
                     Set(ref _selectedWaiter, value);
