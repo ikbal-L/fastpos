@@ -534,7 +534,7 @@ namespace ServiceInterface.Model
     {
         Delivery,
         OnTable,
-        Takeaway,
+        TakeAway,
         InWaiting
     }
 }

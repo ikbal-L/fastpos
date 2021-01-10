@@ -25,11 +25,13 @@ using System.Windows.Xps.Packaging;
 using Newtonsoft.Json;
 using ServiceLib.Service;
 using Table = ServiceInterface.Model.Table;
+using System.Drawing.Printing;
 
 namespace PosTest.ViewModels
 {
     public class CheckoutViewModel : Screen, IHandle<AssignOrderTypeEventArgs>
     {
+        
         #region Private fields
 
         private static readonly bool IsRunningFromXUnit =
@@ -631,7 +633,7 @@ namespace PosTest.ViewModels
                 }
                 else
                 {
-                    if (orderType == OrderType.Takeaway)
+                    if (orderType == OrderType.TakeAway)
                     {
                         SelectedDeliveryman = null;
                     }
@@ -1058,7 +1060,7 @@ namespace PosTest.ViewModels
                         NewOrder();
                     }
 
-                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Takeaway);
+                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.TakeAway);
                     break;
                 case ActionButton.Served:
                     if (CurrentOrder == null)
@@ -1738,11 +1740,15 @@ namespace PosTest.ViewModels
         public void PrintDocument()
         {
             FixedDocument fixedDocument = GenerateOrderReceipt();
-            PrintDocumentImageableArea area = null;
-            XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(ref area);
-            Size size = new Size(area.MediaSizeWidth, area.MediaSizeHeight);
-            fixedDocument.DocumentPaginator.PageSize = size;
-            writer.Write(fixedDocument.DocumentPaginator);
+         //    var printer=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
+            PrintDialog dialog = new PrintDialog();
+            dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+            dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+            /* printdocumentimageablearea area = null;
+             xpsdocumentwriter writer = printqueue.createxpsdocumentwriter(ref area);
+             size size = new size(area.mediasizewidth, area.mediasizeheight);
+             fixeddocument.documentpaginator.pagesize = size;
+             writer.write(fixeddocument.documentpaginator);*/
         }
 
 

@@ -35,7 +35,7 @@ namespace PosTest.ViewModels.SubViewModel
             if (order != null)
             {
                 // Filter out products with price 25 or above
-                if (order.Type == OrderType.Takeaway)
+                if (order.Type == OrderType.TakeAway)
                 {
                     e.Accepted = true;
                 }

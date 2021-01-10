@@ -50,7 +50,7 @@ namespace PosTest.Converters
                     return PackIconKind.Moped;
                 case OrderType.OnTable:
                     return PackIconKind.TableFurniture;
-                case OrderType.Takeaway:
+                case OrderType.TakeAway:
                     return PackIconKind.BasketOutline;
                 case OrderType.InWaiting:
                     return PackIconKind.TimerOutline;
