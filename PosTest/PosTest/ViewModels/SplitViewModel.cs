@@ -467,7 +467,7 @@ namespace PosTest.ViewModels
 
         private void SaveSplittedOrder()
         {
-            bool? resp1=false;
+            bool resp1=false;
             if (Parent.CurrentOrder.Id == null)
             {
                  Parent.CurrentOrder.State = OrderState.Splitted;
@@ -476,7 +476,7 @@ namespace PosTest.ViewModels
                  Parent.CurrentOrder = parentCurrentOrder;
                  Parent.NotifyOfPropertyChange(() => Parent.CurrentOrder);
             }
-            switch (resp1)
+            switch (resp1|| Parent.CurrentOrder.Id != null)
             {
                 case true:
                     SplittedOrder.SplittedFrom = Parent.CurrentOrder;
@@ -495,7 +495,6 @@ namespace PosTest.ViewModels
                             SplittedOrder.Id = null;
                             break;
 
-                        case null: break;
 
                         default:
                             //false
@@ -505,7 +504,6 @@ namespace PosTest.ViewModels
 
                     break;
 
-                case null: break;
 
                 default:
                     // false or null
