@@ -518,11 +518,11 @@ namespace PosTest.ViewModels
 
         #region Order Commands
 
-        public bool? SaveOrder(ref Order order)
+        public bool SaveOrder(ref Order order)
         {
             if (IsRunningFromXUnit)
             {
-                return null;
+                return false;
             }
 
             bool resp;
@@ -533,7 +533,7 @@ namespace PosTest.ViewModels
             catch (AggregateException)
             {
                 ToastNotification.Notify("Check your server connection");
-                return null;
+                return false;
             }
 
             return resp;
