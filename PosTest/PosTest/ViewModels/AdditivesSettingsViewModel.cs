@@ -137,96 +137,38 @@ namespace PosTest.ViewModels
             }
         }
 
-        private void PutAdditiveInCellOf(Additive targetAdditive, Additive receivedAdditive)
+        private void PutAdditiveInCellOf(Additive targetAdditive, Additive incomingAdditive)
         {
             var targetRank = targetAdditive.Rank;
-            var receivedRank = receivedAdditive.Rank;
-            var targetIndex = Additives.IndexOf(targetAdditive);
-            var receivedIndex = Additives.IndexOf(receivedAdditive);
+            var receivedRank = incomingAdditive.Rank;
+            var indexOfTargetAdditive = Additives.IndexOf(targetAdditive);
+            var indexOfIncomingAdditive = Additives.IndexOf(incomingAdditive);
             targetAdditive.Rank = receivedRank;
-            receivedAdditive.Rank = targetRank;
+            incomingAdditive.Rank = targetRank;
             
-            Additives[targetIndex] = receivedAdditive;
-            Additives[receivedIndex] = targetAdditive;
-            try
+            Additives[indexOfTargetAdditive] = incomingAdditive;
+            Additives[indexOfIncomingAdditive] = targetAdditive;
+            
+            if (incomingAdditive.Id != null)
             {
-                if (receivedAdditive.Id != null)
-                {
-                    int receivedAdditiveStatusCode=_additiveService.UpdateAdditive(receivedAdditive);
-                    if (receivedAdditiveStatusCode!=200)
-                    {
-                        var message = "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                        var args = new object[] { receivedAdditive.Description, receivedAdditiveStatusCode, 300 };
-                        ServiceHelper.HandleStatusCodeErrors(receivedAdditiveStatusCode, message, args);
-                    }
-                }
-                if (targetAdditive.Id != null)
-                {
-                    int targetAdditiveStatusCode=_additiveService.UpdateAdditive(targetAdditive);
-                    if (targetAdditiveStatusCode!=200)
-                    {
-                        {
-                            var message = "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                            var args = new object[] { targetAdditive.Description, targetAdditiveStatusCode, 300 };
-                            ServiceHelper.HandleStatusCodeErrors(targetAdditiveStatusCode, message, args);
-                        }
-                    }
-                }
+                StateManager.Save(incomingAdditive);
+
             }
-            catch (AggregateException)
+            if (targetAdditive.Id != null)
             {
-                ToastNotification.Notify("Problem connecting to server");
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                throw;
-#endif
-                NLog.LogManager.GetCurrentClassLogger().Error(e);
+                StateManager.Save(targetAdditive);
             }
         }
 
         public void SaveAdditive()
         {
-            IsEditing = false;
-            try
-            {
-                int statusCode = 0;
-                if (SelectedAdditive.Id == null)
-                {
-
-                    statusCode = _additiveService.SaveAdditive(SelectedAdditive,out IEnumerable<string> errors);
-                    //SelectedAdditive.Id = id;
-                }
-                else
-                {
-                    statusCode = _additiveService.UpdateAdditive(SelectedAdditive);
-                }
-
-                if (statusCode != 200 && statusCode!=201)
-                {
-                    var message =
-                        "Failed To update Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] {SelectedAdditive.Description, statusCode, 300};
-                    ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
-                }
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Problem connecting to server ");
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                throw;
-#endif
-                NLog.LogManager.GetCurrentClassLogger().Error(e);
-            }
+            IsEditing = false; 
+            if (StateManager.Save(SelectedAdditive)) ToastNotification.Notify("Additive saved Successfully");
         }
 
         public void CopyAdditive()
         {
-            if (SelectedAdditive == null || SelectedAdditive.Id == null)
+            if (SelectedAdditive?.Id == null)
             {
                 ToastNotification.Notify("Select a Valid Additive to copy", 1);
                 return;

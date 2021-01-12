@@ -10,18 +10,25 @@ namespace ServiceLib.helpers
 
         static AssociationHelpers()
         {
-            _association = new Dictionary<(Type, Type), Action<object,object>>();
-           
-            _association.Add(
-                (typeof(Product), typeof(Category)), (object o1, object o2)=> {
+            _association = new Dictionary<(Type, Type), Action<object, object>>
+            {
+                {
+                    (typeof(Product), typeof(Category)),
+                    (object o1, object o2) =>
+                    {
 
-                    AssociateProductsWithCategories(o1 as ICollection<Product>, o2 as ICollection<Category>);
-                });
-            _association.Add(
-              (typeof(Additive), typeof(Product)), (object o1, object o2) => {
+                        AssociateProductsWithCategories(o1 as ICollection<Product>, o2 as ICollection<Category>);
+                    }
+                },
+                {
+                    (typeof(Additive), typeof(Product)),
+                    (object o1, object o2) =>
+                    {
 
-                  AssociateAdditivesWithProducts(o1 as ICollection<Additive>, o2 as ICollection<Product>);
-              });
+                        AssociateAdditivesWithProducts(o1 as ICollection<Additive>, o2 as ICollection<Product>);
+                    }
+                }
+            };
         }
         public static void AssociateAdditivesWithProducts(ICollection<Additive> additives, ICollection<Product> products)
         {
