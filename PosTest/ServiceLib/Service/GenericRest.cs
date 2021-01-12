@@ -187,7 +187,7 @@ namespace ServiceLib.Service
 
             if (response.StatusCode== HttpStatusCode.NoContent)
             {
-                collection = Array.Empty<T>();
+                collection = new List<T>();
             }
             
             return ((int)response.StatusCode,collection);

@@ -181,7 +181,7 @@ namespace ServiceLib.Service
             {
                 var (status, data) = service.Get();
                 //ServiceHelper.HandleStatusCodeErrors();
-                if (status != 200) return;
+                if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
                 State[key] = data;
 
             }
