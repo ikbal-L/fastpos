@@ -1680,14 +1680,14 @@ namespace PosTest.ViewModels
             contentOfPage.Content = _printOrder;
             _diff.Clear();
             var conv = new LengthConverter();
-
-            //double width = (double)conv.ConvertFromString("8cm");
-            //double height = document.DocumentPaginator.PageSize.Height;
-
-            //document.DocumentPaginator.PageSize = new Size(width, height);
-
-            fixedPage.Width = contentOfPage.Width;
-            fixedPage.Height = contentOfPage.Height;
+    
+            double width = (double)conv.ConvertFromString("8cm");
+            double height = document.DocumentPaginator.PageSize.Height;
+            contentOfPage.Width = width;
+            document.DocumentPaginator.PageSize = new Size(width, height);
+            
+           // fixedPage.Width = contentOfPage.Width;
+            //fixedPage.Height = contentOfPage.Height;
             fixedPage.Children.Add(contentOfPage);
             PageContent pageContent = new PageContent();
             ((IAddChild) pageContent).AddChild(fixedPage);
@@ -1744,8 +1744,8 @@ namespace PosTest.ViewModels
 
         public void PrintDocument()
         {
-            FixedDocument fixedDocument = GenerateOrderReceipt();
-         //    var printer=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
+            FixedDocument fixedDocument = GenerateOrderReceipt();      
+            //    var printer=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
             PrintDialog dialog = new PrintDialog();
             dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
             dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
