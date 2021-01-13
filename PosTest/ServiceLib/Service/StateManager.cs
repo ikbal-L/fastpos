@@ -104,10 +104,7 @@ namespace ServiceLib.Service
                         if (!tState.Contains(state)) tState.Add(state);
                     }
 
-                    if ((HttpStatusCode)status == HttpStatusCode.OK)
-                    {
-                        Association[typeof(TState)]();
-                    }
+                    Association[typeof(TState)]();
                     return true;
                 }
 
