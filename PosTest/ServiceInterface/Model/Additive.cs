@@ -83,8 +83,7 @@ namespace ServiceInterface.Model
 
         public override bool Equals(object other)
         {
-            var additive = other as Additive;
-            var result = additive != null &&
+            var result = other is Additive additive &&
                          additive.Id == Id &&
                          additive.Description == Description &&
                          additive.BackgroundString == BackgroundString &&
