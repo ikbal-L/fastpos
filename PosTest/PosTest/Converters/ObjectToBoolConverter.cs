@@ -9,7 +9,7 @@ namespace PosTest.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is OrderItem item && item.Product is Platter && (item.Product as Platter).Additives != null)
+            if (value is OrderItem item && item.Product.IsPlatter && item.Product.Additives != null)
             {
                 return true;
             }

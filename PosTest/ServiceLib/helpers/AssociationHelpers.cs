@@ -35,9 +35,9 @@ namespace ServiceLib.helpers
             if(additives==null|| products == null) return ;
             foreach (Product product in products as ICollection<Product>)
             {
-                if (product is Platter platter)
+                if (product.IsPlatter)
                 {
-                    platter.MappingAfterReceiving(category: null, (List<Additive>)additives);
+                    product.MappingAfterReceiving(category: null, (List<Additive>)additives);
 
                 }
             }

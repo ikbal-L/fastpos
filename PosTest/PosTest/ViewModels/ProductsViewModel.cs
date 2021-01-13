@@ -113,9 +113,9 @@ namespace PosTest.ViewModels
 
         public void UpdateAdditivesList()
         {
-            if(CurrentProduct is Platter plat && plat.Additives != null) 
+            if(CurrentProduct.IsPlatter && CurrentProduct.Additives != null) 
             {
-                var platter = (Platter)CurrentProduct;
+                var platter = CurrentProduct;
                 var exceptList = Additives?.Where( a => !platter.Additives.Any(pa => pa.Equals(a)));
                 AvailableAdditives = 
                     new BindableCollection<Additive>(exceptList?.OrderBy(f => f.Description));
@@ -183,12 +183,12 @@ namespace PosTest.ViewModels
             if (AvailableAdditives == null)
                 return;
 
-            if (CurrentProduct is Platter platter)
+            if (CurrentProduct.IsPlatter)
             {
-                if (platter.Additives == null)
-                    platter.Additives = new BindableCollection<Additive>();
-                platter.Additives.Clear();
-                platter.Additives.AddRange(Additives);
+                if (CurrentProduct.Additives == null)
+                    CurrentProduct.Additives = new BindableCollection<Additive>();
+                CurrentProduct.Additives.Clear();
+                CurrentProduct.Additives.AddRange(Additives);
                 UpdateAdditivesList();
             }
         }
@@ -197,34 +197,34 @@ namespace PosTest.ViewModels
             if (SelectedAvailableAdditive == null)
                     return;
 
-            if(CurrentProduct is Platter platter)
+            if(CurrentProduct.IsPlatter)
             {
-                if (platter == null)
-                    platter.Additives = new BindableCollection<Additive>();
+                if (CurrentProduct == null)
+                    CurrentProduct.Additives = new BindableCollection<Additive>();
 
-                platter.Additives.Add(SelectedAvailableAdditive);
+                CurrentProduct.Additives.Add(SelectedAvailableAdditive);
                 UpdateAdditivesList();
             }
             
         }
         public void RemoveAdditiveCommand()
         {
-            if (CurrentProduct is Platter platter)
+            if (CurrentProduct.IsPlatter)
             {
                 if (SelectedAddedAdditive == null 
-                    || platter.Additives.Count == 0)
+                    || CurrentProduct.Additives.Count == 0)
                     return;
-                platter.Additives.Remove(SelectedAddedAdditive);
+                CurrentProduct.Additives.Remove(SelectedAddedAdditive);
                 UpdateAdditivesList();
             }
         }
         public void RemoveAllAdditivesCommand()
         {
-            if (CurrentProduct is Platter platter)
+            if (CurrentProduct.IsPlatter)
             {
-                if (platter.Additives == null || platter.Additives.Count == 0)
+                if (CurrentProduct.Additives == null || CurrentProduct.Additives.Count == 0)
                     return;
-                platter.Additives.Clear();
+                CurrentProduct.Additives.Clear();
                 UpdateAdditivesList();
             }
         }
@@ -234,11 +234,11 @@ namespace PosTest.ViewModels
             int quantity = 0;
             if(int.TryParse(Quantity,out quantity))
             {
-                if(CurrentProduct is Platter platter)
+                if(CurrentProduct.IsPlatter)
                 {
-                    if (platter.Ingredients == null)
-                        platter.Ingredients = new List<Ingredient>();
-                    platter.Ingredients.Add(new Ingredient { Product = SelectedCompositProduct, Quantity = quantity });
+                    if (CurrentProduct.Ingredients == null)
+                        CurrentProduct.Ingredients = new List<Ingredient>();
+                    CurrentProduct.Ingredients.Add(new Ingredient { Product = SelectedCompositProduct, Quantity = quantity });
                 }
             }
             

@@ -794,10 +794,10 @@ namespace PosTest.ViewModels
                 size: MaxProductPageSize, parameter: category);
         }
 
-        public void ShowProductAdditives(Platter product)
+        public void ShowProductAdditives(Product product)
         {
             AdditivesPage?.Clear();
-            if (product == null) return;
+            if (product == null||!product.IsPlatter||(product.IsPlatter&& (product.IdAdditives==null|| product.IdAdditives.Count==0))) return;
             var comparer = new Comparer<Additive>();
             var additives = product.Additives.ToList();
             additives.Sort(comparer);
@@ -1561,9 +1561,9 @@ namespace PosTest.ViewModels
             }
             //OrderItemsCollectionViewSource.View.Refresh();
 
-            if (selectedproduct is Platter && (selectedproduct as Platter).Additives != null)
+            if (selectedproduct.IsPlatter && selectedproduct.IdAdditives?.Count > 0)
             {
-                ShowProductAdditives(selectedproduct as Platter);
+                ShowProductAdditives(selectedproduct);
                 ProductsVisibility = false;
                 AdditivesVisibility = true;
             }
@@ -1585,7 +1585,7 @@ namespace PosTest.ViewModels
             var oitem = CurrentOrder.SelectedOrderItem;
             AdditivesVisibility = true;
             ProductsVisibility = false;
-            ShowProductAdditives(oitem.Product as Platter);
+            ShowProductAdditives(oitem.Product);
         }
 
         #endregion

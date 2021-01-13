@@ -115,7 +115,6 @@
     <Compile Include="Model\OrderItem.cs" />
     <Compile Include="Model\OrderItemAdditiveState.cs" />
     <Compile Include="Model\Place.cs" />
-    <Compile Include="Model\Platter.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductMappingException.cs" />
     <Compile Include="Model\Ranked.cs" />

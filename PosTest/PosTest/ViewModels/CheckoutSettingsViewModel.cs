@@ -687,9 +687,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var product = ClipboardProduct is Platter
-                ? new Platter(ClipboardProduct as Platter)
-                : new Product(ClipboardProduct);
+            var product = new Product(ClipboardProduct);
             product.Category = SelectedCategory;
             product.Id = null;
             product.Rank = null; 
@@ -728,7 +726,7 @@ namespace PosTest.ViewModels
 
         public void NewFreeProduct()
         {
-            FreeProducts.Add(SelectedFreeProduct = new Platter());
+            FreeProducts.Add(SelectedFreeProduct = new Product());
         }
 
         public void CopyFreeProduct()
@@ -738,7 +736,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var product = new Platter(SelectedFreeProduct as Platter);
+            var product = new Product(SelectedFreeProduct);
         }
 
         public void CotegoryOfSelectFreeProductChanged(Category category)

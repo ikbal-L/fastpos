@@ -14,6 +14,7 @@ namespace ServiceInterface.Model
 {
     public class Product : Ranked,IState<long>
     {
+        private BindableCollection<Additive> _additives;
         private string _backgroundString = null;
         private bool _isMuchInDemand;
         private string _description;
@@ -95,6 +96,26 @@ namespace ServiceInterface.Model
             }
         }
 
+
+        [DataMember]
+        public List<Ingredient> Ingredients { get; set; }
+
+        //public List<long> IdIngredients { get; set; }
+        public BindableCollection<Additive> Additives
+        {
+            get => _additives;
+            set
+            {
+                _additives = value;
+                NotifyOfPropertyChange(() => Additives);
+            }
+        }
+
+
+
+        [DataMember]
+        public List<long> IdAdditives { get; set; } = new List<long>();
+
         public Category Category
         {
             get => _category;
@@ -129,6 +150,7 @@ namespace ServiceInterface.Model
 
         public Product()
         {
+            
         }
 
         public Product(Product platProduct) : this()
@@ -146,6 +168,9 @@ namespace ServiceInterface.Model
             Type = platProduct.Type;
             Unit = platProduct.Unit;
             Rank = platProduct.Rank;
+            IdAdditives = platProduct.IdAdditives;
+            Additives = platProduct.Additives;
+            Ingredients = platProduct.Ingredients;
         }
 
         [DataMember]
@@ -211,37 +236,40 @@ namespace ServiceInterface.Model
                 this.CategoryId = (long) this.Category.Id;
             }
 
-            
 
 
-            if (this is Platter plat)
+
+            if (this.IsPlatter)
             {
-                if (plat.Additives != null)
+                if (this.Additives != null)
                 {
-                    if (plat.IdAdditives == null)
+                    if (this.IdAdditives == null)
                     {
-                        plat.IdAdditives = new List<long>();
+                        this.IdAdditives = new List<long>();
                     }
                     else
                     {
-                        plat.IdAdditives.Clear();
+                        this.IdAdditives.Clear();
                     }
 
-                    foreach (var a in plat.Additives)
+                    foreach (var a in this.Additives)
                     {
-                        plat.IdAdditives.Add((long)a.Id);
+                        this.IdAdditives.Add((long)a.Id);
                     }
                 }
 
-                if (plat.Ingredients != null)
-                    foreach (var ing in plat.Ingredients)
+                if (this.Ingredients != null)
+                {
+                    foreach (var ing in this.Ingredients)
                     {
                         if (ing.Product != null)
                         {
-                            ing.ProductId = (long) ing.Product.Id;
+                            ing.ProductId = (long)ing.Product.Id;
                         }
                     }
+                } 
             }
+                
 
 
             if (this.CategoryId == null)
@@ -267,21 +295,20 @@ namespace ServiceInterface.Model
             //{
             //    throw new MappingException("Id category different of CategoryId of the related Product");
             //}
-            if (this is Platter plat &&
-                plat.IdAdditives != null && additives != null &&
-                additives.Count == plat.IdAdditives.Count)
+            if (this.IsPlatter &&
+                this.IdAdditives != null && additives != null )
             {
-                plat.Additives = new BindableCollection<Additive>();
+                this.Additives = new BindableCollection<Additive>();
                 foreach (var a in additives)
                 {
-                    if (plat.IdAdditives.Any(id => id == a.Id))
+                    if (this.IdAdditives.Any(id => id == a.Id))
                     {
-                        plat.Additives.Add(a);
+                        this.Additives.Add(a);
                     }
-                    else
-                    {
-                        throw new MappingException("Additive Id does not exist in the list of ids");
-                    }
+                    //else
+                    //{
+                    //    throw new MappingException("Additive Id does not exist in the list of ids");
+                    //}
                 }
             }
         }

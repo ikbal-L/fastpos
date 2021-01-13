@@ -50,7 +50,7 @@ namespace PosTest.ViewModels.SubViewModel
             PopulateAdditivesPage();
 
             this._source = sourceProduct;
-            _product = new Platter();
+            _product = new Product();
             _product = CloneFromSource();
 
             IsSaveEnabled = true;
@@ -60,7 +60,7 @@ namespace PosTest.ViewModels.SubViewModel
         {
             if (_source != null)
             {
-                var product = new Platter()
+                var product = new Product()
                 {
                     Name = _source.Name,
                     Description = _source.Description,
@@ -69,23 +69,19 @@ namespace PosTest.ViewModels.SubViewModel
                     Price = _source.Price,
                     Unit = _source.Unit
                 };
-                if (Source is Platter|| Source.Id==null)
+                if (Source.IsPlatter)
                 {
-                    
-                    // product.Additives = (Source as Platter).Additives;
-                    // product.IdAdditives = (Source as Platter).IdAdditives;
-
                     if (Source.Id != null)
                     {
                         product.IsPlatter = Source.IsPlatter;
-                        product.IdAdditives = (Source as Platter).IdAdditives;
-                        product.Additives = (Source as Platter).Additives;
+                        product.IdAdditives = Source.IdAdditives;
+                        product.Additives = Source.Additives;
                     }
                     else
                     {
                         product.IdAdditives = new List<long>();
                         product.Additives = new BindableCollection<Additive>();
-                    }
+                    } 
                 }
 
                 Set(ref _name, _source.Name);
@@ -182,7 +178,7 @@ namespace PosTest.ViewModels.SubViewModel
 
         private bool CanCheckAdditive(object arg)
         {
-            return Product is Platter;
+            return Product.IsPlatter;
         }
         public void CheckAdditive(object sender)
         {
@@ -194,17 +190,17 @@ namespace PosTest.ViewModels.SubViewModel
                 return;
             }
 
-            if ((Product as Platter).Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
+            if (Product.Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Remove((long)source.Id);
-                ((Platter) Product).Additives.Remove(source);
+                Product.IdAdditives.Remove((long)source.Id);
+                Product.Additives.Remove(source);
                 return;
             }
 
-            if (!(Product as Platter).Additives.Contains(source) && (bool) toggleButton?.IsChecked)
+            if (!Product.Additives.Contains(source) && (bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Add((long)source.Id);
-                ((Platter) Product).Additives.Add(source);
+                Product.IdAdditives.Add((long)source.Id);
+                Product.Additives.Add(source);
                 return;
             }
         }
@@ -264,14 +260,10 @@ namespace PosTest.ViewModels.SubViewModel
             target.Price = source.Price;
             target.Background = source.Background;
             target.Unit = source.Unit;
-            if (target is Platter)
+            if (target.IsPlatter)
             {
-                
-                  (target as Platter).IdAdditives = (source as Platter).IdAdditives;
-                  (target as Platter).Additives = (source as Platter).Additives;
-                
-               
-
+                target.IdAdditives = source.IdAdditives;
+                target.Additives = source.Additives; 
             }
 
         }

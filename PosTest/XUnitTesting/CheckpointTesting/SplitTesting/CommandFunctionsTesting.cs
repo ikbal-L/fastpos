@@ -17,7 +17,7 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //Arrange
             var checkoutVM = new CheckoutViewModel();
             var p = new Product { Id = 1, Description = "desc abc", Name = "name", Price = 150 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
 
             //Act
             //checkoutVM.AddOrderItem(p);
@@ -40,7 +40,7 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //Arrange
             var checkoutVM = new CheckoutViewModel();
             var p = new Product { Id = 1, Description = "desc abc", Name = "name", Price = 150 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
 
             //Act
             //checkoutVM.AddOrderItem(p);
@@ -86,7 +86,7 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //Arrange
             var checkoutVM = new CheckoutViewModel();
             var p = new Product { Id = 1, Description = "desc abc", Name = "name", Price = 150 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
 
             //Act
             //checkoutVM.AddOrderItem(p);
@@ -128,7 +128,7 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //Arrange
             var checkoutVM = new CheckoutViewModel();
             var p = new Product { Id = 1, Description = "desc abc", Name = "name", Price = 150 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
 
             //Act
             //checkoutVM.AddOrderItem(p);

@@ -344,7 +344,7 @@ namespace ServiceInterface.Model
             bool groupByProduct = true)
         {
             OrderItem item;
-            if ((product is Platter && (product as Platter).Additives != null) || OrderItems.All(p => p.ProductId != product.Id) ||
+            if (product.IsPlatter && (product.Additives != null) || OrderItems.All(p => p.ProductId != product.Id) ||
                 !groupByProduct ||
                 OrderItems.Where(oi =>
                     oi.ProductId == product.Id 
