@@ -27,6 +27,38 @@ namespace ServiceLib.helpers
 
                         AssociateAdditivesWithProducts(o1 as ICollection<Additive>, o2 as ICollection<Product>);
                     }
+                },
+                {
+                    (typeof(Order), typeof(Table)),
+                    (object o1, object o2) =>
+                    {
+
+                        AssociateOrdersWithTables(o1 as ICollection<Order>, o2 as ICollection<Table>);
+                    }
+                },
+                {
+                    (typeof(Order), typeof(Waiter)),
+                    (object o1, object o2) =>
+                    {
+
+                        AssociateOrdersWithWaiters(o1 as ICollection<Order>, o2 as ICollection<Waiter>);
+                    }
+                },
+                {
+                    (typeof(Order), typeof(Deliveryman)),
+                    (object o1, object o2) =>
+                    {
+
+                        AssociateOrdersWithDeliveryMen(o1 as ICollection<Order>, o2 as ICollection<Deliveryman>);
+                    }
+                },
+                {
+                    (typeof(Order), typeof(Product)),
+                    (object o1, object o2) =>
+                    {
+
+                        AssociateOrdersWithProducts(o1 as ICollection<Order>, o2 as ICollection<Product>);
+                    }
                 }
             };
         }
@@ -51,10 +83,61 @@ namespace ServiceLib.helpers
             }
         }
 
+        public static void AssociateOrdersWithTables(ICollection<Order> orders, ICollection<Table> tables)
+        {
+            foreach (Table table in tables)
+            {
+                foreach (Order order in orders)
+                {
+                    if (order.Type == OrderType.OnTable && order.TableId == table.Id)
+                    {
+                        order.Table = table;
+                    }
+                }
+            }
+        }
+
+        public static void AssociateOrdersWithWaiters(ICollection<Order> orders, ICollection<Waiter> waiters)
+        {
+            foreach (Waiter waiter in waiters)
+            {
+                foreach (Order order in orders)
+                {
+                    if (order.Type == OrderType.OnTable && order.WaiterId == waiter.Id)
+                    {
+                        order.Waiter = waiter;
+                    }
+                }
+            }
+        }
+
+        public static void AssociateOrdersWithDeliveryMen(ICollection<Order> orders, ICollection<Deliveryman> deliverymen)
+        {
+            foreach (Deliveryman deliveryman in deliverymen)
+            {
+                foreach (Order order in orders)
+                {
+                    if (order.Type == OrderType.Delivery && order.WaiterId == deliveryman.Id)
+                    {
+                        order.Deliveryman = deliveryman;
+                    }
+                }
+            }
+        }
+
+        public static void AssociateOrdersWithProducts(ICollection<Order> orders, ICollection<Product> products)
+        {
+            foreach (Order order in orders)
+            {
+                order.MappingAfterReceiving(products);
+            }
+        }
+
         public static Action<ICollection<T1>,ICollection<T2>> GetAssociation<T1, T2>()
         {
             var key = (typeof(T1), typeof(T2));
             return _association[key];
         }
     }
+
 }

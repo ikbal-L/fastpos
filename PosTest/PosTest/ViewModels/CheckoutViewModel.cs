@@ -135,6 +135,8 @@ namespace PosTest.ViewModels
             StateManager.Fetch();
             StateManager.Associate<Additive,Product>();
             StateManager.Associate<Product,Category>();
+            StateManager.Associate<Order,Table>();
+            StateManager.Associate<Order,Product>();
 
             //var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
             var deliveryMen = StateManager.Get<Deliveryman>();
@@ -154,21 +156,22 @@ namespace PosTest.ViewModels
             //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
             OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
             //var unprocessedOrders = StateManager.Get<Order>();
-            var unprocessedOrders = StateManager.Get<Order>();
+            var unprocessedOrders = StateManager.Get<Order>().ToList();
+            
 
 
-            var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
-            foreach (var table in tables.ToList())
-            {
-                var order = unprocessedTableOrders.FirstOrDefault(uo => uo.TableId == table.Id);
-                if (order != null)
-                {
+            //var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
+            //foreach (var table in tables.ToList())
+            //{
+            //    var order = unprocessedTableOrders.FirstOrDefault(uo => uo.TableId == table.Id);
+            //    if (order != null)
+            //    {
                     
-                    order.Table = table;
-                    order.OrderItems.ToList().ForEach(oi=>oi.Additives
-                    = new BindableCollection<Additive>());
-                }
-            }
+            //        order.Table = table;
+            //        order.OrderItems.ToList().ForEach(oi=>oi.Additives
+            //        = new BindableCollection<Additive>());
+            //    }
+            //}
             
             Orders = new BindableCollection<Order>(unprocessedOrders);
 
