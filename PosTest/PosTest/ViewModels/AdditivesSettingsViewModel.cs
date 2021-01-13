@@ -118,7 +118,7 @@ namespace PosTest.ViewModels
 
                 Additive receivedAdditive = e.Data.GetData("Additive") as Additive;
 
-                if (receivedAdditive == null || receivedAdditive.Description == null) return;
+                if (receivedAdditive?.Description == null) return;
 
                 Console.WriteLine(targetAdditive.GetHashCode());
                 Console.WriteLine(receivedAdditive.GetHashCode());
@@ -185,7 +185,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            if (SelectedAdditive == null || SelectedAdditive.Rank == null)
+            if (SelectedAdditive?.Rank == null)
             {
                 ToastNotification.Notify("Select a zone to copy in first");
                 return;
@@ -197,36 +197,9 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            int rank = (int) SelectedAdditive.Rank;
-            var additive = new Additive(ClipBoardAdditive);
-            additive.Rank = rank;
-            additive.Id = null;
-            try
-            {
-                var statusCode = _additiveService.SaveAdditive(additive, out IEnumerable<string> errors);
-                if (statusCode == 200)
-                {
-                    // additive = savedAdditive;
-                }
-                else
-                {
-                    var message =
-                        "Failed To save Additive {Additive}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                    var args = new object[] {additive.Description, statusCode, 300};
-                    ServiceHelper.HandleStatusCodeErrors(statusCode, message, args);
-                }
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Problem connecting to server");
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                throw;
-#endif
-                NLog.LogManager.GetCurrentClassLogger().Error(e);
-            }
+            var rank = (int) SelectedAdditive.Rank;
+            var additive = new Additive(ClipBoardAdditive) {Rank = rank, Id = null};
+            StateManager.Save(additive);
 
             Additives[rank - 1] = additive;
         }
@@ -253,14 +226,14 @@ namespace PosTest.ViewModels
 
         public void DeleteAdditive()
         {
-            if (SelectedAdditive == null||SelectedAdditive.Id==null)
+            if (SelectedAdditive?.Id==null)
             {
                 ToastNotification.Notify("Select an Additive to delete first ");
                 return;
             }
 
             var selectedAdditiveId = (long)SelectedAdditive.Id;
-            if (_additiveService.DeleteAdditive(selectedAdditiveId)==200)
+            if (StateManager.Delete(SelectedAdditive))
             {
                 Additives.Remove(SelectedAdditive);
                 ToastNotification.Notify("Additive was deleted successfully",1);

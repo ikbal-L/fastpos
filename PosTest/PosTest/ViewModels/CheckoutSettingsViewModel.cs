@@ -27,8 +27,6 @@ namespace PosTest.ViewModels
 {
     public class CheckoutSettingsViewModel : Screen
     {
-        //private IProductService _productsService;
-        //private ICategoryService _categoriesService;
         private bool _IsProductDetailsDrawerOpen;
         private bool _IsDeleteCategoryDialogOpen;
         private bool _IsDeleteProductDialogOpen;
@@ -154,50 +152,7 @@ namespace PosTest.ViewModels
             }
         }
 
-        //void GenarateRanksForProducts()
-        //{
-        //    bool existsNumber(int[] tab, int value, int end)
-        //    {
-        //        for (int i = 0; i < end; i++)
-        //        {
-        //            if (tab[i] == value)
-        //            {
-        //                return true;
-        //            }
-        //        }
-
-        //        return false;
-        //    }
-
-        //    foreach (var cat in AllCategories)
-        //    {
-        //        var random = new Random();
-        //        var catProducts = AllProducts.Where(p => p.Category == cat);
-        //        var t = new int[20];
-        //        int i = 0, end = 1;
-        //        foreach (var prod in catProducts)
-        //        {
-        //            var r = random.Next(1, 21);
-        //            while (existsNumber(t, r, end))
-        //            {
-        //                r = random.Next(1, 21);
-        //            }
-
-        //            prod.Rank = r;
-        //            t[i++] = r;
-        //            end++;
-        //        }
-        //    }
-
-        //    int j = 1;
-        //    foreach (var prod in AllProducts)
-        //    {
-        //        var code = _productsService.UpdateProduct(prod, out IEnumerable<string> errors);
-        //        if (code != 200)
-        //        {
-        //        }
-        //    }
-        //}
+       
 
         public List<Product> AllProducts { get; }
         public List<Category> AllCategories { get; }
@@ -627,10 +582,6 @@ namespace PosTest.ViewModels
             sourceProduct.Category = SelectedCategory;
             sourceProduct.CategoryId = SelectedCategory.Id;
 
-
-            int selectedCategoryStatusCode = 0;
-            int sourceProductStatusCode = 0;
-            int targetProductStatusCode = 0;
             try
             {
                 if (targetProduct.Category != null && targetProduct.Id != null)
@@ -727,7 +678,7 @@ namespace PosTest.ViewModels
 
             if (SelectedProduct == null)
             {
-                ToastNotification.Notify("Selcect a zone to copy in");
+                ToastNotification.Notify("Select a zone to copy in");
                 return;
             }
 
@@ -741,7 +692,27 @@ namespace PosTest.ViewModels
                 : new Product(ClipboardProduct);
             product.Category = SelectedCategory;
             product.Id = null;
-            PutProductInCellOf(SelectedProduct, product);
+            product.Rank = null; 
+            var target = SelectedProduct;
+            //PutProductInCellOf(SelectedProduct, product);
+
+            int targetRank = target.Rank.Value;
+            product.Rank = targetRank;
+            CurrentProducts[targetRank - 1] = product;
+            
+
+            try
+            {
+                StateManager.Save(product);
+                ClipboardProduct = null;
+                //StateManager.Save(target);
+
+
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Problem connecting to server");
+            }
         }
 
         public void MoveProductTo()
@@ -820,25 +791,7 @@ namespace PosTest.ViewModels
 
             if (SelectedFreeProduct.Id != null)
             {
-
-
-                
-                try
-                {
-                    StateManager.Delete(SelectedFreeProduct);
-                }
-                catch (AggregateException)
-                {
-                    ToastNotification.Notify("Problem connecting to server");
-                }
-                catch (Exception e)
-                {
-#if DEBUG
-                    throw;
-#endif
-                    NLog.LogManager.GetCurrentClassLogger().Error(e);
-                }
-
+                StateManager.Delete(SelectedFreeProduct);
 
 
                 AllProducts.Remove(SelectedFreeProduct);
