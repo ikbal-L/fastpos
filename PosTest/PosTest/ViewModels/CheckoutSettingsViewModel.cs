@@ -412,15 +412,14 @@ namespace PosTest.ViewModels
         {
             if (IsCategory)
             {
-                EditCategoryViewModel.Cancel();
-                //IsCategory = false;
+                EditCategoryViewModel = null;
             }
             else
             {
-                EditProductViewModel.Cancel();
+                EditProductViewModel = null;
             }
 
-            //IsFlipped = false;
+            IsFlipped = false;
         }
 
         public void RemoveTElementFromTList<T>(T SelectedT, ref T SelectedFreeT,
@@ -751,12 +750,12 @@ namespace PosTest.ViewModels
 
         public void DeleteCategory()
         {
-            if (SelectedFreeCategory == null)
+            if (SelectedCategory!=null && SelectedFreeCategory == null)
             {
-                return;
+                Notify("Category must be unassigned to be deleted");
             }
 
-            if (SelectedFreeCategory.Id != null)
+            if (SelectedFreeCategory?.Id != null)
             {
 
                 try
@@ -782,12 +781,12 @@ namespace PosTest.ViewModels
 
         public void DeleteProduct()
         {
-            if (SelectedFreeProduct == null)
+            if (SelectedProduct != null && SelectedFreeProduct == null)
             {
-                return;
+                Notify("Product must be unassigned from category to be deleted");
             }
 
-            if (SelectedFreeProduct.Id != null)
+            if (SelectedFreeProduct?.Id != null)
             {
                 StateManager.Delete(SelectedFreeProduct);
 

@@ -249,7 +249,8 @@ namespace PosTest.ViewModels.SubViewModel
             //this.Name = null;
             //this.Price = 0;
             //this.Unit = null;
-            Product = CloneFromSource();
+            //Product = CloneFromSource();
+            
 
         }
 
