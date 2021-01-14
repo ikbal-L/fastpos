@@ -113,6 +113,14 @@
                                 caliburn:Message.Attach="[Event Click] = [Action DeleteAdditive()]">
                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_7" Kind="Delete" Height="22" Width="22" />
                             </Button>
+
+                            <Button x:Uid="Button_6" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 310 -20"
+                                    caliburn:Message.Attach="[Event Click] = [Action BackToLogin()]">
+                                <materialdesign:PackIcon Kind="ArrowBack" Height="22" Width="22" />
+                            </Button>
+
+
                         </Grid>
                     </Border>
                 </ScrollViewer>

@@ -240,5 +240,12 @@ namespace PosTest.ViewModels
 
             }
         }
+
+        public void BackToLogin()
+        {
+            LoginViewModel loginvm = new LoginViewModel();
+            loginvm.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+        }
     }
 }

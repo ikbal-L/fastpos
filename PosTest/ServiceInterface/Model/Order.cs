@@ -433,26 +433,29 @@ namespace ServiceInterface.Model
             {
                 var additives = new List<Additive>();
                 var product = products.FirstOrDefault(p => p.Id == oit.ProductId);
-                if (product.IsPlatter)
+                if (product!=null)
                 {
-                    var additivesOfProduct = product?.Additives.Where(a =>
-                              oit.OrderItemAdditives.Any(orderItemAdditive => orderItemAdditive.AdditiveId == a.Id)).ToList();
-                    foreach (var additive in additivesOfProduct)
+                    if (product.IsPlatter)
                     {
-                        var newAdditive = new Additive(additive) {ParentOrderItem = oit};
-                        additives.Add(newAdditive);
+                        var additivesOfProduct = product?.Additives.Where(a =>
+                                  oit.OrderItemAdditives.Any(orderItemAdditive => orderItemAdditive.AdditiveId == a.Id)).ToList();
+                        foreach (var additive in additivesOfProduct)
+                        {
+                            var newAdditive = new Additive(additive) { ParentOrderItem = oit };
+                            additives.Add(newAdditive);
+                        }
+
+                        oit.Order = this;
                     }
 
-                    oit.Order = this;
-                }
-               
-                if (product == null)
-                {
-                    throw new MappingException("Order mapping product is null");
-                }
-                oit.Additives = new BindableCollection<Additive>(additives);
+                    if (product == null)
+                    {
+                        throw new MappingException("Order mapping product is null");
+                    }
+                    oit.Additives = new BindableCollection<Additive>(additives);
 
-                oit.Product = product;
+                    oit.Product = product; 
+                }
             }
         }
 

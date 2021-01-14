@@ -36,13 +36,14 @@ namespace PosTest.ViewModels.SubViewModel
         private string _unit;
         private IAdditiveService _additiveService;
         private int _additivesPageSize;
+        private bool _isPlatter;
 
         public EditProductViewModel(ref Product sourceProduct,
             int additivesPageSize = 30)
         {
             
             this._source = sourceProduct;
-
+            IsPlatter = sourceProduct.IsPlatter;
 
 
             this._additiveService = new AdditiveService();
@@ -55,6 +56,7 @@ namespace PosTest.ViewModels.SubViewModel
 
             IsSaveEnabled = true;
             CheckAdditiveCommand = new DelegateCommandBase(CheckAdditive, CanCheckAdditive);
+            
         }
         public Product CloneFromSource()
         {
@@ -67,22 +69,28 @@ namespace PosTest.ViewModels.SubViewModel
                     Background = _source.Background,
                     BackgroundColor = _source.BackgroundColor,
                     Price = _source.Price,
-                    Unit = _source.Unit
+                    Unit = _source.Unit,
+                    IsPlatter = _source.IsPlatter
                 };
-                if (Source.IsPlatter)
+
+                IsPlatter = Product.IsPlatter;
+
+                if (Source.Id != null)
                 {
-                    if (Source.Id != null)
+                    if (Source.IsPlatter)
                     {
                         product.IsPlatter = Source.IsPlatter;
                         product.IdAdditives = Source.IdAdditives;
                         product.Additives = Source.Additives;
                     }
-                    else
-                    {
-                        product.IdAdditives = new List<long>();
-                        product.Additives = new BindableCollection<Additive>();
-                    } 
                 }
+                else
+                {
+                    product.IsPlatter = true;
+                    product.IdAdditives = new List<long>();
+                    product.Additives = new BindableCollection<Additive>();
+                }
+
 
                 Set(ref _name, _source.Name);
                 Set(ref _price, _source.Price);
@@ -134,6 +142,22 @@ namespace PosTest.ViewModels.SubViewModel
         }
 
         public BindableCollection<Additive> Additives { get; set; }
+
+        public bool IsPlatter
+        {
+            get => _isPlatter;
+            set
+            {
+                Set(ref _isPlatter, value);
+                
+                if (Product!=null)
+                {
+                    Product.IsPlatter = value;
+                }
+
+                (CheckAdditiveCommand as DelegateCommandBase)?.RaiseCanExecuteChanged();
+            }
+        }
 
         public Product Product
         {
@@ -261,7 +285,8 @@ namespace PosTest.ViewModels.SubViewModel
             target.Price = source.Price;
             target.Background = source.Background;
             target.Unit = source.Unit;
-            if (target.IsPlatter)
+            target.IsPlatter = source.IsPlatter;
+            if (source.IsPlatter)
             {
                 target.IdAdditives = source.IdAdditives;
                 target.Additives = source.Additives; 

@@ -22,12 +22,13 @@
                     <!--caliburn:Message.Attach="[Event MouseDoubleClick] = [Action CheckAdditive($source,$eventArgs,$this)];"-->
                     <ListBox x:Uid="AdditiveSettingsList" x:Name="AdditiveSettingsList" 
                                  AllowDrop="True"
-
+                                 Visibility="{Binding IsPlatter ,Converter={StaticResource boolToVisibilityConverter}}"
                                  ItemsSource="{Binding Additives}"
                                  ItemTemplate="{StaticResource AdditivesOfProductStyle}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 
-                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                 >
 
                         <ListBox.ItemContainerStyle>
                             <Style x:Uid="Style_1" TargetType="ListBoxItem">
@@ -42,7 +43,13 @@
                         </ListBox.ItemsPanel>
 
                     </ListBox>
-                    <TextBlock x:Uid="TextBlock_1" Grid.Row="1"  Margin="16">Additives</TextBlock>
+                    
+                    <StackPanel  Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock x:Uid="TextBlock_1" Grid.Row="1"  Margin="8 16"
+                                   >Additives</TextBlock>
+                        <ToggleButton Margin="8 16" IsChecked="{Binding IsPlatter,Mode=TwoWay}"></ToggleButton>
+                    </StackPanel>
+
                 </Grid>
             </Border>
         </ScrollViewer>

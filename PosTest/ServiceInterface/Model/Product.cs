@@ -147,6 +147,7 @@ namespace ServiceInterface.Model
         private Color? _backgroundColor;
         private bool _isSelected;
         private long? _categoryId;
+        private bool _isPlatter = false;
 
         public Product()
         {
@@ -216,7 +217,24 @@ namespace ServiceInterface.Model
         [DataMember]
         //[DefaultValue(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool IsPlatter { get; set; } = false;
+        public bool IsPlatter
+        {
+            get => _isPlatter;
+            set
+            {
+                Set(ref _isPlatter, value);
+                if (!value)
+                {
+                    Additives = null;
+                    IdAdditives = null;
+                }
+                else
+                {
+                    Additives = new BindableCollection<Additive>();
+                    IdAdditives = new List<long>();
+                }
+            }
+        }
 
         public bool IsDark
         {
