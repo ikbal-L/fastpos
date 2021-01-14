@@ -79,6 +79,10 @@ namespace PosTest.ViewModels
         private Dictionary<int, OrderItem> _diff;
         private Order _printOrder;
         private Category _currentCategory;
+        private bool _isInWaitingViewActive = true;
+        private bool _isTableViewActive;
+        private bool _isTakeawayViewActive;
+        private bool _isDeliveryViewActive;
 
         #endregion
 
@@ -137,6 +141,9 @@ namespace PosTest.ViewModels
             StateManager.Associate<Product,Category>();
             StateManager.Associate<Order,Table>();
             StateManager.Associate<Order,Product>();
+            StateManager.Associate<Order,Deliveryman>();
+            StateManager.Associate<Order,Waiter>();
+            StateManager.Associate<Order,Customer>();
 
             //var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
             var deliveryMen = StateManager.Get<Deliveryman>();
@@ -264,6 +271,30 @@ namespace PosTest.ViewModels
         {
             get => _IsDialogOpen;
             set => Set(ref _IsDialogOpen, value);
+        }
+
+        public bool IsInWaitingViewActive
+        {
+            get => _isInWaitingViewActive;
+            set => Set(ref _isInWaitingViewActive, value);
+        }
+
+        public bool IsTableViewActive
+        {
+            get => _isTableViewActive;
+            set => Set(ref _isTableViewActive, value);
+        }
+
+        public bool IsTakeawayViewActive
+        {
+            get => _isTakeawayViewActive;
+            set => Set(ref _isTakeawayViewActive, value);
+        }
+
+        public bool IsDeliveryViewActive
+        {
+            get => _isDeliveryViewActive;
+            set => Set(ref _isDeliveryViewActive, value);
         }
 
         public bool CanExecuteMext
@@ -463,7 +494,7 @@ namespace PosTest.ViewModels
             set
             {
                 TableAction(value);
-                Set(ref _selectedTable, value);
+                //Set(ref _selectedTable, value);
             }
         }
 
@@ -573,12 +604,19 @@ namespace PosTest.ViewModels
 
         public void ShowOrder(Order order)
         {
-            if (order == null || order == CurrentOrder) return;
-
+            if (order == null ) return;
 
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-
-            CurrentOrder = order;
+            if (CurrentOrder== order)
+            {
+                CurrentOrder = null;
+                return;
+            }
+            else
+            {
+                CurrentOrder = order;
+            }
+            
             //DisplayedOrder = order;
 
             if (order.ShownCategory == null && order.Id != null)
@@ -588,6 +626,10 @@ namespace PosTest.ViewModels
                 order.AdditivesVisibility = AdditivesVisibility;
             }
 
+            SelectedDeliveryman = CurrentOrder.Deliveryman;
+            SelectedWaiter = CurrentOrder.Waiter;
+            SelectedTable = CurrentOrder.Table;
+            
             CurrentCategory = CurrentOrder.ShownCategory;
 
             if (CurrentCategory != null && ProductsPage.Any(p => p?.Category != CurrentCategory))
@@ -633,12 +675,38 @@ namespace PosTest.ViewModels
                 {
                     CurrentOrder.Table = table;
                     SelectedDeliveryman = null;
+                    IsTableViewActive = true;
+                    IsTakeawayViewActive = false;
+                    IsDeliveryViewActive = false;
+                    IsInWaitingViewActive = false;
+
+
                 }
                 else
                 {
                     if (orderType == OrderType.TakeAway)
                     {
                         SelectedDeliveryman = null;
+                        IsTableViewActive = false;
+                        IsTakeawayViewActive = true;
+                        IsDeliveryViewActive = false;
+                        IsInWaitingViewActive = false;
+                    }
+
+                    if (orderType == OrderType.InWaiting)
+                    {
+                        IsTableViewActive = false;
+                        IsTakeawayViewActive = false;
+                        IsDeliveryViewActive = false;
+                        IsInWaitingViewActive = true;
+                    }
+
+                    if (orderType == OrderType.Delivery)
+                    {
+                        IsTableViewActive = false;
+                        IsTakeawayViewActive = false;
+                        IsDeliveryViewActive = true;
+                        IsInWaitingViewActive = false;
                     }
 
                     CurrentOrder.Table = null;
@@ -678,10 +746,7 @@ namespace PosTest.ViewModels
 
         public void SetNullCurrentOrder()
         {
-            if (CurrentOrder != null)
-            {
-                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-            }
+            CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
             _currentOrder = null;
             //DisplayedOrder = null;
@@ -1170,6 +1235,12 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (table == CurrentOrder?.Table)
+            {
+                
+                SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
+            }
+
             if (CurrentOrder == null)
             {
                 NewOrder();
@@ -1639,7 +1710,7 @@ namespace PosTest.ViewModels
 
                 Set(ref _selectedWaiter, value);
 
-                if (CurrentOrder != null && CurrentOrder.Type ==OrderType.OnTable)
+                if (CurrentOrder != null)
                 {
                     Set(ref _selectedWaiter, value);
                     CurrentOrder.Waiter = value;
@@ -1820,6 +1891,18 @@ namespace PosTest.ViewModels
         {
             get => _currentCategoryPageIndex;
             set => Set(ref _currentCategoryPageIndex, value);
+        }
+
+        public void SelectWaiter(object waiter)
+        {
+           
+            if (SelectedWaiter!= null && waiter == SelectedWaiter)
+            {
+                SelectedWaiter = null;
+                
+            }
+            
+            
         }
     }
 }

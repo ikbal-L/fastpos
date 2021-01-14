@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ServiceInterface.Model;
 
 namespace ServiceLib.helpers
@@ -59,9 +60,26 @@ namespace ServiceLib.helpers
 
                         AssociateOrdersWithProducts(o1 as ICollection<Order>, o2 as ICollection<Product>);
                     }
+                },
+                {
+                    (typeof(Order), typeof(Customer)),
+                    (object o1, object o2) =>
+                    {
+
+                        AssociateOrdersWithCustomers(o1 as ICollection<Order>, o2 as ICollection<Customer>);
+                    }
                 }
             };
         }
+
+        private static void AssociateOrdersWithCustomers(ICollection<Order> orders, ICollection<Customer> customers)
+        {
+            foreach (Order order in orders)
+            {
+                order.Customer = customers.FirstOrDefault(c=>c.Id== order.CustomerId);
+            }
+        }
+
         public static void AssociateAdditivesWithProducts(ICollection<Additive> additives, ICollection<Product> products)
         {
             if(additives==null|| products == null) return ;
@@ -85,44 +103,27 @@ namespace ServiceLib.helpers
 
         public static void AssociateOrdersWithTables(ICollection<Order> orders, ICollection<Table> tables)
         {
-            foreach (Table table in tables)
+            orders.Where(o => o.Type == OrderType.OnTable).ToList().ForEach(o =>
             {
-                foreach (Order order in orders)
-                {
-                    if (order.Type == OrderType.OnTable && order.TableId == table.Id)
-                    {
-                        order.Table = table;
-                    }
-                }
-            }
+                o.Table = tables.FirstOrDefault(t => t.Id == o.TableId);
+            });
         }
 
         public static void AssociateOrdersWithWaiters(ICollection<Order> orders, ICollection<Waiter> waiters)
         {
-            foreach (Waiter waiter in waiters)
+            
+            orders.Where(o=>o.Type == OrderType.OnTable).ToList().ForEach(o =>
             {
-                foreach (Order order in orders)
-                {
-                    if (order.Type == OrderType.OnTable && order.WaiterId == waiter.Id)
-                    {
-                        order.Waiter = waiter;
-                    }
-                }
-            }
+                o.Waiter = waiters.FirstOrDefault(w => w.Id == o.WaiterId);
+            });
         }
 
         public static void AssociateOrdersWithDeliveryMen(ICollection<Order> orders, ICollection<Deliveryman> deliverymen)
         {
-            foreach (Deliveryman deliveryman in deliverymen)
+            orders.Where(o => o.Type == OrderType.Delivery).ToList().ForEach(o =>
             {
-                foreach (Order order in orders)
-                {
-                    if (order.Type == OrderType.Delivery && order.WaiterId == deliveryman.Id)
-                    {
-                        order.Deliveryman = deliveryman;
-                    }
-                }
-            }
+                o.Deliveryman = deliverymen.FirstOrDefault(d => d.Id == o.DeliverymanId);
+            });
         }
 
         public static void AssociateOrdersWithProducts(ICollection<Order> orders, ICollection<Product> products)

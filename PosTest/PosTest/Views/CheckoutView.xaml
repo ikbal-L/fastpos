@@ -766,7 +766,8 @@
 
                 <!--ORDER NAVIGATION-->
 
-                <RadioButton x:Uid="tableCheckBtn" x:Name="tableCheckBtn" Grid.Row="1" GroupName="BottomBtn"  
+                <RadioButton x:Uid="tableCheckBtn" x:Name="tableCheckBtn" Grid.Row="1" GroupName="BottomBtn"
+                             IsChecked="{Binding IsTableViewActive}"
                              Style="{StaticResource ButtonTabDesactive}">
 
                     <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal">
@@ -780,6 +781,7 @@
 
 
                 <RadioButton x:Uid="takeawayCheckBtn" x:Name="takeawayCheckBtn" Grid.Row="2"  GroupName="BottomBtn"
+                             IsChecked="{Binding IsTakeawayViewActive}"
                             Style="{StaticResource ButtonTabDesactive}">
 
                     <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
@@ -792,6 +794,7 @@
                 </RadioButton>
 
                 <RadioButton x:Uid="delivereyCheckBtn" x:Name="delivereyCheckBtn" Grid.Row="3" GroupName="BottomBtn"
+                             IsChecked="{Binding IsDeliveryViewActive}"
 
                               Style="{StaticResource ButtonTabDesactive}">
 
@@ -806,7 +809,7 @@
 
 
                 <RadioButton x:Uid="waitingCheckBtn" x:Name="waitingCheckBtn" Grid.Row="4" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}"
-                              IsChecked="True">
+                              IsChecked="{Binding IsInWaitingViewActive, Mode=TwoWay}">
 
                     <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal">
                         <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_22" Kind="TimerOutline" />
