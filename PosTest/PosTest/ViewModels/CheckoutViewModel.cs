@@ -163,7 +163,7 @@ namespace PosTest.ViewModels
             //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
             OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
             //var unprocessedOrders = StateManager.Get<Order>();
-            var unprocessedOrders = StateManager.Get<Order>().ToList();
+            var unprocessedOrders = StateManager.Get<Order>().ToList().Where(o=> !filteredTypes.ToList().Contains((OrderState)o.State));
             
 
 
@@ -1172,6 +1172,8 @@ namespace PosTest.ViewModels
             GivenAmount = CurrentOrder.GivenAmount;
             ReturnedAmount = CurrentOrder.ReturnedAmount;
             SaveCurrentOrder();
+            GivenAmount = 0;
+            ReturnedAmount = 0;
         }
 
         private void TableAction(int tableNumber)
