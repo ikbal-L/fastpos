@@ -1173,7 +1173,7 @@ namespace PosTest.ViewModels
             ReturnedAmount = CurrentOrder.ReturnedAmount;
             SaveCurrentOrder();
             GivenAmount = 0;
-            ReturnedAmount = 0;
+            ReturnedAmount = null;
         }
 
         private void TableAction(int tableNumber)
