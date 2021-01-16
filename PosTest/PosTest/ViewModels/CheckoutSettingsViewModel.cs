@@ -681,6 +681,13 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (SelectedProduct.Id!=null)
+            {
+                Notify("Select an empty cell to paste product in!");
+                SelectedProduct = null;
+                return;
+            }
+
             if (ClipboardProduct.Equals(SelectedProduct))
             {
                 return;
