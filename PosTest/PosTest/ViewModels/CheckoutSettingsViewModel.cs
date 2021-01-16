@@ -1174,7 +1174,7 @@ namespace PosTest.ViewModels
 
         public void EditProduct()
         {
-            if (SelectedCategory.Id == null) return;
+            if (SelectedCategory.Id == null || SelectedProduct == null) return;
             this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct);
             EditProductViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             IsCategory = false;
