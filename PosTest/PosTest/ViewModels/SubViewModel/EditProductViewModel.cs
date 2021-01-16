@@ -73,7 +73,7 @@ namespace PosTest.ViewModels.SubViewModel
                     IsPlatter = _source.IsPlatter
                 };
 
-                IsPlatter = Product.IsPlatter;
+                
 
                 if (Source.Id != null)
                 {
@@ -90,7 +90,7 @@ namespace PosTest.ViewModels.SubViewModel
                     product.IdAdditives = new List<long>();
                     product.Additives = new BindableCollection<Additive>();
                 }
-
+                IsPlatter = product.IsPlatter;
 
                 Set(ref _name, _source.Name);
                 Set(ref _price, _source.Price);
@@ -202,7 +202,7 @@ namespace PosTest.ViewModels.SubViewModel
 
         private bool CanCheckAdditive(object arg)
         {
-            return Product.IsPlatter;
+            return _product.IsPlatter;
         }
         public void CheckAdditive(object sender)
         {

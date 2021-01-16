@@ -62,7 +62,8 @@ namespace PosTest.ViewModels
             CategoryPageSize = categoryPageSize;
 
 
-
+            
+            StateManager.Fetch();
             var products = StateManager.Get<Product>();
             var categories = StateManager.Get<Category>();
 
