@@ -645,6 +645,8 @@ namespace PosTest.ViewModels
 
         public void NewOrder()
         {
+            AdditivesVisibility = false;
+            ProductsVisibility = true;
             if (CurrentOrder != null)
             {
                 CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
