@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using NLog;
 using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
+using Product = ServiceInterface.Model.Product;
 
 namespace PosTest.ViewModels
 {
@@ -46,6 +47,7 @@ namespace PosTest.ViewModels
         private EditCategoryViewModel _editCategoryViewModel;
         private bool _isCategory;
         private EditProductViewModel _editProductViewModel;
+        private Type _activeTab;
 
         public CheckoutSettingsViewModel()
         {
@@ -801,6 +803,26 @@ namespace PosTest.ViewModels
             MouseMoveEventHandler<Product>(sender, e, key);
         }
 
+        public Type ActiveTab
+        {
+            get => _activeTab;
+            set => Set(ref _activeTab, value);
+        }
+
+        public void SetActiveTab(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("Product"))
+            {
+                ActiveTab = typeof(Product);
+                return;
+            }
+
+            if (e.Data.GetDataPresent("Category"))
+            {
+                ActiveTab = typeof(Category);
+            }
+        }
+
         public void FreeCategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "FreeCategory";
@@ -810,7 +832,6 @@ namespace PosTest.ViewModels
         public void CategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "Category";
-
             MouseMoveEventHandler<Category>(sender, e, key);
         }
 

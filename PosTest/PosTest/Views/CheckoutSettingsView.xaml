@@ -200,6 +200,7 @@
             </DockPanel>
         </DataTemplate>
         <converters:BooleanToHiddenVisibilityConverter x:Uid="converters:BooleanToHiddenVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"></converters:BooleanToHiddenVisibilityConverter>
+        <converters:TypeToIntegerIndexValueConverter x:Key="TypeToIntegerIndexValueConverter"></converters:TypeToIntegerIndexValueConverter>
     </UserControl.Resources>
     
     <Grid x:Uid="Grid_5">
@@ -208,9 +209,10 @@
             <ColumnDefinition x:Uid="ColumnDefinition_22" Width="3.3*" />
         </Grid.ColumnDefinitions>
         <materialdesign:Snackbar x:Uid="materialdesign:Snackbar_1" Grid.ColumnSpan="2"  MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        
-        <TabControl x:Uid="TabControl_1" Style="{StaticResource MaterialDesignTabControl}">
-            <TabItem x:Uid="CategoriesTabItem" x:Name="CategoriesTabItem" Header="Categories" Tag="{Binding AllCategories}">
+
+        <TabControl x:Uid="TabControl_1" Style="{StaticResource MaterialDesignTabControl}" SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
+                    caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]">
+            <TabItem x:Uid="CategoriesTabItem" x:Name="CategoriesTabItem" Header="Categories" Tag="{Binding AllCategories}" TabIndex="0">
                 <ScrollViewer x:Uid="ScrollViewer_1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                     <Grid x:Uid="Grid_6">
                         <Grid.RowDefinitions>
@@ -248,7 +250,7 @@
                     </Grid>
                 </ScrollViewer>
             </TabItem>
-            <TabItem x:Uid="TabItem_1" Header="Produits">
+            <TabItem x:Uid="TabItem_1" Header="Products" TabIndex="1">
                 <ScrollViewer x:Uid="ScrollViewer_2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                     <Grid x:Uid="Grid_7">
                         <Grid.RowDefinitions>
