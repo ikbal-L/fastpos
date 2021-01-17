@@ -104,7 +104,10 @@ namespace ServiceLib.Service
                         if (!tState.Contains(state)) tState.Add(state);
                     }
 
-                    Association[typeof(TState)]();
+                    if (Association.ContainsKey(key))
+                    {
+                        Association[key](); 
+                    }
                     return true;
                 }
 
