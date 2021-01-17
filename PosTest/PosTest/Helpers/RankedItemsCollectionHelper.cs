@@ -64,7 +64,7 @@ namespace PosTest.Helpers
             LoadPages<T>(source: source, target: target, size: size, parameter: parameter);
         }
 
-        public static void InsertTElementInPositionOf<T>(ref T incomingArg,ref T targetArg ,ref IList<T> list) where T : Ranked, new()
+        public static void InsertTElementInPositionOf<T>(ref T incomingArg,ref T targetArg ,IList<T> list) where T : Ranked, new()
         {
             if (incomingArg==null)
             {
@@ -93,13 +93,42 @@ namespace PosTest.Helpers
             targetArg.Rank = incomingArg.Rank;
             if (incomingArg.Rank != null)
             {
-                list[indexOfIncomingArg] = targetArg;
+                if (incomingArg is Product incomingProduct && targetArg is Product targetProduct)
+                {
+                    if (incomingProduct.Category!= targetProduct.Category)
+                    {
+                        Category incomingCategory = incomingProduct.Category;
+                        Category targetCategory = targetProduct.Category;
+                        
+                        if (incomingProduct.Id != null)
+                        {
+                            incomingCategory.ProductIds.Remove(incomingProduct.Id.Value);
+                            incomingCategory.Products.Remove(incomingProduct);
+                            targetCategory.ProductIds.Add(incomingProduct.Id.Value);
+                            targetCategory.Products.Add(incomingProduct);
+                        }
+                        if (targetProduct.Id != null)
+                        {
+                            targetCategory.ProductIds.Remove(targetProduct.Id.Value);
+                            targetCategory.Products.Remove(targetProduct);
+                            incomingCategory.ProductIds.Add(targetProduct.Id.Value);
+                            incomingCategory.Products.Add(targetProduct);
+                        }
+                    }
+                }
+                if (indexOfIncomingArg>=0 && indexOfIncomingArg<list.Count)
+                {
+                    list[indexOfIncomingArg] = targetArg; 
+                }
+
             }
             else
             {
                 if (incomingArg is Product incomingProduct && targetArg is Product targetProduct)
                 {
                     incomingProduct.Category = targetProduct.Category;
+                    incomingProduct.Category.Products.Add(incomingProduct);
+                    if (incomingProduct.Id != null) incomingProduct.Category.ProductIds.Add(incomingProduct.Id.Value);
                 }
 
                 targetArg = null;

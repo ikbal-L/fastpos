@@ -348,6 +348,7 @@ namespace PosTest.ViewModels
             SelectedProduct = product;
             if (ProductToMove != null)
             {
+                SelectedFreeCategory = null;
                 var index = CurrentProducts.IndexOf(ProductToMove);
                 var prod = new Product { Rank = ProductToMove.Rank };
                 if (SelectedProduct.Equals(ProductToMove))
@@ -356,13 +357,26 @@ namespace PosTest.ViewModels
                     return;
                 }
 
-                PutProductInCellOf(SelectedProduct, ProductToMove);
-                CurrentProducts[index] = prod;
+                //PutProductInCellOf(SelectedProduct, ProductToMove);
+                var incomingProduct = ProductToMove;
+                var targetProduct = SelectedProduct;
+                IList<Product> products = CurrentProducts;
+                RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingProduct,ref targetProduct,  products);
+
+
+                if (targetProduct?.Id != null)
+                {
+                    StateManager.Save(targetProduct);
+                }
+
+                StateManager.Save(incomingProduct);
+                //CurrentProducts[index] = prod;
+                SelectedProduct = null;
                 ProductToMove = null;
                 return;
             }
 
-            if (SelectedFreeProduct != null)
+            if (SelectedFreeProduct != null&& SelectedProduct?.Id == null)
             {
                 AttachProductToCategory();
             }
@@ -582,66 +596,22 @@ namespace PosTest.ViewModels
             sourceProduct.Category = SelectedCategory;
             sourceProduct.CategoryId = SelectedCategory.Id;
 
-            try
+            if (targetProduct.Category != null && targetProduct.Id != null)
             {
-                if (targetProduct.Category != null && targetProduct.Id != null)
-                {
-                    targetProduct.Rank = null;
-                    targetProduct.Category = null;
+                targetProduct.Rank = null;
+                targetProduct.Category = null;
 
-                    StateManager.Save<Product>(targetProduct);
-                }
-
-                CurrentProducts[index] = sourceProduct;
-
-                StateManager.Save<Product>(sourceProduct);
-
-                SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
-                SelectedCategory.Products.Add(sourceProduct);
-                StateManager.Save<Category>(SelectedCategory);
-
-
-
-                // if (sourceProductStatusCode != 200)
-                // {
-                //
-                //     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                //     var args = new object[] { sourceProduct.Name, selectedCategoryStatusCode, 300 };
-                //     ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-                //
-                // }
-                //
-                //
-                // if (targetProductStatusCode != 200&&targetProductStatusCode!=0)
-                // {
-                //
-                //     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                //     var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
-                //     ServiceHelper.HandleStatusCodeErrors(targetProductStatusCode, message, args);
-                //
-                // }
-                //
-                // if (selectedCategoryStatusCode != 200)
-                // {
-                //
-                //     var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                //     var args = new object[] { SelectedCategory.Name, selectedCategoryStatusCode, 300 };
-                //     ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-                //
-                // }
-
+                StateManager.Save<Product>(targetProduct);
             }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Problem connecting to server");
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                throw;
-#endif
-                NLog.LogManager.GetCurrentClassLogger().Error(e);
-            }
+
+            CurrentProducts[index] = sourceProduct;
+
+            StateManager.Save<Product>(sourceProduct);
+
+            SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
+            SelectedCategory.Products.Add(sourceProduct);
+            StateManager.Save<Category>(SelectedCategory);
+
         }
 
         //for test make it public 
@@ -957,7 +927,7 @@ namespace PosTest.ViewModels
                     receivedProduct = e.Data.GetData("Product") as Product;
                 }
 
-                if (receivedProduct == null || receivedProduct.Name == null) return;
+                if (receivedProduct?.Id == null) return;
 
                 if (receivedProduct.Rank == null)
                 {
@@ -1070,7 +1040,7 @@ namespace PosTest.ViewModels
                     try
                     {
                         RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
-                            ref categories);
+                             categories);
                     }
                     catch (Exception ex)
                     {
@@ -1121,7 +1091,7 @@ namespace PosTest.ViewModels
             Category targetCategory = SelectedCategory;
             IList<Category> categories = CurrentCategories;
             RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
-                ref categories);
+                 categories);
 
             try
             {
