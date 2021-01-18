@@ -495,7 +495,7 @@
                                     <Button x:Uid="Button_16" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                                             caliburn:Message.Attach="[Event Click] = [Action Cancel()]"  Margin="10">
                                         <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="Cancel" HorizontalAlignment="Right" Width="25" Height="25" />
+                                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="CloseBox" HorizontalAlignment="Right" Width="25" Height="25" />
                                         </StackPanel>
                                     </Button>
                                     <TextBlock x:Uid="TextBlock_12" Text="Product Details" FontSize="24" Margin="10"/>
