@@ -29,6 +29,7 @@ namespace ServiceInterface.Model
         [DataMember]
         [Required(ErrorMessage = "Product Name must not be Null or Empty")]
         [MinLength(5, ErrorMessage = "Product Name must not be under 5 characters ")]
+        [RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-_\s]*$", ErrorMessage = "Use Latin or Arabic Characters only ")]
         public string Name
         {
             get => _name;
