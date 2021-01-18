@@ -1456,9 +1456,10 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            if (CurrentOrder.SelectedOrderItem.Product == null || !CurrentOrder.SelectedOrderItem.Product.IsPlatter)
+            if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
             {
                 AdditivesVisibility = false;
+                ProductsVisibility = true;
                 return;
             }
             if (!CurrentOrder.SelectedOrderItem.AddAdditives(additive))
