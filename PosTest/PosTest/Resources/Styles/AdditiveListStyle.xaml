@@ -15,7 +15,7 @@
                         <Trigger x:Uid="Trigger_1" Property="IsSelected" Value="True">
                             <Setter x:Uid="Setter_3" TargetName="Border" Property="BorderBrush" Value="Red"/>
                             <Setter x:Uid="Setter_4" TargetName="Border" Property="BorderThickness" Value="2"/>
-                            <Setter x:Uid="Setter_5" TargetName="Border" Property="TextBlock.FontSize" Value="13" />
+                           <!-- <Setter x:Uid="Setter_5" TargetName="Border" Property="TextBlock.FontSize" Value="13" />-->
                             <Setter x:Uid="Setter_6" TargetName="Border" Property="TextBlock.FontWeight" Value="Bold" />
                             <Setter x:Uid="Setter_7" TargetName="Border" Property="TextBlock.Foreground" Value="Blue" />
                         </Trigger>
