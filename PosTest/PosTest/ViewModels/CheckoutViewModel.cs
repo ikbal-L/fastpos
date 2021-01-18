@@ -237,14 +237,27 @@ namespace PosTest.ViewModels
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
+            
         }
 
         private void CurrentOrder_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CurrentOrder.OrderItems))
+            //if (e.PropertyName == nameof(CurrentOrder.OrderItems))
+            //{
+            //    OrderItemsCollectionViewSource.Source = CurrentOrder.OrderItems;
+            //    //OrderItemsCollectionViewSource.View.Refresh();
+            //}
+
+            if (e.PropertyName == nameof(Order.SelectedOrderItem))
             {
-                OrderItemsCollectionViewSource.Source = CurrentOrder.OrderItems;
-                //OrderItemsCollectionViewSource.View.Refresh();
+                if (CurrentOrder.SelectedOrderItem!= null)
+                {
+                    if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
+                    {
+                        AdditivesVisibility = false;
+                        ProductsVisibility = true;
+                    }
+                }
             }
         }
 
@@ -655,7 +668,7 @@ namespace PosTest.ViewModels
             CurrentOrder = new Order(this.Orders);
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
             //OrderItemsCollectionViewSource.View.Refresh();
-            //CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
+            CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
             //DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
@@ -849,6 +862,8 @@ namespace PosTest.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
+            AdditivesVisibility = false;
+            ProductsVisibility = true;
             if (category == CurrentCategory && !(ProductsPage.Count == 0 || ProductsPage == null)) return;
 
             ProductsPage.Clear();
@@ -1441,6 +1456,11 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (CurrentOrder.SelectedOrderItem.Product == null || !CurrentOrder.SelectedOrderItem.Product.IsPlatter)
+            {
+                AdditivesVisibility = false;
+                return;
+            }
             if (!CurrentOrder.SelectedOrderItem.AddAdditives(additive))
             {
                 CurrentOrder.SelectedOrderItem.SelectedAdditive = null;
