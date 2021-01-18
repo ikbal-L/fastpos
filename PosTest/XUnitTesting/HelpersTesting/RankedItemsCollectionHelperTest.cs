@@ -22,7 +22,7 @@ namespace XUnitTesting.HelpersTesting
             Category targetArg = list.First(category => category.Id == 5);//Id 5 Rank 8 Name Cat1
             
             //act
-            Action act = () => RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg,ref targetArg,ref list);
+            Action act = () => RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg,ref targetArg, list);
             
             //assert
             var e =Assert.Throws<InvalidOperationException>(act);
@@ -41,7 +41,7 @@ namespace XUnitTesting.HelpersTesting
             Category targetArg = list.First(category => category.Rank == 21);//Id null Rank 21 Name Empty Category 2
 
             //act
-            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg, ref list);
+            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg,  list);
 
             //assert
             Assert.Null(targetArg);
@@ -58,7 +58,7 @@ namespace XUnitTesting.HelpersTesting
             Category targetArg = list.First(category => category.Id == 5);//{Id = 05, Rank = 08, Name = "Cat1"}
 
             //act
-            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg, ref list);
+            RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg,  list);
 
             //assert
             Assert.Equal(18,targetArg.Rank);
@@ -75,7 +75,7 @@ namespace XUnitTesting.HelpersTesting
             Category targetArg = list.First(category => category.Id == 5);//{Id = 05, Rank = 08, Name = "Cat1"}
 
             //act
-            Action act = () => RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg, ref list);
+            Action act = () => RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg,  list);
 
             //assert
             var e = Assert.Throws<NullReferenceException>(act);
@@ -92,7 +92,7 @@ namespace XUnitTesting.HelpersTesting
             Category targetArg = null;
 
             //act
-            Action act = () => RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg, ref list);
+            Action act = () => RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingArg, ref targetArg,  list);
 
             //assert
             var e = Assert.Throws<NullReferenceException>(act);

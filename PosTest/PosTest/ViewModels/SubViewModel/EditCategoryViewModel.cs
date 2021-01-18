@@ -90,18 +90,7 @@ namespace PosTest.ViewModels.SubViewModel
             StateManager.Save<Category>(this._source);
         }
 
-        public void Cancel()
-        {
-            //this.Category = new Category();
-            //this.Name = null;
-            //this.Description = null;
-            //NotifyOfPropertyChange(() => this.Category);
-            //NotifyOfPropertyChange(() => this.Name);
-            //NotifyOfPropertyChange(() => this.Description);
-
-            Category = CloneFromSource();
-
-        }
+        
 
         private static void Clone(ref Category source, ref Category target)
         {
@@ -110,6 +99,11 @@ namespace PosTest.ViewModels.SubViewModel
             target.Description = source.Description;
             target.Background = source.Background;
             target.BackgroundColor = source.BackgroundColor;
+            if (target.Id == null)
+            {
+                target.ProductIds = source.ProductIds;
+                target.Products = source.Products;
+            }
         }
 
         public Category CloneFromSource()
@@ -123,6 +117,11 @@ namespace PosTest.ViewModels.SubViewModel
                     Background = _source.Background,
                     BackgroundColor = _source.BackgroundColor
                 };
+                if (_source.Id == null)
+                {
+                    category.ProductIds = new List<long>();
+                    category.Products = new List<Product>();
+                }
                 Set(ref _name, _source.Name);
                 Set(ref _description, _source.Description);
                 NotifyOfPropertyChange(() => this.Name);

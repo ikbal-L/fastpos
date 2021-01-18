@@ -103,6 +103,11 @@ namespace ServiceLib.Service
                     {
                         if (!tState.Contains(state)) tState.Add(state);
                     }
+
+                    if (Association.ContainsKey(key))
+                    {
+                        Association[key](); 
+                    }
                     return true;
                 }
 
@@ -220,7 +225,7 @@ namespace ServiceLib.Service
             }
             else
             {
-                if (Association[keyOfTOne].GetInvocationList().Contains(act))
+                if (!Association[keyOfTOne].GetInvocationList().Contains(act))
                 {
                     Association[keyOfTOne] += act; 
                 }

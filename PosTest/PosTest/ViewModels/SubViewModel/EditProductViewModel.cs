@@ -36,13 +36,14 @@ namespace PosTest.ViewModels.SubViewModel
         private string _unit;
         private IAdditiveService _additiveService;
         private int _additivesPageSize;
+        private bool _isPlatter;
 
         public EditProductViewModel(ref Product sourceProduct,
             int additivesPageSize = 30)
         {
             
             this._source = sourceProduct;
-
+            IsPlatter = sourceProduct.IsPlatter;
 
 
             this._additiveService = new AdditiveService();
@@ -50,43 +51,46 @@ namespace PosTest.ViewModels.SubViewModel
             PopulateAdditivesPage();
 
             this._source = sourceProduct;
-            _product = new Platter();
+            _product = new Product();
             _product = CloneFromSource();
 
             IsSaveEnabled = true;
             CheckAdditiveCommand = new DelegateCommandBase(CheckAdditive, CanCheckAdditive);
+            
         }
         public Product CloneFromSource()
         {
             if (_source != null)
             {
-                var product = new Platter()
+                var product = new Product()
                 {
                     Name = _source.Name,
                     Description = _source.Description,
                     Background = _source.Background,
                     BackgroundColor = _source.BackgroundColor,
                     Price = _source.Price,
-                    Unit = _source.Unit
+                    Unit = _source.Unit,
+                    IsPlatter = _source.IsPlatter
                 };
-                if (Source is Platter|| Source.Id==null)
-                {
-                    
-                    // product.Additives = (Source as Platter).Additives;
-                    // product.IdAdditives = (Source as Platter).IdAdditives;
 
-                    if (Source.Id != null)
+                
+
+                if (Source.Id != null)
+                {
+                    if (Source.IsPlatter)
                     {
                         product.IsPlatter = Source.IsPlatter;
-                        product.IdAdditives = (Source as Platter).IdAdditives;
-                        product.Additives = (Source as Platter).Additives;
-                    }
-                    else
-                    {
-                        product.IdAdditives = new List<long>();
-                        product.Additives = new BindableCollection<Additive>();
+                        product.IdAdditives = Source.IdAdditives;
+                        product.Additives = Source.Additives;
                     }
                 }
+                else
+                {
+                    product.IsPlatter = true;
+                    product.IdAdditives = new List<long>();
+                    product.Additives = new BindableCollection<Additive>();
+                }
+                IsPlatter = product.IsPlatter;
 
                 Set(ref _name, _source.Name);
                 Set(ref _price, _source.Price);
@@ -139,6 +143,22 @@ namespace PosTest.ViewModels.SubViewModel
 
         public BindableCollection<Additive> Additives { get; set; }
 
+        public bool IsPlatter
+        {
+            get => _isPlatter;
+            set
+            {
+                Set(ref _isPlatter, value);
+                
+                if (Product!=null)
+                {
+                    Product.IsPlatter = value;
+                }
+
+                (CheckAdditiveCommand as DelegateCommandBase)?.RaiseCanExecuteChanged();
+            }
+        }
+
         public Product Product
         {
             get => _product;
@@ -182,7 +202,7 @@ namespace PosTest.ViewModels.SubViewModel
 
         private bool CanCheckAdditive(object arg)
         {
-            return Product is Platter;
+            return _product.IsPlatter;
         }
         public void CheckAdditive(object sender)
         {
@@ -194,17 +214,17 @@ namespace PosTest.ViewModels.SubViewModel
                 return;
             }
 
-            if ((Product as Platter).Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
+            if (Product.Additives.Contains(source) && !(bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Remove((long)source.Id);
-                ((Platter) Product).Additives.Remove(source);
+                Product.IdAdditives.Remove((long)source.Id);
+                Product.Additives.Remove(source);
                 return;
             }
 
-            if (!(Product as Platter).Additives.Contains(source) && (bool) toggleButton?.IsChecked)
+            if (!Product.Additives.Contains(source) && (bool) toggleButton?.IsChecked)
             {
-                ((Platter) Product).IdAdditives.Add((long)source.Id);
-                ((Platter) Product).Additives.Add(source);
+                Product.IdAdditives.Add((long)source.Id);
+                Product.Additives.Add(source);
                 return;
             }
         }
@@ -253,7 +273,8 @@ namespace PosTest.ViewModels.SubViewModel
             //this.Name = null;
             //this.Price = 0;
             //this.Unit = null;
-            Product = CloneFromSource();
+            //Product = CloneFromSource();
+            
 
         }
 
@@ -264,14 +285,11 @@ namespace PosTest.ViewModels.SubViewModel
             target.Price = source.Price;
             target.Background = source.Background;
             target.Unit = source.Unit;
-            if (target is Platter)
+            target.IsPlatter = source.IsPlatter;
+            if (source.IsPlatter)
             {
-                
-                  (target as Platter).IdAdditives = (source as Platter).IdAdditives;
-                  (target as Platter).Additives = (source as Platter).Additives;
-                
-               
-
+                target.IdAdditives = source.IdAdditives;
+                target.Additives = source.Additives; 
             }
 
         }

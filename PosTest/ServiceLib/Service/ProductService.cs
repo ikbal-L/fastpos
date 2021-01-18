@@ -57,9 +57,9 @@ namespace ServiceLib.Service
             products.ToList().ForEach(p => idCategories.Add(p.CategoryId));
             foreach (var p in products)
             {
-                if (p is Platter plat && plat.IdAdditives != null)
+                if (p.IsPlatter && p.IdAdditives != null)
                 {
-                    plat.IdAdditives.ForEach(id => idAdditivesOfAllProducts.Add(id));
+                    p.IdAdditives.ForEach(id => idAdditivesOfAllProducts.Add(id));
                 }
             }
 
@@ -81,9 +81,9 @@ namespace ServiceLib.Service
                 // Category category = categories.Where(c => c.Id == p.CategoryId).FirstOrDefault() ;
                 
                 IEnumerable<Additive> additives = null;
-                if (p is Platter plat && plat.IdAdditives != null)
+                if (p.IsPlatter && p.IdAdditives != null)
                 {
-                    additives = GetAdditivesFromCollection(additivesOfAllProducts, plat.IdAdditives);
+                    additives = GetAdditivesFromCollection(additivesOfAllProducts, p.IdAdditives);
                 }
             
                 if (true)
@@ -111,9 +111,9 @@ namespace ServiceLib.Service
                 throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getCategryStatusCode.ToString());
             }
             IEnumerable<Additive> additives = null;
-            if (product is Platter plat && plat.IdAdditives!=null && plat.IdAdditives.Count>0)
+            if (product.IsPlatter && product.IdAdditives!=null && product.IdAdditives.Count>0)
             {
-                additives = _restAdditiveService.GetManyAdditives(plat.IdAdditives, ref getAdditivestatusCode);
+                additives = _restAdditiveService.GetManyAdditives(product.IdAdditives, ref getAdditivestatusCode);
                 if (getAdditivestatusCode != 200)
                 {
                     throw new MappingException("Error in GetManyCategories to map with products, StatusCode: " + getAdditivestatusCode.ToString());
@@ -191,7 +191,7 @@ namespace ServiceLib.Service
             ICollection<Product> products = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var plattersProducts = JsonConvert.DeserializeObject<List<Platter>>(response.Content);
+                var plattersProducts = JsonConvert.DeserializeObject<List<Product>>(response.Content);
                 if (plattersProducts != null && plattersProducts.Count>0)
                 {
                     products = new Collection<Product>();
@@ -242,7 +242,7 @@ namespace ServiceLib.Service
             ICollection<Product> products = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var plattersProducts = JsonConvert.DeserializeObject<List<Platter>>(response.Content);
+                var plattersProducts = JsonConvert.DeserializeObject<List<Product>>(response.Content);
                 if (plattersProducts != null && plattersProducts.Count > 0)
                 {
                     products = new Collection<Product>();
@@ -298,7 +298,7 @@ namespace ServiceLib.Service
             ICollection<Product> products = null;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var plattersProducts = JsonConvert.DeserializeObject<List<Platter>>(response.Content);
+                var plattersProducts = JsonConvert.DeserializeObject<List<Product>>(response.Content);
                 if (plattersProducts != null && plattersProducts.Count > 0)
                 {
                     products = new Collection<Product>();

@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using NLog;
 using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
+using Product = ServiceInterface.Model.Product;
 
 namespace PosTest.ViewModels
 {
@@ -46,6 +47,7 @@ namespace PosTest.ViewModels
         private EditCategoryViewModel _editCategoryViewModel;
         private bool _isCategory;
         private EditProductViewModel _editProductViewModel;
+        private Type _activeTab;
 
         public CheckoutSettingsViewModel()
         {
@@ -62,7 +64,8 @@ namespace PosTest.ViewModels
             CategoryPageSize = categoryPageSize;
 
 
-
+            
+            StateManager.Fetch();
             var products = StateManager.Get<Product>();
             var categories = StateManager.Get<Category>();
 
@@ -347,6 +350,7 @@ namespace PosTest.ViewModels
             SelectedProduct = product;
             if (ProductToMove != null)
             {
+                SelectedFreeCategory = null;
                 var index = CurrentProducts.IndexOf(ProductToMove);
                 var prod = new Product { Rank = ProductToMove.Rank };
                 if (SelectedProduct.Equals(ProductToMove))
@@ -355,13 +359,26 @@ namespace PosTest.ViewModels
                     return;
                 }
 
-                PutProductInCellOf(SelectedProduct, ProductToMove);
-                CurrentProducts[index] = prod;
+                //PutProductInCellOf(SelectedProduct, ProductToMove);
+                var incomingProduct = ProductToMove;
+                var targetProduct = SelectedProduct;
+                IList<Product> products = CurrentProducts;
+                RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingProduct,ref targetProduct,  products);
+
+
+                if (targetProduct?.Id != null)
+                {
+                    StateManager.Save(targetProduct);
+                }
+
+                StateManager.Save(incomingProduct);
+                //CurrentProducts[index] = prod;
+                SelectedProduct = null;
                 ProductToMove = null;
                 return;
             }
 
-            if (SelectedFreeProduct != null)
+            if (SelectedFreeProduct != null&& SelectedProduct?.Id == null)
             {
                 AttachProductToCategory();
             }
@@ -412,15 +429,14 @@ namespace PosTest.ViewModels
         {
             if (IsCategory)
             {
-                EditCategoryViewModel.Cancel();
-                //IsCategory = false;
+                EditCategoryViewModel = null;
             }
             else
             {
-                EditProductViewModel.Cancel();
+                EditProductViewModel = null;
             }
 
-            //IsFlipped = false;
+            IsFlipped = false;
         }
 
         public void RemoveTElementFromTList<T>(T SelectedT, ref T SelectedFreeT,
@@ -582,66 +598,22 @@ namespace PosTest.ViewModels
             sourceProduct.Category = SelectedCategory;
             sourceProduct.CategoryId = SelectedCategory.Id;
 
-            try
+            if (targetProduct.Category != null && targetProduct.Id != null)
             {
-                if (targetProduct.Category != null && targetProduct.Id != null)
-                {
-                    targetProduct.Rank = null;
-                    targetProduct.Category = null;
+                targetProduct.Rank = null;
+                targetProduct.Category = null;
 
-                    StateManager.Save<Product>(targetProduct);
-                }
-
-                CurrentProducts[index] = sourceProduct;
-
-                StateManager.Save<Product>(sourceProduct);
-
-                SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
-                SelectedCategory.Products.Add(sourceProduct);
-                StateManager.Save<Category>(SelectedCategory);
-
-
-
-                // if (sourceProductStatusCode != 200)
-                // {
-                //
-                //     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                //     var args = new object[] { sourceProduct.Name, selectedCategoryStatusCode, 300 };
-                //     ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-                //
-                // }
-                //
-                //
-                // if (targetProductStatusCode != 200&&targetProductStatusCode!=0)
-                // {
-                //
-                //     var message = "Failed To update Product {Product}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                //     var args = new object[] { targetProduct.Name, targetProductStatusCode, 300 };
-                //     ServiceHelper.HandleStatusCodeErrors(targetProductStatusCode, message, args);
-                //
-                // }
-                //
-                // if (selectedCategoryStatusCode != 200)
-                // {
-                //
-                //     var message = "Failed To update Category {Category}  {ERRORCODE}, attempting to resave after {0} milliseconds ";
-                //     var args = new object[] { SelectedCategory.Name, selectedCategoryStatusCode, 300 };
-                //     ServiceHelper.HandleStatusCodeErrors(selectedCategoryStatusCode, message, args);
-                //
-                // }
-
+                StateManager.Save<Product>(targetProduct);
             }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Problem connecting to server");
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                throw;
-#endif
-                NLog.LogManager.GetCurrentClassLogger().Error(e);
-            }
+
+            CurrentProducts[index] = sourceProduct;
+
+            StateManager.Save<Product>(sourceProduct);
+
+            SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
+            SelectedCategory.Products.Add(sourceProduct);
+            StateManager.Save<Category>(SelectedCategory);
+
         }
 
         //for test make it public 
@@ -682,14 +654,19 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (SelectedProduct.Id!=null)
+            {
+                Notify("Select an empty cell to paste product in!");
+                SelectedProduct = null;
+                return;
+            }
+
             if (ClipboardProduct.Equals(SelectedProduct))
             {
                 return;
             }
 
-            var product = ClipboardProduct is Platter
-                ? new Platter(ClipboardProduct as Platter)
-                : new Product(ClipboardProduct);
+            var product = new Product(ClipboardProduct);
             product.Category = SelectedCategory;
             product.Id = null;
             product.Rank = null; 
@@ -728,7 +705,7 @@ namespace PosTest.ViewModels
 
         public void NewFreeProduct()
         {
-            FreeProducts.Add(SelectedFreeProduct = new Platter());
+            FreeProducts.Add(SelectedFreeProduct = new Product());
         }
 
         public void CopyFreeProduct()
@@ -738,7 +715,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var product = new Platter(SelectedFreeProduct as Platter);
+            var product = new Product(SelectedFreeProduct);
         }
 
         public void CotegoryOfSelectFreeProductChanged(Category category)
@@ -753,12 +730,12 @@ namespace PosTest.ViewModels
 
         public void DeleteCategory()
         {
-            if (SelectedFreeCategory == null)
+            if (SelectedCategory!=null && SelectedFreeCategory == null)
             {
-                return;
+                Notify("Category must be unassigned to be deleted");
             }
 
-            if (SelectedFreeCategory.Id != null)
+            if (SelectedFreeCategory?.Id != null)
             {
 
                 try
@@ -784,12 +761,12 @@ namespace PosTest.ViewModels
 
         public void DeleteProduct()
         {
-            if (SelectedFreeProduct == null)
+            if (SelectedProduct != null && SelectedFreeProduct == null)
             {
-                return;
+                Notify("Product must be unassigned from category to be deleted");
             }
 
-            if (SelectedFreeProduct.Id != null)
+            if (SelectedFreeProduct?.Id != null)
             {
                 StateManager.Delete(SelectedFreeProduct);
 
@@ -826,6 +803,26 @@ namespace PosTest.ViewModels
             MouseMoveEventHandler<Product>(sender, e, key);
         }
 
+        public Type ActiveTab
+        {
+            get => _activeTab;
+            set => Set(ref _activeTab, value);
+        }
+
+        public void SetActiveTab(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("Product"))
+            {
+                ActiveTab = typeof(Product);
+                return;
+            }
+
+            if (e.Data.GetDataPresent("Category"))
+            {
+                ActiveTab = typeof(Category);
+            }
+        }
+
         public void FreeCategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "FreeCategory";
@@ -835,7 +832,6 @@ namespace PosTest.ViewModels
         public void CategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "Category";
-
             MouseMoveEventHandler<Category>(sender, e, key);
         }
 
@@ -952,7 +948,7 @@ namespace PosTest.ViewModels
                     receivedProduct = e.Data.GetData("Product") as Product;
                 }
 
-                if (receivedProduct == null || receivedProduct.Name == null) return;
+                if (receivedProduct?.Id == null) return;
 
                 if (receivedProduct.Rank == null)
                 {
@@ -1065,7 +1061,7 @@ namespace PosTest.ViewModels
                     try
                     {
                         RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
-                            ref categories);
+                             categories);
                     }
                     catch (Exception ex)
                     {
@@ -1116,7 +1112,7 @@ namespace PosTest.ViewModels
             Category targetCategory = SelectedCategory;
             IList<Category> categories = CurrentCategories;
             RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
-                ref categories);
+                 categories);
 
             try
             {
@@ -1169,7 +1165,7 @@ namespace PosTest.ViewModels
 
         public void EditProduct()
         {
-            if (SelectedCategory.Id == null) return;
+            if (SelectedCategory.Id == null || SelectedProduct == null) return;
             this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct);
             EditProductViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             IsCategory = false;

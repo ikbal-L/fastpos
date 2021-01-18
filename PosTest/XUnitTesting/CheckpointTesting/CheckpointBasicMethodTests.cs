@@ -64,7 +64,7 @@ namespace XUnitTesting.CheckpointTesting
             //Arrange
             var checkoutVM = new CheckoutViewModel();
             var p = new Product { Id=1, Description="desc abc", Name="name", Price=8};
-            var p2 = new Platter { Id=2, Description="desc2", Name="awescome", Price=6};
+            var p2 = new Product() { Id=2, Description="desc2", Name="awescome", Price=6};
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -95,7 +95,7 @@ namespace XUnitTesting.CheckpointTesting
         {
             //Arrange
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id=2, Description="desc2", Name= "awesome", Price=6};
+            var p = new Product() { Id=2, Description="desc2", Name= "awesome", Price=6};
             var orderItem = new OrderItem(p, 5, 120, new Order());
             checkoutVM.CurrentOrder = new Order();
             checkoutVM.CurrentOrder.SelectedOrderItem = orderItem;
@@ -113,7 +113,7 @@ namespace XUnitTesting.CheckpointTesting
         {
             //Arrange
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id=2, Description="desc2", Name="awescome", Price=160};
+            var p = new Product() { Id=2, Description="desc2", Name="awescome", Price=160};
             checkoutVM.AddOrderItem(p);
            
 
@@ -136,7 +136,7 @@ namespace XUnitTesting.CheckpointTesting
                 new Additive{Id=1, Description="abc"},
                 new Additive{Id=2, Description="abc"},
             };
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives=additives };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives=additives };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -153,7 +153,7 @@ namespace XUnitTesting.CheckpointTesting
             //Arrange
             var checkoutVM = new CheckoutViewModel();
 
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives=null };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives=null };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -176,7 +176,7 @@ namespace XUnitTesting.CheckpointTesting
                 new Additive{Id=4, Description="add4"},
             };
 
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -198,7 +198,7 @@ namespace XUnitTesting.CheckpointTesting
                 new Additive{Id=4, Description="add4"},
             };
 
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -228,7 +228,7 @@ namespace XUnitTesting.CheckpointTesting
                 new Additive{Id=4, Description="add4"},
             };
 
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 6, Additives = additives };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -274,8 +274,8 @@ namespace XUnitTesting.CheckpointTesting
         {
             //Arrange
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
             checkoutVM.AddOrderItem(p);
             checkoutVM.AddOrderItem(p2);
 
@@ -295,7 +295,7 @@ namespace XUnitTesting.CheckpointTesting
         {
             //Arrange
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 160 };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 160 };
             checkoutVM.AddOrderItem(p);
 
             //Act
@@ -315,8 +315,8 @@ namespace XUnitTesting.CheckpointTesting
         {
             //Arrange
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = 100 };
             checkoutVM.AddOrderItem(p);
             checkoutVM.AddOrderItem(p2);
 
@@ -337,7 +337,7 @@ namespace XUnitTesting.CheckpointTesting
         public void DiscountOnOrderItem_AmountDiscount_DiscountValueEmpty()
         {
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
             checkoutVM.AddOrderItem(p);
 
             //Act
@@ -360,7 +360,7 @@ namespace XUnitTesting.CheckpointTesting
         public void DiscountOnOrderItem_AmountDiscount_DiscountValueGreaterThanOrderItemTotal()
         {
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
             checkoutVM.AddOrderItem(p);
 
             //Act
@@ -379,7 +379,7 @@ namespace XUnitTesting.CheckpointTesting
         public void DiscountOnOrderItem_AmountDiscount_DiscountValueNotNumericString()
         {
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
             checkoutVM.AddOrderItem(p);
 
             //Act
@@ -398,7 +398,7 @@ namespace XUnitTesting.CheckpointTesting
         public void DiscountOnOrderItem_AmountDiscount_ApplyDiscountTwoTimes()
         {
             var checkoutVM = new CheckoutViewModel();
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = 160 };
             checkoutVM.AddOrderItem(p);
 
             //Act
@@ -423,8 +423,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 100,
                 price2 = 160;
-            var p2 = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p2 = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
             checkoutVM.AddOrderItem(p);
             checkoutVM.AddOrderItem(p2);
             var discount = 20;
@@ -450,8 +450,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                 price2 = 160;
-            var p2 = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p2 = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
             checkoutVM.AddOrderItem(p);
             checkoutVM.AddOrderItem(p2);
             var discountpercent = 20;
@@ -477,8 +477,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                 price2 = 160;
-            var p2 = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p2 = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
             checkoutVM.AddOrderItem(p);
             checkoutVM.AddOrderItem(p2);
 
@@ -507,8 +507,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                 price2 = 160;
-            var p2 = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p2 = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
             checkoutVM.AddOrderItem(p);
             checkoutVM.AddOrderItem(p2);
 
@@ -559,8 +559,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                     price2 = 160;
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
             
             //Act
             checkoutVM.NumericZone = "5";
@@ -613,8 +613,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                     price2 = 160;
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -656,8 +656,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                     price2 = 160;
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -699,8 +699,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                     price2 = 160;
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -734,8 +734,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                     price2 = 160;
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
 
             //Act
             checkoutVM.AddOrderItem(p);
@@ -767,8 +767,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                     price2 = 160;
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
 
             //Act  the same as total
             checkoutVM.AddOrderItem(p);
@@ -821,8 +821,8 @@ namespace XUnitTesting.CheckpointTesting
             var checkoutVM = new CheckoutViewModel();
             decimal price1 = 150,
                     price2 = 160;
-            var p = new Platter { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
-            var p2 = new Platter { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
+            var p = new Product() { Id = 1, Description = "desc2", Name = "awescome", Price = price1 };
+            var p2 = new Product() { Id = 2, Description = "desc2", Name = "awescome", Price = price2 };
 
             //Act  the same as total
             checkoutVM.AddOrderItem(p);

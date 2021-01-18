@@ -344,7 +344,7 @@ namespace ServiceInterface.Model
             bool groupByProduct = true)
         {
             OrderItem item;
-            if ((product is Platter && (product as Platter).Additives != null) || OrderItems.All(p => p.ProductId != product.Id) ||
+            if (product.IsPlatter && (product.Additives != null) || OrderItems.All(p => p.ProductId != product.Id) ||
                 !groupByProduct ||
                 OrderItems.Where(oi =>
                     oi.ProductId == product.Id 
@@ -428,16 +428,34 @@ namespace ServiceInterface.Model
             {
                 throw new MappingException("Order mapping products is null");
             }
-
+            
             foreach (var oit in OrderItems)
             {
+                var additives = new List<Additive>();
                 var product = products.FirstOrDefault(p => p.Id == oit.ProductId);
-                if (product == null)
+                if (product!=null)
                 {
-                    throw new MappingException("Order mapping product is null");
-                }
+                    if (product.IsPlatter)
+                    {
+                        var additivesOfProduct = product?.Additives.Where(a =>
+                                  oit.OrderItemAdditives.Any(orderItemAdditive => orderItemAdditive.AdditiveId == a.Id)).ToList();
+                        foreach (var additive in additivesOfProduct)
+                        {
+                            var newAdditive = new Additive(additive) { ParentOrderItem = oit };
+                            additives.Add(newAdditive);
+                        }
 
-                oit.Product = product;
+                        oit.Order = this;
+                    }
+
+                    if (product == null)
+                    {
+                        throw new MappingException("Order mapping product is null");
+                    }
+                    oit.Additives = new BindableCollection<Additive>(additives);
+
+                    oit.Product = product; 
+                }
             }
         }
 

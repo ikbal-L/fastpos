@@ -75,7 +75,7 @@ namespace ServiceLib.Service
     {
         public override (int status, IEnumerable<Product>) Get()
         {
-            var result = GenericRest.GetAll<Platter>(RestApis.Resource<Product>.GetAll());
+            var result = GenericRest.GetAll<Product>(RestApis.Resource<Product>.GetAll());
             var products = result.Item2.Cast<Product>().ToList();
             return (result.Item1,products ) ;
         }
@@ -133,15 +133,15 @@ namespace ServiceLib.Service
                 foreach (var newOrderItem in deserializedState.OrderItems)
                 {
                     var oldOrderItem = state.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
-                    if (oldOrderItem.Additives != null)
+                    if (oldOrderItem?.Additives != null)
                     {
                         foreach (var additive in oldOrderItem.Additives)
                         {
                             additive.ParentOrderItem = newOrderItem;
-                        }
+                        } 
                     }
-                    newOrderItem.Additives = oldOrderItem.Additives;
-                    newOrderItem.Order = oldOrderItem.Order;
+                    newOrderItem.Additives = oldOrderItem?.Additives;
+                    newOrderItem.Order = oldOrderItem?.Order;
                 }
                 state.OrderItems = deserializedState.OrderItems;
                 deserializedState = null;

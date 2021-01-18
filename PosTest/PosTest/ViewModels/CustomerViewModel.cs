@@ -44,10 +44,7 @@ namespace PosTest.ViewModels
         public ICommand SelectCustomerCommand { get; set; }
         public Customer SelectedCustomer
         {
-            get
-            {
-                return _selectedCustomer;
-            }
+            get => _selectedCustomer;
             set 
             {
                 if (ParentChechoutVM.CurrentOrder == null && value!=null)
