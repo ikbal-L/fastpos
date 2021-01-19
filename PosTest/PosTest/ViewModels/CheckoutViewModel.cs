@@ -998,7 +998,7 @@ namespace PosTest.ViewModels
                 cmd != ActionButton.Served &&
                 cmd != ActionButton.Del)
             {
-                ToastNotification.Notify("Enter the required value before ..");
+                ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
                 return;
             }
 
@@ -1052,7 +1052,7 @@ namespace PosTest.ViewModels
                 case ActionButton.Payment:
                     if (CurrentOrder.Type == OrderType.InWaiting)
                     {
-                        ToastNotification.Notify("Set order type first");
+                        ToastNotification.Notify("Set order type first", NotificationType.Warning);
                         return;
                     }
 
@@ -1062,7 +1062,7 @@ namespace PosTest.ViewModels
                 case ActionButton.Cmd:
                     if (CurrentOrder == null || CurrentOrder.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
                     {
-                        ToastNotification.Notify("Add products before ...");
+                        ToastNotification.Notify("Add products before ...", NotificationType.Warning);
                         return;
                     }
 
@@ -1107,7 +1107,7 @@ namespace PosTest.ViewModels
                     }
                     catch (Exception)
                     {
-                        ToastNotification.Notify("Table Number should be integer");
+                        ToastNotification.Notify("Table Number should be integer", NotificationType.Warning);
                         NumericZone = "";
                         return;
                     }
@@ -1126,7 +1126,7 @@ namespace PosTest.ViewModels
                     }
                     else
                     {
-                        ToastNotification.Notify("Non products to split");
+                        ToastNotification.Notify("Non products to split", NotificationType.Warning);
                     }
 
                     break;
@@ -1172,13 +1172,13 @@ namespace PosTest.ViewModels
                 CurrentOrder.OrderItems == null ||
                 CurrentOrder.OrderItems.Count < 1)
             {
-                ToastNotification.Notify("Add products before ...");
+                ToastNotification.Notify("Add products before ...", NotificationType.Warning);
                 return;
             }
 
             if (payedAmount < CurrentOrder.NewTotal)
             {
-                ToastNotification.Notify("Payed amount lower than total");
+                ToastNotification.Notify("Payed amount lower than total", NotificationType.Warning);
                 return;
             }
 
@@ -1209,7 +1209,7 @@ namespace PosTest.ViewModels
                 table =StateManager.Get<Table>(tableNumber);
             if (table == null)
             {
-                ToastNotification.Notify("Table not found");
+                ToastNotification.Notify("Table not found", NotificationType.Warning);
                 return;
             }
             switch (status)
@@ -1228,7 +1228,7 @@ namespace PosTest.ViewModels
                         
                         if (StateManager.Save<Table>(new Table { IsVirtual = true, Number = tableNumber }))
                         {
-                            ToastNotification.Notify("Creation of virtual table", 1);
+                            ToastNotification.Notify("Creation of virtual table",NotificationType.Information);
                             NewOrder();
                         }
                         else
@@ -1325,7 +1325,7 @@ namespace PosTest.ViewModels
             else
             {
                 priceStr = string.Empty;
-                ToastNotification.Notify("New price less than the total price");
+                ToastNotification.Notify("New price less than the total price",NotificationType.Warning);
             }
 
             priceStr = "";
@@ -1378,7 +1378,7 @@ namespace PosTest.ViewModels
             {
                 //Use Local to select message according to UI language
                 discStr = "";
-                ToastNotification.Notify("Discount bigger than total");
+                ToastNotification.Notify("Discount bigger than total",NotificationType.Warning);
                 //CurrentOrder.DiscountAmount = 0;
                 return;
             }
@@ -1431,7 +1431,7 @@ namespace PosTest.ViewModels
                     }
                     else
                     {
-                        ToastNotification.Notify("Invalid value for Percentagte");
+                        ToastNotification.Notify("Invalid value for Percentagte",NotificationType.Warning);
                     }
                 }
                 else
@@ -1595,7 +1595,7 @@ namespace PosTest.ViewModels
             NumericZone = string.Empty;
             if (item.Total < discount)
             {
-                ToastNotification.Notify("Discount Greater Than Price");
+                ToastNotification.Notify("Discount Greater Than Price",NotificationType.Warning);
                 return;
             }
 
@@ -1620,7 +1620,7 @@ namespace PosTest.ViewModels
         {
             if (e.Key == Key.Enter)
             {
-                ToastNotification.Notify(scanValue);
+                ToastNotification.Notify(scanValue,NotificationType.Information);
 
                 if (scanValue.Contains("BON"))
                 {
@@ -1800,7 +1800,7 @@ namespace PosTest.ViewModels
             DateTime? recent = CurrentOrder.OrderItems.Max(oi => oi.TimeStamp);
             if (!ChangesMade)
             {
-                ToastNotification.Notify("You made no updates");
+                ToastNotification.Notify("You made no updates",NotificationType.Information);
             }
 
             var value = new Order(order.Orders)

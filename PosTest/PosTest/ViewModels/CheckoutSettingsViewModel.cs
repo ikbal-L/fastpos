@@ -565,7 +565,7 @@ namespace PosTest.ViewModels
         {
             if (SelectedFreeProduct == null || SelectedProduct == null)
             {
-                ToastNotification.Notify("Select Both free product and category product");
+                ToastNotification.Notify("Select Both free product and category product",NotificationType.Warning);
                 return;
             }
 
@@ -577,7 +577,7 @@ namespace PosTest.ViewModels
         {
             if (SelectedProduct.Category == null)
             {
-                ToastNotification.Notify("We can't copy empty product");
+                ToastNotification.Notify("We can't copy empty product",NotificationType.Warning);
             }
 
             ClipboardProduct = SelectedProduct;
@@ -586,7 +586,7 @@ namespace PosTest.ViewModels
 
         public void OpenProdcutDetail()
         {
-            ToastNotification.Notify("Open Form", 1);
+            ToastNotification.Notify("Open Form", NotificationType.Information);
             IsFlipped = true;
         }
 
@@ -644,13 +644,13 @@ namespace PosTest.ViewModels
         {
             if (ClipboardProduct == null)
             {
-                ToastNotification.Notify("Copy a product before");
+                ToastNotification.Notify("Copy a product before",NotificationType.Warning);
                 return;
             }
 
             if (SelectedProduct == null)
             {
-                ToastNotification.Notify("Select a zone to copy in");
+                ToastNotification.Notify("Select a zone to copy in",NotificationType.Warning);
                 return;
             }
 
@@ -744,7 +744,7 @@ namespace PosTest.ViewModels
 
                     if (StateManager.Delete(SelectedFreeCategory))
                     {
-                        ToastNotification.Notify($"{SelectedFreeCategory.Name} {SelectedFreeCategory.GetType().Name}");
+                        ToastNotification.Notify($"{SelectedFreeCategory.Name} {SelectedFreeCategory.GetType().Name}",NotificationType.Success);
                     }
                     
                 }
@@ -1097,13 +1097,13 @@ namespace PosTest.ViewModels
         {
             if (SelectedFreeCategory == null || SelectedCategory == null)
             {
-                ToastNotification.Notify("Select Both free product and category product");
+                ToastNotification.Notify("Select Both free product and category product",NotificationType.Warning);
                 return;
             }
 
             if (SelectedCategory.Id != null)
             {
-                ToastNotification.Notify("Must select an Empty Cell to drop Free Category");
+                ToastNotification.Notify("Must select an Empty Cell to drop Free Category", NotificationType.Warning);
                 return;
             }
 
