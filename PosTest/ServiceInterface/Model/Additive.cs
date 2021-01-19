@@ -124,8 +124,24 @@ namespace ServiceInterface.Model
         {
             return Description + " ";
         }
+   public Additive Clone()
+        {
+            return new Additive()
+            {
+                Background = this.Background,
+                BackgroundColor = this.BackgroundColor,
+                Description = this.Description,
+                BackgroundString = this.BackgroundString,
+                Id = this.Id,
+                IdIngrediants = this.IdIngrediants,
+                Ingrediants = this.Ingrediants,
+                IsNotifying = this.IsNotifying,
+                ParentOrderItem = this.ParentOrderItem,
+                Rank = this.Rank
+            };
+        }
     }
-
+   
     public enum AdditiveState
     {
         Added,

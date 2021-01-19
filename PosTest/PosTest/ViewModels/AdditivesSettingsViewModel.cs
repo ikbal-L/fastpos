@@ -20,6 +20,7 @@ namespace PosTest.ViewModels
     {
         private BindableCollection<Additive> _additives;
         private Additive _selectedAdditive;
+        private Additive _copySelectedAdditive;
         private IAdditiveService _additiveService;
         private List<Additive> _allAdditives;
         private int _additivePageSize;
@@ -49,7 +50,15 @@ namespace PosTest.ViewModels
         public Additive SelectedAdditive
         {
             get => _selectedAdditive;
-            set { Set(ref _selectedAdditive, value); }
+            set {
+                CopySelectedAdditive = value?.Clone();
+                Set(ref _selectedAdditive, value); }
+        }
+
+        public Additive CopySelectedAdditive
+        {
+            get => _copySelectedAdditive;
+            set { Set(ref _copySelectedAdditive, value); }
         }
 
         public Additive ClipBoardAdditive
@@ -162,8 +171,15 @@ namespace PosTest.ViewModels
 
         public void SaveAdditive()
         {
-            IsEditing = false; 
+            IsEditing = false;
+            this.SelectedAdditive.Description = CopySelectedAdditive.Description;
+            this.SelectedAdditive.Background = CopySelectedAdditive.Background;
             if (StateManager.Save(SelectedAdditive)) ToastNotification.Notify("Additive saved Successfully");
+        }
+        public void Cancel() {
+            SelectedAdditive = null;
+            IsEditing = false;
+
         }
 
         public void CopyAdditive()
