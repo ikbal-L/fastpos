@@ -256,7 +256,10 @@ namespace PosTest.ViewModels
 
             }
         }
-
+     public void SelectAdditive(Additive onj)
+        {
+            SelectedAdditive = onj;
+        }
         public void BackToLogin()
         {
             LoginViewModel loginvm = new LoginViewModel();
