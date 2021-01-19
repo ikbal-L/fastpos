@@ -1547,6 +1547,13 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (CurrentOrder.DiscountAmount>0)
+            {
+                ToastNotification.Notify("Set order discount to 0 in order to apply a discount to selected order item");
+                NumericZone = "";
+                return;
+            }
+
             var item = CurrentOrder.SelectedOrderItem;
 
             if (param == 0)

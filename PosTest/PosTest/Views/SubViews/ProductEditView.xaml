@@ -32,39 +32,7 @@
                     </Trigger>
                 </Style.Triggers>-->
 
-                <Setter x:Uid="Setter_4" Property="Validation.ErrorTemplate">
-                    <Setter.Value>
-                        <ControlTemplate x:Uid="ControlTemplate_1">
-                            <Grid x:Uid="Grid_1">
-                                <Border x:Uid="errorBorder" BorderBrush="#FFCB2E2E" BorderThickness="1" Background="#11FF0000"
-                                    IsHitTestVisible="False" x:Name="errorBorder" />
-                                <AdornedElementPlaceholder x:Uid="placeholder" x:Name="placeholder" />
-                                <Popup x:Uid="Popup_1" AllowsTransparency="True" HorizontalAlignment="Right" HorizontalOffset="0"
-                                   VerticalOffset="0" PopupAnimation="Fade" Placement="Right"
-                                   PlacementTarget="{Binding ElementName=errorBorder}"
-                                   IsOpen="{Binding ElementName=placeholder, Path=AdornedElement.IsFocused, Mode=OneWay}">
-                                    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
-                                        <Polygon x:Uid="Polygon_1" VerticalAlignment="Center" Points="0,4 4,0 4,8" Fill="#FFCC2E2E"
-                                             Stretch="Fill" Stroke="#FFCB2E2E"
-                                             StrokeThickness="2" />
-                                        <Border x:Uid="Border_1" Background="#FFCB2E2E" CornerRadius="4" Padding="4">
-                                            <ItemsControl x:Uid="ItemsControl_1" ItemsSource="{Binding}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate x:Uid="DataTemplate_1">
-                                                        <TextBlock x:Uid="TextBlock_1" HorizontalAlignment="Center" Foreground="White"
-                                                               FontWeight="Bold" Margin="2,0,0,0"
-                                                               Text="{Binding ErrorContent}"  />
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </Border>
-                                    </StackPanel>
-                                </Popup>
-                            </Grid>
-                        </ControlTemplate>
-
-                    </Setter.Value>
-                </Setter>
+                
                 <Style.Triggers>
                     <Trigger x:Uid="Trigger_1" Property="Validation.HasError" Value="True">
                         <Setter x:Uid="Setter_5" Property="ToolTip"
