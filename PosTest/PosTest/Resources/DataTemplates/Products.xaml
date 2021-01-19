@@ -174,7 +174,8 @@
 
 
                         <Button  x:Uid="Button_2" Width="30" Height="30"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
-                                 
+                                 caliburn:Message.Attach="
+                        [Event Click] = [Action SelectAdditive($dataContext)];"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="35 20">
                             <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_5" Kind="Plus" Height="20" Width="20" />
                             <Button.Style>
