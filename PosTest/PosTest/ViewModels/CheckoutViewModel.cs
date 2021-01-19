@@ -1294,6 +1294,12 @@ namespace PosTest.ViewModels
                 return;
             }
 
+            if (order.OrderItems.Any((item => item.DiscountAmount > 0)))
+            {
+                ToastNotification.Notify("Remove discount from order items in order to change the price of the order", NotificationType.Error);
+                return;
+            }
+
             try
             {
                 price = Convert.ToDecimal(priceStr);
@@ -1340,6 +1346,12 @@ namespace PosTest.ViewModels
 
             if (discStr == "")
             {
+                return;
+            }
+
+            if (order.OrderItems.Any((item => item.DiscountAmount > 0)))
+            {
+                ToastNotification.Notify("Remove discount from order items in order to apply discount on order as a whole",NotificationType.Error);
                 return;
             }
 

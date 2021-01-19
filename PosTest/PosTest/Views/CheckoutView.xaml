@@ -472,11 +472,12 @@
                                 caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('5')]" />
                         <Button x:Uid="Button_20" Grid.Row="1" Grid.Column="2" Content="6" Style="{StaticResource ButtonStyle22}"
                                 caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]" />
+                        <!--IsEnabled="{Binding CurrentOrder.OrderItems,Converter={StaticResource NotCollectionItemAnyGreaterThanZeroValueConverter}}"-->
                         <Button x:Uid="Button_21" Grid.Row="1" Grid.Column="3"
                                 Content="{materialdesign:PackIcon  Kind=TagMinus, Size=30}"
                                 Style="{StaticResource ButtonStyle18}"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]" 
-                                IsEnabled="{Binding CurrentOrder.OrderItems,Converter={StaticResource NotCollectionItemAnyGreaterThanZeroValueConverter}}"/>
+                                />
 
 
                         <Button x:Uid="Button_22" Grid.Row="2" Grid.Column="0" Content="7" Style="{StaticResource ButtonStyle22}"
