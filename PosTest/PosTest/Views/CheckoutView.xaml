@@ -219,10 +219,10 @@
                         <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_7" Kind="TagFaces" Height="30" Width="30" />
                     </Button>
 
+                    <!-- caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]" -->
                     <Button x:Uid="Button_12" Grid.Row="8" Foreground="#2496ed" Background="WhiteSmoke"
                             IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
-                            Style="{StaticResource ButtonRightOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]">
+                            Style="{StaticResource ButtonRightOrder}">
                         <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_8" Kind="ChevronDoubleDown" Height="30" Width="30" />
                     </Button>
 
