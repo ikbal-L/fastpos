@@ -498,7 +498,7 @@
                                             <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="CloseBox" HorizontalAlignment="Right" Width="25" Height="25" />
                                         </StackPanel>
                                     </Button>
-                                    <TextBlock x:Uid="TextBlock_12" Text="Product Details" FontSize="24" Margin="10"/>
+                                    <TextBlock x:Uid="TextBlock_12" Text="Category Details" FontSize="24" Margin="10"/>
                                 </StackPanel>
                             </materialdesign:ColorZone>
 

@@ -39,18 +39,26 @@ namespace PosTest.Helpers
                    }));
         }
 
-        public static void Notify(string message, int type = -1)
+        public static void Notify(string message, NotificationType type = NotificationType.Error)
         {
             Notifier notifier = Instance;
             if (!IsRunningFromXUnit)
             {
-                if (type == -1)
+                if (type == NotificationType.Error)
                 {
                     notifier.ShowError(message);
                 }
-                else if (type == 1)
+                else if (type == NotificationType.Information)
                 {
                     notifier.ShowInformation(message);
+                }
+                else if (type == NotificationType.Warning)
+                {
+                    notifier.ShowWarning(message);
+                }
+                else if (type == NotificationType.Success)
+                {
+                    notifier.ShowSuccess(message);
                 }
             }
             else

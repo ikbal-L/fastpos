@@ -31,7 +31,8 @@
                          Tag="{Binding ClipboardProduct}
                                 SelectedItem="{Binding SelectedAdditive}""
 -->
-                            <ListBox x:Uid="AdditiveSettingsList" x:Name="AdditiveSettingsList" d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
+                            <Viewbox >
+                                <ListBox x:Uid="AdditiveSettingsList" Width="630" Padding="2" x:Name="AdditiveSettingsList" d:DataContext="{d:DesignData Source=/Design/Additives.xaml}"
                                  AllowDrop="True"
                                  ItemsSource="{Binding Additives}"
                                  SelectedItem="{Binding SelectedAdditive}"
@@ -54,6 +55,7 @@
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
+                            </Viewbox>
                             <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
                                 <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
                                     <Button x:Uid="Button_1" Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="10" Foreground="White"
@@ -135,10 +137,10 @@
                     </Grid.RowDefinitions>
                         <Border x:Uid="Border_3" Grid.Row="0"  Margin="10  10">
                             <TextBox x:Uid="TextBox_1" materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
-                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24" Text="{Binding SelectedAdditive.Description}" />
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24" Text="{Binding CopySelectedAdditive.Description}" />
                         </Border>
 
-                        <controls:ColorPalette  x:Uid="controls:ColorPalette_1" Grid.Row="1" CPColorBrush="{Binding SelectedAdditive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>
+                        <controls:ColorPalette  x:Uid="controls:ColorPalette_1" Grid.Row="1" CPColorBrush="{Binding CopySelectedAdditive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>
                         <materialdesign:ColorZone  x:Uid="materialdesign:ColorZone_2" Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
                         <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
                                 <Button x:Uid="Button_7" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}" 
@@ -147,7 +149,14 @@
                                         <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_8" Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
                                     </StackPanel>
                                 </Button>
-                                        <TextBlock x:Uid="TextBlock_2" Text="Edit Aditives" FontSize="16" Margin="10"/>
+
+                                <Button x:Uid="Button_16" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Command="{x:Static materialdesign:Flipper.FlipCommand}"  
+                                                caliburn:Message.Attach="[Event Click] = [Action Cancel()]" Margin="10">
+                                    <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="CloseBox" HorizontalAlignment="Right" Width="25" Height="25" />
+                                    </StackPanel>
+                                </Button>
+                                <TextBlock x:Uid="TextBlock_2" Text="Edit Aditives" FontSize="16" Margin="10"/>
                         </StackPanel>
                     </materialdesign:ColorZone>
                 </Grid>

@@ -20,6 +20,7 @@ namespace PosTest.ViewModels
     {
         private BindableCollection<Additive> _additives;
         private Additive _selectedAdditive;
+        private Additive _copySelectedAdditive;
         private IAdditiveService _additiveService;
         private List<Additive> _allAdditives;
         private int _additivePageSize;
@@ -49,7 +50,15 @@ namespace PosTest.ViewModels
         public Additive SelectedAdditive
         {
             get => _selectedAdditive;
-            set { Set(ref _selectedAdditive, value); }
+            set {
+                CopySelectedAdditive = value?.Clone();
+                Set(ref _selectedAdditive, value); }
+        }
+
+        public Additive CopySelectedAdditive
+        {
+            get => _copySelectedAdditive;
+            set { Set(ref _copySelectedAdditive, value); }
         }
 
         public Additive ClipBoardAdditive
@@ -162,15 +171,22 @@ namespace PosTest.ViewModels
 
         public void SaveAdditive()
         {
-            IsEditing = false; 
-            if (StateManager.Save(SelectedAdditive)) ToastNotification.Notify("Additive saved Successfully");
+            IsEditing = false;
+            this.SelectedAdditive.Description = CopySelectedAdditive.Description;
+            this.SelectedAdditive.Background = CopySelectedAdditive.Background;
+            if (StateManager.Save(SelectedAdditive)) ToastNotification.Notify("Additive saved Successfully",NotificationType.Success);
+        }
+        public void Cancel() {
+            SelectedAdditive = null;
+            IsEditing = false;
+
         }
 
         public void CopyAdditive()
         {
             if (SelectedAdditive?.Id == null)
             {
-                ToastNotification.Notify("Select a Valid Additive to copy", 1);
+                ToastNotification.Notify("Select a Valid Additive to copy", NotificationType.Warning);
                 return;
             }
 
@@ -181,19 +197,19 @@ namespace PosTest.ViewModels
         {
             if (ClipBoardAdditive == null)
             {
-                ToastNotification.Notify("Copy an additive first");
+                ToastNotification.Notify("Copy an additive first",NotificationType.Warning);
                 return;
             }
 
             if (SelectedAdditive?.Rank == null)
             {
-                ToastNotification.Notify("Select a zone to copy in first");
+                ToastNotification.Notify("Select a zone to copy in first",NotificationType.Warning);
                 return;
             }
 
             if (ClipBoardAdditive.Equals(SelectedAdditive))
             {
-                ToastNotification.Notify("You chose the same additive");
+                ToastNotification.Notify("You chose the same additive",NotificationType.Warning);
                 return;
             }
 
@@ -214,7 +230,7 @@ namespace PosTest.ViewModels
 
             if (AdditiveToMove == SelectedAdditive)
             {
-                ToastNotification.Notify("You selected the same additive");
+                ToastNotification.Notify("You selected the same additive",NotificationType.Warning);
                 AdditiveToMove = null;
                 SelectedAdditive = null;
                 return;
@@ -228,7 +244,7 @@ namespace PosTest.ViewModels
         {
             if (SelectedAdditive?.Id==null)
             {
-                ToastNotification.Notify("Select an Additive to delete first ");
+                ToastNotification.Notify("Select an Additive to delete first ",NotificationType.Warning);
                 return;
             }
 
@@ -236,7 +252,7 @@ namespace PosTest.ViewModels
             if (StateManager.Delete(SelectedAdditive))
             {
                 Additives.Remove(SelectedAdditive);
-                ToastNotification.Notify("Additive was deleted successfully",1);
+                ToastNotification.Notify("Additive was deleted successfully",NotificationType.Success);
 
             }
         }

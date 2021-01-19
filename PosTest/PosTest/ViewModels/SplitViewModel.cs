@@ -245,7 +245,7 @@ namespace PosTest.ViewModels
             else
             {
                 priceStr = priceStr.Remove(priceStr.Length - 1, 1);
-                ToastNotification.Notify("New price less than the total price");
+                ToastNotification.Notify("New price less than the total price",NotificationType.Warning);
             }
             priceStr = "";
 
@@ -293,7 +293,7 @@ namespace PosTest.ViewModels
             if (discount > order.Total)
             {
                 discStr = discStr.Remove(discStr.Length - 1, 1);
-                ToastNotification.Notify("Discount bigger than total");
+                ToastNotification.Notify("Discount bigger than total", NotificationType.Warning);
                 return;
             }
             if (!isPercentage)
@@ -316,7 +316,7 @@ namespace PosTest.ViewModels
             }
             catch (Exception)
             {
-                ToastNotification.Notify("Payed Amoount non valid");
+                ToastNotification.Notify("Payed Amoount non valid", NotificationType.Warning);
                 return;
             }
             if (payedAmount < 0)
@@ -326,7 +326,7 @@ namespace PosTest.ViewModels
             }
             if (SplittedOrder == null)
             {
-                ToastNotification.Notify("Add products before ...");
+                ToastNotification.Notify("Add products before ...", NotificationType.Warning);
                 return;
             }
 
@@ -334,7 +334,7 @@ namespace PosTest.ViewModels
             {
                 //NumericZone = "";
                 //Use Local to select message according to UI language
-                ToastNotification.Notify("Payed amount lower than total");
+                ToastNotification.Notify("Payed amount lower than total", NotificationType.Warning);
                 //CurrentOrder.DiscountAmount = 0;
                 return;
             }
