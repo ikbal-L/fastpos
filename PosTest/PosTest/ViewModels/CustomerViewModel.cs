@@ -3,6 +3,7 @@ using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -111,10 +112,13 @@ namespace PosTest.ViewModels
         public void CreateAndSave()
         {
             string name= Regex.Replace(FilterString, @"\d", "");
-            string mobile = "+213"+Regex.Replace(FilterString, @"\D", "").Remove(0,1);
+            string mobile = "+213"+Regex.Replace(FilterString, @"\D", "");
+            if (!ValidateCustomerFullNameAndPhone(name, mobile)) return;
+            
             Customer customer = new Customer { Name = name, Mobile = mobile };
             StateManager.Save(customer);
             //customer.Id = id;
+           
             ParentChechoutVM.Customers.Add(customer);
             
             _CustomerView.Refresh();
@@ -126,6 +130,34 @@ namespace PosTest.ViewModels
 
             ParentChechoutVM.CurrentOrder.Customer =customer;
             SelectedCustomer = customer;
+        }
+
+        private bool ValidateCustomerFullNameAndPhone([Required]string name,string mobile)
+        {
+            bool isValid = true;
+            if (string.IsNullOrEmpty(name))
+            {
+                ToastNotification.Notify("Name must not be null or empty");
+                isValid =  false ;
+
+            }
+            else
+            {
+                if (!Regex.IsMatch(name, @"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-_\s]*$"))
+                {
+                    ToastNotification.Notify("Name must only contain Arabic or Latin characters ");
+                    isValid = false;
+                }
+            }
+
+            if (string.IsNullOrEmpty(mobile))
+            {
+                ToastNotification.Notify("Phone number  must not be null or empty");
+                isValid = false;
+
+            }
+           
+            return isValid;
         }
 
         public void CreateAndEdit()
