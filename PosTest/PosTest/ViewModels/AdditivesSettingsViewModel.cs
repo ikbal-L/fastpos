@@ -249,11 +249,26 @@ namespace PosTest.ViewModels
             }
 
             var selectedAdditiveId = (long)SelectedAdditive.Id;
-            if (StateManager.Delete(SelectedAdditive))
+            
+            var additiveToDelete = SelectedAdditive;
+            
+            
+            //additiveToDelete.Rank = null;
+            
+
+            if (StateManager.Delete(additiveToDelete))
             {
-                Additives.Remove(SelectedAdditive);
+                //Additives.Remove(SelectedAdditive);
+                var index = Additives.IndexOf(additiveToDelete);
+                Additives[index] = new Additive(){Rank = additiveToDelete.Rank};
+                additiveToDelete = null;
+                SelectedAdditive = null;
                 ToastNotification.Notify("Additive was deleted successfully",NotificationType.Success);
 
+            }
+            else
+            {
+                ToastNotification.Notify("Something happened",NotificationType.Error);
             }
         }
   
