@@ -81,7 +81,7 @@ namespace PosTest.ViewModels
                         Login();
                     break;
                 case "backspace":
-                    PinCode =PinCode.Remove(PinCode.Length - 1, 1); 
+                    PinCode =PinCode?.Remove(PinCode.Length - 1, 1); 
                     break;
             }
         }
