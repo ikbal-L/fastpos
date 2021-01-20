@@ -85,7 +85,11 @@ namespace PosTest.ViewModels
             var additives = new List<Additive>(_allAdditives.Where(a => a.Rank != null));
             additives.Sort(comparer);
             Additives = new BindableCollection<Additive>();
-            var maxRank = (int) additives.Max(a => a.Rank);
+            var maxRank = 30;
+            if (additives.Count>0)
+            {
+                maxRank =  (int) additives.Max(a => a.Rank);
+            }
             int numberOfPages = (maxRank / _additivePageSize) + (maxRank % _additivePageSize == 0 ? 0 : 1);
             numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
             var size = numberOfPages * _additivePageSize;
