@@ -59,6 +59,8 @@
     <DataTemplate x:Uid="DataTemplate_2" DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <StackPanel  x:Uid="StackPanel_1" Orientation="Vertical"  x:Name="ProductTemplate">
             <Border x:Uid="ProductSettingsClick" x:Name="ProductSettingsClick"  BorderBrush="LightGray" BorderThickness="1" 
+                                                                      cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
+
                     caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this,$eventArgs)]">
                 <StackPanel x:Uid="StackPanel_2">
                     <DockPanel x:Uid="DockPanel_2" Height="70" Width="100" Background="{Binding Background}" >

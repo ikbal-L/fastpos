@@ -27,6 +27,16 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(Content));
             }
         }
+        private object _dataContext;
+
+        public object DataContext
+        {
+            get { return _dataContext; }
+            set { _dataContext = value;
+
+                NotifyOfPropertyChange(nameof(DataContext));
+            }
+        }
 
     }
 }

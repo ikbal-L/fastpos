@@ -112,8 +112,8 @@
                         x:Name="MainScrollViewer"
                         Grid.Row="1"
                         materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True">
-                     
-                    <ContentControl
+
+                    <ContentControl  
                             Content="{Binding SelectedItem.Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"/>
                 </ScrollViewer>
             </DockPanel>

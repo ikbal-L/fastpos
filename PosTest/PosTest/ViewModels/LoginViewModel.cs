@@ -191,7 +191,7 @@ namespace PosTest.ViewModels
         }
         public void CheckoutSettings()
         {
-            IsDialogOpen = false;
+        /*    IsDialogOpen = false;
             int resp;
             try
             {
@@ -210,7 +210,7 @@ namespace PosTest.ViewModels
                 //_categorieService
                       );
             checkoutSettingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
+            (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);*/
         }  
         
         public void CustomersSettings()
@@ -250,7 +250,8 @@ namespace PosTest.ViewModels
             int resp;
             try
             {
-                resp = _authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             }
             catch (AggregateException)
             {
