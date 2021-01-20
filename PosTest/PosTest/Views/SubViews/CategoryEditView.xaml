@@ -66,7 +66,7 @@
             <Label x:Uid="Label_1" Grid.Row="0" Grid.Column="0" Content="Edit Category" Background="AliceBlue" Grid.ColumnSpan="2" />
 
             <Label x:Uid="Label_2" Grid.Row="1" Grid.Column="0" Content="Name" />
-            <TextBox x:Uid="NameField" Grid.Row="1" Grid.Column="1" Text="{Binding Name,Mode=TwoWay}"
+            <TextBox x:Uid="NameField" Grid.Row="1" Grid.Column="1" Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      x:Name="NameField"  >
             </TextBox>
 

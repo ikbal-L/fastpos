@@ -31,9 +31,9 @@ namespace PosTest.ViewModels.SubViewModel
             
             this._source = sourceCategory;
             _category = new Category();
-            _category = CloneFromSource();
+            CloneFromSource();
            
-            IsSaveEnabled = true;
+            IsSaveEnabled = !HasErrors;
         }
 
 
@@ -77,7 +77,7 @@ namespace PosTest.ViewModels.SubViewModel
             set
             {
                 Set(ref _source, value);
-                Category = CloneFromSource();
+                CloneFromSource();
                 NotifyOfPropertyChange(() => this.Category);
             }
         }
@@ -106,7 +106,7 @@ namespace PosTest.ViewModels.SubViewModel
             }
         }
 
-        public Category CloneFromSource()
+        public void CloneFromSource()
         {
             if (_source!=null)
             {
@@ -122,15 +122,15 @@ namespace PosTest.ViewModels.SubViewModel
                     category.ProductIds = new List<long>();
                     category.Products = new List<Product>();
                 }
-                Set(ref _name, _source.Name);
-                Set(ref _description, _source.Description);
-                NotifyOfPropertyChange(() => this.Name);
-                NotifyOfPropertyChange(() => this.Description);
-                return category;
+                Category = category;
+                Name = _source.Name;
+                Description = _source.Description;
+                
+                
             }
             else
             {
-                return _source;
+                Category = new Category();
             }
         }
 
