@@ -16,6 +16,7 @@ using ServiceInterface.StaticValues;
 using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
 using PosTest.Helpers;
+using PosTest.ViewModels.Settings;
 
 namespace PosTest.ViewModels
 {
@@ -243,6 +244,22 @@ namespace PosTest.ViewModels
             AssemblyCatalog catalog2 = new AssemblyCatalog("ServiceLib.dll");
             CompositionContainer container = new CompositionContainer(catalog2);
             container.SatisfyImportsOnce(this);
+        }
+
+     public void   Settingsbtn() {
+            int resp;
+            try
+            {
+                resp = _authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Check your server connection");
+                return;
+            }
+            SettingsViewModel settingsViewModel = new SettingsViewModel();
+             settingsViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
     }
 }
