@@ -8,6 +8,7 @@
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
         <StackPanel  x:Uid="AddivieTemplate" Orientation="Vertical"  x:Name="AddivieTemplate">
             <Button x:Uid="ProductClick" x:Name="ProductClick" Height="55" Width="100"  
+                    Background="{Binding Background}"
                     Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger x:Uid="i:EventTrigger_1" EventName="Click">
@@ -18,7 +19,16 @@
                 </i:Interaction.Triggers>
                 <TextBlock x:Uid="TextBlock_1" Text="{Binding Path=Description}"   FontSize="16"  
                                    TextAlignment="Center" VerticalAlignment="Center" 
-                                   TextWrapping="WrapWithOverflow" FontWeight="Bold"/>
+                                   TextWrapping="WrapWithOverflow" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style  TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger  Binding="{Binding IsDark}" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style></TextBlock>
 
             </Button>
         </StackPanel>
