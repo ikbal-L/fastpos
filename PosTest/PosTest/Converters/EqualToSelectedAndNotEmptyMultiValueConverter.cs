@@ -15,6 +15,9 @@ namespace PosTest.Converters
             var selected = values[0];
             var obj = values[1];
             var str = values[2] as string;
+            // expect issue
+            if (selected == null) return false;
+
             return (selected.Equals(obj) && !string.IsNullOrEmpty(str));
         }
 

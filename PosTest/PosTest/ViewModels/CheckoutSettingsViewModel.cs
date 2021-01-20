@@ -969,7 +969,10 @@ namespace PosTest.ViewModels
                     try
                     {
                         StateManager.Save(receivedProduct);
-                        StateManager.Save(targetProduct);
+                        if (targetProduct.Id!=null)
+                        {
+                            StateManager.Save(targetProduct); 
+                        }
 
                        
                     }
