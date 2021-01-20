@@ -51,14 +51,15 @@ namespace PosTest.ViewModels.SubViewModel
             PopulateAdditivesPage();
 
             this._source = sourceProduct;
-            _product = new Product();
-            _product = CloneFromSource();
-
-            IsSaveEnabled = true;
-            CheckAdditiveCommand = new DelegateCommandBase(CheckAdditive, CanCheckAdditive);
             
+            CloneFromSource();
+
+            
+            CheckAdditiveCommand = new DelegateCommandBase(CheckAdditive, CanCheckAdditive);
+            IsSaveEnabled = !HasErrors;
+
         }
-        public Product CloneFromSource()
+        public void CloneFromSource()
         {
             if (_source != null)
             {
@@ -92,20 +93,22 @@ namespace PosTest.ViewModels.SubViewModel
                 }
                 IsPlatter = product.IsPlatter;
 
-                Set(ref _name, _source.Name);
-                Set(ref _price, _source.Price);
-                Set(ref _unit, _source.Unit);
-                NotifyOfPropertyChange(() => this.Product);
-                NotifyOfPropertyChange(() => this.Name);
-                NotifyOfPropertyChange(() => this.Price);
-                NotifyOfPropertyChange(() => this.Unit);
+                //Set(ref _name, _source.Name);
+                //Set(ref _price, _source.Price);
+                //Set(ref _unit, _source.Unit);
+                Product = product;
+                Name = _source.Name;
+                Price = _source.Price;
+                Unit = _source.Unit;
+                //NotifyOfPropertyChange(() => this.Product);
+                //NotifyOfPropertyChange(() => this.Name);
+                //NotifyOfPropertyChange(() => this.Price);
+                //NotifyOfPropertyChange(() => this.Unit);
 
-                return product;
+                return ;
             }
-            else
-            {
-                return _source;
-            }
+
+            Product = new Product();
         }
 
         public string Name
@@ -300,7 +303,7 @@ namespace PosTest.ViewModels.SubViewModel
             set
             {
                 Set(ref _source, value);
-                Product = CloneFromSource();
+                CloneFromSource();
                 NotifyOfPropertyChange(() => this.Product);
             }
         }
@@ -321,10 +324,7 @@ namespace PosTest.ViewModels.SubViewModel
             return _validationErrors[propertyName];
         }
 
-        public bool HasErrors
-        {
-            get { return _validationErrors.Count > 0; }
-        }
+        public bool HasErrors => _validationErrors.Any();
 
         public bool IsSaveEnabled
         {

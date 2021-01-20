@@ -86,11 +86,15 @@
                             </Button>
 
                             <!--caliburn:Message.Attach="[Event Click] = [Action MoveAdditive()]"-->
+                            
+
                             <Button x:Uid="MoveButton" x:Name="MoveButton"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 60 -20" Tag=""
-                                caliburn:Message.Attach="[Event Click] = [Action MoveAdditive()]">
+                                Grid.Row="0" Margin="0 0 60 -20" 
+                                caliburn:Message.Attach="[Event Click] = [Action MoveAdditive()]"
+                                Tag="{Binding AdditiveToMove}">
+                                
                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Kind="ArrowExpandAll" Height="22" Width="22" />
                             </Button>
 

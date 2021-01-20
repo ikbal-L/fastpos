@@ -248,20 +248,22 @@
                                     </Style>
                                 </Border.Style>
                             </Border>
-                            <Border   x:Uid="Border_10" Width="20" Height="20" DockPanel.Dock="Right">
-                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_8" Height="20" Width="20"  Kind="ArrowExpandAll" Padding="0"/>
+                          
+                            <!--Move indicator-->
+                            <Border   x:Uid="Border_6" Width="20" Height="20" DockPanel.Dock="Right">
+                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Height="20" Width="20"  Kind="ArrowExpandAll" Padding="0"/>
                                 <Border.Style>
-                                    <Style x:Uid="Style_12" TargetType="Border">
-                                        <Setter x:Uid="Setter_19" Property="Visibility" Value="Collapsed"/>
+                                    <Style TargetType="Border">
+                                        <Setter  Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger x:Uid="DataTrigger_11" Value="True">
+                                            <DataTrigger  Value="True">
                                                 <DataTrigger.Binding>
-                                                    <MultiBinding x:Uid="MultiBinding_7" Converter="{StaticResource MultiValueEqualityConverter}">
-                                                        <Binding x:Uid="Binding_14" ElementName="MoveButton" Path="Tag"/>
-                                                        <Binding x:Uid="Binding_15" RelativeSource="{RelativeSource self}" Path="DataContext" />
+                                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                                        <Binding  ElementName="MoveButton" Path="Tag"/>
+                                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
                                                     </MultiBinding>
                                                 </DataTrigger.Binding>
-                                                <Setter x:Uid="Setter_20" Property="Visibility" Value="Visible"/>
+                                                <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

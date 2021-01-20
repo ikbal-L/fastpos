@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Attributes;
+using Caliburn.Micro;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -54,12 +55,14 @@ namespace ServiceInterface.Model
         [DataMember]
         // [Required(ErrorMessage = "Price is required")]
         // [RegularExpression(@"\-?\d+\.\d+",ErrorMessage = "Product Price must be a Decimal")]
+        [GreaterThan("0")]
         public decimal Price
         {
             get => _price;
             set
             {
                 _price = value;
+                
                 NotifyOfPropertyChange(() => Price);
             }
         }

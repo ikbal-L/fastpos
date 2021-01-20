@@ -144,8 +144,7 @@ namespace PosTest.ViewModels
                 else
                 {
                     if (EditProductViewModel != null)
-                    {
-                        return !EditProductViewModel.HasErrors;
+                    { return !EditProductViewModel.HasErrors;
                     }
                     else
                     {
@@ -1168,19 +1167,21 @@ namespace PosTest.ViewModels
 
         public void EditProduct()
         {
+            IsCategory = false;
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
             this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct);
             EditProductViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
-            IsCategory = false;
+            
             NotifyOfPropertyChange((() => IsCategory));
             IsFlipped = true;
         }
 
         public void EditCategory()
         {
+            IsCategory = true;
             this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory);
             EditCategoryViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
-            IsCategory = true;
+            
             IsFlipped = true;
         }
 
