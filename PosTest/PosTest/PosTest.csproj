@@ -271,7 +271,7 @@
     <Compile Include="ViewModels\AdditivesOfProductViewModel.cs" />
     <Compile Include="ViewModels\AdditivesSettingsViewModel.cs" />
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
-    <Compile Include="ViewModels\Settings\CheckoutSetting\CheckoutSettingsViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -304,7 +304,7 @@
     <Compile Include="Views\CategoryView.xaml.cs">
       <DependentUpon>CategoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\CheckoutSetting\CheckoutSettingsView.xaml.cs">
+    <Compile Include="Views\CheckoutSettingsView.xaml.cs">
       <DependentUpon>CheckoutSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CheckoutView.xaml.cs">
@@ -518,7 +518,7 @@
     <Page Include="Views\CategoryView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Settings\CheckoutSetting\CheckoutSettingsView.xaml">
+    <Page Include="Views\CheckoutSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
