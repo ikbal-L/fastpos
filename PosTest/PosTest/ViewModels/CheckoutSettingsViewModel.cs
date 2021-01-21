@@ -779,6 +779,7 @@ namespace PosTest.ViewModels
         public void Close()
         {
             LoginViewModel loginvm = new LoginViewModel();
+            StateManager.Flush();
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
