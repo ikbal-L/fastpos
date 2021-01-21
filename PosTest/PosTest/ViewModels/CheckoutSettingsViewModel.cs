@@ -482,21 +482,9 @@ namespace PosTest.ViewModels
             SelectedCategory = null;
 
 
-            try
+            if (StateManager.Save(selectedCategory))
             {
-                bool saved = StateManager.Save(selectedCategory);
-
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Problem connecting to server");
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                throw;
-#endif
-                NLog.LogManager.GetCurrentClassLogger().Error(e);
+                ToastNotification.Notify("Category was Save successfully ",NotificationType.Success);
             }
         }
 
@@ -535,12 +523,16 @@ namespace PosTest.ViewModels
                         FreeProducts.Add(product);
                     }
                 });
-                StateManager.Save<Product>(selectedCategory.Products);
+                
+                if (StateManager.Save<Product>(selectedCategory.Products))
+                {
+                    selectedCategory.Products= null;
+                    selectedCategory.ProductIds = null;
+                }
 
             }
 
-            selectedCategory.Products.Clear();
-            selectedCategory.ProductIds.Clear();
+            
         }
 
 

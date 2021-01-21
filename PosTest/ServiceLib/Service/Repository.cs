@@ -52,7 +52,7 @@ namespace ServiceLib.Service
 
         public virtual int Update(IEnumerable<TState> state)
         {
-            return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.UpdateMany(),out _).status;
+            return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.PutMany(),out _).status;
         }
 
         public virtual (int status, IEnumerable<TState>) Get(object param)
