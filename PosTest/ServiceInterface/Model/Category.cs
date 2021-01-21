@@ -27,12 +27,12 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required(ErrorMessage = "Name must not be Null or Empty",AllowEmptyStrings = false)]
-        [MinLength(5,ErrorMessage = "Name must not be under 5 characters ")]
-        [RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-_\s]*$", ErrorMessage = "Use Latin or Arabic Characters only ")]
+        [MinLength(2,ErrorMessage = "Name must not be under 2 characters ")]
+        [RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-0-9_\s]*$", ErrorMessage = "Use Latin, Arabic or Numeric Characters only ")]
         public string Name
         {
             get => _name;
-            set { Set(ref _name, value); }
+            set => Set(ref _name, value);
         }
         //[Required(ErrorMessage = "Description must not be Null or Empty")]
         public string Description
