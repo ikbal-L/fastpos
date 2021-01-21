@@ -26,6 +26,7 @@ using Newtonsoft.Json;
 using ServiceLib.Service;
 using Table = ServiceInterface.Model.Table;
 using System.Drawing.Printing;
+using PosTest.ViewModels.Settings;
 
 namespace PosTest.ViewModels
 {
@@ -821,7 +822,11 @@ namespace PosTest.ViewModels
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
-
+       public void SettingsCommand() {
+            SettingsViewModel settingsViewModel = new SettingsViewModel();
+            settingsViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+        }
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {
             var categories = new HashSet<Category>();

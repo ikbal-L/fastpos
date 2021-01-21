@@ -668,6 +668,11 @@
                             Content="{materialdesign:PackIcon Power,25}"
                             Style="{StaticResource ButtonTopOrder}"
                             caliburn:Message.Attach="[Event Click] = [Action CloseCommand]" />
+
+                    <Button DockPanel.Dock="Right" Padding="0"
+                            Content="{materialdesign:PackIcon CogOutline,25}"
+                            Style="{StaticResource ButtonTopOrder}"
+                            caliburn:Message.Attach="[Event Click] = [Action SettingsCommand]" />
                     <Menu x:Uid="Menu_1" IsMainMenu="True" DockPanel.Dock="Right">
                         <MenuItem x:Uid="MenuItem_1" Height="30" Width="30">
                             <MenuItem.Icon>
