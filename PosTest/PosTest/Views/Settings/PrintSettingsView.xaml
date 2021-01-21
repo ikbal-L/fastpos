@@ -8,7 +8,7 @@
     <StackPanel>
         <StackPanel Background="White" Margin="30 15 0 0">
         <TextBlock Text="Receipt Printers" FontWeight="Bold" FontSize="18"/>
-            <ListBox Name="lbTodoList"  HorizontalContentAlignment="Stretch"  ItemsSource="{Binding ReceiptPrinters,Mode=TwoWay}">
+            <ListBox Name="lbTodoList"  HorizontalContentAlignment="Stretch"  ItemsSource="{Binding Printers,Mode=TwoWay}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Focusable" Value="false"/>
@@ -18,7 +18,7 @@
                 <ListBox.ItemTemplate>
                 <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <ToggleButton Margin="15 0 15 0" IsChecked="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></ToggleButton>
+                            <ToggleButton Margin="15 0 15 0" IsChecked="{Binding SelectedReceipt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></ToggleButton>
                             <TextBlock Text="{Binding Name}"  FontSize="14"/>
                             <TextBlock Text="Print Test Page" 
                                     Padding="0"
@@ -28,7 +28,7 @@
                                     Cursor="Hand"
                                     Foreground="DarkCyan"
                                     Background="Transparent"
-                                    Visibility="{Binding Selected ,Converter={StaticResource boolToVisibilityConverter}}"
+                                    Visibility="{Binding SelectedReceipt ,Converter={StaticResource boolToVisibilityConverter}}"
                                     />
                         </StackPanel>
                     </DataTemplate>
@@ -37,7 +37,7 @@
     </StackPanel>
     <StackPanel Background="White" Margin="30 15 0 0">
         <TextBlock Text="Kitchen Printers " FontWeight="Bold" FontSize="18"/>
-        <ListBox HorizontalContentAlignment="Stretch" SelectionMode="Extended" ItemsSource="{Binding ReceiptPrinters,Mode=TwoWay}">
+            <ListBox HorizontalContentAlignment="Stretch" SelectionMode="Extended" ItemsSource="{Binding Printers,Mode=TwoWay}">
 
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -47,7 +47,7 @@
                 <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <ToggleButton Margin="15 0 15 0" IsChecked="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></ToggleButton>
+                            <ToggleButton Margin="15 0 15 0" IsChecked="{Binding SelectedKitchen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></ToggleButton>
                         <TextBlock Text="{Binding Name}"  FontSize="14"/>
                             <TextBlock Text="Print Test Page" 
                                     Padding="0"
@@ -57,7 +57,7 @@
                                     Cursor="Hand"
                                     Foreground="DarkCyan"
                                     Background="Transparent"
-                                    Visibility="{Binding Selected ,Converter={StaticResource boolToVisibilityConverter}}"
+                                    Visibility="{Binding SelectedKitchen ,Converter={StaticResource boolToVisibilityConverter}}"
                                     />
                         </StackPanel>
                 </DataTemplate>

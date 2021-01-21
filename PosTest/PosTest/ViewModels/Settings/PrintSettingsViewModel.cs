@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Newtonsoft.Json;
 using PosTest.Helpers;
 using PosTest.Views.Settings;
 using System;
@@ -12,58 +13,93 @@ using System.Windows;
 
 namespace PosTest.ViewModels.Settings
 {
-  public class PrintSettingsViewModel: SettingsItemBase
+    public class PrintSettingsViewModel : SettingsItemBase
     {
-        private ObservableCollection<PrinterItem> _ReceiptPrinters;
+        private ObservableCollection<PrinterItem> _Printers;
 
-        public ObservableCollection<PrinterItem> ReceiptPrinters
+        public ObservableCollection<PrinterItem> Printers
         {
-            get { return _ReceiptPrinters; }
+            get { return _Printers; }
             set {
-                _ReceiptPrinters = value;
-                NotifyOfPropertyChange(() => _ReceiptPrinters);
+                _Printers = value;
+                NotifyOfPropertyChange(() => Printers);
 
             }
         }
+        private SettingsManager<List<PrinterItem>> Settings;
         public PrintSettingsViewModel()
         {
             this.Title = "Printers";
             this.Content = new PrintSettingsView() { DataContext = this };
-            ReceiptPrinters = new ObservableCollection<PrinterItem>();
+            Printers = new ObservableCollection<PrinterItem>();
+            Settings = new SettingsManager<List<PrinterItem>>("PrintSettings.json");
+            var listSettings = Settings.LoadSettings();
             foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
             {
-                ReceiptPrinters.Add(new PrinterItem(printer)); ;
+                var printerSetting = listSettings?.FirstOrDefault(x => x.Name.Equals(printer));
+                printerSetting = printerSetting == null ? new PrinterItem(printer) : printerSetting;
+                printerSetting.PropertyChanged += PrinterSetting_PropertyChanged;
+                Printers.Add(printerSetting);
+
+            }
+        }
+
+        private void PrinterSetting_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(nameof(PrinterItem.SelectedKitchen))|| e.PropertyName.Equals(nameof(PrinterItem.SelectedReceipt)))
+            {
+                Settings.SaveSettings(Printers.ToList());
             }
         }
     }
-    public class  PrinterItem:PropertyChangedBase
+
+    public class PrinterItem : PropertyChangedBase
     {
 
-        private bool _selected;
+        private bool _selectedKitchen;
+        [JsonProperty]
 
-        public bool Selected
+        public bool SelectedKitchen
         {
-            get { return _selected; }
-            set { _selected = value;
-                NotifyOfPropertyChange(() => Selected);
-              }
+            get { return _selectedKitchen; }
+            set
+            {
+                _selectedKitchen = value;
+                NotifyOfPropertyChange(() => SelectedKitchen);
+
+            }
         }
+        private bool _selectedReceipt;
+        [JsonProperty]
+
+        public bool SelectedReceipt
+        {
+            get { return _selectedReceipt; }
+            set
+            {
+                _selectedReceipt = value;
+                NotifyOfPropertyChange(() => SelectedReceipt);
+            }
+        }
+
         private string _name;
+        [JsonProperty]
 
         public string Name
         {
             get { return _name; }
-            set {  
+            set
+            {
                 _name = value;
                 Set(ref _name, value);
             }
         }
-      public  PrinterItem(string name) {
+        public PrinterItem(string name)
+        {
             this.Name = name;
         }
 
 
-     
 
     }
 }
