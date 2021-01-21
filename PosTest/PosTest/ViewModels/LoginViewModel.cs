@@ -16,6 +16,7 @@ using ServiceInterface.StaticValues;
 using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
 using PosTest.Helpers;
+using PosTest.ViewModels.Settings;
 
 namespace PosTest.ViewModels
 {
@@ -190,7 +191,7 @@ namespace PosTest.ViewModels
         }
         public void CheckoutSettings()
         {
-            IsDialogOpen = false;
+        /*    IsDialogOpen = false;
             int resp;
             try
             {
@@ -209,7 +210,7 @@ namespace PosTest.ViewModels
                 //_categorieService
                       );
             checkoutSettingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);
+            (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);*/
         }  
         
         public void CustomersSettings()
@@ -222,11 +223,11 @@ namespace PosTest.ViewModels
         public void AdditivesSettings()
         {
             // authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+         //   _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             //_additiveService = new AdditiveService();
-            AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(/*_additiveService,*/30);
-            additivesSettingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
+         /*   AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(/*_additiveService,*///30);
+            //additivesSettingsViewModel.Parent = this.Parent;
+        //    (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
         }
         public void AdditivesOfProduct()
         {
@@ -243,6 +244,23 @@ namespace PosTest.ViewModels
             AssemblyCatalog catalog2 = new AssemblyCatalog("ServiceLib.dll");
             CompositionContainer container = new CompositionContainer(catalog2);
             container.SatisfyImportsOnce(this);
+        }
+
+     public void   Settingsbtn() {
+            int resp;
+            try
+            {
+                //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Check your server connection");
+                return;
+            }
+            SettingsViewModel settingsViewModel = new SettingsViewModel();
+             settingsViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
     }
 }

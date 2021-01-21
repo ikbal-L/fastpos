@@ -10,6 +10,7 @@
              xmlns:ex="clr-namespace:PosTest.Extensions"
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
              xmlns:converters="clr-namespace:PosTest.Converters"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
@@ -386,6 +387,7 @@
                                 </Grid.RowDefinitions>
                                 <ListBox x:Uid="CategoryList" DockPanel.Dock="Left" x:Name="CategoryList" AllowDrop="True"
                                          ItemsSource="{Binding CurrentCategories}" SelectedItem="{Binding SelectedCategory}"
+                                        
                                          caliburn:Message.Attach="
                                          [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];
                                          [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];">
@@ -397,6 +399,7 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate x:Uid="DataTemplate_9" DataType="{x:Type models:Category}">
                                             <Border x:Uid="catBtn" x:Name="catBtn" Width="100" Height="45" Padding="2" Margin="2" 
+                                                  cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
                                                     caliburn:Message.Attach="
                                                     [Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]" >
                                                 <Border.Style>
@@ -413,7 +416,7 @@
                                                         </Style.Triggers>
                                                     </Style>
                                                 </Border.Style>
-                                                <TextBlock x:Uid="TextBlock_10" FontWeight="Bold" FontSize="16" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="{Binding Description}" >
+                                                <TextBlock x:Uid="TextBlock_10" FontWeight="Bold" FontSize="8" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="{Binding Description}" >
                                                     <TextBlock.Style>
                                                         <Style x:Uid="Style_9" TargetType="TextBlock">
                                                             <Style.Triggers>

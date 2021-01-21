@@ -15,10 +15,12 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
+using PosTest.ViewModels.Settings;
+using PosTest.Views;
 
 namespace PosTest.ViewModels
 {
-    public class AdditivesSettingsViewModel : Screen
+    public class AdditivesSettingsViewModel : SettingsItemBase
     {
         private BindableCollection<Additive> _additives;
         private Additive _selectedAdditive;
@@ -33,6 +35,10 @@ namespace PosTest.ViewModels
         private INotifyPropertyChanged _dialogViewModel;
         private WarningViewModel _warningViewModel;
 
+        public AdditivesSettingsViewModel():this(30) {
+            this.Title = "Additives Settings";
+            this.Content = new AdditivesSettingsView() { DataContext=this};
+        }
         public AdditivesSettingsViewModel(/*IAdditiveService additiveService,*/ int additivePageSize)
         {
             IsDialogOpen = false;
@@ -326,9 +332,9 @@ namespace PosTest.ViewModels
   
         public void BackToLogin()
         {
-            LoginViewModel loginvm = new LoginViewModel();
+     /*       LoginViewModel loginvm = new LoginViewModel();
             loginvm.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+            (this.Parent as Conductor<object>).ActivateItem(loginvm);*/
         }
 
         public void SelectAdditive(Additive additive)

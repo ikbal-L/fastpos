@@ -23,10 +23,12 @@ using NLog;
 using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
 using Product = ServiceInterface.Model.Product;
+using PosTest.ViewModels.Settings;
+using PosTest.Views;
 
 namespace PosTest.ViewModels
 {
-    public class CheckoutSettingsViewModel : Screen
+    public class CheckoutSettingsViewModel : SettingsItemBase
     {
         private bool _IsProductDetailsDrawerOpen;
         private bool _IsDeleteCategoryDialogOpen;
@@ -49,17 +51,17 @@ namespace PosTest.ViewModels
         private EditProductViewModel _editProductViewModel;
         private Type _activeTab;
 
-        public CheckoutSettingsViewModel()
+        public CheckoutSettingsViewModel():this(30, 8)
         {
         }
 
         public CheckoutSettingsViewModel(int productPageSize, int categoryPageSize
-            ) : this()
+            ) 
         {
             _productPageSize = productPageSize;
             _categpryPageSize = categoryPageSize;
-
-
+            this.Title = "Checkout Settings";
+            this.Content = new CheckoutSettingsView() {DataContext= this};
             ProductPageSize = productPageSize;
             CategoryPageSize = categoryPageSize;
 
@@ -89,6 +91,7 @@ namespace PosTest.ViewModels
             SelectedProduct.PropertyChanged += (sender, args) => { Save(); };
             IsFlipped = false;
             IsCategory = false;
+            SelectedCategory = CurrentCategories.FirstOrDefault();
         }
 
         private void EditProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
