@@ -35,7 +35,8 @@ namespace PosTest.ViewModels.Settings
         {
             SettingItems = new ObservableCollection<SettingsItemBase>(Assembly.GetExecutingAssembly().GetTypes().
                 Where(x => x.IsSubclassOf(typeof(SettingsItemBase))).ToList()
-                .Select(t=> (SettingsItemBase)Activator.CreateInstance(t)).ToList());
+                .Select(t=> (SettingsItemBase)Activator.CreateInstance(t)).OrderBy(x=>x.Index).ToList());
+            SelectedItem = SettingItems?.FirstOrDefault();
         }
         public void  Close() {
             LoginViewModel loginvm = new LoginViewModel();

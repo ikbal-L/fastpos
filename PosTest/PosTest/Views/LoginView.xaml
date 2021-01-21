@@ -28,11 +28,11 @@
                 <!--<Button x:Name="Settings" Content="Settings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
             <Button x:Uid="Close" x:Name="Close" Content="Close" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
             <!--<Button x:Name="PaginationTest" Content="Pagination Test" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
-            <Button x:Uid="CheckoutSettings" x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
+         <!--   <Button x:Uid="CheckoutSettings" x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
 
             <!--<Button x:Name="CustomersSettings" Content="CustomersSettings" Margin="5"
                     Style="{StaticResource MaterialDesignFlatButton}"/>-->
-            <Button x:Uid="AdditivesSettings" x:Name="AdditivesSettings" Content="AdditivesSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
+          <!--  <Button x:Uid="AdditivesSettings" x:Name="AdditivesSettings" Content="AdditivesSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
             <!--<Button x:Uid="AdditivesOfProduct" x:Name="AdditivesOfProduct" Content="AdditivesOfProduct" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
 
             <!--<TextBlock Text="{res:Resources.HelloWorld,Converter={StaticResource}}"/>-->

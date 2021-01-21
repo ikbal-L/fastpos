@@ -27,6 +27,6 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(Content));
             }
         }
-  
+        public int Index { get; set; } = 5;
     }
 }
