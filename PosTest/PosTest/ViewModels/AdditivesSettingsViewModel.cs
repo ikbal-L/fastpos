@@ -240,8 +240,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            PutAdditiveInCellOf(SelectedAdditive, AdditiveToMove);
-            AdditiveToMove = null;
+            
         }
 
         public void DeleteAdditive()
@@ -281,6 +280,23 @@ namespace PosTest.ViewModels
             LoginViewModel loginvm = new LoginViewModel();
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
+        }
+
+        public void SelectAdditive(Additive additive)
+        {
+            if (AdditiveToMove!= null)
+            {
+                PutAdditiveInCellOf(SelectedAdditive, AdditiveToMove);
+                AdditiveToMove = null;
+                return;
+            }
+
+            if (AdditiveToMove == SelectedAdditive)
+            {
+                ToastNotification.Notify("You selected the same additive", NotificationType.Warning);
+                AdditiveToMove = null;
+                SelectedAdditive = null;
+            }
         }
     }
 }
