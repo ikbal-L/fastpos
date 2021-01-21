@@ -61,7 +61,6 @@ namespace PosTest.ViewModels
             _productPageSize = productPageSize;
             _categpryPageSize = categoryPageSize;
             this.Title = "Checkout Settings";
-            this.DataContext = this;
             this.Content = new CheckoutSettingsView() {DataContext= this};
             ProductPageSize = productPageSize;
             CategoryPageSize = categoryPageSize;

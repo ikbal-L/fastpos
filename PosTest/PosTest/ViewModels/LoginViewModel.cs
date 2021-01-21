@@ -223,11 +223,11 @@ namespace PosTest.ViewModels
         public void AdditivesSettings()
         {
             // authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+         //   _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
             //_additiveService = new AdditiveService();
-            AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(/*_additiveService,*/30);
-            additivesSettingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
+         /*   AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(/*_additiveService,*///30);
+            //additivesSettingsViewModel.Parent = this.Parent;
+        //    (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
         }
         public void AdditivesOfProduct()
         {

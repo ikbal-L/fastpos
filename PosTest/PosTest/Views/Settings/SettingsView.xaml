@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-
-             xmlns:local="clr-namespace:PosTest.Views.Settings"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
+             xmlns:cal="http://www.caliburnproject.org"
              d:DesignHeight="450" d:DesignWidth="800">
     <materialDesign:DialogHost
         Identifier="RootDialog"
@@ -53,47 +52,18 @@
                                 Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                                 IsChecked="False"
                                 AutomationProperties.Name="HamburgerToggleButton"/>
-
-                                           </StackPanel>
-
+                        </StackPanel>
                         <materialDesign:PopupBox
                             DockPanel.Dock="Right"
                             PlacementMode="BottomAndAlignRightEdges"
                             StaysOpen="False">
                             <StackPanel>
-                                <StackPanel
-                                    Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    Margin="10">
-                                    <TextBlock
-                                        Text="Light"
-                                        Margin="0 0 10 0"/>
-                                    <ToggleButton
-                                        x:Name="DarkModeToggleButton"
-                                       />
-                                    <TextBlock
-                                        Text="Dark"
-                                        Margin="10 0 0 0"/>
-                                </StackPanel>
-
-                                <Separator/>
+                     
+                        
 
                                 <Button
-                                    Content="Hello World"
-                                   />
-
-                                <Button
-                                    Content="Nice Popup"
-                                   />
-
-                                <Button
-                                    Content="Can't Touch This"
-                                    IsEnabled="False"/>
-
-                                <Separator/>
-
-                                <Button
-                                    Content="Goodbye"
+                                   cal:Message.Attach="Close()" 
+                                    Content="Close"
                                     />
                             </StackPanel>
                         </materialDesign:PopupBox>

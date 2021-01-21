@@ -33,8 +33,14 @@ namespace PosTest.ViewModels.Settings
         }
         public SettingsViewModel()
         {
-            SettingItems = new ObservableCollection<SettingsItemBase>(Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(SettingsItemBase))).ToList().Select(t=> (SettingsItemBase)Activator.CreateInstance(t)).ToList());
+            SettingItems = new ObservableCollection<SettingsItemBase>(Assembly.GetExecutingAssembly().GetTypes().
+                Where(x => x.IsSubclassOf(typeof(SettingsItemBase))).ToList()
+                .Select(t=> (SettingsItemBase)Activator.CreateInstance(t)).ToList());
         }
-
+        public void  Close() {
+            LoginViewModel loginvm = new LoginViewModel();
+            loginvm.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+        }
     }
 }
