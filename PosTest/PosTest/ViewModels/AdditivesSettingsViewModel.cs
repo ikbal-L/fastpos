@@ -2,6 +2,7 @@
 using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using PosTest.Helpers;
+using PosTest.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
@@ -27,9 +29,13 @@ namespace PosTest.ViewModels
         private bool _isEditing;
         private Additive _clipBoardAdditive;
         private Additive _additiveToMove;
+        private bool _isDialogOpen;
+        private INotifyPropertyChanged _dialogViewModel;
+        private WarningViewModel _warningViewModel;
 
         public AdditivesSettingsViewModel(/*IAdditiveService additiveService,*/ int additivePageSize)
         {
+            IsDialogOpen = false;
             //_additiveService = additiveService;
             _additivePageSize = additivePageSize;
             
@@ -77,6 +83,32 @@ namespace PosTest.ViewModels
         {
             get => _isEditing;
             set => Set(ref _isEditing, value);
+        }
+
+        public bool IsDialogOpen
+        {
+            get => _isDialogOpen;
+            set => Set(ref _isDialogOpen, value);
+        }
+
+        public INotifyPropertyChanged DialogViewModel
+        {
+            get => _dialogViewModel;
+            set
+            {
+                _dialogViewModel = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public WarningViewModel WarningViewModel
+        {
+            get => _warningViewModel;
+            set
+            {
+                _warningViewModel = value;
+                NotifyOfPropertyChange();
+            }
         }
 
         private void PopulateAdditivesPage()
@@ -245,34 +277,51 @@ namespace PosTest.ViewModels
 
         public void DeleteAdditive()
         {
-            if (SelectedAdditive?.Id==null)
+            if (SelectedAdditive == null)
             {
-                ToastNotification.Notify("Select an Additive to delete first ",NotificationType.Warning);
+                return;
+            }
+
+            WarningViewModel = new WarningViewModel("Are you sure to delete this Order?", "Check", "Ok", "Close", "No",
+                (o) => DeleteAdditiveAction(o), this, () => IsDialogOpen = false);
+            DialogViewModel = WarningViewModel;
+            IsDialogOpen = true;
+
+
+        }
+
+        public void DeleteAdditiveAction(object param)
+        {
+
+            if (SelectedAdditive?.Id == null)
+            {
+                ToastNotification.Notify("Select an Additive to delete first ", NotificationType.Warning);
                 return;
             }
 
             var selectedAdditiveId = (long)SelectedAdditive.Id;
-            
+
             var additiveToDelete = SelectedAdditive;
-            
-            
+
+
             //additiveToDelete.Rank = null;
-            
+
 
             if (StateManager.Delete(additiveToDelete))
             {
                 //Additives.Remove(SelectedAdditive);
                 var index = Additives.IndexOf(additiveToDelete);
-                Additives[index] = new Additive(){Rank = additiveToDelete.Rank};
+                Additives[index] = new Additive() { Rank = additiveToDelete.Rank };
                 additiveToDelete = null;
                 SelectedAdditive = null;
-                ToastNotification.Notify("Additive was deleted successfully",NotificationType.Success);
+                ToastNotification.Notify("Additive was deleted successfully", NotificationType.Success);
 
             }
             else
             {
-                ToastNotification.Notify("Something happened",NotificationType.Error);
+                ToastNotification.Notify("Something happened", NotificationType.Error);
             }
+            IsDialogOpen = false;
         }
   
         public void BackToLogin()
