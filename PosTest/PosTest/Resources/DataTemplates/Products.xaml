@@ -171,6 +171,8 @@
     <DataTemplate x:Uid="DataTemplate_3" DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
         <StackPanel  x:Uid="AdditiveTemplate" Orientation="Vertical"  x:Name="AdditiveTemplate">
             <Border x:Uid="AdditiveSettingsClick" x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1"
+                    cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
+
                     caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]" >
                 <StackPanel x:Uid="StackPanel_3" >
                     <DockPanel x:Uid="DockPanel_4" Height="70" Width="100" Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}"  >
