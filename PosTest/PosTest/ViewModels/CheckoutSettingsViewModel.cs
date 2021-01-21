@@ -1165,8 +1165,14 @@ namespace PosTest.ViewModels
             }
         }
 
-        public void EditProduct()
+        public void EditProduct(bool callFromCreate = false)
         {
+            if (!callFromCreate && SelectedProduct.Id == null)
+            {
+                ToastNotification.Notify("There is no Product to edit, select a valid cell!");
+                return;
+            }
+
             IsCategory = false;
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
             this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct);
@@ -1176,13 +1182,48 @@ namespace PosTest.ViewModels
             IsFlipped = true;
         }
 
-        public void EditCategory()
+        public void CreateProduct()
         {
+            if (SelectedProduct == null)
+            {
+                return;
+            }
+
+            if (SelectedProduct.Id!= null)
+            {
+                ToastNotification.Notify("Select an empty cell to create a new Product");
+                return;
+            }
+            EditProduct(true);
+        }
+
+        public void EditCategory(bool callFromCreate = false)
+        {
+            if (!callFromCreate&& SelectedCategory.Id == null)
+            {
+                ToastNotification.Notify("There is no category to edit, select a valid cell!");
+                return;
+            }
             IsCategory = true;
             this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory);
             EditCategoryViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
             
             IsFlipped = true;
+        }
+
+        public void CreateCategory()
+        {
+            if (SelectedCategory== null)
+            {
+                return;
+            }
+
+            if (SelectedCategory.Id != null)
+            {
+                ToastNotification.Notify("Select an empty cell to create a new Category");
+                return;
+            }
+            EditCategory(true);
         }
 
         public void SavedProduct()

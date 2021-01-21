@@ -334,38 +334,46 @@
                                 <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_3" Mode="PrimaryMid" Grid.Row="1">
                                     <TextBlock x:Uid="TextBlock_9" Margin="16">Gestion Du Menu Produits</TextBlock>
                                 </materialdesign:ColorZone>
-                                 
+
                                 <Button x:Uid="Button_7" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 10 -20"
-                                            caliburn:Message.Attach="[Event Click] = [Action EditProduct()]"
-                                            >
+                                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                        Grid.Row="0" Margin="0 0 10 -20"
+                                        caliburn:Message.Attach="[Event Click] = [Action CreateProduct()]"
+                                >
+                                    <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="Plus" Height="22" Width="22" />
+                                </Button>
+
+                                <Button x:Uid="Button_7" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                        Grid.Row="0" Margin="0 0 60 -20"
+                                        caliburn:Message.Attach="[Event Click] = [Action EditProduct(false)]"
+                                >
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="Edit" Height="22" Width="22" />
                                 </Button>
                                 <Button x:Uid="MoveButton" x:Name="MoveButton"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 caliburn:Message.Attach="[Event Click] = [Action MoveProductTo()]"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 60 -20"
+                                Grid.Row="0" Margin="0 0 110 -20"
                                 Tag="{Binding ProductToMove}">
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Kind="ArrowExpandAll" Height="22" Width="22" />
                                 </Button>
                                 <Button x:Uid="Button_8" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 110 -20">
+                                Grid.Row="0" Margin="0 0 160 -20">
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_5" Kind="ContentPaste" Height="22" Width="22" />
                                 </Button>
                                 <Button x:Uid="Button_9" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 160 -20">
+                                Grid.Row="0" Margin="0 0 210 -20">
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_6" Kind="ContentCopy" Height="22" Width="22" />
                                 </Button>
                                 <Button x:Uid="Button_10" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                 caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Grid.Row="0" Margin="0 0 210 -20">
+                                Grid.Row="0" Margin="0 0 260 -20">
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_7" Kind="Delete" Height="22" Width="22" />
                                 </Button>
                             </Grid>
@@ -438,13 +446,14 @@
                                 </materialdesign:ColorZone>
 
                                 <Button x:Uid="Button_11" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 10 -20">
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 10 -20"
+                        caliburn:Message.Attach="[Event Click] = [Action CreateCategory()]">
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_8" Kind="Plus" Height="22" Width="22" />
                                 </Button>
 
                                 <Button x:Uid="Button_12" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                         VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 60 -20"
-                        caliburn:Message.Attach="[Event Click] = [Action EditCategory()]">
+                        caliburn:Message.Attach="[Event Click] = [Action EditCategory(false)]">
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_9" Kind="Edit" Height="22" Width="22" />
                                 </Button>
 
