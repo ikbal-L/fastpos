@@ -6,7 +6,10 @@
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:PosTest.Converters"
-             mc:Ignorable="d" 
+             xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:cal="http://www.caliburnproject.org"
+
+    mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:TypeToIntegerIndexValueConverter x:Key="TypeToIntegerIndexValueConverter"></converters:TypeToIntegerIndexValueConverter>
@@ -24,6 +27,7 @@
                             ItemsSource="{Binding Deliverymans}"
                              Margin="5 20 0 0"
                              Height="300"
+                             SelectedItem="{Binding SelectedDeliveryman,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                              HorizontalContentAlignment="Stretch"
                              AlternationCount="2"
                              >
@@ -44,65 +48,22 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
-                        <Border  BorderThickness="0 0 0 0"
-                                        BorderBrush="CornflowerBlue">
-                            <TextBox  Foreground="#26ff26"
-                                             Text="{Binding NumericZone, StringFormat='{}{0:0,0.00}'}"
-                                             FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
-                                             HorizontalContentAlignment="Right">
-                                <TextBox.Style>
-                                    <Style x:Uid="Style_4" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                                        <Setter x:Uid="Setter_7" Property="Visibility" Value="Collapsed" />
-                                        <Style.Triggers>
-                                            <DataTrigger x:Uid="DataTrigger_2" Binding="{Binding ReturnedAmount}" Value="{x:Null}">
-                                                <Setter x:Uid="Setter_8" Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </Border>
-                        <Border x:Uid="Border_5" Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
-                                        BorderBrush="CornflowerBlue">
-                            <TextBox x:Uid="TextBox_2" Foreground="#26ff26" IsReadOnly="True"
-                                             Text="{Binding ReturnedAmount}"
-                                             FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
-                                             HorizontalContentAlignment="Right" />
-                        </Border>
-
-                        <Border x:Uid="Border_6" Grid.Row="0" Grid.Column="1" BorderThickness="0 0 0 0"
-                                        BorderBrush="CornflowerBlue">
-                            <TextBlock
-                                        x:Uid="TextBlock_6" Text="{Binding GivenAmount,StringFormat='{}{0:0}.00'}"
-                                        Visibility="{Binding GivenAmount, Converter={StaticResource NumberToVisibilityHidden}}"
-                                        FontSize="26"
-                                        Foreground="#26ff26" FontFamily="{StaticResource DigitalFontFamily}"
-                                        HorizontalAlignment="Right" />
-                        </Border>
-
-                        <Grid x:Uid="Grid_10" Grid.RowSpan="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition x:Uid="RowDefinition_22" Height="*" />
-                                <RowDefinition x:Uid="RowDefinition_23" Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <DockPanel x:Uid="DockPanel_3">
-                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_11" Kind="CoinOutline" Width="40" Height="40" Padding="0"
+                        <DockPanel Grid.Column="0" Margin="0 0 0 5" Grid.Row="0">
+                            <materialdesign:PackIcon  Kind="CoinOutline" Width="40" Height="40" Padding="0"
                                                                  Foreground="#26ff26" />
-                                <TextBlock x:Uid="TextBlock_7" Foreground="#26ff26" TextAlignment="Right"
+                            <TextBlock  Foreground="#26ff26" TextAlignment="Right"
                                                    FontFamily="{StaticResource DigitalFontFamily}"
                                                    FontSize="32" Padding="0 5 0 0"
-                                                   Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
+                                                   Text="{Binding Total, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
                                                     />
-                            </DockPanel>
-                            <DockPanel x:Uid="DockPanel_4" Grid.Row="2" Grid.Column="3">
-                              
-                                <TextBlock x:Uid="TextBlock_8" Foreground="#26ff26" FontSize="28" DockPanel.Dock="Right"
+                        </DockPanel>
+                        <DockPanel  Grid.Row="1" Grid.Column="1" Margin="0 0 10 10">
+
+                            <TextBlock  Foreground="#26ff26" FontSize="28" DockPanel.Dock="Right"
                                                    TextAlignment="Right"
                                                    FontFamily="{StaticResource DigitalFontFamily}"
-                                                   Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,0.00}', Mode=OneWay}" />
-                            </DockPanel>
-                        </Grid>
+                                                   Text="{Binding NumericZone, StringFormat='{}{0:#,0.00}', Mode=OneWay}" />
+                        </DockPanel>
                     </Grid>
 
 
@@ -134,18 +95,18 @@
                                 <RowDefinition Height="60"/>
                                 <RowDefinition Height="60"/>
                         </Grid.RowDefinitions>
-                        <Button Style="{StaticResource ButtonStyle18}" Margin="1" Content="1" Grid.Column="0" Grid.Row="0"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="2" Grid.Column="1" Grid.Row="0"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="3" Grid.Column="2" Grid.Row="0"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="4" Grid.Column="0" Grid.Row="1"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="5" Grid.Column="1" Grid.Row="1"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="6" Grid.Column="2" Grid.Row="1"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="7" Grid.Column="0" Grid.Row="2"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="8" Grid.Column="1" Grid.Row="2"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="9" Grid.Column="2" Grid.Row="2"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="%" Grid.Column="0" Grid.Row="3"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="0" Grid.Column="1" Grid.Row="3"/>
-                            <Button Style="{StaticResource ButtonStyle18}" Margin="2" Content="." Grid.Column="2" Grid.Row="3"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('1')]" Style="{StaticResource ButtonStyle18}" Margin="1" Content="1" Grid.Column="0" Grid.Row="0"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('2')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="2" Grid.Column="1" Grid.Row="0"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('3')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="3" Grid.Column="2" Grid.Row="0"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('4')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="4" Grid.Column="0" Grid.Row="1"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('5')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="5" Grid.Column="1" Grid.Row="1"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="6" Grid.Column="2" Grid.Row="1"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('7')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="7" Grid.Column="0" Grid.Row="2"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('8')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="8" Grid.Column="1" Grid.Row="2"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('9')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="9" Grid.Column="2" Grid.Row="2"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('%')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="%" Grid.Column="0" Grid.Row="3"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('0')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="0" Grid.Column="1" Grid.Row="3"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]" Style="{StaticResource ButtonStyle18}" Margin="2" Content="." Grid.Column="2" Grid.Row="3"/>
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
@@ -153,54 +114,219 @@
                             <RowDefinition Height="auto"/>
                             
                         </Grid.RowDefinitions>
-                            <Button Width="150" Style="{StaticResource ButtonStyle18}" Grid.Row="0" Margin="2" Content="{materialdesign:PackIcon Cash,40}" />
-                            <Button Height="50" Style="{StaticResource ButtonStyle18}" Grid.Row="1" Margin="2" Content="{materialdesign:PackIcon ArrowLeftCircleOutline,30}"/>
+                            <Button  caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Payment')]" Width="150" Style="{StaticResource ButtonStyle18}" Grid.Row="0" Margin="2" Content="{materialdesign:PackIcon Cash,40}" />
+                            <Button caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Backspase')]" Height="50" Style="{StaticResource ButtonStyle18}" Grid.Row="1" Margin="2" Content="{materialdesign:PackIcon BackspaceOutline,30}"/>
 
                     </Grid>
                 </Grid>
                 <StackPanel Grid.Row="1">
-                        <Button Height="50" Style="{StaticResource ButtonStyle18}" Content="{materialdesign:PackIcon ArrowLeft,30}" />
+                        <Button caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('BackOut')]" Height="50" Style="{StaticResource ButtonStyle18}" Content="{materialdesign:PackIcon ArrowLeft,30}" />
                 </StackPanel>
             </Grid>
             </StackPanel>
         </StackPanel>
-        <TabControl Grid.Column="1" Margin="5" Style="{StaticResource MaterialDesignTabControl}" SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
+        <TabControl Grid.Column="1"  Style="{StaticResource MaterialDesignTabControl}" SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
                     >
-                <TabItem   Header="Command Non Poye" Tag="{Binding AllCategories}" TabIndex="0">
-                  <ScrollViewer Margin="0 0 0 40"  BorderThickness="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
-                    <ListBox
-                            ItemsSource="{Binding Deliverymans}"
+            <TabItem   Header="Paid Orders" Tag="{Binding AllCategories}" TabIndex="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness=" 0 0 0 1" Padding="0 10 10 0" BorderBrush="Gray">
+                        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Grid.Row="0" Margin="10 0 0 5">
+                            
+                                <TextBox Width="250" x:Name="searchInput" BorderBrush="Black" Height="30.4" materialdesign:HintAssist.Hint="Search"/>
+                         
+                            <Button BorderThickness="0"  Background="Transparent">
+                                    <materialdesign:PackIcon Kind="ArrowCollapseLeft" Height="15"  Width="15" />
+                                </Button>
+                                <Button BorderThickness="0" Background="Transparent">
+                                    <materialdesign:PackIcon Kind="ArrowCollapseRight" Height="15"  Width="15" />
+                                </Button>
+                        </StackPanel>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" Margin="0 0 0 40"  BorderThickness="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
+                        <ListBox
+                        Cursor="Hand"
+                            ItemsSource="{Binding Orders}"
                         >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                    <StackPanel Width="650"   >
-                                    <Border  HorizontalAlignment="Center" BorderBrush="Gray" BorderThickness="1" Padding="20 10 50 10">
-                                        <Grid >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="Commande 1"/>
-                                        <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="Waiter 1 "/>
-                                        <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="12/12/2021"/>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Focusable" Value="false"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="650" cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
+                                                    caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action ViewOrderItems($this)]">
+                                        <Border
+                                        Width="600"
+                                     
+                                         BorderBrush="Gray" BorderThickness="1" Padding="20 10 50 10">
+                                            <StackPanel>
+                                                <Grid >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock  >
+                                                        <Run>Order</Run>
+                                                        <Run Text="{Binding Id}"> </Run>
+                                                        </TextBlock>
+                                                        <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding Waiter.Name}"/>
+                                                        <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding OrderTime.Date,StringFormat=dd-MM-yyyy}" />
+                                                    </StackPanel>
+                                                    <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="20 0 0 0 " Orientation="Horizontal">
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1500"/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="+"/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1000"/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="="/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="-500"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <StackPanel Margin="0 10 0 0"
+                                                        Visibility="{Binding ProductsVisibility,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource boolToVisibilityConverter}}"
+                                                        >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Width="300" FontWeight="Medium" Margin="0 0 20 0" Text="Name"/>
+                                                        <TextBlock Width="50" FontWeight="Medium"  TextAlignment="Center" Margin="0 0 20 0"  Text=" Quantity"/>
+                                                        <TextBlock Width="50"  FontWeight="Medium"  TextAlignment="Right" Text="Total"/>
+                                                    </StackPanel>
+                                                    <ListBox 
+                                                 ItemsSource="{Binding OrderItems}"
+                                                 HorizontalContentAlignment="Stretch"
+                                                 AlternationCount="2">
+                                                        <ListBox.ItemContainerStyle>
+                                                            <Style TargetType="ListBoxItem">
+                                                                <Setter Property="Focusable" Value="false"/>
+                                                            </Style>
+                                                        </ListBox.ItemContainerStyle>
+                                                        <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Width="300" Margin="0 0 20 10" Text="{Binding ProductName}"/>
+                                                                    <TextBlock Width="50" TextAlignment="Center" Margin="0 0 20 0"  Text="{Binding Quantity}"/>
+                                                                    <TextBlock Width="50" TextAlignment="Right"  Text="{Binding Total}"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                    </ListBox>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
                                     </StackPanel>
-                                    <StackPanel Grid.Column="1"  Margin="20 0 0 0 " Orientation="Horizontal">
-                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1500"/>
-                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="+"/>
-                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1000"/>
-                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="="/>
-                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="-500"/>
-                                    </StackPanel>
-                                    </Grid>
-                                    </Border>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>     
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </ScrollViewer>
-                </TabItem>
-                <TabItem  Header="Historique" TabIndex="1">
+                </Grid>
+            </TabItem>
+            <TabItem   Header="All Orders" Tag="{Binding AllCategories}" TabIndex="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness=" 0 0 0 1" Padding="0 10 10 0" BorderBrush="Gray">
+                        <StackPanel Grid.Row="0" Margin="10 0 0 0">
+                            <StackPanel>
+                                <TextBlock Text="Command Non Poye"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button BorderThickness="0"  Background="Transparent">
+                                    <materialdesign:PackIcon Kind="ArrowCollapseLeft" Height="15"  Width="15" />
+                                </Button>
+                                <Button BorderThickness="0" Background="Transparent">
+                                    <materialdesign:PackIcon Kind="ArrowCollapseRight" Height="15"  Width="15" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" Margin="0 0 0 40"  BorderThickness="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
+                        <ListBox
+                        Cursor="Hand"
+                            ItemsSource="{Binding Orders}"
+                        >
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Focusable" Value="false"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="650" cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
+                                                    caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action ViewOrderItems($this)]">
+                                        <Border
+                                        Width="600"
+                                     
+                                        HorizontalAlignment="Center" BorderBrush="Gray" BorderThickness="1" Padding="20 10 50 10">
+                                            <StackPanel>
+                                                <Grid
+                                               
+                                                >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock  >
+                                                        <Run>Order</Run>
+                                                        <Run Text="{Binding Id}"> </Run>
+                                                        </TextBlock>
+                                                        <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding Waiter.Name}"/>
+                                                        <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding OrderTime.Date,StringFormat=dd-MM-yyyy}" />
+                                                    </StackPanel>
+                                                    <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="20 0 0 0 " Orientation="Horizontal">
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1500"/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="+"/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1000"/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="="/>
+                                                        <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="-500"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <StackPanel Margin="0 10 0 0"
+                                                        Visibility="{Binding ProductsVisibility,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource boolToVisibilityConverter}}"
+                                                        >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Width="300" FontWeight="Medium" Margin="0 0 20 0" Text="Name"/>
+                                                        <TextBlock Width="50" FontWeight="Medium"  Margin="0 0 20 0"  Text=" Quantity"/>
+                                                        <TextBlock Width="50"  FontWeight="Medium"  TextAlignment="Right" Text="Total"/>
+                                                    </StackPanel>
+                                                    <ListBox 
+                                                 ItemsSource="{Binding OrderItems}"
+                                                 HorizontalContentAlignment="Stretch"
+                                                 AlternationCount="2"
+                                           >
+                                                        <ListBox.ItemContainerStyle>
+                                                            <Style TargetType="ListBoxItem">
+                                                                <Setter Property="Focusable" Value="false"/>
+                                                            </Style>
+                                                        </ListBox.ItemContainerStyle>
+                                                        <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Width="300" Margin="0 0 20 10" Text="{Binding ProductName}"/>
+                                                                    <TextBlock Width="50" Margin="0 0 20 0"  Text="{Binding Quantity}"/>
+                                                                    <TextBlock Width="50" TextAlignment="Right"  Text="{Binding Total}"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                    </ListBox>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem  Header="Historique" TabIndex="1">
                     <ScrollViewer  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                      
                     </ScrollViewer>

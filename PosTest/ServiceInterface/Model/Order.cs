@@ -337,7 +337,16 @@ namespace ServiceInterface.Model
         public Category ShownCategory { get; set; }
         public BindableCollection<Additive> ShownAdditivesPage { get; set; } = new BindableCollection<Additive>();
 
-        public bool ProductsVisibility { get; set; }
+        private bool _ProductsVisibility;
+
+        public bool ProductsVisibility
+        {
+            get { return _ProductsVisibility; }
+            set { _ProductsVisibility = value;
+                NotifyOfPropertyChange(nameof(ProductsVisibility));
+            }
+        }
+
         public bool AdditivesVisibility { get; set; }
 
         public OrderItem AddOrderItem(Product product, decimal unitPrice, bool setSelected, float quantity = 1,
