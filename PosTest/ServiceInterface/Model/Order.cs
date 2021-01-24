@@ -64,9 +64,13 @@ namespace ServiceInterface.Model
 
         [DataMember] public string BuyerId { get; set; }
 
-        [DataMember] 
+        [DataMember]
         [Required]
-        public DateTime OrderTime { get; set; }
+        public DateTime OrderTime
+        {
+            get => _orderTime;
+            set => Set(ref _orderTime, value);
+        }
 
         public Deliveryman Deliveryman
         {
@@ -134,12 +138,12 @@ namespace ServiceInterface.Model
                     OrderStates = new BindableCollection<OrderStateElement>();
                 }
 
-                OrderStates.Add(new OrderStateElement
-                {
-                    State = (OrderState) _state,
-                    StateTime = DateTime.Now,
-                    // SessionId = AuthProvider.Instance.SessionId
-                });
+                //OrderStates.Add(new OrderStateElement
+                //{
+                //    State = (OrderState)_state,
+                //    StateTime = DateTime.Now,
+                //    // SessionId = AuthProvider.Instance.SessionId
+                //});
                 NotifyOfPropertyChange();
             }
         }
@@ -318,6 +322,7 @@ namespace ServiceInterface.Model
         }
 
         private Customer _customer;
+        private DateTime _orderTime;
 
         [DataMember] public long? CustomerId { get; set; }
 
