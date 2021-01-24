@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:PosTest.SL.Controls"
              xmlns:local="clr-namespace:PosTest.SL.Controls"
+             xmlns:controls1="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
              mc:Ignorable="d" 
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
              x:Name="parent"
@@ -72,6 +73,7 @@
             <SolidColorBrush x:Uid="SolidColorBrush_59" Color="#FF7D4D99"/>
             <SolidColorBrush x:Uid="SolidColorBrush_60" Color="#FF533366"/>
         </x:Array>
+       
 
     </FrameworkElement.Resources>
     <ScrollViewer x:Uid="ScrollViewer_1" HorizontalScrollBarVisibility="Disabled" DataContext="{Binding ElementName=parent}">
@@ -89,7 +91,25 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate x:Uid="DataTemplate_1">
-                    <Border  x:Uid="Border_1" Height="30" Width="30"  Margin="0" Style="{x:Null}" Background="{Binding}"> </Border>
+                    <Border  x:Uid="Border_1" Height="30" Width="30"  Margin="0" Background="{Binding}">
+                        <Border.Style>
+                            <Style>
+                                <Style.Triggers>
+                                   <DataTrigger Value="true">
+                                       <DataTrigger.Binding>
+                                           <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                               <Binding></Binding>
+                                               <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="SelectedItem"></Binding>
+                                           </MultiBinding>
+                                       </DataTrigger.Binding>
+                                       <DataTrigger.Setters>
+                                           <Setter Property="Border.CornerRadius" Value="10"></Setter>
+                                       </DataTrigger.Setters>
+                                   </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

@@ -222,16 +222,12 @@
                                       AllowDotkey="True"
                                       AllowPercentKey="{Binding IsPercentKeyAllowed}"/>
 
-                <RadioButton x:Uid="RadioButton_1" Grid.Column="3" Grid.Row="1" Content="{materialdesign:PackIcon Kind=CoinOutline, Size=30}" 
-                                 GroupName="action"
-                                 Style="{StaticResource ButtonStyle18radio}"
-                                 IsChecked="{Binding IsTotalPriceChecked}"
+                <Button Grid.Column="3" Grid.Row="1" Content="{materialdesign:PackIcon Kind=CoinOutline, Size=30}" 
+                        Style="{StaticResource ButtonStyle18radio}"
                                  cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]" />
 
-                <RadioButton x:Uid="RadioButton_2" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2"
-                                 GroupName="action"
-                                 Style="{StaticResource ButtonStyle18radio}"
-                                 IsChecked="{Binding IsPayementChecked}"
+                <Button  Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" 
+                         Style="{StaticResource ButtonStyle18radio}"
                                  cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"
                                  FontSize="15"
                                  >
@@ -239,7 +235,7 @@
                         <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Kind="CashRegister" Width="30" Height="30" HorizontalAlignment="Center"/>
                         <TextBlock x:Uid="TextBlock_3" VerticalAlignment="Center" >Payement</TextBlock>
                     </StackPanel>
-                </RadioButton>
+                </Button>
 
                 <Button x:Uid="Button_2" Grid.Column="3" Grid.Row="4"
                             Content="{materialdesign:PackIcon  Kind=BackspaceOutline, Size=30}"
