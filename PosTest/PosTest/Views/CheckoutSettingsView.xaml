@@ -318,7 +318,7 @@
                                  caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                            [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
                                                            [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];
-                                                             [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
+                                                           [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
                                  Tag="{Binding ClipboardProduct}">
                                     <ListBox.ItemContainerStyle>
                                         <Style x:Uid="Style_7" TargetType="ListBoxItem">

@@ -69,8 +69,10 @@ namespace ServiceInterface.StaticValues
             public static string GetTable = TableApiEndpoint + "/get/";
             public static string SaveTable = TableApiEndpoint + "/save";
             public static string GetAllTables = TableApiEndpoint + "/getall";
-        } 
-        
+            public static string GetByStatePage = OrderApiEndpoint + "/getByStatePage";
+            public static string GetAllByDeliveryManPage = OrderApiEndpoint + "/getAllbydeliverymanPage";
+        }
+
         public static class DelivereyUrl
         {
             static string hostname = "http://192.168.1.7:5000/";

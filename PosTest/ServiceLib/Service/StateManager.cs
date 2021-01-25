@@ -298,5 +298,8 @@ namespace ServiceLib.Service
         {
             Refresh<TState, long>();
         }
+        public static TService getService<TState, TService>() {
+            return (TService) Service[typeof(TState)];
+        }
     }
 }

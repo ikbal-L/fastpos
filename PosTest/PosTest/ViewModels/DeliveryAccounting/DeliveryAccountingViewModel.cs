@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
 using PosTest.Helpers;
+using PosTest.ViewModels.DeliveryAccounting;
+using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using System;
 using System.Collections.Generic;
@@ -9,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PosTest.ViewModels
+namespace PosTest.ViewModels.DeliveryAccounting
 {
    public class DeliveryAccountingViewModel: Screen
     {
@@ -23,7 +26,6 @@ namespace PosTest.ViewModels
             }
         }
         private string _NumericZone ;
-
         public string NumericZone
         {
             get { return _NumericZone; }
@@ -32,29 +34,27 @@ namespace PosTest.ViewModels
                 NotifyOfPropertyChange(nameof(NumericZone));
             }
         }
-        private Order _CurrentOrder;
-
-
-        public Order CurrentOrder
-        {
-            get { return _CurrentOrder; }
-            set { _CurrentOrder = value;
-                NotifyOfPropertyChange(nameof(CurrentOrder));
-            }
-        }
+ 
+        private decimal _total;
 
         public decimal Total
         {
-            get { return Orders?.Sum(x => x.Total) ?? 0;  }
-            
+            get { return _total; }
+            set { _total = value;
+                NotifyOfPropertyChange(nameof(Total));
+            }
         }
 
+        private EnumActiveTab _ActiveTab= EnumActiveTab.NotPaidOrders;
 
-        public ObservableCollection<Order> Orders
+        public EnumActiveTab ActiveTab
         {
-            get { return new ObservableCollection<Order>(StateManager.Get<Order>()); }
-            
+            get { return _ActiveTab; }
+            set { _ActiveTab = value;
+                NotifyOfPropertyChange(nameof(ActiveTab));
+            }
         }
+
         private Deliveryman _selectedDeliveryman;
 
         public Deliveryman SelectedDeliveryman
@@ -62,23 +62,40 @@ namespace PosTest.ViewModels
             get { return _selectedDeliveryman; }
             set { _selectedDeliveryman = value;
                 NotifyOfPropertyChange(nameof(SelectedDeliveryman));
-                NotifyOfPropertyChange(nameof(Total));
+                NotPaidOrdersViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
+                AllOrdersViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
+            }
+        }
+        private NotPaidOrdersViewModel _NotPaidOrdersViewModel;
+
+        public NotPaidOrdersViewModel NotPaidOrdersViewModel
+        {
+            get { return _NotPaidOrdersViewModel; }
+            set { _NotPaidOrdersViewModel = value;
+                NotifyOfPropertyChange(nameof(NotPaidOrdersViewModel));
+            }
+        }
+        private AllOrdersViewModel _AllOrdersViewModel;
+
+        public AllOrdersViewModel AllOrdersViewModel
+        {
+            get { return _AllOrdersViewModel; }
+            set { _AllOrdersViewModel = value; 
+                NotifyOfPropertyChange(nameof(AllOrdersViewModel));
             }
         }
 
         public  DeliveryAccountingViewModel() {
             StateManager.Fetch();
-            StateManager.Associate<Additive, Product>();
-            StateManager.Associate<Product, Category>();
-            StateManager.Associate<Order, Table>();
-            StateManager.Associate<Order, Product>();
-            StateManager.Associate<Order, Deliveryman>();
-            StateManager.Associate<Order, Waiter>();
-            StateManager.Associate<Order, Customer>();
             Deliverymans =  new ObservableCollection<Deliveryman>(StateManager.Get<Deliveryman>());
-            SelectedDeliveryman = Deliverymans.FirstOrDefault();
+            initialize();
         }
-
+        public  void initialize(){
+          Task.Run(()=> {
+              NotPaidOrdersViewModel = new NotPaidOrdersViewModel(this);
+              AllOrdersViewModel = new AllOrdersViewModel(this);
+          });
+        }
         public void NumericKeyboard(string number)
         {
             if (String.IsNullOrEmpty(number))
@@ -146,6 +163,9 @@ namespace PosTest.ViewModels
                     PayementAction();
                     break;
                 case ActionButton.BackOut:
+                    LoginViewModel loginvm = new LoginViewModel();
+                    loginvm.Parent = this.Parent;
+                    (this.Parent as Conductor<object>).ActivateItem(loginvm);
                     break;
 
              
@@ -154,17 +174,74 @@ namespace PosTest.ViewModels
 
         private void PayementAction()
         {
+            
+            var payedAmount = Convert.ToDecimal(NumericZone);
+            if (payedAmount < 0)
+            {
+                NumericZone = "";
+                return;
+            }
+
+            if (ActiveTab == EnumActiveTab.NotPaidOrders)
+            {
+                var listPaidOrder = new List<Order>();
+                foreach (var order in NotPaidOrdersViewModel.Orders)
+                {
+                    if (payedAmount == 0)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        order.GivenAmount = (order.Total > payedAmount) ? payedAmount : order.Total;
+                        payedAmount= (order.Total > payedAmount) ? 0 : payedAmount-order.Total;
+                        order.State = OrderState.Payed;
+                        listPaidOrder.Add(order);
+                    }
+
+                }
+              if(StateManager.Save<Order>(listPaidOrder))
+                {
+                    ToastNotification.Notify("save Success", NotificationType.Success);
+                    NumericZone = "";
+                    NotPaidOrdersViewModel.UpdateOrderNotPaid();
+                }
+                else
+                {
+                    ToastNotification.Notify("Error Save", NotificationType.Error);
+
+                }
+            }
+       
+        /*    
+            CurrentOrder.GivenAmount = payedAmount;
+            CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
+            CurrentOrder.State = OrderState.Payed;
+            NumericZone = "";
+            GivenAmount = CurrentOrder.GivenAmount;
+            ReturnedAmount = CurrentOrder.ReturnedAmount;
+            SaveCurrentOrder();
+            GivenAmount = 0;
+            ReturnedAmount = null;*/
         }
-       public void ViewOrderItems(Order order) {
-            order.ProductsVisibility = !order.ProductsVisibility;
-          //  NotifyOfPropertyChange(() => order.ProductsVisibility);
-        }
+ 
        public  enum ActionButton
         {
             Payment,
             Backspase,
             BackOut
         }
-    }
 
+    }
+   public enum PaginationAction
+    {
+        Next,
+        Previous
+    }
+    public enum EnumActiveTab
+    {
+        NotPaidOrders=0,
+        AllOrders=1,
+        
+    }
 }

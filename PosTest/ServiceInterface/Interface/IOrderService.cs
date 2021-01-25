@@ -15,6 +15,7 @@ namespace ServiceInterface.Interface
         int SaveTable(Table table ,out IEnumerable<string> errors);
 
         (int,IEnumerable<Table>) GeAllTables();
+
     }
 
 }

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PosTest.Views
+namespace PosTest.Views.DeliveryAccounting
 {
     /// <summary>
-    /// Interaction logic for DeliveryAccountingView.xaml
+    /// Interaction logic for NotPaidOrderView.xaml
     /// </summary>
-    public partial class DeliveryAccountingView : UserControl
+    public partial class AllOrdersView : TabItem
     {
-        public DeliveryAccountingView()
+        public AllOrdersView()
         {
             InitializeComponent();
         }

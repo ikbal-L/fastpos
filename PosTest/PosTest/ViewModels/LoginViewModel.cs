@@ -17,6 +17,7 @@ using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
 using PosTest.Helpers;
 using PosTest.ViewModels.Settings;
+using PosTest.ViewModels.DeliveryAccounting;
 
 namespace PosTest.ViewModels
 {

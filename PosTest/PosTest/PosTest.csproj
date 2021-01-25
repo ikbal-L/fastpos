@@ -235,6 +235,7 @@
     <Compile Include="Converters\SolidColorBrushToBrushConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\OrderStateEnumToBrushConverter.cs" />
+    <Compile Include="Converters\EnumToIntegerIndexValueConverter.cs" />
     <Compile Include="Converters\TypeToIntegerIndexValueConverter.cs" />
     <Compile Include="Enums\ActionButton.cs" />
     <Compile Include="Enums\ListedOrdersType.cs" />
@@ -273,7 +274,9 @@
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
-    <Compile Include="ViewModels\DeliveryAccountingViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryAccounting\DeliveryAccountingViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryAccounting\AllOrdersViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OpenTableViewModel.cs" />
@@ -312,8 +315,14 @@
     <Compile Include="Views\CheckoutView.xaml.cs">
       <DependentUpon>CheckoutView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DeliveryAccountingView.xaml.cs">
+    <Compile Include="Views\DeliveryAccounting\DeliveryAccountingView.xaml.cs">
       <DependentUpon>DeliveryAccountingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeliveryAccounting\AllOrdersView.xaml.cs">
+      <DependentUpon>AllOrdersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeliveryAccounting\NotPaidOrdersView.xaml.cs">
+      <DependentUpon>NotPaidOrdersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
@@ -538,7 +547,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DeliveryAccountingView.xaml">
+    <Page Include="Views\DeliveryAccounting\DeliveryAccountingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeliveryAccounting\AllOrdersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DeliveryAccounting\NotPaidOrdersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
