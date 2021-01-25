@@ -231,7 +231,9 @@
     <Compile Include="Converters\NumberToVisibilityConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\ListKindToVisibilityConverter.cs" />
+    <Compile Include="Converters\OrderItemAdditiveStateToIconValueConverter.cs" />
     <Compile Include="Converters\OrderItemObjectToVisibilityConverter.cs" />
+    <Compile Include="Converters\OrderItemStateToIconConverter.cs" />
     <Compile Include="Converters\SolidColorBrushToBrushConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\OrderStateEnumToBrushConverter.cs" />
@@ -289,6 +291,7 @@
     <Compile Include="ViewModels\Settings\PrintSettingsViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
+    <Compile Include="ViewModels\SubViewModel\CustomerDetailViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\EditCategoryViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\EditProductViewModel.cs" />
@@ -352,6 +355,9 @@
     </Compile>
     <Compile Include="Views\CustomerView.xaml.cs">
       <DependentUpon>CustomerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubViews\CustomerDetailView.xaml.cs">
+      <DependentUpon>CustomerDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\CustomerEditView.xaml.cs">
       <DependentUpon>CustomerEditView.xaml</DependentUpon>
@@ -587,6 +593,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CustomerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubViews\CustomerDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

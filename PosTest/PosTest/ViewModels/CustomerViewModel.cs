@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using PosTest.Helpers;
+using PosTest.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
 using ServiceLib.Service;
 
@@ -22,6 +23,8 @@ namespace PosTest.ViewModels
         private ICollectionView _CustomerView;
         private string _FilterString;
         private Customer _selectedCustomer;
+        private bool _isEditing;
+        private CustomerDetailViewModel _customerDetailViewModel;
         public CheckoutViewModel ParentChechoutVM { get; set; }
       
         public CustomerViewModel(CheckoutViewModel checkoutViewModel/*,ICustomerService customerService*/)
@@ -32,6 +35,7 @@ namespace PosTest.ViewModels
             _CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers);
             _CustomerView.Filter = CustomerFilter;
             SelectCustomerCommand = new DelegateCommandBase(SelectCustomer,CanSelectCustomer);
+            IsEditing = false;
 
         }
 
@@ -166,6 +170,29 @@ namespace PosTest.ViewModels
             string name = Regex.Replace(FilterString, @"\D", "");
 
             Customer customer = new Customer { Name = name, Mobile = mobile };
+            IsEditing = true;
+            CustomerDetailViewModel = new CustomerDetailViewModel(customer);
+            CustomerDetailViewModel.CommandExecuted += CustomerDetailViewModel_CommandExecuted;
+        }
+
+        private void CustomerDetailViewModel_CommandExecuted(object sender, CommandExecutedEventArgs e)
+        {
+            if (e.CommandName.ToLowerInvariant() == "save"|| e.CommandName.ToLowerInvariant() == "cancel")
+            {
+                IsEditing = false;
+            }
+        }
+
+        public CustomerDetailViewModel CustomerDetailViewModel
+        {
+            get => _customerDetailViewModel;
+            set => Set(ref _customerDetailViewModel, value);
+        }
+
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set => Set(ref _isEditing, value);
         }
     }
 }

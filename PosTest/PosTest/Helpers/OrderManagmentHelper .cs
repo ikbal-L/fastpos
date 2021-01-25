@@ -72,18 +72,20 @@ namespace PosTest.Helpers
             var changedOrderItems = new List<OrderItem>();
             var orderItems = order.OrderItems
                 .Where(oi =>
-                    oi.State == OrderItemState.IncreasedQuantity || oi.State == OrderItemState.DecreasedQuantity);
+                    (oi.State == OrderItemState.IncreasedQuantity || oi.State == OrderItemState.DecreasedQuantity)&& oi.TimeStamp == recent);
             if (orderItems != null)
             {
                 foreach (var orderItem in orderItems)
                 {
                     var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
-                    changedOrderItems.Add(new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.UnitPrice, orderItem.Order));
+                    var item = new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.UnitPrice, orderItem.Order){State = orderItem.State};
+                    changedOrderItems.Add(item);
                 } 
             }
 
-            changedOrderItems = changedOrderItems.Concat(order.OrderItems.Where(oi =>
-                oi.TimeStamp == recent && (oi.State == OrderItemState.Removed || oi.State == OrderItemState.Added))
+            var addedOrRemovedItems = order.OrderItems.Where(oi =>
+                oi.TimeStamp == recent && (oi.State == OrderItemState.Removed || oi.State == OrderItemState.Added));
+            changedOrderItems = changedOrderItems.Concat(addedOrRemovedItems
             ).ToList();
             return  new Order(){OrderItems = new BindableCollection<OrderItem>(changedOrderItems)};
         }

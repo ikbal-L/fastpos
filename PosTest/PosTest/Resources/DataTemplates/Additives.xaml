@@ -7,7 +7,7 @@
 
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
         <StackPanel  x:Uid="AddivieTemplate" Orientation="Vertical"  x:Name="AddivieTemplate">
-            <Button x:Uid="ProductClick" x:Name="ProductClick" Height="55" Width="100"  
+            <Button x:Uid="ProductClick" x:Name="ProductClick" Height="72" Width="190"  
                     Background="{Binding Background}"
                     Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
                 <i:Interaction.Triggers>

@@ -22,7 +22,7 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DockPanel x:Uid="DockPanel_1" Height="74" Width="106" Background="{Binding Background}" >
+                <DockPanel x:Uid="DockPanel_1" Height="90" Width="190" Background="{Binding Background}" >
                     <Border x:Uid="Border_1" DockPanel.Dock="Top" Height="40">
                         <TextBlock x:Uid="TextBlock_1" Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">

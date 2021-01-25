@@ -294,7 +294,7 @@
         </TabControl>
 
         <ScrollViewer x:Uid="ScrollViewer_3" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="3.3">
-            <materialdesign:Flipper x:Uid="materialdesign:Flipper_1" IsFlipped="{Binding IsFlipped}" Style="{StaticResource MaterialDesignCardFlipper}">
+            <materialdesign:Flipper  x:Uid="materialdesign:Flipper_1" IsFlipped="{Binding IsFlipped}" Style="{StaticResource MaterialDesignCardFlipper}">
                 <materialdesign:Flipper.FrontContent>
 
                     <Grid x:Uid="Grid_8">

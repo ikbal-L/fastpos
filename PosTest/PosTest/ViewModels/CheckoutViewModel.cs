@@ -1050,11 +1050,11 @@ namespace PosTest.ViewModels
                     break;
                 }
                 case ActionButton.Payment:
-                    if (CurrentOrder.Type == OrderType.InWaiting)
-                    {
-                        ToastNotification.Notify("Set order type first", NotificationType.Warning);
-                        return;
-                    }
+                    //if (CurrentOrder.Type == OrderType.InWaiting)
+                    //{
+                    //    ToastNotification.Notify("Set order type first", NotificationType.Warning);
+                    //    return;
+                    //}
 
                     PayementAction();
                     break;
@@ -1789,7 +1789,9 @@ namespace PosTest.ViewModels
         {
             FixedDocument document = new FixedDocument();
             FixedPage fixedPage = new FixedPage();
-            DataTemplate dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
+
+            //DataTemplate dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
+            DataTemplate dt = Application.Current.FindResource("KitchenReceiptDataTemplate") as DataTemplate;
 
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
@@ -1862,11 +1864,22 @@ namespace PosTest.ViewModels
 
         public void PrintDocument()
         {
-            FixedDocument fixedDocument = GenerateOrderReceipt();      
-            //    var printer=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
-            PrintDialog dialog = new PrintDialog();
-            dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
-            dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+
+            PrintPreview();
+
+
+            //FixedDocument fixedDocument = GenerateOrderReceipt();
+            ////    var printer=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
+            //PrintDialog dialog = new PrintDialog();
+            //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+            //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+
+
+
+
+
+
+
             /* printdocumentimageablearea area = null;
              xpsdocumentwriter writer = printqueue.createxpsdocumentwriter(ref area);
              size size = new size(area.mediasizewidth, area.mediasizeheight);

@@ -183,7 +183,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        public List<OrderItemAdditive> OrderItemAdditives ;
+        public List<OrderItemAdditive> OrderItemAdditives { get; set; }
 
         private decimal _totalDiscountAmount;
         private DateTime? _timeStamp;

@@ -55,6 +55,7 @@
                 <Style x:Uid="Style_2" TargetType="ListBoxItem">
                     <Setter x:Uid="Setter_3" Property="Padding" Value="0"/>
                     <Setter x:Uid="Setter_4" Property="Margin" Value="2"/>
+
                     
                 </Style>
             </ListBox.ItemContainerStyle>
@@ -62,7 +63,9 @@
                 <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_2">
                     <WrapPanel x:Uid="WrapPanel_2" />
                 </ItemsPanelTemplate>
+                
             </ListBox.ItemsPanel>
+            
         </ListBox>
         
         
