@@ -150,9 +150,9 @@ namespace ServiceLib.Service
 
         }
 
-        public PageList<Order> getOrderByState(OrderState state, long deliverymanId, int pageNumber, int pageSize)
+        public PageList<Order> GetOrderByStates(string[] states, long deliverymanId, int pageNumber, int pageSize)
         {
-            return GenericRest.GetThing<PageList<Order>>(UrlConfig.OrderUrl.GetByStatePage + $"/{pageNumber}/{pageSize}/{deliverymanId}/{state}").Item2;
+            return GenericRest.PostThing<PageList<Order>>(UrlConfig.OrderUrl.GetByStatePage + $"/{pageNumber}/{pageSize}/{deliverymanId}",states).Item2;
         }
         public PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId)
         {

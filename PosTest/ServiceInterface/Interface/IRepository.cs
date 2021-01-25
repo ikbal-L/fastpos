@@ -33,7 +33,7 @@ namespace ServiceInterface.Interface
 
     public interface IOrderRepository : IRepository<Order, long>
     {
-        PageList<Order> getOrderByState(OrderState state, long deliverymanId, int pageNumber, int pageSize);
+        PageList<Order> GetOrderByStates(string[] states, long deliverymanId, int pageNumber, int pageSize);
         PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId);
 
     }

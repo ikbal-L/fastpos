@@ -251,7 +251,7 @@ namespace PosTest.ViewModels
 
             if (e.PropertyName == nameof(Order.SelectedOrderItem))
             {
-                if (CurrentOrder.SelectedOrderItem!= null)
+                if (CurrentOrder?.SelectedOrderItem!= null)
                 {
                     if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
                     {
