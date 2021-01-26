@@ -16,6 +16,8 @@ namespace PosTest.ViewModels.SubViewModel
         private readonly Dictionary<string, ICollection<string>> _validationErrors =
             new Dictionary<string, ICollection<string>>();
 
+        private bool _isSaveEnabled;
+
         public CustomerDetailViewModel(Customer customer)
         {
             Customer = new Customer(){Id = customer.Id,Name = customer.Name,Mobile = customer.Mobile,PhoneNumbers = customer.PhoneNumbers};
@@ -53,6 +55,13 @@ namespace PosTest.ViewModels.SubViewModel
         }
 
         public bool HasErrors => _validationErrors.Any();
+
+        public bool IsSaveEnabled
+        {
+            get => _isSaveEnabled;
+            set => Set(ref _isSaveEnabled, value);
+        }
+
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public event EventHandler<CommandExecutedEventArgs> CommandExecuted;
@@ -83,7 +92,9 @@ namespace PosTest.ViewModels.SubViewModel
                 }
             }
 
+            
             RaiseErrorsChanged(propertyName);
+            IsSaveEnabled = !_validationErrors.Any();
         }
         public void Save()
         {

@@ -9,11 +9,33 @@
              d:DesignHeight="300" d:DesignWidth="240">
     <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="auto"/>
-            <RowDefinition x:Uid="RowDefinition_2"/>
+            <RowDefinition  Height="auto"/>
+            <RowDefinition  Height="auto"/>
+            <RowDefinition  Height="auto"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock x:Uid="TextBlock_1" Background="Black" Margin="10" FontSize="30" Foreground="White" Text="{Binding PinCode}" ></TextBlock>
-        <Grid x:Uid="Grid_2" Grid.Row="1" Margin="20 5" >
+        
+        <Border>
+            <StackPanel Orientation="Vertical">
+                <Label><materialdesign:PackIcon Kind="UserCircle"></materialdesign:PackIcon></Label>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" >
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <!--Background="Black" FontSize="30" Foreground="White"-->
+                <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"   Text="{Binding PinCode}" 
+                         Height="50" Margin="3"></TextBox>
+                <Button Grid.Column="1"  Width="50" Height="50"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <materialdesign:PackIcon Kind="Login" VerticalContentAlignment="Center"></materialdesign:PackIcon>
+                </Button>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="2" Margin="20 5" >
             <Grid.Effect>
                 <DropShadowEffect x:Uid="DropShadowEffect_1" BlurRadius="20"></DropShadowEffect>
             </Grid.Effect>

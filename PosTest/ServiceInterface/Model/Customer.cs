@@ -34,6 +34,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
+        [Required(AllowEmptyStrings = false)]
         public string Mobile
         {
             get => _mobile;
