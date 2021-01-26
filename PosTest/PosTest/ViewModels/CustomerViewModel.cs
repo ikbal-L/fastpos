@@ -169,7 +169,7 @@ namespace PosTest.ViewModels
             string mobile = Regex.Replace(FilterString, @"\d", "");
             string name = Regex.Replace(FilterString, @"\D", "");
 
-            Customer customer = new Customer { Name = name, Mobile = mobile };
+            Customer customer = new Customer { Name = name, Mobile = mobile , PhoneNumbers = new BindableCollection<string>(){"0665666768","0666676869"}};
             IsEditing = true;
             CustomerDetailViewModel = new CustomerDetailViewModel(customer);
             CustomerDetailViewModel.CommandExecuted += CustomerDetailViewModel_CommandExecuted;

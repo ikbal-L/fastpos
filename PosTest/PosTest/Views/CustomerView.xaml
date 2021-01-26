@@ -104,7 +104,7 @@
             </Grid>
         </materialdesign:ColorZone>
         <!--SelectedItem="{Binding SelectedCustomer}" -->
-        <materialdesign:Flipper Grid.Row="1" Margin="0" IsFlipped="{Binding IsEditing}" x:Name="cvFlipper">
+        <materialdesign:Flipper Grid.Row="1" Margin="0" IsFlipped="{Binding IsEditing}">
             <!--Front Content goes here--> 
             <materialdesign:Flipper.FrontContent>
                 <ListBox  x:Name="lboxCustomers" ItemsSource="{Binding ElementName=CustomerViewUserControl,Path=DataContext.Customers}" Grid.Row="1" Margin="0" Visibility="Visible" Background="White">
@@ -128,7 +128,7 @@
             </materialdesign:Flipper.FrontContent>
             <!--Back Content Goes here--> 
             <materialdesign:Flipper.BackContent >
-                <subviews:CustomerDetailView DataContext="{Binding ElementName=cvFlipper,Path=DataContext.CustomerDetailViewModel,UpdateSourceTrigger=PropertyChanged}"></subviews:CustomerDetailView>
+                <subviews:CustomerDetailView DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl,AncestorLevel=1},Path=DataContext.CustomerDetailViewModel}"></subviews:CustomerDetailView>
             </materialdesign:Flipper.BackContent>
        </materialdesign:Flipper>
     </Grid>

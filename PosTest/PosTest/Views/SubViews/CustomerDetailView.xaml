@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:PosTest.SL.Controls"
              xmlns:views="clr-namespace:PosTest.Views"
+             xmlns:converters="clr-namespace:PosTest.Converters"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -18,7 +19,9 @@
                <ResourceDictionary x:Uid="ResourceDictionary_4" Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                <ResourceDictionary x:Uid="ResourceDictionary_5" Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
            </ResourceDictionary.MergedDictionaries>
+           <converters:NegateBooleanValueConverter x:Key="NegateBooleanValueConverter"></converters:NegateBooleanValueConverter>
         </ResourceDictionary>
+        
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -34,6 +37,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 
             </Grid.RowDefinitions>
             <Border Grid.Row="0"  Margin="2">
@@ -47,13 +51,17 @@
                          materialDesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
                          Text="{Binding Customer.Mobile,UpdateSourceTrigger=PropertyChanged}" />
             </Border>
+
+            <Border Grid.Row="2" Margin="2">
+                <ListView ItemsSource="{Binding PhoneNumbers}"></ListView>
+            </Border>
         </Grid>
 
         <materialDesign:ColorZone Grid.Row="1" Background="#FFAEEA00" Padding="6"  Margin="1">
             <StackPanel Orientation="Horizontal">
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                         cal:Message.Attach="[Event Click] = [Action Save()]"
-                        IsEnabled="{Binding IsSaveEnabled}">
+                        IsEnabled="{Binding HasErrors,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NegateBooleanValueConverter }}">
                     <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
                         <materialDesign:PackIcon x:Uid="materialdesign:PackIcon_12" Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
                     </StackPanel>

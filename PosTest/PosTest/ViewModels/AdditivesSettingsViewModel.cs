@@ -288,7 +288,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            WarningViewModel = new WarningViewModel("Are you sure to delete this Order?", "Check", "Ok", "Close", "No",
+            WarningViewModel = new WarningViewModel("Are you sure to delete this Additive?", "Check", "Ok", "Close", "No",
                 (o) => DeleteAdditiveAction(o), this, () => IsDialogOpen = false);
             DialogViewModel = WarningViewModel;
             IsDialogOpen = true;
