@@ -7,7 +7,7 @@
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             Header="All Orders">
+             Header="Paid Orders">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>

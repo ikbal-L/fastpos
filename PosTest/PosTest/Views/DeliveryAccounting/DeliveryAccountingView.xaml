@@ -125,9 +125,10 @@
             </Grid>
             </StackPanel>
         </StackPanel>
-        <TabControl Grid.Column="1"  Style="{StaticResource MaterialDesignTabControl}" SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource EnumToIntegerIndexValueConverter}}"
+        <Border Grid.Column="1" Margin="0 20 0 0" BorderThickness="1 0 0 0" BorderBrush="Gray" >
+            <TabControl   Style="{StaticResource MaterialDesignTabControl}" SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource EnumToIntegerIndexValueConverter}}"
                     >
-            <local:NotPaidOrdersView   DataContext="{Binding NotPaidOrdersViewModel,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+            <local:NotPaidOrdersView DataContext="{Binding NotPaidOrdersViewModel,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
             <local:AllOrdersView DataContext="{Binding AllOrdersViewModel,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
             <TabItem  Header="Historique" TabIndex="1">
                     <ScrollViewer  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
@@ -135,7 +136,7 @@
                     </ScrollViewer>
                 </TabItem>
             </TabControl>
+        </Border>
 
-        
     </Grid>
 </UserControl>

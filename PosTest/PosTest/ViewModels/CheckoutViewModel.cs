@@ -162,7 +162,7 @@ namespace PosTest.ViewModels
             var customers = StateManager.Get<Customer>();
 
             //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
-            OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
+            OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed,OrderState.Delivered};
             //var unprocessedOrders = StateManager.Get<Order>();
             var unprocessedOrders = StateManager.Get<Order>().ToList().Where(o=> !filteredTypes.ToList().Contains((OrderState)o.State));
             
@@ -598,7 +598,7 @@ namespace PosTest.ViewModels
                 case true:
                     if (CurrentOrder.State == OrderState.Payed ||
                         CurrentOrder.State == OrderState.Canceled ||
-                        CurrentOrder.State == OrderState.Removed)
+                        CurrentOrder.State == OrderState.Removed||CurrentOrder.State==OrderState.Delivered)
                     {
                         RemoveCurrentOrderForOrdersList();
                     }
@@ -1001,7 +1001,7 @@ namespace PosTest.ViewModels
                 cmd != ActionButton.Takeaway &&
                 cmd != ActionButton.Table &&
                 cmd != ActionButton.Served &&
-                cmd != ActionButton.Del)
+                cmd != ActionButton.Del&& cmd != ActionButton.DElIVERED)
             {
                 ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
                 return;
@@ -1159,6 +1159,19 @@ namespace PosTest.ViewModels
                     }
 
                     CurrentOrder.State = OrderState.Served;
+                    break;
+                case ActionButton.DElIVERED:
+                    if(CurrentOrder==null)
+                    {
+                        return; 
+                    }
+                    if (CurrentOrder.Type != OrderType.Delivery)
+                    {
+                        ToastNotification.Notify("Type Order mast be Delivery", NotificationType.Warning);
+                        break;
+                    }
+                    CurrentOrder.State = OrderState.Delivered;
+                    SaveCurrentOrder();
                     break;
             }
         }

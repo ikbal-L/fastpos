@@ -55,7 +55,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
             if (this._SelectedDeliveryman != null)
             {
-                var res = StateManager.getService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Ordered.ToString() }, this._SelectedDeliveryman.Id.Value, _PageNumber, _PageSize);
+                 var res = StateManager.getService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, this._SelectedDeliveryman.Id.Value, _PageNumber, _PageSize);
                 if (res != null)
                 {
                     Orders = res.page != null ? new ObservableCollection<Order>(res.page) : new ObservableCollection<Order>();

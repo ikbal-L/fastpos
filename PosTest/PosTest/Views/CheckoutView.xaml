@@ -539,9 +539,12 @@
                                 Style="{StaticResource ButtonStyle18}"
                                 caliburn:Message.Attach="[Event Click] = [Action PrintDocument()]" />
 
-                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ButtonStyle18}"
+                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="0"  Style="{StaticResource ButtonStyle18}"
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]" />
+                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="1"  Style="{StaticResource ButtonStyle18}"
+                                Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
+                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVERED')]" />
 
                         <Button x:Uid="Button_35" Grid.Row="3" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }"
                                 Style="{StaticResource ButtonStyle18}"
