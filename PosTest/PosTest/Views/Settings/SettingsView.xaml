@@ -15,28 +15,45 @@
         <materialDesign:DrawerHost
             IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
             <materialDesign:DrawerHost.LeftDrawerContent>
-                <DockPanel MinWidth="220">
-                    <ToggleButton 
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0" MinWidth="220">
+                        <ToggleButton 
                         Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
                         DockPanel.Dock="Top"
                         HorizontalAlignment="Right" 
                         Margin="16"
-                        IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"/>
-                    <ListBox 
+                        IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                        <ListBox 
                         Margin="0 16 0 16"
                         SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding SettingItems}"
                         >
-                        <ListBox.Resources>
-                            <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
-                        </ListBox.Resources>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate >
-                                <TextBlock Text="{Binding Title}" Margin="32 0 32 0" AutomationProperties.AutomationId="DemoItemPage"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </DockPanel>
+                            <ListBox.Resources>
+                                <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate >
+                                    <TextBlock Cursor="Hand" 
+                                           cal:Message.Attach="[Event MouseDown] = [Action HideenLeftBar($datacontext)]" 
+                                           Text="{Binding Title}" Padding="32 0 32 0" AutomationProperties.AutomationId="DemoItemPage"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                    <Button Cursor="Hand" 
+                               MinWidth="220"
+                               Background="Transparent"
+                               Grid.Row="1"
+                               FontWeight="Medium"
+                               BorderThickness="0"
+                               cal:Message.Attach="Close()" 
+                               Content="Close" Padding="32 0 32 0" AutomationProperties.AutomationId="DemoItemPage"/>
+                </Grid>
+
             </materialDesign:DrawerHost.LeftDrawerContent>
 
             <DockPanel>
@@ -50,7 +67,7 @@
                             <ToggleButton
                                 x:Name="MenuToggleButton"
                                 Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-                                IsChecked="False"
+                                IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                                 AutomationProperties.Name="HamburgerToggleButton"/>
                         </StackPanel>
                         <materialDesign:PopupBox

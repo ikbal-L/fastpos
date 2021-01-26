@@ -36,7 +36,7 @@ namespace PosTest.ViewModels
         private WarningViewModel _warningViewModel;
 
         public AdditivesSettingsViewModel():this(30) {
-            this.Title = "Additives Settings";
+            this.Title = "Additives";
             this.Content = new AdditivesSettingsView() { DataContext=this};
         }
         public AdditivesSettingsViewModel(/*IAdditiveService additiveService,*/ int additivePageSize)

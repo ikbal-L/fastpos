@@ -28,7 +28,7 @@ namespace PosTest.ViewModels.Settings
 
         public GeneralSettingsViewModel() {
             this.Index = 1;
-            this.Title = "General Settings";
+            this.Title = "General";
             Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
             var setting = Manager.LoadSettings();
             Settings = setting != null ? setting : new GeneralSettings();
