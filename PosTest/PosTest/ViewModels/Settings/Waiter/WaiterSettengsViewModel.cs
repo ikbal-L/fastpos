@@ -60,7 +60,7 @@ namespace PosTest.ViewModels.Settings
         public bool DeleteVisibility { get => SelectedWaiter != null; }
         public bool EditVisibility { get => SelectedWaiter != null; }
         public void AddWiaterAction() {
-            _AddEditWaiterViewModel.ChangeWaiter(new Waiter());
+            _AddEditWaiterViewModel.NewWaiter();
             _AddEditWaiterViewModel.ChangeDailogSatate(true);
         }
         public void EditWiaterAction()

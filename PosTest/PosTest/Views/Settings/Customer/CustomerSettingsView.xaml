@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="PosTest.Views.Settings.CustomerSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PosTest.Views.Settings"
+              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+                                       xmlns:caliburn="http://www.caliburnproject.org"
+
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid
+            Grid.Row="0"
+            >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Name" Binding = "{Binding Name}" />
+                <DataGridTextColumn Header = "Phone" Binding = "{Binding Title}" />
+                <DataGridTextColumn Header = "Dept" Binding = "{Binding Title}" />
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid
+            Grid.Row="1"
+            >
+            
+        <materialdesign:ColorZone Mode="PrimaryMid"  Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                <Grid >
+                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" Text="Customers Management" Margin="12 12 0 12"/>
+                </Grid>
+            </materialdesign:ColorZone>
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" >
+                <Button
+                    caliburn:Message.Attach="[Event Click] = [Action DeleteCustomerAction()]"
+                    
+                    Visibility="{Binding DeleteVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Margin="5 -44 5 0" >
+                    <materialdesign:PackIcon  Kind="DeleteOutline" HorizontalAlignment="Right" Width="25" Height="25" />
+                </Button>
+                <Button
+                    caliburn:Message.Attach="[Event Click] = [Action EditCustomerAction()]"
+
+                     Visibility="{Binding EditVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"  >
+                    <materialdesign:PackIcon Kind="PencilOutline" HorizontalAlignment="Right" Width="25" Height="25" />
+                </Button>
+                <Button 
+                      caliburn:Message.Attach="[Event Click] = [Action AddCustomerAction()]"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"  >
+                    <materialdesign:PackIcon  Kind="Plus" HorizontalAlignment="Right" Width="25" Height="25" />
+                </Button>
+            </StackPanel>
+
+
+        </Grid>
+
+        <ContentControl Content="{Binding DailogContent }"/>
+    </Grid>
+</UserControl>
