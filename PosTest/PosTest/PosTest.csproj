@@ -244,6 +244,7 @@
     <Compile Include="Events\AssignOrderTypeEventArgs.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
     <Compile Include="Extensions\ListPaginationEx.cs" />
+    <Compile Include="Extensions\ObjectExtentions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
@@ -291,6 +292,9 @@
     <Compile Include="ViewModels\Settings\SettingItemBase.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\PrintSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Waiter\AddEditWaiterViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Waiter\WaiterSettengsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\DialogViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
@@ -345,6 +349,12 @@
     <Compile Include="Views\PrintView.xaml.cs">
       <DependentUpon>PrintView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\Waiter\AddEditWaiterView.xaml.cs">
+      <DependentUpon>AddEditWaiterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Waiter\WaiterSettingsView.xaml.cs">
+      <DependentUpon>WaiterSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
@@ -353,6 +363,9 @@
     </Compile>
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\DialogView.xaml.cs">
+      <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SplitView.xaml.cs">
       <DependentUpon>SplitView.xaml</DependentUpon>
@@ -587,6 +600,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Settings\Waiter\AddEditWaiterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Waiter\WaiterSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Settings\GeneralSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -598,6 +619,10 @@
     <Page Include="Views\Settings\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\DialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SplitView.xaml">
       <SubType>Designer</SubType>

@@ -113,6 +113,7 @@ namespace ServiceInterface.Model
             get => _agent;
             set => Set(ref _agent, value);
         }
+       
     }
 
     [DataContract]
