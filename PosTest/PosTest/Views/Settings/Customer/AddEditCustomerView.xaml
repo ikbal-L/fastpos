@@ -16,6 +16,7 @@
           VerticalAlignment="Center"
           IsOpen="{Binding IsOpenDailog}"
           CloseOnClickAway="True"
+      
           OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
           DialogTheme="Inherit">
         <materialdesign:DialogHost.DialogContent>
@@ -27,16 +28,65 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="Gray" BorderThickness="0 0 0 1" Grid.Row="0">
-                    <TextBlock Text="Waiter" Padding="10" FontWeight="Bold" FontSize="16" />
+                    <TextBlock Text="Customer" Padding="10" FontWeight="Bold" FontSize="16" />
                 </Border>
                 <StackPanel Grid.Row="1" Margin="0 20 0 50">
                     <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
                         <TextBlock Text="Name" Margin="0 5 0 5"/>
-                            <TextBox Width="250"  Text="{Binding Waiter.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+                            <TextBox Width="250"  Text="{Binding Customer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
                     </StackPanel>
+                        <StackPanel>
+                            <ListBox
+                                    Height="150"
+                                    Width="250"
+                                    BorderThickness="1"
+                                BorderBrush="DimGray"
+                                    ItemsSource="{Binding Numbers, UpdateSourceTrigger=PropertyChanged}"
+                                >
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="180"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock  Grid.Column="0" Text="{Binding}" />
+                                                <Button
+                                                   Grid.Column="1"
+                                                   Width="20" Height="20"
+                                                   Margin="0 0 2 0"
+                                                   Visibility="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem},Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                   caliburn:Message.Attach="[Event Click] = [Action DeleteCustomerAction($datacontext)]"
+                                                   caliburn:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                   Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"   >
+                                                    <materialdesign:PackIcon  Kind="DeleteOutline" HorizontalAlignment="Right" Width="15" Height="15" />
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                           
+                            <Grid Width="250" Margin="0 2 0 0">
+                                <TextBox Width="250" materialdesign:HintAssist.Hint="Pone Number" Text="{Binding NewPhoneNumner,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
+                                    Width="25" Height="25"
+                                    HorizontalAlignment="Right"
+                                   caliburn:Message.Attach="[Event Click] = [Action AddPhoneNumber()]"
+                                             Margin="4 -45 0 1">
+
+                                    <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="Plus" HorizontalAlignment="Right" />
+                                </Button>
+                            </Grid>
+                        </StackPanel>
                     <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="Phone"  Margin="0 5 0 5"/>
-                            <TextBox Width="250" Text="{Binding Waiter.PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+                        <TextBlock Text="Debit"  Margin="0 5 0 5"/>
+                          
+                            <TextBox Width="250" Text="{Binding Customer.PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
                     </StackPanel>
                 </StackPanel>
                 <materialdesign:ColorZone Mode="PrimaryMid" Padding="1" Grid.Row="2" Effect="{DynamicResource MaterialDesignShadowDepth5}">

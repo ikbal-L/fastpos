@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -40,6 +41,17 @@ namespace ServiceInterface.Model
             set => Set(ref _mobile, value);
         }
 
-        public BindableCollection<String> PhoneNumbers { get; set; }    
+        private ObservableCollection<String> _PhoneNumbers;
+
+        public ObservableCollection<String> PhoneNumbers
+    {
+            get { return _PhoneNumbers; }
+            set
+            {
+                _PhoneNumbers = value;
+                NotifyOfPropertyChange(nameof(_PhoneNumbers));
+            }
+        }
+
     }    
 }

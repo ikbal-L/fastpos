@@ -26,18 +26,7 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange((nameof(Customers)));
             }
         }
-        private Customer _SelectedCustomer;
-
-        public Customer SelectedCustomer
-        {
-            get { return _SelectedCustomer; }
-            set {
-                _SelectedCustomer = value;
-                NotifyOfPropertyChange(nameof(SelectedCustomer));
-                NotifyOfPropertyChange(nameof(DeleteVisibility));
-                NotifyOfPropertyChange(nameof(EditVisibility));
-            }
-        }
+   
         private UserControl _DailogContent;
 
         public UserControl DailogContent
@@ -58,19 +47,18 @@ namespace PosTest.ViewModels.Settings
             _AddEditCustomerView = new AddEditCustomerView() { DataContext = _AddEditCustomerViewModel };
             DailogContent = _AddEditCustomerView;
         }
-        public bool DeleteVisibility { get => SelectedCustomer != null; }
-        public bool EditVisibility { get => SelectedCustomer != null; }
+
         public void AddCustomerAction() {
             _AddEditCustomerViewModel.NewCustome();
             _AddEditCustomerViewModel.ChangeDailogSatate(true);
         }
-        public void EditCustomerAction()
+        public void EditCustomerAction(Customer _SelectedCustomer)
         {
-            _AddEditCustomerViewModel.ChangeCustomer(SelectedCustomer);
+            _AddEditCustomerViewModel.ChangeCustomer(_SelectedCustomer);
             _AddEditCustomerViewModel.ChangeDailogSatate(true);
         }
-        public void DeleteCustomerAction() {
-            if (SelectedCustomer == null)
+        public void DeleteCustomerAction(Customer _SelectedCustomer) {
+            if (_SelectedCustomer == null)
             {
                 ToastNotification.Notify("Selected Customer First", NotificationType.Warning);
             }
@@ -81,11 +69,10 @@ namespace PosTest.ViewModels.Settings
                 DataContext = new DialogViewModel("Are you sure to delete this Customer ?", "Check", "Ok", "Close", "No",
                 (e) =>
                 {
-                    if (StateManager.Delete<Customer>(SelectedCustomer))
+                    if (StateManager.Delete<Customer>(_SelectedCustomer))
                     {
 
-                        Customers.Remove(SelectedCustomer);
-                        SelectedCustomer = null;
+                        Customers.Remove(_SelectedCustomer);
                         DailogContent = _AddEditCustomerView;
                         ToastNotification.Notify("Delete  Success", NotificationType.Success);
                     }

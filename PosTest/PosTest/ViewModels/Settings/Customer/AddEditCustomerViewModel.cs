@@ -5,6 +5,7 @@ using ServiceInterface.Model;
 using ServiceLib.Service;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,10 +33,32 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(Customer));
             }
         }
+        private ObservableCollection<String> numbres;
+
+        public ObservableCollection<String> Numbers
+        {
+            get { return numbres; }
+            set { numbres = value;
+
+                NotifyOfPropertyChange(nameof(Numbers));
+            }
+        }
+
+        private string _NewPhoneNumner;
+
+        public string NewPhoneNumner
+        {
+            get { return _NewPhoneNumner; }
+            set { _NewPhoneNumner = value;
+                NotifyOfPropertyChange(nameof(NewPhoneNumner));
+            }
+        }
+
         private CustomerSettengsViewModel Parent { get; set; }
         public AddEditCustomerViewModel(CustomerSettengsViewModel parent)
         {
             Parent = parent;
+            Numbers = new ObservableCollection<string>();
         }
         public void ChangeDailogSatate(bool value)
         {
@@ -44,9 +67,13 @@ namespace PosTest.ViewModels.Settings
    
         public void NewCustome()
         {
-            _Customer = new  Customer();
+            Customer = new  Customer();
+            Numbers.Clear();
         }
         public void Save() {
+            Customer.Mobile = Numbers.FirstOrDefault();
+            Numbers.Remove(Customer.Mobile);
+            Customer.PhoneNumbers = Numbers;
             if (StateManager.Save<Customer>(Customer))
             {
                 int index=   Parent.Customers.IndexOf(Parent.Customers.FirstOrDefault(x => x.Id == Customer.Id));
@@ -71,12 +98,26 @@ namespace PosTest.ViewModels.Settings
         public void Close()
         {
             IsOpenDailog = false;
-            Parent.SelectedCustomer = null;
         }
 
         internal void ChangeCustomer(Customer selectedCustomer)
-        {
+        { 
             Customer = selectedCustomer.Clone();
+            Numbers.Clear();
+            if(Customer?.PhoneNumbers!=null)
+            foreach (var item in Customer?.PhoneNumbers)
+            {
+                Numbers.Add(item);
+            }
+        }
+        public void AddPhoneNumber() {
+            if(!string.IsNullOrEmpty(NewPhoneNumner))
+                this.Numbers.Add(NewPhoneNumner);
+            NotifyOfPropertyChange(() => this.Customer.PhoneNumbers);
+        }
+        public void DeletePhoneNumber(string number)
+        {
+            this.Customer.PhoneNumbers.Remove(number);
         }
     }
 }
