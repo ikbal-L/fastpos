@@ -114,6 +114,7 @@
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\OrderItem.cs" />
     <Compile Include="Model\OrderItemAdditiveState.cs" />
+    <Compile Include="Model\PageList.cs" />
     <Compile Include="Model\Place.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductMappingException.cs" />

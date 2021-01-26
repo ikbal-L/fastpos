@@ -21,6 +21,7 @@ namespace PosTest.Enums
         Validate = 10,
         Deliverey = 11,
         Takeaway = 12,
-        Served = 13
+        Served = 13,
+        DElIVERED = 14
     }
 }

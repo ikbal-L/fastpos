@@ -31,17 +31,30 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(() => SelectedItem);
             }
         }
-        public SettingsViewModel()
+        private bool _leftBarVisibilty;
+
+        public bool LeftBarVisibilty
         {
-            SettingItems = new ObservableCollection<SettingsItemBase>(Assembly.GetExecutingAssembly().GetTypes().
+            get { return _leftBarVisibilty; }
+            set { _leftBarVisibilty = value;
+                NotifyOfPropertyChange(nameof(LeftBarVisibilty));
+            }
+        }
+        private Screen ParentVeiwModel { get; set; }
+        public SettingsViewModel(Screen parentVeiwModel)
+        {
+            ParentVeiwModel = parentVeiwModel;
+               SettingItems = new ObservableCollection<SettingsItemBase>(Assembly.GetExecutingAssembly().GetTypes().
                 Where(x => x.IsSubclassOf(typeof(SettingsItemBase))).ToList()
                 .Select(t=> (SettingsItemBase)Activator.CreateInstance(t)).OrderBy(x=>x.Index).ToList());
             SelectedItem = SettingItems?.FirstOrDefault();
         }
         public void  Close() {
-            LoginViewModel loginvm = new LoginViewModel();
-            loginvm.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+            (this.Parent as Conductor<object>).ActivateItem(ParentVeiwModel);
+        }
+      public void  HideenLeftBar(SettingsItemBase obj) {
+            LeftBarVisibilty = false;
+            SelectedItem = obj;
         }
     }
 }

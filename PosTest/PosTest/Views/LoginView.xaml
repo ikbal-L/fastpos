@@ -24,7 +24,7 @@
 
                 <Button x:Uid="Login with Pin" x:Name="LoginWithPin" Content="Login with PIN" Margin="5" Style="{StaticResource MaterialDesignFlatButton}" ></Button>
 
-                <Button x:Uid="Settings" x:Name="Settingsbtn" Content="Settings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}" ></Button>
+                <Button x:Uid="Settings" x:Name="Settingsbtn" Content="Delivery Accounting" Margin="5" Style="{StaticResource MaterialDesignFlatButton}" ></Button>
                 <!--<Button x:Name="Settings" Content="Settings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
             <Button x:Uid="Close" x:Name="Close" Content="Close" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
             <!--<Button x:Name="PaginationTest" Content="Pagination Test" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->

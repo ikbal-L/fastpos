@@ -17,6 +17,7 @@ using PosTest.ViewModels.SubViewModel;
 using ServiceLib.Service;
 using PosTest.Helpers;
 using PosTest.ViewModels.Settings;
+using PosTest.ViewModels.DeliveryAccounting;
 
 namespace PosTest.ViewModels
 {
@@ -258,9 +259,10 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("Check your server connection");
                 return;
             }
-            SettingsViewModel settingsViewModel = new SettingsViewModel();
-             settingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+            //     SettingsViewModel settingsViewModel = new SettingsViewModel();
+            DeliveryAccountingViewModel viewModel = new DeliveryAccountingViewModel();
+             viewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(viewModel);
         }
     }
 }

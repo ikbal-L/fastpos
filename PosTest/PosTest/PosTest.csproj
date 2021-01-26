@@ -237,6 +237,7 @@
     <Compile Include="Converters\SolidColorBrushToBrushConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\OrderStateEnumToBrushConverter.cs" />
+    <Compile Include="Converters\EnumToIntegerIndexValueConverter.cs" />
     <Compile Include="Converters\TypeToIntegerIndexValueConverter.cs" />
     <Compile Include="Enums\ActionButton.cs" />
     <Compile Include="Enums\ListedOrdersType.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Events\AssignOrderTypeEventArgs.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
     <Compile Include="Extensions\ListPaginationEx.cs" />
+    <Compile Include="Extensions\ObjectExtentions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
@@ -275,6 +277,9 @@
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryAccounting\DeliveryAccountingViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryAccounting\AllOrdersViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OpenTableViewModel.cs" />
@@ -289,6 +294,11 @@
     <Compile Include="ViewModels\Settings\SettingItemBase.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\PrintSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Customer\AddEditCustomerViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Customer\CustomerSettengsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Waiter\AddEditWaiterViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Waiter\WaiterSettengsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\DialogViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\CustomerDetailViewModel.cs" />
@@ -314,6 +324,15 @@
     <Compile Include="Views\CheckoutView.xaml.cs">
       <DependentUpon>CheckoutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DeliveryAccounting\DeliveryAccountingView.xaml.cs">
+      <DependentUpon>DeliveryAccountingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeliveryAccounting\AllOrdersView.xaml.cs">
+      <DependentUpon>AllOrdersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeliveryAccounting\NotPaidOrdersView.xaml.cs">
+      <DependentUpon>NotPaidOrdersView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -335,6 +354,18 @@
     <Compile Include="Views\PrintView.xaml.cs">
       <DependentUpon>PrintView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\Customer\AddEditCustomerView.xaml.cs">
+      <DependentUpon>AddEditCustomerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Customer\CustomerSettingsView.xaml.cs">
+      <DependentUpon>CustomerSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Waiter\AddEditWaiterView.xaml.cs">
+      <DependentUpon>AddEditWaiterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Waiter\WaiterSettingsView.xaml.cs">
+      <DependentUpon>WaiterSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
@@ -343,6 +374,9 @@
     </Compile>
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\DialogView.xaml.cs">
+      <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SplitView.xaml.cs">
       <DependentUpon>SplitView.xaml</DependentUpon>
@@ -540,6 +574,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\DeliveryAccounting\DeliveryAccountingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeliveryAccounting\AllOrdersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DeliveryAccounting\NotPaidOrdersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -568,6 +614,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Settings\Customer\AddEditCustomerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\Customer\CustomerSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\Waiter\AddEditWaiterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Waiter\WaiterSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Settings\GeneralSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -579,6 +641,10 @@
     <Page Include="Views\Settings\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\DialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SplitView.xaml">
       <SubType>Designer</SubType>

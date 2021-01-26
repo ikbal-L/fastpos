@@ -115,6 +115,8 @@ namespace ServiceLib.Service
         {
             return GenericRest.GetThing<IEnumerable<Table>>(UrlConfig.OrderUrl.GetAllTables);
         }
+
+       
     }
 
 
@@ -297,7 +299,6 @@ namespace ServiceLib.Service
         {
             throw new NotImplementedException();
         }
-
     }
     [Export(typeof(IDelivereyService))]
     public class DeliveryService : IDelivereyService

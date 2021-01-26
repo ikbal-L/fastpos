@@ -26,6 +26,7 @@ using Newtonsoft.Json;
 using ServiceLib.Service;
 using Table = ServiceInterface.Model.Table;
 using System.Drawing.Printing;
+using PosTest.ViewModels.Settings;
 
 namespace PosTest.ViewModels
 {
@@ -161,7 +162,7 @@ namespace PosTest.ViewModels
             var customers = StateManager.Get<Customer>();
 
             //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
-            OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed};
+            OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed,OrderState.Delivered};
             //var unprocessedOrders = StateManager.Get<Order>();
             var unprocessedOrders = StateManager.Get<Order>().ToList().Where(o=> !filteredTypes.ToList().Contains((OrderState)o.State));
             
@@ -250,7 +251,7 @@ namespace PosTest.ViewModels
 
             if (e.PropertyName == nameof(Order.SelectedOrderItem))
             {
-                if (CurrentOrder.SelectedOrderItem!= null)
+                if (CurrentOrder?.SelectedOrderItem!= null)
                 {
                     if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
                     {
@@ -597,7 +598,7 @@ namespace PosTest.ViewModels
                 case true:
                     if (CurrentOrder.State == OrderState.Payed ||
                         CurrentOrder.State == OrderState.Canceled ||
-                        CurrentOrder.State == OrderState.Removed)
+                        CurrentOrder.State == OrderState.Removed||CurrentOrder.State==OrderState.Delivered)
                     {
                         RemoveCurrentOrderForOrdersList();
                     }
@@ -821,7 +822,11 @@ namespace PosTest.ViewModels
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
-
+       public void SettingsCommand() {
+            SettingsViewModel settingsViewModel = new SettingsViewModel(this);
+            settingsViewModel.Parent = this.Parent;
+            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+        }
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {
             var categories = new HashSet<Category>();
@@ -996,7 +1001,7 @@ namespace PosTest.ViewModels
                 cmd != ActionButton.Takeaway &&
                 cmd != ActionButton.Table &&
                 cmd != ActionButton.Served &&
-                cmd != ActionButton.Del)
+                cmd != ActionButton.Del&& cmd != ActionButton.DElIVERED)
             {
                 ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
                 return;
@@ -1154,6 +1159,19 @@ namespace PosTest.ViewModels
                     }
 
                     CurrentOrder.State = OrderState.Served;
+                    break;
+                case ActionButton.DElIVERED:
+                    if(CurrentOrder==null)
+                    {
+                        return; 
+                    }
+                    if (CurrentOrder.Type != OrderType.Delivery)
+                    {
+                        ToastNotification.Notify("Type Order mast be Delivery", NotificationType.Warning);
+                        break;
+                    }
+                    CurrentOrder.State = OrderState.Delivered;
+                    SaveCurrentOrder();
                     break;
             }
         }
