@@ -7,8 +7,10 @@
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:controls="clr-namespace:PosTest.SL.Controls"
              xmlns:local="clr-namespace:PosTest.Views.SubViews"
+             xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUserControl">
+             d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUserControl"
+             >
     <Grid x:Uid="Grid_1">
         <Grid.ColumnDefinitions/>
         <Grid.RowDefinitions>
@@ -38,7 +40,7 @@
                 </Grid>
             </materialdesign:DialogHost.DialogContent>
         </materialdesign:DialogHost>
-        <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryDark" Grid.Row="0" Margin="0 0 0 2" CornerRadius="2" materialdesign:ShadowAssist.ShadowDepth="Depth2">
+        <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryDark" Grid.Row="0" Margin="0 0 0 20" CornerRadius="2" materialdesign:ShadowAssist.ShadowDepth="Depth2">
             <Grid x:Uid="Grid_3">
                 <Grid.RowDefinitions>
                     <RowDefinition x:Uid="RowDefinition_7" Height="*"/>
@@ -102,23 +104,32 @@
             </Grid>
         </materialdesign:ColorZone>
         <!--SelectedItem="{Binding SelectedCustomer}" -->
-        <ListBox x:Uid="lboxCustomers" x:Name="lboxCustomers" ItemsSource="{Binding Customers}" Grid.Row="1" Margin="0" Visibility="Visible" Background="White">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
-                        <controls:VirtualizingWrapPanel x:Uid="controls:VirtualizingWrapPanel_1" ItemHeight="80" ItemWidth="125" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate x:Uid="DataTemplate_1">
-                        <Button 
-                            x:Uid="Button_5" Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
-                        <StackPanel  x:Uid="StackPanel_3" Height="60" Width="120"  HorizontalAlignment="Center" VerticalAlignment="Center" >
-                            <TextBlock x:Uid="TextBlock_3" FontSize="14" Text="{Binding Mobile}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                            <TextBlock x:Uid="TextBlock_4" FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-                </DataTemplate>
-                </ListBox.ItemTemplate>
-        </ListBox>
+        <materialdesign:Flipper Grid.Row="1" Margin="0" IsFlipped="{Binding IsEditing}">
+            <!--Front Content goes here--> 
+            <materialdesign:Flipper.FrontContent>
+                <ListBox  x:Name="lboxCustomers" ItemsSource="{Binding ElementName=CustomerViewUserControl,Path=DataContext.Customers}" Grid.Row="1" Margin="0" Visibility="Visible" Background="White">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
+                            <WrapPanel></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:Uid="DataTemplate_1">
+                            <Button 
+                                x:Uid="Button_5" Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
+                                <StackPanel  x:Uid="StackPanel_3" Height="60" Width="120"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                    <TextBlock x:Uid="TextBlock_3" FontSize="14" Text="{Binding Mobile}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                    <TextBlock x:Uid="TextBlock_4" FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </materialdesign:Flipper.FrontContent>
+            <!--Back Content Goes here--> 
+            <materialdesign:Flipper.BackContent >
+                <subviews:CustomerDetailView DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl,AncestorLevel=1},Path=DataContext.CustomerDetailViewModel}"></subviews:CustomerDetailView>
+            </materialdesign:Flipper.BackContent>
+       </materialdesign:Flipper>
     </Grid>
 </UserControl>

@@ -94,7 +94,7 @@ namespace ServiceInterface.StaticValues
 
             }
 
-            public static string UpdateMany()
+            public static string PutMany()
             {
 
                 SetPath();

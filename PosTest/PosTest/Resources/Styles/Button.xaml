@@ -271,13 +271,13 @@
         <Setter x:Uid="Setter_103" Property="FontSize" Value="18"/>
     </Style>  
     <Style x:Uid="Style_14" BasedOn="{StaticResource  ButtonStyle}"
-           TargetType="{x:Type ToggleButton}"
+           TargetType="{x:Type Button}"
            x:Key="ButtonStyle18radio">
         <Setter x:Uid="Setter_104" Property="FontSize" Value="18"/>
         <Setter x:Uid="Setter_105" Property="HorizontalContentAlignment" Value="Center"/>
         <Setter x:Uid="Setter_106" Property="VerticalContentAlignment" Value="Center"/>
         <Style.Triggers>
-            <Trigger x:Uid="Trigger_16" Property="IsChecked" Value="True">
+            <Trigger x:Uid="Trigger_16" Property="IsMouseOver" Value="True">
                 <Setter x:Uid="Setter_107" Property="Background" Value="Green"/>
             </Trigger>
         </Style.Triggers>

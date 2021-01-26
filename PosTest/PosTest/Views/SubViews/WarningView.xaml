@@ -43,7 +43,7 @@
             <DockPanel x:Uid="DockPanel_1" LastChildFill="True" >
                 <materialDesign:PackIcon x:Uid="materialDesign:PackIcon_2" DockPanel.Dock="Left" Kind="{Binding RightKind}" Width="30" Height="30"/>
                 <TextBlock x:Uid="TextBlock_2" DockPanel.Dock="Right" 
-                           Text="{Binding RightLabel}"></TextBlock>
+                           Text="{Binding RightLabel}" VerticalAlignment="Center"></TextBlock>
             </DockPanel>
         </Button>
 

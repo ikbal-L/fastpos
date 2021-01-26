@@ -22,7 +22,7 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DockPanel x:Uid="DockPanel_1" Height="74" Width="106" Background="{Binding Background}" >
+                <DockPanel x:Uid="DockPanel_1" Height="90" Width="190" Background="{Binding Background}" >
                     <Border x:Uid="Border_1" DockPanel.Dock="Top" Height="40">
                         <TextBlock x:Uid="TextBlock_1" Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
@@ -171,6 +171,8 @@
     <DataTemplate x:Uid="DataTemplate_3" DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
         <StackPanel  x:Uid="AdditiveTemplate" Orientation="Vertical"  x:Name="AdditiveTemplate">
             <Border x:Uid="AdditiveSettingsClick" x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1"
+                    cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
+
                     caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]" >
                 <StackPanel x:Uid="StackPanel_3" >
                     <DockPanel x:Uid="DockPanel_4" Height="70" Width="100" Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}"  >

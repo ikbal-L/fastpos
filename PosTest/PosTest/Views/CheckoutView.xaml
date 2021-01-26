@@ -158,7 +158,8 @@
                 </Grid>
                 <Grid x:Uid="Grid_5" Grid.Column="1"
                       IsEnabled="{Binding ElementName=OrderitemsList, 
-                            Path=SelectedItem, Converter={StaticResource ObjectToBoolConverter}}">
+                            Path=SelectedItem, Converter={StaticResource ObjectToBoolConverter}}"
+                      x:Name="OrderItemCommandsGrid">
 
                     <Grid.RowDefinitions>
                         <RowDefinition x:Uid="RowDefinition_7" Height="auto" />
@@ -702,7 +703,7 @@
                 </DockPanel>
             </Grid>
 
-            <Grid x:Uid="Grid_15" Grid.Column="1" Grid.Row="1">
+            <Grid x:Uid="Grid_15" Grid.Column="1" Grid.Row="1" Width="1200">
                 <Grid.RowDefinitions>
                     <RowDefinition x:Uid="RowDefinition_32" Height="*" />
                     <RowDefinition x:Uid="RowDefinition_33" Height="auto" />
@@ -775,73 +776,83 @@
 
                 <!--ORDER NAVIGATION-->
 
-                <RadioButton x:Uid="tableCheckBtn" x:Name="tableCheckBtn" Grid.Row="1" GroupName="BottomBtn"
-                             IsChecked="{Binding IsTableViewActive}"
-                             Style="{StaticResource ButtonTabDesactive}">
+              <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="4">
+                  <Grid.RowDefinitions>
+                      <RowDefinition x:Uid="RowDefinition_34" Height="auto" />
+                      <RowDefinition x:Uid="RowDefinition_35" Height="auto" />
+                      <RowDefinition x:Uid="RowDefinition_36" Height="auto" />
+                      <RowDefinition x:Uid="RowDefinition_37" Height="auto" />
+                   
+                  </Grid.RowDefinitions>
+                    <RadioButton x:Uid="tableCheckBtn" x:Name="tableCheckBtn" Grid.Row="0" GroupName="BottomBtn"
+                               IsChecked="{Binding IsTableViewActive}"
+                               Style="{StaticResource ButtonTabDesactive}">
 
-                    <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal">
-                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_19" Kind="TableFurniture" />
-                        <Border
+                        <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal">
+                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_19" Kind="TableFurniture" />
+                            <Border
                             x:Uid="Border_9" Visibility="{Binding TablesViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
-                            <TextBlock x:Uid="TextBlock_11" Text="{Binding TablesViewModel.OrderCount}" />
-                        </Border>
-                    </StackPanel>
-                </RadioButton>
+                                <TextBlock x:Uid="TextBlock_11" Text="{Binding TablesViewModel.OrderCount}" />
+                            </Border>
+                        </StackPanel>
+                    </RadioButton>
 
 
-                <RadioButton x:Uid="takeawayCheckBtn" x:Name="takeawayCheckBtn" Grid.Row="2"  GroupName="BottomBtn"
+                    <RadioButton x:Uid="takeawayCheckBtn" x:Name="takeawayCheckBtn" Grid.Row="1"  GroupName="BottomBtn"
                              IsChecked="{Binding IsTakeawayViewActive}"
                             Style="{StaticResource ButtonTabDesactive}">
 
-                    <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
-                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_20" Kind="BasketOutline" />
-                        <Border
+                        <StackPanel x:Uid="StackPanel_9" Orientation="Horizontal">
+                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_20" Kind="BasketOutline" />
+                            <Border
                             x:Uid="Border_10" Visibility="{Binding TakeAwayViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
-                            <TextBlock x:Uid="TextBlock_12" Text="{Binding TakeAwayViewModel.OrderCount}" />
-                        </Border>
-                    </StackPanel>
-                </RadioButton>
+                                <TextBlock x:Uid="TextBlock_12" Text="{Binding TakeAwayViewModel.OrderCount}" />
+                            </Border>
+                        </StackPanel>
+                    </RadioButton>
 
-                <RadioButton x:Uid="delivereyCheckBtn" x:Name="delivereyCheckBtn" Grid.Row="3" GroupName="BottomBtn"
+                    <RadioButton x:Uid="delivereyCheckBtn" x:Name="delivereyCheckBtn" Grid.Row="2" GroupName="BottomBtn"
                              IsChecked="{Binding IsDeliveryViewActive}"
 
                               Style="{StaticResource ButtonTabDesactive}">
 
-                    <StackPanel x:Uid="StackPanel_10" Orientation="Horizontal">
-                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_21" Kind="Moped" />
-                        <Border
+                        <StackPanel x:Uid="StackPanel_10" Orientation="Horizontal">
+                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_21" Kind="Moped" />
+                            <Border
                             x:Uid="Border_11" Visibility="{Binding DelivereyViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
-                            <TextBlock x:Uid="TextBlock_13" Text="{Binding DelivereyViewModel.OrderCount}" />
-                        </Border>
-                    </StackPanel>
-                </RadioButton>
+                                <TextBlock x:Uid="TextBlock_13" Text="{Binding DelivereyViewModel.OrderCount}" />
+                            </Border>
+                        </StackPanel>
+                    </RadioButton>
 
 
-                <RadioButton x:Uid="waitingCheckBtn" x:Name="waitingCheckBtn" Grid.Row="4" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}"
+                    <RadioButton x:Uid="waitingCheckBtn" x:Name="waitingCheckBtn" Grid.Row="3" GroupName="BottomBtn" Style="{StaticResource ButtonTabDesactive}"
                               IsChecked="{Binding IsInWaitingViewActive, Mode=TwoWay}">
 
-                    <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal">
-                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_22" Kind="TimerOutline" />
-                        <Border
+                        <StackPanel x:Uid="StackPanel_11" Orientation="Horizontal">
+                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_22" Kind="TimerOutline" />
+                            <Border
                             x:Uid="Border_12" Visibility="{Binding WaitingViewModel.OrderCount, Converter={StaticResource NumberToVisibility}, ConverterParameter='=0'}">
-                            <TextBlock x:Uid="TextBlock_14" Text="{Binding WaitingViewModel.OrderCount}" />
-                        </Border>
-                    </StackPanel>
-                </RadioButton>
+                                <TextBlock x:Uid="TextBlock_14" Text="{Binding WaitingViewModel.OrderCount}" />
+                            </Border>
+                        </StackPanel>
+                    </RadioButton>
+                </Grid>
+                <Grid  Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"  Height="240">
 
-
-                <subviews:TableButtomView x:Uid="subviews:TableButtomView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
-                                          DataContext="{Binding TablesViewModel}"
-                                          Visibility="{Binding ElementName=tableCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
-                <subviews:DelivereyView x:Uid="subviews:DelivereyView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
-                                        DataContext="{Binding DelivereyViewModel}"
-                                        Visibility="{Binding ElementName=delivereyCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
-                <subviews:WaitingView x:Uid="subviews:WaitingView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
-                                      DataContext="{Binding WaitingViewModel}"
-                                      Visibility="{Binding ElementName=waitingCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
-                <subviews:TakeAwayView x:Uid="subviews:TakeAwayView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
-                                       DataContext="{Binding TakeAwayViewModel}"
-                                       Visibility="{Binding ElementName=takeawayCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
+                    <subviews:TableButtomView x:Uid="subviews:TableButtomView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                                              DataContext="{Binding TablesViewModel}"
+                                              Visibility="{Binding ElementName=tableCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
+                    <subviews:DelivereyView x:Uid="subviews:DelivereyView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                                            DataContext="{Binding DelivereyViewModel}"
+                                            Visibility="{Binding ElementName=delivereyCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
+                    <subviews:WaitingView x:Uid="subviews:WaitingView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                                          DataContext="{Binding WaitingViewModel}"
+                                          Visibility="{Binding ElementName=waitingCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
+                    <subviews:TakeAwayView x:Uid="subviews:TakeAwayView_2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                                           DataContext="{Binding TakeAwayViewModel}"
+                                           Visibility="{Binding ElementName=takeawayCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
+                </Grid>
             </Grid>
 
 

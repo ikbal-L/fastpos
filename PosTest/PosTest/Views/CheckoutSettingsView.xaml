@@ -294,7 +294,7 @@
         </TabControl>
 
         <ScrollViewer x:Uid="ScrollViewer_3" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="3.3">
-            <materialdesign:Flipper x:Uid="materialdesign:Flipper_1" IsFlipped="{Binding IsFlipped}" Style="{StaticResource MaterialDesignCardFlipper}">
+            <materialdesign:Flipper  x:Uid="materialdesign:Flipper_1" IsFlipped="{Binding IsFlipped}" Style="{StaticResource MaterialDesignCardFlipper}">
                 <materialdesign:Flipper.FrontContent>
 
                     <Grid x:Uid="Grid_8">
@@ -404,8 +404,8 @@
                                                     [Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]" >
                                                 <Border.Style>
                                                     <Style x:Uid="Style_8" TargetType="Border">
-                                                        <Setter x:Uid="Setter_18" Property="Background" Value="{Binding Background}"/>
-                                                        <Style.Triggers>
+                                                        <Setter x:Uid="Setter_18" Property="Background" Value="{Binding Background,UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <!--<Style.Triggers>
                                                             <DataTrigger x:Uid="DataTrigger_2" Binding="{Binding Id}" Value="{x:Null}">
                                                                 <Setter  x:Uid="Setter_19" Property="Background">
                                                                     <Setter.Value>
@@ -413,7 +413,7 @@
                                                                     </Setter.Value>
                                                                 </Setter>
                                                             </DataTrigger>
-                                                        </Style.Triggers>
+                                                        </Style.Triggers>-->
                                                     </Style>
                                                 </Border.Style>
                                                 <TextBlock x:Uid="TextBlock_10" FontWeight="Bold" FontSize="8" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="{Binding Description}" >

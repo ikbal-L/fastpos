@@ -67,21 +67,21 @@
                                         </ListBox.ItemsPanel>
                                     </ListBox>
                                 </Viewbox>
-                                <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
-                                    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
-                                        <Button x:Uid="Button_1" Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="10" Foreground="White"
+                                <materialdesign:ColorZone Height="45" x:Uid="materialdesign:ColorZone_1" Mode="PrimaryMid" Grid.Row="1" Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                                    <!--<StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
+                                        --><!--<Button x:Uid="Button_1" Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="10" Foreground="White"
                                              
                                             Command="{x:Static materialdesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
                                             <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal" >
                                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_1" Kind="ArrowLeft" HorizontalAlignment="Right" Width="25" Height="25"/>
                                                 <TextBlock x:Uid="TextBlock_1" FontSize="16"> Gestion Du Menu Additives</TextBlock>
                                             </StackPanel>
-                                        </Button>
+                                        </Button>--><!--
 
 
 
 
-                                    </StackPanel>
+                                    </StackPanel>-->
 
 
                                 </materialdesign:ColorZone>
@@ -131,11 +131,11 @@
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_7" Kind="Delete" Height="22" Width="22" />
                                 </Button>
 
-                                <Button x:Uid="Button_6" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                <!--<Button x:Uid="Button_6" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 260 -20"
                                     caliburn:Message.Attach="[Event Click] = [Action BackToLogin()]">
                                     <materialdesign:PackIcon Kind="ArrowBack" Height="22" Width="22" />
-                                </Button>
+                                </Button>-->
 
 
                             </Grid>
