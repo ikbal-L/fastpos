@@ -246,7 +246,6 @@
     <Compile Include="Events\AssignOrderTypeEventArgs.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
     <Compile Include="Extensions\ListPaginationEx.cs" />
-    <Compile Include="Extensions\ObjectExtentions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
@@ -290,12 +289,14 @@
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\ProductsViewModel.cs" />
     <Compile Include="ViewModels\Settings1ViewModel.cs" />
+    <Compile Include="ViewModels\Settings\DeliveryMan\AddEditDeliveryManViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingItemBase.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\PrintSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\AddEditCustomerViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\CustomerSettengsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\DeliveryMan\DeliveryManSettengsViewModel.cs" />
     <Compile Include="ViewModels\Settings\Waiter\AddEditWaiterViewModel.cs" />
     <Compile Include="ViewModels\Settings\Waiter\WaiterSettengsViewModel.cs" />
     <Compile Include="ViewModels\Settings\DialogViewModel.cs" />
@@ -359,6 +360,12 @@
     </Compile>
     <Compile Include="Views\Settings\Customer\CustomerSettingsView.xaml.cs">
       <DependentUpon>CustomerSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\DeliveryMan\AddEditDeliveryManView.xaml.cs">
+      <DependentUpon>AddEditDeliveryManView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\DeliveryMan\DeliveryManSettingsView.xaml.cs">
+      <DependentUpon>DeliveryManSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\Waiter\AddEditWaiterView.xaml.cs">
       <DependentUpon>AddEditWaiterView.xaml</DependentUpon>
@@ -619,6 +626,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Settings\Customer\CustomerSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\DeliveryMan\AddEditDeliveryManView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\DeliveryMan\DeliveryManSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

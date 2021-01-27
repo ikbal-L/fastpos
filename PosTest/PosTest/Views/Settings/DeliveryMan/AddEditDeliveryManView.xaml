@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PosTest.Views.Settings.AddEditCustomerView"
+﻿<UserControl x:Class="PosTest.Views.Settings.AddEditDeliveryManView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -33,7 +33,7 @@
                 <StackPanel Grid.Row="1" Margin="0 20 0 50">
                     <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
                         <TextBlock Text="Name" Margin="0 5 0 5"/>
-                            <TextBox Width="250"  Text="{Binding Customer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+                            <TextBox Width="250"  Text="{Binding Deliveryman.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
                     </StackPanel>
                         <StackPanel>
                             <ListBox
@@ -86,7 +86,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Debit"  Margin="0 5 0 5"/>
 
-                            <TextBox Width="250" Text="{Binding Customer.Debit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+                            <TextBox Width="250" Text="{Binding Deliveryman.Debit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
                     </StackPanel>
                 </StackPanel>
                 <materialdesign:ColorZone Mode="PrimaryMid" Padding="1" Grid.Row="2" Effect="{DynamicResource MaterialDesignShadowDepth5}">

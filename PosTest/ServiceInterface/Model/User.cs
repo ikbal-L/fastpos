@@ -1,8 +1,10 @@
 ﻿using Caliburn.Micro;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using PosTest.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -121,10 +123,36 @@ namespace ServiceInterface.Model
     {
  
     }
-    
+
     [DataContract]
     public class Deliveryman : User
     {
+        private ObservableCollection<string> _PhoneNumbers;
+        [DataMember]
+        public ObservableCollection<string> PhoneNumbers
+        {
+            get { return _PhoneNumbers; }
+            set { _PhoneNumbers = value; 
+            NotifyOfPropertyChange(nameof(PhoneNumbers));
+            }
+        }
+        private decimal _debit;
+        [DataMember]
+
+        public decimal Debit
+        {
+            get { return _debit; }
+            set { _debit = value;
+                NotifyOfPropertyChange(nameof(Debit));
+            }
+        }
+        public ObservableCollection<string> AllPhoneNumbers {
+                                                                get {
+                                                                    var phs = PhoneNumbers.Clone();
+                                                                    phs?.Add(PhoneNumber);
+                                                                    return phs;
+                                                                }
+                                                            }
 
     }
 

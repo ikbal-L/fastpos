@@ -1883,18 +1883,26 @@ namespace PosTest.ViewModels
         public void PrintDocument()
         {
 
-            PrintPreview();
+            // PrintPreview();
 
 
-            //FixedDocument fixedDocument = GenerateOrderReceipt();
-            ////    var printer=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
+             FixedDocument fixedDocument = GenerateOrderReceipt();
+             var printers=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
             //PrintDialog dialog = new PrintDialog();
             //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
             //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
 
 
-
-
+           var PrinterItemSetting=  new SettingsManager<List<PrinterItem>>("PrintSettings.json");
+            foreach (var e in PrinterItemSetting.LoadSettings())
+            {
+                if (e.SelectedKitchen && printers.Contains(e.Name))
+                {
+                    PrintDialog dialog = new PrintDialog();
+                    dialog.PrintQueue = new PrintQueue(new PrintServer(), e.Name);
+                    dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+                }
+            }
 
 
 
