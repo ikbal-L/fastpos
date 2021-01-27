@@ -85,15 +85,15 @@
                         </StackPanel>
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Debit"  Margin="0 5 0 5"/>
-                          
-                            <TextBox Width="250" Text="{Binding Customer.PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+
+                            <TextBox Width="250" Text="{Binding Customer.Debit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
                     </StackPanel>
                 </StackPanel>
                 <materialdesign:ColorZone Mode="PrimaryMid" Padding="1" Grid.Row="2" Effect="{DynamicResource MaterialDesignShadowDepth5}">
                     <StackPanel  Orientation="Horizontal" >
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                                          Margin="4 1 0 1"   
-                                caliburn:Message.Attach="[Event Click] = [Action Save()]"
+                                           caliburn:Message.Attach="[Event Click] = [Action Save()]"
                                             IsEnabled="{Binding IsSaveEnabled}">
                            
                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_12" Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />

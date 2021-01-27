@@ -38,6 +38,19 @@ namespace PosTest.ViewModels.Settings
         }
         private AddEditCustomerViewModel _AddEditCustomerViewModel;
         private AddEditCustomerView _AddEditCustomerView;
+        private string _searchString="";
+
+        public string SearchString
+        {
+            get { return _searchString; }
+            set { _searchString = value;
+                NotifyOfPropertyChange(nameof(SearchString));
+                NotifyOfPropertyChange(nameof(FilteredCustomers));
+            }
+        }
+
+        public ObservableCollection<Customer> FilteredCustomers { get => new ObservableCollection<Customer>(Customers.Where(x => (x.Name?.ToLower().Contains(SearchString?.ToLower())??false) || (x.PhoneNumbers?.Any(n => n.ToLower().Contains(SearchString?.ToLower()))??false) || (x.Debit.ToString()?.ToLower().Contains(SearchString?.ToLower()) ??false))); }
+
         public CustomerSettengsViewModel() {
 
             this.Title = "Customers";
@@ -86,5 +99,6 @@ namespace PosTest.ViewModels.Settings
             };
             
         }
+        
     }
 }

@@ -68,11 +68,11 @@ namespace PosTest.ViewModels.Settings
         public void NewCustome()
         {
             Customer = new  Customer();
+            NewPhoneNumner = "";
             Numbers.Clear();
         }
         public void Save() {
-            Customer.Mobile = Numbers.FirstOrDefault();
-            Numbers.Remove(Customer.Mobile);
+           
             Customer.PhoneNumbers = Numbers;
             if (StateManager.Save<Customer>(Customer))
             {
@@ -104,7 +104,8 @@ namespace PosTest.ViewModels.Settings
         { 
             Customer = selectedCustomer.Clone();
             Numbers.Clear();
-            if(Customer?.PhoneNumbers!=null)
+            NewPhoneNumner = "";
+            if (Customer?.PhoneNumbers!=null)
             foreach (var item in Customer?.PhoneNumbers)
             {
                 Numbers.Add(item);

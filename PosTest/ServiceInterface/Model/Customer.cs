@@ -15,7 +15,6 @@ namespace ServiceInterface.Model
     {
         private string _name;
         private long? _id;
-        private string _mobile;
 
         [DataMember]
         public long? Id
@@ -33,16 +32,11 @@ namespace ServiceInterface.Model
             set => Set(ref _name, value);
         }
 
-        [DataMember]
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
-        public string Mobile
-        {
-            get => _mobile;
-            set => Set(ref _mobile, value);
-        }
-
+     
         private ObservableCollection<String> _PhoneNumbers;
 
+        [DataMember]
         public ObservableCollection<String> PhoneNumbers
     {
             get { return _PhoneNumbers; }
@@ -50,6 +44,16 @@ namespace ServiceInterface.Model
             {
                 _PhoneNumbers = value;
                 NotifyOfPropertyChange(nameof(_PhoneNumbers));
+            }
+        }
+        public string FirstNumber { get => PhoneNumbers?.FirstOrDefault(); }
+        private decimal _Debit;
+        [DataMember]
+        public decimal Debit
+        {
+            get { return _Debit; }
+            set { _Debit = value;
+                NotifyOfPropertyChange(nameof(Debit));
             }
         }
 
