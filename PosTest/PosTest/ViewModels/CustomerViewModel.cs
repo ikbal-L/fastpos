@@ -99,7 +99,7 @@ namespace PosTest.ViewModels
 
         private bool CustomerFilter(object item)
         {
-            if (string.IsNullOrEmpty(FilterString)) 
+            if (string.IsNullOrEmpty(FilterString)|| string.IsNullOrWhiteSpace(FilterString)) 
                 return true;
             try
             {
@@ -145,6 +145,8 @@ namespace PosTest.ViewModels
 
             ParentChechoutVM.CurrentOrder.Customer =customer;
             SelectedCustomer = customer;
+
+            FilterString = "";
         }
 
         private bool ValidateCustomerFullNameAndPhone([Required]string name,string mobile)
