@@ -1659,9 +1659,9 @@ namespace PosTest.ViewModels
             scanValue += e.Text;
         }
 
-        public void doneScan(object sender, KeyEventArgs e)
+        public void DoneScan(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && !string.IsNullOrEmpty(scanValue) )
             {
                 ToastNotification.Notify(scanValue,NotificationType.Information);
 

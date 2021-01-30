@@ -116,10 +116,21 @@ namespace PosTest.ViewModels
         public void CreateAndSave()
         {
             string name= Regex.Replace(FilterString, @"\d", "");
-            string mobile = "+213"+Regex.Replace(FilterString, @"\D", "");
-            if (!ValidateCustomerFullNameAndPhone(name, mobile)) return;
+            string mobile = Regex.Replace(FilterString, @"\D", "");
+           
             
             Customer customer = new Customer { Name = name, Mobile = mobile };
+            var errors =EntityValidationHelper.Validate(customer);
+            if (errors.Any())
+            {
+                foreach (var error in errors)
+                {
+                    ToastNotification.Notify(error,NotificationType.Error);
+                }
+                return;
+            }
+
+            customer.Mobile = "+213" + customer.Mobile;
             StateManager.Save(customer);
             //customer.Id = id;
            

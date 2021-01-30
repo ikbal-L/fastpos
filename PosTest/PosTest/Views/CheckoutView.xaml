@@ -19,7 +19,7 @@
              mc:Ignorable="d"
 
              d:DesignWidth="900"
-             caliburn:Message.Attach="[Event TextInput] = [Action scanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action doneScan($source, $eventArgs)]">
+             caliburn:Message.Attach="[Event TextInput] = [Action scanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action DoneScan($source, $eventArgs)]">
     <FrameworkElement.Resources>
         <ResourceDictionary x:Uid="ResourceDictionary_1">
             <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type viewmodels:SplitViewModel}">
