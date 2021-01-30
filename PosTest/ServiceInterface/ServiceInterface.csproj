@@ -103,6 +103,7 @@
     <Compile Include="Interface\ICustomerService.cs" />
     <Compile Include="Interface\IProductService.cs" />
     <Compile Include="Interface\IRepository.cs" />
+    <Compile Include="jsonConverters\TimespanConverter.cs" />
     <Compile Include="Model\Additive.cs" />
     <Compile Include="Model\Annex.cs" />
     <Compile Include="Model\Category.cs" />

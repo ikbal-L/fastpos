@@ -745,6 +745,7 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Converters\jsonConverters\" />
     <Folder Include="Localization\" />
   </ItemGroup>
   <ItemGroup>

@@ -42,10 +42,11 @@ namespace ServiceLib.Service
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             string json = JsonConvert.SerializeObject(thing,
-                            Newtonsoft.Json.Formatting.None,
+                            Formatting.None,
                             new JsonSerializerSettings
                             {
-                                NullValueHandling = NullValueHandling.Ignore
+                                NullValueHandling = NullValueHandling.Ignore,
+                                
                             });
 
             var client = new RestClient(url);
