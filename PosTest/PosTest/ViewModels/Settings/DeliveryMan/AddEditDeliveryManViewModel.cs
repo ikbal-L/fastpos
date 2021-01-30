@@ -115,8 +115,11 @@ namespace PosTest.ViewModels.Settings
 
  
         public void AddPhoneNumber() {
-            if(!string.IsNullOrEmpty(NewPhoneNumner))
+            if (!string.IsNullOrEmpty(NewPhoneNumner))
+            {
                 this.Numbers.Add(NewPhoneNumner);
+                NewPhoneNumner = "";
+            }
             NotifyOfPropertyChange(() => this.Deliveryman.PhoneNumbers);
         }
         public void DeletePhoneNumber(string number)

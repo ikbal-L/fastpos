@@ -31,23 +31,24 @@
                     <TextBlock Text="Customer" Padding="10" FontWeight="Bold" FontSize="16" />
                 </Border>
                 <StackPanel Grid.Row="1" Margin="0 20 0 50">
-                    <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
-                        <TextBlock Text="Name" Margin="0 5 0 5"/>
+                        <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
+                            <TextBlock Text="Name" Margin="0 5 0 5"/>
                             <TextBox Width="250"  Text="{Binding Deliveryman.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
-                    </StackPanel>
-                        <StackPanel>
-                            <ListBox
+                        </StackPanel>
+                        <Grid Width="250" Margin="0 2 0 0">
+                    
+                                <ListBox
                                     Height="150"
                                     Width="250"
                                     BorderThickness="1"
                                 BorderBrush="DimGray"
                                     ItemsSource="{Binding Numbers, UpdateSourceTrigger=PropertyChanged}"
                                 >
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel/>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -70,19 +71,62 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-                           
-                            <Grid Width="250" Margin="0 2 0 0">
-                                <TextBox Width="250" materialdesign:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumner,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
-                                    Width="25" Height="25"
-                                    HorizontalAlignment="Right"
-                                   caliburn:Message.Attach="[Event Click] = [Action AddPhoneNumber()]"
-                                             Margin="4 -45 0 1">
+                            
+                            <materialdesign:DialogHost
+                                      DialogTheme="Inherit"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center">
+                                <materialdesign:DialogHost.DialogContent>
+                                                                <StackPanel
+                                  Margin="16">
+                                                                    <TextBlock>
+                                  Add a new Phone Number.
+                                        </TextBlock>
+                                            <TextBox Width="250" materialdesign:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumner,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
-                                    <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="Plus" HorizontalAlignment="Right" />
-                                </Button>
+                                            <StackPanel
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
+                                                                                <Button
+                                              Style="{StaticResource MaterialDesignFlatButton}"
+                                              IsDefault="True"
+                                              Margin="0 8 8 0"
+                                                caliburn:Message.Attach="[Event Click] = [Action AddPhoneNumber()]"
+                                                Command="materialdesign:DialogHost.CloseDialogCommand">
+                                                                                    
+                                                                                    ACCEPT
+                                                                                </Button>
+                                                                                <Button
+                                              Style="{StaticResource MaterialDesignFlatButton}"
+                                              IsCancel="True"
+                                              Margin="0 8 8 0"
+                                              Command="materialdesign:DialogHost.CloseDialogCommand">
+                                                <Button.CommandParameter>
+                                                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                                        False
+                                                    </system:Boolean>
+                                                </Button.CommandParameter>
+                                                CANCEL
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialdesign:DialogHost.DialogContent>
+                                    <StackPanel     Height="150"
+                                                      Width="250"
+                                                    Margin="0 -30 -30 0"
+                                                    VerticalAlignment="Top">
+                                        <Button  Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
+                                    Width="30" Height="30"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Right"
+                                    Command="{x:Static materialdesign:DialogHost.OpenDialogCommand}"
+                                        >
+
+                                    <materialdesign:PackIcon  Kind="Plus" HorizontalAlignment="Right" />
+                                        </Button>
+                                    </StackPanel>
+                                </materialdesign:DialogHost>
                             </Grid>
-                        </StackPanel>
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Debit"  Margin="0 5 0 5"/>
 

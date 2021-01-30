@@ -78,6 +78,7 @@ namespace PosTest.ViewModels.Settings
                 {
                     Parent.Customers.RemoveAt(index);
                     Parent.Customers.Insert(index, Customer);
+                    Parent.NotifyCustomers();
                 }
                 IsOpenDailog = false;
                 ToastNotification.Notify("Save  Success", NotificationType.Success);
@@ -98,8 +99,11 @@ namespace PosTest.ViewModels.Settings
             Numbers = selectedCustomer.PhoneNumbers.Clone();
         }
         public void AddPhoneNumber() {
-            if(!string.IsNullOrEmpty(NewPhoneNumner))
+            if (!string.IsNullOrEmpty(NewPhoneNumner))
+            {
                 this.Numbers.Add(NewPhoneNumner);
+                NewPhoneNumner = "";
+            }
             NotifyOfPropertyChange(() => this.Customer.PhoneNumbers);
         }
         public void DeletePhoneNumber(string number)

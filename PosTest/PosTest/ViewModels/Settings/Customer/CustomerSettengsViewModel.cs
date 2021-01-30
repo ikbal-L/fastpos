@@ -99,6 +99,9 @@ namespace PosTest.ViewModels.Settings
             };
             
         }
-        
+      public void NotifyCustomers() {
+            NotifyOfPropertyChange(nameof(FilteredCustomers));
+
+        }
     }
 }
