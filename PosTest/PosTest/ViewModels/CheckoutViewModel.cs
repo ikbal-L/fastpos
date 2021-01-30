@@ -1789,6 +1789,30 @@ namespace PosTest.ViewModels
             }
         }
 
+
+        public void SelectDeliveryMan(Deliveryman deliveryman)
+        {
+            if (SelectedDeliveryman!= deliveryman)
+            {
+                SelectedDeliveryman = deliveryman; 
+            }
+            else
+            {
+                SelectedDeliveryman = null;
+            }
+        }
+
+        public void SelectWaiter(Waiter waiter)
+        {
+            if (SelectedWaiter != waiter)
+            {
+                SelectedWaiter = waiter;
+            }
+            else
+            {
+                SelectedWaiter = null;
+            }
+        }
         public ListKind ListKind
         {
             get => _listKind;
@@ -1974,16 +1998,6 @@ namespace PosTest.ViewModels
             set => Set(ref _currentCategoryPageIndex, value);
         }
 
-        public void SelectWaiter(object waiter)
-        {
-           
-            if (SelectedWaiter!= null && waiter == SelectedWaiter)
-            {
-                SelectedWaiter = null;
-                
-            }
-            
-            
-        }
+        
     }
 }

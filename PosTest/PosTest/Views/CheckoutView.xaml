@@ -265,8 +265,8 @@
                                  Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=waiter}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:Uid="DataTemplate_9" DataType="{x:Type models:Waiter}">
-                                    <RadioButton x:Uid="RadioButton_2" GroupName="groupName1" Width="120" Height="70"
-                                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                    <Button x:Uid="RadioButton_2" Width="120" Height="70"
+                                            caliburn:Message.Attach="[Event Click] = [Action SelectWaiter($this)]"
                                                  Style="{StaticResource ButtonTopOrderDelivereyman}"
                                                  Background="{Binding Background}">
                                         <DockPanel x:Uid="DockPanel_1">
@@ -276,7 +276,7 @@
                                             <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_9" DockPanel.Dock="Left" Kind="Phone" />
                                             <TextBlock x:Uid="TextBlock_3" DockPanel.Dock="Left" Text="{Binding PhoneNumber}" />
                                         </DockPanel>
-                                    </RadioButton>
+                                    </Button>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemContainerStyle>
@@ -298,8 +298,8 @@
                                  Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter} , ConverterParameter=delivrey}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:Uid="DataTemplate_10" DataType="{x:Type models:Deliveryman}">
-                                    <RadioButton x:Uid="RadioButton_3" GroupName="groupName2" Width="120" Height="70"
-                                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                    <Button x:Uid="RadioButton_3"  Width="120" Height="70"
+                                            caliburn:Message.Attach="[Event Click] = [Action SelectDeliveryMan($this)]"
                                                  Style="{StaticResource ButtonTopOrderDelivereyman}"
                                                  Background="{Binding Background}">
                                         <DockPanel x:Uid="DockPanel_2">
@@ -309,7 +309,7 @@
                                                                      Height="20" VerticalAlignment="Center" />
                                             <TextBlock x:Uid="TextBlock_5" DockPanel.Dock="Bottom" Text="{Binding PhoneNumber}" />
                                         </DockPanel>
-                                    </RadioButton>
+                                    </Button>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemContainerStyle>
