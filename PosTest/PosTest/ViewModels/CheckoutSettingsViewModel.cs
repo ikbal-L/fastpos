@@ -1161,13 +1161,13 @@ namespace PosTest.ViewModels
             }
         }
 
-        public void EditProduct(bool callFromCreate = false)
+        public void EditProduct()
         {
-            if (!callFromCreate && SelectedProduct.Id == null)
+          /*  if (SelectedProduct.Id == null)
             {
                 ToastNotification.Notify("There is no Product to edit, select a valid cell!");
                 return;
-            }
+            }*/
 
             IsCategory = false;
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
@@ -1190,7 +1190,7 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("Select an empty cell to create a new Product");
                 return;
             }
-            EditProduct(true);
+            EditProduct();
         }
 
         public void EditCategory(bool callFromCreate = false)

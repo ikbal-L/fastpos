@@ -59,8 +59,7 @@
     <DataTemplate x:Uid="DataTemplate_2" DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <StackPanel  x:Uid="StackPanel_1" Orientation="Vertical"  x:Name="ProductTemplate">
             <Border x:Uid="ProductSettingsClick" x:Name="ProductSettingsClick"  BorderBrush="LightGray" BorderThickness="1" 
-                                                                      cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
-
+                    cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
                     caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this,$eventArgs)]">
                 <StackPanel x:Uid="StackPanel_2">
                     <DockPanel x:Uid="DockPanel_2" Height="70" Width="100" Background="{Binding Background}" >
@@ -77,6 +76,7 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
+
                         </Border>
 
                         <DockPanel x:Uid="DockPanel_3" LastChildFill="False" >
@@ -100,6 +100,8 @@
                                 </Border.Style>
                             </Border>
                             <Button x:Uid="Button_1" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" 
+                                    cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
+
                                     cal:Message.Attach="[Event Click] = [Action EditProduct()]">
                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="Plus" Height="20" Width="20"/>
                                 <Button.Style>
