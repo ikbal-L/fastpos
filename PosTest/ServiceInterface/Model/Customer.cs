@@ -35,6 +35,7 @@ namespace ServiceInterface.Model
         [DataMember]
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
         [Required(AllowEmptyStrings = false)]
+        [MinLength(09,ErrorMessage = "Phone number length must be at least 9 digits ")]
         public string Mobile
         {
             get => _mobile;

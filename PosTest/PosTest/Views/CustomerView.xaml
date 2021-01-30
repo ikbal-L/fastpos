@@ -115,11 +115,11 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate x:Uid="DataTemplate_1">
-                            <Button 
+                            <Button Height="60"
                                 x:Uid="Button_5" Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
-                                <StackPanel  x:Uid="StackPanel_3" Height="60" Width="120"  HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                    <TextBlock x:Uid="TextBlock_3" FontSize="14" Text="{Binding Mobile}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                <StackPanel  x:Uid="StackPanel_3"  Width="120"   Orientation="Vertical" >
                                     <TextBlock x:Uid="TextBlock_4" FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                    <TextBlock x:Uid="TextBlock_4" FontSize="14" Text="{Binding Mobile}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                                 </StackPanel>
                             </Button>
                         </DataTemplate>
