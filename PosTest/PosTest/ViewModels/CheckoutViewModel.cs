@@ -1041,7 +1041,13 @@ namespace PosTest.ViewModels
                 case ActionButton.Price:
                 {
                     string numericZone = NumericZone;
-                    PriceAction(ref numericZone, CurrentOrder);
+                    if (CurrentOrder == null || CurrentOrder.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
+                    {
+                        ToastNotification.Notify("Add products before ...", NotificationType.Warning);
+                        NumericZone = "";
+                        return;
+                    }
+                        PriceAction(ref numericZone, CurrentOrder);
                     NumericZone = numericZone;
                     break;
                 }
