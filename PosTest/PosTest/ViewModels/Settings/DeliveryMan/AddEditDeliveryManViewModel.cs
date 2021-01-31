@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace PosTest.ViewModels.Settings
 {
-   public class AddEditCustomerViewModel : PropertyChangedBase
+   public class AddEditDeliveryManViewModel : PropertyChangedBase
     {
         private bool _IsOpenDailog ;
+
         public bool IsOpenDailog
         {
             get { return _IsOpenDailog; }
@@ -22,16 +23,18 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(IsOpenDailog));
             }
         }
-        private Customer _Customer;
-        public Customer Customer
+        private Deliveryman _deliveryman;
+
+        public Deliveryman Deliveryman
         {
-            get { return _Customer; }
+            get { return _deliveryman; }
             set {
-                _Customer = value;
-                NotifyOfPropertyChange(nameof(Customer));
+                _deliveryman = value;
+                NotifyOfPropertyChange(nameof(Deliveryman));
             }
         }
         private ObservableCollection<String> numbres;
+
         public ObservableCollection<String> Numbers
         {
             get { return numbres; }
@@ -40,7 +43,9 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(Numbers));
             }
         }
+
         private string _NewPhoneNumner;
+
         public string NewPhoneNumner
         {
             get { return _NewPhoneNumner; }
@@ -48,8 +53,9 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(NewPhoneNumner));
             }
         }
-        private CustomerSettengsViewModel Parent { get; set; }
-        public AddEditCustomerViewModel(CustomerSettengsViewModel parent)
+
+        private DeliveryManSettengsViewModel Parent { get; set; }
+        public AddEditDeliveryManViewModel(DeliveryManSettengsViewModel parent)
         {
             Parent = parent;
             Numbers = new ObservableCollection<string>();
@@ -58,27 +64,26 @@ namespace PosTest.ViewModels.Settings
         {
             IsOpenDailog = value;
         }
-        public void NewCustome()
-        {
-            Customer = new  Customer();
-            NewPhoneNumner = "";
-            Numbers.Clear();
-        }
+   
+    
         public void Save() {
-           
-            Customer.PhoneNumbers = Numbers;
-            if (StateManager.Save<Customer>(Customer))
+
+            Deliveryman.PhoneNumber = Numbers?.FirstOrDefault();
+            Deliveryman.PhoneNumbers = Numbers.Count>1? new ObservableCollection<string>( Numbers?.Where(x=>x!= Deliveryman.PhoneNumber).ToList()):null;
+
+            if (StateManager.Save<Deliveryman>(Deliveryman))
             {
-                int index=   Parent.Customers.IndexOf(Parent.Customers.FirstOrDefault(x => x.Id == Customer.Id));
+                int index=   Parent.Deliverymans.IndexOf(Parent.Deliverymans.FirstOrDefault(x => x.Id == Deliveryman.Id));
+                
+                Numbers = Deliveryman.AllPhoneNumbers!=null?new ObservableCollection<string>(Deliveryman.AllPhoneNumbers):new ObservableCollection<string>();
                 if (index==-1)
                 {
-                    Parent.Customers.Add(Customer);
+                    Parent.Deliverymans.Add(Deliveryman);
                 }
                 else
                 {
-                    Parent.Customers.RemoveAt(index);
-                    Parent.Customers.Insert(index, Customer);
-                    Parent.NotifyCustomers();
+                    Parent.Deliverymans.RemoveAt(index);
+                    Parent.Deliverymans.Insert(index, Deliveryman);
                 }
                 IsOpenDailog = false;
                 ToastNotification.Notify("Save  Success", NotificationType.Success);
@@ -89,26 +94,38 @@ namespace PosTest.ViewModels.Settings
 
             }
         }
+
+        internal void ChangeDeliveryMan(Deliveryman selectedDeliveryMan)
+        {
+            Deliveryman = selectedDeliveryMan.Clone();
+            Numbers = Deliveryman.AllPhoneNumbers.Clone();
+        }
+
+        internal void NewDeliveryMan()
+        {
+            Deliveryman = new Deliveryman();
+            NewPhoneNumner = "";
+            Numbers.Clear();
+        }
+
         public void Close()
         {
             IsOpenDailog = false;
         }
-        public void ChangeCustomer(Customer selectedCustomer)
-        { 
-            Customer = selectedCustomer.Clone();
-            Numbers = selectedCustomer.PhoneNumbers.Clone();
-        }
+
+ 
         public void AddPhoneNumber() {
             if (!string.IsNullOrEmpty(NewPhoneNumner))
             {
                 this.Numbers.Add(NewPhoneNumner);
                 NewPhoneNumner = "";
             }
-            NotifyOfPropertyChange(() => this.Customer.PhoneNumbers);
+            NotifyOfPropertyChange(() => this.Deliveryman.PhoneNumbers);
         }
         public void DeletePhoneNumber(string number)
         {
-            this.Customer.PhoneNumbers.Remove(number);
+            this.Numbers.Remove(number);
+           // this.Deliveryman.PhoneNumbers.Remove(number);
         }
     }
 }

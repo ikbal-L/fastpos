@@ -347,7 +347,7 @@
                                 <Button x:Uid="Button_7" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                         VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                         Grid.Row="0" Margin="0 0 60 -20"
-                                        caliburn:Message.Attach="[Event Click] = [Action EditProduct(false)]"
+                                        caliburn:Message.Attach="[Event Click] = [Action EditProduct()]"
                                 >
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="Edit" Height="22" Width="22" />
                                 </Button>

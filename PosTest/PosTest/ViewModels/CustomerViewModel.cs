@@ -104,7 +104,7 @@ namespace PosTest.ViewModels
             try
             {
                 Customer customer = item as Customer;
-                return customer.Name.ToLower().Contains(FilterString.ToLower()) || customer.Mobile.Contains(FilterString);
+                return customer.Name.ToLower().Contains(FilterString.ToLower());//|| customer.Mobile.Contains(FilterString);
             }
             catch
             {
@@ -182,7 +182,7 @@ namespace PosTest.ViewModels
             string mobile = Regex.Replace(FilterString, @"\d", "");
             string name = Regex.Replace(FilterString, @"\D", "");
 
-            Customer customer = new Customer { Name = name, Mobile = mobile , PhoneNumbers = new BindableCollection<string>(){"0665666768","0666676869"}};
+            Customer customer = new Customer { Name = name/*, Mobile = mobile */, PhoneNumbers = new BindableCollection<string>(){"0665666768","0666676869"}};
             IsEditing = true;
             CustomerDetailViewModel = new CustomerDetailViewModel(customer);
             CustomerDetailViewModel.CommandExecuted += CustomerDetailViewModel_CommandExecuted;

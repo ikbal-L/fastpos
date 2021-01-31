@@ -20,9 +20,9 @@ namespace PosTest.ViewModels.SubViewModel
 
         public CustomerDetailViewModel(Customer customer)
         {
-            Customer = new Customer(){Id = customer.Id,Name = customer.Name,Mobile = customer.Mobile,PhoneNumbers = customer.PhoneNumbers};
+            Customer = new Customer(){Id = customer.Id,Name = customer.Name/*,Mobile = customer.Mobile*/,PhoneNumbers = customer.PhoneNumbers};
             ValidateModelProperty(Customer,Customer.Name,nameof(Customer.Name));
-            ValidateModelProperty(Customer,Customer.Mobile,nameof(Customer.Mobile));
+          //  ValidateModelProperty(Customer,Customer.Mobile,nameof(Customer.Mobile));
             Customer.PropertyChanged += Customer_PropertyChanged;
         }
 
@@ -33,10 +33,10 @@ namespace PosTest.ViewModels.SubViewModel
                 ValidateModelProperty(Customer, Customer.Name, nameof(Customer.Name));
             }
 
-            if (e.PropertyName == nameof(Customer.Mobile))
+         /*   if (e.PropertyName == nameof(Customer.Mobile))
             {
                 ValidateModelProperty(Customer, Customer.Mobile, nameof(Customer.Mobile));
-            }
+            }*/
         }
 
         public Customer Customer

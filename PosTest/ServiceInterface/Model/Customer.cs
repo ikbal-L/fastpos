@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -14,7 +15,6 @@ namespace ServiceInterface.Model
     {
         private string _name;
         private long? _id;
-        private string _mobile;
 
         [DataMember]
         public long? Id
@@ -32,16 +32,30 @@ namespace ServiceInterface.Model
             set => Set(ref _name, value);
         }
 
-        [DataMember]
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
-        [Required(AllowEmptyStrings = false)]
-        [MinLength(09,ErrorMessage = "Phone number length must be at least 9 digits ")]
-        public string Mobile
+     
+        private ObservableCollection<String> _PhoneNumbers;
+
+        [DataMember]
+        public ObservableCollection<String> PhoneNumbers
+    {
+            get { return _PhoneNumbers; }
+            set
+            {
+                _PhoneNumbers = value;
+                NotifyOfPropertyChange(nameof(_PhoneNumbers));
+            }
+        }
+        public string FirstNumber { get => PhoneNumbers?.FirstOrDefault(); }
+        private decimal _Debit;
+        [DataMember]
+        public decimal Debit
         {
-            get => _mobile;
-            set => Set(ref _mobile, value);
+            get { return _Debit; }
+            set { _Debit = value;
+                NotifyOfPropertyChange(nameof(Debit));
+            }
         }
 
-        public BindableCollection<String> PhoneNumbers { get; set; }    
     }    
 }

@@ -95,6 +95,7 @@
     <Compile Include="Authorisation\DefaultAuthProvider.cs" />
     <Compile Include="Authorisation\UIElementPermission.cs" />
     <Compile Include="Authorisation\VisibilityOrBool.cs" />
+    <Compile Include="ExtentionsMethod\ObjectExtentions.cs" />
     <Compile Include="Interface\IAdditiveService.cs" />
     <Compile Include="Interface\IAuthentification.cs" />
     <Compile Include="Interface\IDelivereyService.cs" />

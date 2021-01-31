@@ -50,7 +50,7 @@ namespace PosTest.ViewModels.Settings
         private AddEditWaiterView _addEditWaiterView;
         public WaiterSettengsViewModel() {
 
-            this.Title = "Waiter";
+            this.Title = "Waiters";
             this.Content = new WaiterSettingsView() { DataContext = this };
             Waiters = new ObservableCollection<Waiter>(StateManager.Get<Waiter>());
             _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
