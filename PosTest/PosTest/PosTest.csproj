@@ -246,6 +246,8 @@
     <Compile Include="Enums\ListKind.cs" />
     <Compile Include="Enums\NextOrPrevious.cs" />
     <Compile Include="Events\AssignOrderTypeEventArgs.cs" />
+    <Compile Include="Extensions\AbilityEx.cs" />
+    <Compile Include="Extensions\AbiltyStringException.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
     <Compile Include="Extensions\ListGridContainerEx.cs" />
     <Compile Include="Extensions\ListPaginationEx.cs" />

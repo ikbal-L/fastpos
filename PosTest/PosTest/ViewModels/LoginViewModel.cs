@@ -18,6 +18,8 @@ using ServiceLib.Service;
 using PosTest.Helpers;
 using PosTest.ViewModels.Settings;
 using PosTest.ViewModels.DeliveryAccounting;
+using System.Threading;
+using System.Security.Principal;
 
 namespace PosTest.ViewModels
 {
@@ -76,6 +78,14 @@ namespace PosTest.ViewModels
                 .Manage(_customerRepository)
                 .Manage(_waiterRepository)
                 .Manage(_deliverymanRepository);
+            
+            List<string> auths = new List<string>();
+            auths.Add("Read_Product");
+            auths.Add("Can_login");
+            var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), auths.ToArray());
+            Thread.CurrentPrincipal = principal;
+
+        
         }
         public bool CanLogin()
         {
