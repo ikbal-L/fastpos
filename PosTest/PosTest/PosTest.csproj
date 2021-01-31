@@ -245,6 +245,7 @@
     <Compile Include="Enums\ListedOrdersType.cs" />
     <Compile Include="Enums\ListKind.cs" />
     <Compile Include="Enums\NextOrPrevious.cs" />
+    <Compile Include="Enums\PrintSource.cs" />
     <Compile Include="Events\AssignOrderTypeEventArgs.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
     <Compile Include="Extensions\ListGridContainerEx.cs" />

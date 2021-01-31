@@ -1052,17 +1052,12 @@ namespace PosTest.ViewModels
                     break;
                 }
                 case ActionButton.Payment:
-                    //if (CurrentOrder.Type == OrderType.InWaiting)
-                    //{
-                    //    ToastNotification.Notify("Set order type first", NotificationType.Warning);
-                    //    return;
-                    //}
-
+                    
                     PayementAction();
                     break;
 
                 case ActionButton.Cmd:
-                    if (CurrentOrder == null || CurrentOrder.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
+                    if (CurrentOrder?.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
                     {
                         ToastNotification.Notify("Add products before ...", NotificationType.Warning);
                         return;
@@ -1082,6 +1077,7 @@ namespace PosTest.ViewModels
                     CurrentOrder.State = OrderState.Ordered;
                     _diff.Clear();
                     SaveCurrentOrder();
+                    PrintDocument(PrintSource.Kitchen);
                     break;
 
                 case ActionButton.Table:
@@ -1662,6 +1658,11 @@ namespace PosTest.ViewModels
                     NotifyOfPropertyChange(() => CurrentOrder);
                 }
 
+                if (scanValue.Contains("printPV"))
+                {
+                    PrintPreview(PrintSource.Kitchen);
+                }
+
                 scanValue = "";
             }
         }
@@ -1824,13 +1825,21 @@ namespace PosTest.ViewModels
         {
         }
 
-        private FixedDocument GenerateOrderReceipt()
+        private FixedDocument GenerateOrderReceipt(PrintSource source)
         {
             FixedDocument document = new FixedDocument();
             FixedPage fixedPage = new FixedPage();
 
-            //DataTemplate dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
-            DataTemplate dt = Application.Current.FindResource("KitchenReceiptDataTemplate") as DataTemplate;
+            
+            DataTemplate dt = null;
+            if (source == PrintSource.Checkout)
+            {
+                dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
+            }
+            if (source == PrintSource.Kitchen)
+            {
+                dt = Application.Current.FindResource("KitchenReceiptDataTemplate") as DataTemplate;
+            }
 
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
@@ -1872,13 +1881,12 @@ namespace PosTest.ViewModels
             return value;
         }
 
-        public void PrintPreview()
+        public void PrintPreview(PrintSource source)
         {
             if (CurrentOrder == null) return;
 
-            var doc = GenerateOrderReceipt();
-            PrintViewModel pvm = new PrintViewModel() {Document = doc, PreviousScreen = this};
-            pvm.Parent = this.Parent;
+            var doc = GenerateOrderReceipt(source);
+            PrintViewModel pvm = new PrintViewModel {Document = doc, PreviousScreen = this, Parent = this.Parent};
             (this.Parent as MainViewModel).ActivateItem(pvm);
 
             //var xpsDoc = GenerateXpsDocument($"customerReceipt{DateTime.Now.ToFileTime()}");
@@ -1902,26 +1910,35 @@ namespace PosTest.ViewModels
             xpsDocument.Close();
         }
 
-        public void PrintDocument()
+        public void PrintDocument(PrintSource source)
         {
 
             // PrintPreview();
 
 
-             FixedDocument fixedDocument = GenerateOrderReceipt();
+             FixedDocument fixedDocument = GenerateOrderReceipt(source);
              var printers=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
             //PrintDialog dialog = new PrintDialog();
             //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
             //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
 
-
+            IList<PrinterItem> printerItems = null;
            var PrinterItemSetting=  new SettingsManager<List<PrinterItem>>("PrintSettings.json");
-            foreach (var e in PrinterItemSetting.LoadSettings())
+           if (source == PrintSource.Kitchen)
+           {
+               printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedKitchen).ToList();
+           }
+
+           if (source == PrintSource.Checkout)
+           {
+               printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedReceipt).ToList();
+           }
+
+            foreach (var e in printerItems)
             {
-                if (e.SelectedKitchen && printers.Contains(e.Name))
+                if ( printers.Contains(e.Name))
                 {
-                    PrintDialog dialog = new PrintDialog();
-                    dialog.PrintQueue = new PrintQueue(new PrintServer(), e.Name);
+                    PrintDialog dialog = new PrintDialog {PrintQueue = new PrintQueue(new PrintServer(), e.Name)};
                     dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
                 }
             }

@@ -531,19 +531,20 @@
                                 caliburn:Message.Attach="[Event Click] = [Action CancelOrder()]" />
 
 
-                        <Button x:Uid="Button_32" Grid.Row="2" Grid.Column="0"
+                        <!--<Button x:Uid="Button_32" Grid.Row="2" Grid.Column="0"
                                 Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}"
                                 Style="{StaticResource ButtonStyle18}"
-                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]" />
+                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]" />-->
                         <!--caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('NOTE')]"-->
-                        <Button x:Uid="Button_33" Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon NoteOutline, 30}"
+                        <Button x:Uid="Button_33" Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon Printer, 30}"
                                 Style="{StaticResource ButtonStyle18}"
-                                caliburn:Message.Attach="[Event Click] = [Action PrintDocument()]" />
+                                caliburn:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" />
 
-                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="0"  Style="{StaticResource ButtonStyle18}"
+                        <Button x:Uid="Button_34" Grid.Row="2" Grid.Column="0"  Style="{StaticResource ButtonStyle18}"
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]" />
-                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="1"  Style="{StaticResource ButtonStyle18}"
+
+                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Style="{StaticResource ButtonStyle18}"
                                 Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVERED')]" />
 
