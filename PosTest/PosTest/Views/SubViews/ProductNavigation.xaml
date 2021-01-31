@@ -8,7 +8,9 @@
              xmlns:localvm="clr-namespace:PosTest.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:converters="clr-namespace:PosTest.Converters"
+             xmlns:ex="clr-namespace:PosTest.Extensions"
              mc:Ignorable="d" 
+
              d:DesignHeight="450" d:DesignWidth="600"
              d:DataContext="{d:DesignData localvm:CheckoutViewModel, IsDesignTimeCreatable=False}" >
     <UserControl.Resources>
@@ -40,6 +42,9 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
                         <WrapPanel x:Uid="WrapPanel_1"/>
+                        <!--<Grid ex:ListGridContainerEx.Columns="6">
+                            
+                        </Grid>-->
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

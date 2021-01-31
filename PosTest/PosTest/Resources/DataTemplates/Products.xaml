@@ -12,6 +12,8 @@
     <converters:CollectionContainsValueConverter x:Uid="converters:CollectionContainsValueConverter_1" x:Key="CollectionContainsValueConverter"></converters:CollectionContainsValueConverter>
     <converters:EqualToSelectedAndNotEmptyMultiValueConverter x:Uid="converters:EqualToSelectedAndNotEmptyMultiValueConverter_1" x:Key="EqualToSelectedAndNotEmptyMultiValueConverter"></converters:EqualToSelectedAndNotEmptyMultiValueConverter>
     <converters:EqualToSelectedAndEmptyMultiValueConverter x:Key="EqualToSelectedAndEmptyMultiValueConverter"></converters:EqualToSelectedAndEmptyMultiValueConverter>
+    <converters:ProductTemplateHeightConverter x:Key="ProductTemplateHeightConverter"></converters:ProductTemplateHeightConverter>
+    <converters:ProductTemplateWidthConverter x:Key="ProductTemplateWidthConverter"></converters:ProductTemplateWidthConverter>
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <StackPanel  x:Uid="ProductTemplate" Orientation="Vertical"  x:Name="ProductTemplate">
             <Button x:Uid="ProductClick" x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" >
@@ -22,7 +24,10 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DockPanel x:Uid="DockPanel_1" Height="90" Width="190" Background="{Binding Background}" >
+                <DockPanel x:Uid="DockPanel_1" 
+                           Height="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualHeight,Converter={StaticResource ProductTemplateHeightConverter}}" 
+                           Width="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualWidth,Converter={StaticResource ProductTemplateWidthConverter}}" 
+                           Background="{Binding Background}" >
                     <Border x:Uid="Border_1" DockPanel.Dock="Top" Height="40">
                         <TextBlock x:Uid="TextBlock_1" Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">

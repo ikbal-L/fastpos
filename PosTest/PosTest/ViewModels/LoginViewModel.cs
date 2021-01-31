@@ -122,8 +122,11 @@ namespace PosTest.ViewModels
         public void Checkout()
         {
             IsDialogOpen = false;
+            var  Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
+            var setting = Manager.LoadSettings();
+            var pageSize = int.Parse(setting.NumberProducts);
             CheckoutViewModel checkoutViewModel =
-                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage
+                new CheckoutViewModel(pageSize
                 //,_productService,
                 //_categorieService,
                 //_orderRepository,

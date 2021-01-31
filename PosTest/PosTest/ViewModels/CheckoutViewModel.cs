@@ -120,21 +120,12 @@ namespace PosTest.ViewModels
         }
 
         public CheckoutViewModel(int pageSize
-            //,
-            //IProductService productsService,
-            //ICategoryService categoriesService,
-            //IOrderService orderService,
-            //IWaiterService waiterService,
-            //IDelivereyService delivereyService,
-            //ICustomerService customerService
+            
         ) : this()
         {
             _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
-            //_productsService = productsService;
-            //_categoriesService = categoriesService;
-            //_orderService = orderService;
-            //_customerService = customerService;
+           
 
 
             StateManager.Fetch();
@@ -234,7 +225,7 @@ namespace PosTest.ViewModels
             TakeAwayViewModel = new TakeawayViewModel(this);
             DelivereyViewModel = new DelivereyViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
-            CustomerViewModel = new CustomerViewModel(this/*, customerService*/);
+            CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
@@ -1850,6 +1841,7 @@ namespace PosTest.ViewModels
             var conv = new LengthConverter();
     
             double width = (double)conv.ConvertFromString("8cm");
+            
             double height = document.DocumentPaginator.PageSize.Height;
             contentOfPage.Width = width;
             document.DocumentPaginator.PageSize = new Size(width, height);

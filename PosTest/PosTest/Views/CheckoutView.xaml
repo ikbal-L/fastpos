@@ -703,7 +703,7 @@
                 </DockPanel>
             </Grid>
 
-            <Grid x:Uid="Grid_15" Grid.Column="1" Grid.Row="1" Width="1200">
+            <Grid x:Uid="Grid_15" Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition x:Uid="RowDefinition_32" Height="*" />
                     <RowDefinition x:Uid="RowDefinition_33" Height="auto" />
