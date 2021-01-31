@@ -48,6 +48,8 @@ namespace ServiceInterface.Model
         }
         public string FirstNumber { get => PhoneNumbers?.FirstOrDefault(); }
         private decimal _Debit;
+        private string _mobile;
+
         [DataMember]
         public decimal Debit
         {
@@ -55,6 +57,17 @@ namespace ServiceInterface.Model
             set { _Debit = value;
                 NotifyOfPropertyChange(nameof(Debit));
             }
+        }
+
+
+        [DataMember]
+        //[Phone(ErrorMessage = "Enter a valid phone number ")]
+        [Required(AllowEmptyStrings = false)]
+        [MinLength(09, ErrorMessage = "Phone number length must be at least 9 digits ")]
+        public string Mobile
+        {
+            get => _mobile;
+            set => Set(ref _mobile, value);
         }
 
     }    
