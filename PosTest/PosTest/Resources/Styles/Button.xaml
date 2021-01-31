@@ -36,12 +36,12 @@
         <Setter x:Uid="Setter_22" Property="Foreground" Value="{StaticResource DefaultForegroundBrush}"/>
         <Setter x:Uid="Setter_23" Property="Template">
             <Setter.Value>
-                <ControlTemplate x:Uid="ControlTemplate_1" TargetType="ButtonBase">
-                    <Border x:Uid="Border_1" BorderBrush="{TemplateBinding BorderBrush}"
+                <ControlTemplate  TargetType="ButtonBase">
+                    <Border  BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     Background="{TemplateBinding Background}">
                         <ContentPresenter 
-                                x:Uid="ContentPresenter_1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 Margin="{TemplateBinding Padding}"/>
                     </Border>

@@ -6,44 +6,44 @@
              xmlns:local="clr-namespace:PosTest.Views" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="240">
-    <Grid x:Uid="Grid_1">
+             d:DesignHeight="300" d:DesignWidth="240"  >
+    <UserControl.Resources>
+        <Style x:Key="LoginPadButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle22}">
+            <Setter Property="Width" Value="30"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid x:Uid="Grid_1" VerticalAlignment="Center" >
         <Grid.RowDefinitions>
-            <RowDefinition  Height="auto"/>
-            <RowDefinition  Height="auto"/>
-            <RowDefinition  Height="auto"/>
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <Border>
-            <StackPanel Orientation="Vertical">
-                <Label><materialdesign:PackIcon Kind="UserCircle"></materialdesign:PackIcon></Label>
-            </StackPanel>
+        <Border HorizontalAlignment="Center" >
+            <materialdesign:PackIcon Kind="UserCircle" Height="120" Width="120"></materialdesign:PackIcon>
         </Border>
-        <Border Grid.Row="1" >
+        <Border Grid.Row="1"  Width="240" >
             <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
                 <!--Background="Black" FontSize="30" Foreground="White"-->
                 <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"   Text="{Binding PinCode}" 
                          Height="50" Margin="3"></TextBox>
-                <Button Grid.Column="1"  Width="50" Height="50"  VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <materialdesign:PackIcon Kind="Login" VerticalContentAlignment="Center"></materialdesign:PackIcon>
-                </Button>
+                
             </Grid>
         </Border>
-        <Grid Grid.Row="2" Margin="20 5" >
+        <Grid Grid.Row="2" Margin="20 5"  Width="240" Height="240" >
             <Grid.Effect>
                 <DropShadowEffect x:Uid="DropShadowEffect_1" BlurRadius="20"></DropShadowEffect>
             </Grid.Effect>
             <Grid.RowDefinitions>
-                <RowDefinition x:Uid="RowDefinition_3"/>
-                <RowDefinition x:Uid="RowDefinition_4"/>
-                <RowDefinition x:Uid="RowDefinition_5"/>
-                <RowDefinition x:Uid="RowDefinition_6"/>
+                <RowDefinition x:Uid="RowDefinition_3" Height="*"/>
+                <RowDefinition x:Uid="RowDefinition_4" Height="*"/>
+                <RowDefinition x:Uid="RowDefinition_5" Height="*"/>
+                <RowDefinition x:Uid="RowDefinition_6" Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Uid="ColumnDefinition_1" />
