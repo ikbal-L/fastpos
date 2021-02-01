@@ -11,7 +11,9 @@
     <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BoolToVisibility" />
     <converters:CollectionContainsValueConverter x:Uid="converters:CollectionContainsValueConverter_1" x:Key="CollectionContainsValueConverter"></converters:CollectionContainsValueConverter>
     <converters:EqualToSelectedAndNotEmptyMultiValueConverter x:Uid="converters:EqualToSelectedAndNotEmptyMultiValueConverter_1" x:Key="EqualToSelectedAndNotEmptyMultiValueConverter"></converters:EqualToSelectedAndNotEmptyMultiValueConverter>
-
+    <converters:EqualToSelectedAndEmptyMultiValueConverter x:Key="EqualToSelectedAndEmptyMultiValueConverter"></converters:EqualToSelectedAndEmptyMultiValueConverter>
+    <converters:ProductTemplateHeightConverter x:Key="ProductTemplateHeightConverter"></converters:ProductTemplateHeightConverter>
+    <converters:ProductTemplateWidthConverter x:Key="ProductTemplateWidthConverter"></converters:ProductTemplateWidthConverter>
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <StackPanel  x:Uid="ProductTemplate" Orientation="Vertical"  x:Name="ProductTemplate">
             <Button x:Uid="ProductClick" x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" >
@@ -22,7 +24,10 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <DockPanel x:Uid="DockPanel_1" Height="90" Width="190" Background="{Binding Background}" >
+                <DockPanel x:Uid="DockPanel_1" 
+                           Height="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualHeight,Converter={StaticResource ProductTemplateHeightConverter}}" 
+                           Width="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualWidth,Converter={StaticResource ProductTemplateWidthConverter}}" 
+                           Background="{Binding Background}" >
                     <Border x:Uid="Border_1" DockPanel.Dock="Top" Height="40">
                         <TextBlock x:Uid="TextBlock_1" Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
@@ -99,10 +104,9 @@
                                     </Style>
                                 </Border.Style>
                             </Border>
-                            <Button x:Uid="Button_1" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" 
-                                    cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
 
-                                    cal:Message.Attach="[Event Click] = [Action EditProduct()]">
+                            <Button x:Uid="Button_1" DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" 
+                                    cal:Message.Attach="[Event Click] = [Action CreateProduct()]">
                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="Plus" Height="20" Width="20"/>
                                 <Button.Style>
                                     <Style x:Uid="Style_5" TargetType="Button">
@@ -186,17 +190,18 @@
                             <Button.Style>
 
                                 <Style x:Uid="Style_8" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" TargetType="Button">
-                                    <Setter x:Uid="Setter_12" Property="Visibility" Value="Collapsed"/>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <MultiDataTrigger x:Uid="MultiDataTrigger_1">
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition x:Uid="Condition_1" Binding="{Binding RelativeSource={RelativeSource Self },  Path=Parent.IsMouseOver}" Value="True"/>
-                                                <Condition x:Uid="Condition_2" Binding="{Binding Description}" Value="{x:Null}"/>
-                                                <Condition  Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}" Value="True"/>
-                                
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter x:Uid="Setter_13" Property="Visibility" Value="Visible" />
-                                        </MultiDataTrigger>
+                                        <DataTrigger x:Uid="DataTrigger_9" Value="True">
+                                            <DataTrigger.Binding>
+                                                <MultiBinding x:Uid="MultiBinding_5" Converter="{StaticResource EqualToSelectedAndEmptyMultiValueConverter }" >
+                                                    <Binding x:Uid="Binding_9" ElementName="AdditiveSettingsList" Path="SelectedItem.Rank"/>
+                                                    <Binding x:Uid="Binding_10" Path="Rank" />
+                                                    <Binding x:Uid="Binding_11" Path="Description" />
+                                                </MultiBinding>
+                                            </DataTrigger.Binding>
+                                            <Setter x:Uid="Setter_16" Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>

@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
+using ServiceInterface.jsonConverters;
 
 namespace ServiceInterface.Model
 {
@@ -98,12 +99,15 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required]
+        [JsonConverter(typeof(TimespanConverter))]
+        [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
         public TimeSpan ElapsedTime
         {
             get => _elapsedTime;
             set
             {
                 _elapsedTime = value;
+                
                 NotifyOfPropertyChange();
             }
         }

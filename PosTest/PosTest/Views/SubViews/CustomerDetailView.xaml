@@ -49,19 +49,19 @@
             <Border Grid.Row="1"  Margin="2">
                 <TextBox materialDesign:HintAssist.Hint="Mobile" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                          materialDesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                         Text="{Binding Customer.Mobile,UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Customer.Mobile,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" />
             </Border>
 
-            <Border Grid.Row="2" Margin="2">
-                <ListView ItemsSource="{Binding PhoneNumbers}"></ListView>
-            </Border>
+            <!--<Border Grid.Row="2" Margin="2">
+                <ListView ItemsSource="{Binding Customer.PhoneNumbers}"></ListView>
+            </Border>-->
         </Grid>
 
         <materialDesign:ColorZone Grid.Row="1" Background="#FFAEEA00" Padding="6"  Margin="1">
             <StackPanel Orientation="Horizontal">
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                         cal:Message.Attach="[Event Click] = [Action Save()]"
-                        IsEnabled="{Binding HasErrors,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NegateBooleanValueConverter }}">
+                        IsEnabled="{Binding IsSaveEnabled}">
                     <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
                         <materialDesign:PackIcon x:Uid="materialdesign:PackIcon_12" Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
                     </StackPanel>

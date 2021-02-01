@@ -27,7 +27,7 @@ namespace PosTest.Helpers
                    {
                        cfg.PositionProvider = new WindowPositionProvider(
                            parentWindow: Application.Current.MainWindow,
-                           corner: Corner.BottomLeft,
+                           corner: Corner.BottomRight,
                            offsetX: 10,
                            offsetY: 10);
 

@@ -19,7 +19,7 @@
              mc:Ignorable="d"
 
              d:DesignWidth="900"
-             caliburn:Message.Attach="[Event TextInput] = [Action scanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action doneScan($source, $eventArgs)]">
+             caliburn:Message.Attach="[Event TextInput] = [Action scanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action DoneScan($source, $eventArgs)]">
     <FrameworkElement.Resources>
         <ResourceDictionary x:Uid="ResourceDictionary_1">
             <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type viewmodels:SplitViewModel}">
@@ -265,8 +265,8 @@
                                  Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=waiter}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:Uid="DataTemplate_9" DataType="{x:Type models:Waiter}">
-                                    <RadioButton x:Uid="RadioButton_2" GroupName="groupName1" Width="120" Height="70"
-                                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                    <Button x:Uid="RadioButton_2" Width="120" Height="70"
+                                            caliburn:Message.Attach="[Event Click] = [Action SelectWaiter($this)]"
                                                  Style="{StaticResource ButtonTopOrderDelivereyman}"
                                                  Background="{Binding Background}">
                                         <DockPanel x:Uid="DockPanel_1">
@@ -276,7 +276,7 @@
                                             <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_9" DockPanel.Dock="Left" Kind="Phone" />
                                             <TextBlock x:Uid="TextBlock_3" DockPanel.Dock="Left" Text="{Binding PhoneNumber}" />
                                         </DockPanel>
-                                    </RadioButton>
+                                    </Button>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemContainerStyle>
@@ -298,8 +298,8 @@
                                  Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter} , ConverterParameter=delivrey}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:Uid="DataTemplate_10" DataType="{x:Type models:Deliveryman}">
-                                    <RadioButton x:Uid="RadioButton_3" GroupName="groupName2" Width="120" Height="70"
-                                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                    <Button x:Uid="RadioButton_3"  Width="120" Height="70"
+                                            caliburn:Message.Attach="[Event Click] = [Action SelectDeliveryMan($this)]"
                                                  Style="{StaticResource ButtonTopOrderDelivereyman}"
                                                  Background="{Binding Background}">
                                         <DockPanel x:Uid="DockPanel_2">
@@ -309,7 +309,7 @@
                                                                      Height="20" VerticalAlignment="Center" />
                                             <TextBlock x:Uid="TextBlock_5" DockPanel.Dock="Bottom" Text="{Binding PhoneNumber}" />
                                         </DockPanel>
-                                    </RadioButton>
+                                    </Button>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemContainerStyle>
@@ -531,19 +531,20 @@
                                 caliburn:Message.Attach="[Event Click] = [Action CancelOrder()]" />
 
 
-                        <Button x:Uid="Button_32" Grid.Row="2" Grid.Column="0"
+                        <!--<Button x:Uid="Button_32" Grid.Row="2" Grid.Column="0"
                                 Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}"
                                 Style="{StaticResource ButtonStyle18}"
-                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]" />
+                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]" />-->
                         <!--caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('NOTE')]"-->
-                        <Button x:Uid="Button_33" Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon NoteOutline, 30}"
+                        <Button x:Uid="Button_33" Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon Printer, 30}"
                                 Style="{StaticResource ButtonStyle18}"
-                                caliburn:Message.Attach="[Event Click] = [Action PrintDocument()]" />
+                                caliburn:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" />
 
-                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="0"  Style="{StaticResource ButtonStyle18}"
+                        <Button x:Uid="Button_34" Grid.Row="2" Grid.Column="0"  Style="{StaticResource ButtonStyle18}"
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]" />
-                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="1"  Style="{StaticResource ButtonStyle18}"
+
+                        <Button x:Uid="Button_34" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Style="{StaticResource ButtonStyle18}"
                                 Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVERED')]" />
 
@@ -703,7 +704,7 @@
                 </DockPanel>
             </Grid>
 
-            <Grid x:Uid="Grid_15" Grid.Column="1" Grid.Row="1" Width="1200">
+            <Grid x:Uid="Grid_15" Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition x:Uid="RowDefinition_32" Height="*" />
                     <RowDefinition x:Uid="RowDefinition_33" Height="auto" />

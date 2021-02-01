@@ -221,6 +221,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\CollectionContainsValueConverter.cs" />
+    <Compile Include="Converters\EqualToSelectedAndEmptyMultiValueConverter.cs" />
     <Compile Include="Converters\EqualToSelectedAndNotEmptyMultiValueConverter.cs" />
     <Compile Include="Converters\NotCollectionItemAnyGreaterThanZeroValueConverter.cs" />
     <Compile Include="Converters\EntityIdValueConverter.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="Converters\OrderItemAdditiveStateToIconValueConverter.cs" />
     <Compile Include="Converters\OrderItemObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\OrderItemStateToIconConverter.cs" />
+    <Compile Include="Converters\ProductTemplateHeightConverter.cs" />
     <Compile Include="Converters\SolidColorBrushToBrushConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\OrderStateEnumToBrushConverter.cs" />
@@ -243,8 +245,10 @@
     <Compile Include="Enums\ListedOrdersType.cs" />
     <Compile Include="Enums\ListKind.cs" />
     <Compile Include="Enums\NextOrPrevious.cs" />
+    <Compile Include="Enums\PrintSource.cs" />
     <Compile Include="Events\AssignOrderTypeEventArgs.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
+    <Compile Include="Extensions\ListGridContainerEx.cs" />
     <Compile Include="Extensions\ListPaginationEx.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
@@ -760,6 +764,7 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Converters\jsonConverters\" />
     <Folder Include="Localization\" />
   </ItemGroup>
   <ItemGroup>

@@ -224,6 +224,14 @@ namespace PosTest.ViewModels
 
         }
 
+        public void EditAdditive()
+        {
+            if (SelectedAdditive?.Id == null)
+            {
+                ToastNotification.Notify("Select a non empty cell to edit",NotificationType.Warning);
+                return;
+            }
+        }
         public void CopyAdditive()
         {
             if (SelectedAdditive?.Id == null)

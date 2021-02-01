@@ -99,7 +99,7 @@ namespace PosTest.ViewModels
 
         private bool CustomerFilter(object item)
         {
-            if (string.IsNullOrEmpty(FilterString)) 
+            if (string.IsNullOrEmpty(FilterString)|| string.IsNullOrWhiteSpace(FilterString)) 
                 return true;
             try
             {
@@ -116,10 +116,21 @@ namespace PosTest.ViewModels
         public void CreateAndSave()
         {
             string name= Regex.Replace(FilterString, @"\d", "");
-            string mobile = "+213"+Regex.Replace(FilterString, @"\D", "");
-            if (!ValidateCustomerFullNameAndPhone(name, mobile)) return;
+            string mobile = Regex.Replace(FilterString, @"\D", "");
+           
+            
+            Customer customer = new Customer { Name = name, Mobile = mobile };
+            var errors =EntityValidationHelper.Validate(customer);
+            if (errors.Any())
+            {
+                foreach (var error in errors)
+                {
+                    ToastNotification.Notify(error,NotificationType.Error);
+                }
+                return;
+            }
 
-            Customer customer = new Customer();// { Name = name, Mobile = mobile };
+            customer.Mobile = "+213" + customer.Mobile;
             StateManager.Save(customer);
             //customer.Id = id;
            
@@ -134,6 +145,8 @@ namespace PosTest.ViewModels
 
             ParentChechoutVM.CurrentOrder.Customer =customer;
             SelectedCustomer = customer;
+
+            FilterString = "";
         }
 
         private bool ValidateCustomerFullNameAndPhone([Required]string name,string mobile)
