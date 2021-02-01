@@ -51,6 +51,8 @@ namespace PosTest.ViewModels
 
         [Import(typeof(ICustomerRepository))]
         private ICustomerRepository _customerRepository;
+        [Import(typeof(IPaymentRepository))]
+        private IPaymentRepository _paymentRepository;
 
         //public String Username { get; set; }
         //public String Password { get; set; }
@@ -75,7 +77,8 @@ namespace PosTest.ViewModels
                 .Manage(_tableRepository)
                 .Manage(_customerRepository)
                 .Manage(_waiterRepository)
-                .Manage(_deliverymanRepository);
+                .Manage(_deliverymanRepository)
+                .Manage(_paymentRepository);
         }
         public bool CanLogin()
         {

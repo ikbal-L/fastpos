@@ -68,14 +68,12 @@ namespace PosTest.ViewModels.Settings
     
         public void Save() {
 
-            Deliveryman.PhoneNumber = Numbers?.FirstOrDefault();
-            Deliveryman.PhoneNumbers = Numbers.Count>1? new ObservableCollection<string>( Numbers?.Where(x=>x!= Deliveryman.PhoneNumber).ToList()):null;
-
+            Deliveryman.PhoneNumbers = Numbers;
             if (StateManager.Save<Deliveryman>(Deliveryman))
             {
                 int index=   Parent.Deliverymans.IndexOf(Parent.Deliverymans.FirstOrDefault(x => x.Id == Deliveryman.Id));
                 
-                Numbers = Deliveryman.AllPhoneNumbers!=null?new ObservableCollection<string>(Deliveryman.AllPhoneNumbers):new ObservableCollection<string>();
+                Numbers = Deliveryman.PhoneNumbers!=null?new ObservableCollection<string>(Deliveryman.PhoneNumbers) :new ObservableCollection<string>();
                 if (index==-1)
                 {
                     Parent.Deliverymans.Add(Deliveryman);
@@ -98,7 +96,7 @@ namespace PosTest.ViewModels.Settings
         internal void ChangeDeliveryMan(Deliveryman selectedDeliveryMan)
         {
             Deliveryman = selectedDeliveryMan.Clone();
-            Numbers = Deliveryman.AllPhoneNumbers.Clone();
+            Numbers = Deliveryman.PhoneNumbers.Clone();
         }
 
         internal void NewDeliveryMan()

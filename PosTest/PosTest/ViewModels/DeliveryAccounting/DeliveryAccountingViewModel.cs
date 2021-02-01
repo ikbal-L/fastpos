@@ -182,26 +182,35 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 return;
             }
 
-            if (ActiveTab == EnumActiveTab.NotPaidOrders)
+           if (ActiveTab == EnumActiveTab.NotPaidOrders)
             {
                 var listPaidOrder = new List<Order>();
-                foreach (var order in NotPaidOrdersViewModel.Orders)
-                {
-                    if (payedAmount == 0)
+    
+            //   foreach (var order in NotPaidOrdersViewModel.Orders)
+            /*    {
+                    if (payedAmount == 0||order.Total>payedAmount)
                     {
                         break;
                     }
                     else
                     {
-                        order.GivenAmount = (order.Total > payedAmount) ? payedAmount : order.Total;
-                        payedAmount= (order.Total > payedAmount) ? 0 : payedAmount-order.Total;
-                        order.State = OrderState.Payed;
+                        payedAmount-=order.Total;
+                        order.State = OrderState.DeliveredPaid;
                         listPaidOrder.Add(order);
                     }
 
-                }
-              if(StateManager.Save<Order>(listPaidOrder))
+                }*/
+                var res=   StateManager.SaveAndReturn<Payment,PaymentSaved>(new Payment() { Amount = payedAmount, DeliveryManId = SelectedDeliveryman.Id.Value });
+                if (res != default(PaymentSaved))
                 {
+                    SelectedDeliveryman.Balance = res.Deliveryman.Balance;
+                    res.PaidOrders?.ForEach(x => NotPaidOrdersViewModel.Orders.Remove(NotPaidOrdersViewModel.Orders.FirstOrDefault(o => x.Id == o.Id)));
+                    res.NotPaidOrders?.ForEach(x => NotPaidOrdersViewModel.Orders.Add(x));
+
+                    res.NotPaidOrders?.ForEach(x => AllOrdersViewModel.Orders.Remove(NotPaidOrdersViewModel.Orders.FirstOrDefault(o => x.Id == o.Id)));
+                    res.PaidOrders?.ForEach(x => AllOrdersViewModel.Orders.Add(x));
+                }
+             /*   {
                     ToastNotification.Notify("save Success", NotificationType.Success);
                     NumericZone = "";
                     NotPaidOrdersViewModel.UpdateOrderNotPaid();
@@ -210,19 +219,10 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 {
                     ToastNotification.Notify("Error Save", NotificationType.Error);
 
-                }
+                }*/
             }
-       
-        /*    
-            CurrentOrder.GivenAmount = payedAmount;
-            CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
-            CurrentOrder.State = OrderState.Payed;
-            NumericZone = "";
-            GivenAmount = CurrentOrder.GivenAmount;
-            ReturnedAmount = CurrentOrder.ReturnedAmount;
-            SaveCurrentOrder();
-            GivenAmount = 0;
-            ReturnedAmount = null;*/
+      
+
         }
  
        public  enum ActionButton

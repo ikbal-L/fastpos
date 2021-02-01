@@ -106,7 +106,7 @@ namespace ServiceLib.Service
 
                     if (Association.ContainsKey(key))
                     {
-                        Association[key](); 
+                        Association[key]();
                     }
                     return true;
                 }
@@ -116,10 +116,29 @@ namespace ServiceLib.Service
 
             return false;
         }
+        public static TReturn Save<TReturn,TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
+        {
+            var key = typeof(TState);
+            IsStateManaged<TState, TIdentifier>(key);
+
+            IEnumerable<string> errors = null;
+
+            if (Service[key] is IRepository<TState, TIdentifier> service)
+            {
+                return service.Save<TReturn>(state);
+
+            }
+
+            return default(TReturn);
+        }
 
         public static bool Save<TState>(TState state) where TState : IState<long>
         {
             return Save<TState, long>(state);
+        }
+        public static TReturn SaveAndReturn<TState,TReturn>(TState state) where TState : IState<long>
+        {
+            return Save<TReturn,TState, long>(state);
         }
 
         public static bool Save<TState, TIdentifier>(IEnumerable<TState> state) where TState : IState<TIdentifier> where TIdentifier : struct

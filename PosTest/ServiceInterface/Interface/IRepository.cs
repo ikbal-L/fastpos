@@ -14,6 +14,8 @@ namespace ServiceInterface.Interface
         int Delete(TIdentifier id);
         int Update(TState state, out IEnumerable<string> errors);
         int Update(IEnumerable<TState> state);
+        TReturn Save<TReturn>(TState state);
+
     }
 
     public interface IAdditiveRepository : IRepository<Additive, long>
@@ -59,6 +61,10 @@ namespace ServiceInterface.Interface
     }
 
     public interface IDeliverymanRepository : IRepository<Deliveryman, long>
+    {
+
+    }
+    public interface IPaymentRepository: IRepository<Payment, long>
     {
 
     }

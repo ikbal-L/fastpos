@@ -59,6 +59,11 @@ namespace ServiceLib.Service
         {
             throw new NotImplementedException();
         }
+
+        public TReturn Save<TReturn>(TState state)
+        {
+            return GenericRest.SaveThing<TState, TReturn>(state, RestApis.Resource<TState>.Save());
+        }
     }
 
 
@@ -180,6 +185,11 @@ namespace ServiceLib.Service
 
     [Export(typeof(IDeliverymanRepository))]
     public class DeliverymanRepository : Repository<Deliveryman, long>, IDeliverymanRepository
+    {
+
+    }
+    [Export(typeof(IPaymentRepository))]
+    public class PaymentRepository : Repository<Payment, long>, IPaymentRepository
     {
 
     }

@@ -57,8 +57,8 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             return response;
         }
-        
-        public static (int status,T result) SaveThing<T>(T thing, string url,out IEnumerable<string> errors)
+
+        public static (int status, T result) SaveThing<T>(T thing, string url, out IEnumerable<string> errors)
         {
             errors = new List<string>();
             var response = SaveThing<T>(thing, url);
@@ -66,7 +66,7 @@ namespace ServiceLib.Service
             {
 
                 long.TryParse(response.Content, out long id);
-                thing.GetType().GetProperty("Id")?.SetValue(thing,id);
+                thing.GetType().GetProperty("Id")?.SetValue(thing, id);
 
             }
 
@@ -75,8 +75,19 @@ namespace ServiceLib.Service
                 errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
             }
 
-            return ((int) response.StatusCode, thing);
+            return ((int)response.StatusCode, thing);
         }
+        public static TReturn  SaveThing<T,TReturn>(T thing, string url)
+        {
+            var response = SaveThing<T>(thing, url);
+            TReturn tretun= default(TReturn);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                tretun= JsonConvert.DeserializeObject<TReturn>(response.Content);
+            }
+            return tretun;
+        }
+
 
         public static (int Status ,IEnumerable<T> result) GetManyThings<T>(IEnumerable<long> ids, string url)
         {
