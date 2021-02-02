@@ -1658,7 +1658,7 @@ namespace PosTest.ViewModels
                     NotifyOfPropertyChange(() => CurrentOrder);
                 }
 
-                if (scanValue.Contains("printPV"))
+                if (scanValue.Contains("cmd_print_pv"))
                 {
                     PrintPreview(PrintSource.Kitchen);
                 }
@@ -1716,10 +1716,10 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var oitem = CurrentOrder.SelectedOrderItem;
+            var currentOrderSelectedOrderItem = CurrentOrder.SelectedOrderItem;
             AdditivesVisibility = true;
             ProductsVisibility = false;
-            ShowProductAdditives(oitem.Product);
+            ShowProductAdditives(currentOrderSelectedOrderItem.Product);
         }
 
         #endregion
@@ -1843,6 +1843,7 @@ namespace PosTest.ViewModels
 
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
+
             //contentOfPage.Content = CurrentOrder;
             //contentOfPage.Content = GenerateContent(CurrentOrder);
             contentOfPage.Content = _printOrder;

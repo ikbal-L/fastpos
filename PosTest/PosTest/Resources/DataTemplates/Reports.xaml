@@ -5,6 +5,8 @@
                     xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
+    <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter"></converters:ObjectToBarcodeValueConverter>
+
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type models:OrderItem}" x:Key="OrderItemTicketDataTemplate">
         <Grid x:Uid="Grid_1">
             <Grid.ColumnDefinitions>
@@ -262,16 +264,18 @@
                 <Border  x:Uid="Border_3" Grid.Row="3" BorderThickness="0.3"  BorderBrush="Black" Background="Black" />
                
             </Grid>
+
             <Grid x:Uid="Footer" Grid.Row="2" Name="Footer">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Uid="ColumnDefinition_11" Width="*"/>
                     <ColumnDefinition x:Uid="ColumnDefinition_12" Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition x:Uid="RowDefinition_22"/>
-                    <RowDefinition x:Uid="RowDefinition_23"/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock x:Uid="TextBlock_20" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Barecode" HorizontalAlignment="Center"/>
+                <!--<TextBlock x:Uid="TextBlock_20" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Barecode" HorizontalAlignment="Center"/>-->
+                <Border Margin="10"   Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm" Background="{Binding Converter={StaticResource ObjectToBarcodeValueConverter}}"></Border>
                 <TextBlock x:Uid="TextBlock_21" Grid.Row="1" Grid.Column="0" Text="12/12/2020 12:12:60"/>
                 <TextBlock x:Uid="TextBlock_22" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client"/>
             </Grid>
