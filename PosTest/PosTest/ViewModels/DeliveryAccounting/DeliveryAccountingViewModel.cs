@@ -216,7 +216,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
         }
 
-       public void DeletePayment() {
+        public void DeletePayment() {
             PaymentHistoryViewModel.DeletePayment();
         }
         public void EditPayment()
