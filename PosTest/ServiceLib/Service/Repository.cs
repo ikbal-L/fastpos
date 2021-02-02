@@ -60,9 +60,19 @@ namespace ServiceLib.Service
             throw new NotImplementedException();
         }
 
-        public TReturn Save<TReturn>(TState state)
+        public (bool, TReturn) Save<TReturn>(TState state)
         {
             return GenericRest.SaveThing<TState, TReturn>(state, RestApis.Resource<TState>.Save());
+        }
+
+        public (bool, TReturn) Update<TReturn>(TState state)
+        {
+            return GenericRest.UpdateThing<TState, TReturn>(state, RestApis.Resource<TState>.Put<TIdentifier>((TIdentifier)state.Id));
+        }
+
+        public (bool, TReturn) Delete<TReturn>(TIdentifier id)
+        {
+            return GenericRest.DeleteThing<TReturn>(RestApis.Resource<TState>.Delete(id));
         }
     }
 
@@ -155,9 +165,9 @@ namespace ServiceLib.Service
 
         }
 
-        public PageList<Order> GetOrderByStates(string[] states, long deliverymanId, int pageNumber, int pageSize)
+        public List<Order> GetOrderByStates(string[] states, long deliverymanId)
         {
-            return GenericRest.PostThing<PageList<Order>>(UrlConfig.OrderUrl.GetByStatePage + $"/{pageNumber}/{pageSize}/{deliverymanId}",states).Item2;
+            return GenericRest.PostThing<List<Order>>(UrlConfig.OrderUrl.GetByStatePage + $"/{deliverymanId}",states).Item2;
         }
         public PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId)
         {
@@ -191,7 +201,10 @@ namespace ServiceLib.Service
     [Export(typeof(IPaymentRepository))]
     public class PaymentRepository : Repository<Payment, long>, IPaymentRepository
     {
-
+        public PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId)
+        {
+            return GenericRest.GetThing<PageList<Payment>>(UrlConfig.PaymentUrl.GetAllByDeliveryManPage + $"/{pageNumber}/{pageSize}/{deliverymanId}").Item2;
+        }
     }
 
 }

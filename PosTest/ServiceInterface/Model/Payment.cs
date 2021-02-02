@@ -23,7 +23,8 @@ namespace ServiceInterface.Model
 
             }
         }
-
+        [DataMember]
+       public DateTime Date { get; set; }
         [DataMember]
         public long? Id { get; set; }
         [DataMember]

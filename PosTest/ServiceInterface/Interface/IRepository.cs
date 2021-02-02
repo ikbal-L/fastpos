@@ -13,8 +13,11 @@ namespace ServiceInterface.Interface
         int Save(IEnumerable<TState> state);
         int Delete(TIdentifier id);
         int Update(TState state, out IEnumerable<string> errors);
+        (bool, TReturn) Update<TReturn>(TState state);
         int Update(IEnumerable<TState> state);
-        TReturn Save<TReturn>(TState state);
+        (bool ,TReturn) Save<TReturn>(TState state);
+        (bool, TReturn) Delete<TReturn>(TIdentifier id);
+
 
     }
 
@@ -35,7 +38,7 @@ namespace ServiceInterface.Interface
 
     public interface IOrderRepository : IRepository<Order, long>
     {
-        PageList<Order> GetOrderByStates(string[] states, long deliverymanId, int pageNumber, int pageSize);
+        List<Order>  GetOrderByStates(string[] states, long deliverymanId);
         PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId);
 
     }
@@ -66,6 +69,7 @@ namespace ServiceInterface.Interface
     }
     public interface IPaymentRepository: IRepository<Payment, long>
     {
+        PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId);
 
     }
 }

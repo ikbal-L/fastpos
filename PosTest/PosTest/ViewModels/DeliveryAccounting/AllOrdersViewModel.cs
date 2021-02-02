@@ -60,6 +60,12 @@ namespace PosTest.ViewModels.DeliveryAccounting
                     Count = res.count;
                     NotifyOfAllPropertyChange();
                 }
+                else
+                {
+                    Orders =  new ObservableCollection<Order>();
+                    Count = 0;
+                    NotifyOfAllPropertyChange();
+                }
             }
 
         }
@@ -68,7 +74,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
             _PageNumber += (action == PaginationAction.Next) ? 1 : -1;
             UpdateOrderNotPaid();
         }
-      public void  ChangeSelectedDeliveryman(Deliveryman selectedDeliveryman)
+        public void ChangeSelectedDeliveryman(Deliveryman selectedDeliveryman)
         {
             _SelectedDeliveryman = selectedDeliveryman;
             UpdateOrderNotPaid();

@@ -18,5 +18,8 @@ namespace ServiceInterface.Model
         public Deliveryman Deliveryman { get; set; }
         [DataMember]
         public List<Order> NotPaidOrders { get; set; }
+        [DataMember]
+
+        public long? Id { get; set; }
     }
 }

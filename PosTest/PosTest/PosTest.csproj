@@ -280,6 +280,7 @@
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryAccounting\PaymentHistoryViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\DeliveryAccountingViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\AllOrdersViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
@@ -328,6 +329,9 @@
     </Compile>
     <Compile Include="Views\CheckoutView.xaml.cs">
       <DependentUpon>CheckoutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeliveryAccounting\PaymentHistoryView.xaml.cs">
+      <DependentUpon>PaymentHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeliveryAccounting\DeliveryAccountingView.xaml.cs">
       <DependentUpon>DeliveryAccountingView.xaml</DependentUpon>
@@ -584,6 +588,10 @@
     <Page Include="Views\CheckoutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeliveryAccounting\PaymentHistoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DeliveryAccounting\DeliveryAccountingView.xaml">
       <SubType>Designer</SubType>

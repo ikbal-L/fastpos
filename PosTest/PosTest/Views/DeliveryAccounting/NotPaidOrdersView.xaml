@@ -15,15 +15,7 @@
             </Grid.RowDefinitions>
             <Border BorderThickness=" 0 0 0 1" Padding="0 10 10 0" BorderBrush="Gray">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button BorderThickness="0" IsEnabled="{Binding  PrevioussBtnEnabled}"  Background="Transparent"
-                                         caliburn:Message.Attach="[Event Click] = [Action PaginationOrderNotPaid('Previous')]"
-                                        >
-                        <materialdesign:PackIcon Kind="ArrowCollapseLeft" Height="15"  Width="15" />
-                    </Button>
-                <Button IsEnabled="{Binding NextBtnEnabled}" BorderThickness="0" Background="Transparent"  
-                                        caliburn:Message.Attach="[Event Click] = [Action PaginationOrderNotPaid('Next')]">
-                        <materialdesign:PackIcon Kind="ArrowCollapseRight" Height="15"  Width="15" />
-                    </Button>
+           
                 </StackPanel>
             </Border>
             <ScrollViewer Grid.Row="1" Margin="0 0 0 40"  BorderThickness="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
@@ -59,12 +51,10 @@
                                                 <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding OrderTime.Date,StringFormat=dd-MM-yyyy}" />
                                             </StackPanel>
                                             <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="20 0 0 0 " Orientation="Horizontal">
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1500"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="+"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1000"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="="/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="-500"/>
-                                            </StackPanel>
+                                                <TextBlock FontSize="25" VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Total}"/>
+                                                <TextBlock Margin="20  0 0 0" VerticalAlignment="Center" FontWeight="Bold" Text="{Binding OrderTime.Date}" />
+
+                                        </StackPanel>
                                         </Grid>
                                         <StackPanel Margin="0 10 0 0"
                                                         Visibility="{Binding ProductsVisibility,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource boolToVisibilityConverter}}"

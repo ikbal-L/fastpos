@@ -49,23 +49,31 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <StackPanel Grid.Column="0">
-                                                <TextBlock  >
-                                                        <Run>Order</Run>
-                                                        <Run Text="{Binding Id}"> </Run>
-                                                </TextBlock>
-                                                <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding Waiter.Name}"/>
-                                                <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding OrderTime.Date,StringFormat=dd-MM-yyyy}" />
-                                            </StackPanel>
-                                            <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="20 0 0 0 " Orientation="Horizontal">
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1500"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="+"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1000"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="="/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="-500"/>
-                                            </StackPanel>
-                                        </Grid>
+                                                <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Margin="20  0 0 0"  VerticalAlignment="Center" HorizontalAlignment="Center" Text="Order"/>
+                                            <TextBlock Margin="20  0 0 0"  VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding Id}" />
+
+                                        </StackPanel>
+                                   
+                                        <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="20 0 0 0 ">
+                                            <TextBlock FontSize="25" VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Total}"/>
+                                        
+
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Margin="20  0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Text="Date" />
+                                            <TextBlock Margin="20  0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center"  FontWeight="Bold" Text="{Binding OrderTime.Date}" />
+
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="3">
+                                            <TextBlock Margin="20  0 0 0"  VerticalAlignment="Center" HorizontalAlignment="Center" Text="Status:"/>
+                                            <TextBlock Margin="20  0 0 0"  VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Green" Text="{Binding State}" />
+
+                                        </StackPanel>
+                                    </Grid>
                                         <StackPanel Margin="0 10 0 0"
                                                         Visibility="{Binding ProductsVisibility,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource boolToVisibilityConverter}}"
                                                         >

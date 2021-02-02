@@ -23,8 +23,6 @@ namespace PosTest.ViewModels.DeliveryAccounting
         private ObservableCollection<Order> _Orders;
 
 
-        private int _PageNumber = 0;
-        private int _PageSize = 10;
         private Deliveryman _SelectedDeliveryman { get; set; }
         public ObservableCollection<Order> Orders
         {
@@ -33,6 +31,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
             {
                 _Orders = value;
                 NotifyOfPropertyChange(nameof(Orders));
+                NotifyOfAllPropertyChange();
             }
         }
         public void ViewOrderItems(Order order)
@@ -40,14 +39,11 @@ namespace PosTest.ViewModels.DeliveryAccounting
             order.ProductsVisibility = !order.ProductsVisibility;
             //  NotifyOfPropertyChange(() => order.ProductsVisibility);
         }
-        private long Count=0;
-        public bool PrevioussBtnEnabled { get =>  _PageNumber !=0; }
-        public bool NextBtnEnabled { get => Count > (_PageNumber + 1) * _PageSize; }
+   
         private DeliveryAccountingViewModel Parent { get;  set; }
 
         public NotPaidOrdersViewModel(DeliveryAccountingViewModel deliveryAccountingViewModel) {
             this.Parent = deliveryAccountingViewModel;
-
         }
 
         public void UpdateOrderNotPaid()
@@ -55,36 +51,30 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
             if (this._SelectedDeliveryman != null)
             {
-                 var res = StateManager.getService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, this._SelectedDeliveryman.Id.Value, _PageNumber, _PageSize);
+                 var res = StateManager.getService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, this._SelectedDeliveryman.Id.Value);
                 if (res != null)
                 {
-                    Orders = res.page != null ? new ObservableCollection<Order>(res.page) : new ObservableCollection<Order>();
-                    this.Parent.Total = Orders?.Sum(x => x.Total) ?? 0;
-                    Count = res.count;
+                    Orders = res != null ? new ObservableCollection<Order>(res) : new ObservableCollection<Order>();
+                    
                     NotifyOfAllPropertyChange();
                 }
                 else
                 {
-                    Orders = null;
-                    Count = 0;
-                    this.Parent.Total = 0;
+                    Orders =  new ObservableCollection<Order>();
                 }
             }
 
         }
-        public void PaginationOrderNotPaid(PaginationAction action)
-        {
-            _PageNumber += (action == PaginationAction.Next) ? 1 : -1;
-            UpdateOrderNotPaid();
-        }
+   
       public void  ChangeSelectedDeliveryman(Deliveryman selectedDeliveryman)
         {
             _SelectedDeliveryman = selectedDeliveryman;
             UpdateOrderNotPaid();
         }
         public void NotifyOfAllPropertyChange() {
-            NotifyOfPropertyChange(nameof(PrevioussBtnEnabled));
-            NotifyOfPropertyChange(nameof(NextBtnEnabled));
+            NotifyOfPropertyChange(nameof(Total));
+            Parent.NotifyTotal();
+
         }
     }
 }

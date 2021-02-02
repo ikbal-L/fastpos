@@ -78,15 +78,15 @@ namespace ServiceLib.Service
 
             return ((int)response.StatusCode, thing);
         }
-        public static TReturn  SaveThing<T,TReturn>(T thing, string url)
+        public static (bool, TReturn) SaveThing<T,TReturn>(T thing, string url)
         {
             var response = SaveThing<T>(thing, url);
-            TReturn tretun= default(TReturn);
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK||response.StatusCode==HttpStatusCode.Created)
             {
-                tretun= JsonConvert.DeserializeObject<TReturn>(response.Content);
+                return(true, JsonConvert.DeserializeObject<TReturn>(response.Content));
+                
             }
-            return tretun;
+            return (false,default(TReturn));
         }
 
 
@@ -128,6 +128,24 @@ namespace ServiceLib.Service
             IRestResponse response = client.Execute(request);
             return response;
         }
+        public static IRestResponse RestPut(object objecToPost, string url)
+        {
+            string token = AuthProvider.Instance.AuthorizationToken;
+            var client = new RestClient(url);
+            var request = new RestRequest(Method.PUT);
+            request.AddHeader("authorization", token);
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
+            string json = JsonConvert.SerializeObject(objecToPost,
+                           Newtonsoft.Json.Formatting.None,
+                           new JsonSerializerSettings
+                           {
+                               NullValueHandling = NullValueHandling.Ignore
+                           });
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            return response;
+        }
 
         public static (int status, string) UpdateThing<T>(T t, string url, out IEnumerable<string> errors)
         {
@@ -153,7 +171,15 @@ namespace ServiceLib.Service
 
             return ((int)response.StatusCode, response.Content);
         }
+        public static (bool, TReturn) UpdateThing<T,TReturn>(T t, string url) {
 
+            IRestResponse response = RestPut(t, url);
+            if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
+            {
+                return (true, JsonConvert.DeserializeObject<TReturn>(response.Content));
+            }
+            return (false, default(TReturn));
+        }
         public static IRestResponse UpdateThing<T>(T t, string url)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
@@ -225,6 +251,16 @@ namespace ServiceLib.Service
             }
             return ((int)resp.StatusCode, t);// ;products
 
+        }
+        public static (bool, TReturn) DeleteThing<TReturn>(string url)
+        {
+
+            IRestResponse response =RestDelete(url);
+            if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
+            {
+                return (true, JsonConvert.DeserializeObject<TReturn>(response.Content));
+            }
+            return (false, default(TReturn));
         }
     }
 }
