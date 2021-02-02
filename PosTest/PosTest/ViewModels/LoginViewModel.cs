@@ -80,10 +80,6 @@ namespace PosTest.ViewModels
                 .Manage(_deliverymanRepository);
             
             List<string> auths = new List<string>();
-            auths.Add("Read_Product");
-            auths.Add("Can_login");
-            var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), auths.ToArray());
-            Thread.CurrentPrincipal = principal;
 
         
         }
@@ -134,7 +130,7 @@ namespace PosTest.ViewModels
             IsDialogOpen = false;
             var  Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
             var setting = Manager.LoadSettings();
-            var pageSize = int.Parse(setting.NumberProducts);
+            var pageSize = 30;// int.Parse(setting.NumberProducts);
             CheckoutViewModel checkoutViewModel =
                 new CheckoutViewModel(pageSize
                 //,_productService,

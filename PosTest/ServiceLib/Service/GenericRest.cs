@@ -33,7 +33,7 @@ namespace ServiceLib.Service
             var request = new RestRequest(Method.GET);
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
-            request.AddHeader("Annex-Id", $"{AuthProvider.Instance.AnnexId}");
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance?.AnnexId}");
             IRestResponse response = client.Execute(request);
             return response;
         }
