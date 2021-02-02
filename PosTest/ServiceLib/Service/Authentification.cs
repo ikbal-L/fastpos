@@ -64,8 +64,8 @@ namespace ServiceLib.Service
                 var jsonContent = response.Content.ReadAsStringAsync().Result;
                 try
                 {
-                    var jsonContentDict = JObject.Parse(jsonContent);
-                    var permissions = jsonContentDict.Value<List<String>>("permissions");
+                    var permissions = JsonConvert.DeserializeObject<List<String>>(jsonContent);
+                    
                     var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), permissions.ToArray());
                     Thread.CurrentPrincipal = principal;
                 }
