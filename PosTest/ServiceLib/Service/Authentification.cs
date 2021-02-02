@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json.Converters;
+using System.Security.Principal;
+using System.Threading;
 
 namespace ServiceLib.Service
 {
@@ -58,11 +60,20 @@ namespace ServiceLib.Service
             {
                 response.Headers.TryGetValues("Authorization", out IEnumerable<string> values);
                 var token = values.First();
-                // var jsonContent = response.Content.ReadAsStringAsync().Result;
-                // var jsonContentDict = JObject.Parse(jsonContent);
-                // string token = jsonContentDict["auth_token"].ToString();
-                // long sessionId = jsonContentDict.Value<long>("SessionId");
                 AuthProvider.Initialize<DefaultAuthProvider>(new object[] { new User { }, token, annex.Id});
+                var jsonContent = response.Content.ReadAsStringAsync().Result;
+                try
+                {
+                    var permissions = JsonConvert.DeserializeObject<List<String>>(jsonContent);
+                    
+                    var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), permissions.ToArray());
+                    Thread.CurrentPrincipal = principal;
+                }
+                catch (Exception)
+                {
+                    return -400;
+                }
+
                 //return true;
             }
 

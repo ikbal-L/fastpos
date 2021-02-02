@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:res="clr-namespace:PosTest.Properties"
+             xmlns:ex="clr-namespace:PosTest.Extensions"
+             
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800" Background="White">
@@ -18,7 +20,9 @@
         <Grid x:Uid="Grid_1">
             <StackPanel x:Uid="StackPanel_1" Width="200" Height="380" >
 
-            <TextBox x:Uid="Username" x:Name="Username" Margin="5" Text="Admin"/>
+            <TextBox x:Uid="Username" x:Name="Username" Margin="5" Text="Admin"
+                     ex:AbilityEx.Autority="Can_login1" ex:AbilityEx.AppliedBy = "Readonly"
+                     />
             <PasswordBox x:Uid="Password" x:Name="Password" Margin="5" />
             <Button x:Uid="Login" x:Name="Login" Content="Log-in" Margin="5" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
 
@@ -26,7 +30,9 @@
 
                 <Button x:Uid="Settings" x:Name="Settingsbtn" Content="Delivery Accounting" Margin="5" Style="{StaticResource MaterialDesignFlatButton}" ></Button>
                 <!--<Button x:Name="Settings" Content="Settings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
-            <Button x:Uid="Close" x:Name="Close" Content="Close" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>
+            <Button x:Uid="Close" x:Name="Close" Content="Close" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"
+                    
+                    />
             <!--<Button x:Name="PaginationTest" Content="Pagination Test" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
          <!--   <Button x:Uid="CheckoutSettings" x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
 
