@@ -25,6 +25,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 NotifyOfPropertyChange(nameof(Deliverymans));
             }
         }
+        public ObservableCollection<Deliveryman> FilterDeliverymens { get => new ObservableCollection<Deliveryman>(Deliverymans.Where(x => x.Name.ToLower().Contains(SearchDeliveryMan.ToLower()))); }
         private string _NumericZone ;
         public string NumericZone
         {
@@ -38,6 +39,16 @@ namespace PosTest.ViewModels.DeliveryAccounting
         internal void NotifyTotal()
         {
             NotifyOfPropertyChange(nameof(Total));
+        }
+        private string _SearchDeliveryMan="";
+
+        public string SearchDeliveryMan
+        {
+            get { return _SearchDeliveryMan; }
+            set { _SearchDeliveryMan = value;
+                NotifyOfPropertyChange(nameof(SearchDeliveryMan));
+                NotifyOfPropertyChange(nameof(FilterDeliverymens));
+            }
         }
 
 
@@ -54,8 +65,11 @@ namespace PosTest.ViewModels.DeliveryAccounting
             get { return _ActiveTab; }
             set { _ActiveTab = value;
                 NotifyOfPropertyChange(nameof(ActiveTab));
+                LoadDataTab();
             }
         }
+
+      
 
         private Deliveryman _selectedDeliveryman;
 
@@ -67,6 +81,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 NotPaidOrdersViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
                 AllOrdersViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
                 PaymentHistoryViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
+                LoadDataTab();
             }
         }
         private NotPaidOrdersViewModel _NotPaidOrdersViewModel;
@@ -170,10 +185,12 @@ namespace PosTest.ViewModels.DeliveryAccounting
                     break;
 
          
-                case ActionButton.Payment:
-               
+                case ActionButton.Enter:
 
-                    PayementAction();
+                    if (ActiveTab == EnumActiveTab.NotPaidOrders)
+                        PayementAction();
+                    else
+                        EditPayment();
                     break;
                 case ActionButton.BackOut:
                     LoginViewModel loginvm = new LoginViewModel();
@@ -198,17 +215,11 @@ namespace PosTest.ViewModels.DeliveryAccounting
            if (ActiveTab == EnumActiveTab.NotPaidOrders)
             {
     
-               var res=   StateManager.SaveAndReturn<Payment,PaymentSaved>(new Payment() { Amount = payedAmount,Date=DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value });
-               if (res.Item1)
+               var res=   StateManager.Save<Payment>(new Payment() { Amount = payedAmount,Date=DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value });
+               if (res)
                 {
                     NumericZone = "";
-                    SelectedDeliveryman.Balance = res.Item2.Deliveryman.Balance;
-                    res.Item2.PaidOrders?.ForEach(x => NotPaidOrdersViewModel.Orders.Remove(NotPaidOrdersViewModel.Orders.FirstOrDefault(o => x.Id == o.Id)));
-                    res.Item2.NotPaidOrders?.ForEach(x => NotPaidOrdersViewModel.Orders.Add(x));
-                    NotPaidOrdersViewModel.NotifyOfAllPropertyChange();
-                    res.Item2.NotPaidOrders?.ForEach(x => AllOrdersViewModel.Orders.Remove(NotPaidOrdersViewModel.Orders.FirstOrDefault(o => x.Id == o.Id)));
-                    res.Item2.PaidOrders?.ForEach(x => AllOrdersViewModel.Orders.Add(x));
-                    PaymentHistoryViewModel.Payments.Insert(0, res.Item2.Payment);
+                    LoadDataTab();
                 }
        
             }
@@ -223,12 +234,30 @@ namespace PosTest.ViewModels.DeliveryAccounting
         {
             PaymentHistoryViewModel.EditPayment();
         }
+
+        private void LoadDataTab()
+        {
+            switch (ActiveTab)
+            {
+                case EnumActiveTab.NotPaidOrders:
+                    NotPaidOrdersViewModel.UpdateDatas();
+                    break;
+                case EnumActiveTab.AllOrders:
+                    AllOrdersViewModel.UpdateDatas();
+                    break;
+                case EnumActiveTab.PaymentHistory:
+                    PaymentHistoryViewModel.UpdateDatas();
+                    break;
+
+            }
+        }
         public  enum ActionButton
         {
-            Payment,
+            Enter,
             Backspase,
             BackOut
         }
+
 
     }
    public enum PaginationAction
@@ -240,6 +269,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
     {
         NotPaidOrders=0,
         AllOrders=1,
+        PaymentHistory=2
         
     }
 }

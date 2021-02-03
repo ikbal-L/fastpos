@@ -169,9 +169,9 @@ namespace ServiceLib.Service
         {
             return GenericRest.PostThing<List<Order>>(UrlConfig.OrderUrl.GetByStatePage + $"/{deliverymanId}",states).Item2;
         }
-        public PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId)
+        public PageList<Order> getAllByDeliveryManAndStatePage( int pageNumber, int pageSize, long deliverymanId, string[] states)
         {
-            return GenericRest.GetThing<PageList<Order>>(UrlConfig.OrderUrl.GetAllByDeliveryManPage + $"/{pageNumber}/{pageSize}/{deliverymanId}").Item2;
+            return GenericRest.PostThing<PageList<Order>>(UrlConfig.OrderUrl.GetAllByDeliveryManPage + $"/{pageNumber}/{pageSize}/{deliverymanId}", states).Item2;
         }
     }
 
@@ -204,6 +204,11 @@ namespace ServiceLib.Service
         public PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId)
         {
             return GenericRest.GetThing<PageList<Payment>>(UrlConfig.PaymentUrl.GetAllByDeliveryManPage + $"/{pageNumber}/{pageSize}/{deliverymanId}").Item2;
+        }
+
+        public List<Payment> getByDeliveryManAndDate(long deliverymanId, DateTime date)
+        {
+           return GenericRest.PostThing<List<Payment>>(UrlConfig.PaymentUrl.GetByDeliveryManAndDate + $"/{deliverymanId}", date).Item2;
         }
     }
 

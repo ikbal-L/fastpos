@@ -70,7 +70,7 @@ namespace ServiceInterface.StaticValues
             public static string SaveTable = TableApiEndpoint + "/save";
             public static string GetAllTables = TableApiEndpoint + "/getall";
             public static string GetByStatePage = OrderApiEndpoint + "/getByState";
-            public static string GetAllByDeliveryManPage = OrderApiEndpoint + "/getAllbydeliverymanPage";
+            public static string GetAllByDeliveryManPage = OrderApiEndpoint + "/getAllbyDeliveryManAndStatePage";
         }
 
         public static class PaymentUrl
@@ -78,6 +78,7 @@ namespace ServiceInterface.StaticValues
             private static string PaymentApiEndpoint = hostname1 + "api/payment";
 
             public static string GetAllByDeliveryManPage = PaymentApiEndpoint + "/getAllbydeliverymanPage";
+            public static string GetByDeliveryManAndDate = PaymentApiEndpoint + "/getByDeliverymanAndDate";
 
         }
         public static class DelivereyUrl

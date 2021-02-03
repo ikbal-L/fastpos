@@ -51,31 +51,34 @@ namespace PosTest.ViewModels.DeliveryAccounting
             this.Parent = deliveryAccountingViewModel;
         }
 
-        public void UpdateOrderNotPaid()
+        public void UpdateDatas()
         {
 
             if (this._SelectedDeliveryman != null)
             {
                 var res = StateManager.getService<Payment, IPaymentRepository>().getAllByDeliveryManPage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value);
-                if (res != null)
-                {
-                    Payments = res.page != null ? new ObservableCollection<Payment>(res.page) : new ObservableCollection<Payment>();
-                    Count = res.count;
+                
+                    Payments = res != null ? new ObservableCollection<Payment>(res.page) : new ObservableCollection<Payment>();
+                    Count = res != null ? res.count : 0;
                     NotifyOfAllPropertyChange();
-                }
+                
+            }
+            else
+            {
+                Payments = new ObservableCollection<Payment>();
+                Count = 0;
             }
 
         }
-        public void PaginationOrderNotPaid(PaginationAction action)
+        public void Pagination(PaginationAction action)
         {
             _PageNumber += (action == PaginationAction.Next) ? 1 : -1;
-            UpdateOrderNotPaid();
+            UpdateDatas();
         }
       public void  ChangeSelectedDeliveryman(Deliveryman selectedDeliveryman)
         {
             _SelectedDeliveryman = selectedDeliveryman;
-            UpdateOrderNotPaid();
-        }
+      }
         public void NotifyOfAllPropertyChange() {
             NotifyOfPropertyChange(nameof(PrevioussBtnEnabled));
             NotifyOfPropertyChange(nameof(NextBtnEnabled));
@@ -90,36 +93,21 @@ namespace PosTest.ViewModels.DeliveryAccounting
             }
             var localpayment = SelectedPayment.Clone();
             localpayment.Amount = payedAmount;
-            var res = StateManager.SaveAndReturn<Payment, PaymentSaved>(localpayment);
-            if (res.Item1)
+            var res = StateManager.Save<Payment>(localpayment);
+            if (res)
             {
+                UpdateDatas();
                 Parent.NumericZone = "";
-                Parent.SelectedDeliveryman.Balance = res.Item2.Deliveryman.Balance;
-                res.Item2.PaidOrders?.ForEach(x => Parent.NotPaidOrdersViewModel.Orders?.Remove(Parent.NotPaidOrdersViewModel.Orders?.FirstOrDefault(o => x.Id == o.Id)));
-                res.Item2.NotPaidOrders?.ForEach(x => Parent.NotPaidOrdersViewModel.Orders?.Add(x));
-                Parent.NotPaidOrdersViewModel.NotifyOfAllPropertyChange();
-
-                res.Item2.NotPaidOrders?.ForEach(x => Parent.AllOrdersViewModel.Orders?.Remove(Parent.NotPaidOrdersViewModel.Orders?.FirstOrDefault(o => x.Id == o.Id)));
-                res.Item2.PaidOrders?.ForEach(x => Parent.AllOrdersViewModel.Orders?.Add(x));
-                var index = Parent.PaymentHistoryViewModel.Payments.IndexOf(SelectedPayment);
-                Parent.PaymentHistoryViewModel.Payments.RemoveAt(index);
-                Parent.PaymentHistoryViewModel.Payments.Insert(index, res.Item2.Payment);
             }
+
         }
         public void DeletePayment()
         {
           
-            var res = StateManager.DeleteAndRetrun<Payment,PaymentSaved>(SelectedPayment);
-            if (res.Item1)
+            var res = StateManager.Delete<Payment>(SelectedPayment);
+            if (res)
             {
-                Parent.SelectedDeliveryman.Balance = res.Item2.Deliveryman.Balance;
-                res.Item2.PaidOrders?.ForEach(x => Parent.NotPaidOrdersViewModel.Orders?.Remove(Parent.NotPaidOrdersViewModel.Orders?.FirstOrDefault(o => x.Id == o.Id)));
-                res.Item2.NotPaidOrders?.ForEach(x => Parent.NotPaidOrdersViewModel.Orders?.Add(x));
-                Parent.NotPaidOrdersViewModel.NotifyOfAllPropertyChange();
-                res.Item2.NotPaidOrders?.ForEach(x => Parent.AllOrdersViewModel.Orders?.Remove(Parent.NotPaidOrdersViewModel.Orders?.FirstOrDefault(o => x.Id == o.Id)));
-                res.Item2.PaidOrders?.ForEach(x => Parent.AllOrdersViewModel.Orders?.Add(x));
-                var index = Parent.PaymentHistoryViewModel.Payments.IndexOf(SelectedPayment);
-                Parent.PaymentHistoryViewModel.Payments.RemoveAt(index);
+                UpdateDatas();
             }
         }
     }

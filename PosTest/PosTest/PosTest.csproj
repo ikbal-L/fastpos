@@ -221,6 +221,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\CollectionContainsValueConverter.cs" />
+    <Compile Include="Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualToSelectedAndEmptyMultiValueConverter.cs" />
     <Compile Include="Converters\EqualToSelectedAndNotEmptyMultiValueConverter.cs" />
     <Compile Include="Converters\NotCollectionItemAnyGreaterThanZeroValueConverter.cs" />

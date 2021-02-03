@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ServiceInterface.Model;
 
 namespace ServiceInterface.Interface
@@ -39,7 +40,7 @@ namespace ServiceInterface.Interface
     public interface IOrderRepository : IRepository<Order, long>
     {
         List<Order>  GetOrderByStates(string[] states, long deliverymanId);
-        PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId);
+        PageList<Order> getAllByDeliveryManAndStatePage( int pageNumber, int pageSize, long deliverymanId,string[] states);
 
     }
 
@@ -70,6 +71,6 @@ namespace ServiceInterface.Interface
     public interface IPaymentRepository: IRepository<Payment, long>
     {
         PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId);
-
+        List<Payment> getByDeliveryManAndDate(long deliverymanId, DateTime date);
     }
 }

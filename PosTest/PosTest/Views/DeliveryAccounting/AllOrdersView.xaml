@@ -8,24 +8,65 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Header="Paid Orders">
-        <Grid>
+    <TabItem.Style>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+                            <Border Name="Border" Margin="0,0,0,0" Background="Transparent">
+                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                                 
+                              ContentSource="Header" Margin="12,2,12,2"
+                              RecognizesAccessKey="True"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Panel.ZIndex" Value="100" />
+                                <Setter TargetName="Border" Property="Background" Value="Transparent" />
+                                <Setter  Property="Foreground" Value="#31b7f9" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0 0 0 2" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#31b7f9" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </TabItem.Style>
+
+    <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Border BorderThickness=" 0 0 0 1" Padding="0 10 10 0" BorderBrush="Gray">
+            <Grid  >
+                <StackPanel Orientation="Horizontal" Margin="50 0 0 0" >
+                    <CheckBox Content="Deliverd" IsChecked="{Binding FilterOrderState.IsDelivered,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0 0 5 0" Foreground="Black"/>
+                    <CheckBox Content="Deliverd Paid" IsChecked="{Binding FilterOrderState.IsDeliveredPaid,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0 0 5 0" Foreground="Black"/>
+                    <CheckBox Content="Deliverd Return" IsChecked="{Binding FilterOrderState.IsDeliveredReturned,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="0 0 5 0" Foreground="Black"/>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button BorderThickness="0" IsEnabled="{Binding  PrevioussBtnEnabled}"  Background="Transparent"
-                                         caliburn:Message.Attach="[Event Click] = [Action PaginationOrderNotPaid('Previous')]"
+                
+                    <Button BorderThickness="0" IsEnabled="{Binding  PrevioussBtnEnabled}"  Background="Transparent"
+                                         caliburn:Message.Attach="[Event Click] = [Action Pagination('Previous')]"
                                         >
                         <materialdesign:PackIcon Kind="ArrowCollapseLeft" Height="15"  Width="15" />
                     </Button>
-                <Button IsEnabled="{Binding NextBtnEnabled}" BorderThickness="0" Background="Transparent"  
-                                        caliburn:Message.Attach="[Event Click] = [Action PaginationOrderNotPaid('Next')]">
+                   <Button IsEnabled="{Binding NextBtnEnabled}" BorderThickness="0" Background="Transparent"  
+                                        caliburn:Message.Attach="[Event Click] = [Action Pagination('Next')]">
                         <materialdesign:PackIcon Kind="ArrowCollapseRight" Height="15"  Width="15" />
                     </Button>
                 </StackPanel>
-            </Border>
+            </Grid>
+        </Border>
             <ScrollViewer Grid.Row="1" Margin="0 0 0 40"  BorderThickness="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
                 <ListBox
                         Cursor="Hand"
@@ -50,7 +91,7 @@
                                                 <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="auto"/>
-                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="120"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid Grid.Column="0">
                                             <TextBlock   HorizontalAlignment="Center" Text="Order"/>
