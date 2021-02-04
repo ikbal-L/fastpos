@@ -156,8 +156,9 @@ namespace ServiceLib.Service
             status = service.Delete((TIdentifier)state.Id);
 
             if ((HttpStatusCode) status != HttpStatusCode.OK) return false;
-            if (!(State[key] is ICollection<TState> tState)) return false;
-            if (tState.Contains(state)) tState.Remove(state);
+            if ((State[key] is ICollection<TState> tState)) 
+                   if (tState.Contains(state))
+                            tState.Remove(state);
             return true;
 
         }

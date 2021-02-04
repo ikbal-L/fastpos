@@ -61,7 +61,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
             if (this._SelectedDeliveryman != null)
             {
-                var res = StateManager.getService<Order, IOrderRepository>().getAllByDeliveryManAndStatePage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value, FilterOrderState.GetStates());
+                var res = StateManager.GetService<Order, IOrderRepository>().getAllByDeliveryManAndStatePage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value, FilterOrderState.GetStates());
   
                     Orders = res != null ? new ObservableCollection<Order>(res.page) : new ObservableCollection<Order>();
                     Count = res != null? res.count:0;

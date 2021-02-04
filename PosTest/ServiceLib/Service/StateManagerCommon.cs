@@ -25,20 +25,14 @@ namespace ServiceLib.Service
             return Get<TState, long>(identifier);
         }
 
-        public static bool Save<TState>(TState state) where TState : IState<long>
-        {
-            return Save<TState, long>(state);
-        }
+     
 
         public static bool Save<TState>(IEnumerable<TState> state) where TState : IState<long>
         {
             return Save<TState, long>(state);
         }
 
-        public static bool Delete<TState>(TState state) where TState : IState<long>
-        {
-            return Delete<TState, long>(state);
-        }
+      
 
         private static void IsStateManaged<TState>(Type key) where TState : IState<long>
         {

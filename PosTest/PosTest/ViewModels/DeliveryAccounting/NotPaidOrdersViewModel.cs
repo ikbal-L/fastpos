@@ -82,7 +82,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
             if (this._SelectedDeliveryman != null)
             {
-                   var res = StateManager.getService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, this._SelectedDeliveryman.Id.Value);
+                   var res = StateManager.GetService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, this._SelectedDeliveryman.Id.Value);
                     Orders = res != null ? new ObservableCollection<Order>(res) : new ObservableCollection<Order>();
                  GetDeliveryManPayment();
                  NotifyOfAllPropertyChange();
@@ -105,7 +105,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
         }
         public void GetDeliveryManPayment() {
-                 var res = StateManager.getService<Payment, IPaymentRepository>().getByDeliveryManAndDate(this._SelectedDeliveryman.Id.Value,DateTime.Now);
+                 var res = StateManager.GetService<Payment, IPaymentRepository>().getByDeliveryManAndDate(this._SelectedDeliveryman.Id.Value,DateTime.Now);
                      Payments = res != null ? new ObservableCollection<Payment>(res) : new ObservableCollection<Payment>();
                      PaymentVisibility = Payments.Count > 0;
                      PaymentVisivilityBtn = Payments.Count > 0 && Orders.Count > 0;

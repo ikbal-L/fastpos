@@ -69,17 +69,17 @@ namespace ServiceLib.Service
 
         public (bool, TReturn) Save<TReturn>(TState state)
         {
-            return GenericRest.SaveThing<TState, TReturn>(state, RestApis.Resource<TState>.Save());
+            return GenericRest.SaveThing<TState, TReturn>(state, RestApis.Resource<TState>.Action(EndPoint.Save));
         }
 
         public (bool, TReturn) Update<TReturn>(TState state)
         {
-            return GenericRest.UpdateThing<TState, TReturn>(state, RestApis.Resource<TState>.Put<TIdentifier>((TIdentifier)state.Id));
+            return GenericRest.UpdateThing<TState, TReturn>(state, RestApis.Resource<TState>.Action(EndPoint.Put,(TIdentifier)state.Id));
         }
 
         public (bool, TReturn) Delete<TReturn>(TIdentifier id)
         {
-            return GenericRest.DeleteThing<TReturn>(RestApis.Resource<TState>.Delete(id));
+            return GenericRest.DeleteThing<TReturn>(RestApis.Resource<TState>.Action(EndPoint.Delete,id));
         }
     }
 

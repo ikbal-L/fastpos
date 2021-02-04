@@ -75,13 +75,12 @@ namespace PosTest.ViewModels
                 .Manage(_productRepository)
                 .Manage(_categoryRepository)
                 .Manage(_additiveRepository)
-                .Manage(_orderRepository,fetch:false)
+                .Manage(_orderRepository, fetch: false)
                 .Manage(_tableRepository)
                 .Manage(_customerRepository)
                 .Manage(_waiterRepository)
                 .Manage(_deliverymanRepository)
                 .Manage(_paymentRepository);
-                .Manage(_deliverymanRepository);
             
             List<string> auths = new List<string>();
             auths.Add("Read_Product");
@@ -138,7 +137,7 @@ namespace PosTest.ViewModels
             IsDialogOpen = false;
             var  Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
             var setting = Manager.LoadSettings();
-            var pageSize = setting.NumberOfProducts;
+            var pageSize = setting?.NumberOfProducts??30;
             CheckoutViewModel checkoutViewModel =
                 new CheckoutViewModel(pageSize
                 //,_productService,

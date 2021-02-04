@@ -56,7 +56,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
             if (this._SelectedDeliveryman != null)
             {
-                var res = StateManager.getService<Payment, IPaymentRepository>().getAllByDeliveryManPage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value);
+                var res = StateManager.GetService<Payment, IPaymentRepository>().getAllByDeliveryManPage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value);
                 
                     Payments = res != null ? new ObservableCollection<Payment>(res.page) : new ObservableCollection<Payment>();
                     Count = res != null ? res.count : 0;
@@ -85,21 +85,23 @@ namespace PosTest.ViewModels.DeliveryAccounting
         }
         public void EditPayment()
         {
-            var payedAmount =!string.IsNullOrEmpty(Parent.NumericZone)? Convert.ToDecimal(Parent.NumericZone) : -1;
-            if (payedAmount < 0)
+            if (SelectedPayment != null)
             {
-                Parent.NumericZone = "";
-                return;
+                var payedAmount = !string.IsNullOrEmpty(Parent.NumericZone) ? Convert.ToDecimal(Parent.NumericZone) : -1;
+                if (payedAmount < 0)
+                {
+                    Parent.NumericZone = "";
+                    return;
+                }
+                var localpayment = SelectedPayment.Clone();
+                localpayment.Amount = payedAmount;
+                var res = StateManager.Save<Payment>(localpayment);
+                if (res)
+                {
+                    UpdateDatas();
+                    Parent.NumericZone = "";
+                }
             }
-            var localpayment = SelectedPayment.Clone();
-            localpayment.Amount = payedAmount;
-            var res = StateManager.Save<Payment>(localpayment);
-            if (res)
-            {
-                UpdateDatas();
-                Parent.NumericZone = "";
-            }
-
         }
         public void DeletePayment()
         {
