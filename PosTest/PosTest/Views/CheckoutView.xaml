@@ -53,6 +53,7 @@
             <helpers:TableViewTemplateSelector x:Uid="helpers:TableViewTemplateSelector_1" x:Key="tableViewSelector"
                                                TableFullView="{StaticResource tableFullView}"
                                                TableButtomView="{StaticResource tableButtomView}" />
+            <convert:CategoryTemplateWidthConverter x:Key="CategoryTemplateWidthConverter"></convert:CategoryTemplateWidthConverter>
             <convert:ObjectToBoolConverter x:Uid="convert:ObjectToBoolConverter_1" x:Key="objectToBoolConverter" />
             <convert:OrderItemObjectToBoolConverter x:Uid="convert:OrderItemObjectToBoolConverter_1" x:Key="OrderItemToBoolConverter" />
             <convert:ListKindToVisibilityConverter x:Uid="convert:ListKindToVisibilityConverter_1" x:Key="listKindToVisibilityConverter" />
@@ -752,7 +753,9 @@
                             <ItemsControl.ItemTemplate>
                                 <!--caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering($this)]"-->
                                 <DataTemplate x:Uid="DataTemplate_11" DataType="{x:Type models:Category}">
-                                    <Button x:Uid="Button_42" MinWidth="80" Height="60" Background="{Binding Background}"
+                                    <Button x:Uid="Button_42" 
+                                            MinWidth="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualWidth,Converter={StaticResource CategoryTemplateWidthConverter}}" 
+                                            Height="60" Background="{Binding Background}"
                                             Content="{Binding Name}"
                                             caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
                                             FontWeight="Bold"

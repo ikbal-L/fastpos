@@ -73,7 +73,7 @@ namespace PosTest.ViewModels
                 .Manage(_productRepository)
                 .Manage(_categoryRepository)
                 .Manage(_additiveRepository)
-                .Manage(_orderRepository)
+                .Manage(_orderRepository,fetch:false)
                 .Manage(_tableRepository)
                 .Manage(_customerRepository)
                 .Manage(_waiterRepository)
@@ -132,9 +132,9 @@ namespace PosTest.ViewModels
         public void Checkout()
         {
             IsDialogOpen = false;
-            var  Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
+            var  Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
             var setting = Manager.LoadSettings();
-            var pageSize = int.Parse(setting.NumberProducts);
+            var pageSize = setting.NumberOfProducts;
             CheckoutViewModel checkoutViewModel =
                 new CheckoutViewModel(pageSize
                 //,_productService,

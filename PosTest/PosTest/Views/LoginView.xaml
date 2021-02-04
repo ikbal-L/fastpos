@@ -21,7 +21,7 @@
             <StackPanel x:Uid="StackPanel_1" Width="200" Height="380" >
 
             <TextBox x:Uid="Username" x:Name="Username" Margin="5" Text="Admin"
-                     ex:AbilityEx.Autority="Can_login1" ex:AbilityEx.AppliedBy = "Readonly"
+                     ex:AbilityEx.Autority="Can_login" ex:AbilityEx.AppliedBy = "Readonly"
                      />
             <PasswordBox x:Uid="Password" x:Name="Password" Margin="5" />
             <Button x:Uid="Login" x:Name="Login" Content="Log-in" Margin="5" Style="{StaticResource MaterialDesignRaisedLightButton}"/>

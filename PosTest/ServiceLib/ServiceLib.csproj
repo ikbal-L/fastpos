@@ -119,6 +119,7 @@
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\Repository.cs" />
     <Compile Include="Service\StateManager.cs" />
+    <Compile Include="Service\StateManagerCommon.cs" />
     <Compile Include="Service\ValidationService.cs" />
   </ItemGroup>
   <ItemGroup>

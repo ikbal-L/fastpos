@@ -50,20 +50,23 @@ namespace PosTest.ViewModels
         private bool _isCategory;
         private EditProductViewModel _editProductViewModel;
         private Type _activeTab;
+        private ProductLayoutViewModel _productLayout;
+        private bool _isDialogOpen;
 
-        public CheckoutSettingsViewModel():this(30, 8)
-        {
-        }
+        
 
-        public CheckoutSettingsViewModel(int productPageSize, int categoryPageSize
-            ) 
+        public CheckoutSettingsViewModel()
         {
-            _productPageSize = productPageSize;
-            _categpryPageSize = categoryPageSize;
+            IsDialogOpen = false;
+            ProductLayout = new ProductLayoutViewModel();
+            var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
+            var setting = Manager.LoadSettings();
+            var pageSize = setting.NumberOfProducts;
+            
             this.Title = "Checkout";
             this.Content = new CheckoutSettingsView() {DataContext= this};
-            ProductPageSize = productPageSize;
-            CategoryPageSize = categoryPageSize;
+            ProductPageSize = pageSize;
+            CategoryPageSize = 6;
 
 
             
@@ -184,6 +187,18 @@ namespace PosTest.ViewModels
         {
             get => _currentCategory;
             set => Set(ref _currentCategory, value);
+        }
+
+        public ProductLayoutViewModel ProductLayout
+        {
+            get => _productLayout;
+            set => Set(ref _productLayout, value);
+        }
+
+        public bool IsDialogOpen
+        {
+            get => _isDialogOpen;
+            set => Set(ref _isDialogOpen, value);
         }
 
         public Product SelectedProduct
@@ -1239,7 +1254,28 @@ namespace PosTest.ViewModels
         //    ToastNotification.Notify("hi.cos");
         //}
 
+        public void ConfigureProductDisplayLayout()
+        {
+            IsDialogOpen = true;
+            ProductLayout.Configuration.PropertyChanged += Configuration_PropertyChanged;
+        }
 
+        public void ApplyLayoutConfig()
+        {
+            ProductLayout.Apply();
+        }
+
+        private void Configuration_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ProductLayoutConfiguration.NumberOfProducts))
+            {
+                if (ProductLayout.Configuration.NumberOfProducts>0)
+                {
+                    _productPageSize = ProductLayout.Configuration.NumberOfProducts; 
+                    ShowCategoryProducts(SelectedCategory);
+                }
+            }
+        }
     }
 }
 

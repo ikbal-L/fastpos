@@ -67,7 +67,9 @@
                     cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
                     caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this,$eventArgs)]">
                 <StackPanel x:Uid="StackPanel_2">
-                    <DockPanel x:Uid="DockPanel_2" Height="70" Width="100" Background="{Binding Background}" >
+                    <DockPanel x:Uid="DockPanel_2" Background="{Binding Background}"
+                               Height="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualHeight,Converter={StaticResource ProductTemplateHeightConverter}}" 
+                               Width="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualWidth,Converter={StaticResource ProductTemplateWidthConverter}}" >
                         <Border x:Uid="Border_3" DockPanel.Dock="Top" Height="48">
                             <TextBlock x:Uid="TextBlock_3" Text="{Binding Path=Name}"   FontSize="12"  TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">

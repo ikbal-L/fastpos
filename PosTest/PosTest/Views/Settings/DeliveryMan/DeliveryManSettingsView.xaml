@@ -37,9 +37,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid
-            Grid.Row="1"
-            >
+        <Grid Grid.Row="1">
             
         <materialdesign:ColorZone Mode="PrimaryMid"  Effect="{DynamicResource MaterialDesignShadowDepth5}">
                 <Grid >

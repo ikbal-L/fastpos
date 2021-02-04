@@ -319,6 +319,7 @@
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\EditCategoryViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\EditProductViewModel.cs" />
+    <Compile Include="ViewModels\SubViewModel\ProductLayoutViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\TakeawayViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WarningViewModel.cs" />

@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using PosTest.Helpers;
+using ServiceInterface;
 
 
 namespace ConsoleApp
@@ -110,9 +111,9 @@ namespace ConsoleApp
 
 
             Console.WriteLine("------------------------------------------------------------");
-            Console.WriteLine(RestApis.Resource<Product>.GetAll());
-            Console.WriteLine(RestApis.Resource<Product>.Delete(5));
-            Console.WriteLine(RestApis.Resource<Category>.Delete(5));
+            Console.WriteLine(RestApis.Resource<Product>.Action(EndPoint.GetAll));
+            Console.WriteLine(RestApis.Resource<Product>.Action(EndPoint.Delete,arg:5));
+            Console.WriteLine(RestApis.Resource<Category>.Action(EndPoint.Delete, arg: 5));
 
             var repo1 = new AdditiveRepository();
             var repo2 = new ProductRepository();
@@ -121,6 +122,11 @@ namespace ConsoleApp
             //StateManager.Instance.Manage<Additive>(repo1).Manage<Product>(repo2);
 
             StateManager.Instance.Manage(repo1).Manage(repo2).Manage(repo3).Manage(repo4);
+
+            var path =Path.Create("product").SubPath("getall").SubPath("unprocessed").Build();
+            Console.WriteLine(path);
+
+
 
             //StateManager.Get<Category>(); throws exception because type category is not managed 
 

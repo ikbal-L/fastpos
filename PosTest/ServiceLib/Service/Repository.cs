@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net;
+using EndPoint = ServiceInterface.StaticValues.EndPoint;
 
 namespace ServiceLib.Service
 {
@@ -15,50 +16,53 @@ namespace ServiceLib.Service
 
         public virtual (int status, TState) Get(TIdentifier id)
         {
-            return GenericRest.GetThing<TState>(RestApis.Resource<TState>.Get(id));
+            return GenericRest.GetThing<TState>(RestApis.Resource<TState>.Action(EndPoint.Get,arg:id));
         }
 
         public virtual (int status, IEnumerable<TState>) Get()
         {
-            return GenericRest.GetAll<TState>(RestApis.Resource<TState>.GetAll());
+            return GenericRest.GetAll<TState>(RestApis.Resource<TState>.Action(EndPoint.GetAll));
+        }
+
+        public (int status, IEnumerable<TState>) Get(string subPath)
+        {
+            return GenericRest.GetAll<TState>(RestApis.Resource<TState>.Action(EndPoint.GetAll,subPath:subPath));
         }
 
 
         public virtual (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids)
         {
-            return GenericRest.GetManyThings<TState>((IEnumerable<long>)ids, RestApis.Resource<TState>.GetMany());
+            return GenericRest.GetManyThings<TState>((IEnumerable<long>)ids, RestApis.Resource<TState>.Action(EndPoint.GetMany));
         }
 
         public virtual int Save(TState state, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<TState>(state, RestApis.Resource<TState>.Save(),out errors).status;
+            return GenericRest.SaveThing<TState>(state, RestApis.Resource<TState>.Action(EndPoint.Save),out errors).status;
         }
 
         public virtual int Save(IEnumerable<TState> state)
         {
-            return GenericRest.SaveThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.SaveMany(),out _).status;
+            return GenericRest.SaveThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.Action(EndPoint.SaveMany),out _).status;
         }
 
         public virtual int Delete(TIdentifier id)
         {
-            return GenericRest.Delete<TState>(RestApis.Resource<TState>.Delete(id));
+            return GenericRest.Delete<TState>(RestApis.Resource<TState>.Action(EndPoint.Delete,id));
         }
 
 
         public virtual int Update(TState state, out IEnumerable<string> errors) 
         {
-            return GenericRest.UpdateThing<TState>(state,RestApis.Resource<TState>.Put<TIdentifier>((TIdentifier) state.Id),out errors).status;
+            
+            return GenericRest.UpdateThing<TState>(state, RestApis.Resource<TState>.Action(EndPoint.Put, arg: state.Id), out errors).status;
         }
 
         public virtual int Update(IEnumerable<TState> state)
         {
-            return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.PutMany(),out _).status;
+            return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.Action(EndPoint.PutMany), out _).status;
         }
 
-        public virtual (int status, IEnumerable<TState>) Get(object param)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 
 
@@ -75,7 +79,7 @@ namespace ServiceLib.Service
     {
         public override (int status, IEnumerable<Product>) Get()
         {
-            var result = GenericRest.GetAll<Product>(RestApis.Resource<Product>.GetAll());
+            var result = GenericRest.GetAll<Product>(RestApis.Resource<Product>.Action(EndPoint.GetAll));
             var products = result.Item2.Cast<Product>().ToList();
             return (result.Item1,products ) ;
         }
@@ -90,26 +94,18 @@ namespace ServiceLib.Service
     [Export(typeof(IOrderRepository))]
     public class OrderRepository : Repository<Order, long>, IOrderRepository
     {
-        public override (int status, IEnumerable<Order>) Get(object unprocessed)
-        {
-            var suffix = "";
-            if (unprocessed is bool b && b)
-            {
-                suffix = nameof(unprocessed);
-            }
-            return GenericRest.GetAll<Order>(RestApis.Resource<Order>.GetAll() + suffix);
-        }
+        
 
         public override int Save(Order state, out IEnumerable<string> errors)
         {
-            var response = GenericRest.SaveThing(state, RestApis.Resource<Order>.Save());
+            var response = GenericRest.SaveThing(state, RestApis.Resource<Order>.Action(EndPoint.Save));
             PatchOrder(state, response,out errors);
             return (int)response.StatusCode;
         }
 
         public override int Update(Order state, out IEnumerable<string> errors)
         {
-            var response = GenericRest.UpdateThing(state, RestApis.Resource<Order>.Put(state.Id));
+            var response = GenericRest.UpdateThing(state, RestApis.Resource<Order>.Action(EndPoint.Put,arg: state.Id));
             PatchOrder(state, response, out errors);
             return (int)response.StatusCode;
         }
@@ -122,6 +118,7 @@ namespace ServiceLib.Service
             {
                 errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
             }
+
             else
             {
                 var deserializedState = JsonConvert.DeserializeObject<Order>(response.Content);

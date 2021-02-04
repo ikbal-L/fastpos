@@ -127,7 +127,6 @@ namespace PosTest.ViewModels
             MaxProductPageSize = pageSize;
            
 
-
             StateManager.Fetch();
             StateManager.Associate<Additive,Product>();
             StateManager.Associate<Product,Category>();
@@ -154,8 +153,10 @@ namespace PosTest.ViewModels
 
             //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
             OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed,OrderState.Delivered};
-            //var unprocessedOrders = StateManager.Get<Order>();
-            var unprocessedOrders = StateManager.Get<Order>().ToList().Where(o=> !filteredTypes.ToList().Contains((OrderState)o.State));
+            
+
+            //var unprocessedOrders = StateManager.Get<Order>().ToList().Where(o=> !filteredTypes.ToList().Contains((OrderState)o.State));
+            var unprocessedOrders = StateManager.Get<Order>(predicate:"unprocessed");
             
 
 

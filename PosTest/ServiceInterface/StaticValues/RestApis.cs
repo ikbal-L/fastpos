@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using ServiceInterface.Interface;
 
 namespace ServiceInterface.StaticValues
 {
@@ -30,85 +31,29 @@ namespace ServiceInterface.StaticValues
 
         public static class Resource<T>
         {
-            static Resource()
-            {
-                
-            }
+           
 
-            private static void SetPath([CallerMemberName] string endpoint = "",string pathVariable = "")
+            public static string Action(EndPoint endPoint,object arg = null,string subPath ="")
             {
                 _resource = typeof(T).Name.ToLowerInvariant();
-                _endpoint = endpoint;
+                _endpoint = endPoint.ToString();
+
+                //var path = $"{_prefix}/{_resource}/{_endpoint.ToLowerInvariant()}/{pathVariable}";
                 
-                var path = $"{_prefix}/{_resource}/{_endpoint.ToLowerInvariant()}/{pathVariable}";
-                if (string.IsNullOrEmpty(pathVariable))
+                IPathBuilder builder = Path.Create(_prefix).SubPath(_resource).SubPath(_endpoint);
+                if (arg!= null)
                 {
-                   path=  path.TrimEnd('/');
+                    builder.Arg(arg);
                 }
-                Builder.Path = path;
-            }
-            public static string GetAll()
-            {
-                
-                SetPath();
+
+                if (!string.IsNullOrEmpty(subPath))
+                {
+                    builder.SubPath(subPath);
+                }
+
+                IPath path = builder.Build();
+                Builder.Path = path.ToString();
                 return Builder.Uri.ToString();
-
-            }
-
-            public static string GetMany()
-            {
-
-                SetPath();
-                return Builder.Uri.ToString();
-
-            }
-
-            public static string Save()
-            {
-
-                SetPath();
-                return Builder.Uri.ToString();
-
-            }
-
-            public static string SaveMany()
-            {
-
-                SetPath();
-                return Builder.Uri.ToString();
-
-            }
-
-            public static string Get<TIdentifier>(TIdentifier id)
-            {
-
-                SetPath(pathVariable: id.ToString());
-                return Builder.Uri.ToString();
-
-            }
-            public static string Put<TIdentifier>(TIdentifier id)
-            {
-
-                SetPath(pathVariable:id.ToString());
-                return Builder.Uri.ToString();
-
-            }
-
-            public static string PutMany()
-            {
-
-                SetPath();
-                return Builder.Uri.ToString();
-
-            }
-
-
-            public static string Delete<TIdentifier>(TIdentifier id)
-            {
-
-                SetPath(pathVariable: id.ToString());
-                return Builder.Uri.ToString();
-
             }
 
 
@@ -116,5 +61,8 @@ namespace ServiceInterface.StaticValues
         }
     }
 
-   
+    public enum EndPoint
+    {
+        GetAll,Get,GetMany,Save,SaveMany,Put,PutMany,Delete
+    }
 }
