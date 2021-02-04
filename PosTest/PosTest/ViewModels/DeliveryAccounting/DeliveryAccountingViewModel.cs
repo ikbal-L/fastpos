@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -188,9 +189,15 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 case ActionButton.Enter:
 
                     if (ActiveTab == EnumActiveTab.NotPaidOrders)
+                    {
                         PayementAction();
+                        RelaodDeliveryMan();
+                    }
                     else
+                    {
                         EditPayment();
+                        RelaodDeliveryMan();
+                    }
                     break;
                 case ActionButton.BackOut:
                     LoginViewModel loginvm = new LoginViewModel();
@@ -227,9 +234,6 @@ namespace PosTest.ViewModels.DeliveryAccounting
 
         }
 
-        public void DeletePayment() {
-            PaymentHistoryViewModel.DeletePayment();
-        }
         public void EditPayment()
         {
             PaymentHistoryViewModel.EditPayment();
@@ -258,7 +262,18 @@ namespace PosTest.ViewModels.DeliveryAccounting
             BackOut
         }
 
-
+        public void RelaodDeliveryMan() {
+           var res= StateManager.getService<Deliveryman, IDeliverymanRepository>().Get(SelectedDeliveryman.Id.Value);
+            if(res.status==(int)HttpStatusCode.OK)
+            {
+               var index= Deliverymans.IndexOf(Deliverymans?.FirstOrDefault(x => x.Id == SelectedDeliveryman.Id));
+                Deliverymans.RemoveAt(index);
+                Deliverymans.Insert(index,res.Item2);
+                NotifyOfPropertyChange(nameof(FilterDeliverymens));
+                SelectedDeliveryman = res.Item2;
+            }
+        
+        }
     }
    public enum PaginationAction
     {

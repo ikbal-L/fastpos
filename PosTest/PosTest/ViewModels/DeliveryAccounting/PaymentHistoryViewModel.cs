@@ -108,6 +108,8 @@ namespace PosTest.ViewModels.DeliveryAccounting
             if (res)
             {
                 UpdateDatas();
+                Parent.RelaodDeliveryMan();
+
             }
         }
     }
