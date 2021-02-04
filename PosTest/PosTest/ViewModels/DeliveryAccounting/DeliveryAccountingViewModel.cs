@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +26,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 NotifyOfPropertyChange(nameof(Deliverymans));
             }
         }
+        public ObservableCollection<Deliveryman> FilterDeliverymens { get => new ObservableCollection<Deliveryman>(Deliverymans.Where(x => x.Name.ToLower().Contains(SearchDeliveryMan.ToLower()))); }
         private string _NumericZone ;
         public string NumericZone
         {
@@ -34,15 +36,27 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 NotifyOfPropertyChange(nameof(NumericZone));
             }
         }
- 
-        private decimal _total;
+
+        internal void NotifyTotal()
+        {
+            NotifyOfPropertyChange(nameof(Total));
+        }
+        private string _SearchDeliveryMan="";
+
+        public string SearchDeliveryMan
+        {
+            get { return _SearchDeliveryMan; }
+            set { _SearchDeliveryMan = value;
+                NotifyOfPropertyChange(nameof(SearchDeliveryMan));
+                NotifyOfPropertyChange(nameof(FilterDeliverymens));
+            }
+        }
+
 
         public decimal Total
         {
-            get { return _total; }
-            set { _total = value;
-                NotifyOfPropertyChange(nameof(Total));
-            }
+            get { return NotPaidOrdersViewModel.Total; }
+          
         }
 
         private EnumActiveTab _ActiveTab= EnumActiveTab.NotPaidOrders;
@@ -52,8 +66,11 @@ namespace PosTest.ViewModels.DeliveryAccounting
             get { return _ActiveTab; }
             set { _ActiveTab = value;
                 NotifyOfPropertyChange(nameof(ActiveTab));
+                LoadDataTab();
             }
         }
+
+      
 
         private Deliveryman _selectedDeliveryman;
 
@@ -64,6 +81,8 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 NotifyOfPropertyChange(nameof(SelectedDeliveryman));
                 NotPaidOrdersViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
                 AllOrdersViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
+                PaymentHistoryViewModel?.ChangeSelectedDeliveryman(SelectedDeliveryman);
+                LoadDataTab();
             }
         }
         private NotPaidOrdersViewModel _NotPaidOrdersViewModel;
@@ -84,6 +103,15 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 NotifyOfPropertyChange(nameof(AllOrdersViewModel));
             }
         }
+        private PaymentHistoryViewModel _PaymentHistoryViewModel;
+
+        public PaymentHistoryViewModel PaymentHistoryViewModel
+        {
+            get { return _PaymentHistoryViewModel; }
+            set { _PaymentHistoryViewModel = value;
+                NotifyOfPropertyChange(nameof(PaymentHistoryViewModel));
+            }
+        }
 
         public  DeliveryAccountingViewModel() {
             StateManager.Fetch();
@@ -94,6 +122,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
           Task.Run(()=> {
               NotPaidOrdersViewModel = new NotPaidOrdersViewModel(this);
               AllOrdersViewModel = new AllOrdersViewModel(this);
+              PaymentHistoryViewModel = new PaymentHistoryViewModel(this);
           });
         }
         public void NumericKeyboard(string number)
@@ -157,10 +186,18 @@ namespace PosTest.ViewModels.DeliveryAccounting
                     break;
 
          
-                case ActionButton.Payment:
-               
+                case ActionButton.Enter:
 
-                    PayementAction();
+                    if (ActiveTab == EnumActiveTab.NotPaidOrders)
+                    {
+                        PayementAction();
+                        RelaodDeliveryMan();
+                    }
+                    else
+                    {
+                        EditPayment();
+                        RelaodDeliveryMan();
+                    }
                     break;
                 case ActionButton.BackOut:
                     LoginViewModel loginvm = new LoginViewModel();
@@ -182,56 +219,61 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 return;
             }
 
-            if (ActiveTab == EnumActiveTab.NotPaidOrders)
+           if (ActiveTab == EnumActiveTab.NotPaidOrders)
             {
-                var listPaidOrder = new List<Order>();
-                foreach (var order in NotPaidOrdersViewModel.Orders)
+    
+               var res=   StateManager.Save<Payment>(new Payment() { Amount = payedAmount,Date=DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value });
+               if (res)
                 {
-                    if (payedAmount == 0)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        order.GivenAmount = (order.Total > payedAmount) ? payedAmount : order.Total;
-                        payedAmount= (order.Total > payedAmount) ? 0 : payedAmount-order.Total;
-                        order.State = OrderState.Payed;
-                        listPaidOrder.Add(order);
-                    }
-
-                }
-              if(StateManager.Save<Order>(listPaidOrder))
-                {
-                    ToastNotification.Notify("save Success", NotificationType.Success);
                     NumericZone = "";
-                    NotPaidOrdersViewModel.UpdateOrderNotPaid();
+                    LoadDataTab();
                 }
-                else
-                {
-                    ToastNotification.Notify("Error Save", NotificationType.Error);
-
-                }
-            }
        
-        /*    
-            CurrentOrder.GivenAmount = payedAmount;
-            CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
-            CurrentOrder.State = OrderState.Payed;
-            NumericZone = "";
-            GivenAmount = CurrentOrder.GivenAmount;
-            ReturnedAmount = CurrentOrder.ReturnedAmount;
-            SaveCurrentOrder();
-            GivenAmount = 0;
-            ReturnedAmount = null;*/
+            }
+      
+
         }
- 
-       public  enum ActionButton
+
+        public void EditPayment()
         {
-            Payment,
+            PaymentHistoryViewModel.EditPayment();
+        }
+
+        private void LoadDataTab()
+        {
+            switch (ActiveTab)
+            {
+                case EnumActiveTab.NotPaidOrders:
+                    NotPaidOrdersViewModel.UpdateDatas();
+                    break;
+                case EnumActiveTab.AllOrders:
+                    AllOrdersViewModel.UpdateDatas();
+                    break;
+                case EnumActiveTab.PaymentHistory:
+                    PaymentHistoryViewModel.UpdateDatas();
+                    break;
+
+            }
+        }
+        public  enum ActionButton
+        {
+            Enter,
             Backspase,
             BackOut
         }
 
+        public void RelaodDeliveryMan() {
+           var res= StateManager.getService<Deliveryman, IDeliverymanRepository>().Get(SelectedDeliveryman.Id.Value);
+            if(res.status==(int)HttpStatusCode.OK)
+            {
+               var index= Deliverymans.IndexOf(Deliverymans?.FirstOrDefault(x => x.Id == SelectedDeliveryman.Id));
+                Deliverymans.RemoveAt(index);
+                Deliverymans.Insert(index,res.Item2);
+                NotifyOfPropertyChange(nameof(FilterDeliverymens));
+                SelectedDeliveryman = res.Item2;
+            }
+        
+        }
     }
    public enum PaginationAction
     {
@@ -242,6 +284,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
     {
         NotPaidOrders=0,
         AllOrders=1,
+        PaymentHistory=2
         
     }
 }

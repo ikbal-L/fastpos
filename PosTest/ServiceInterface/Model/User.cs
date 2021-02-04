@@ -41,9 +41,17 @@ namespace ServiceInterface.Model
         [DataMember]
         public string PinCode { get; set; }
 
+        private ObservableCollection<string> _PhoneNumbers;
         [DataMember]
-        [Phone]
-        public string PhoneNumber { get; set; }
+        public ObservableCollection<string> PhoneNumbers
+        {
+            get { return _PhoneNumbers; }
+            set
+            {
+                _PhoneNumbers = value;
+                NotifyOfPropertyChange(nameof(PhoneNumbers));
+            }
+        }
 
         public List<Role> Roles { get; set; }
 
@@ -127,32 +135,19 @@ namespace ServiceInterface.Model
     [DataContract]
     public class Deliveryman : User
     {
-        private ObservableCollection<string> _PhoneNumbers;
-        [DataMember]
-        public ObservableCollection<string> PhoneNumbers
-        {
-            get { return _PhoneNumbers; }
-            set { _PhoneNumbers = value; 
-            NotifyOfPropertyChange(nameof(PhoneNumbers));
-            }
-        }
-        private decimal _debit;
+  
+        private decimal _balance;
         [DataMember]
 
-        public decimal Debit
+        public decimal Balance
         {
-            get { return _debit; }
-            set { _debit = value;
-                NotifyOfPropertyChange(nameof(Debit));
+            get { return _balance; }
+            set {
+                _balance = value;
+                NotifyOfPropertyChange(nameof(Balance));
             }
         }
-        public ObservableCollection<string> AllPhoneNumbers {
-                                                                get {
-                                                                    var phs = PhoneNumbers.Clone();
-                                                                    phs?.Add(PhoneNumber);
-                                                                    return phs;
-                                                                }
-                                                            }
+    
 
     }
 

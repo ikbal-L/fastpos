@@ -62,7 +62,25 @@ namespace ServiceLib.Service
             return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.Action(EndPoint.PutMany), out _).status;
         }
 
+        public virtual (int status, IEnumerable<TState>) Get(object param)
+        {
+            throw new NotImplementedException();
+        }
 
+        public (bool, TReturn) Save<TReturn>(TState state)
+        {
+            return GenericRest.SaveThing<TState, TReturn>(state, RestApis.Resource<TState>.Save());
+        }
+
+        public (bool, TReturn) Update<TReturn>(TState state)
+        {
+            return GenericRest.UpdateThing<TState, TReturn>(state, RestApis.Resource<TState>.Put<TIdentifier>((TIdentifier)state.Id));
+        }
+
+        public (bool, TReturn) Delete<TReturn>(TIdentifier id)
+        {
+            return GenericRest.DeleteThing<TReturn>(RestApis.Resource<TState>.Delete(id));
+        }
     }
 
 
@@ -147,13 +165,13 @@ namespace ServiceLib.Service
 
         }
 
-        public PageList<Order> GetOrderByStates(string[] states, long deliverymanId, int pageNumber, int pageSize)
+        public List<Order> GetOrderByStates(string[] states, long deliverymanId)
         {
-            return GenericRest.PostThing<PageList<Order>>(UrlConfig.OrderUrl.GetByStatePage + $"/{pageNumber}/{pageSize}/{deliverymanId}",states).Item2;
+            return GenericRest.PostThing<List<Order>>(UrlConfig.OrderUrl.GetByStatePage + $"/{deliverymanId}",states).Item2;
         }
-        public PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId)
+        public PageList<Order> getAllByDeliveryManAndStatePage( int pageNumber, int pageSize, long deliverymanId, string[] states)
         {
-            return GenericRest.GetThing<PageList<Order>>(UrlConfig.OrderUrl.GetAllByDeliveryManPage + $"/{pageNumber}/{pageSize}/{deliverymanId}").Item2;
+            return GenericRest.PostThing<PageList<Order>>(UrlConfig.OrderUrl.GetAllByDeliveryManPage + $"/{pageNumber}/{pageSize}/{deliverymanId}", states).Item2;
         }
     }
 
@@ -179,6 +197,19 @@ namespace ServiceLib.Service
     public class DeliverymanRepository : Repository<Deliveryman, long>, IDeliverymanRepository
     {
 
+    }
+    [Export(typeof(IPaymentRepository))]
+    public class PaymentRepository : Repository<Payment, long>, IPaymentRepository
+    {
+        public PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId)
+        {
+            return GenericRest.GetThing<PageList<Payment>>(UrlConfig.PaymentUrl.GetAllByDeliveryManPage + $"/{pageNumber}/{pageSize}/{deliverymanId}").Item2;
+        }
+
+        public List<Payment> getByDeliveryManAndDate(long deliverymanId, DateTime date)
+        {
+           return GenericRest.PostThing<List<Payment>>(UrlConfig.PaymentUrl.GetByDeliveryManAndDate + $"/{deliverymanId}", date).Item2;
+        }
     }
 
 }

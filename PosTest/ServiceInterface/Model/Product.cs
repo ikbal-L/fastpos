@@ -158,25 +158,6 @@ namespace ServiceInterface.Model
             
         }
 
-        public Product(Product platProduct) : this()
-        {
-            AvailableStock = platProduct.AvailableStock;
-            BackgroundString = platProduct.BackgroundString;
-            CategoryId = platProduct.CategoryId;
-            Description = platProduct.Description;
-            Id = platProduct.Id;
-            IsMuchInDemand = platProduct.IsMuchInDemand;
-            Name = platProduct.Name;
-            PictureFileName = platProduct.PictureFileName;
-            PictureUri = platProduct.PictureUri;
-            Price = platProduct.Price;
-            Type = platProduct.Type;
-            Unit = platProduct.Unit;
-            Rank = platProduct.Rank;
-            IdAdditives = platProduct.IdAdditives;
-            Additives = platProduct.Additives;
-            Ingredients = platProduct.Ingredients;
-        }
 
         [DataMember]
         [Required]

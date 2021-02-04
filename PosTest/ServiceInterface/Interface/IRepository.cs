@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ServiceInterface.Model;
 
 namespace ServiceInterface.Interface
@@ -13,7 +14,12 @@ namespace ServiceInterface.Interface
         int Save(IEnumerable<TState> state);
         int Delete(TIdentifier id);
         int Update(TState state, out IEnumerable<string> errors);
+        (bool, TReturn) Update<TReturn>(TState state);
         int Update(IEnumerable<TState> state);
+        (bool ,TReturn) Save<TReturn>(TState state);
+        (bool, TReturn) Delete<TReturn>(TIdentifier id);
+
+
     }
 
     public interface IAdditiveRepository : IRepository<Additive, long>
@@ -33,8 +39,8 @@ namespace ServiceInterface.Interface
 
     public interface IOrderRepository : IRepository<Order, long>
     {
-        PageList<Order> GetOrderByStates(string[] states, long deliverymanId, int pageNumber, int pageSize);
-        PageList<Order> getAllByDeliveryManPage( int pageNumber, int pageSize, long deliverymanId);
+        List<Order>  GetOrderByStates(string[] states, long deliverymanId);
+        PageList<Order> getAllByDeliveryManAndStatePage( int pageNumber, int pageSize, long deliverymanId,string[] states);
 
     }
 
@@ -61,5 +67,10 @@ namespace ServiceInterface.Interface
     public interface IDeliverymanRepository : IRepository<Deliveryman, long>
     {
 
+    }
+    public interface IPaymentRepository: IRepository<Payment, long>
+    {
+        PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId);
+        List<Payment> getByDeliveryManAndDate(long deliverymanId, DateTime date);
     }
 }

@@ -25,6 +25,7 @@ using ServiceLib.Service;
 using Product = ServiceInterface.Model.Product;
 using PosTest.ViewModels.Settings;
 using PosTest.Views;
+using PosTest.Extensions;
 
 namespace PosTest.ViewModels
 {
@@ -675,7 +676,8 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var product = new Product(ClipboardProduct);
+            //var product = new Product(ClipboardProduct);
+            var product = ClipboardProduct.Clone();
             product.Category = SelectedCategory;
             product.Id = null;
             product.Rank = null; 
@@ -724,7 +726,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-            var product = new Product(SelectedFreeProduct);
+         //   var product = new Product(SelectedFreeProduct);
         }
 
         public void CotegoryOfSelectFreeProductChanged(Category category)

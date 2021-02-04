@@ -108,6 +108,7 @@
     <Compile Include="jsonConverters\TimespanConverter.cs" />
     <Compile Include="Model\Additive.cs" />
     <Compile Include="Model\Annex.cs" />
+    <Compile Include="Model\CashOperation.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\DebtPayement.cs" />
@@ -118,6 +119,8 @@
     <Compile Include="Model\OrderItem.cs" />
     <Compile Include="Model\OrderItemAdditiveState.cs" />
     <Compile Include="Model\PageList.cs" />
+    <Compile Include="Model\Payment.cs" />
+    <Compile Include="Model\PaymentSaved.cs" />
     <Compile Include="Model\Place.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductMappingException.cs" />

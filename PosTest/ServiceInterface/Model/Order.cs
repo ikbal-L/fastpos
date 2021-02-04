@@ -563,7 +563,9 @@ namespace ServiceInterface.Model
         Canceled,
         Removed,
         Served,
-        Changed
+        Changed,
+        DeliveredPaid,
+        DeliveredReturned
     }
 
     public enum OrderType

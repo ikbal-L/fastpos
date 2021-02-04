@@ -35,6 +35,7 @@ namespace PosTest.ViewModels.DeliveryAccounting
                 NotifyOfPropertyChange(nameof(Orders));
             }
         }
+        public FilterOrderState FilterOrderState  { get; set; }
         public void ViewOrderItems(Order order)
         {
             order.ProductsVisibility = !order.ProductsVisibility;
@@ -46,36 +47,91 @@ namespace PosTest.ViewModels.DeliveryAccounting
         private DeliveryAccountingViewModel Parent { get; set; }
         public AllOrdersViewModel(DeliveryAccountingViewModel deliveryAccountingViewModel) {
             this.Parent = deliveryAccountingViewModel;
+            FilterOrderState = new FilterOrderState();
+            FilterOrderState.PropertyChanged += FilterOrderState_PropertyChanged;
         }
 
-        public void UpdateOrderNotPaid()
+        private void FilterOrderState_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            UpdateDatas();
+        }
+
+        public void UpdateDatas()
         {
 
             if (this._SelectedDeliveryman != null)
             {
-                var res = StateManager.GetService<Order, IOrderRepository>().getAllByDeliveryManPage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value);
-                if (res != null)
-                {
-                    Orders = res.page != null ? new ObservableCollection<Order>(res.page) : new ObservableCollection<Order>();
-                    Count = res.count;
+                var res = StateManager.getService<Order, IOrderRepository>().getAllByDeliveryManAndStatePage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value, FilterOrderState.GetStates());
+  
+                    Orders = res != null ? new ObservableCollection<Order>(res.page) : new ObservableCollection<Order>();
+                    Count = res != null? res.count:0;
                     NotifyOfAllPropertyChange();
-                }
+            }
+            else
+            {
+                Orders = new ObservableCollection<Order>();
+                Count = 0;
+                NotifyOfAllPropertyChange();
             }
 
         }
-        public void PaginationOrderNotPaid(PaginationAction action)
+        public void Pagination(PaginationAction action)
         {
             _PageNumber += (action == PaginationAction.Next) ? 1 : -1;
-            UpdateOrderNotPaid();
+            UpdateDatas();
         }
-      public void  ChangeSelectedDeliveryman(Deliveryman selectedDeliveryman)
+        public void ChangeSelectedDeliveryman(Deliveryman selectedDeliveryman)
         {
             _SelectedDeliveryman = selectedDeliveryman;
-            UpdateOrderNotPaid();
         }
         public void NotifyOfAllPropertyChange() {
             NotifyOfPropertyChange(nameof(PrevioussBtnEnabled));
             NotifyOfPropertyChange(nameof(NextBtnEnabled));
+        }
+
+    }
+    public class FilterOrderState: PropertyChangedBase
+    {
+        private bool _isDelivered;
+
+        public bool IsDelivered
+        {
+            get { return _isDelivered; }
+            set { _isDelivered = value;
+                NotifyOfPropertyChange(nameof(IsDelivered));
+            }
+        }
+        private bool _isDeliveredReturned;
+
+        public bool IsDeliveredReturned
+        {
+            get { return _isDeliveredReturned; }
+            set
+            {
+                _isDeliveredReturned = value;
+                NotifyOfPropertyChange(nameof(IsDeliveredReturned));
+            }
+        }
+        private bool _isDeliveredPaid;
+
+        public bool IsDeliveredPaid
+        {
+            get { return _isDeliveredPaid; }
+            set
+            {
+                _isDeliveredPaid = value;
+                NotifyOfPropertyChange(nameof(IsDeliveredPaid));
+            }
+        }
+        public string[] GetStates() {
+            var list = new List<string>();
+            if (IsDelivered)
+                list.Add(OrderState.Delivered.ToString());
+            if (IsDeliveredPaid)
+                list.Add(OrderState.DeliveredPaid.ToString());
+            if (IsDeliveredReturned)
+                list.Add(OrderState.DeliveredReturned.ToString());
+            return list.ToArray();
         }
     }
 }

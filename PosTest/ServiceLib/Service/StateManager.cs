@@ -91,7 +91,7 @@ namespace ServiceLib.Service
 
                     if (Association.ContainsKey(key))
                     {
-                        Association[key](); 
+                        Association[key]();
                     }
                     return true;
                 }
@@ -100,6 +100,30 @@ namespace ServiceLib.Service
             }
 
             return false;
+        }
+        public static (bool, TReturn) Save<TReturn,TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
+        {
+            var key = typeof(TState);
+            IsStateManaged<TState, TIdentifier>(key);
+
+            IEnumerable<string> errors = null;
+
+            if (Service[key] is IRepository<TState, TIdentifier> service)
+            {
+                return state.Id == null? service.Save<TReturn>(state): service.Update<TReturn>(state); ;
+
+            }
+
+            return(false, default(TReturn));
+        }
+
+        public static bool Save<TState>(TState state) where TState : IState<long>
+        {
+            return Save<TState, long>(state);
+        }
+        public static (bool,TReturn) SaveAndReturn<TState,TReturn>(TState state) where TState : IState<long>
+        {
+            return Save<TReturn,TState, long>(state);
         }
 
         public static bool Save<TState, TIdentifier>(IEnumerable<TState> state) where TState : IState<TIdentifier> where TIdentifier : struct
@@ -137,7 +161,29 @@ namespace ServiceLib.Service
             return true;
 
         }
+        public static (bool,TReturn) DeleteAndRetrun<TState, TReturn>(TState state) where TState : IState<long>
+        {
+            var key = typeof(TState);
+            if (Service[key] is IRepository<TState, long> service)
+            {
+                var status = -1;
+                if (state.Id == null)
+                {
+                    throw new InvalidOperationException("State must have an Id");
+                }
+                else
+                {
+                    return service.Delete<TReturn>((long)state.Id);
+                }
 
+            }
+
+            return (false, default(TReturn));
+        }
+        public static bool Delete<TState>(TState state) where TState : IState<long>
+        {
+            return Delete<TState, long>(state);
+        }
         private static void Fetch<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
         {
             Fetch<TState,TIdentifier>(null);

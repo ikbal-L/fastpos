@@ -8,24 +8,65 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Header="Paid Orders">
-        <Grid>
+    <TabItem.Style>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+                            <Border Name="Border" Margin="0,0,0,0" Background="Transparent">
+                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                                 
+                              ContentSource="Header" Margin="12,2,12,2"
+                              RecognizesAccessKey="True"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Panel.ZIndex" Value="100" />
+                                <Setter TargetName="Border" Property="Background" Value="Transparent" />
+                                <Setter  Property="Foreground" Value="#31b7f9" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0 0 0 2" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#31b7f9" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </TabItem.Style>
+
+    <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Border BorderThickness=" 0 0 0 1" Padding="0 10 10 0" BorderBrush="Gray">
+            <Grid  >
+                <StackPanel Orientation="Horizontal" Margin="50 0 0 0" >
+                    <CheckBox Content="Deliverd" IsChecked="{Binding FilterOrderState.IsDelivered,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0 0 5 0" Foreground="Black"/>
+                    <CheckBox Content="Deliverd Paid" IsChecked="{Binding FilterOrderState.IsDeliveredPaid,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0 0 5 0" Foreground="Black"/>
+                    <CheckBox Content="Deliverd Return" IsChecked="{Binding FilterOrderState.IsDeliveredReturned,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="0 0 5 0" Foreground="Black"/>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button BorderThickness="0" IsEnabled="{Binding  PrevioussBtnEnabled}"  Background="Transparent"
-                                         caliburn:Message.Attach="[Event Click] = [Action PaginationOrderNotPaid('Previous')]"
+                
+                    <Button BorderThickness="0" IsEnabled="{Binding  PrevioussBtnEnabled}"  Background="Transparent"
+                                         caliburn:Message.Attach="[Event Click] = [Action Pagination('Previous')]"
                                         >
                         <materialdesign:PackIcon Kind="ArrowCollapseLeft" Height="15"  Width="15" />
                     </Button>
-                <Button IsEnabled="{Binding NextBtnEnabled}" BorderThickness="0" Background="Transparent"  
-                                        caliburn:Message.Attach="[Event Click] = [Action PaginationOrderNotPaid('Next')]">
+                   <Button IsEnabled="{Binding NextBtnEnabled}" BorderThickness="0" Background="Transparent"  
+                                        caliburn:Message.Attach="[Event Click] = [Action Pagination('Next')]">
                         <materialdesign:PackIcon Kind="ArrowCollapseRight" Height="15"  Width="15" />
                     </Button>
                 </StackPanel>
-            </Border>
+            </Grid>
+        </Border>
             <ScrollViewer Grid.Row="1" Margin="0 0 0 40"  BorderThickness="1"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Padding="5">
                 <ListBox
                         Cursor="Hand"
@@ -49,23 +90,32 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <StackPanel Grid.Column="0">
-                                                <TextBlock  >
-                                                        <Run>Order</Run>
-                                                        <Run Text="{Binding Id}"> </Run>
-                                                </TextBlock>
-                                                <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding Waiter.Name}"/>
-                                                <TextBlock Padding="5 0 0 0" FontWeight="Bold" Text="{Binding OrderTime.Date,StringFormat=dd-MM-yyyy}" />
-                                            </StackPanel>
-                                            <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="20 0 0 0 " Orientation="Horizontal">
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1500"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="+"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="1000"/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="="/>
-                                                <TextBlock FontSize="25" Margin="1" FontWeight="Bold" Text="-500"/>
-                                            </StackPanel>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="120"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <TextBlock   HorizontalAlignment="Center" Text="Order"/>
+                                            <TextBlock   VerticalAlignment="Bottom" Padding="0 0 0 6" HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding Id}" />
+
                                         </Grid>
+                                   
+                                        <StackPanel Grid.Column="1"  >
+                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Text="Total"/>
+
+                                            <TextBlock  VerticalAlignment="Center"  HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Text="{Binding Total}"/>
+
+                                        </StackPanel>
+                                        <Grid Grid.Column="2">
+                                            <TextBlock   HorizontalAlignment="Center" FontWeight="Bold" Text="Date" />
+                                            <TextBlock   VerticalAlignment="Bottom" Padding="0 0 0 6" HorizontalAlignment="Center"  FontWeight="Bold" Text="{Binding OrderTime.Date}" />
+
+                                        </Grid>
+                                        <Grid Grid.Column="3">
+                                            <TextBlock Margin="20  0 0 0"   HorizontalAlignment="Center" Text="Status"/>
+                                            <TextBlock Margin="20  0 0 0"  VerticalAlignment="Bottom" Padding="0 0 0 6" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Green" Text="{Binding State}" />
+
+                                        </Grid>
+                                    </Grid>
                                         <StackPanel Margin="0 10 0 0"
                                                         Visibility="{Binding ProductsVisibility,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource boolToVisibilityConverter}}"
                                                         >
