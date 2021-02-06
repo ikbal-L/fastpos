@@ -606,6 +606,9 @@ namespace PosTest.ViewModels
                     ToastNotification.Notify("Unable to save order");
                     break;
             }
+
+            AdditivesVisibility = false;
+            ProductsVisibility = true;
         }
 
         public void ShowOrder(Order order)
@@ -1173,6 +1176,7 @@ namespace PosTest.ViewModels
 
         private void PayementAction()
         {
+            
             var payedAmount = Convert.ToDecimal(NumericZone);
             if (payedAmount < 0)
             {
@@ -1203,6 +1207,7 @@ namespace PosTest.ViewModels
             SaveCurrentOrder();
             GivenAmount = 0;
             ReturnedAmount = null;
+            AdditivesVisibility = false;
         }
 
         private void TableAction(int tableNumber)
