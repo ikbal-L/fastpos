@@ -20,6 +20,9 @@ using PosTest.ViewModels.Settings;
 using PosTest.ViewModels.DeliveryAccounting;
 using System.Threading;
 using System.Security.Principal;
+using System.Windows.Controls;
+using System.Collections.ObjectModel;
+using System.Windows.Media;
 
 namespace PosTest.ViewModels
 {
@@ -56,6 +59,25 @@ namespace PosTest.ViewModels
         [Import(typeof(IPaymentRepository))]
         private IPaymentRepository _paymentRepository;
 
+        private ObservableCollection<User> _Users;
+
+        public ObservableCollection<User> Users
+        {
+            get { return _Users; }
+            set { _Users = value;
+                NotifyOfPropertyChange(nameof(Users));
+            }
+        }
+        private User _selectedUser;
+
+        public User SelectedUser
+        {
+            get { return _selectedUser; }
+            set { _selectedUser = value;
+                NotifyOfPropertyChange(nameof(SelectedUser));
+            }
+        }
+
         //public String Username { get; set; }
         //public String Password { get; set; }
 
@@ -65,6 +87,16 @@ namespace PosTest.ViewModels
         {
             get => _IsDialogOpen;
             set => Set(ref _IsDialogOpen, value);
+        }
+
+        private string _Password;
+
+        public string Password
+        {
+            get { return _Password; }
+            set { _Password = value;
+                NotifyOfPropertyChange(nameof(Password));
+            }
         }
 
         protected override void OnActivate()
@@ -87,15 +119,20 @@ namespace PosTest.ViewModels
             auths.Add("Can_login");
             var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), auths.ToArray());
             Thread.CurrentPrincipal = principal;
+            Users = new ObservableCollection<User>();
+            Users.Add(new User() { Username = "admin", Password = "admin" });
+            Users.Add(new User() { Username = "Elahbib ", Password = "admin", BackgroundColor = Color.FromRgb(66, 114, 192) });
+            Users.Add(new User() { Username = "Othman ", Password = "admin", BackgroundColor = Color.FromRgb(23, 43, 77) });
+            Users.Add(new User() { Username = "Djaber ", Password = "admin", BackgroundColor = Color.FromRgb(112, 192, 232) });
 
-        
+
         }
         public bool CanLogin()
         {
             //logger.Info("User: " + username + "  Pass: " + password);
             return true;// !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
         }
-
+        
         public void Login()
         {
             int resp;
@@ -118,6 +155,8 @@ namespace PosTest.ViewModels
 
             IsDialogOpen = true;
 
+          
+            Checkout();
             //CheckoutViewModel checkoutViewModel =
             //    new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,
             //    productService,
@@ -131,7 +170,14 @@ namespace PosTest.ViewModels
             //checkoutViewModel.Parent = this.Parent;
             //(this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
         }
-        
+        public void NumericKeyboard(PasswordBox passwordBox,string key)
+        {
+            if(!key.Equals("-"))
+                passwordBox.Password += key;
+            else
+                passwordBox.Password = passwordBox.Password.Substring(0, passwordBox.Password.Length==0?passwordBox.Password.Length: passwordBox.Password.Length - 1);
+        }
+
         public void Checkout()
         {
             IsDialogOpen = false;
@@ -263,7 +309,7 @@ namespace PosTest.ViewModels
             container.SatisfyImportsOnce(this);
         }
 
-     public void   Settingsbtn() {
+        public void   Settingsbtn() {
             int resp;
             try
             {
