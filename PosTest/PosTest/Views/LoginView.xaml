@@ -6,45 +6,167 @@
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:res="clr-namespace:PosTest.Properties"
              xmlns:ex="clr-namespace:PosTest.Extensions"
-             
+             xmlns:converters="clr-namespace:PosTest.Converters"
+             xmlns:caliburn="http://www.caliburnproject.org"
+                          xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800" Background="White">
     
-        <materialdesign:DialogHost x:Uid="materialdesign:DialogHost_1" IsOpen="{Binding IsDialogOpen}">
-            <materialdesign:DialogHost.DialogContent>
+    
+        <Border BorderBrush="Black" BorderThickness="1" Margin="10"> 
+            <Grid x:Uid="Grid_1">
             
-                <local:SwitchMenuView x:Uid="local:SwitchMenuView_1"></local:SwitchMenuView>
-            </materialdesign:DialogHost.DialogContent>
+            
+            <StackPanel x:Uid="StackPanel_1"  HorizontalAlignment="Center"  VerticalAlignment="Center">
+                <TextBlock Text="Welcome" FontSize="35" FontWeight="Medium" HorizontalAlignment="Center"/>
+                <materialdesign:PackIcon HorizontalAlignment="Center" Foreground="{Binding SelectedUser.Background,FallbackValue=#4a4c4f}" Kind="AccountCircle"  Width="120" Height="120" />
+                <TextBlock Text="{Binding SelectedUser.Username}"  FontSize="20"
+                               
+                               
+                               FontWeight="Medium" HorizontalAlignment="Center"/>
 
-        <Grid x:Uid="Grid_1">
-            <StackPanel x:Uid="StackPanel_1" Width="200" Height="380" >
 
-            <TextBox x:Uid="Username" x:Name="Username" Margin="5" Text="Admin"
-                     ex:AbilityEx.Autority="Can_login" ex:AbilityEx.AppliedBy = "Readonly"
-                     />
-            <PasswordBox x:Uid="Password" x:Name="Password" Margin="5" />
-            <Button x:Uid="Login" x:Name="Login" Content="Log-in" Margin="5" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
+                    <PasswordBox x:Name="Password"  
+                                 Style="{StaticResource MaterialDesignOutlinedPasswordFieldPasswordBox}"  Width="300" 
+                                  materialdesign:HintAssist.Hint="Password"
+                                 Margin="5" />
+                <Grid Grid.Column="0" HorizontalAlignment="Center" Margin="0 20 0 0 ">
+                    <Grid.Effect>
+                        <DropShadowEffect BlurRadius="20" />
+                    </Grid.Effect>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="80"/>
+                    </Grid.RowDefinitions>
+                    <Button  Cursor="Hand"   Style="{StaticResource ButtonStyle18}" Margin="4" Content="1" Grid.Column="0" Grid.Row="0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="1" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button  Cursor="Hand" Style="{StaticResource ButtonStyle18}" Margin="4" Content="2" Grid.Column="1" Grid.Row="0"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="2" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="3" Grid.Column="2" Grid.Row="0"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="3" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="4" Grid.Column="0" Grid.Row="1"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="4" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="5" Grid.Column="1" Grid.Row="1"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="5" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="6" Grid.Column="2" Grid.Row="1"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="6" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="7" Grid.Column="0" Grid.Row="2"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="7" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="8" Grid.Column="1" Grid.Row="2"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="8" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="9" Grid.Column="2" Grid.Row="2"> <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                        <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                        <caliburn:Parameter Value="9" />
+                                    </caliburn:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    <Button Cursor="Hand"  caliburn:Message.Attach="[Event Click] = [Action Login()]" Margin="4"  Content="{materialdesign:PackIcon Login,30}"  Style="{StaticResource ButtonStyle18}" Grid.Column="0" Grid.Row="3"/>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Margin="4" Content="0" Grid.Column="1" Grid.Row="3">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                    <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                    <caliburn:Parameter Value="0" />
+                                </caliburn:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                    <Button Cursor="Hand"  Style="{StaticResource ButtonStyle18}" Content="{materialdesign:PackIcon  Kind=BackspaceOutline, Size=30}" Margin="4" Grid.Column="2" Grid.Row="3">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <caliburn:ActionMessage MethodName="NumericKeyboard">
+                                    <caliburn:Parameter Value="{Binding ElementName=Password}" />
+                                    <caliburn:Parameter Value="-" />
+                                </caliburn:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </Grid>
+              
 
-                <Button x:Uid="Login with Pin" x:Name="LoginWithPin" Content="Login with PIN" Margin="5" Style="{StaticResource MaterialDesignFlatButton}" ></Button>
-
-                <Button x:Uid="Settings" x:Name="Settingsbtn" Content="Delivery Accounting" Margin="5" Style="{StaticResource MaterialDesignFlatButton}" ></Button>
-                <!--<Button x:Name="Settings" Content="Settings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
-            <Button x:Uid="Close" x:Name="Close" Content="Close" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"
-                    
-                    />
-            <!--<Button x:Name="PaginationTest" Content="Pagination Test" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
-         <!--   <Button x:Uid="CheckoutSettings" x:Name="CheckoutSettings" Content="CheckoutSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
-
-            <!--<Button x:Name="CustomersSettings" Content="CustomersSettings" Margin="5"
-                    Style="{StaticResource MaterialDesignFlatButton}"/>-->
-          <!--  <Button x:Uid="AdditivesSettings" x:Name="AdditivesSettings" Content="AdditivesSettings" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
-            <!--<Button x:Uid="AdditivesOfProduct" x:Name="AdditivesOfProduct" Content="AdditivesOfProduct" Margin="5" Style="{StaticResource MaterialDesignFlatButton}"/>-->
-
-            <!--<TextBlock Text="{res:Resources.HelloWorld,Converter={StaticResource}}"/>-->
         </StackPanel>
-            <!--<local:PinCodeView Width="200"  Height="300" HorizontalAlignment="Left"/>-->
+
+            <ListBox BorderBrush="Gray"  BorderThickness="1" MaxHeight="200" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10 0 0 10"  VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                <ListBox.ItemTemplate >
+                    <DataTemplate>
+                        <StackPanel Cursor="Hand" Orientation="Horizontal" Width="150">
+                            <materialdesign:PackIcon Foreground="{Binding Background}" VerticalAlignment="Center" Kind="AccountCircle" Height="30" Width="30"  />
+                            <TextBlock Text="{Binding Username}" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" Margin="2 0 0 0"/>
+                        </StackPanel>
+                    </DataTemplate>
+
+                </ListBox.ItemTemplate>
+                </ListBox>
         </Grid>
-    </materialdesign:DialogHost>
+        </Border>
     
 </UserControl>
