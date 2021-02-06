@@ -183,7 +183,12 @@ namespace PosTest.ViewModels
             IsDialogOpen = false;
             var  Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
             var setting = Manager.LoadSettings();
-            var pageSize = setting?.NumberOfProducts??30;
+            if (setting == null)
+            {
+             setting = new ProductLayoutConfiguration(){Rows = 5,Columns = 6};  
+             Manager.SaveSettings(setting);
+            }
+            var pageSize = setting.NumberOfProducts;
             CheckoutViewModel checkoutViewModel =
                 new CheckoutViewModel(pageSize
                 //,_productService,

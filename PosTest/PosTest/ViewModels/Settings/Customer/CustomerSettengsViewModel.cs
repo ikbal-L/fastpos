@@ -86,6 +86,7 @@ namespace PosTest.ViewModels.Settings
                     {
 
                         Customers.Remove(_SelectedCustomer);
+                        NotifyOfPropertyChange(nameof(FilteredCustomers));
                         DailogContent = _AddEditCustomerView;
                         ToastNotification.Notify("Delete  Success", NotificationType.Success);
                     }
