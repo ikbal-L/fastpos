@@ -5,17 +5,47 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
-             xmlns:controls="clr-namespace:PosTest.SL.Controls"
-             xmlns:local="clr-namespace:PosTest.Views.SubViews"
+             xmlns:vm="clr-namespace:PosTest.ViewModels"
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
+             xmlns:Controls="clr-namespace:PosTest.SL.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUserControl"
              >
+
+    <UserControl.Resources>
+
+        <DataTemplate x:Key="CustomerListTemplate" DataType="vm:CustomerViewModel">
+            <ListBox    Grid.Row="1" Margin="0" Visibility="Visible" Background="White" 
+                        ItemsSource="{Binding CustomerCollectionViewSource.View}">
+
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <Button Height="60"
+                                 Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
+                            <StackPanel    Width="120"   Orientation="Vertical" >
+                                <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+        </DataTemplate>
+
+        <DataTemplate x:Key="CustomerDetailTemplate" DataType="vm:CustomerViewModel">
+            <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid x:Uid="Grid_1">
-        <Grid.ColumnDefinitions/>
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="auto"/>
-            <RowDefinition x:Uid="RowDefinition_2" Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <materialdesign:DialogHost x:Uid="materialdesign:DialogHost_1">
             <materialdesign:DialogHost.DialogContent>
@@ -88,48 +118,29 @@
                         </Style>
                     </StackPanel.Resources>
                     <Button x:Uid="Button_3" Margin="5" Height="40" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" Foreground="White" >
-                    <TextBlock x:Uid="TextBlock_1" >
-                    <Run x:Uid="Run_1" Text="Create &amp; Save" FontWeight="Thin"/>
-                        <LineBreak x:Uid="LineBreak_1"/>
-                    <Run x:Uid="Run_2" Text="{Binding ElementName=SearchBox, Path=Text}" FontSize="10"   />
-                    </TextBlock>
-                </Button>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Create &amp; Save"  FontWeight="Thin"></TextBlock>
+                            <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
+                        </StackPanel>
+                    </Button>
                     <Button x:Uid="Button_4" Margin="5" Height="40"  caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" Foreground="White">
-                    <TextBlock x:Uid="TextBlock_2">
-                    <Run x:Uid="Run_3" Text="Create &amp; Edit"  FontWeight="Thin"/><LineBreak x:Uid="LineBreak_2"/>
-                    <Run x:Uid="Run_4" Text="{Binding ElementName=SearchBox, Path=Text}" FontSize="10" />
-                    </TextBlock>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Create &amp; Edit"  FontWeight="Thin"></TextBlock>
+                            <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
+                        </StackPanel>
                 </Button>
             </StackPanel>
             </Grid>
         </materialdesign:ColorZone>
         <!--SelectedItem="{Binding SelectedCustomer}" -->
-        <materialdesign:Flipper Grid.Row="1" Margin="0" IsFlipped="{Binding IsEditing}">
-            <!--Front Content goes here--> 
-            <materialdesign:Flipper.FrontContent>
-                <ListBox  x:Name="lboxCustomers" ItemsSource="{Binding ElementName=CustomerViewUserControl,Path=DataContext.Customers}" Grid.Row="1" Margin="0" Visibility="Visible" Background="White">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
-                            <WrapPanel></WrapPanel>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:Uid="DataTemplate_1">
-                            <Button Height="60"
-                                x:Uid="Button_5" Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
-                                <StackPanel  x:Uid="StackPanel_3"  Width="120"   Orientation="Vertical" >
-                                    <TextBlock x:Uid="TextBlock_4" FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                                    <TextBlock x:Uid="TextBlock_4" FontSize="14" Text="{Binding Mobile}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                                </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </materialdesign:Flipper.FrontContent>
-            <!--Back Content Goes here--> 
-            <materialdesign:Flipper.BackContent >
-                <subviews:CustomerDetailView DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl,AncestorLevel=1},Path=DataContext.CustomerDetailViewModel}"></subviews:CustomerDetailView>
-            </materialdesign:Flipper.BackContent>
+        <materialdesign:Flipper Grid.Row="1" Margin="0" IsFlipped="{Binding IsEditing}" 
+                                BackContentTemplate="{StaticResource CustomerDetailTemplate}" 
+                                FrontContentTemplate="{StaticResource CustomerListTemplate}"
+                                BackContent="{Binding RelativeSource={RelativeSource Self},Path=DataContext}"
+                                FrontContent="{Binding RelativeSource={RelativeSource Self},Path=DataContext}"
+                                >
+            
+            
        </materialdesign:Flipper>
     </Grid>
 </UserControl>

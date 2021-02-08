@@ -96,6 +96,11 @@ namespace ServiceLib.Service
                     return true;
                 }
 
+                if (status == 422)
+                {
+                    
+                }
+
 
             }
 

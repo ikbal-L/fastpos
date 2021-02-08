@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using PosTest.Converters;
 using PosTest.Helpers;
 using ServiceInterface;
 
@@ -122,6 +123,8 @@ namespace ConsoleApp
             //StateManager.Instance.Manage<Additive>(repo1).Manage<Product>(repo2);
 
             StateManager.Instance.Manage(repo1).Manage(repo2).Manage(repo3).Manage(repo4);
+            
+           
 
             var path =Path.Create("product").SubPath("getall").SubPath("unprocessed").Build();
             Console.WriteLine(path);

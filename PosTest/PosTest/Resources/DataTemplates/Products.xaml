@@ -14,6 +14,7 @@
     <converters:EqualToSelectedAndEmptyMultiValueConverter x:Key="EqualToSelectedAndEmptyMultiValueConverter"></converters:EqualToSelectedAndEmptyMultiValueConverter>
     <converters:ProductTemplateHeightConverter x:Key="ProductTemplateHeightConverter"></converters:ProductTemplateHeightConverter>
     <converters:ProductTemplateWidthConverter x:Key="ProductTemplateWidthConverter"></converters:ProductTemplateWidthConverter>
+    <converters:LengthPropertyConverter x:Key="LengthPropertyConverter"></converters:LengthPropertyConverter>
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <StackPanel  x:Uid="ProductTemplate" Orientation="Vertical"  x:Name="ProductTemplate">
             <Button x:Uid="ProductClick" x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" >

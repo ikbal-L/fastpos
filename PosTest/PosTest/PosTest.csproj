@@ -225,11 +225,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\BooleanToBinaryEnumValueConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\CollectionContainsValueConverter.cs" />
+    <Compile Include="Converters\DynamicLayout.cs" />
     <Compile Include="Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualToSelectedAndEmptyMultiValueConverter.cs" />
     <Compile Include="Converters\EqualToSelectedAndNotEmptyMultiValueConverter.cs" />
+    <Compile Include="Converters\MultiValueEqualityWithConditionConverter.cs" />
     <Compile Include="Converters\NotCollectionItemAnyGreaterThanZeroValueConverter.cs" />
     <Compile Include="Converters\EntityIdValueConverter.cs" />
     <Compile Include="Converters\LesserOrEqualToValueConverter.cs" />

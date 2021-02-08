@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Caliburn.Micro;
+using PosTest.Helpers;
 using ServiceInterface.Model;
+using ServiceLib.Service;
 
 namespace PosTest.ViewModels.SubViewModel
 {
@@ -17,13 +20,21 @@ namespace PosTest.ViewModels.SubViewModel
             new Dictionary<string, ICollection<string>>();
 
         private bool _isSaveEnabled;
+        private string _name;
+        private string _mobile;
+        private string _selectedPhoneNumber;
+        private bool _isEditingPhone = false;
 
         public CustomerDetailViewModel(Customer customer)
         {
-            Customer = new Customer(){Id = customer.Id,Name = customer.Name/*,Mobile = customer.Mobile*/,PhoneNumbers = customer.PhoneNumbers};
-            ValidateModelProperty(Customer,Customer.Name,nameof(Customer.Name));
-          //  ValidateModelProperty(Customer,Customer.Mobile,nameof(Customer.Mobile));
-            Customer.PropertyChanged += Customer_PropertyChanged;
+            Customer = new Customer(){Id = customer.Id,Name = customer.Name, Mobile = customer.Mobile,PhoneNumbers = new ObservableCollection<string>() };
+            //ValidateModelProperty(Customer,Customer.Name,nameof(Customer.Name));
+            Name = Customer.Name;
+            Mobile = Customer.Mobile;
+            ValidateModelProperty(Customer,Name,nameof(Name));
+
+            ValidateModelProperty(Customer, Mobile, nameof(Mobile));
+            //Customer.PropertyChanged += Customer_PropertyChanged;
         }
 
         private void Customer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -33,16 +44,36 @@ namespace PosTest.ViewModels.SubViewModel
                 ValidateModelProperty(Customer, Customer.Name, nameof(Customer.Name));
             }
 
-         /*   if (e.PropertyName == nameof(Customer.Mobile))
+            if (e.PropertyName == nameof(Customer.Mobile))
             {
                 ValidateModelProperty(Customer, Customer.Mobile, nameof(Customer.Mobile));
-            }*/
+            }
         }
 
         public Customer Customer
         {
             get => _customer;
             set => Set(ref _customer, value);
+        }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                Set(ref _name, value);
+                ValidateModelProperty(Customer, Name, nameof(Name));
+            }
+        }
+
+        public string Mobile
+        {
+            get => _mobile;
+            set
+            {
+                Set(ref _mobile, value);
+                ValidateModelProperty(Customer, Mobile, nameof(Mobile));
+            }
         }
 
         public IEnumerable GetErrors(string propertyName)
@@ -60,6 +91,18 @@ namespace PosTest.ViewModels.SubViewModel
         {
             get => _isSaveEnabled;
             set => Set(ref _isSaveEnabled, value);
+        }
+
+        public bool IsEditingPhone
+        {
+            get => _isEditingPhone;
+            set => Set(ref _isEditingPhone, value);
+        }
+
+        public string SelectedPhoneNumber
+        {
+            get => _selectedPhoneNumber;
+            set => Set(ref _selectedPhoneNumber, value);
         }
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -96,9 +139,63 @@ namespace PosTest.ViewModels.SubViewModel
             RaiseErrorsChanged(propertyName);
             IsSaveEnabled = !_validationErrors.Any();
         }
+
+        public void AddPhone()
+        {
+            if (!_validationErrors.ContainsKey(nameof(Mobile)))
+            {
+                if (!Customer.PhoneNumbers.Contains(Mobile))
+                {
+                    Customer.PhoneNumbers.Add(Mobile); 
+                }
+                else
+                {
+                    ToastNotification.Notify("Phone number is already added",NotificationType.Warning);
+                }
+                return;
+            }
+            ToastNotification.Notify("Phone Number has validation errors ");
+        }
+
+        public void RemovePhone()
+        {
+            if (SelectedPhoneNumber!= null)
+            {
+                Customer.PhoneNumbers.Remove(SelectedPhoneNumber);
+            }
+        }
+
+        public void EditPhone()
+        {
+
+            if (IsEditingPhone)
+            {
+                if (!_validationErrors.ContainsKey(nameof(Mobile)))
+                {
+                    SelectedPhoneNumber = Mobile;
+                    IsEditingPhone = false;
+                    return;
+                }
+                ToastNotification.Notify("Phone Number has validation errors ");
+            }
+            else
+            {
+                Mobile = SelectedPhoneNumber;
+                IsEditingPhone = true;
+            }
+            
+        }
         public void Save()
         {
-            RaiseCommandExecuted();
+            Customer.Mobile = "+213" + Mobile;
+            Customer.PhoneNumbers.ToList().ForEach(phone=> phone = "+213"+phone);
+            if (StateManager.Save(Customer))
+            {
+                ToastNotification.Notify("Customer saved successfully",NotificationType.Success);
+                RaiseCommandExecuted();
+            }
+
+            ;
         }
 
         public void Cancel()

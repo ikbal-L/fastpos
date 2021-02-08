@@ -24,7 +24,6 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
-        [Required(ErrorMessage = "Customer Name must not be null or empty", AllowEmptyStrings = false)]
         [RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-0-9_\s]*$", ErrorMessage = "Use Latin, Arabic or Numeric Characters only ")]
         public string Name
         {
@@ -33,12 +32,12 @@ namespace ServiceInterface.Model
         }
 
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
-     
-        private ObservableCollection<String> _PhoneNumbers;
+
+        private ObservableCollection<string> _PhoneNumbers;
 
         [DataMember]
-        public ObservableCollection<String> PhoneNumbers
-    {
+        public ObservableCollection<string> PhoneNumbers
+        {
             get { return _PhoneNumbers; }
             set
             {
@@ -48,12 +47,12 @@ namespace ServiceInterface.Model
         }
         public string FirstNumber { get => PhoneNumbers?.FirstOrDefault(); }
         private decimal _Debit;
-        private string _mobile;
+        private string _mobile = "";
 
         [DataMember]
         public decimal Debit
         {
-            get { return _Debit; }
+            get => _Debit;
             set { _Debit = value;
                 NotifyOfPropertyChange(nameof(Debit));
             }
@@ -64,11 +63,14 @@ namespace ServiceInterface.Model
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
         [Required(AllowEmptyStrings = false)]
         [MinLength(09, ErrorMessage = "Phone number length must be at least 9 digits ")]
+        [MaxLength(12, ErrorMessage = "Phone number length must not exceed 12 digits ")]
         public string Mobile
         {
             get => _mobile;
-            set => Set(ref _mobile, value);
+            set
+            {
+                Set(ref _mobile, value);
+            }
         }
-
     }    
 }

@@ -3,15 +3,31 @@
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:cal="http://www.caliburnproject.org"
-                    xmlns:local="clr-namespace:PosTest.Resources.DataTemplates">
+                    xmlns:local="clr-namespace:PosTest.Resources.DataTemplates"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="additiveWithParamString">
+        width;[417px,50px]
+    </system:String>
+
+    <system:String x:Key="additiveHeightParamString">
+        height;[313px,85px,50px,30px]
+    </system:String>
 
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
         <StackPanel  x:Uid="AddivieTemplate" Orientation="Vertical"  x:Name="AddivieTemplate">
             <Button x:Uid="ProductClick" x:Name="ProductClick"
-                    Height="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualHeight,Converter={StaticResource ProductTemplateHeightConverter}}" 
-                    Width="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualWidth,Converter={StaticResource ProductTemplateWidthConverter}}"
                     Background="{Binding Background}"
                     Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
+                <Button.Width>
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
+                             Converter="{StaticResource LengthPropertyConverter}"
+                             ConverterParameter="{StaticResource additiveWithParamString}"/>
+                </Button.Width>
+                <Button.Height>
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
+                             Converter="{StaticResource LengthPropertyConverter}"
+                             ConverterParameter="{StaticResource additiveHeightParamString}" />
+                </Button.Height>
                 <i:Interaction.Triggers>
                     <i:EventTrigger x:Uid="i:EventTrigger_1" EventName="Click">
                         <cal:ActionMessage x:Uid="cal:ActionMessage_1" MethodName="AddAditive">

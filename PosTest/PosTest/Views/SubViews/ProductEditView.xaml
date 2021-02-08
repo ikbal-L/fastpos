@@ -24,15 +24,7 @@
                 <Setter x:Uid="Setter_1" Property="Foreground" Value="#333333" />
                 <Setter x:Uid="Setter_2" Property="MaxLength" Value="40" />
                 <Setter x:Uid="Setter_3" Property="Width" Value="392" />
-                <!--<Style.Triggers>
-                    <Trigger Property="Validation.HasError" Value="true">
-                        <Setter Property="ToolTip"
-                                Value="{Binding RelativeSource={RelativeSource Self},
-                        Path=(Validation.Errors)[0].ErrorContent}" />
-                    </Trigger>
-                </Style.Triggers>-->
 
-                
                 <Style.Triggers>
                     <Trigger x:Uid="Trigger_1" Property="Validation.HasError" Value="True">
                         <Setter x:Uid="Setter_5" Property="ToolTip"

@@ -21,10 +21,10 @@ namespace PosTest.ViewModels
 
     {
         private ICollectionView _CustomerView;
-        private string _FilterString;
+        private string _FilterString ="";
         private Customer _selectedCustomer;
         private bool _isEditing;
-        private CustomerDetailViewModel _customerDetailViewModel;
+        private CustomerDetailViewModel _customerDetailVm;
         public CheckoutViewModel ParentChechoutVM { get; set; }
       
         public CustomerViewModel(CheckoutViewModel checkoutViewModel/*,ICustomerService customerService*/)
@@ -32,19 +32,44 @@ namespace PosTest.ViewModels
             //_customerService = customerService;
             ParentChechoutVM = checkoutViewModel;
 
-            _CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers);
-            _CustomerView.Filter = CustomerFilter;
+            //_CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers);
+            CustomerCollectionViewSource = new CollectionViewSource {Source = ParentChechoutVM.Customers};
+            CustomerCollectionViewSource.Filter += CustomerCollectionViewSource_Filter;
+            
+            //_CustomerView.Filter = CustomerFilter;
             SelectCustomerCommand = new DelegateCommandBase(SelectCustomer,CanSelectCustomer);
             IsEditing = false;
 
         }
 
-        
+        private void CustomerCollectionViewSource_Filter(object sender, FilterEventArgs e)
+        {
+            var customer = (Customer) e.Item;
+            string name = Regex.Replace(FilterString, @"\d", "").ToLowerInvariant();
+            string mobile = Regex.Replace(FilterString, @"\D", "");
+
+            
+            if (customer.Name.ToLowerInvariant().Contains(name))
+            {
+                if (customer.Mobile!= null && !customer.Mobile.Contains(mobile))
+                {
+                    e.Accepted = false;
+                }
+
+                e.Accepted = true;
+            }
+            else
+            {
+                e.Accepted = false;
+            }
+        }
+
         public ICollectionView Customers
         {
             get => _CustomerView;
         }
 
+        public CollectionViewSource CustomerCollectionViewSource { get; set; }
 
         public ICommand SelectCustomerCommand { get; set; }
         public Customer SelectedCustomer
@@ -74,7 +99,8 @@ namespace PosTest.ViewModels
             get => _FilterString;
             set {
                 Set(ref _FilterString, value);
-                _CustomerView.Refresh(); 
+                //_CustomerView.Refresh(); 
+                CustomerCollectionViewSource.View.Refresh();
             }
         }
 
@@ -149,57 +175,36 @@ namespace PosTest.ViewModels
             FilterString = "";
         }
 
-        private bool ValidateCustomerFullNameAndPhone([Required]string name,string mobile)
-        {
-            bool isValid = true;
-            if (string.IsNullOrEmpty(name))
-            {
-                ToastNotification.Notify("Name must not be null or empty");
-                isValid =  false ;
-
-            }
-            else
-            {
-                if (!Regex.IsMatch(name, @"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-_\s]*$"))
-                {
-                    ToastNotification.Notify("Name must only contain Arabic or Latin characters ");
-                    isValid = false;
-                }
-            }
-
-            if (string.IsNullOrEmpty(mobile))
-            {
-                ToastNotification.Notify("Phone number  must not be null or empty");
-                isValid = false;
-
-            }
-           
-            return isValid;
-        }
+        
 
         public void CreateAndEdit()
         {
-            string mobile = Regex.Replace(FilterString, @"\d", "");
-            string name = Regex.Replace(FilterString, @"\D", "");
+            string mobile = Regex.Replace(FilterString, @"\D", "");
+            string name = Regex.Replace(FilterString, @"\d", "");
 
-            Customer customer = new Customer { Name = name/*, Mobile = mobile */, PhoneNumbers = new BindableCollection<string>(){"0665666768","0666676869"}};
+            Customer customer = new Customer { Name = name, Mobile = mobile };
+            
+            CustomerDetailVm = new CustomerDetailViewModel(customer);
+            CustomerDetailVm.CommandExecuted += CustomerDetailViewModel_CommandExecuted;
             IsEditing = true;
-            CustomerDetailViewModel = new CustomerDetailViewModel(customer);
-            CustomerDetailViewModel.CommandExecuted += CustomerDetailViewModel_CommandExecuted;
+            FilterString = string.Empty;
+            
         }
 
         private void CustomerDetailViewModel_CommandExecuted(object sender, CommandExecutedEventArgs e)
         {
             if (e.CommandName.ToLowerInvariant() == "save"|| e.CommandName.ToLowerInvariant() == "cancel")
             {
+                ParentChechoutVM.Customers.Add(CustomerDetailVm.Customer);
+                CustomerCollectionViewSource.View.Refresh();
                 IsEditing = false;
             }
         }
 
-        public CustomerDetailViewModel CustomerDetailViewModel
+        public CustomerDetailViewModel CustomerDetailVm
         {
-            get => _customerDetailViewModel;
-            set => Set(ref _customerDetailViewModel, value);
+            get => _customerDetailVm;
+            set => Set(ref _customerDetailVm, value);
         }
 
         public bool IsEditing
