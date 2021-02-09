@@ -125,7 +125,15 @@ namespace PosTest.ViewModels
         {
             _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
-           
+            CurrentCategoryPageIndex = 0;
+            itemsPerCategoryPage = 5;
+            var manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
+            var configuration = manager.LoadSettings();
+            if (configuration != null)
+            {
+                itemsPerCategoryPage = int.Parse(configuration.NumberCategores);
+            }
+
 
             StateManager.Fetch();
             StateManager.Associate<Additive,Product>();
@@ -207,8 +215,7 @@ namespace PosTest.ViewModels
 
             PaginatedCategories = new CollectionViewSource();
             PaginatedCategories.Source = Categories;
-            CurrentCategoryPageIndex = 0;
-            itemsPerCategoryPage = 5;
+            
             PaginatedCategories.Filter += PaginatedCategoriesOnFilter;
 
             CalculateTotalPages(Categories.Count);

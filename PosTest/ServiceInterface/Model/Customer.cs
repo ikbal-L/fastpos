@@ -45,15 +45,15 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(nameof(_PhoneNumbers));
             }
         }
-        public string FirstNumber { get => PhoneNumbers?.FirstOrDefault(); }
-        private decimal _Debit;
+        public string FirstNumber => PhoneNumbers?.FirstOrDefault();
+        private decimal _debit;
         private string _mobile = "";
 
         [DataMember]
         public decimal Debit
         {
-            get => _Debit;
-            set { _Debit = value;
+            get => _debit;
+            set { _debit = value;
                 NotifyOfPropertyChange(nameof(Debit));
             }
         }

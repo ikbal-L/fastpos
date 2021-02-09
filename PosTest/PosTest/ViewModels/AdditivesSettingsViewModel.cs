@@ -213,10 +213,16 @@ namespace PosTest.ViewModels
 
         public void SaveAdditive()
         {
-            IsEditing = false;
-            this.SelectedAdditive.Description = CopySelectedAdditive.Description;
-            this.SelectedAdditive.Background = CopySelectedAdditive.Background;
-            if (StateManager.Save(SelectedAdditive)) ToastNotification.Notify("Additive saved Successfully",NotificationType.Success);
+            if (StateManager.Save(SelectedAdditive))
+            {
+                ToastNotification.Notify("Additive saved Successfully", NotificationType.Success);
+                IsEditing = false;
+                this.SelectedAdditive.Description = CopySelectedAdditive.Description;
+                this.SelectedAdditive.Background = CopySelectedAdditive.Background;
+            }
+
+            
+            
         }
         public void Cancel() {
             SelectedAdditive = null;
@@ -231,6 +237,8 @@ namespace PosTest.ViewModels
                 ToastNotification.Notify("Select a non empty cell to edit",NotificationType.Warning);
                 return;
             }
+
+            IsEditing = true;
         }
         public void CopyAdditive()
         {

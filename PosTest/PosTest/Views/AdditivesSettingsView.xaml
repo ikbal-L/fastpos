@@ -91,7 +91,8 @@
                                 <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="MoveResizeVariant" Height="22" Width="22" />
                             </Button>-->
 
-                                <Button x:Uid="Button_3" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  caliburn:Message.Attach="[Event Click] = [Action EditAdditive()]"
+                                <Button x:Uid="Button_3" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        caliburn:Message.Attach="[Event Click] = [Action EditAdditive()]"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="0 0 10 -20">
                                     <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="Edit" Height="22" Width="22" />
                                 </Button>

@@ -235,9 +235,10 @@
 
             <materialdesign:DrawerHost x:Uid="materialdesign:DrawerHost_1" Panel.ZIndex="10" IsTopDrawerOpen="{Binding IsTopDrawerOpen}" Grid.Column="0"
                                        Grid.Row="0" Grid.RowSpan="4">
+                <!--Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialdesign:DrawerHost}},Path=ActualHeight}"-->
                 <materialdesign:DrawerHost.TopDrawerContent>
                     <Grid x:Uid="Grid_6" Width="400"
-                          Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialdesign:DrawerHost}},Path=ActualHeight}">
+                          >
                         <Grid.RowDefinitions>
                             <RowDefinition x:Uid="RowDefinition_16" Height="*" />
                             <RowDefinition x:Uid="RowDefinition_17" Height="auto" />
@@ -728,23 +729,16 @@
                     <RowDefinition x:Uid="RowDefinition_38" Height="auto" />
                 </Grid.RowDefinitions>
 
-                <DockPanel x:Uid="DockPanel_6" Grid.Row="0" Grid.ColumnSpan="2" Margin="2 2 2 2" LastChildFill="False">
-                    <Button x:Uid="NextPage" DockPanel.Dock="Right" Height="60" Width="35" x:Name="NextPage"
-                            Style="{StaticResource ButtonStyle22}"
-                            caliburn:Message.Attach="[Event Click] = [Action PaginateCategories('NEXT')]"
-                            Content="{materialdesign:PackIcon ChevronDoubleRight,30}" />
-                    <!--Visibility="{Binding CanExecuteMext,Converter={StaticResource BoolToVisibility}}"-->
-                    <!--Style="{StaticResource MaterialDesignFlatButton}"-->
-                    <!--Visibility="{Binding CanExecutePrevious,Converter={StaticResource BoolToVisibility}}"-->
-                    <Button x:Uid="PreviousPqge" DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
-                            x:Name="PreviousPqge" Style="{StaticResource ButtonStyle22}"
-                            caliburn:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
-                            Content="{materialdesign:PackIcon ChevronDoubleLeft,30}" />
-
+                <Grid  Grid.Row="0" Grid.ColumnSpan="3" Margin="2 2 2 2">
+                   
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
                     <!--CATEGORY NAVIGATION-->
                     <!--ItemsSource="{Binding Categories}"-->
-                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" Margin="2 0 0 0" Height="60"  >
-                        <ItemsControl x:Uid="Stack" x:Name="Stack" Grid.Column="0" ItemsSource="{Binding PaginatedCategories.View}" >
+                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" Margin="2 0 0 0" Height="60" >
+                        <ItemsControl x:Uid="Stack" x:Name="Stack"  ItemsSource="{Binding PaginatedCategories.View}" >
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_4">
                                     <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal" />
@@ -776,7 +770,23 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                </DockPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                       
+                        <!--Visibility="{Binding CanExecuteMext,Converter={StaticResource BoolToVisibility}}"-->
+                        <!--Style="{StaticResource MaterialDesignFlatButton}"-->
+                        <!--Visibility="{Binding CanExecutePrevious,Converter={StaticResource BoolToVisibility}}"-->
+                        <Button x:Uid="PreviousPqge" DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
+                                x:Name="PreviousPqge" Style="{StaticResource ButtonStyle22}"
+                                caliburn:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
+                                Content="{materialdesign:PackIcon ChevronDoubleLeft,30}" />
+
+                        <Button x:Uid="NextPage" DockPanel.Dock="Right" Height="60" Width="35" x:Name="NextPage"
+                                Style="{StaticResource ButtonStyle22}"
+                                caliburn:Message.Attach="[Event Click] = [Action PaginateCategories('NEXT')]"
+                                Content="{materialdesign:PackIcon ChevronDoubleRight,30}" />
+                    </StackPanel>
+                </Grid>
 
                 <!--ORDER NAVIGATION-->
 

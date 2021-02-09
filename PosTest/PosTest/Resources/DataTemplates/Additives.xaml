@@ -6,11 +6,11 @@
                     xmlns:local="clr-namespace:PosTest.Resources.DataTemplates"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="additiveWithParamString">
-        width;[417px,50px]
+        width;[417px,70px]
     </system:String>
 
     <system:String x:Key="additiveHeightParamString">
-        height;[313px,85px,50px,30px]
+        height;[313px,85px,50px,50px]
     </system:String>
 
     <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
