@@ -162,7 +162,8 @@ namespace PosTest.ViewModels
            
             ParentChechoutVM.Customers.Add(customer);
             
-            _CustomerView.Refresh();
+            //_CustomerView.Refresh();
+            CustomerCollectionViewSource.View.Refresh();
 
             if (ParentChechoutVM.CurrentOrder == null)
             {
