@@ -2028,6 +2028,12 @@ namespace PosTest.ViewModels
             set => Set(ref _currentCategoryPageIndex, value);
         }
 
-        
+        public void CloseDrawer()
+        {
+            CustomerViewModel?.CustomerDetailVm?.Cancel();
+        }
+
+
+
     }
 }

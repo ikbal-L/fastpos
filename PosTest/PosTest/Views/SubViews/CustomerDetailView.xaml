@@ -30,7 +30,7 @@
                 <StackPanel
                     Orientation="Horizontal">
                     <materialDesign:PackIcon
-                        Kind="Phone"
+                        Kind="Cellphone"
                         Height="32"
                         Width="32"
                         VerticalAlignment="Center" />
@@ -65,7 +65,7 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <Grid>
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -75,7 +75,7 @@
 
         </Grid.RowDefinitions>
 
-        <Grid>
+        <Grid Margin="10 10 10 0" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -98,7 +98,7 @@
                 <TextBox materialDesign:HintAssist.Hint="Mobile"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                         Text="{Binding Mobile,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}" />
+                         Text="{Binding Mobile,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,ValidatesOnNotifyDataErrors=True}" />
             </Border>
 
             <Border Grid.Row="2" Margin="2 10">
@@ -189,7 +189,7 @@
             </Border>
         </Grid>
 
-        <materialDesign:ColorZone Grid.Row="1" Background="#FFAEEA00" Padding="6" Margin="1">
+        <materialDesign:ColorZone Grid.Row="1" Background="#FFAEEA00" Padding="6" >
             <StackPanel Orientation="Horizontal">
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                         cal:Message.Attach="[Event Click] = [Action Save()]"

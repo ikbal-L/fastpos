@@ -157,13 +157,17 @@ namespace PosTest.ViewModels
             }
 
             customer.Mobile = "+213" + customer.Mobile;
-            StateManager.Save(customer);
+            if (StateManager.Save(customer))
+            {
+                ParentChechoutVM.Customers.Add(customer);
+
+                //_CustomerView.Refresh();
+                CustomerCollectionViewSource.View.Refresh();
+
+            };
             //customer.Id = id;
            
-            ParentChechoutVM.Customers.Add(customer);
             
-            //_CustomerView.Refresh();
-            CustomerCollectionViewSource.View.Refresh();
 
             if (ParentChechoutVM.CurrentOrder == null)
             {
@@ -196,9 +200,18 @@ namespace PosTest.ViewModels
         {
             if (e.CommandName.ToLowerInvariant() == "save"|| e.CommandName.ToLowerInvariant() == "cancel")
             {
-                ParentChechoutVM.Customers.Add(CustomerDetailVm.Customer);
-                CustomerCollectionViewSource.View.Refresh();
+                
+                if (e.CommandName.ToLowerInvariant() == "save")
+                {
+                    var customer = CustomerDetailVm.Customer;
+                    ParentChechoutVM.Customers.Add(customer);
+                    CustomerCollectionViewSource.View.Refresh();
+                    SelectedCustomer = customer;
+                }
                 IsEditing = false;
+                CustomerDetailVm = null;
+
+
             }
         }
 

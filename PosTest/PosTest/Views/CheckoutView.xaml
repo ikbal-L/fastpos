@@ -335,6 +335,7 @@
                         <Button x:Uid="Button_13" Grid.Row="1" Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
                                 CommandParameter="{x:Static Dock.Top}"
                                 Style="{DynamicResource MaterialDesignFlatButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action CloseDrawer()]"
                                 Margin="10" VerticalAlignment="Center" Content="CLOSE" />
 
                     </Grid>

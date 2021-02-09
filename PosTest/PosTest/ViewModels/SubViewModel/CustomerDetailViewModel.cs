@@ -31,7 +31,7 @@ namespace PosTest.ViewModels.SubViewModel
             //ValidateModelProperty(Customer,Customer.Name,nameof(Customer.Name));
             Name = Customer.Name;
             Mobile = Customer.Mobile;
-            ValidateModelProperty(Customer,Name,nameof(Name));
+            ValidateModelProperty(Customer, Name, nameof(Name));
 
             ValidateModelProperty(Customer, Mobile, nameof(Mobile));
             //Customer.PropertyChanged += Customer_PropertyChanged;
@@ -193,9 +193,12 @@ namespace PosTest.ViewModels.SubViewModel
             {
                 ToastNotification.Notify("Customer saved successfully",NotificationType.Success);
                 RaiseCommandExecuted();
+                return;
             }
 
-            ;
+            ToastNotification.Notify("Something happened", NotificationType.Error);
+
+
         }
 
         public void Cancel()

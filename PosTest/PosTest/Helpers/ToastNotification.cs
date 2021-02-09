@@ -32,7 +32,7 @@ namespace PosTest.Helpers
                            offsetY: 10);
 
                        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                           notificationLifetime: TimeSpan.FromSeconds(1.5),
+                           notificationLifetime: TimeSpan.FromSeconds(2),
                            maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
                        cfg.Dispatcher = Application.Current.Dispatcher;

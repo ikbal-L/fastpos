@@ -42,98 +42,82 @@
             <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid x:Uid="Grid_1">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5*"/>
-        </Grid.RowDefinitions>
-        <materialdesign:DialogHost x:Uid="materialdesign:DialogHost_1">
-            <materialdesign:DialogHost.DialogContent>
-                <Grid x:Uid="Grid_2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Uid="ColumnDefinition_1" Width="*"/>
-                        <ColumnDefinition x:Uid="ColumnDefinition_2" Width="*"/>
-                    </Grid.ColumnDefinitions>
+
+    <materialdesign:DialogHost x:Uid="materialdesign:DialogHost_1" IsOpen="{Binding IsEditing}">
+        <materialdesign:DialogHost.DialogContent>
+            <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>
+
+        </materialdesign:DialogHost.DialogContent>
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5*"/>
+            </Grid.RowDefinitions>
+            <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryDark" Grid.Row="0" Margin="0 0 0 20" CornerRadius="2" materialdesign:ShadowAssist.ShadowDepth="Depth2">
+                <Grid x:Uid="Grid_3">
                     <Grid.RowDefinitions>
-                        <RowDefinition x:Uid="RowDefinition_3" Height="*"/>
-                        <RowDefinition x:Uid="RowDefinition_4" Height="*"/>
-                        <RowDefinition x:Uid="RowDefinition_5" Height="*"/>
-                        <RowDefinition x:Uid="RowDefinition_6" Height="*"/>
+                        <RowDefinition x:Uid="RowDefinition_7" Height="*"/>
+                        <RowDefinition x:Uid="RowDefinition_8" Height="*"/>
                     </Grid.RowDefinitions>
-
-                    <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_1" Kind="CellphoneAndroid" Grid.Row="0" Grid.Column="0" />
-                    
-                    
-                    <TextBox x:Uid="TextBox_1" />
-                    <TextBox x:Uid="TextBox_2" />
-
-                </Grid>
-            </materialdesign:DialogHost.DialogContent>
-        </materialdesign:DialogHost>
-        <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryDark" Grid.Row="0" Margin="0 0 0 20" CornerRadius="2" materialdesign:ShadowAssist.ShadowDepth="Depth2">
-            <Grid x:Uid="Grid_3">
-                <Grid.RowDefinitions>
-                    <RowDefinition x:Uid="RowDefinition_7" Height="*"/>
-                    <RowDefinition x:Uid="RowDefinition_8" Height="*"/>
-                </Grid.RowDefinitions>
             
-            <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" Margin="8 8 8 3" Grid.Row="0" >
-                <Border x:Uid="Border_1" Background="White" MaxHeight="30" CornerRadius="3" Margin="0 0 50 0" ToolTip="Enter to search, ignore case">
-                    <Grid x:Uid="Grid_4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto" />
-                            <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Button x:Uid="SearchButton" Style="{DynamicResource MaterialDesignToolButton}"
-                                x:Name="SearchButton" Height="24" Width="24">
-                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="Magnify" Opacity=".56" />
-                        </Button>
-                        <!--KeyDown="Search_OnKeyDown"-->
-                        <TextBox x:Uid="SearchBox" Grid.Column="1" Margin="5 0 0 0"  FontSize="18" FontWeight="Bold"
-                                 x:Name="SearchBox"
-                                 materialdesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0"
-                                 MinWidth="230" VerticalAlignment="Center" 
-                                 Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}"
-                                 Foreground="Black"/>
-                    </Grid>
-                </Border>
+                    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" Margin="8 8 8 3" Grid.Row="0" >
+                        <Border x:Uid="Border_1" Background="White" MaxHeight="30" CornerRadius="3" Margin="0 0 50 0" ToolTip="Enter to search, ignore case">
+                            <Grid x:Uid="Grid_4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto" />
+                                    <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button x:Uid="SearchButton" Style="{DynamicResource MaterialDesignToolButton}"
+                                        x:Name="SearchButton" Height="24" Width="24">
+                                    <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="Magnify" Opacity=".56" />
+                                </Button>
+                                <!--KeyDown="Search_OnKeyDown"-->
+                                <TextBox x:Uid="SearchBox" Grid.Column="1" Margin="5 0 0 0"  FontSize="18" FontWeight="Bold"
+                                         x:Name="SearchBox"
+                                         materialdesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0"
+                                         MinWidth="230" VerticalAlignment="Center" 
+                                         Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}"
+                                         Foreground="Black"/>
+                            </Grid>
+                        </Border>
 
-                    <Button  x:Uid="Button_1" Margin="4 0 4 0" Padding="3" HorizontalAlignment="Right" >
-                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="ViewGridOutline"  Width="25" Height="25" Foreground="White" />
-                    </Button>
+                        <Button  x:Uid="Button_1" Margin="4 0 4 0" Padding="3" HorizontalAlignment="Right" >
+                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="ViewGridOutline"  Width="25" Height="25" Foreground="White" />
+                        </Button>
                 
-                    <Button  x:Uid="Button_2" Margin="4 0 4 0" Padding="3">
-                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Kind="ViewList" Width="25" Height="25" Foreground="White"/>
-                    </Button>
+                        <Button  x:Uid="Button_2" Margin="4 0 4 0" Padding="3">
+                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Kind="ViewList" Width="25" Height="25" Foreground="White"/>
+                        </Button>
                 
-            </StackPanel>
-                <StackPanel x:Uid="StackPanel_2" Grid.Row="1" Orientation="Horizontal" Margin="3 0 3 3">
-                    <StackPanel.Resources>
-                        <Style x:Uid="Style_1" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-                            <Style.Triggers>
-                                <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding ElementName=SearchBox, Path=Text}" Value="">
-                                    <Setter x:Uid="Setter_1" Property="Visibility" Value="Hidden"></Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackPanel.Resources>
-                    <Button x:Uid="Button_3" Margin="5" Height="40" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" Foreground="White" >
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Create &amp; Save"  FontWeight="Thin"></TextBlock>
-                            <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Uid="Button_4" Margin="5" Height="40"  caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" Foreground="White">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Create &amp; Edit"  FontWeight="Thin"></TextBlock>
-                            <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
-                        </StackPanel>
-                </Button>
-            </StackPanel>
-            </Grid>
-        </materialdesign:ColorZone>
-        <!--SelectedItem="{Binding SelectedCustomer}" -->
-        <materialdesign:Flipper Grid.Row="1" Margin="0" IsFlipped="{Binding IsEditing}" 
+                    </StackPanel>
+                    <StackPanel x:Uid="StackPanel_2" Grid.Row="1" Orientation="Horizontal" Margin="3 0 3 3">
+                        <StackPanel.Resources>
+                            <Style x:Uid="Style_1" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                <Style.Triggers>
+                                    <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding ElementName=SearchBox, Path=Text}" Value="">
+                                        <Setter x:Uid="Setter_1" Property="Visibility" Value="Hidden"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button x:Uid="Button_3" Margin="5" Height="40" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" Foreground="White" >
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Create &amp; Save"  FontWeight="Thin"></TextBlock>
+                                <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Uid="Button_4" Margin="5" Height="40"  caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" Foreground="White">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Create &amp; Edit"  FontWeight="Thin"></TextBlock>
+                                <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </materialdesign:ColorZone>
+            <!--SelectedItem="{Binding SelectedCustomer}" -->
+            <!--<materialdesign:Flipper Grid.Row="1" Margin="0" IsFlipped="{Binding IsEditing}" 
                                 BackContentTemplate="{StaticResource CustomerDetailTemplate}" 
                                 FrontContentTemplate="{StaticResource CustomerListTemplate}"
                                 BackContent="{Binding RelativeSource={RelativeSource Self},Path=DataContext}"
@@ -141,6 +125,30 @@
                                 >
             
             
-       </materialdesign:Flipper>
-    </Grid>
+       </materialdesign:Flipper>-->
+
+            <ListBox    Grid.Row="1" Margin="0" Visibility="Visible" Background="White" 
+                        ItemsSource="{Binding CustomerCollectionViewSource.View}">
+
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Center"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <Button Height="60"
+                                Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
+                            <StackPanel    Width="120"   Orientation="Vertical"  HorizontalAlignment="Center">
+                                <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </materialdesign:DialogHost>
+
+
 </UserControl>
