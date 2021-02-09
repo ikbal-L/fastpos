@@ -825,9 +825,8 @@ namespace PosTest.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
        public void SettingsCommand() {
-            SettingsViewModel settingsViewModel = new SettingsViewModel(this);
-            settingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+           SettingsViewModel settingsViewModel = new SettingsViewModel(this) {Parent = this.Parent};
+           (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {

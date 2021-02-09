@@ -64,10 +64,12 @@ namespace ServiceLib.Service
                 var jsonContent = response.Content.ReadAsStringAsync().Result;
                 try
                 {
-                    var permissions = JsonConvert.DeserializeObject<List<String>>(jsonContent);
-                    
-                    var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), permissions.ToArray());
-                    Thread.CurrentPrincipal = principal;
+                    if (!string.IsNullOrEmpty(jsonContent))
+                    {
+                        var permissions = JsonConvert.DeserializeObject<List<String>>(jsonContent);
+                        var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), permissions.ToArray());
+                        Thread.CurrentPrincipal = principal; 
+                    }
                 }
                 catch (Exception)
                 {
