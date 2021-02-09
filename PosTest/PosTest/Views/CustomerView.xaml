@@ -1,4 +1,4 @@
-﻿<UserControl x:Uid="CustomerViewUserControl" x:Class="PosTest.Views.CustomerView"
+﻿<UserControl  x:Class="PosTest.Views.CustomerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,38 +9,11 @@
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
              xmlns:Controls="clr-namespace:PosTest.SL.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUserControl"
+             d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUc"
              >
 
     <UserControl.Resources>
 
-        <DataTemplate x:Key="CustomerListTemplate" DataType="vm:CustomerViewModel">
-            <ListBox    Grid.Row="1" Margin="0" Visibility="Visible" Background="White" 
-                        ItemsSource="{Binding CustomerCollectionViewSource.View}">
-
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel></WrapPanel>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate >
-                        <Button Height="60"
-                                 Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
-                            <StackPanel    Width="120"   Orientation="Vertical" >
-                                <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                                <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                            </StackPanel>
-                        </Button>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-        </DataTemplate>
-
-        <DataTemplate x:Key="CustomerDetailTemplate" DataType="vm:CustomerViewModel">
-            <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>
-        </DataTemplate>
     </UserControl.Resources>
 
     <materialdesign:DialogHost x:Uid="materialdesign:DialogHost_1" IsOpen="{Binding IsEditing}">
@@ -138,7 +111,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate >
                         <Button Height="60"
-                                Background="YellowGreen" Command="{Binding ElementName=CustomerViewUserControl,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
+                                Background="YellowGreen" Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" CommandParameter="{Binding}" >
                             <StackPanel    Width="120"   Orientation="Vertical"  HorizontalAlignment="Center">
                                 <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                                 <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
