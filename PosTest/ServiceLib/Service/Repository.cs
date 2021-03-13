@@ -212,4 +212,10 @@ namespace ServiceLib.Service
         }
     }
 
+    [Export(typeof(IUserRepository))]
+    public class UserRepository : Repository<User, long>, IUserRepository
+    {
+
+    }
+
 }

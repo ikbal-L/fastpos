@@ -28,5 +28,8 @@ namespace PosTest.ViewModels.Settings
             }
         }
         public int Index { get; set; } = 5;
+
+        public virtual void OnItemChanged(){}
+        
     }
 }
