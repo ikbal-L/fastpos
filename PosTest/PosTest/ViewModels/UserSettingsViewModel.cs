@@ -10,8 +10,8 @@ namespace PosTest.ViewModels
         public UserSettingsViewModel()
         {
             var userRepository = new UserRepository();
-           StateManager.Register(append:true).Manage<User>().Using(userRepository).Commit();
-           var data = StateManager.Get<User>();
+           
+            var data = StateManager.Get<User>();
            Users = new BindableCollection<User>(data);
 
         }
