@@ -5,6 +5,7 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialdesignextensions="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
+             xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
              
              xmlns:local="clr-namespace:PosTest">
     <Application.Resources>
@@ -14,7 +15,7 @@
                     <local:ShellBootstrapper x:Uid="local:ShellBootstrapper_1" x:Key="bootstrapper" />
                 </ResourceDictionary>
                 <!--Mateirla design-->
-                <materialdesign:BundledTheme  x:Uid="materialdesign:BundledTheme_1" BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
+                <wpf:BundledTheme  x:Uid="materialdesign:BundledTheme_1" BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
                 <ResourceDictionary x:Uid="ResourceDictionary_3" Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 
                 <ResourceDictionary x:Uid="ResourceDictionary_4" Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
@@ -31,7 +32,7 @@
                 <ResourceDictionary x:Uid="ResourceDictionary_14" Source="/Resources/DataTemplates/Reports.xaml"/>
 
                 <!--ToastNotifications-->
-                <ResourceDictionary x:Uid="ResourceDictionary_15" Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
+                <!--<ResourceDictionary x:Uid="ResourceDictionary_15" Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />-->
                 <ResourceDictionary x:Uid="ResourceDictionary_16" Source="i18n/Localization.xaml"></ResourceDictionary>
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />

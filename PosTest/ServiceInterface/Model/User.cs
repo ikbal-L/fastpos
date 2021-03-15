@@ -32,7 +32,23 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required(AllowEmptyStrings = false)]
-        public string Username { get; set; }
+        public string FirstName { get; set; }
+
+        [DataMember]
+        [Required(AllowEmptyStrings = false)]
+        public string LastName { get; set; }
+
+        [DataMember]
+        [Required(AllowEmptyStrings = false)]
+        public string Username
+        {
+            get => _username;
+            set => Set(ref _username, value);
+        }
+
+        [DataMember]
+        [Required(AllowEmptyStrings = false)]
+        public string Email { get; set; }
 
         [DataMember]
         [Required(AllowEmptyStrings = false)]
@@ -42,6 +58,8 @@ namespace ServiceInterface.Model
         public string PinCode { get; set; }
 
         private ObservableCollection<string> _PhoneNumbers;
+        private string _username;
+
         [DataMember]
         public ObservableCollection<string> PhoneNumbers
         {
@@ -156,6 +174,9 @@ namespace ServiceInterface.Model
     {
         [DataMember]
         public long Id { get; set; }
+
+        [DataMember]
+        public string Description { get; set; }
 
         [DataMember]
         public List<Permission> Permissions { get; set; }

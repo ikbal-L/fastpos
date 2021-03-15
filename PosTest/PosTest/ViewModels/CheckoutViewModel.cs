@@ -26,6 +26,7 @@ using Newtonsoft.Json;
 using ServiceLib.Service;
 using Table = ServiceInterface.Model.Table;
 using System.Drawing.Printing;
+using PosTest.ViewModels.DeliveryAccounting;
 using PosTest.ViewModels.Settings;
 
 namespace PosTest.ViewModels
@@ -827,6 +828,12 @@ namespace PosTest.ViewModels
        public void SettingsCommand() {
            SettingsViewModel settingsViewModel = new SettingsViewModel(this) {Parent = this.Parent};
            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+        }
+
+       public void AccountingCommand()
+       {
+            DeliveryAccountingViewModel vm = new DeliveryAccountingViewModel(){Parent =  this.Parent};
+            (this.Parent as Conductor<object>).ActivateItem(vm);
         }
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {

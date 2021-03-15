@@ -58,7 +58,7 @@ namespace PosTest.Helpers
                 }
                 else if (type == NotificationType.Success)
                 {
-                    notifier.ShowSuccess(message);
+                    //notifier.ShowSuccess(message);
                 }
             }
             else
