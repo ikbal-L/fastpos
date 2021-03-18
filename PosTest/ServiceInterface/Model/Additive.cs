@@ -37,8 +37,8 @@ namespace ServiceInterface.Model
         [DataMember] public long? Id { get; set; }
 
         [DataMember]
-        [Required(ErrorMessage = "Description must not be Null or Empty")]
-        [MinLength(5,ErrorMessage = "Description must not be under 5 charac")]
+        [Required(ErrorMessage = "Name must not be Null or Empty")]
+        [MinLength(5,ErrorMessage = "Name must not be under 5 charac")]
         public string Description
         {
             get => _description;
@@ -74,7 +74,7 @@ namespace ServiceInterface.Model
             // var additive = additiveObj as Additive;
             var result = additive != null &&
                     additive.Id == Id &&
-                    additive.Description == Description &&
+                    additive.Name == Name &&
                     additive.BackgroundString == BackgroundString;
             return result;
         }*/

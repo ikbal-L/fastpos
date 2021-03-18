@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PosTest.Views.SubViews
+namespace PosTest.Views
 {
     /// <summary>
     /// Interaction logic for UserDetailView.xaml

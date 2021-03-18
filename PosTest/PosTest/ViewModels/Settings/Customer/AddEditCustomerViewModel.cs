@@ -31,8 +31,8 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(Customer));
             }
         }
-        private ObservableCollection<String> numbres;
-        public ObservableCollection<String> Numbers
+        private BindableCollection<String> numbres;
+        public BindableCollection<String> Numbers
         {
             get { return numbres; }
             set { numbres = value;
@@ -40,19 +40,19 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(Numbers));
             }
         }
-        private string _NewPhoneNumner;
-        public string NewPhoneNumner
+        private string _newPhoneNumber;
+        public string NewPhoneNumber
         {
-            get { return _NewPhoneNumner; }
-            set { _NewPhoneNumner = value;
-                NotifyOfPropertyChange(nameof(NewPhoneNumner));
+            get { return _newPhoneNumber; }
+            set { _newPhoneNumber = value;
+                NotifyOfPropertyChange(nameof(NewPhoneNumber));
             }
         }
         private CustomerSettengsViewModel Parent { get; set; }
         public AddEditCustomerViewModel(CustomerSettengsViewModel parent)
         {
             Parent = parent;
-            Numbers = new ObservableCollection<string>();
+            Numbers = new BindableCollection<string>();
         }
         public void ChangeDailogSatate(bool value)
         {
@@ -61,7 +61,7 @@ namespace PosTest.ViewModels.Settings
         public void NewCustome()
         {
             Customer = new  Customer();
-            NewPhoneNumner = "";
+            NewPhoneNumber = "";
             Numbers.Clear();
         }
         public void Save() {
@@ -99,10 +99,10 @@ namespace PosTest.ViewModels.Settings
             Numbers = selectedCustomer.PhoneNumbers.Clone();
         }
         public void AddPhoneNumber() {
-            if (!string.IsNullOrEmpty(NewPhoneNumner))
+            if (!string.IsNullOrEmpty(NewPhoneNumber))
             {
-                this.Numbers.Add(NewPhoneNumner);
-                NewPhoneNumner = "";
+                this.Numbers.Add(NewPhoneNumber);
+                NewPhoneNumber = "";
             }
             NotifyOfPropertyChange(() => this.Customer.PhoneNumbers);
         }

@@ -18,7 +18,8 @@
 
     <materialdesign:DialogHost x:Uid="materialdesign:DialogHost_1" IsOpen="{Binding IsEditing}">
         <materialdesign:DialogHost.DialogContent>
-            <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>
+            <!--<subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>-->
+            <ContentControl Content="{Binding DetailView}"></ContentControl>
 
         </materialdesign:DialogHost.DialogContent>
         <Grid>

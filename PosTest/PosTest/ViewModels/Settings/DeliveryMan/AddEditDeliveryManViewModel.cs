@@ -33,9 +33,9 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(Deliveryman));
             }
         }
-        private ObservableCollection<String> numbres;
+        private BindableCollection<String> numbres;
 
-        public ObservableCollection<String> Numbers
+        public BindableCollection<String> Numbers
         {
             get { return numbres; }
             set { numbres = value;
@@ -58,7 +58,7 @@ namespace PosTest.ViewModels.Settings
         public AddEditDeliveryManViewModel(DeliveryManSettengsViewModel parent)
         {
             Parent = parent;
-            Numbers = new ObservableCollection<string>();
+            Numbers = new BindableCollection<string>();
         }
         public void ChangeDailogSatate(bool value)
         {
@@ -73,7 +73,7 @@ namespace PosTest.ViewModels.Settings
             {
                 int index=   Parent.Deliverymans.IndexOf(Parent.Deliverymans.FirstOrDefault(x => x.Id == Deliveryman.Id));
                 
-                Numbers = Deliveryman.PhoneNumbers!=null?new ObservableCollection<string>(Deliveryman.PhoneNumbers) :new ObservableCollection<string>();
+                Numbers = Deliveryman.PhoneNumbers!=null? Deliveryman.PhoneNumbers : new BindableCollection<string>();
                 if (index==-1)
                 {
                     Parent.Deliverymans.Add(Deliveryman);

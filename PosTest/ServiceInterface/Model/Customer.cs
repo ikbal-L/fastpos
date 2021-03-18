@@ -33,21 +33,18 @@ namespace ServiceInterface.Model
 
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
 
-        private ObservableCollection<string> _PhoneNumbers;
 
         [DataMember]
-        public ObservableCollection<string> PhoneNumbers
+        public BindableCollection<string> PhoneNumbers
         {
-            get { return _PhoneNumbers; }
-            set
-            {
-                _PhoneNumbers = value;
-                NotifyOfPropertyChange(nameof(_PhoneNumbers));
-            }
+            get => _phoneNumbers;
+            set => Set(ref _phoneNumbers, value);
         }
+
         public string FirstNumber => PhoneNumbers?.FirstOrDefault();
         private decimal _debit;
         private string _mobile = "";
+        private BindableCollection<string> _phoneNumbers;
 
         [DataMember]
         public decimal Debit

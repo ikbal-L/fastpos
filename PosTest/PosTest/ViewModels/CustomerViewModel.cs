@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using PosTest.Helpers;
 using PosTest.ViewModels.SubViewModel;
+using PosTest.Views.SubViews;
 using ServiceInterface.Interface;
 using ServiceLib.Service;
 
@@ -25,6 +26,7 @@ namespace PosTest.ViewModels
         private Customer _selectedCustomer;
         private bool _isEditing;
         private CustomerDetailViewModel _customerDetailVm;
+        private CustomerDetailView _detailView;
         public CheckoutViewModel ParentChechoutVM { get; set; }
       
         public CustomerViewModel(CheckoutViewModel checkoutViewModel/*,ICustomerService customerService*/)
@@ -192,8 +194,15 @@ namespace PosTest.ViewModels
             CustomerDetailVm = new CustomerDetailViewModel(customer);
             CustomerDetailVm.CommandExecuted += CustomerDetailViewModel_CommandExecuted;
             IsEditing = true;
+            DetailView= new CustomerDetailView(){DataContext = CustomerDetailVm};
             FilterString = string.Empty;
             
+        }
+
+        public CustomerDetailView DetailView
+        {
+            get => _detailView;
+            set => Set(ref _detailView, value);
         }
 
         private void CustomerDetailViewModel_CommandExecuted(object sender, CommandExecutedEventArgs e)

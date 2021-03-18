@@ -63,10 +63,16 @@ namespace ServiceLib.helpers
                 },
                 {
                     (typeof(Order), typeof(Customer)),
-                    (object o1, object o2) =>
+                    (o1, o2) =>
                     {
 
                         AssociateOrdersWithCustomers(o1 as ICollection<Order>, o2 as ICollection<Customer>);
+                    }
+                },
+                {
+                    (typeof(Role),typeof(User)),(o1, o2) =>
+                    {
+                        AssociateRolesWithUsers(o1 as ICollection<Role>,o2 as ICollection<User>);
                     }
                 }
             };
@@ -131,6 +137,19 @@ namespace ServiceLib.helpers
             foreach (Order order in orders)
             {
                 order.MappingAfterReceiving(products);
+            }
+        }
+
+        public static void AssociateRolesWithUsers(ICollection<Role> roles, ICollection<User> users)
+        {
+            foreach (var user in users)
+            {
+               
+                user.RoleIds.ForEach(roleId =>
+                {
+                    var role = roles.FirstOrDefault(r => r.Id == roleId);
+                    user.Roles.Add(role);
+                });
             }
         }
 

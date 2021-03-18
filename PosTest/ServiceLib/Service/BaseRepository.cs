@@ -11,55 +11,55 @@ using EndPoint = ServiceInterface.StaticValues.EndPoint;
 
 namespace ServiceLib.Service
 {
-    public class Repository <TState, TIdentifier> : IRepository<TState, TIdentifier> where TState : IState<TIdentifier> where TIdentifier : struct
+    public class BaseRepository <TState, TIdentifier> : IRepository<TState, TIdentifier> where TState : IState<TIdentifier> where TIdentifier : struct
     {
-
+        protected RestApis restApi = new RestApis();
         public virtual (int status, TState) Get(TIdentifier id)
         {
-            return GenericRest.GetThing<TState>(RestApis.Resource<TState>.Action(EndPoint.Get,arg:id));
+            return GenericRest.GetThing<TState>(restApi.Action<TState>(EndPoint.Get,arg:id));
         }
 
         public virtual (int status, IEnumerable<TState>) Get()
         {
-            return GenericRest.GetAll<TState>(RestApis.Resource<TState>.Action(EndPoint.GetAll));
+            return GenericRest.GetAll<TState>(restApi.Action<TState>(EndPoint.GetAll));
         }
 
         public (int status, IEnumerable<TState>) Get(string subPath)
         {
-            return GenericRest.GetAll<TState>(RestApis.Resource<TState>.Action(EndPoint.GetAll,subPath:subPath));
+            return GenericRest.GetAll<TState>(restApi.Action<TState>(EndPoint.GetAll,subPath:subPath));
         }
 
 
         public virtual (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids)
         {
-            return GenericRest.GetManyThings<TState>((IEnumerable<long>)ids, RestApis.Resource<TState>.Action(EndPoint.GetMany));
+            return GenericRest.GetManyThings<TState>((IEnumerable<long>)ids, restApi.Action<TState>(EndPoint.GetMany));
         }
 
         public virtual int Save(TState state, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<TState>(state, RestApis.Resource<TState>.Action(EndPoint.Save),out errors).status;
+            return GenericRest.SaveThing<TState>(state, restApi.Action<TState>(EndPoint.Save),out errors).status;
         }
 
         public virtual int Save(IEnumerable<TState> state)
         {
-            return GenericRest.SaveThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.Action(EndPoint.SaveMany),out _).status;
+            return GenericRest.SaveThing<IEnumerable<TState>>(state, restApi.Action<TState>(EndPoint.SaveMany),out _).status;
         }
 
         public virtual int Delete(TIdentifier id)
         {
-            return GenericRest.Delete<TState>(RestApis.Resource<TState>.Action(EndPoint.Delete,id));
+            return GenericRest.Delete<TState>(restApi.Action<TState>(EndPoint.Delete,id));
         }
 
 
         public virtual int Update(TState state, out IEnumerable<string> errors) 
         {
             
-            return GenericRest.UpdateThing<TState>(state, RestApis.Resource<TState>.Action(EndPoint.Put, arg: state.Id), out errors).status;
+            return GenericRest.UpdateThing<TState>(state, restApi.Action<TState>(EndPoint.Put, arg: state.Id), out errors).status;
         }
 
         public virtual int Update(IEnumerable<TState> state)
         {
-            return GenericRest.UpdateThing<IEnumerable<TState>>(state, RestApis.Resource<TState>.Action(EndPoint.PutMany), out _).status;
+            return GenericRest.UpdateThing<IEnumerable<TState>>(state, restApi.Action<TState>(EndPoint.PutMany), out _).status;
         }
 
         public virtual (int status, IEnumerable<TState>) Get(object param)
@@ -69,17 +69,17 @@ namespace ServiceLib.Service
 
         public (bool, TReturn) Save<TReturn>(TState state)
         {
-            return GenericRest.SaveThing<TState, TReturn>(state, RestApis.Resource<TState>.Action(EndPoint.Save));
+            return GenericRest.SaveThing<TState, TReturn>(state, restApi.Action<TState>(EndPoint.Save));
         }
 
-        public (bool, TReturn) Update<TReturn>(TState state)
+        public (bool,TReturn) Update<TReturn>(TState state)
         {
-            return GenericRest.UpdateThing<TState, TReturn>(state, RestApis.Resource<TState>.Action(EndPoint.Put,(TIdentifier)state.Id));
+            return GenericRest.UpdateThing<TState, TReturn>(state, restApi.Action<TState>(EndPoint.Put,(TIdentifier)state.Id));
         }
 
         public (bool, TReturn) Delete<TReturn>(TIdentifier id)
         {
-            return GenericRest.DeleteThing<TReturn>(RestApis.Resource<TState>.Action(EndPoint.Delete,id));
+            return GenericRest.DeleteThing<TReturn>(restApi.Action<TState>(EndPoint.Delete,id));
         }
     }
 
@@ -87,43 +87,43 @@ namespace ServiceLib.Service
 
 
     [Export(typeof(IAdditiveRepository))]
-    public class AdditiveRepository : Repository<Additive, long>, IAdditiveRepository
+    public class AdditiveBaseRepository : BaseRepository<Additive, long>, IAdditiveRepository
     {
 
     }
 
     [Export(typeof(IProductRepository))]
-    public class ProductRepository : Repository<Product, long>, IProductRepository
+    public class ProductBaseRepository : BaseRepository<Product, long>, IProductRepository
     {
         public override (int status, IEnumerable<Product>) Get()
         {
-            var result = GenericRest.GetAll<Product>(RestApis.Resource<Product>.Action(EndPoint.GetAll));
+            var result = GenericRest.GetAll<Product>(restApi.Action<Product>(EndPoint.GetAll));
             var products = result.Item2.Cast<Product>().ToList();
             return (result.Item1,products ) ;
         }
     }
 
     [Export(typeof(ICategoryRepository))]
-    public class CategoryRepository : Repository<Category, long>, ICategoryRepository
+    public class CategoryBaseRepository : BaseRepository<Category, long>, ICategoryRepository
     {
 
     }
 
     [Export(typeof(IOrderRepository))]
-    public class OrderRepository : Repository<Order, long>, IOrderRepository
+    public class OrderBaseRepository : BaseRepository<Order, long>, IOrderRepository
     {
         
 
         public override int Save(Order state, out IEnumerable<string> errors)
         {
-            var response = GenericRest.SaveThing(state, RestApis.Resource<Order>.Action(EndPoint.Save));
+            var response = GenericRest.SaveThing(state, restApi.Action<Order>(EndPoint.Save));
             PatchOrder(state, response,out errors);
             return (int)response.StatusCode;
         }
 
         public override int Update(Order state, out IEnumerable<string> errors)
         {
-            var response = GenericRest.UpdateThing(state, RestApis.Resource<Order>.Action(EndPoint.Put,arg: state.Id));
+            var response = GenericRest.UpdateThing(state, restApi.Action<Order>(EndPoint.Put,arg: state.Id));
             PatchOrder(state, response, out errors);
             return (int)response.StatusCode;
         }
@@ -176,30 +176,30 @@ namespace ServiceLib.Service
     }
 
     [Export(typeof(ITableRepository))]
-    public class TableRepository : Repository<Table, long>,ITableRepository
+    public class TableBaseRepository : BaseRepository<Table, long>,ITableRepository
     {
 
     }
 
     [Export(typeof(ICustomerRepository))]
-    public class CustomerRepository : Repository<Customer, long>, ICustomerRepository
+    public class CustomerBaseRepository : BaseRepository<Customer, long>, ICustomerRepository
     {
 
     }
 
     [Export(typeof(IWaiterRepository))]
-    public class WaiterRepository : Repository<Waiter, long>, IWaiterRepository
+    public class WaiterBaseRepository : BaseRepository<Waiter, long>, IWaiterRepository
     {
 
     }
 
     [Export(typeof(IDeliverymanRepository))]
-    public class DeliverymanRepository : Repository<Deliveryman, long>, IDeliverymanRepository
+    public class DeliverymanBaseRepository : BaseRepository<Deliveryman, long>, IDeliverymanRepository
     {
 
     }
     [Export(typeof(IPaymentRepository))]
-    public class PaymentRepository : Repository<Payment, long>, IPaymentRepository
+    public class PaymentBaseRepository : BaseRepository<Payment, long>, IPaymentRepository
     {
         public PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId)
         {
@@ -213,9 +213,20 @@ namespace ServiceLib.Service
     }
 
     [Export(typeof(IUserRepository))]
-    public class UserRepository : Repository<User, long>, IUserRepository
+    public class UserBaseRepository : BaseRepository<User, long>, IUserRepository
     {
+        public UserBaseRepository()
+        {
+            restApi.Prefix = "config";
+        }
+    }
 
+    public class RoleRepository : BaseRepository<Role, long>, IRoleRepository
+    {
+        public RoleRepository()
+        {
+            restApi.Prefix = "config";
+        }
     }
 
 }

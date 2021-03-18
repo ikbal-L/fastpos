@@ -63,7 +63,10 @@ namespace PosTest.ViewModels
             //});
             LoginViewModel toActivateViewModel = new LoginViewModel();
             toActivateViewModel.Parent = this;
+            //UserSettingsViewModel userSettingsViewModel = new UserSettingsViewModel() { Parent = this };
+            //ActivateItem(userSettingsViewModel);
             ActivateItem(toActivateViewModel);
+
             //splashScreen.Close();
         }
         public void showLogin()

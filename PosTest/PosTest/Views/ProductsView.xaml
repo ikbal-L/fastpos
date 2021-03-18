@@ -100,7 +100,7 @@
                     <GridView x:Uid="GridView_1" >
                         
                         <GridViewColumn x:Uid="GridViewColumn_1" DisplayMemberBinding="{Binding Name }" Header="Name"/>
-                        <GridViewColumn x:Uid="GridViewColumn_2" DisplayMemberBinding="{Binding Description}" Header="Description" />
+                        <GridViewColumn x:Uid="GridViewColumn_2" DisplayMemberBinding="{Binding Description}" Header="Name" />
                         <GridViewColumn x:Uid="GridViewColumn_3" DisplayMemberBinding="{Binding Price}" Header="Price" />
                         <GridViewColumn x:Uid="GridViewColumn_4" DisplayMemberBinding="{Binding Unit}" Header="Unit" />
                         <GridViewColumn x:Uid="GridViewColumn_5" DisplayMemberBinding="{Binding Category.Name}" Header="Category" />

@@ -47,6 +47,8 @@ namespace ServiceLib.Service
             if (fetch)
             {
                 _onFetchRequested += Fetch<TState, TIdentifier>;
+                Fetch<TState, TIdentifier>();
+
             }
             return _instance;
         }
@@ -89,6 +91,7 @@ namespace ServiceLib.Service
                         if (!tState.Contains(state)) tState.Add(state);
                     }
 
+                    //TODO TRACK NULL POINTER EXCEPTION WHEN CREATING A NEW USER
                     if (Association.ContainsKey(key))
                     {
                         Association[key]();

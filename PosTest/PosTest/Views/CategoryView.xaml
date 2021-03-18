@@ -94,7 +94,7 @@
                 <ListView.View >
                     <GridView x:Uid="GridView_1" >
                         <GridViewColumn x:Uid="GridViewColumn_1" DisplayMemberBinding="{Binding Name }" Header="Name"/>
-                        <GridViewColumn x:Uid="GridViewColumn_2" DisplayMemberBinding="{Binding Description}" Header="Description" />
+                        <GridViewColumn x:Uid="GridViewColumn_2" DisplayMemberBinding="{Binding Description}" Header="Name" />
                     </GridView>
                 </ListView.View>
             </ListView>

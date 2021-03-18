@@ -152,7 +152,7 @@
                                 <RowDefinition x:Uid="RowDefinition_5" Height="Auto" />
                             </Grid.RowDefinitions>
                             <Border x:Uid="Border_3" Grid.Row="0"  Margin="10  10">
-                                <TextBox x:Uid="TextBox_1" materialdesign:HintAssist.Hint="Description" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                <TextBox x:Uid="TextBox_1" materialdesign:HintAssist.Hint="Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
                                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24" Text="{Binding CopySelectedAdditive.Description}" />
                             </Border>
 

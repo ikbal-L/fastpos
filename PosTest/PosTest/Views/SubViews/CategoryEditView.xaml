@@ -70,7 +70,7 @@
                      x:Name="NameField"  >
             </TextBox>
 
-            <Label x:Uid="Label_3" Grid.Row="2" Grid.Column="0" Content="Description" />
+            <Label x:Uid="Label_3" Grid.Row="2" Grid.Column="0" Content="Name" />
             <TextBox x:Uid="TextBox_1" Grid.Row="2" Grid.Column="1" Text="{Binding Description}" />
 
             <Label x:Uid="Label_4" Grid.Row="3" Grid.Column="0" Content="Color" />

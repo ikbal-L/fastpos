@@ -5,15 +5,16 @@ using ServiceInterface.Interface;
 
 namespace ServiceInterface.StaticValues
 {
-    public static class RestApis
+    public  class RestApis
     {
         private static readonly string _scheme = "http";
         private static readonly string _host = "localhost";
         private static readonly int _port = 8080;
-        private static readonly UriBuilder Builder;
-        private static string _prefix = "api";
+        private static UriBuilder Builder;
+      
         private static string _resource;
         private static string _endpoint;
+        private string _prefix = "api";
 
         static RestApis()
         {
@@ -27,37 +28,48 @@ namespace ServiceInterface.StaticValues
 
         }
 
-        
-
-        public static class Resource<T>
+        public RestApis()
         {
-           
-
-            public static string Action(EndPoint endPoint,object arg = null,string subPath ="")
+            Builder = new UriBuilder
             {
-                _resource = typeof(T).Name.ToLowerInvariant();
-                _endpoint = endPoint.ToString();
+                Scheme = _scheme,
+                Host = _host,
+                Port = _port
+            };
+        }
+        public RestApis(string host,int port,string prefix)
+        {
+            this._prefix = prefix;
+            Builder = new UriBuilder(){Scheme = _scheme,Host = host,Port = port,};
+        }
 
-                //var path = $"{_prefix}/{_resource}/{_endpoint.ToLowerInvariant()}/{pathVariable}";
-                
-                IPathBuilder builder = Path.Create(_prefix).SubPath(_resource).SubPath(_endpoint);
-                if (arg!= null)
-                {
-                    builder.Arg(arg);
-                }
+        public string Prefix
+        {
+            get => _prefix;
+            set => _prefix = value;
+        }
 
-                if (!string.IsNullOrEmpty(subPath))
-                {
-                    builder.SubPath(subPath);
-                }
+        public  string Action<T>(EndPoint endPoint, object arg = null, string subPath = "")
+        {
+            _resource = typeof(T).Name.ToLowerInvariant();
+            _endpoint = endPoint.ToString();
 
-                IPath path = builder.Build();
-                Builder.Path = path.ToString();
-                return Builder.Uri.ToString();
+            //var path = $"{_prefix}/{_resource}/{_endpoint.ToLowerInvariant()}/{pathVariable}";
+
+            IPathBuilder builder = Path.Create(_prefix).SubPath(_resource).SubPath(_endpoint);
+            if (arg != null)
+            {
+                builder.Arg(arg);
             }
 
+            if (!string.IsNullOrEmpty(subPath))
+            {
+                builder.SubPath(subPath);
+            }
 
-
+            IPath path = builder.Build();
+            Builder.Path = path.ToString();
+            return Builder.Uri.ToString();
         }
     }
 

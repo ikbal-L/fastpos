@@ -57,21 +57,19 @@ namespace ServiceInterface.Model
         [DataMember]
         public string PinCode { get; set; }
 
-        private ObservableCollection<string> _PhoneNumbers;
+        
         private string _username;
+        private BindableCollection<string> _phoneNumbers;
+        private bool _enabled = true;
 
         [DataMember]
-        public ObservableCollection<string> PhoneNumbers
+        public BindableCollection<string> PhoneNumbers
         {
-            get { return _PhoneNumbers; }
-            set
-            {
-                _PhoneNumbers = value;
-                NotifyOfPropertyChange(nameof(PhoneNumbers));
-            }
+            get => _phoneNumbers;
+            set => Set(ref _phoneNumbers, value);
         }
 
-        public List<Role> Roles { get; set; }
+        public List<Role> Roles { get; set; } = new List<Role>();
 
         [DataMember]
         public List<long> RoleIds { get; set; }
@@ -136,13 +134,22 @@ namespace ServiceInterface.Model
             }
         }
 
+        
         public Agent Agent
         {
             get => _agent;
             set => Set(ref _agent, value);
         }
-       
+
+        [DataMember]
+        public bool Enabled
+        {
+            get => _enabled;
+            set => Set(ref _enabled, value);
+        }
     }
+
+   
 
     [DataContract]
     public class Waiter : User
@@ -170,13 +177,13 @@ namespace ServiceInterface.Model
     }
 
     [DataContract]
-    public class Role
+    public class Role:IState<long>
     {
         [DataMember]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [DataMember]
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         [DataMember]
         public List<Permission> Permissions { get; set; }

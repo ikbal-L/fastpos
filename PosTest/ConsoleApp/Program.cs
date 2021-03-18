@@ -116,10 +116,10 @@ namespace ConsoleApp
             Console.WriteLine(RestApis.Resource<Product>.Action(EndPoint.Delete,arg:5));
             Console.WriteLine(RestApis.Resource<Category>.Action(EndPoint.Delete, arg: 5));
 
-            var repo1 = new AdditiveRepository();
-            var repo2 = new ProductRepository();
-            var repo3 = new CategoryRepository();
-            var repo4 = new OrderRepository();
+            var repo1 = new AdditiveBaseRepository();
+            var repo2 = new ProductBaseRepository();
+            var repo3 = new CategoryBaseRepository();
+            var repo4 = new OrderBaseRepository();
             //StateManager.Instance.Manage<Additive>(repo1).Manage<Product>(repo2);
 
             StateManager.Instance.Manage(repo1).Manage(repo2).Manage(repo3).Manage(repo4);

@@ -34,7 +34,7 @@ namespace ServiceInterface.Model
             get => _name;
             set => Set(ref _name, value);
         }
-        //[Required(ErrorMessage = "Description must not be Null or Empty")]
+        //[Required(ErrorMessage = "Name must not be Null or Empty")]
         public string Description
         {
             get => _description;

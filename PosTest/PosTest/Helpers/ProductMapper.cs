@@ -24,7 +24,7 @@ namespace PosTest.Helpers
         //                    AvailableStock = platProduct.AvailableStock,
         //                    BackgroundString = platProduct.BackgroundString,
         //                    CategoryId = platProduct.CategoryId,
-        //                    Description = platProduct.Description,
+        //                    Name = platProduct.Name,
         //                    Id = platProduct.Id,
         //                    IsMuchInDemand = platProduct.IsMuchInDemand,
         //                    Name = platProduct.Name,

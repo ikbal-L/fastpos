@@ -59,6 +59,9 @@ namespace PosTest.ViewModels
         [Import(typeof(IPaymentRepository))]
         private IPaymentRepository _paymentRepository;
 
+        [Import(typeof(IUserRepository))]
+        private IUserRepository _userRepository;
+
         private ObservableCollection<User> _Users;
 
         public ObservableCollection<User> Users
@@ -103,17 +106,8 @@ namespace PosTest.ViewModels
         {
             base.OnActivate();
             this.Compose();
-            StateManager.Instance
-                .Manage(_productRepository)
-                .Manage(_categoryRepository)
-                .Manage(_additiveRepository)
-                .Manage(_orderRepository, fetch: false)
-                .Manage(_tableRepository)
-                .Manage(_customerRepository)
-                .Manage(_waiterRepository)
-                .Manage(_deliverymanRepository)
-                .Manage(_paymentRepository);
-            
+           
+
             List<string> auths = new List<string>();
             auths.Add("Read_Product");
             auths.Add("Can_login");
@@ -155,7 +149,19 @@ namespace PosTest.ViewModels
 
             IsDialogOpen = true;
 
-          
+            StateManager.Instance
+                .Manage(_productRepository)
+                .Manage(_categoryRepository)
+                .Manage(_additiveRepository)
+                .Manage(_orderRepository, fetch: false)
+                .Manage(_tableRepository)
+                .Manage(_customerRepository)
+                .Manage(_waiterRepository)
+                .Manage(_deliverymanRepository)
+                .Manage(_paymentRepository)
+                .Manage(_userRepository);
+
+
             Checkout();
             //CheckoutViewModel checkoutViewModel =
             //    new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,

@@ -835,6 +835,12 @@ namespace PosTest.ViewModels
             DeliveryAccountingViewModel vm = new DeliveryAccountingViewModel(){Parent =  this.Parent};
             (this.Parent as Conductor<object>).ActivateItem(vm);
         }
+
+       public void UserSettingsCommand()
+       {
+           //UserSettingsViewModel vm = new UserSettingsViewModel() { Parent = this.Parent };
+           //(this.Parent as Conductor<object>).ActivateItem(vm);
+       }
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {
             var categories = new HashSet<Category>();

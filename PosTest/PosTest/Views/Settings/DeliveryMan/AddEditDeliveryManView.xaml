@@ -82,7 +82,7 @@
                                                                     <TextBlock>
                                   Add a new Phone Number.
                                         </TextBlock>
-                                            <TextBox Width="250" materialdesign:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumner,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Width="250" materialdesign:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
                                             <StackPanel
                                             Orientation="Horizontal"

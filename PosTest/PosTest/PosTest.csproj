@@ -327,7 +327,7 @@
     <Compile Include="ViewModels\SubViewModel\EditProductViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\ProductLayoutViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\TakeawayViewModel.cs" />
-    <Compile Include="ViewModels\SubViewModel\UserDetailViewModel.cs" />
+    <Compile Include="ViewModels\UserDetailViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WarningViewModel.cs" />
     <Compile Include="ViewModels\TablesViewModel.cs" />
@@ -452,9 +452,6 @@
     <Compile Include="Views\SubViews\TakeAwayView.xaml.cs">
       <DependentUpon>TakeAwayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubViews\UserDetailView.xaml.cs">
-      <DependentUpon>UserDetailView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SubViews\WaitingView.xaml.cs">
       <DependentUpon>WaitingView.xaml</DependentUpon>
     </Compile>
@@ -469,6 +466,9 @@
     </Compile>
     <Compile Include="Views\TestRepTemp.xaml.cs">
       <DependentUpon>TestRepTemp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserDetailView.xaml.cs">
+      <DependentUpon>UserDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserSettingsView.xaml.cs">
       <DependentUpon>UserSettingsView.xaml</DependentUpon>
@@ -752,10 +752,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SubViews\UserDetailView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\SubViews\WaitingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -773,6 +769,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TestRepTemp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

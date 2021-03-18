@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:PosTest.Views"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              xmlns:subviews="clr-namespace:PosTest.Views.SubViews"
              xmlns:convert="clr-namespace:PosTest.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" x:Name="UserSettings">
     <UserControl.Resources>
         <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" x:Key="PhoneItemStyle"
                TargetType="Button">
@@ -48,209 +49,17 @@
 
     <Grid>
 
-        <materialDesign:DialogHost IsOpen="False">
+        <materialDesign:DialogHost IsOpen="{Binding IsEditing}">
             <materialDesign:DialogHost.DialogContent>
 
-              
-                <StackPanel Orientation="Vertical">
-                 
-                    <Grid Width="500" Margin="20">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
 
-                        </Grid.RowDefinitions>
-                        <TextBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                 materialDesign:HintAssist.Hint="Username" Margin="5"
-                                 Text="{Binding SelectedUser.Username}" />
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                     materialDesign:HintAssist.Hint="Password" Margin="5"
-                                     Text="{Binding SelectedUser.Password}" />
-                            <Button Grid.Column="1"
-                                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                                    Height="40"
-                                    Margin="5"
-                                    ToolTip="Generate Random Password"
-                                    VerticalAlignment="Center">
-                                GENERATE
-                            </Button>
-                        </Grid>
-                        <TextBox Grid.Row="2" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                 materialDesign:HintAssist.Hint="PinCode" Margin="5" />
-                        <TextBox Grid.Row="3" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                 materialDesign:HintAssist.Hint="First Name" Margin="5"
-                                 Text="{Binding SelectedUser.FirstName}" />
-                        <TextBox Grid.Row="4" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                 materialDesign:HintAssist.Hint="Last Name" Margin="5"
-                                 Text="{Binding SelectedUser.LastName}" />
-                        <TextBox Grid.Row="5" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                 materialDesign:HintAssist.Hint="Email" Margin="5"
-                                 Text="{Binding SelectedUser.Email}" />
+                <!--<local:UserDetailView 
+                    DataContext="{Binding ElementName=UserSettings,Path=DataContext.UserDetailViewModel}"></local:UserDetailView>-->
+                <ContentControl Content="{Binding SubView}">
 
-                        <TabControl Grid.Row="6" Style="{StaticResource MaterialDesignTabControl}">
-
-                         
-                            <TabItem>
-                                <TabItem.Header>
-                                    <materialDesign:PackIcon
-                                        Kind="CellphoneCog"
-                                        Width="24"
-                                        Height="24" />
-                                </TabItem.Header>
-                                <GroupBox Grid.Row="6"
-                                          Header="Phone"
-                                          Style="{DynamicResource MaterialDesignGroupBox}"
-                                          Margin="5"
-                                          materialDesign:ColorZoneAssist.Mode="Dark">
-                                    <GroupBox.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel
-                                                Orientation="Horizontal" VerticalAlignment="Bottom">
-                                                <materialDesign:PackIcon
-                                                    Kind="Cellphone"
-                                                    Height="32"
-                                                    Width="32"
-                                                    VerticalAlignment="Center" />
-                                                <TextBlock
-                                                    Margin="8,0,0,0"
-                                                    VerticalAlignment="Center"
-                                                    Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                    Text="{Binding}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GroupBox.HeaderTemplate>
-                                    <Grid>
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                                                Content="{materialDesign:PackIcon AddThick}"
-                                                VerticalAlignment="top" HorizontalAlignment="Right"
-                                                Margin="0 -30 10 0" />
-                                        <ListBox ItemsSource="{Binding SelectedUser.PhoneNumbers}"
-                                                 x:Name="UserFormPhoneList">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Grid Width="400">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="3*" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Text="{Binding}" FontWeight="DemiBold" />
-                                                        <Button Grid.Column="1" Style="{StaticResource PhoneItemStyle}"
-                                                                Content="{materialDesign:PackIcon Delete}"
-                                                                Width="30" Height="30" VerticalAlignment="Center"
-                                                                HorizontalAlignment="Right" />
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </Grid>
-                                </GroupBox>
-                            </TabItem>
-                          
-                            <TabItem>
-                                <TabItem.Header>
-                                    <materialDesign:PackIcon
-                                        Kind="Security"
-                                        Width="24"
-                                        Height="24" />
-                                </TabItem.Header>
-                                <GroupBox Grid.Row="6"
-                                          Header="Roles"
-                                          Style="{DynamicResource MaterialDesignGroupBox}"
-                                          Margin="5"
-                                          materialDesign:ColorZoneAssist.Mode="Dark">
-                                    <GroupBox.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel
-                                                Orientation="Horizontal" VerticalAlignment="Bottom">
-                                                <materialDesign:PackIcon
-                                                    Kind="SecurityAccount"
-                                                    Height="32"
-                                                    Width="32"
-                                                    VerticalAlignment="Center" />
-                                                <TextBlock
-                                                    Margin="8,0,0,0"
-                                                    VerticalAlignment="Center"
-                                                    Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                    Text="{Binding}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GroupBox.HeaderTemplate>
-                                    <Grid>
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                                                Content="{materialDesign:PackIcon AddThick}"
-                                                VerticalAlignment="top" HorizontalAlignment="Right"
-                                                Margin="0 -30 10 0" />
-                                        <ListBox ItemsSource="{Binding SelectedUser.Roles}"
-                                                 x:Name="UserFormRoleList">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Grid Width="400">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="3*" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Text="{Binding Description}" FontWeight="DemiBold" />
-                                                        <Button Grid.Column="1" Style="{StaticResource RoleItemStyle}"
-                                                                Content="{materialDesign:PackIcon Delete}"
-                                                                Width="30" Height="30" VerticalAlignment="Center"
-                                                                HorizontalAlignment="Right" />
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </Grid>
-                                </GroupBox>
-                            </TabItem>
-                         
-
-                            <TabItem>
-                                <TabItem.Header>
-                                    <materialDesign:PackIcon
-                                        Kind="AccountCog"
-                                        Width="24"
-                                        Height="24" />
-                                </TabItem.Header>
-
-                            </TabItem>
-                            #endregion
-
-                        </TabControl>
+                </ContentControl>
 
 
-                    </Grid>
-                  
-                    
-                    <materialDesign:ColorZone Margin="0"
-                                              Mode="PrimaryDark"
-                                              Padding="16"
-
-                                              materialDesign:ShadowAssist.ShadowDepth="Depth3"
-                                              ClipToBounds="True">
-                        <StackPanel
-                            Orientation="Horizontal">
-                            <Button Style="{StaticResource MaterialDesignIconButton}"
-                                    Content="{materialDesign:PackIcon ContentSave}" />
-                            <Button Style="{StaticResource MaterialDesignIconButton}"
-                                    Content="{materialDesign:PackIcon Cancel}"
-                                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
-                        </StackPanel>
-                    </materialDesign:ColorZone>
-                 
-                </StackPanel>
-            
-               
-               
             </materialDesign:DialogHost.DialogContent>
             <Grid>
                 <Grid.RowDefinitions>
@@ -267,7 +76,8 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="model:User">
-                            <materialDesign:Card>
+                            <materialDesign:Card materialDesign:UniformCornerRadius="10" 
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth3" >
                                 <StackPanel Orientation="Vertical" Margin="10">
                                     <TextBlock FontWeight="Bold" Margin="0 0 0 20" Text="{Binding Username}"
                                                HorizontalAlignment="Center" />
@@ -300,20 +110,27 @@
                             Content="{materialDesign:PackIcon Add}"
                             HorizontalAlignment="Right"
                             Margin="0 0 10 0"
-                            Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" />
+                            caliburn:Message.Attach="[Event Click] = [Action CreateUser()]"
+                    />
+                   
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                             Content="{materialDesign:PackIcon Edit}"
                             HorizontalAlignment="Right"
-                            Margin="0 0 60 0" />
+                            Margin="0 0 60 0" 
+                            caliburn:Message.Attach="[Event Click] = [Action EditUser()]"
+                            />
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                             Content="{materialDesign:PackIcon Delete}"
                             HorizontalAlignment="Right"
-                            Margin="0 0 110 0" />
+                            Margin="0 0 110 0"
+                            caliburn:Message.Attach="[Event Click] = [Action DeleteUser()]"
+                            />
 
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                             Content="{materialDesign:PackIcon SecurityAccount}"
                             HorizontalAlignment="Right"
-                            Margin="0 0 160 0" />
+                            Margin="0 0 160 0"
+                            />
                 </Grid>
                 <!--#endregion-->
             </Grid>

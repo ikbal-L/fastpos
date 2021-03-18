@@ -27,7 +27,7 @@ namespace PosTest.ViewModels.SubViewModel
 
         public CustomerDetailViewModel(Customer customer)
         {
-            Customer = new Customer(){Id = customer.Id,Name = customer.Name, Mobile = customer.Mobile,PhoneNumbers = new ObservableCollection<string>() };
+            Customer = new Customer(){Id = customer.Id,Name = customer.Name, Mobile = customer.Mobile,PhoneNumbers = new BindableCollection<string>() };
             //ValidateModelProperty(Customer,Customer.Name,nameof(Customer.Name));
             Name = Customer.Name;
             Mobile = Customer.Mobile;
