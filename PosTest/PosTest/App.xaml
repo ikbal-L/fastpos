@@ -1,4 +1,4 @@
-﻿<Application x:Uid="Application_1" x:Class="PosTest.App"
+﻿<Application x:Class="PosTest.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
@@ -9,38 +9,38 @@
              
              xmlns:local="clr-namespace:PosTest">
     <Application.Resources>
-        <ResourceDictionary x:Uid="ResourceDictionary_1">
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Uid="ResourceDictionary_2">
-                    <local:ShellBootstrapper x:Uid="local:ShellBootstrapper_1" x:Key="bootstrapper" />
+                <ResourceDictionary>
+                    <local:ShellBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>
                 <!--Mateirla design-->
-                <wpf:BundledTheme  x:Uid="materialdesign:BundledTheme_1" BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
-                <ResourceDictionary x:Uid="ResourceDictionary_3" Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <wpf:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 
-                <ResourceDictionary x:Uid="ResourceDictionary_4" Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_5" Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_6" Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
 
-                <ResourceDictionary x:Uid="ResourceDictionary_7" Source="/Resources/Styles/Brushes.xaml"/>
-                <ResourceDictionary x:Uid="ResourceDictionary_8" Source="/Resources/Styles/Button.xaml"/>
-                <ResourceDictionary x:Uid="ResourceDictionary_9" Source="/Resources/Styles/AdditiveListStyle.xaml"/>
-                <ResourceDictionary x:Uid="ResourceDictionary_10" Source="/Resources/Styles/OrderItemListStyle.xaml"/>
-                <ResourceDictionary x:Uid="ResourceDictionary_11" Source="/Resources/DataTemplates/OrdreItem.xaml"/>
-                <ResourceDictionary x:Uid="ResourceDictionary_12" Source="/Resources/DataTemplates/Products.xaml"/>
-                <ResourceDictionary x:Uid="ResourceDictionary_13" Source="/Resources/DataTemplates/Additives.xaml"/>
-                <ResourceDictionary x:Uid="ResourceDictionary_14" Source="/Resources/DataTemplates/Reports.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Brushes.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/AdditiveListStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/OrderItemListStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/OrdreItem.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Products.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Additives.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Reports.xaml"/>
 
                 <!--ToastNotifications-->
-                <ResourceDictionary x:Uid="ResourceDictionary_15" Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_16" Source="i18n/Localization.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
+                <ResourceDictionary Source="i18n/Localization.xaml"></ResourceDictionary>
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
-            <FontFamily x:Uid="FontFamily_1" x:Key="DigitalFontFamily">/PosTest;Component/Fonts/#digital-7</FontFamily>
-            <FontFamily x:Uid="FontFamily_2" x:Key="DSDIGIFontFamily">/PosTest;Component/Fonts/#DS-DIGI</FontFamily>
+            <FontFamily x:Key="DigitalFontFamily">/PosTest;Component/Fonts/#digital-7</FontFamily>
+            <FontFamily x:Key="DSDIGIFontFamily">/PosTest;Component/Fonts/#DS-DIGI</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

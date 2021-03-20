@@ -1,18 +1,18 @@
-﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
                     xmlns:local="clr-namespace:PosTest.Resources.DataTemplates"
                     
                     >
-    <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type src:Order}" x:Key="OrderTableTemplate"  >
+    <DataTemplate DataType="{x:Type src:Order}" x:Key="OrderTableTemplate"  >
 
-        <StackPanel x:Uid="StackPanel_1" >
+        <StackPanel >
             <StackPanel.Resources>
-                <DataTemplate x:Uid="DataTemplate_2" x:Key="itemorder"></DataTemplate>
+                <DataTemplate x:Key="itemorder"></DataTemplate>
             </StackPanel.Resources>
-            <Label x:Uid="Label_1" Content="{Binding Id}"/>
+            <Label Content="{Binding Id}"/>
             
-            <ListBox x:Uid="ListBox_1" ItemsSource="{Binding Order.OrderItems}"  ItemTemplate="{StaticResource itemorder}"/>
+            <ListBox ItemsSource="{Binding Order.OrderItems}"  ItemTemplate="{StaticResource itemorder}"/>
         </StackPanel>
     </DataTemplate>
 

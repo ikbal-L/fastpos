@@ -1,4 +1,4 @@
-﻿<UserControl x:Uid="parent" x:Class="PosTest.SL.Controls.ColorPalette"
+﻿<UserControl x:Class="PosTest.SL.Controls.ColorPalette"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,87 +11,87 @@
              x:Name="parent"
              >
     <FrameworkElement.Resources>
-        <x:Array x:Uid="x:Array_1" x:Key="slcolors" Type="SolidColorBrush">
-            <SolidColorBrush x:Uid="SolidColorBrush_1" Color="White"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_2" Color="Black"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_3" Color="#FFF2F2F2"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_4" Color="#FFD8D8D8"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_5" Color="#FFBFBFBF"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_6" Color="#FFA5A5A5"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_7" Color="#FF7F7F7F"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_8" Color="#FF7F7F7F"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_9" Color="#FF595959"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_10" Color="#FF3F3F3F"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_11" Color="#FF262626"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_12" Color="#FF0C0C0C"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_13" Color="#FFC9C2D1"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_14" Color="#FFF4F2F5"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_15" Color="#FFE9E6EC"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_16" Color="#FFDEDAE3"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_17" Color="#FF9688A5"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_18" Color="#FF635672"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_19" Color="#FF69676D"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_20" Color="#FFE0E0E2"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_21" Color="#FFC2C1C5"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_22" Color="#FFA4A3A8"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_23" Color="#FF4E4D51"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_24" Color="#FF343336"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_25" Color="#FFCEB966"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_26" Color="#FFF5F1E0"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_27" Color="#FFEBE3C1"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_28" Color="#FFE1D5A3"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_29" Color="#FFAE9638"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_30" Color="#FF746425"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_31" Color="#FF9CB084"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_32" Color="#FFEBEFE6"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_33" Color="#FFD7DFCD"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_34" Color="#FFC3CFB5"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_35" Color="#FF758C5A"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_36" Color="#FF4E5D3C"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_37" Color="#FF6BB1C9"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_38" Color="#FFE1EFF4"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_39" Color="#FFC3DFE9"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_40" Color="#FFA6D0DE"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_41" Color="#FF3D8DA9"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_42" Color="#FF295E70"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_43" Color="#FF6585CF"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_44" Color="#FFE0E6F5"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_45" Color="#FFC1CEEB"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_46" Color="#FFA2B5E2"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_47" Color="#FF365BB0"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_48" Color="#FF243C75"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_49" Color="#FF7E6BC9"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_50" Color="#FFE5E1F4"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_51" Color="#FFCBC3E9"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_52" Color="#FFB1A6DE"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_53" Color="#FF533DA9"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_54" Color="#FF372970"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_55" Color="#FFA379BB"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_56" Color="#FFECE4F1"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_57" Color="#FFDAC9E3"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_58" Color="#FFC7AED6"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_59" Color="#FF7D4D99"/>
-            <SolidColorBrush x:Uid="SolidColorBrush_60" Color="#FF533366"/>
+        <x:Array x:Key="slcolors" Type="SolidColorBrush">
+            <SolidColorBrush Color="White"/>
+            <SolidColorBrush Color="Black"/>
+            <SolidColorBrush Color="#FFF2F2F2"/>
+            <SolidColorBrush Color="#FFD8D8D8"/>
+            <SolidColorBrush Color="#FFBFBFBF"/>
+            <SolidColorBrush Color="#FFA5A5A5"/>
+            <SolidColorBrush Color="#FF7F7F7F"/>
+            <SolidColorBrush Color="#FF7F7F7F"/>
+            <SolidColorBrush Color="#FF595959"/>
+            <SolidColorBrush Color="#FF3F3F3F"/>
+            <SolidColorBrush Color="#FF262626"/>
+            <SolidColorBrush Color="#FF0C0C0C"/>
+            <SolidColorBrush Color="#FFC9C2D1"/>
+            <SolidColorBrush Color="#FFF4F2F5"/>
+            <SolidColorBrush Color="#FFE9E6EC"/>
+            <SolidColorBrush Color="#FFDEDAE3"/>
+            <SolidColorBrush Color="#FF9688A5"/>
+            <SolidColorBrush Color="#FF635672"/>
+            <SolidColorBrush Color="#FF69676D"/>
+            <SolidColorBrush Color="#FFE0E0E2"/>
+            <SolidColorBrush Color="#FFC2C1C5"/>
+            <SolidColorBrush Color="#FFA4A3A8"/>
+            <SolidColorBrush Color="#FF4E4D51"/>
+            <SolidColorBrush Color="#FF343336"/>
+            <SolidColorBrush Color="#FFCEB966"/>
+            <SolidColorBrush Color="#FFF5F1E0"/>
+            <SolidColorBrush Color="#FFEBE3C1"/>
+            <SolidColorBrush Color="#FFE1D5A3"/>
+            <SolidColorBrush Color="#FFAE9638"/>
+            <SolidColorBrush Color="#FF746425"/>
+            <SolidColorBrush Color="#FF9CB084"/>
+            <SolidColorBrush Color="#FFEBEFE6"/>
+            <SolidColorBrush Color="#FFD7DFCD"/>
+            <SolidColorBrush Color="#FFC3CFB5"/>
+            <SolidColorBrush Color="#FF758C5A"/>
+            <SolidColorBrush Color="#FF4E5D3C"/>
+            <SolidColorBrush Color="#FF6BB1C9"/>
+            <SolidColorBrush Color="#FFE1EFF4"/>
+            <SolidColorBrush Color="#FFC3DFE9"/>
+            <SolidColorBrush Color="#FFA6D0DE"/>
+            <SolidColorBrush Color="#FF3D8DA9"/>
+            <SolidColorBrush Color="#FF295E70"/>
+            <SolidColorBrush Color="#FF6585CF"/>
+            <SolidColorBrush Color="#FFE0E6F5"/>
+            <SolidColorBrush Color="#FFC1CEEB"/>
+            <SolidColorBrush Color="#FFA2B5E2"/>
+            <SolidColorBrush Color="#FF365BB0"/>
+            <SolidColorBrush Color="#FF243C75"/>
+            <SolidColorBrush Color="#FF7E6BC9"/>
+            <SolidColorBrush Color="#FFE5E1F4"/>
+            <SolidColorBrush Color="#FFCBC3E9"/>
+            <SolidColorBrush Color="#FFB1A6DE"/>
+            <SolidColorBrush Color="#FF533DA9"/>
+            <SolidColorBrush Color="#FF372970"/>
+            <SolidColorBrush Color="#FFA379BB"/>
+            <SolidColorBrush Color="#FFECE4F1"/>
+            <SolidColorBrush Color="#FFDAC9E3"/>
+            <SolidColorBrush Color="#FFC7AED6"/>
+            <SolidColorBrush Color="#FF7D4D99"/>
+            <SolidColorBrush Color="#FF533366"/>
         </x:Array>
        
 
     </FrameworkElement.Resources>
-    <ScrollViewer x:Uid="ScrollViewer_1" HorizontalScrollBarVisibility="Disabled" DataContext="{Binding ElementName=parent}">
-        <ListBox x:Uid="ListBox_1" ItemsSource="{StaticResource slcolors}" SelectedItem="{Binding Path=CPColorBrush, Mode=TwoWay}" >
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" DataContext="{Binding ElementName=parent}">
+        <ListBox ItemsSource="{StaticResource slcolors}" SelectedItem="{Binding Path=CPColorBrush, Mode=TwoWay}" >
             <ListBox.ItemsPanel>
-                <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
-                    <WrapPanel x:Uid="WrapPanel_1"></WrapPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel></WrapPanel>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>
-                <Style x:Uid="Style_1" TargetType="ListBoxItem">
-                    <Setter x:Uid="Setter_1" Property="Padding" Value="0" />
-                    <Setter x:Uid="Setter_2" Property="Margin" Value="1" />
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="1" />
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
-                <DataTemplate x:Uid="DataTemplate_1">
-                    <Border  x:Uid="Border_1" Height="30" Width="30"  Margin="0" Background="{Binding}">
+                <DataTemplate>
+                    <Border  Height="30" Width="30"  Margin="0" Background="{Binding}">
                         <Border.Style>
                             <Style>
                                 <Style.Triggers>

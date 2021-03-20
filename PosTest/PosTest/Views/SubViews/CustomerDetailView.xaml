@@ -15,13 +15,13 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Uid="ResourceDictionary_2"
+                <ResourceDictionary
                                     Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_3"
+                <ResourceDictionary
                                     Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_4"
+                <ResourceDictionary
                                     Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary x:Uid="ResourceDictionary_5"
+                <ResourceDictionary
                                     Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:NegateBooleanValueConverter x:Key="NegateBooleanValueConverter" />
@@ -194,15 +194,15 @@
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                         cal:Message.Attach="[Event Click] = [Action Save()]"
                         IsEnabled="{Binding IsSaveEnabled}">
-                    <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
-                        <materialDesign:PackIcon x:Uid="materialdesign:PackIcon_12" Kind="ContentSave"
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave"
                                                  HorizontalAlignment="Right" Width="25" Height="25" />
                     </StackPanel>
                 </Button>
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                         cal:Message.Attach="[Event Click] = [Action Cancel()]" Margin="10">
-                    <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                        <materialDesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="CloseBox"
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseBox"
                                                  HorizontalAlignment="Right" Width="25" Height="25" />
                     </StackPanel>
                 </Button>

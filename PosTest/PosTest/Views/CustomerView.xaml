@@ -16,7 +16,7 @@
 
     </UserControl.Resources>
 
-    <materialdesign:DialogHost x:Uid="materialdesign:DialogHost_1" IsOpen="{Binding IsEditing}">
+    <materialdesign:DialogHost IsOpen="{Binding IsEditing}">
         <materialdesign:DialogHost.DialogContent>
             <!--<subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>-->
             <ContentControl Content="{Binding DetailView}"></ContentControl>
@@ -28,26 +28,26 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
-            <materialdesign:ColorZone x:Uid="materialdesign:ColorZone_1" Mode="PrimaryDark" Grid.Row="0" Margin="0 0 0 20" CornerRadius="2" materialdesign:ShadowAssist.ShadowDepth="Depth2">
-                <Grid x:Uid="Grid_3">
+            <materialdesign:ColorZone Mode="PrimaryDark" Grid.Row="0" Margin="0 0 0 20" CornerRadius="2" materialdesign:ShadowAssist.ShadowDepth="Depth2">
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition x:Uid="RowDefinition_7" Height="*"/>
-                        <RowDefinition x:Uid="RowDefinition_8" Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
             
-                    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" Margin="8 8 8 3" Grid.Row="0" >
-                        <Border x:Uid="Border_1" Background="White" MaxHeight="30" CornerRadius="3" Margin="0 0 50 0" ToolTip="Enter to search, ignore case">
-                            <Grid x:Uid="Grid_4">
+                    <StackPanel Orientation="Horizontal" Margin="8 8 8 3" Grid.Row="0" >
+                        <Border Background="White" MaxHeight="30" CornerRadius="3" Margin="0 0 50 0" ToolTip="Enter to search, ignore case">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition x:Uid="ColumnDefinition_3" Width="Auto" />
-                                    <ColumnDefinition x:Uid="ColumnDefinition_4" Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button x:Uid="SearchButton" Style="{DynamicResource MaterialDesignToolButton}"
+                                <Button Style="{DynamicResource MaterialDesignToolButton}"
                                         x:Name="SearchButton" Height="24" Width="24">
-                                    <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_2" Kind="Magnify" Opacity=".56" />
+                                    <materialdesign:PackIcon Kind="Magnify" Opacity=".56" />
                                 </Button>
                                 <!--KeyDown="Search_OnKeyDown"-->
-                                <TextBox x:Uid="SearchBox" Grid.Column="1" Margin="5 0 0 0"  FontSize="18" FontWeight="Bold"
+                                <TextBox Grid.Column="1" Margin="5 0 0 0"  FontSize="18" FontWeight="Bold"
                                          x:Name="SearchBox"
                                          materialdesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0"
                                          MinWidth="230" VerticalAlignment="Center" 
@@ -56,32 +56,32 @@
                             </Grid>
                         </Border>
 
-                        <Button  x:Uid="Button_1" Margin="4 0 4 0" Padding="3" HorizontalAlignment="Right" >
-                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_3" Kind="ViewGridOutline"  Width="25" Height="25" Foreground="White" />
+                        <Button  Margin="4 0 4 0" Padding="3" HorizontalAlignment="Right" >
+                            <materialdesign:PackIcon Kind="ViewGridOutline"  Width="25" Height="25" Foreground="White" />
                         </Button>
                 
-                        <Button  x:Uid="Button_2" Margin="4 0 4 0" Padding="3">
-                            <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_4" Kind="ViewList" Width="25" Height="25" Foreground="White"/>
+                        <Button  Margin="4 0 4 0" Padding="3">
+                            <materialdesign:PackIcon Kind="ViewList" Width="25" Height="25" Foreground="White"/>
                         </Button>
                 
                     </StackPanel>
-                    <StackPanel x:Uid="StackPanel_2" Grid.Row="1" Orientation="Horizontal" Margin="3 0 3 3">
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="3 0 3 3">
                         <StackPanel.Resources>
-                            <Style x:Uid="Style_1" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                                 <Style.Triggers>
-                                    <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding ElementName=SearchBox, Path=Text}" Value="">
-                                        <Setter x:Uid="Setter_1" Property="Visibility" Value="Hidden"></Setter>
+                                    <DataTrigger Binding="{Binding ElementName=SearchBox, Path=Text}" Value="">
+                                        <Setter Property="Visibility" Value="Hidden"></Setter>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <Button x:Uid="Button_3" Margin="5" Height="40" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" Foreground="White" >
+                        <Button Margin="5" Height="40" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" Foreground="White" >
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="Create &amp; Save"  FontWeight="Thin"></TextBlock>
                                 <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button x:Uid="Button_4" Margin="5" Height="40"  caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" Foreground="White">
+                        <Button Margin="5" Height="40"  caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" Foreground="White">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="Create &amp; Edit"  FontWeight="Thin"></TextBlock>
                                 <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>

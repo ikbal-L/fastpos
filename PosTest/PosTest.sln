@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationUsingSatelliteA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Attributes", "Attributes\Attributes.csproj", "{0AAE43F2-D42A-4EA4-8EDC-CCA3F626A5E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastPosFrontend", "FastPosFrontend\FastPosFrontend.csproj", "{9AF58E0B-E90F-408D-A3ED-476F62B7DEBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{0AAE43F2-D42A-4EA4-8EDC-CCA3F626A5E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AAE43F2-D42A-4EA4-8EDC-CCA3F626A5E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AAE43F2-D42A-4EA4-8EDC-CCA3F626A5E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF58E0B-E90F-408D-A3ED-476F62B7DEBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF58E0B-E90F-408D-A3ED-476F62B7DEBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF58E0B-E90F-408D-A3ED-476F62B7DEBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF58E0B-E90F-408D-A3ED-476F62B7DEBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

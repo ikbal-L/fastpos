@@ -1,0 +1,45 @@
+﻿<Application x:Class="FastPosFrontend.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FastPosFrontend"
+             xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+             >
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    
+                </ResourceDictionary>
+                <!--Mateirla design-->
+                <wpf:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+
+                <ResourceDictionary Source="/Resources/Styles/Brushes.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/AdditiveListStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/OrderItemListStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/OrdreItem.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Products.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Additives.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Reports.xaml"/>
+
+                <!--ToastNotifications-->
+                <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
+                <ResourceDictionary Source="i18n/Localization.xaml"></ResourceDictionary>
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <FontFamily x:Key="DigitalFontFamily">/PosTest;Component/Fonts/#digital-7</FontFamily>
+            <FontFamily x:Key="DSDIGIFontFamily">/PosTest;Component/Fonts/#DS-DIGI</FontFamily>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

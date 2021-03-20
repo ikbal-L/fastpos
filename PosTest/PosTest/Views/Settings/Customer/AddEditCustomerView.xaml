@@ -140,14 +140,14 @@
                                            caliburn:Message.Attach="[Event Click] = [Action Save()]"
                                             IsEnabled="{Binding IsSaveEnabled}">
                            
-                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_12" Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
+                                <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
                          
                         </Button>
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                                  caliburn:Message.Attach="[Event Click] = [Action Close()]"
                                              Margin="4 1 0 1">
 
-                                <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_13" Kind="CloseBox" HorizontalAlignment="Right" Width="25" Height="25" />
+                                <materialdesign:PackIcon Kind="CloseBox" HorizontalAlignment="Right" Width="25" Height="25" />
                             </Button>
                     </StackPanel>
                 </materialdesign:ColorZone>

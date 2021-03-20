@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.SubViews.ProductEditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:convert="clr-namespace:FastPosFrontend.Converters"
+             xmlns:caliburn="http://www.caliburnproject.org" 
+             xmlns:slcontrole="clr-namespace:FastPosFrontend.SL.Controls"
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="460"  >
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <convert:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
+
+            <Style  TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" >
+                <Setter Property="Foreground" Value="#333333" />
+                <Setter Property="MaxLength" Value="40" />
+                <Setter Property="Width" Value="392" />
+
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                    </Trigger>
+                </Style.Triggers>
+
+
+            </Style>
+
+        </ResourceDictionary>
+
+
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"  Margin="2">
+            <TextBox materialdesign:HintAssist.Hint="Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
+                     Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" />
+        </Border> 
+        
+        <Border Grid.Row="1"  Margin="2">
+            <TextBox materialdesign:HintAssist.Hint="Price" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
+                     Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" />
+        </Border>
+        
+        <Border Grid.Row="2"  Margin="2">
+            <TextBox materialdesign:HintAssist.Hint="Unit" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                                     materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
+                     Text="{Binding Unit,UpdateSourceTrigger=PropertyChanged}" />
+        </Border>
+
+        <slcontrole:ColorPalette  Grid.Row="3" CPColorBrush="{Binding Product.Background,Converter={StaticResource scbtobrush}}"></slcontrole:ColorPalette>
+        
+        <!--List of additives-->
+        <!-- Visibility="{Binding Product.Additives,Converter={StaticResource ObjectToVisibility}}" -->
+        <local:AdditivesOfProductView Grid.Row="4" >
+        </local:AdditivesOfProductView>
+    </Grid>
+</UserControl>
