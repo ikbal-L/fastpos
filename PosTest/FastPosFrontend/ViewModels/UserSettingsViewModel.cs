@@ -11,12 +11,12 @@ namespace FastPosFrontend.ViewModels
         private User _selectedUser;
         private UserDetailViewModel _userDetailViewModel;
         private bool _isEditing;
-        private UserDetailView _subView;
+        //private UserDetailView _subView;
 
         public UserSettingsViewModel()
         {
             this.Title = "User Settings";
-            this.Content = new UserSettingsView() { DataContext = this };
+            //this.Content = new UserSettingsView() { DataContext = this };
             var userRepository = new UserBaseRepository();
             var roleRepository = new RoleRepository();
             StateManager.Instance.Manage(userRepository).Manage(roleRepository);
@@ -70,7 +70,7 @@ namespace FastPosFrontend.ViewModels
 
             IsEditing = true;
             UserDetailViewModel = new UserDetailViewModel(null,this);
-            SubView = new UserDetailView(){DataContext = UserDetailViewModel};
+            //SubView = new UserDetailView(){DataContext = UserDetailViewModel};
         }
 
         public void EditUser()
@@ -81,16 +81,16 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             UserDetailViewModel = new UserDetailViewModel(SelectedUser, this);
-            SubView = new UserDetailView() {DataContext = UserDetailViewModel};
+            //SubView = new UserDetailView() {DataContext = UserDetailViewModel};
             IsEditing = true;
             
         }
 
-        public UserDetailView SubView
-        {
-            get => _subView;
-            set => Set(ref _subView, value);
-        }
+        //public UserDetailView SubView
+        //{
+        //    get => _subView;
+        //    set => Set(ref _subView, value);
+        //}
 
         public void DeleteUser()
         {

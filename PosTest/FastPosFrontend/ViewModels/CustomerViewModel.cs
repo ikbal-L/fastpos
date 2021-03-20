@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.SubViewModel;
+using FastPosFrontend.Views.SubViews;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 

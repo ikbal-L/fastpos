@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.PaginationTestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
+             xmlns:src="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="listbox" 
+                 Grid.RowSpan="2"
+                 ex:ListPaginationEx.ItemsPerPage="{Binding ProductPageSize}"
+                 ex:ListPaginationEx.ItemsSource="{Binding Products}" 
+                 Width="200" Background="LightBlue">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type src:Product}">
+                    <Border>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="{Binding Price}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Content="Previous" Command="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.PreviousCommand)}" 
+                    IsEnabled="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.CanExecutePrevious)}"/>
+            <TextBox Text="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.CurrentPageNumber), Mode=TwoWay}"/>
+            <TextBox Text="{Binding ElementName=listbox, Path=SelectedIndex, Mode=TwoWay}"/>
+            <TextBlock Margin="10">
+                <Run Text="Number of Pages"/>
+                <Run Text="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.NumberOfPages), Mode=TwoWay}"/>
+            </TextBlock> 
+            <Button Content="Next" Command="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.NextCommand)}" 
+                    IsEnabled="{Binding ElementName=listbox, Path=(ex:ListPaginationEx.CanExecuteMext)}"/>
+        </StackPanel>
+
+        <Button x:Name="Close"  Grid.Row="3" Content="Close" />
+        <Popup PlacementTarget="{Binding ElementName=listbox}" Placement="Right" Margin="-10" AllowsTransparency="True">
+            <StackPanel Background="Transparent">
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                        <materialDesign:PackIcon Kind="TrashCanOutline" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="ShapePlus" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="Plus" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="Minus" Height="25"  Width="25"/>
+                </Button>
+                <Button  Foreground="#2496ed" Background="WhiteSmoke" Margin="0 0 0 15"
+                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                    <materialDesign:PackIcon Kind="CashMinus" Height="25"  Width="25"/>
+                </Button>
+            </StackPanel>
+            <Popup.Style>
+                <Style TargetType="Popup">
+                    <Setter Property="IsOpen" Value="True"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=listbox, Path=SelectedIndex}" Value="-1">
+                            <Setter Property="IsOpen" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Popup.Style>
+        </Popup>
+        <!--Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"-->
+        <!--<materialDesign:PopupBox
+                Grid.Row="3"
+                Background="Gray"
+                PlacementMode="LeftAndAlignMiddles"
+                UnfurlOrientation="Horizontal"
+                ToolTip="Manage items"
+                Margin="0 0 10 10"
+                IsPopupOpen="True"
+                IsManipulationEnabled="False"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom">
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            ToolTip="Add an item"
+                            Command="{Binding AddCommand}">
+                                    <Path
+                              Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                              Stretch="Uniform"
+                              Width="15"
+                              Height="15"
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+                        </Button>
+                        <Button
+                            ToolTip="Remove selected item"
+                            Command="{Binding RemoveSelectedItemCommand}">
+                                    <Path
+                              Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+                              Stretch="Uniform"
+                              Width="15"
+                              Height="15"
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+                        </Button>
+                    </StackPanel>
+        </materialDesign:PopupBox>-->
+    </Grid>
+
+</UserControl>
+    

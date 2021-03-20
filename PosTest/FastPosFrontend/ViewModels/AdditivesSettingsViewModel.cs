@@ -9,6 +9,7 @@ using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
+using FastPosFrontend.Views;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;

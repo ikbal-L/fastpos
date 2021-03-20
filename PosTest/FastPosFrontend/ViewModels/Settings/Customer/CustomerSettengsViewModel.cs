@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Windows.Controls;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Views.Settings;
+using FastPosFrontend.Views.Settings.Customer;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels.Settings.Customer

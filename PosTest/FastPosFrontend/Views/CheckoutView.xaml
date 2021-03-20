@@ -7,13 +7,15 @@
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:views="clr-namespace:FastPosFrontend.Views"
              xmlns:viewmodels="clr-namespace:FastPosFrontend.ViewModels"
              xmlns:subviews="clr-namespace:FastPosFrontend.Views.SubViews"
              xmlns:subviewmodels="clr-namespace:FastPosFrontend.ViewModels.SubViewModel"
              xmlns:extensions="clr-namespace:FastPosFrontend.Extensions"
              xmlns:helpers="clr-namespace:FastPosFrontend.Helpers"
              xmlns:convert="clr-namespace:FastPosFrontend.Converters"
-             xmlns:views="clr-namespace:FastPosFrontend.Views"
+             xmlns:views1="clr-namespace:FastPosFrontend.Views"
+             xmlns:subViews="clr-namespace:FastPosFrontend.Views.SubViews"
              Background="{StaticResource MaterialDesignPaper}"
              x:Name="CheckoutViewUserControl"
              mc:Ignorable="d"
@@ -23,31 +25,31 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <DataTemplate DataType="{x:Type viewmodels:SplitViewModel}">
-                <views:SplitView />
+                <views1:SplitView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewmodels:TablesViewModel}" x:Key="tableFullView">
-                <views:TablesView />
+                <views1:TablesView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewmodels:TablesViewModel}" x:Key="tableButtomView">
-                <subviews:TableButtomView />
+                <subViews:TableButtomView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type subviewmodels:DelivereyViewModel}">
-                <subviews:DelivereyView />
+                <subViews:DelivereyView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type subviewmodels:WaitingViewModel}">
-                <subviews:WaitingView />
+                <subViews:WaitingView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type subviewmodels:TakeawayViewModel}">
-                <subviews:TakeAwayView />
+                <subViews:TakeAwayView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type subviewmodels:WarningViewModel}">
-                <subviews:WarningView />
+                <subViews:WarningView />
             </DataTemplate>
 
             <helpers:TableViewTemplateSelector x:Key="tableViewSelector"
@@ -329,7 +331,7 @@
 
                         <Border Grid.Row="0" Grid.RowSpan="1"
                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=customer}">
-                            <views:CustomerView x:Name="lcustomer" DataContext="{Binding CustomerViewModel}" />
+                            <views1:CustomerView x:Name="lcustomer" DataContext="{Binding CustomerViewModel}" />
                         </Border>
 
                         <Button Grid.Row="1" Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
@@ -407,7 +409,7 @@
                                     </Grid.RowDefinitions>
 
                                     <DockPanel>
-                                        <materialdesign:PackIcon Kind="CoinsOutline" Width="40" Height="40" Padding="0"
+                                        <materialdesign:PackIcon Kind="CoinOutline" Width="40" Height="40" Padding="0"
                                                                  Foreground="#26ff26" />
                                         <TextBlock Foreground="#26ff26" TextAlignment="Right"
                                                    FontFamily="{StaticResource DigitalFontFamily}"
@@ -723,7 +725,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-                <subviews:ProductNavigation Grid.Row="0" />
+                <subViews:ProductNavigation Grid.Row="0" />
 
             </Grid>
 
@@ -866,16 +868,16 @@
                 </Grid>
                 <Grid  Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"  Height="240">
 
-                    <subviews:TableButtomView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                    <subViews:TableButtomView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
                                               DataContext="{Binding TablesViewModel}"
                                               Visibility="{Binding ElementName=tableCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
-                    <subviews:DelivereyView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                    <subViews:DelivereyView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
                                             DataContext="{Binding DelivereyViewModel}"
                                             Visibility="{Binding ElementName=delivereyCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
-                    <subviews:WaitingView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                    <subViews:WaitingView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
                                           DataContext="{Binding WaitingViewModel}"
                                           Visibility="{Binding ElementName=waitingCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
-                    <subviews:TakeAwayView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
+                    <subViews:TakeAwayView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
                                            DataContext="{Binding TakeAwayViewModel}"
                                            Visibility="{Binding ElementName=takeawayCheckBtn, Path=IsChecked, Converter={StaticResource BoolToVisibility}}" />
                 </Grid>

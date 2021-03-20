@@ -9,9 +9,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    
+                    <local:ShellBootstrapper x:Key="bootstrapper"></local:ShellBootstrapper>
                 </ResourceDictionary>
                 <!--Mateirla design-->
+                
                 <wpf:BundledTheme  BaseTheme="Light" PrimaryColor="LightBlue" SecondaryColor="DeepPurple" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 

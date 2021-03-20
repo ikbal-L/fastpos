@@ -17,6 +17,7 @@ using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
+using FastPosFrontend.Views;
 using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using NLog;

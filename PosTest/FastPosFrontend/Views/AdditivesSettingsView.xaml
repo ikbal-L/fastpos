@@ -2,19 +2,20 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:FastPosFrontend.SL.Controls"
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
              xmlns:subviewmodels="clr-namespace:FastPosFrontend.ViewModels.SubViewModel"
-             xmlns:subViews="clr-namespace:FastPosFrontend.Views.SubViews"
+             xmlns:subViews1="clr-namespace:FastPosFrontend.Views.SubViews"
              mc:Ignorable="d" 
              d:DesignHeight="610" d:DesignWidth="640">
         <UserControl.Resources>
             <converters:SolidColorBrushToBrushConverter x:Key="scbtobrush"/>
         <DataTemplate DataType="{x:Type subviewmodels:WarningViewModel}" x:Key="DialogTemplate">
-            <subViews:WarningView />
+            <subViews1:WarningView />
         </DataTemplate>
     </UserControl.Resources>
     <Grid >

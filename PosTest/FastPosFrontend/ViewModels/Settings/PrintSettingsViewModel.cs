@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Views.Settings;
 using Newtonsoft.Json;
 
 namespace FastPosFrontend.ViewModels.Settings

@@ -1,0 +1,275 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.UserDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:caliburn="http://www.caliburnproject.org"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" x:Key="PhoneItemStyle"
+               TargetType="Button">
+            <Setter Property="Visibility" Value="Hidden" />
+            <Style.Triggers>
+                <DataTrigger Value="true">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                            <Binding ElementName="UserFormPhoneList" Path="SelectedItem" />
+                            <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
+                        </MultiBinding>
+                    </DataTrigger.Binding>
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" x:Key="RoleItemStyle"
+               TargetType="Button">
+            <Setter Property="Visibility" Value="Hidden" />
+            <Style.Triggers>
+                <DataTrigger Value="true">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                            <Binding ElementName="UserFormRoleList" Path="SelectedItem" />
+                            <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
+                        </MultiBinding>
+                    </DataTrigger.Binding>
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Orientation="Vertical">
+
+        <Grid Width="500" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                     materialDesign:HintAssist.Hint="Username" Margin="5"
+                     Text="{Binding Username,UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                         materialDesign:HintAssist.Hint="Password" Margin="5"
+                         Text="{Binding Password}" />
+                <Button Grid.Column="1"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Height="40"
+                        Margin="5"
+                        ToolTip="Generate Random Password"
+                        VerticalAlignment="Center">
+                    GENERATE
+                </Button>
+            </Grid>
+            <TextBox Grid.Row="2" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                     materialDesign:HintAssist.Hint="PinCode" Margin="5" />
+            <TextBox Grid.Row="3" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                     materialDesign:HintAssist.Hint="First Name" Margin="5"
+                     Text="{Binding FirstName}" />
+            <TextBox Grid.Row="4" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                     materialDesign:HintAssist.Hint="Last Name" Margin="5"
+                     Text="{Binding LastName}" />
+            <TextBox Grid.Row="5" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                     materialDesign:HintAssist.Hint="Email" Margin="5"
+                     Text="{Binding Email}" />
+
+            <TabControl Grid.Row="6" Style="{StaticResource MaterialDesignTabControl}">
+
+
+                <TabItem>
+                    <TabItem.Header>
+                        <materialDesign:PackIcon
+                            Kind="CellphoneCog"
+                            Width="24"
+                            Height="24" />
+                    </TabItem.Header>
+                    <GroupBox Grid.Row="6"
+                              Header="Phone"
+                              Style="{DynamicResource MaterialDesignGroupBox}"
+                              Margin="5"
+                              materialDesign:ColorZoneAssist.Mode="Dark">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    Orientation="Horizontal" VerticalAlignment="Bottom">
+                                    <materialDesign:PackIcon
+                                        Kind="Cellphone"
+                                        Height="32"
+                                        Width="32"
+                                        VerticalAlignment="Center" />
+                                    <TextBlock
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                        Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <Grid>
+                            <materialDesign:DialogHost IsOpen="{Binding IsEditingPhone}" DialogMargin="200">
+                               <materialDesign:DialogHost.DialogContent>
+                                   <StackPanel Margin="15 15" VerticalAlignment="Center">
+                                        <TextBox materialDesign:HintAssist.Hint="Phone Number" MinWidth="250" Margin="10" Text="{Binding NewPhoneNumber}"></TextBox>
+                                       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 5">
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}" caliburn:Message.Attach="[Event Click] = [Action AddPhone()]">Add   </Button>
+                                           <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">Cancel</Button>
+                                       </StackPanel>
+                                   </StackPanel>
+                               </materialDesign:DialogHost.DialogContent>
+                               <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                       Content="{materialDesign:PackIcon AddThick}"
+                                       VerticalAlignment="top" HorizontalAlignment="Right"
+                                       Margin="0 -30 10 0"
+                                       Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
+                           </materialDesign:DialogHost>
+                            <ListBox ItemsSource="{Binding PhoneNumbers}"
+                                     x:Name="UserFormPhoneList">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="400">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding}" FontWeight="DemiBold" />
+                                            <Button Grid.Column="1" Style="{StaticResource PhoneItemStyle}"
+                                                    Content="{materialDesign:PackIcon Delete}"
+                                                    Width="30" Height="30" VerticalAlignment="Center"
+                                                    HorizontalAlignment="Right"
+                                                    caliburn:Message.Attach="[Event Click] = [Action RemovePhone($dataContext)]"
+                                                    caliburn:Action.TargetWithoutContext="{Binding ElementName=UserFormPhoneList,Path=DataContext}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            
+                        </Grid>
+                    </GroupBox>
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <materialDesign:PackIcon
+                            Kind="Security"
+                            Width="24"
+                            Height="24" />
+                    </TabItem.Header>
+                    <GroupBox Grid.Row="6"
+                              Header="UserRoles"
+                              Style="{DynamicResource MaterialDesignGroupBox}"
+                              Margin="5"
+                              materialDesign:ColorZoneAssist.Mode="Dark">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    Orientation="Horizontal" VerticalAlignment="Bottom">
+                                    <materialDesign:PackIcon
+                                        Kind="SecurityAccount"
+                                        Height="32"
+                                        Width="32"
+                                        VerticalAlignment="Center" />
+                                    <TextBlock
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                        Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <Grid>
+                            <materialDesign:DialogHost IsOpen="{Binding IsEditingRole}">
+                                <materialDesign:DialogHost.DialogContent>
+                                    <StackPanel Margin="15 15" VerticalAlignment="Center">
+                                        <ComboBox materialDesign:HintAssist.Hint="Role" MinWidth="250" Margin="10" ItemsSource="{Binding Roles}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedRoleToAdd}">
+                                           
+                                        </ComboBox>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 5">
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                    caliburn:Message.Attach="[Event Click] = [Action AddRole()]">Add</Button>
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">Cancel</Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </materialDesign:DialogHost.DialogContent>
+                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        Content="{materialDesign:PackIcon AddThick}"
+                                        VerticalAlignment="top" HorizontalAlignment="Right"
+                                        Margin="0 -30 10 0"
+                                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
+                            </materialDesign:DialogHost>
+                            <ListBox ItemsSource="{Binding UserRoles}"
+                                     SelectedItem="{Binding SelectedUserRole}"
+                                     x:Name="UserFormRoleList">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate >
+                                        <Grid Width="400">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Name}" FontWeight="DemiBold" />
+                                            <Button Grid.Column="1" Style="{StaticResource RoleItemStyle}"
+                                                    Content="{materialDesign:PackIcon Delete}"
+                                                    Width="30" Height="30" VerticalAlignment="Center"
+                                                    HorizontalAlignment="Right"
+                                                    caliburn:Message.Attach="[Event Click] = [Action RemoveRole()]"
+                                                    caliburn:Action.TargetWithoutContext="{Binding ElementName=UserFormRoleList,Path=DataContext}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </GroupBox>
+                </TabItem>
+
+
+                <TabItem>
+                    <TabItem.Header>
+                        <materialDesign:PackIcon
+                            Kind="AccountCog"
+                            Width="24"
+                            Height="24" />
+                    </TabItem.Header>
+
+                </TabItem>
+
+
+            </TabControl>
+
+
+        </Grid>
+
+
+        <materialDesign:ColorZone Margin="0"
+                                  Mode="PrimaryDark"
+                                  Padding="16"
+
+                                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                  ClipToBounds="True">
+            <StackPanel
+                Orientation="Horizontal">
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Content="{materialDesign:PackIcon ContentSave}"
+                        caliburn:Message.Attach="[Event Click] = [Action SaveUser()]" />
+                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        Content="{materialDesign:PackIcon Cancel}"
+                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+            </StackPanel>
+        </materialDesign:ColorZone>
+
+    </StackPanel>
+</UserControl>
