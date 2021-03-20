@@ -53,11 +53,11 @@
             <materialDesign:DialogHost.DialogContent>
 
 
-                <!--<local:UserDetailView 
-                    DataContext="{Binding ElementName=UserSettings,Path=DataContext.UserDetailViewModel}"></local:UserDetailView>-->
-                <ContentControl Content="{Binding SubView}">
+                <local:UserDetailView 
+                    DataContext="{Binding UserDetailViewModel}"></local:UserDetailView>
+                <!--<ContentControl Content="{Binding SubView}">
 
-                </ContentControl>
+                </ContentControl>-->
 
 
             </materialDesign:DialogHost.DialogContent>

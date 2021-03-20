@@ -153,6 +153,7 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_paymentRepository)
                 .Manage(_userRepository);
 
+            //(this.Parent as Conductor<object>).ActivateItem(new UserSettingsViewModel(){Parent = this.Parent});
 
             Checkout();
             //CheckoutViewModel checkoutViewModel =

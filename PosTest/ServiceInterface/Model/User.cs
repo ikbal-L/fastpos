@@ -32,11 +32,19 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required(AllowEmptyStrings = false)]
-        public string FirstName { get; set; }
+        public string FirstName
+        {
+            get => _firstName;
+            set => Set(ref _firstName, value);
+        }
 
         [DataMember]
         [Required(AllowEmptyStrings = false)]
-        public string LastName { get; set; }
+        public string LastName
+        {
+            get => _lastName;
+            set => Set(ref _lastName, value);
+        }
 
         [DataMember]
         [Required(AllowEmptyStrings = false)]
@@ -61,6 +69,8 @@ namespace ServiceInterface.Model
         private string _username;
         private BindableCollection<string> _phoneNumbers;
         private bool _enabled = true;
+        private string _firstName;
+        private string _lastName;
 
         [DataMember]
         public BindableCollection<string> PhoneNumbers

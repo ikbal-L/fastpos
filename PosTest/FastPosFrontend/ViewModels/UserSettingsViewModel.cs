@@ -1,12 +1,13 @@
 ﻿using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
+using FastPosFrontend.Views;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class UserSettingsViewModel : SettingsItemBase
+    public class UserSettingsViewModel : /*SettingsItemBase*/ Screen
     {
         private User _selectedUser;
         private UserDetailViewModel _userDetailViewModel;
@@ -15,7 +16,7 @@ namespace FastPosFrontend.ViewModels
 
         public UserSettingsViewModel()
         {
-            this.Title = "User Settings";
+            //this.Title = "User Settings";
             //this.Content = new UserSettingsView() { DataContext = this };
             var userRepository = new UserBaseRepository();
             var roleRepository = new RoleRepository();
