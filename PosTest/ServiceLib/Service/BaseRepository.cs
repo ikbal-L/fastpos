@@ -81,6 +81,11 @@ namespace ServiceLib.Service
         {
             return GenericRest.DeleteThing<TReturn>(restApi.Action<TState>(EndPoint.Delete,id));
         }
+
+        public int Delete(IEnumerable<TIdentifier> ids)
+        {
+            return GenericRest.DeleteThing(restApi.Action<TState>(EndPoint.DeleteMany),ids);
+        }
     }
 
 
@@ -176,30 +181,30 @@ namespace ServiceLib.Service
     }
 
     [Export(typeof(ITableRepository))]
-    public class TableBaseRepository : BaseRepository<Table, long>,ITableRepository
+    public class TableRepository : BaseRepository<Table, long>,ITableRepository
     {
 
     }
 
     [Export(typeof(ICustomerRepository))]
-    public class CustomerBaseRepository : BaseRepository<Customer, long>, ICustomerRepository
+    public class CustomerRepository : BaseRepository<Customer, long>, ICustomerRepository
     {
 
     }
 
     [Export(typeof(IWaiterRepository))]
-    public class WaiterBaseRepository : BaseRepository<Waiter, long>, IWaiterRepository
+    public class WaiterRepository : BaseRepository<Waiter, long>, IWaiterRepository
     {
 
     }
 
     [Export(typeof(IDeliverymanRepository))]
-    public class DeliverymanBaseRepository : BaseRepository<Deliveryman, long>, IDeliverymanRepository
+    public class DeliverymanRepository : BaseRepository<Deliveryman, long>, IDeliverymanRepository
     {
 
     }
     [Export(typeof(IPaymentRepository))]
-    public class PaymentBaseRepository : BaseRepository<Payment, long>, IPaymentRepository
+    public class PaymentRepository : BaseRepository<Payment, long>, IPaymentRepository
     {
         public PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId)
         {
@@ -213,9 +218,9 @@ namespace ServiceLib.Service
     }
 
     [Export(typeof(IUserRepository))]
-    public class UserBaseRepository : BaseRepository<User, long>, IUserRepository
+    public class UserRepository : BaseRepository<User, long>, IUserRepository
     {
-        public UserBaseRepository()
+        public UserRepository()
         {
             restApi.Prefix = "config";
         }

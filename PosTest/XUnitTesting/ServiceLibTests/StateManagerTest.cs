@@ -14,24 +14,25 @@ namespace XUnitTesting.ServiceLibTests
 {
     public class StateManagerTest 
     {
-        private Mock<IProductRepository> _productRepository;
-        private Mock<ICategoryRepository> _categoryRepositroy;
-
         public StateManagerTest()
         {
-            _productRepository = new Mock<IProductRepository>();
-            _categoryRepositroy = new Mock<ICategoryRepository>();
-            _productRepository.Setup(pr => pr.Get()).Returns((200, MockingHelpers.GetAllProducts()));
-            _categoryRepositroy.Setup(cr => cr.Get()).Returns((200, MockingHelpers.GetAllCategories()));
-
+            var productRepository = new Mock<IProductRepository>();
+            var categoryRepository = new Mock<ICategoryRepository>();
+            
+            productRepository.Setup(pr => pr.Get()).Returns((200, MockingHelpers.GetAllProducts()));
+            categoryRepository.Setup(cr => cr.Get()).Returns((200, MockingHelpers.GetAllCategories()));
+            
             StateManager.Instance
-                .Manage(_productRepository.Object)
-                .Manage(_categoryRepositroy.Object);
+                .Manage(productRepository.Object)
+                .Manage(categoryRepository.Object);
+            var authService = new Authentification();
+            var resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+
 
         }
 
         [Fact]
-        public void GetTState_TStateIsUmmangedState_ThrowsStateNotManagedExceptionTState()
+        public void GetTState_TStateIsUnmanagedState_ThrowsStateNotManagedExceptionTState()
         {
             //Arrange 
 
@@ -46,6 +47,15 @@ namespace XUnitTesting.ServiceLibTests
             var ex2 = Assert.Throws<StateNotManagedException<Table>>(act2);
             var ex3 = Assert.Throws<StateNotManagedException<Table>>(act3);
             var ex4 = Assert.Throws<StateNotManagedException<Table>>(act4);
+        }
+        [Fact]
+        public void DeleteTState_IdListNotNullOrEmpty_TargetEntitiesAreDeleted()
+        {
+            var tablesRepository = new TableRepository();
+            long[] ids = {1, 2, 3, 5};
+            StateManager.Instance.Manage(tablesRepository);
+            var result = StateManager.Delete<Table,long>(ids);
+            Assert.True(result);
         }
     }
 }

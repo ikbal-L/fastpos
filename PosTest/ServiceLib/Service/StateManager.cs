@@ -125,10 +125,7 @@ namespace ServiceLib.Service
             return(false, default(TReturn));
         }
 
-        public static bool Save<TState>(TState state) where TState : IState<long>
-        {
-            return Save<TState, long>(state);
-        }
+        
         public static (bool,TReturn) SaveAndReturn<TState,TReturn>(TState state) where TState : IState<long>
         {
             return Save<TReturn,TState, long>(state);
@@ -139,9 +136,14 @@ namespace ServiceLib.Service
             var key = typeof(TState);
             IEnumerable<string> errors = null;
 
+            if (state.Any(tState => tState.Id!= null ))
+            {
+                throw new ArgumentException("State must be unmanaged");
+            }
+
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-                var status = service.Update(state);
+                var status = service.Save(state);
 
                 if ((HttpStatusCode)status == HttpStatusCode.OK || (HttpStatusCode)status == HttpStatusCode.Created) return true;
             }
@@ -180,19 +182,47 @@ namespace ServiceLib.Service
                 {
                     throw new InvalidOperationException("State must have an Id");
                 }
-                else
-                {
-                    return service.Delete<TReturn>((long)state.Id);
-                }
+
+                return service.Delete<TReturn>((long)state.Id);
 
             }
 
             return (false, default(TReturn));
         }
-        public static bool Delete<TState>(TState state) where TState : IState<long>
+
+        public static bool Delete<TState, TIdentifier>(IEnumerable<TIdentifier> ids) where TState : IState<TIdentifier> where TIdentifier : struct
         {
-            return Delete<TState, long>(state);
+            var key = typeof(TState);
+            IEnumerable<string> errors = null;
+
+            if (!(Service[key] is IRepository<TState, TIdentifier> service)) return false;
+            var status = -1;
+            if (!ids.Any())
+            {
+                throw new InvalidOperationException("Set ids to delete");
+            }
+
+            status = service.Delete(ids);
+            if (status!= 200) return false;
+
+            if ((State[key] is ICollection<TState> tState))
+            {
+                IEnumerable<TState> stateToRemove;
+                foreach (var state in tState.ToList())
+                {
+                    if (state.Id != null && ids.Contains(state.Id.Value))
+                    {
+                        tState.Remove(state);
+                    }
+                }
+            }
+
+            return true;
         }
+
+        
+
+
         private static void Fetch<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
         {
             Fetch<TState,TIdentifier>(null);
@@ -206,7 +236,14 @@ namespace ServiceLib.Service
                 var (status, data) = string.IsNullOrEmpty(predicate)?service.Get(): service.Get(predicate);
                 //ServiceHelper.HandleStatusCodeErrors();
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
-                State[key] = data;
+                if ((HttpStatusCode)status== HttpStatusCode.NoContent)
+                {
+                    State[key] = new List<TState>();
+                }
+                else
+                {
+                    State[key] = data;
+                }
 
             }
         }

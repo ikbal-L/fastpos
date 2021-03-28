@@ -127,7 +127,11 @@ namespace FastPosFrontend.ViewModels
                 // resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
                 resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
                 // resp = authService.Authenticate(new User(){Username = "admin",Password = "admin",Agent = Agent.Desktop});
-                int statusCode = 0;
+                if (resp == 401)
+                {
+                    ToastNotification.Notify("Wrong username or password");
+                    return;
+                }
                 
                
 
@@ -153,9 +157,10 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_paymentRepository)
                 .Manage(_userRepository);
 
-            //(this.Parent as Conductor<object>).ActivateItem(new UserSettingsViewModel(){Parent = this.Parent});
+            //(this.Parent as Conductor<object>).ActivateItem(new UserSettingsViewModel() { Parent = this.Parent });
 
             Checkout();
+
             //CheckoutViewModel checkoutViewModel =
             //    new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,
             //    productService,

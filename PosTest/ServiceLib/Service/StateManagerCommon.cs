@@ -32,7 +32,13 @@ namespace ServiceLib.Service
             return Save<TState, long>(state);
         }
 
-      
+
+        public static bool Save<TState>(TState state) where TState : IState<long>
+        {
+            return Save<TState, long>(state);
+        }
+
+
 
         private static void IsStateManaged<TState>(Type key) where TState : IState<long>
         {
@@ -42,6 +48,11 @@ namespace ServiceLib.Service
         public static void Refresh<TState>() where TState : IState<long>
         {
             Refresh<TState, long>();
+        }
+
+        public static bool Delete<TState>(TState state) where TState : IState<long>
+        {
+            return Delete<TState, long>(state);
         }
     }
 }

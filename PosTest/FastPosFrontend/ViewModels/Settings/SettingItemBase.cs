@@ -24,7 +24,7 @@ namespace FastPosFrontend.ViewModels.Settings
         }
         public int Index { get; set; } = 5;
 
-        public virtual void OnItemChanged(){}
+        public virtual void CommitChanges(){}
         
     }
 }

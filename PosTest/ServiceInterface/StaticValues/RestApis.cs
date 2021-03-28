@@ -75,6 +75,6 @@ namespace ServiceInterface.StaticValues
 
     public enum EndPoint
     {
-        GetAll,Get,GetMany,Save,SaveMany,Put,PutMany,Delete
+        GetAll,Get,GetMany,Save,SaveMany,Put,PutMany,Delete,DeleteMany
     }
 }

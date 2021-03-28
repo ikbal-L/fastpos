@@ -71,7 +71,8 @@
                         Height="40"
                         Margin="5"
                         ToolTip="Generate Random Password"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        caliburn:Message.Attach="[Event Click] = [Action GeneratePassword()]">
                     GENERATE
                 </Button>
             </Grid>

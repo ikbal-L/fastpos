@@ -253,7 +253,7 @@
                                             <DataTrigger Value="True">
                                                 <DataTrigger.Binding>
                                                     <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
-                                                        <Binding ElementName="AdditiveSettingsList" Path="Tag"/>
+                                                        <Binding ElementName="AdditiveSettingsList" Path="DataContext.ClipBoardAdditive"/>
                                                         <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
                                                     </MultiBinding>
                                                 </DataTrigger.Binding>

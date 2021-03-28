@@ -18,6 +18,7 @@ namespace ServiceInterface.Interface
         int Update(IEnumerable<TState> state);
         (bool ,TReturn) Save<TReturn>(TState state);
         (bool, TReturn) Delete<TReturn>(TIdentifier id);
+        int Delete(IEnumerable<TIdentifier> ids);
 
 
     }

@@ -40,10 +40,10 @@ namespace XUnitTesting.ViewModelTesting
             //).Returns(200);
             //_categoryService.Setup((cs => cs.UpdateCategory(new Category()))).Returns(200);
             int productPageSize = 30, categoryPageSize = 10;
-            _checkoutSettingsViewModel = new CheckoutSettingsViewModel(productPageSize, categoryPageSize
-                //,
-                //_productService.Object, _categoryService.Object
-                );
+            //_checkoutSettingsViewModel = new CheckoutSettingsViewModel(productPageSize, categoryPageSize
+            //    //,
+            //    //_productService.Object, _categoryService.Object
+            //    );
         }
 
         public delegate void GetGetAllProductsCallback(ref int categStatusCode,

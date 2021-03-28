@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using PasswordGenerator;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 
@@ -161,7 +162,13 @@ namespace FastPosFrontend.ViewModels
 
         public void GeneratePassword()
         {
-
+            var pwd = new Password()
+                .IncludeLowercase()
+                .IncludeUppercase()
+                .IncludeNumeric()
+                .IncludeSpecial()
+                .LengthRequired(60);
+            Password = pwd.Next();
         }
 
         public void AddRole()

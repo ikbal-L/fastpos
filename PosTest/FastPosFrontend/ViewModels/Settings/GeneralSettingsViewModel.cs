@@ -1,7 +1,12 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Views.Settings;
 using Newtonsoft.Json;
+using ServiceInterface.Model;
+using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
@@ -26,9 +31,11 @@ namespace FastPosFrontend.ViewModels.Settings
             this.Title = "General";
             Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
             var setting = Manager.LoadSettings();
-            Settings = setting != null ? setting : new GeneralSettings();
+            Settings = setting ?? new GeneralSettings();
             Settings.PropertyChanged += Settings_PropertyChanged;
+            setting.Initialized = true;
             this.Content = new GeneralSettingsView() { DataContext = this };
+            
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -38,19 +45,62 @@ namespace FastPosFrontend.ViewModels.Settings
     }
     public class GeneralSettings: PropertyChangedBase
     {
+        
+        private int _tableNumber;
+        private string _serverHost;
+        private bool _initialized = false;
+        private string _numberCategores;
 
-        private string _tableNumber;
-        [JsonProperty]
-        public string TableNumber
+        public bool Initialized
         {
-            get { return _tableNumber; }
+            get => _initialized;
+            set => Set(ref _initialized, value);
+        }
+
+        [JsonProperty]
+        public int TableNumber
+        {
+            get => _tableNumber;
             set
             {
-                _tableNumber = value;
-                NotifyOfPropertyChange(nameof(TableNumber));
+
+                if (value>=0)
+                {
+                    var oldValue = _tableNumber;
+                    var changesCommitted = false;
+                    if (Initialized)
+                    {
+                        var d = value- oldValue ;
+                        
+                        if (d < 0)
+                        {
+                            changesCommitted = DeleteTables(Math.Abs(d));
+                        }
+                        else if (d>0)
+                        {
+                            changesCommitted =CreateTables(Math.Abs(d));
+                        }
+
+                        if (changesCommitted)
+                        {
+                            Set(ref _tableNumber, value);
+                        }
+                    }
+                    else
+                    {
+                        Set(ref _tableNumber, value);
+                    }
+                }
+                else
+                {
+                    ToastNotification.Notify("Enter a valid number");
+                }
+                
+
+
             }
         }
-        private string _numberCategores;
+        
         [JsonProperty]
 
         public string NumberCategores
@@ -76,7 +126,8 @@ namespace FastPosFrontend.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(NumberProducts));
             }
         }
-        private string _serverHost;
+        
+
         [JsonProperty]
 
         public string ServerHost
@@ -87,6 +138,30 @@ namespace FastPosFrontend.ViewModels.Settings
                 _serverHost = value;
                 NotifyOfPropertyChange(nameof(ServerHost));
             }
+        }
+
+        public bool DeleteTables(int limit)
+        {
+             var ids = StateManager.Get<Table>().Where(t=>t.Id != null).OrderByDescending(table => table.Number).Take(limit).Select((table, i) => table.Id.Value );
+             return StateManager.Delete<Table,long>(ids);
+        }
+
+        public bool CreateTables(int limit)
+        {
+            var baseNumber = StateManager.Get<Table>().Max(table => table.Number);
+            IList<Table> tables = new List<Table>(limit);
+            for (int i = 1 ; i <= limit; i++)
+            {
+                
+                tables.Add( new Table(){Number = baseNumber+i});
+            }
+
+            var result = StateManager.Save(tables);
+            if (result)
+            {
+                
+            }
+            return result;
         }
 
     }

@@ -18,7 +18,7 @@ namespace FastPosFrontend.ViewModels
         {
             //this.Title = "User Settings";
             //this.Content = new UserSettingsView() { DataContext = this };
-            var userRepository = new UserBaseRepository();
+            var userRepository = new UserRepository();
             var roleRepository = new RoleRepository();
             StateManager.Instance.Manage(userRepository).Manage(roleRepository);
 

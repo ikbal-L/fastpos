@@ -201,11 +201,21 @@ namespace ServiceLib.Service
             return response;
         }
 
-        private static IRestResponse RestDelete(string path)
+        private static IRestResponse RestDelete(string path,object payload = null)
         {
             string token = AuthProvider.Instance.AuthorizationToken;
             var client = new RestClient(path);
             var request = new RestRequest(Method.DELETE);
+            if (payload!= null)
+            {
+                var json = JsonConvert.SerializeObject(payload,
+                       Newtonsoft.Json.Formatting.None,
+                       new JsonSerializerSettings
+                       {
+                           NullValueHandling = NullValueHandling.Ignore
+                       });
+                request.AddParameter("application/json", json, ParameterType.RequestBody); 
+            }
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", token);
             IRestResponse response = client.Execute(request);
@@ -252,10 +262,18 @@ namespace ServiceLib.Service
             return ((int)resp.StatusCode, t);// ;products
 
         }
-        public static (bool, TReturn) DeleteThing<TReturn>(string url)
+
+        public static int DeleteThing(string url, object payload = null)
         {
 
-            IRestResponse response =RestDelete(url);
+            IRestResponse response = RestDelete(url, payload);
+           
+            return (int)response.StatusCode;
+        }
+        public static (bool, TReturn) DeleteThing<TReturn>(string url,object payload = null)
+        {
+
+            IRestResponse response =RestDelete(url,payload);
             if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
             {
                 return (true, JsonConvert.DeserializeObject<TReturn>(response.Content));
