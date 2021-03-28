@@ -10,6 +10,7 @@
              xmlns:Controls="clr-namespace:FastPosFrontend.SL.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUc"
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              >
 
     <UserControl.Resources>
@@ -18,7 +19,8 @@
 
     <materialdesign:DialogHost IsOpen="{Binding IsEditing}">
         <materialdesign:DialogHost.DialogContent>
-            <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm}"  ></subviews:CustomerDetailView>
+            <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm,diag:PresentationTraceSources.TraceLevel=High}" 
+                                         ></subviews:CustomerDetailView>
             <!--<ContentControl Content="{Binding DetailView}"></ContentControl>-->
 
         </materialdesign:DialogHost.DialogContent>
