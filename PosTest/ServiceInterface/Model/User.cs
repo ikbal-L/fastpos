@@ -1,15 +1,7 @@
 ﻿using Caliburn.Micro;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using PosTest.Extensions;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace ServiceInterface.Model

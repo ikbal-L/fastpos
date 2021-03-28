@@ -473,11 +473,7 @@ namespace FastPosFrontend.ViewModels
         public CustomerViewModel CustomerViewModel
         {
             get => _customerViewModel;
-            set
-            {
-                _customerViewModel = value;
-                NotifyOfPropertyChange();
-            }
+            set => Set(ref _customerViewModel, value);
         }
 
         public DelivereyViewModel DelivereyViewModel
