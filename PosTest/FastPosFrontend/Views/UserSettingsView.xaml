@@ -53,8 +53,11 @@
             <materialDesign:DialogHost.DialogContent>
 
 
-                <local:UserDetailView 
-                    DataContext="{Binding UserDetailViewModel}"></local:UserDetailView>
+                <!--<local:UserDetailView 
+                    DataContext="{Binding UserDetailViewModel}"></local:UserDetailView>-->
+
+                <local:UserDetailView caliburn:View.Model="{Binding UserDetailViewModel}"
+                ></local:UserDetailView>
                 <!--<ContentControl Content="{Binding SubView}">
 
                 </ContentControl>-->
@@ -77,24 +80,31 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="model:User">
                             <materialDesign:Card materialDesign:UniformCornerRadius="10" 
-                                                 materialDesign:ShadowAssist.ShadowDepth="Depth3" >
-                                <StackPanel Orientation="Vertical" Margin="10">
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth3" Width="220px" Margin="20" >
+                                <StackPanel Orientation="Vertical" Margin="30"  >
+                                    <materialDesign:PackIcon 
+                                        HorizontalAlignment="Center" 
+                                        Foreground="{Binding Background,
+                                        FallbackValue=#4a4c4f}" Kind="AccountCircle"  Width="120" Height="120" />
                                     <TextBlock FontWeight="Bold" Margin="0 0 0 20" Text="{Binding Username}"
+                                               FontSize="20"
+                                               
                                                HorizontalAlignment="Center" />
                                     <TextBlock Text="{Binding FirstName}" />
                                     <TextBlock Text="{Binding LastName}" />
                                     <TextBlock Text="{Binding Email}" />
 
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock>
-                                            Enabled
+                                        <TextBlock FontWeight="DemiBold" VerticalAlignment="Center">
+                                            Active
                                         </TextBlock>
-                                        <ToggleButton
+                                        <ToggleButton VerticalAlignment="Bottom"
                                             Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
                                             ToolTip="MaterialDesignSwitchDarkToggleButton"
                                             IsChecked="{Binding IsActive}" />
                                     </StackPanel>
                                 </StackPanel>
+
                             </materialDesign:Card>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

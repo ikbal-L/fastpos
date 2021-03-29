@@ -1,0 +1,375 @@
+﻿line 142
+<!-- Selection controls -->
+            <Border DockPanel.Dock="Bottom">
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}" x:Key="PaletteButton">
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
+                            <Setter Property="materialDesign:ShadowAssist.ShadowEdges" Value="All" />
+                            <Setter Property="materialDesign:RippleAssist.Feedback" Value="LightGray" />
+                            <Setter Property="materialDesign:RippleAssist.RippleOnTop" Value="True" />
+                            <Setter Property="Margin" Value="0" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                            <Setter Property="Padding" Value="16" />
+                        </Style>
+                    </Grid.Resources>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="300" />
+                    </Grid.RowDefinitions>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Primary selection -->
+                    <Border
+                        BorderBrush="LightGray"
+                        BorderThickness="0 0 1 0">
+                        <Button Command="{Binding ChangeToPrimaryCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource PaletteButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ActiveScheme}" Value="Primary">
+                                            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth3" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="2*" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                    Text="Primary"/>
+                                
+                                <!-- Primary mid section -->
+                                <Border
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Grid.Row="1">
+                                    <Grid>
+                                        <TextBlock
+                                            DataContext="{DynamicResource PrimaryHueMidBrush}" 
+                                            Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                            Style="{StaticResource HexLabelTextBlock}" 
+                                            Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                        
+                                        <Border
+                                            Width="30"
+                                            Height="30"
+                                            CornerRadius="15">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ActiveScheme}" Value="Primary">
+                                                            <Setter Property="Background" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontSize="22"
+                                                Text="P">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ActiveScheme}" Value="Primary">
+                                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                                
+                                <UniformGrid Rows="1" Grid.Row="2">
+                                    <!-- Primary light -->
+                                    <Border Background="{DynamicResource PrimaryHueLightBrush}">
+                                        <TextBlock
+                                            DataContext="{DynamicResource PrimaryHueLightBrush}" 
+                                            Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                            Style="{StaticResource HexLabelTextBlock}" 
+                                            Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                                    </Border>
+                                    <!-- Primary dark -->
+                                    <Border Background="{DynamicResource PrimaryHueDarkBrush}">
+                                        <TextBlock
+                                            DataContext="{DynamicResource PrimaryHueDarkBrush}" 
+                                            Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                            Style="{StaticResource HexLabelTextBlock}" 
+                                            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                    </Border>
+                                </UniformGrid>
+                            </Grid>
+                        </Button>
+                    </Border>
+                    
+                    <!-- Secondary selection -->
+                    <Border
+                        BorderBrush="LightGray"
+                        Grid.Column="1"
+                        BorderThickness="0 0 1 0">
+                        <Button Command="{Binding ChangeToSecondaryCommand}" >
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource PaletteButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ActiveScheme}" Value="Secondary">
+                                            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth3" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="2*" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                    Text="Secondary"/>
+                                
+                                <!-- Secondary mid section -->
+                                <Border
+                                    Background="{DynamicResource SecondaryHueMidBrush}"
+                                    Grid.Row="1">
+                                    <Grid>
+                                        <TextBlock
+                                            DataContext="{DynamicResource SecondaryHueMidBrush}" 
+                                            Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                            Style="{StaticResource HexLabelTextBlock}" 
+                                            Foreground="{DynamicResource SecondaryHueMidForegroundBrush}" />
+                                        
+                                        <Border
+                                            Width="30"
+                                            Height="30"
+                                            CornerRadius="15">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ActiveScheme}" Value="Secondary">
+                                                            <Setter Property="Background" Value="{DynamicResource SecondaryHueMidForegroundBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontSize="22"
+                                                Text="S">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidForegroundBrush}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ActiveScheme}" Value="Secondary">
+                                                                <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                                
+                                <UniformGrid Rows="1" Grid.Row="2">
+                                    <!-- Secondary light -->
+                                    <Border Background="{DynamicResource SecondaryHueLightBrush}">
+                                        <TextBlock
+                                            DataContext="{DynamicResource SecondaryHueLightBrush}" 
+                                            Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                            Style="{StaticResource HexLabelTextBlock}" 
+                                            Foreground="{DynamicResource SecondaryHueLightForegroundBrush}" />
+                                    </Border>
+                                    
+                                    <!-- Secondary dark -->
+                                    <Border Background="{DynamicResource SecondaryHueDarkBrush}">
+                                        <TextBlock
+                                            DataContext="{DynamicResource SecondaryHueDarkBrush}" 
+                                            Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                            Style="{StaticResource HexLabelTextBlock}" 
+                                            Foreground="{DynamicResource SecondaryHueDarkForegroundBrush}" />
+                                    </Border>
+                                </UniformGrid>
+                            </Grid>
+                        </Button>
+                    </Border>
+                    
+                    <UniformGrid
+                        Grid.Column="2"
+                        Columns="1">
+                        <!-- Primary foreground selection -->
+                        <Border
+                            BorderBrush="LightGray"
+                            BorderThickness="0 0 0 1">
+                            <Button Command="{Binding ChangeToPrimaryForegroundCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource PaletteButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ActiveScheme}" Value="PrimaryForeground">
+                                                <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth3" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock
+                                        Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                        Text="Text on Primary"/>
+                                    
+                                    <Border
+                                        Background="{DynamicResource PrimaryHueMidBrush}"
+                                        Grid.Row="1">
+                                        <Grid>
+                                            <TextBlock
+                                                DataContext="{DynamicResource PrimaryHueMidForegroundBrush}" 
+                                                Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                                Style="{StaticResource HexLabelTextBlock}" 
+                                                Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                            
+                                            <Border
+                                                Width="30"
+                                                Height="30"
+                                                CornerRadius="15">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ActiveScheme}" Value="PrimaryForeground">
+                                                                <Setter Property="Background" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                
+                                                <TextBlock
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="22"
+                                                    Text="T">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ActiveScheme}" Value="PrimaryForeground">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Button>
+                        </Border>
+                        
+                        <!-- Secondary foreground selection -->
+                        <Border>
+                            <Button Command="{Binding ChangeToSecondaryForegroundCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource PaletteButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ActiveScheme}" Value="SecondaryForeground">
+                                                <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth3" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock
+                                        Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                        Text="Text on Secondary"/>
+                                    
+                                    <Border
+                                        Background="{DynamicResource SecondaryHueMidBrush}"
+                                        Grid.Row="1">
+                                        <Grid>
+                                            <TextBlock
+                                                DataContext="{DynamicResource SecondaryHueMidForegroundBrush}" 
+                                                Text="{Binding Converter={StaticResource BrushToHexConverter}}" 
+                                                Style="{StaticResource HexLabelTextBlock}" 
+                                                Foreground="{DynamicResource SecondaryHueMidForegroundBrush}" />
+                                            
+                                            <Border
+                                                Width="30"
+                                                Height="30"
+                                                CornerRadius="15">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ActiveScheme}" Value="SecondaryForeground">
+                                                                <Setter Property="Background" Value="{DynamicResource SecondaryHueMidForegroundBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                
+                                                <TextBlock
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="22"
+                                                    Text="T">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidForegroundBrush}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ActiveScheme}" Value="SecondaryForeground">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Button>
+                        </Border>
+                    </UniformGrid>
+                </Grid>
+            </Border>
+            
+            <!-- Current scheme label -->
+            <Border
+                DockPanel.Dock="Bottom"
+                BorderThickness="1 0 1 0">
+                <TextBlock
+                    Style="{StaticResource MaterialDesignBody1TextBlock}"
+                    Margin="16"
+                    Text="CURRENT SCHEME"/>
+            </Border>

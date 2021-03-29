@@ -13,7 +13,7 @@ namespace ServiceInterface.Model
         private Brush _background;
         private Color? _backgroundColor;
         private Agent _agent;
-        private bool? _isActive;
+        private bool? _isActive = false;
 
         [DataMember]
         public long? Id { get; set; }
@@ -88,7 +88,7 @@ namespace ServiceInterface.Model
         [Required(AllowEmptyStrings = false)]
         public string BackgroundString
         {
-            get => _backgroundString ?? "#f39c12";
+            get => _backgroundString ?? /*"#f39c12";*/ "#4a4c4f";
             set
             {
                 _backgroundString = value;
@@ -99,7 +99,7 @@ namespace ServiceInterface.Model
 
         public virtual Brush Background
         {
-            get => _background ?? (_background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString)));
+            get => _background ??= new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
             set
             {
                 _background = (SolidColorBrush)value;

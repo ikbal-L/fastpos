@@ -168,7 +168,6 @@ namespace ServiceLib.Service
 
             //if (response.StatusCode == HttpStatusCode.OK)
             //    return true;
-
             return ((int)response.StatusCode, response.Content);
         }
         public static (bool, TReturn) UpdateThing<T,TReturn>(T t, string url) {

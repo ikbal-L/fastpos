@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Linq;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using PasswordGenerator;
@@ -58,6 +59,7 @@ namespace FastPosFrontend.ViewModels
             FirstName = _model.FirstName;
             LastName = _model.LastName;
             Email = _model.Email;
+            IsActive = _model.IsActive;
             if (_model.Roles != null)
             {
                 UserRoles = new BindableCollection<Role>(_model.Roles);
@@ -76,6 +78,9 @@ namespace FastPosFrontend.ViewModels
             _model.FirstName = FirstName;
             _model.LastName = LastName ;
             _model.Email = Email ;
+            _model.PhoneNumbers = PhoneNumbers;
+            _model.Roles = UserRoles.ToList();
+            _model.RoleIds = UserRoles.Select(role => role.Id.Value).ToList();
         }
         public string Username
         {

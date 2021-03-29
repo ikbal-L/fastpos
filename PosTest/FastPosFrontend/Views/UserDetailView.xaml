@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:sl="clr-namespace:FastPosFrontend.SL.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:converters="clr-namespace:FastPosFrontend.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -40,6 +42,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
     <StackPanel Orientation="Vertical">
 
@@ -89,6 +92,7 @@
                      Text="{Binding Email}" />
 
             <TabControl Grid.Row="6" Style="{StaticResource MaterialDesignTabControl}">
+                
 
 
                 <TabItem>
@@ -245,7 +249,41 @@
                             Width="24"
                             Height="24" />
                     </TabItem.Header>
+                    <StackPanel Margin="20 5" >
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock  VerticalAlignment="Center" FontSize="16" Margin="0 0 5 0">
+                                Active
+                            </TextBlock>
+                            <ToggleButton VerticalAlignment="Bottom"
+                                          Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
+                                          ToolTip="MaterialDesignSwitchDarkToggleButton"
+                                          IsChecked="{Binding IsActive}" />
+                        </StackPanel>
 
+                        <StackPanel Orientation="Vertical">
+                            <UniformGrid >
+                                <TextBlock Text="Background Color" 
+                                           FontSize="16" 
+                                           Margin="0 0 5 10"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center"
+                                           ></TextBlock>
+                                <Border  Background="{Binding ElementName=ColorPicker,Path=Color,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ColorToBrushConverter}}"></Border>
+
+                            </UniformGrid>
+                            <materialDesign:PopupBox>
+                                <materialDesign:ColorPicker
+                                    x:Name="ColorPicker"
+                                    Grid.Column="1"
+                                    Height="200"
+                                    Width="250"
+                                    Color="{Binding SelectedColor, Delay=25}"/>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                        <!--<sl:ColorTool></sl:ColorTool>-->
+
+
+                    </StackPanel>
                 </TabItem>
 
 

@@ -7,7 +7,7 @@ using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class UserSettingsViewModel : /*SettingsItemBase*/ Screen
+    public class UserSettingsViewModel : SettingsItemBase
     {
         private User _selectedUser;
         private UserDetailViewModel _userDetailViewModel;
@@ -16,8 +16,8 @@ namespace FastPosFrontend.ViewModels
 
         public UserSettingsViewModel()
         {
-            //this.Title = "User Settings";
-            //this.Content = new UserSettingsView() { DataContext = this };
+            this.Title = "User Settings";
+            this.Content = new UserSettingsView() { DataContext = this };
             var userRepository = new UserRepository();
             var roleRepository = new RoleRepository();
             StateManager.Instance.Manage(userRepository).Manage(roleRepository);
