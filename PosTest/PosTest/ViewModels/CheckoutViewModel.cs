@@ -28,6 +28,7 @@ using Table = ServiceInterface.Model.Table;
 using System.Drawing.Printing;
 using PosTest.ViewModels.DeliveryAccounting;
 using PosTest.ViewModels.Settings;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels
 {

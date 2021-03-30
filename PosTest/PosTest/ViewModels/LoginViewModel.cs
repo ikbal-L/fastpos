@@ -23,6 +23,7 @@ using System.Security.Principal;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels
 {

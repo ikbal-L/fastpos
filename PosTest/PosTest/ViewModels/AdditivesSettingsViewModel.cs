@@ -17,6 +17,7 @@ using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using PosTest.ViewModels.Settings;
 using PosTest.Views;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels
 {

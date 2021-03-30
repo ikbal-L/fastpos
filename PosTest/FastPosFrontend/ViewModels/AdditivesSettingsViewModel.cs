@@ -13,6 +13,7 @@ using FastPosFrontend.Views;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {

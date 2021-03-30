@@ -25,6 +25,7 @@ using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 using Table = ServiceInterface.Model.Table;
 
 namespace FastPosFrontend.ViewModels
@@ -130,7 +131,7 @@ namespace FastPosFrontend.ViewModels
             var configuration = manager.LoadSettings();
             if (configuration != null)
             {
-                itemsPerCategoryPage = int.Parse(configuration.NumberCategores);
+                itemsPerCategoryPage = configuration.NumberCategores;
             }
 
 
@@ -167,19 +168,6 @@ namespace FastPosFrontend.ViewModels
             
 
 
-            //var unprocessedTableOrders = unprocessedOrders.Where(uo => uo.Type == OrderType.OnTable).ToList();
-            //foreach (var table in tables.ToList())
-            //{
-            //    var order = unprocessedTableOrders.FirstOrDefault(uo => uo.TableId == table.Id);
-            //    if (order != null)
-            //    {
-                    
-            //        order.Table = table;
-            //        order.OrderItems.ToList().ForEach(oi=>oi.Additives
-            //        = new BindableCollection<Additive>());
-            //    }
-            //}
-            
             Orders = new BindableCollection<Order>(unprocessedOrders);
 
             ProductsPage = new BindableCollection<Product>();
@@ -200,11 +188,9 @@ namespace FastPosFrontend.ViewModels
                 Orders.Add(CurrentOrder);
             }
 
-            //var ((catStatusCode, prodStatusCode), (categories, products)) =
-            //    _categoriesService.GetAllCategoriesAndProducts();
             var products = StateManager.Get<Product>();
             var categories = StateManager.Get<Category>();
-            //if (catStatusCode != 200 && prodStatusCode != 200) return;
+
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
@@ -212,9 +198,8 @@ namespace FastPosFrontend.ViewModels
             LoadCategoryPages();
 
 
-            PaginatedCategories = new CollectionViewSource();
-            PaginatedCategories.Source = Categories;
-            
+            PaginatedCategories = new CollectionViewSource {Source = Categories};
+
             PaginatedCategories.Filter += PaginatedCategoriesOnFilter;
 
             CalculateTotalPages(Categories.Count);

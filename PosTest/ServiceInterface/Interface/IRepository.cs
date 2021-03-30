@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ServiceInterface.Model;
 
 namespace ServiceInterface.Interface
@@ -19,6 +20,8 @@ namespace ServiceInterface.Interface
         (bool ,TReturn) Save<TReturn>(TState state);
         (bool, TReturn) Delete<TReturn>(TIdentifier id);
         int Delete(IEnumerable<TIdentifier> ids);
+
+        Task<(int,IEnumerable<TState>)> GetAsync();
 
 
     }

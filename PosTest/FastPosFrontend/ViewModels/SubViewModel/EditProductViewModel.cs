@@ -14,6 +14,7 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace FastPosFrontend.ViewModels.SubViewModel

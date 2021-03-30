@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 
-namespace ServiceLib.Service
+namespace ServiceLib.Service.StateManager
 {
     public partial class StateManager
     {
@@ -55,4 +52,6 @@ namespace ServiceLib.Service
             return Delete<TState, long>(state);
         }
     }
+
+    
 }

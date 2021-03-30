@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using ServiceInterface.Model;
 using System;
+using System.Threading.Tasks;
 using RestSharp.Serialization.Json;
 
 namespace ServiceLib.Service
@@ -26,6 +27,21 @@ namespace ServiceLib.Service
 
         }
 
+        public static async Task<(int status, T)> GetThingAsync<T>(string path)
+        {
+            var resp = await RestGetAsync(path);
+            T t = default;
+            if (resp.StatusCode == HttpStatusCode.OK)
+            {
+                //string s = t.ToString();
+                //                if (t.ToString() is Waiter)
+                //                  Console.WriteLine(s);
+                t = JsonConvert.DeserializeObject<T>(resp.Content);
+            }
+            return ((int)resp.StatusCode, t);// ;products
+
+        }
+
         public static IRestResponse RestGet(string path)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
@@ -35,6 +51,18 @@ namespace ServiceLib.Service
             request.AddHeader("accept", "application/json");
             request.AddHeader("Annex-Id", $"{AuthProvider.Instance?.AnnexId}");
             IRestResponse response = client.Execute(request);
+            return response;
+        }
+
+        public static async Task<IRestResponse> RestGetAsync(string path)
+        {
+            string token = AuthProvider.Instance?.AuthorizationToken;
+            var client = new RestClient(path);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("authorization", token);
+            request.AddHeader("accept", "application/json");
+            request.AddHeader("Annex-Id", $"{AuthProvider.Instance?.AnnexId}");
+            var response = await client.ExecuteAsync(request);
             return response;
         }
 

@@ -5,6 +5,7 @@ using FastPosFrontend.Helpers;
 using PasswordGenerator;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {

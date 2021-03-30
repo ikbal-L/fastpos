@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels.DeliveryAccounting
 {

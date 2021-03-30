@@ -5,6 +5,7 @@ using FastPosFrontend.Views.Settings;
 using FastPosFrontend.Views.Settings.DeliveryMan;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
 {

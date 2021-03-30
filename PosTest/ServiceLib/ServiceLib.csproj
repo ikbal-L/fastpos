@@ -118,8 +118,10 @@
     <Compile Include="Service\ProductMappingException.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\BaseRepository.cs" />
-    <Compile Include="Service\StateManager.cs" />
-    <Compile Include="Service\StateManagerCommon.cs" />
+    <Compile Include="Service\StateManager\StateManager.cs" />
+    <Compile Include="Service\StateManager\StateManager.Async.cs" />
+    <Compile Include="Service\StateManager\StateManager.Common.cs" />
+    <Compile Include="Service\StateManager\StateManager.Async.Common.cs" />
     <Compile Include="Service\ValidationService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ using PosTest.ViewModels.SubViewModel;
 using PosTest.Views;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels
 {

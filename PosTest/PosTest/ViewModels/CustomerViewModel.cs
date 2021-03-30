@@ -15,6 +15,7 @@ using PosTest.ViewModels.SubViewModel;
 using PosTest.Views.SubViews;
 using ServiceInterface.Interface;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels
 {

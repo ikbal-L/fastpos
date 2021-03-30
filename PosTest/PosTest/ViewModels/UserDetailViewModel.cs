@@ -4,6 +4,7 @@ using Caliburn.Micro;
 using PosTest.Helpers;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels
 {

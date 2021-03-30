@@ -51,7 +51,7 @@ namespace FastPosFrontend.Converters
                 var configuration = Manager.LoadSettings();
                 if (configuration != null)
                 {
-                    divisor = int.Parse(configuration.NumberCategores);
+                    divisor = configuration.NumberCategores;
                 }
             }
             else

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels.Settings
 {

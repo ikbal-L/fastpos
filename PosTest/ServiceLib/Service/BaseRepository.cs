@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using EndPoint = ServiceInterface.StaticValues.EndPoint;
 
 namespace ServiceLib.Service
@@ -86,6 +87,11 @@ namespace ServiceLib.Service
         {
             return GenericRest.DeleteThing(restApi.Action<TState>(EndPoint.DeleteMany),ids);
         }
+
+        public async Task<(int, IEnumerable<TState>)> GetAsync()
+        {
+             return await GenericRest.GetThingAsync<IEnumerable<TState>>(restApi.Action<TState>(EndPoint.GetAll));
+        }
     }
 
 
@@ -98,7 +104,7 @@ namespace ServiceLib.Service
     }
 
     [Export(typeof(IProductRepository))]
-    public class ProductBaseRepository : BaseRepository<Product, long>, IProductRepository
+    public class ProductRepository : BaseRepository<Product, long>, IProductRepository
     {
         public override (int status, IEnumerable<Product>) Get()
         {

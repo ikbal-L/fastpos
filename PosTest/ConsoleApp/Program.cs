@@ -16,6 +16,7 @@ using System.Web.Script.Serialization;
 using PosTest.Converters;
 using PosTest.Helpers;
 using ServiceInterface;
+using ServiceLib.Service.StateManager;
 
 
 namespace ConsoleApp
@@ -117,7 +118,7 @@ namespace ConsoleApp
             Console.WriteLine(RestApis.Resource<Category>.Action(EndPoint.Delete, arg: 5));
 
             var repo1 = new AdditiveBaseRepository();
-            var repo2 = new ProductBaseRepository();
+            var repo2 = new ProductRepository();
             var repo3 = new CategoryBaseRepository();
             var repo4 = new OrderBaseRepository();
             //StateManager.Instance.Manage<Additive>(repo1).Manage<Product>(repo2);

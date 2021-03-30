@@ -89,6 +89,7 @@
     <Compile Include="ProductsViewModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RESTTesting\ProductServicetesting.cs" />
+    <Compile Include="ServiceLibTests\GenericRestAsyncTest.cs" />
     <Compile Include="ServiceLibTests\StateManagerTest.cs" />
     <Compile Include="ViewModelTesting\CheckoutSettingsTest.cs" />
     <Compile Include="MockingHelpers.cs" />

@@ -4,6 +4,7 @@ using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.Views;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {

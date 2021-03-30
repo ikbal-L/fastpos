@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Reflection;
-using Caliburn.Micro;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Exceptions;
 using ServiceLib.helpers;
 using Action = System.Action;
 
-namespace ServiceLib.Service
+namespace ServiceLib.Service.StateManager
 {
     public partial class StateManager
     {

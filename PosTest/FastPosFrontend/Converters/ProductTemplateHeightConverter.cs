@@ -71,8 +71,8 @@ namespace FastPosFrontend.Converters
             var configuration = Manager.LoadSettings();
             int cols = 6;
             if (configuration != null)
-            {
-                cols = int.Parse(configuration.NumberCategores);
+            {                                                               
+                cols = configuration.NumberCategores;
             }
 
             var conv = new LengthConverter();

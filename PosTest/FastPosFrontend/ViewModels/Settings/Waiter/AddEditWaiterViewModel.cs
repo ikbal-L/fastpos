@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using PosTest.Extensions;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Waiter
 {

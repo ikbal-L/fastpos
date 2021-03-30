@@ -10,6 +10,7 @@ using Caliburn.Micro;
 using ServiceInterface.Interface;
 using ServiceLib.Service;
 using ServiceInterface.Model;
+using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels.SubViewModel
 {

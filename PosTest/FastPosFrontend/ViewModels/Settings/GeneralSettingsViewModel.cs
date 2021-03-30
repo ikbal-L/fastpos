@@ -7,6 +7,7 @@ using FastPosFrontend.Views.Settings;
 using Newtonsoft.Json;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
@@ -49,7 +50,7 @@ namespace FastPosFrontend.ViewModels.Settings
         private int _tableNumber;
         private string _serverHost;
         private bool _initialized = false;
-        private string _numberCategores;
+        private int _numberCategores;
 
         public bool Initialized
         {
@@ -103,7 +104,7 @@ namespace FastPosFrontend.ViewModels.Settings
         
         [JsonProperty]
 
-        public string NumberCategores
+        public int NumberCategores
         {
             get { return _numberCategores; }
             set

@@ -5,6 +5,7 @@ using FastPosFrontend.Helpers;
 using PosTest.Extensions;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
 {

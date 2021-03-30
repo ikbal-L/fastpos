@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceLib.Service.StateManager;
 using Xunit;
 
 namespace XUnitTesting.ServiceLibTests
@@ -57,5 +58,7 @@ namespace XUnitTesting.ServiceLibTests
             var result = StateManager.Delete<Table,long>(ids);
             Assert.True(result);
         }
+
+        
     }
 }

@@ -8,6 +8,7 @@ using FastPosFrontend.Helpers;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.DeliveryAccounting
 {
