@@ -30,7 +30,7 @@ using Table = ServiceInterface.Model.Table;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class CheckoutViewModel : Screen, IHandle<AssignOrderTypeEventArgs>
+    public class CheckoutViewModel : Screen, IHandle<AssignOrderTypeEventArgs>, INotifyViewModelInitialized
     {
         
         #region Private fields
@@ -164,22 +164,24 @@ namespace FastPosFrontend.ViewModels
 
         private NotifyTaskCompletion<ICollection<Deliveryman>> _deliveryMenNotifyTaskCompletion;
 
-        public EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
+        public event EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
         private void DeliveryMenNotifyTaskCompletion_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsCompleted")    
             {
+                
+                Initialize();
                 IsReady = true;
-                Initialize(_deliveryMenNotifyTaskCompletion.Result);
                 ViewModelInitialized?.Invoke(this,new ViewModelInitializedEventArgs(true));
             }
         }
 
         
 
-        public void Initialize(ICollection<Deliveryman> deliveryMen)
+        public void Initialize()
         {
 
+            var deliveryMen = _deliveryMenNotifyTaskCompletion.Result;
             var waiter = StateManager.Get<Waiter>();
 
 
@@ -1963,15 +1965,5 @@ namespace FastPosFrontend.ViewModels
 
 
 
-    }
-
-    public class ViewModelInitializedEventArgs: EventArgs
-    {
-        public bool IsInitialized { get; set; }
-
-        public ViewModelInitializedEventArgs(bool isInitialized)
-        {
-            IsInitialized = isInitialized;
-        }
     }
 }

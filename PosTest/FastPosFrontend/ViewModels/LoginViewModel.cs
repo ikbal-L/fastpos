@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Caliburn.Micro;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.SubViewModel;
@@ -215,7 +216,10 @@ namespace FastPosFrontend.ViewModels
         private void ViewModelInitialized(object sender, ViewModelInitializedEventArgs e)
         {
             var checkoutViewModel = sender as CheckoutViewModel;
-            (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+            if (e.IsInitialized)
+            {
+                (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+            }
         }
 
         public void Settings()
