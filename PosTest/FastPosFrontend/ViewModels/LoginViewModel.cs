@@ -154,7 +154,7 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_tableRepository)
                 .Manage(_customerRepository)
                 .Manage(_waiterRepository)
-                .Manage(_deliverymanRepository)
+                .Manage(_deliverymanRepository,false)
                 .Manage(_paymentRepository)
                 .Manage(_userRepository);
 
@@ -203,9 +203,18 @@ namespace FastPosFrontend.ViewModels
                 //_deliverymanRepository,
                 //_customerService
                 );
+            checkoutViewModel.ViewModelInitialized+=ViewModelInitialized;
+
+            (this.Parent as Conductor<object>).ActivateItem(new LoadingViewModel($"Loading {nameof(CheckoutViewModel)} ..."));
             //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-           
-            checkoutViewModel.Parent = this.Parent;
+
+            //checkoutViewModel.Parent = this.Parent;
+            //(this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+        }
+
+        private void ViewModelInitialized(object sender, ViewModelInitializedEventArgs e)
+        {
+            var checkoutViewModel = sender as CheckoutViewModel;
             (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
         }
 

@@ -84,6 +84,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isTableViewActive;
         private bool _isTakeawayViewActive;
         private bool _isDeliveryViewActive;
+        private bool _isReady;
 
         #endregion
 
@@ -144,29 +145,51 @@ namespace FastPosFrontend.ViewModels
             StateManager.Associate<Order,Waiter>();
             StateManager.Associate<Order,Customer>();
 
-            //var (deliverymenStatusCode, deliveryMen) = delivereyService.GetAllDeliverymen();
-            var deliveryMen = StateManager.Get<Deliveryman>();
+
+            IList<Task > tasks = new List<Task>();
+            
+            var deliveryMen = StateManager.GetAsync<Deliveryman>();
 
 
 
-            //var (waiterStatusCode, waiter) = waiterService.GetAllWaiters();
+           
+            
+            
+            
+             _deliveryMenNotifyTaskCompletion = new NotifyTaskCompletion<ICollection<Deliveryman>>(deliveryMen);
+            _deliveryMenNotifyTaskCompletion.PropertyChanged += DeliveryMenNotifyTaskCompletion_PropertyChanged;
+          
+            
+        }
+
+        private NotifyTaskCompletion<ICollection<Deliveryman>> _deliveryMenNotifyTaskCompletion;
+
+        public EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
+        private void DeliveryMenNotifyTaskCompletion_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsCompleted")    
+            {
+                IsReady = true;
+                Initialize(_deliveryMenNotifyTaskCompletion.Result);
+                ViewModelInitialized?.Invoke(this,new ViewModelInitializedEventArgs(true));
+            }
+        }
+
+        
+
+        public void Initialize(ICollection<Deliveryman> deliveryMen)
+        {
+
             var waiter = StateManager.Get<Waiter>();
 
-            //var (tablesStatusCode, tables) = _orderService.GeAllTables();
+
             var tables = StateManager.Get<Table>();
 
 
-            //var (customerStatusCode,customers) = _customerService.GetAllCustomers();
+
             var customers = StateManager.Get<Customer>();
 
-            //var (orderStatusCode, unprocessedOrders) = _orderService.GetAllOrders(unprocessed: true);
-            OrderState[] filteredTypes = {OrderState.Payed, OrderState.Canceled, OrderState.Removed,OrderState.Delivered};
-            
-
-            //var unprocessedOrders = StateManager.Get<Order>().ToList().Where(o=> !filteredTypes.ToList().Contains((OrderState)o.State));
-            var unprocessedOrders = StateManager.Get<Order>(predicate:"unprocessed");
-            
-
+            var unprocessedOrders = StateManager.Get<Order>(predicate: "unprocessed");
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
 
@@ -198,7 +221,7 @@ namespace FastPosFrontend.ViewModels
             LoadCategoryPages();
 
 
-            PaginatedCategories = new CollectionViewSource {Source = Categories};
+            PaginatedCategories = new CollectionViewSource { Source = Categories };
 
             PaginatedCategories.Filter += PaginatedCategoriesOnFilter;
 
@@ -221,7 +244,6 @@ namespace FastPosFrontend.ViewModels
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
-            
         }
 
         private void CurrentOrder_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -245,6 +267,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        
         private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
         {
             var orderItem = e.Item as OrderItem;
@@ -541,6 +564,12 @@ namespace FastPosFrontend.ViewModels
                 _returnedAmount = value;
                 NotifyOfPropertyChange(() => ReturnedAmount);
             }
+        }
+
+        public bool IsReady
+        {
+            get => _isReady;
+            set => Set(ref _isReady, value);
         }
 
         #region Order Commands
@@ -889,99 +918,6 @@ namespace FastPosFrontend.ViewModels
                 size: MaxProductPageSize);
         }
 
-        #region Filtering and pagination
-
-        //public void CategorieFiltering(object param)
-        //{
-        //    AdditivesVisibility = false;
-        //    ProductsVisibility = true;
-        //    if (param is Category)
-        //    {
-        //        Category category = param as Category;
-        //        category.BackgroundString = DefaultColors.Category_SelectedBackground.ToString();
-        //        if (CurrentCategory != null)
-        //            CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
-        //        CurrentCategory = category;
-        //        FilteredProducts.Filter = (p) => (p as Product).CategoryId.Equals(_currantCategory.Id);
-
-        //        PaginateProducts(NextOrPrevious.First);
-        //    }
-        //    else
-        //        if (param is string)
-        //        if ((param as string).ToUpperInvariant().Equals("Home".ToUpperInvariant()))
-        //        {
-        //            FilteredProducts.Filter = null;
-
-        //            if (CurrentCategory != null)
-        //                CurrentCategory.BackgroundString = DefaultColors.Category_DefaultBackground.ToString();
-
-        //            CurrentCategory = null;
-        //            var muchInDemanadProducts = AllProducts.Where(p => p.IsMuchInDemand == true).ToList();
-        //            FilteredProducts = CollectionViewSource.GetDefaultView(muchInDemanadProducts);
-        //            PaginateProducts(NextOrPrevious.First);
-        //        }
-        //        else // param == "ALL"
-        //        {
-        //            FilteredProducts = CollectionViewSource.GetDefaultView(AllProducts);
-        //            PaginateProducts(NextOrPrevious.First);
-        //        }
-        //}
-
-        //public void ProductFiltering(string text)
-        //{
-        //    Console.WriteLine("Param=" + text);
-        //}
-
-        //public void PaginateProducts(NextOrPrevious nextOrprevious)
-        //{
-        //    if (nextOrprevious == NextOrPrevious.First)
-        //    {
-        //        _pageNumber = 0;
-        //        nextOrprevious = NextOrPrevious.Next;
-        //        CanExecuteMext = false;
-        //        CanExecutePrevious = false;
-        //    }
-
-        //    if (FilteredProducts.Cast<Product>().Count() <= MaxProductPageSize)
-        //    {
-        //        ProductsPage = FilteredProducts;
-        //        _pageNumber = 1;
-        //        CanExecuteMext = false;
-        //        CanExecutePrevious = false;
-        //        return;
-        //    }
-
-        //    var listProducts = FilteredProducts.Cast<Product>().ToList();
-        //    int lastIndexForThisPage = (_pageNumber + 1) * MaxProductPageSize;
-        //    if (nextOrprevious == NextOrPrevious.Next)
-        //    {
-        //        if (listProducts.Count > lastIndexForThisPage)
-        //        {
-        //            listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, MaxProductPageSize);
-        //            CanExecuteMext = true;
-        //        }
-        //        else
-        //        {
-        //            listProducts = listProducts.GetRange(_pageNumber * MaxProductPageSize, listProducts.Count - (_pageNumber * MaxProductPageSize));
-        //            CanExecuteMext = false;
-        //        }
-        //        _pageNumber++;
-        //    }
-        //    else
-        //    {
-        //        if ((_pageNumber - 2) * MaxProductPageSize < 0)
-        //            return;
-        //        listProducts = listProducts.GetRange((_pageNumber - 2) * MaxProductPageSize, MaxProductPageSize);
-        //        _pageNumber--;
-        //        CanExecuteMext = true;
-
-        //    }
-        //    ProductsPage = CollectionViewSource.GetDefaultView(listProducts);
-
-        //    CanExecutePrevious = _pageNumber == 1 ? false : true;
-        //}
-
-        #endregion
 
         #region Command Buttons' Actions
 
@@ -2027,5 +1963,15 @@ namespace FastPosFrontend.ViewModels
 
 
 
+    }
+
+    public class ViewModelInitializedEventArgs: EventArgs
+    {
+        public bool IsInitialized { get; set; }
+
+        public ViewModelInitializedEventArgs(bool isInitialized)
+        {
+            IsInitialized = isInitialized;
+        }
     }
 }
