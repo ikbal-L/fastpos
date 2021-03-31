@@ -9,7 +9,6 @@
 
         WindowStyle="None"
         AllowsTransparency="False"
-        d:DataContext="{x:Type vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
         xmlns:res="clr-namespace:FastPosFrontend.Properties"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -98,19 +97,45 @@
 
                                         <md:Chip
                                                 Content="Server"
-                                                IconBackground="{DynamicResource ErrorColorBrush}"
+                                                
                                                 IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                                 Margin="5 0">
-                                            <md:Chip.Icon>
-                                                <md:PackIcon
-                                                        Kind="ServerOff" />
-                                            </md:Chip.Icon>
+                                            <md:Chip.Style>
+                                                <Style TargetType="md:Chip">
+                                                    <Setter Property="IconBackground" Value="{StaticResource WarningColorBrush}"></Setter>
+                                                    <Setter Property="Icon" Value="{md:PackIcon Server}"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsBackendServerOn}" Value="True">
+                                                            <Setter Property="IconBackground" Value="{StaticResource SuccessColorBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsBackendServerOn}" Value="False">
+                                                            <Setter Property="IconBackground" Value="{StaticResource ErrorColorBrush}"/>
+                                                            <Setter Property="Icon" Value="{md:PackIcon ServerOff}"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </md:Chip.Style>
+
                                         </md:Chip>
                                         <md:Chip
                                                 Content="Database"
-                                                IconBackground="{DynamicResource SuccessColorBrush}"
                                                 IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                                 Margin="5 0">
+                                            <md:Chip.Style>
+                                                <Style TargetType="md:Chip">
+                                                    <Setter Property="IconBackground" Value="{StaticResource WarningColorBrush}"></Setter>
+                                                    <Setter Property="Icon" Value="{md:PackIcon Database}"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDbServerOn}" Value="True">
+                                                            <Setter Property="IconBackground" Value="{StaticResource SuccessColorBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsDbServerOn}" Value="False">
+                                                            <Setter Property="IconBackground" Value="{StaticResource ErrorColorBrush}"/>
+                                                            <Setter Property="Icon" Value="{md:PackIcon DatabaseRemove}"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </md:Chip.Style>
                                             <md:Chip.Icon>
                                                 <md:PackIcon
                                                         Kind="DatabaseRemove" />
@@ -152,7 +177,7 @@
 
                                     <DockPanel>
 
-                                        <ContentPresenter Visibility="Visible" />
+                                        <ContentPresenter/>
 
                                     </DockPanel>
                                 </md:DrawerHost>
