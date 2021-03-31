@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <StackPanel VerticalAlignment="Center">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <ProgressBar
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             Value="0"
