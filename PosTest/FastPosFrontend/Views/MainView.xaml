@@ -25,41 +25,119 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
                         <md:Card UniformCornerRadius="0">
-                            <md:DrawerHost
-                                IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
-                                <md:DrawerHost.LeftDrawerContent>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <DockPanel Grid.Row="0" MinWidth="220">
-                                            <ToggleButton
-                                                Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-                                                DockPanel.Dock="Top"
-                                                HorizontalAlignment="Left"
-                                                Margin="16"
-                                                IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
-                                            <ListBox
-                                                Margin="0 16 0 16"
-                                                SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"
-                                                ItemsSource="{Binding SettingItems}">
-                                                <ListBox.Resources>
-                                                    <Style TargetType="ScrollBar"
-                                                           BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
-                                                </ListBox.Resources>
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Cursor="Hand"
-                                                                   cal:Message.Attach="[Event MouseDown] = [Action HideenLeftBar($datacontext)]"
-                                                                   Text="{Binding Title}" Padding="32 0 32 0"
-                                                                   AutomationProperties.AutomationId="DemoItemPage" />
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </DockPanel>
+                            
+                            <StackPanel>
+                                <md:ColorZone
+                                        Padding="16"
+                                        md:ShadowAssist.ShadowDepth="Depth2"
+                                        DockPanel.Dock="Top">
+                                    <md:ColorZone.Style>
+                                        <Style TargetType="md:ColorZone">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                                                    <Setter Property="Mode" Value="PrimaryMid" />
+                                                </DataTrigger>
 
-                                        <Button Cursor="Hand"
+                                                <DataTrigger Binding="{Binding IsLoggedIn}" Value="False">
+                                                    <Setter Property="Mode" Value="Standard" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+
+                                        </Style>
+                                    </md:ColorZone.Style>
+                                    <DockPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ToggleButton
+                                                    x:Name="AppMenuToggleButton"
+                                                    IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                                                    AutomationProperties.Name="HamburgerToggleButton">
+                                                <ToggleButton.Style>
+                                                    <Style TargetType="ToggleButton"
+                                                               BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsLoggedIn}"
+                                                                             Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding IsLoggedIn}"
+                                                                             Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+
+                                                    </Style>
+                                                </ToggleButton.Style>
+                                            </ToggleButton>
+                                        </StackPanel>
+                                        <md:PopupBox
+                                                DockPanel.Dock="Right"
+                                                PlacementMode="BottomAndAlignRightEdges"
+                                                StaysOpen="False">
+                                            <StackPanel>
+
+
+                                                <Button
+                                                        Command="{x:Static SystemCommands.CloseWindowCommand}"
+                                                        Content="Close" />
+                                                <Button x:Name="MaximizeAppWindowButton"
+                                                            Command="{x:Static SystemCommands.MaximizeWindowCommand}"
+                                                            Content="Maximize" />
+                                                <Button
+                                                        Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+                                                        Content="Minimize" />
+                                                <Button
+                                                        Command="{x:Static SystemCommands.RestoreWindowCommand}"
+                                                        Content="Restore Down" />
+                                                <Button
+                                                        cal:Message.Attach="Close()"
+                                                        Content="Logout" />
+                                            </StackPanel>
+                                        </md:PopupBox>
+
+
+                                        <md:Chip
+                                                Content="Server"
+                                                IconBackground="{DynamicResource ErrorColorBrush}"
+                                                IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                                Margin="5 0">
+                                            <md:Chip.Icon>
+                                                <md:PackIcon
+                                                        Kind="ServerOff" />
+                                            </md:Chip.Icon>
+                                        </md:Chip>
+                                        <md:Chip
+                                                Content="Database"
+                                                IconBackground="{DynamicResource SuccessColorBrush}"
+                                                IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                                Margin="5 0">
+                                            <md:Chip.Icon>
+                                                <md:PackIcon
+                                                        Kind="DatabaseRemove" />
+                                            </md:Chip.Icon>
+                                        </md:Chip>
+                                        <TextBlock
+
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontSize="22"
+                                                AutomationProperties.Name="Fast Pos Settings"
+                                                Text="Fast Pos " />
+                                    </DockPanel>
+                                </md:ColorZone>
+                                <md:DrawerHost
+                                IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
+                                    <md:DrawerHost.LeftDrawerContent>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <DockPanel Grid.Row="0" MinWidth="220">
+                                              
+                                            </DockPanel>
+
+                                            <Button Cursor="Hand"
                                                 MinWidth="220"
                                                 Background="Transparent"
                                                 Grid.Row="1"
@@ -68,113 +146,18 @@
                                                 cal:Message.Attach="Close()"
                                                 Content="Close" Padding="32 0 32 0"
                                                 AutomationProperties.AutomationId="DemoItemPage" />
-                                    </Grid>
+                                        </Grid>
 
-                                </md:DrawerHost.LeftDrawerContent>
+                                    </md:DrawerHost.LeftDrawerContent>
 
-                                <DockPanel>
-                                    <md:ColorZone
-                                        Padding="16"
-                                        md:ShadowAssist.ShadowDepth="Depth2"
-                                        DockPanel.Dock="Top">
-                                        <md:ColorZone.Style>
-                                            <Style TargetType="md:ColorZone">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
-                                                        <Setter Property="Mode" Value="PrimaryMid" />
-                                                    </DataTrigger>
+                                    <DockPanel>
 
-                                                    <DataTrigger Binding="{Binding IsLoggedIn}" Value="False">
-                                                        <Setter Property="Mode" Value="Standard" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
+                                        <ContentPresenter Visibility="Visible" />
 
-                                            </Style>
-                                        </md:ColorZone.Style>
-                                        <DockPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <ToggleButton
-                                                    x:Name="AppMenuToggleButton"
-                                                    IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                                                    AutomationProperties.Name="HamburgerToggleButton">
-                                                    <ToggleButton.Style>
-                                                        <Style TargetType="ToggleButton"
-                                                               BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsLoggedIn}"
-                                                                             Value="True">
-                                                                    <Setter Property="Visibility" Value="Visible" />
-                                                                </DataTrigger>
-
-                                                                <DataTrigger Binding="{Binding IsLoggedIn}"
-                                                                             Value="False">
-                                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-
-                                                        </Style>
-                                                    </ToggleButton.Style>
-                                                </ToggleButton>
-                                            </StackPanel>
-                                            <md:PopupBox
-                                                DockPanel.Dock="Right"
-                                                PlacementMode="BottomAndAlignRightEdges"
-                                                StaysOpen="False">
-                                                <StackPanel>
-
-
-                                                    <Button
-                                                        Command="{x:Static SystemCommands.CloseWindowCommand}"
-                                                        Content="Close" />
-                                                    <Button x:Name="MaximizeAppWindowButton"
-                                                            Command="{x:Static SystemCommands.MaximizeWindowCommand}"
-                                                            Content="Maximize" />
-                                                    <Button
-                                                        Command="{x:Static SystemCommands.MinimizeWindowCommand}"
-                                                        Content="Minimize" />
-                                                    <Button
-                                                        Command="{x:Static SystemCommands.RestoreWindowCommand}"
-                                                        Content="Restore Down" />
-                                                    <Button
-                                                        cal:Message.Attach="Close()"
-                                                        Content="Logout" />
-                                                </StackPanel>
-                                            </md:PopupBox>
-
-
-                                            <md:Chip
-                                                Content="Server"
-                                                IconBackground="{DynamicResource ErrorColorBrush}"
-                                                IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                                                Margin="5 0">
-                                                <md:Chip.Icon>
-                                                    <md:PackIcon
-                                                        Kind="ServerOff" />
-                                                </md:Chip.Icon>
-                                            </md:Chip>
-                                            <md:Chip
-                                                Content="Database"
-                                                IconBackground="{DynamicResource SuccessColorBrush}"
-                                                IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                                                Margin="5 0">
-                                                <md:Chip.Icon>
-                                                    <md:PackIcon
-                                                        Kind="DatabaseRemove" />
-                                                </md:Chip.Icon>
-                                            </md:Chip>
-                                            <TextBlock
-
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                FontSize="22"
-                                                AutomationProperties.Name="Fast Pos Settings"
-                                                Text="Fast Pos " />
-                                        </DockPanel>
-                                    </md:ColorZone>
-                                    <ContentPresenter Visibility="Visible" />
-
-                                </DockPanel>
-                            </md:DrawerHost>
+                                    </DockPanel>
+                                </md:DrawerHost>
+                            </StackPanel>
+                       
                         </md:Card>
                     </ControlTemplate>
                 </Setter.Value>
