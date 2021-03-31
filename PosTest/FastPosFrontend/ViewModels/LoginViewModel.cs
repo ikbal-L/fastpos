@@ -98,6 +98,7 @@ namespace FastPosFrontend.ViewModels
 
         protected override void OnActivate()
         {
+            (this.Parent as MainViewModel).IsLoggedIn = false;
             base.OnActivate();
             this.Compose();
            
@@ -159,22 +160,11 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_paymentRepository)
                 .Manage(_userRepository);
 
-            //(this.Parent as Conductor<object>).ActivateItem(new UserSettingsViewModel() { Parent = this.Parent });
 
+            (this.Parent as MainViewModel).IsLoggedIn = true;
             Checkout();
 
-            //CheckoutViewModel checkoutViewModel =
-            //    new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage,
-            //    productService,
-            //    categorieService,
-            //    orderService,
-            //    waiterService,
-            //    delivereyService,
-            //    customerService
-            //    );
-
-            //checkoutViewModel.Parent = this.Parent;
-            //(this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+          
         }
         public void NumericKeyboard(PasswordBox passwordBox,string key)
         {

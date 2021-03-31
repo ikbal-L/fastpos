@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FastPosFrontend.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
     <StackPanel VerticalAlignment="Center">
         <ProgressBar
             Style="{StaticResource MaterialDesignCircularProgressBar}"
@@ -18,6 +19,6 @@
                    Margin="10"
                    FontSize="20"
                    FontWeight="DemiBold"
-                   Foreground="#42a5f5"></TextBlock>
+                   Foreground="{StaticResource InformationColorBrush}"></TextBlock>
     </StackPanel>
 </UserControl>

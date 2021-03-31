@@ -34,7 +34,7 @@
                                  Style="{StaticResource MaterialDesignOutlinedPasswordFieldPasswordBox}"  Width="300" 
                                   materialdesign:HintAssist.Hint="Password"
                                  Margin="5" />
-                <Grid Grid.Column="0" HorizontalAlignment="Center" Margin="0 20 0 0 ">
+                <Grid HorizontalAlignment="Center" Margin="0 20 0 0 ">
                     <Grid.Effect>
                         <DropShadowEffect BlurRadius="20" />
                     </Grid.Effect>

@@ -105,6 +105,7 @@ namespace PosTest.ViewModels
 
         protected override void OnActivate()
         {
+         
             base.OnActivate();
             this.Compose();
            

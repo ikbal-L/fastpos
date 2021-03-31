@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.NetworkInformation;
 using Caliburn.Micro;
 
 namespace FastPosFrontend.ViewModels
@@ -9,28 +11,31 @@ namespace FastPosFrontend.ViewModels
 
         private string _windowTitle = WindowTitleDefault;
         private string _buttonStr = "Login";
+        private bool _isLoggedIn = false;
+        private bool _isDbServerOn = false;
+        private bool _isBackendServerOn = false;
 
+        public bool IsLoggedIn
+        {
+            get => _isLoggedIn;
+            set => Set(ref _isLoggedIn, value);
+        }
 
+        public bool IsDbServerOn
+        {
+            get => _isDbServerOn;
+            set => Set(ref _isDbServerOn, value);
+        }
+
+        public bool IsBackendServerOn
+        {
+            get => _isBackendServerOn;
+            set => Set(ref _isBackendServerOn, value);
+        }
 
 
         public String ButtonStr { get=> _buttonStr; set { _buttonStr = value; NotifyOfPropertyChange(() => ButtonStr); } }
 
-        /*public IScreen ActiveItem { get; private set; }
-
-        public void ActivateItem(object item)
-        {
-            ActiveItem = item as IScreen;
-
-            var child = ActiveItem as IChild;
-            if (child != null)
-                child.Parent = this;
-
-            if (ActiveItem != null)
-                ActiveItem.Activate();
-
-            NotifyOfPropertyChange(() => ActiveItem);
-            ActivationProcessed(this, new ActivationProcessedEventArgs { Item = ActiveItem, Success = true });
-        }*/
 
         public string WindowTitle
         {
@@ -44,6 +49,7 @@ namespace FastPosFrontend.ViewModels
 
         protected override void OnActivate()
         {
+         
             //var splashScreen = new SplashScreenView();
             //splashScreen.Show();
             //System.Threading.Thread.Sleep(7000);
@@ -56,8 +62,7 @@ namespace FastPosFrontend.ViewModels
             //        splashScreen.Close();
             //    });
             //});
-            LoginViewModel toActivateViewModel = new LoginViewModel();
-            toActivateViewModel.Parent = this;
+            LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};
             //UserSettingsViewModel userSettingsViewModel = new UserSettingsViewModel() { Parent = this };
             //ActivateItem(userSettingsViewModel);
             ActivateItem(toActivateViewModel);
