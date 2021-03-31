@@ -22,6 +22,7 @@ namespace ServiceInterface.Interface
         int Delete(IEnumerable<TIdentifier> ids);
 
         Task<(int,IEnumerable<TState>)> GetAsync();
+        Task<(int status, IEnumerable<TState>)> GetAsync(string subPath);
 
 
     }

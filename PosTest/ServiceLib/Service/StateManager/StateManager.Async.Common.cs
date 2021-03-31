@@ -10,8 +10,8 @@ namespace ServiceLib.Service.StateManager
     {
         public static async Task<ICollection<TState>> GetAsync<TState>(string predicate = "") where TState : IState<long>
         {
-            Console.WriteLine(Thread.CurrentThread);
-            return await GetAsync<TState, long>(predicate);
+            
+            return await GetAsync<TState, long>(predicate).ConfigureAwait(false);
         }
     }
 }

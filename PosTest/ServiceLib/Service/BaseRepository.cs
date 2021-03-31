@@ -92,6 +92,11 @@ namespace ServiceLib.Service
         {
              return await GenericRest.GetThingAsync<IEnumerable<TState>>(restApi.Action<TState>(EndPoint.GetAll));
         }
+
+        public async Task<(int status, IEnumerable<TState>)> GetAsync(string subPath)
+        {
+            return await GenericRest.GetThingAsync<IEnumerable<TState>>(restApi.Action<TState>(EndPoint.GetAll, subPath: subPath));
+        }
     }
 
 

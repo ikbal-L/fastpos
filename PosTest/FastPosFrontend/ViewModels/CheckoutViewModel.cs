@@ -27,10 +27,11 @@ using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 using Table = ServiceInterface.Model.Table;
+using TaskExtensions = System.Threading.Tasks.TaskExtensions;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class CheckoutViewModel : Screen, IHandle<AssignOrderTypeEventArgs>, INotifyViewModelInitialized
+    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, INotifyViewModelInitialized
     {
         
         #region Private fields
@@ -90,9 +91,7 @@ namespace FastPosFrontend.ViewModels
 
         #region Constructors
 
-        public CheckoutViewModel()
-        {
-        }
+        
 
         void CalculateOrderElapsedTime()
         {
@@ -122,7 +121,7 @@ namespace FastPosFrontend.ViewModels
 
         public CheckoutViewModel(int pageSize
             
-        ) : this()
+        ) : base()
         {
             _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
@@ -146,55 +145,75 @@ namespace FastPosFrontend.ViewModels
             StateManager.Associate<Order,Customer>();
 
 
-            IList<Task > tasks = new List<Task>();
+            #region Setup Tasks to Retrieve Data
             
-            var deliveryMen = StateManager.GetAsync<Deliveryman>();
-
-
-
-           
+            Setup();
             
-            
-            
-             _deliveryMenNotifyTaskCompletion = new NotifyTaskCompletion<ICollection<Deliveryman>>(deliveryMen);
-            _deliveryMenNotifyTaskCompletion.PropertyChanged += DeliveryMenNotifyTaskCompletion_PropertyChanged;
           
             
         }
-
-        private NotifyTaskCompletion<ICollection<Deliveryman>> _deliveryMenNotifyTaskCompletion;
-
-        public event EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
-        private void DeliveryMenNotifyTaskCompletion_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        /// <summary>
+        /// The <c>Setup</c> Method sets up tasks to retrieve data and Notifications on task completion 
+        /// </summary>
+        private void Setup()
         {
-            if (e.PropertyName == "IsCompleted")    
+            var deliveryMen = StateManager.GetAsync<Deliveryman>();
+            var waiters = StateManager.GetAsync<Waiter>();
+            var tables = StateManager.GetAsync<Table>();
+            var customers = StateManager.GetAsync<Customer>();
+            var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
+            var categories = StateManager.GetAsync<Category>();
+            var products = StateManager.GetAsync<Product>();
+            #endregion
+
+
+            _data = new NotifyAllTasksCompletion(deliveryMen, waiters, tables, customers, unprocessedOrders, categories, products);
+            //_data.PropertyChanged += _data_PropertyChanged;
+            _data.AllTasksCompleted += _data_AllTasksCompleted; ;
+        }
+
+        private void _data_AllTasksCompleted(object sender, AllTasksCompletedEventArgs e)
+        {
+            if (!e.IsTaskCollectionCompleted) return;
+            Initialize();
+            IsReady = true;
+            /*
+             * Enable this line of code if you want to publish the event to subscribers
+             */
+            //ViewModelInitialized?.Invoke(this, new ViewModelInitializedEventArgs(true));
+            DeactivateLoadingScreen();
+        }
+
+        private void _data_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsCompleted" && _data.IsCompleted)
             {
-                
+
                 Initialize();
                 IsReady = true;
-                ViewModelInitialized?.Invoke(this,new ViewModelInitializedEventArgs(true));
+                ViewModelInitialized?.Invoke(this, new ViewModelInitializedEventArgs(true));
             }
         }
 
+        private NotifyAllTasksCompletion _data;
+
+        public event EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
         
 
         public void Initialize()
         {
 
-            var deliveryMen = _deliveryMenNotifyTaskCompletion.Result;
-            var waiter = StateManager.Get<Waiter>();
+            var deliveryMen = _data.GetResult<ICollection<Deliveryman>>();
+            var waiter = _data.GetResult<ICollection<Waiter>>();
+            var tables = _data.GetResult<ICollection<Table>>();
+            var customers = _data.GetResult<ICollection<Customer>>();
+            var unprocessedOrders = _data.GetResult<ICollection<Order>>();
+            var categories = _data.GetResult<ICollection<Category>>();
+            var products = _data.GetResult<ICollection<Product>>();
 
 
-            var tables = StateManager.Get<Table>();
-
-
-
-            var customers = StateManager.Get<Customer>();
-
-            var unprocessedOrders = StateManager.Get<Order>(predicate: "unprocessed");
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
-
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
@@ -213,8 +232,7 @@ namespace FastPosFrontend.ViewModels
                 Orders.Add(CurrentOrder);
             }
 
-            var products = StateManager.Get<Product>();
-            var categories = StateManager.Get<Category>();
+            
 
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
@@ -831,6 +849,7 @@ namespace FastPosFrontend.ViewModels
 
         public void CloseCommand()
         {
+            StateManager.Flush();
             LoginViewModel loginvm = new LoginViewModel();
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);

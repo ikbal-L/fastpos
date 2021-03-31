@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -14,8 +16,8 @@ namespace ServiceLib.Service.StateManager
             if (State[key] != null && !_refreshRequested) return;
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-                //var (status, data) = string.IsNullOrEmpty(predicate) ? service.GetAsync() : service.Get(predicate);
-                var (status, data) = await service.GetAsync();
+                var (status, data) = string.IsNullOrEmpty(predicate) ?await service.GetAsync() :await service.GetAsync(predicate);
+                //var (status, data) = await service.GetAsync();
                 //ServiceHelper.HandleStatusCodeErrors();
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
                 if ((HttpStatusCode)status == HttpStatusCode.NoContent)
@@ -37,7 +39,7 @@ namespace ServiceLib.Service.StateManager
 
             if (State[key] == null) await FetchAsync<TState, TIdentifier>(predicate);
 
-
+            Console.WriteLine($"Thread {Thread.CurrentThread.GetHashCode()} Time {DateTime.Now.TimeOfDay}");
             return State[key] as ICollection<TState>;
         }
 

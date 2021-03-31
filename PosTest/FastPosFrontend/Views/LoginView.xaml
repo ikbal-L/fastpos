@@ -27,7 +27,9 @@
                                
                                FontWeight="Medium" HorizontalAlignment="Center"/>
 
-
+                    <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" Width="300"
+                             materialdesign:HintAssist.Hint="Username"
+                             Margin="5"></TextBox>
                     <PasswordBox x:Name="Password"  
                                  Style="{StaticResource MaterialDesignOutlinedPasswordFieldPasswordBox}"  Width="300" 
                                   materialdesign:HintAssist.Hint="Password"

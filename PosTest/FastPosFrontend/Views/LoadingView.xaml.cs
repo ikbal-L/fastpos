@@ -18,9 +18,9 @@ namespace FastPosFrontend.Views
     /// <summary>
     /// Interaction logic for LoadingView.xaml
     /// </summary>
-    public partial class LoadingView : UserControl
+    public partial class LoadingScreenView : UserControl
     {
-        public LoadingView()
+        public LoadingScreenView()
         {
             InitializeComponent();
         }
