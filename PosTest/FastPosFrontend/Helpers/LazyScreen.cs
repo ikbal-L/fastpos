@@ -1,11 +1,13 @@
 ﻿using System;
 using Caliburn.Micro;
+using FastPosFrontend.Events;
 using FastPosFrontend.ViewModels;
 
 namespace FastPosFrontend.Helpers
 {
     public interface ILazyScreen
     {
+        public bool IsReady { get; set; }
         void ActivateLoadingScreen();
         void DeactivateLoadingScreen();
     }
@@ -25,14 +27,14 @@ namespace FastPosFrontend.Helpers
     {
     }
 
-    public class AppNavigationLookupItem:PropertyChangedBase
+    public class AppNavigationLookupItem : PropertyChangedBase
     {
         private string _title;
         private Type _target;
         private BindableCollection<AppNavigationLookupItem> _subItems;
 
-        
-        public AppNavigationLookupItem(string title,Type target = null)
+
+        public AppNavigationLookupItem(string title, Type target = null)
         {
             _title = title;
             _target = target;
@@ -56,21 +58,29 @@ namespace FastPosFrontend.Helpers
             set => Set(ref _subItems, value);
         }
 
-        public static explicit operator AppNavigationLookupItem(NavigationItemConfigurationAttribute configuration) => new AppNavigationLookupItem(configuration.Title,configuration.Type);
+        public static explicit operator AppNavigationLookupItem(NavigationItemConfigurationAttribute configuration) =>
+            new AppNavigationLookupItem(configuration.Title, configuration.Target);
     }
 
-    public interface IAppNavigationSubItem<T> : IAppNavigationItem where T : IAppNavigationItem
-    {
-    }
+  
 
-    public abstract class LazyScreen : AppScreen, ILazyScreen
+    public abstract class LazyScreen : AppScreen, ILazyScreen, INotifyViewModelInitialized
     {
         private readonly LoadingScreenViewModel _loadingScreen;
+
+        protected NotifyAllTasksCompletion _data;
+        private bool _isReady;
 
         protected LazyScreen(LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
             _loadingScreen = new LoadingScreenViewModel($"Loading {GetType().Name}")
                 {LoadingScreenType = loadingScreenType};
+        }
+
+        public bool IsReady
+        {
+            get => _isReady;
+            set => Set(ref _isReady, value);
         }
 
         protected LazyScreen(string loadingMessage, LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
@@ -90,6 +100,22 @@ namespace FastPosFrontend.Helpers
             conductor?.ActivateItem(this);
             conductor?.DeactivateItem(_loadingScreen, true);
         }
-    }
 
+        public event EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
+
+        protected abstract void Setup();
+        public abstract void Initialize();
+
+        protected virtual void OnAllTasksCompleted(object sender, AllTasksCompletedEventArgs e)
+        {
+            if (!e.IsTaskCollectionCompleted) return;
+            Initialize();
+            /*
+             * Enable this line of code if you want to publish the event to subscribers
+             */
+            //ViewModelInitialized?.Invoke(this, new ViewModelInitializedEventArgs(true));
+            IsReady = true;
+            DeactivateLoadingScreen();
+        }
+    }
 }

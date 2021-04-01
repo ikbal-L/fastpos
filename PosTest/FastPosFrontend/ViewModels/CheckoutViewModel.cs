@@ -31,8 +31,8 @@ using TaskExtensions = System.Threading.Tasks.TaskExtensions;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Checkout",typeof(CheckoutViewModel))]
-    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, INotifyViewModelInitialized,IAppNavigationItem
+    [NavigationItemConfiguration("Checkout",target: typeof(CheckoutViewModel))]
+    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, IAppNavigationItem
     {
         
         #region Private fields
@@ -125,12 +125,12 @@ namespace FastPosFrontend.ViewModels
         ) : base()
         {
             this.Title = "Checkout";
-            var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
-            var setting = Manager.LoadSettings();
+            var settingsManager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
+            var setting = settingsManager.LoadSettings();
             if (setting == null)
             {
                 setting = new ProductLayoutConfiguration() { Rows = 5, Columns = 6 };
-                Manager.SaveSettings(setting);
+                settingsManager.SaveSettings(setting);
             }
             var pageSize = setting.NumberOfProducts;
 
@@ -145,10 +145,6 @@ namespace FastPosFrontend.ViewModels
                 itemsPerCategoryPage = configuration.NumberCategores;
             }
 
-
-
-            #region Setup Tasks to Retrieve Data
-            
             Setup();
             
           
@@ -157,7 +153,7 @@ namespace FastPosFrontend.ViewModels
         /// <summary>
         /// The <c>Setup</c> Method sets up tasks to retrieve data and Notifications on task completion 
         /// </summary>
-        private void Setup()
+        protected override void Setup()
         {
             var deliveryMen = StateManager.GetAsync<Deliveryman>();
             var waiters = StateManager.GetAsync<Waiter>();
@@ -166,34 +162,20 @@ namespace FastPosFrontend.ViewModels
             var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
             var categories = StateManager.GetAsync<Category>();
             var products = StateManager.GetAsync<Product>();
-            #endregion
+          
 
 
             _data = new NotifyAllTasksCompletion(deliveryMen, waiters, tables, customers, unprocessedOrders, categories, products);
+            if (_data.IsCompleted)
+            {
+                Initialize();
+
+            }
             //_data.PropertyChanged += _data_PropertyChanged;
-            _data.AllTasksCompleted += _data_AllTasksCompleted; ;
+            _data.AllTasksCompleted += OnAllTasksCompleted;
         }
 
-        private void _data_AllTasksCompleted(object sender, AllTasksCompletedEventArgs e)
-        {
-            if (!e.IsTaskCollectionCompleted) return;
-            Initialize();
-            IsReady = true;
-            /*
-             * Enable this line of code if you want to publish the event to subscribers
-             */
-            //ViewModelInitialized?.Invoke(this, new ViewModelInitializedEventArgs(true));
-            DeactivateLoadingScreen();
-        }
-
-        
-
-        private NotifyAllTasksCompletion _data;
-
-        public event EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
-        
-
-        public void Initialize()
+        public override void Initialize()
         {
 
             var deliveryMen = _data.GetResult<ICollection<Deliveryman>>();

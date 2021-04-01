@@ -67,6 +67,10 @@
                                                                 <Setter Property="Visibility" Value="Visible" />
                                                             </DataTrigger>
 
+                                                            <DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
+                                                                <Setter Property="IsEnabled" Value="False"></Setter>
+                                                            </DataTrigger>
+
                                                             <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                          Value="False">
                                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -214,8 +218,19 @@
                                             VerticalAlignment="Center"
                                             FontSize="22"
                                             AutomationProperties.Name="Fast Pos Settings"
-                                            Text="Fast Pos "
-                                            DockPanel.Dock="Top"/>
+                                            DockPanel.Dock="Top">
+                                            <TextBlock.Style>
+                                                
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="Fast Pos"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                                            <Setter Property="Text" Value="{Binding SelectedNavigationItem.Title}"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                     </DockPanel>
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"
@@ -231,7 +246,7 @@
                                                       Style="{StaticResource MaterialDesignTreeView}"
                                                       HorizontalAlignment="Left"
                                                       Margin="10 20"
-                                                      MinWidth="220">
+                                                      MinWidth="220" >
                                                 <b:Interaction.Behaviors>
                                                     <extensions:BindableSelectedItemBehavior SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
                                                 </b:Interaction.Behaviors>

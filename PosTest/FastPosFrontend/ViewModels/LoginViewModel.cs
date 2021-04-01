@@ -20,7 +20,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Login",type:typeof(LoginViewModel),NavigationItemLoadingStrategy.OnStartup)]
+    [NavigationItemConfiguration("Login",target:typeof(LoginViewModel),NavigationItemLoadingStrategy.OnStartup)]
     public class LoginViewModel : AppScreen
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
@@ -163,7 +163,10 @@ namespace FastPosFrontend.ViewModels
 
 
             (this.Parent as MainViewModel).IsLoggedIn = true;
-            Checkout();
+            
+            //Checkout();
+            CheckoutSettings();
+
 
           
         }
@@ -184,13 +187,19 @@ namespace FastPosFrontend.ViewModels
                 new CheckoutViewModel(){Parent = this.Parent};
             checkoutViewModel.ActivateLoadingScreen();
             checkoutViewModel.ViewModelInitialized+=ViewModelInitialized;
-            
 
-            //(this.Parent as Conductor<object>).ActivateItem(new LoadingScreenViewModel($"Loading {nameof(CheckoutViewModel)} ..."));
-            //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+        }
+
+        public void CheckoutSettings()
+        {
+            IsDialogOpen = false;
 
 
-            //(this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+            var checkoutSettingsViewModel =
+                new CheckoutSettingsViewModel() { Parent = this.Parent };
+            checkoutSettingsViewModel.ActivateLoadingScreen();
+            checkoutSettingsViewModel.ViewModelInitialized += ViewModelInitialized;
+
         }
 
         private void ViewModelInitialized(object sender, ViewModelInitializedEventArgs e)

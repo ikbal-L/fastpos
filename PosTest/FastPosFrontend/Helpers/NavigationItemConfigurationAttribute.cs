@@ -5,10 +5,10 @@ namespace FastPosFrontend.Helpers
     [AttributeUsage(System.AttributeTargets.Class)]
     public class NavigationItemConfigurationAttribute : Attribute
     {
-        public NavigationItemConfigurationAttribute(string title, Type type, NavigationItemLoadingStrategy loadingStrategy = NavigationItemLoadingStrategy.Lazy,Type parentNavigationItem = null,string groupName ="")
+        public NavigationItemConfigurationAttribute(string title, Type target, NavigationItemLoadingStrategy loadingStrategy = NavigationItemLoadingStrategy.Lazy,Type parentNavigationItem = null,string groupName ="")
         {
             Title = title;
-            Type = type;
+            Target = target;    
             LoadingStrategy = loadingStrategy;
             ParentNavigationItem = parentNavigationItem;
             GroupName = groupName;
@@ -20,7 +20,7 @@ namespace FastPosFrontend.Helpers
         public Type ParentNavigationItem { get; }
         public string GroupName { get; }
 
-        public Type Type { get; }
+        public Type Target { get; }
     }
 
     public enum NavigationItemLoadingStrategy

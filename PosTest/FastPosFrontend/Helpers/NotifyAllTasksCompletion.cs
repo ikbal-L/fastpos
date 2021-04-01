@@ -18,6 +18,14 @@ namespace FastPosFrontend.Helpers
             {
                 var _ = WatchTaskAsync(Task);
             }
+            else
+            {
+                NotifyOfPropertyChange(nameof(Status));
+                NotifyOfPropertyChange(nameof(IsCompleted));
+                NotifyOfPropertyChange(nameof(IsNotCompleted));
+                //NotifyOfPropertyChange(nameof(IsSuccessfullyCompleted));
+                AllTasksCompleted?.Invoke(this, new AllTasksCompletedEventArgs(true));
+            }
         }
 
         private async Task WatchTaskAsync(Task task)

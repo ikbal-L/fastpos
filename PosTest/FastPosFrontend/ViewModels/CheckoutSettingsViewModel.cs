@@ -29,8 +29,8 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Checkout settings",type:typeof(CheckoutSettingsViewModel),groupName:"Settings")]
-    public class CheckoutSettingsViewModel : AppScreen
+    [NavigationItemConfiguration("Checkout settings",target:typeof(CheckoutSettingsViewModel),groupName:"Settings")]
+    public class CheckoutSettingsViewModel : LazyScreen
     {
         private bool _IsProductDetailsDrawerOpen;
         private bool _IsDeleteCategoryDialogOpen;
@@ -64,28 +64,44 @@ namespace FastPosFrontend.ViewModels
             var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
             var setting = Manager.LoadSettings();
             var pageSize = setting.NumberOfProducts;
-            
-            //this.Title = "Checkout";
-            //this.Content = new CheckoutSettingsView() {DataContext= this};
+
             ProductPageSize = pageSize;
             CategoryPageSize = 6;
 
-
+            //StateManager.Fetch();
             
-            StateManager.Fetch();
-            var products = StateManager.Get<Product>();
-            var categories = StateManager.Get<Category>();
+            Setup();
+            
+            
+        }
 
+        protected override void Setup()
+        {
+            var products = StateManager.GetAsync<Product>();
+            var categories = StateManager.GetAsync<Category>();
+            _data = new NotifyAllTasksCompletion(products, categories);
+
+            if (_data.IsCompleted)
+            {
+                Initialize();
+
+            }
+            //_data.PropertyChanged += _data_PropertyChanged;
+            _data.AllTasksCompleted += OnAllTasksCompleted;
+        }
+
+        public override void Initialize()
+        {
+
+            _allProducts = _data.GetResult<ICollection<Product>>().ToList();
+            _allCategories = _data.GetResult<ICollection<Category>>().ToList();
             StateManager.Associate<Additive, Product>();
             StateManager.Associate<Product, Category>();
 
-            AllProducts = products.ToList();
-            AllCategories = categories.ToList();
-
             LoadCategoryPages();
             CurrentProducts = new BindableCollection<Product>();
-            var freeProds = AllProducts.Where(p => p.Rank == null);
-            var freeCategories = AllCategories.Where(c => c.Rank == null);
+            var freeProds = _allProducts.Where(p => p.Rank == null);
+            var freeCategories = _allCategories.Where(c => c.Rank == null);
 
             FreeProducts = new BindableCollection<Product>(freeProds);
             FreeCategories = new BindableCollection<Category>(freeCategories);
@@ -162,10 +178,9 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-       
 
-        public List<Product> AllProducts { get; }
-        public List<Category> AllCategories { get; }
+        private List<Product> _allProducts;
+        private List<Category> _allCategories;
 
         public int ProductPageSize
         {
@@ -337,7 +352,7 @@ namespace FastPosFrontend.ViewModels
         void LoadCategoryPages()
         {
             var comparer = new Comparer<Category>();
-            var categories = new List<Category>(AllCategories.Where(c => c.Rank != null));
+            var categories = new List<Category>(_allCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
             var maxRank = (int)categories.Max(c => c.Rank);
@@ -354,7 +369,7 @@ namespace FastPosFrontend.ViewModels
 
             CurrentProducts.Clear();
             if (category.Id == null) return;
-            var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
+            var filteredProducts = _allProducts.Where(p => p.Category == category && p.Rank != null);
 
             var comparer = new Comparer<Product>();
             var listOfFliteredProducts = filteredProducts.ToList();
@@ -765,7 +780,7 @@ namespace FastPosFrontend.ViewModels
                     ToastNotification.Notify("Problem connecting to server");
                 }
                 
-                AllCategories.Remove(SelectedFreeCategory);
+                _allCategories.Remove(SelectedFreeCategory);
                 FreeCategories.Remove(SelectedFreeCategory);
                 SelectedFreeCategory = null;
             }
@@ -783,7 +798,7 @@ namespace FastPosFrontend.ViewModels
                 StateManager.Delete(SelectedFreeProduct);
 
 
-                AllProducts.Remove(SelectedFreeProduct);
+                _allProducts.Remove(SelectedFreeProduct);
                 FreeProducts.Remove(SelectedFreeProduct);
                 SelectedFreeProduct = null;
             }

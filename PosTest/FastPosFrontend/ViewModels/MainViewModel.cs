@@ -185,6 +185,7 @@ namespace FastPosFrontend.ViewModels
             return groupItems;
         }
 
+        //TODO possible cause of issue with loading lazy viewmodel with partially completed collection of tasks 
         public virtual void NavigateToItem(AppNavigationLookupItem navigationItem)
         {
             if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return;
