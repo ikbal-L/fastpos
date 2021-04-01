@@ -150,9 +150,9 @@ namespace FastPosFrontend.ViewModels
             IsDialogOpen = true;
 
             StateManager.Instance
-                .Manage(_productRepository)
-                .Manage(_categoryRepository)
-                .Manage(_additiveRepository)
+                .Manage(_productRepository,fetch:false)
+                .Manage(_categoryRepository,false)
+                .Manage(_additiveRepository,false)
                 .Manage(_orderRepository, fetch: false)
                 .Manage(_tableRepository,false)
                 .Manage(_customerRepository)

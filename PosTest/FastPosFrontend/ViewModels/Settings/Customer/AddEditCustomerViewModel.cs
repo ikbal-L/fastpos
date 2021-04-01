@@ -44,8 +44,8 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
                 NotifyOfPropertyChange(nameof(NewPhoneNumber));
             }
         }
-        private CustomerSettengsViewModel Parent { get; set; }
-        public AddEditCustomerViewModel(CustomerSettengsViewModel parent)
+        private CustomerSettingsViewModel Parent { get; set; }
+        public AddEditCustomerViewModel(CustomerSettingsViewModel parent)
         {
             Parent = parent;
             Numbers = new BindableCollection<string>();

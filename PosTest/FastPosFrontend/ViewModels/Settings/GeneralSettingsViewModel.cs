@@ -13,7 +13,7 @@ namespace FastPosFrontend.ViewModels.Settings
 {
   
     [NavigationItemConfiguration(title:"General Settings",typeof(GeneralSettingsViewModel),groupName:"Settings")]
-    public  class GeneralSettingsViewModel : SettingsItemBase
+    public  class GeneralSettingsViewModel : AppScreen
     {
       
         private SettingsManager<GeneralSettings> Manager;
@@ -30,14 +30,14 @@ namespace FastPosFrontend.ViewModels.Settings
         }
 
         public GeneralSettingsViewModel() {
-            this.Index = 1;
+            //this.Index = 1;
             this.Title = "General";
             Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
             var setting = Manager.LoadSettings();
             Settings = setting ?? new GeneralSettings();
             Settings.PropertyChanged += Settings_PropertyChanged;
             Settings.Initialized = true;
-            this.Content = new GeneralSettingsView() { DataContext = this };
+            //this.Content = new GeneralSettingsView() { DataContext = this };
             
         }
 

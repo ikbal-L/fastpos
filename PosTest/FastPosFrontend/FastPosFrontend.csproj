@@ -267,6 +267,7 @@
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
+    <Compile Include="Helpers\NavigationItemConfigurationAttribute.cs" />
     <Compile Include="Helpers\NotifyAllTasksCompletion.cs" />
     <Compile Include="Helpers\NotifyTaskCompletion.cs" />
     <Compile Include="ShellBootstrapper.cs" />
@@ -305,7 +306,7 @@
     <Compile Include="ViewModels\ProductsViewModel.cs" />
     <Compile Include="ViewModels\Settings1ViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\AddEditCustomerViewModel.cs" />
-    <Compile Include="ViewModels\Settings\Customer\CustomerSettengsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Customer\CustomerSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\DeliveryMan\AddEditDeliveryManViewModel.cs" />
     <Compile Include="ViewModels\Settings\DeliveryMan\DeliveryManSettengsViewModel.cs" />
     <Compile Include="ViewModels\Settings\DialogViewModel.cs" />

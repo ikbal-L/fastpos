@@ -17,7 +17,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("Additive settings", typeof(AdditivesSettingsViewModel), groupName: "Settings")]
-    public class AdditivesSettingsViewModel : SettingsItemBase
+    public class AdditivesSettingsViewModel : AppScreen
     {
         private BindableCollection<Additive> _additives;
         private Additive _selectedAdditive;
@@ -34,8 +34,8 @@ namespace FastPosFrontend.ViewModels
 
         public AdditivesSettingsViewModel() : this(30)
         {
-            this.Title = "Additives";
-            this.Content = new AdditivesSettingsView() {DataContext = this};
+            //this.Title = "Additives";
+            //this.Content = new AdditivesSettingsView() {DataContext = this};
         }
 
         public AdditivesSettingsViewModel( /*IAdditiveService additiveService,*/ int additivePageSize)

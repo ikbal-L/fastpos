@@ -9,8 +9,8 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Customer
 {
-    [NavigationItemConfiguration("Customer Settings",type:typeof(CustomerSettengsViewModel), groupName: "Settings")]
-    public class CustomerSettengsViewModel : AppScreen
+    [NavigationItemConfiguration("Customer Settings",type:typeof(CustomerSettingsViewModel), groupName: "Settings")]
+    public class CustomerSettingsViewModel : AppScreen
     {
         private ObservableCollection<ServiceInterface.Model.Customer> _Customers;
 
@@ -47,7 +47,7 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
 
         public ObservableCollection<ServiceInterface.Model.Customer> FilteredCustomers { get => new ObservableCollection<ServiceInterface.Model.Customer>(Customers.Where(x => (x.Name?.ToLower().Contains(SearchString?.ToLower())??false) || (x.PhoneNumbers?.Any(n => n.ToLower().Contains(SearchString?.ToLower()))??false) || (x.Debit.ToString()?.ToLower().Contains(SearchString?.ToLower()) ??false))); }
 
-        public CustomerSettengsViewModel() {
+        public CustomerSettingsViewModel() {
 
             //this.Title = "Customers";
             //this.Content = new CustomerSettingsView() { DataContext = this };
