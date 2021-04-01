@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
+    [NavigationItemConfiguration("Print Settings", typeof(PrintSettingsViewModel), groupName: "Settings")]
     public class PrintSettingsViewModel : SettingsItemBase
     {
         private ObservableCollection<PrinterItem> _Printers;

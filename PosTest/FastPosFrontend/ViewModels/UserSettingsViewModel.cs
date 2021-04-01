@@ -8,6 +8,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
+    [NavigationItemConfiguration("User Settings", typeof(UserSettingsViewModel), groupName: "Settings")]
     public class UserSettingsViewModel : SettingsItemBase
     {
         private User _selectedUser;

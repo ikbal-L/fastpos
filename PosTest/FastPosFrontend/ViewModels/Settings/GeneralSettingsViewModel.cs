@@ -11,7 +11,9 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
-  public  class GeneralSettingsViewModel : SettingsItemBase
+  
+    [NavigationItemConfiguration(title:"General Settings",typeof(GeneralSettingsViewModel),groupName:"Settings")]
+    public  class GeneralSettingsViewModel : SettingsItemBase
     {
       
         private SettingsManager<GeneralSettings> Manager;

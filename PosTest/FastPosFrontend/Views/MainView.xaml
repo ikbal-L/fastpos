@@ -28,8 +28,8 @@
 
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <md:ColorZone
                                     Padding="16"
@@ -55,6 +55,7 @@
                                                 x:Name="AppMenuToggleButton"
                                                 IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                                                 AutomationProperties.Name="HamburgerToggleButton">
+
                                                 <ToggleButton.Style>
                                                     <Style TargetType="ToggleButton"
                                                            BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
@@ -137,13 +138,15 @@
                                                 </Button>
                                                 <Button x:Name="LogoutAppWindowButton"
                                                         cal:Message.Attach="Close()"
-                                                        Content="Logout" >
+                                                        Content="Logout">
                                                     <Button.Style>
-                                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                                            <Setter Property="Visibility" Value="Visible"></Setter>
+                                                        <Style TargetType="Button"
+                                                               BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
+                                                            <Setter Property="Visibility" Value="Visible" />
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsLoggedIn}" Value="false">
-                                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                                <DataTrigger Binding="{Binding IsLoggedIn}"
+                                                                             Value="false">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -209,19 +212,20 @@
                                             VerticalAlignment="Center"
                                             FontSize="22"
                                             AutomationProperties.Name="Fast Pos Settings"
-                                            Text="Fast Pos " />
+                                            Text="Fast Pos "
+                                            DockPanel.Dock="Top"/>
                                     </DockPanel>
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"
-                                    IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
+                                               IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
                                     <md:DrawerHost.LeftDrawerContent>
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
-                                            <DockPanel Grid.Row="0" MinWidth="220" />
-                                            <ListBox ItemsSource="{Binding AppNavigationItems}">
+                                            <DockPanel Grid.Row="0"  />
+                                            <!--<ListBox ItemsSource="{Binding AppNavigationItems}">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate DataType="helpers:AppScreen">
                                                             <TextBlock Text="{Binding Title}"
@@ -231,7 +235,32 @@
                                                                     Margin="20 5 "></TextBlock>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
-                                            </ListBox>
+                                            </ListBox>-->
+                                            <TreeView Grid.Row="0" ItemsSource="{Binding AppNavigationItems}"
+                                                      Style="{StaticResource MaterialDesignTreeView}"
+                                                      HorizontalAlignment="Left"
+                                                      Margin="10 20"
+                                                      MinWidth="220">
+                                                <TreeView.Resources>
+                                                    <HierarchicalDataTemplate
+                                                        DataType="{x:Type helpers:AppNavigationLookupItem}"
+                                                        ItemsSource="{Binding SubItems}">
+                                                        <TextBlock HorizontalAlignment="Center"
+                                                            Text="{Binding Title}"
+                                                            Margin="3 2"
+                                                            FontSize="16"
+                                                            Style="{StaticResource MaterialDesignButtonTextBlock}"/>
+                                                    </HierarchicalDataTemplate>
+                                                    <DataTemplate
+                                                        DataType="{x:Type helpers:AppNavigationLookupItem}" x:Key="SubItem">
+                                                        <TextBlock
+                                                            Text="{Binding Title}"
+                                                            Margin="3 2"
+                                                            ToolTip="{Binding Title}"
+                                                            Style="{StaticResource MaterialDesignButtonTextBlock}"/>
+                                                    </DataTemplate>
+                                                </TreeView.Resources>
+                                            </TreeView>
                                             <Button Cursor="Hand"
                                                     MinWidth="220"
                                                     Background="Transparent"
@@ -245,7 +274,7 @@
 
                                     </md:DrawerHost.LeftDrawerContent>
 
-                                    <ContentPresenter  />
+                                    <ContentPresenter />
 
                                 </md:DrawerHost>
                             </Grid>

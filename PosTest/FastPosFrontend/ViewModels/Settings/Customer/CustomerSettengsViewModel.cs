@@ -9,6 +9,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Customer
 {
+    [NavigationItemConfiguration("Customer Settings",type:typeof(CustomerSettengsViewModel), groupName: "Settings")]
     public class CustomerSettengsViewModel : SettingsItemBase
     {
         private ObservableCollection<ServiceInterface.Model.Customer> _Customers;

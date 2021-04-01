@@ -8,6 +8,8 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Waiter
 {
+
+    [NavigationItemConfiguration("Waiter Settings", typeof(WaiterSettengsViewModel), groupName: "Settings")]
     public class WaiterSettengsViewModel: SettingsItemBase
     {
         private ObservableCollection<ServiceInterface.Model.Waiter> _Waiters;

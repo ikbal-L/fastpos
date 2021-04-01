@@ -31,6 +31,7 @@ using TaskExtensions = System.Threading.Tasks.TaskExtensions;
 
 namespace FastPosFrontend.ViewModels
 {
+    [NavigationItemConfiguration("Checkout",typeof(CheckoutViewModel))]
     public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, INotifyViewModelInitialized,IAppNavigationItem
     {
         

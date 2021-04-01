@@ -29,6 +29,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
+    [NavigationItemConfiguration("Checkout settings",type:typeof(CheckoutSettingsViewModel),groupName:"Settings")]
     public class CheckoutSettingsViewModel : SettingsItemBase
     {
         private bool _IsProductDetailsDrawerOpen;

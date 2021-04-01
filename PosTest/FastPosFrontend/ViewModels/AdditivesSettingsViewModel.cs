@@ -12,11 +12,11 @@ using FastPosFrontend.ViewModels.SubViewModel;
 using FastPosFrontend.Views;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
+    [NavigationItemConfiguration("Additive settings", typeof(AdditivesSettingsViewModel), groupName: "Settings")]
     public class AdditivesSettingsViewModel : SettingsItemBase
     {
         private BindableCollection<Additive> _additives;
@@ -32,17 +32,19 @@ namespace FastPosFrontend.ViewModels
         private INotifyPropertyChanged _dialogViewModel;
         private WarningViewModel _warningViewModel;
 
-        public AdditivesSettingsViewModel():this(30) {
+        public AdditivesSettingsViewModel() : this(30)
+        {
             this.Title = "Additives";
-            this.Content = new AdditivesSettingsView() { DataContext=this};
+            this.Content = new AdditivesSettingsView() {DataContext = this};
         }
-        public AdditivesSettingsViewModel(/*IAdditiveService additiveService,*/ int additivePageSize)
+
+        public AdditivesSettingsViewModel( /*IAdditiveService additiveService,*/ int additivePageSize)
         {
             IsDialogOpen = false;
             //_additiveService = additiveService;
             _additivePageSize = additivePageSize;
-            
-             //_allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
+
+            //_allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
 
             //var (additiveStatusCode, _allAdditives) = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives);
             _allAdditives = StateManager.Get<Additive>().ToList();
@@ -59,9 +61,11 @@ namespace FastPosFrontend.ViewModels
         public Additive SelectedAdditive
         {
             get => _selectedAdditive;
-            set {
+            set
+            {
                 CopySelectedAdditive = value?.Clone();
-                Set(ref _selectedAdditive, value); }
+                Set(ref _selectedAdditive, value);
+            }
         }
 
         public Additive CopySelectedAdditive
@@ -121,10 +125,11 @@ namespace FastPosFrontend.ViewModels
             additives.Sort(comparer);
             Additives = new BindableCollection<Additive>();
             var maxRank = 30;
-            if (additives.Count>0)
+            if (additives.Count > 0)
             {
-                maxRank =  (int) additives.Max(a => a.Rank);
+                maxRank = (int) additives.Max(a => a.Rank);
             }
+
             int numberOfPages = (maxRank / _additivePageSize) + (maxRank % _additivePageSize == 0 ? 0 : 1);
             numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
             var size = numberOfPages * _additivePageSize;
@@ -193,15 +198,15 @@ namespace FastPosFrontend.ViewModels
             var indexOfIncomingAdditive = Additives.IndexOf(incomingAdditive);
             targetAdditive.Rank = receivedRank;
             incomingAdditive.Rank = targetRank;
-            
+
             Additives[indexOfTargetAdditive] = incomingAdditive;
             Additives[indexOfIncomingAdditive] = targetAdditive;
-            
+
             if (incomingAdditive.Id != null)
             {
                 StateManager.Save(incomingAdditive);
-
             }
+
             if (targetAdditive.Id != null)
             {
                 StateManager.Save(targetAdditive);
@@ -217,26 +222,25 @@ namespace FastPosFrontend.ViewModels
                 this.SelectedAdditive.Description = CopySelectedAdditive.Description;
                 this.SelectedAdditive.Background = CopySelectedAdditive.Background;
             }
-
-            
-            
         }
-        public void Cancel() {
+
+        public void Cancel()
+        {
             SelectedAdditive = null;
             IsEditing = false;
-
         }
 
         public void EditAdditive()
         {
             if (SelectedAdditive?.Id == null)
             {
-                ToastNotification.Notify("Select a non empty cell to edit",NotificationType.Warning);
+                ToastNotification.Notify("Select a non empty cell to edit", NotificationType.Warning);
                 return;
             }
 
             IsEditing = true;
         }
+
         public void CopyAdditive()
         {
             if (SelectedAdditive?.Id == null)
@@ -252,19 +256,19 @@ namespace FastPosFrontend.ViewModels
         {
             if (ClipBoardAdditive == null)
             {
-                ToastNotification.Notify("Copy an additive first",NotificationType.Warning);
+                ToastNotification.Notify("Copy an additive first", NotificationType.Warning);
                 return;
             }
 
             if (SelectedAdditive?.Rank == null)
             {
-                ToastNotification.Notify("Select a zone to copy in first",NotificationType.Warning);
+                ToastNotification.Notify("Select a zone to copy in first", NotificationType.Warning);
                 return;
             }
 
             if (ClipBoardAdditive.Equals(SelectedAdditive))
             {
-                ToastNotification.Notify("You chose the same additive",NotificationType.Warning);
+                ToastNotification.Notify("You chose the same additive", NotificationType.Warning);
                 return;
             }
 
@@ -285,13 +289,11 @@ namespace FastPosFrontend.ViewModels
 
             if (AdditiveToMove == SelectedAdditive)
             {
-                ToastNotification.Notify("You selected the same additive",NotificationType.Warning);
+                ToastNotification.Notify("You selected the same additive", NotificationType.Warning);
                 AdditiveToMove = null;
                 SelectedAdditive = null;
                 return;
             }
-
-            
         }
 
         public void DeleteAdditive()
@@ -301,24 +303,22 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            WarningViewModel = new WarningViewModel("Are you sure to delete this Additive?", "Check", "Ok", "Close", "No",
+            WarningViewModel = new WarningViewModel("Are you sure to delete this Additive?", "Check", "Ok", "Close",
+                "No",
                 (o) => DeleteAdditiveAction(o), this, () => IsDialogOpen = false);
             DialogViewModel = WarningViewModel;
             IsDialogOpen = true;
-
-
         }
 
         public void DeleteAdditiveAction(object param)
         {
-
             if (SelectedAdditive?.Id == null)
             {
                 ToastNotification.Notify("Select an Additive to delete first ", NotificationType.Warning);
                 return;
             }
 
-            var selectedAdditiveId = (long)SelectedAdditive.Id;
+            var selectedAdditiveId = (long) SelectedAdditive.Id;
 
             var additiveToDelete = SelectedAdditive;
 
@@ -330,29 +330,29 @@ namespace FastPosFrontend.ViewModels
             {
                 //Additives.Remove(SelectedAdditive);
                 var index = Additives.IndexOf(additiveToDelete);
-                Additives[index] = new Additive() { Rank = additiveToDelete.Rank };
+                Additives[index] = new Additive() {Rank = additiveToDelete.Rank};
                 additiveToDelete = null;
                 SelectedAdditive = null;
                 ToastNotification.Notify("Additive was deleted successfully", NotificationType.Success);
-
             }
             else
             {
                 ToastNotification.Notify("Something happened", NotificationType.Error);
             }
+
             IsDialogOpen = false;
         }
-  
+
         public void BackToLogin()
         {
-     /*       LoginViewModel loginvm = new LoginViewModel();
-            loginvm.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(loginvm);*/
+            /*       LoginViewModel loginvm = new LoginViewModel();
+                   loginvm.Parent = this.Parent;
+                   (this.Parent as Conductor<object>).ActivateItem(loginvm);*/
         }
 
         public void SelectAdditive(Additive additive)
         {
-            if (AdditiveToMove!= null)
+            if (AdditiveToMove != null)
             {
                 PutAdditiveInCellOf(SelectedAdditive, AdditiveToMove);
                 AdditiveToMove = null;
