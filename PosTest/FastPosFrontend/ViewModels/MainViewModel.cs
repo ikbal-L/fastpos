@@ -23,7 +23,11 @@ namespace FastPosFrontend.ViewModels
         private bool _isBackendServerOn = false;
         private AppScreen _activeScreen;
 
-
+        public MainViewModel()
+        {
+            IsBackendServerOn =ConnectionHelper.PingHost();
+            IsDbServerOn = ConnectionHelper.PingHost(portNumber:3306);
+        }
         public bool IsLoggedIn
         {
             get => _isLoggedIn;

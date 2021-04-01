@@ -684,7 +684,7 @@
                             Style="{StaticResource ButtonTopOrder}"
                             caliburn:Message.Attach="[Event Click] = [Action SettingsCommand]" />
 
-                    <Button DockPanel.Dock="Right" Padding="0"
+                    <!--<Button DockPanel.Dock="Right" Padding="0"
                             Content="{materialdesign:PackIcon AccountCashOutline,25}"
                             Style="{StaticResource ButtonTopOrder}"
                             caliburn:Message.Attach="[Event Click] = [Action AccountingCommand]" />
@@ -692,7 +692,7 @@
                     <Button DockPanel.Dock="Right" Padding="0"
                             Content="{materialdesign:PackIcon AccountCog,25}"
                             Style="{StaticResource ButtonTopOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action UserSettingsCommand]" />
+                            caliburn:Message.Attach="[Event Click] = [Action UserSettingsCommand]" />-->
 
                     <Menu IsMainMenu="True" DockPanel.Dock="Right">
                         <MenuItem Height="30" Width="30">

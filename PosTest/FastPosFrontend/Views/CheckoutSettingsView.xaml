@@ -278,6 +278,7 @@
                         </ScrollViewer>
                     </TabItem>
                     <TabItem Header="Products" TabIndex="1">
+
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                             <Grid>
                                 <Grid.RowDefinitions>

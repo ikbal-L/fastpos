@@ -12,7 +12,10 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.DeliveryAccounting
 {
-   public class DeliveryAccountingViewModel: Screen
+
+
+    [NavigationItemConfiguration("Delivery Accounting", typeof(DeliveryAccountingViewModel))]
+    public class DeliveryAccountingViewModel: AppScreen
     {
         private ObservableCollection<Deliveryman> _Deliverymans;
 
