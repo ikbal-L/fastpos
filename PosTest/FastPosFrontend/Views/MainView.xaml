@@ -137,7 +137,7 @@
                                                     </Button.Style>
                                                 </Button>
                                                 <Button x:Name="LogoutAppWindowButton"
-                                                        cal:Message.Attach="Close()"
+                                                        cal:Message.Attach="Logout"
                                                         Content="Logout">
                                                     <Button.Style>
                                                         <Style TargetType="Button"
@@ -225,17 +225,6 @@
                                                 <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
                                             <DockPanel Grid.Row="0"  />
-                                            <!--<ListBox ItemsSource="{Binding AppNavigationItems}">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate DataType="helpers:AppScreen">
-                                                            <TextBlock Text="{Binding Title}"
-                                                                    Style="{StaticResource MaterialDesignButtonTextBlock}"
-                                                                    TextAlignment="Center"
-                                                                    HorizontalAlignment="Center"
-                                                                    Margin="20 5 "></TextBlock>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>-->
                                             <TreeView Grid.Row="0" ItemsSource="{Binding AppNavigationItems}"
                                                       Style="{StaticResource MaterialDesignTreeView}"
                                                       HorizontalAlignment="Left"

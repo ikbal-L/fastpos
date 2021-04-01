@@ -8,6 +8,7 @@ using System.Reflection;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
@@ -98,10 +99,11 @@ namespace FastPosFrontend.ViewModels
             //splashScreen.Close();
         }
 
-        public void showLogin()
+        public void Logout()
         {
-            ButtonStr = "Logged in";
-            ActivateItem(new LoginViewModel());
+            StateManager.Flush();
+            ActiveScreen = new LoginViewModel();
+            ActivateItem(ActiveScreen);
         }
     }
 
