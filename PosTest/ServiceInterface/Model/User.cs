@@ -77,7 +77,7 @@ namespace ServiceInterface.Model
         public List<long> RoleIds { get; set; }
 
         [DataMember]
-        public bool IsActive
+        public bool IsUserActive
         {
             get { return (bool) (_isActive==null?true:_isActive); }
             set => Set(ref _isActive, value);

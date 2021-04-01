@@ -92,7 +92,7 @@
                                         <ToggleButton
                                             Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
                                             ToolTip="MaterialDesignSwitchDarkToggleButton"
-                                            IsChecked="{Binding IsActive}" />
+                                            IsChecked="{Binding IsUserActive}" />
                                     </StackPanel>
                                 </StackPanel>
                             </materialDesign:Card>

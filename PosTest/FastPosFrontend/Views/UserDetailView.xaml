@@ -257,7 +257,7 @@
                             <ToggleButton VerticalAlignment="Bottom"
                                           Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
                                           ToolTip="MaterialDesignSwitchDarkToggleButton"
-                                          IsChecked="{Binding IsActive}" />
+                                          IsChecked="{Binding IsUserActive}" />
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical" Margin=" 0 5">
@@ -269,8 +269,9 @@
                                            HorizontalAlignment="Left"
                                            TextAlignment="Center"
                                            ></TextBlock>
-                                <Border  Background="{Binding ElementName=ColorPicker,Path=Color,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ColorToBrushConverter}}"
-                                         CornerRadius="5"
+                                <materialDesign:Card  Background="{Binding ElementName=ColorPicker,Path=Color,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ColorToBrushConverter}}"
+                                                      materialDesign:UniformCornerRadius="10" 
+                                                      materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                          >
                                     <materialDesign:PopupBox HorizontalAlignment="Right"  
                                                              StaysOpen="True" 
@@ -283,7 +284,7 @@
                                             Width="250"
                                             Color="{Binding SelectedColor, Delay=25}"/>
                                     </materialDesign:PopupBox>
-                                </Border>
+                                </materialDesign:Card>
 
                             </UniformGrid>
                           

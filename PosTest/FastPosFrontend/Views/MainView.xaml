@@ -15,6 +15,8 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:converters="clr-namespace:FastPosFrontend.Converters"
         xmlns:helpers="clr-namespace:FastPosFrontend.Helpers"
+        xmlns:extensions="clr-namespace:FastPosFrontend.Extensions"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         Title="{Binding WindowTitle}" Height="800" Width="1100"
         x:Name="AppMainViewWindow">
     <Window.Resources>
@@ -230,13 +232,16 @@
                                                       HorizontalAlignment="Left"
                                                       Margin="10 20"
                                                       MinWidth="220">
+                                                <b:Interaction.Behaviors>
+                                                    <extensions:BindableSelectedItemBehavior SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
+                                                </b:Interaction.Behaviors>
                                                 <TreeView.Resources>
                                                     <HierarchicalDataTemplate
                                                         DataType="{x:Type helpers:AppNavigationLookupItem}"
                                                         ItemsSource="{Binding SubItems}">
                                                         <TextBlock HorizontalAlignment="Center"
                                                             Text="{Binding Title}"
-                                                            Margin="3 2"
+                                                            Margin="5"
                                                             FontSize="16"
                                                             Style="{StaticResource MaterialDesignButtonTextBlock}"/>
                                                     </HierarchicalDataTemplate>
@@ -244,7 +249,7 @@
                                                         DataType="{x:Type helpers:AppNavigationLookupItem}" x:Key="SubItem">
                                                         <TextBlock
                                                             Text="{Binding Title}"
-                                                            Margin="3 2"
+                                                            Margin="5"
                                                             ToolTip="{Binding Title}"
                                                             Style="{StaticResource MaterialDesignButtonTextBlock}"/>
                                                     </DataTemplate>

@@ -9,17 +9,17 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("User Settings", typeof(UserSettingsViewModel), groupName: "Settings")]
-    public class UserSettingsViewModel : SettingsItemBase
+    public class UserSettingsViewModel : /*SettingsItemBase*/ AppScreen
     {
-        private User _selectedUser;
-        private UserDetailViewModel _userDetailViewModel;
-        private bool _isEditing;
+        private User _selectedUser = null;
+        private UserDetailViewModel _userDetailViewModel = null;
+        private bool _isEditing = false;
         //private UserDetailView _subView;
 
         public UserSettingsViewModel()
         {
-            this.Title = "User Settings";
-            this.Content = new UserSettingsView() { DataContext = this };
+            //this.Title = "User Settings";
+            //this.Content = new UserSettingsView() { DataContext = this };
             var userRepository = new UserRepository();
             var roleRepository = new RoleRepository();
             StateManager.Instance.Manage(userRepository).Manage(roleRepository);

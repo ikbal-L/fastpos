@@ -56,6 +56,7 @@ namespace FastPosFrontend.ViewModels
         }
 
 
+
         public String ButtonStr
         {
             get => _buttonStr;
@@ -103,6 +104,7 @@ namespace FastPosFrontend.ViewModels
         {
             StateManager.Flush();
             ActiveScreen = new LoginViewModel();
+            IsLoggedIn = false;
             ActivateItem(ActiveScreen);
         }
     }
@@ -110,9 +112,20 @@ namespace FastPosFrontend.ViewModels
     public class AppNavigationConductor<T> : Conductor<T>, IAppNavigationConductor where T : class
     {
         private BindableCollection<AppNavigationLookupItem> _appNavigationItems;
+        private AppNavigationLookupItem _selectedNavigationItem;
 
         public AppNavigationConductor()
         {
+        }
+
+        public AppNavigationLookupItem SelectedNavigationItem
+        {
+            get => _selectedNavigationItem;
+            set
+            {
+                Set(ref _selectedNavigationItem, value);
+                NavigateToItem(value);
+            }
         }
 
         public BindableCollection<AppNavigationLookupItem> AppNavigationItems
@@ -168,8 +181,11 @@ namespace FastPosFrontend.ViewModels
             return groupItems;
         }
 
-        public virtual void NavigateToItem(IAppNavigationItem navigationItem)
+        public virtual void NavigateToItem(AppNavigationLookupItem navigationItem)
         {
+            if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return;
+            var screen = (T)Activator.CreateInstance(navigationItem.Target);
+            ActivateItem(screen);
         }
     }
 

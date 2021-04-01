@@ -30,7 +30,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("Checkout settings",type:typeof(CheckoutSettingsViewModel),groupName:"Settings")]
-    public class CheckoutSettingsViewModel : SettingsItemBase
+    public class CheckoutSettingsViewModel : AppScreen
     {
         private bool _IsProductDetailsDrawerOpen;
         private bool _IsDeleteCategoryDialogOpen;
@@ -65,8 +65,8 @@ namespace FastPosFrontend.ViewModels
             var setting = Manager.LoadSettings();
             var pageSize = setting.NumberOfProducts;
             
-            this.Title = "Checkout";
-            this.Content = new CheckoutSettingsView() {DataContext= this};
+            //this.Title = "Checkout";
+            //this.Content = new CheckoutSettingsView() {DataContext= this};
             ProductPageSize = pageSize;
             CategoryPageSize = 6;
 

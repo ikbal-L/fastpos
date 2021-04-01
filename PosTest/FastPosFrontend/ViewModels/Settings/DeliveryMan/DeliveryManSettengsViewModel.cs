@@ -9,6 +9,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
 {
+    [NavigationItemConfiguration("Deliveryman Settings", typeof(DeliveryManSettengsViewModel), groupName: "Settings")]
     public class DeliveryManSettengsViewModel : SettingsItemBase
     {
         private ObservableCollection<Deliveryman> _Deliverymans;

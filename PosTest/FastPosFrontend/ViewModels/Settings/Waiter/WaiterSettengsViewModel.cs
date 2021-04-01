@@ -10,7 +10,7 @@ namespace FastPosFrontend.ViewModels.Settings.Waiter
 {
 
     [NavigationItemConfiguration("Waiter Settings", typeof(WaiterSettengsViewModel), groupName: "Settings")]
-    public class WaiterSettengsViewModel: SettingsItemBase
+    public class WaiterSettengsViewModel: AppScreen
     {
         private ObservableCollection<ServiceInterface.Model.Waiter> _Waiters;
 
@@ -46,8 +46,8 @@ namespace FastPosFrontend.ViewModels.Settings.Waiter
         private AddEditWaiterView _addEditWaiterView;
         public WaiterSettengsViewModel() {
 
-            this.Title = "Waiters";
-            this.Content = new WaiterSettingsView() { DataContext = this };
+            //this.Title = "Waiters";
+            //this.Content = new WaiterSettingsView() { DataContext = this };
             Waiters = new ObservableCollection<ServiceInterface.Model.Waiter>(StateManager.Get<ServiceInterface.Model.Waiter>());
             _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
             _addEditWaiterView = new AddEditWaiterView() { DataContext = _AddEditWaiterViewModel };

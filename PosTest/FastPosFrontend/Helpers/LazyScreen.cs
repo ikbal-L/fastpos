@@ -28,14 +28,14 @@ namespace FastPosFrontend.Helpers
     public class AppNavigationLookupItem:PropertyChangedBase
     {
         private string _title;
-        private Type _type;
+        private Type _target;
         private BindableCollection<AppNavigationLookupItem> _subItems;
 
         
-        public AppNavigationLookupItem(string title,Type type = null)
+        public AppNavigationLookupItem(string title,Type target = null)
         {
             _title = title;
-            _type = type;
+            _target = target;
         }
 
         public string Title
@@ -44,10 +44,10 @@ namespace FastPosFrontend.Helpers
             set => Set(ref _title, value);
         }
 
-        public Type Type
+        public Type Target
         {
-            get => _type;
-            set => Set(ref _type, value);
+            get => _target;
+            set => Set(ref _target, value);
         }
 
         public BindableCollection<AppNavigationLookupItem> SubItems

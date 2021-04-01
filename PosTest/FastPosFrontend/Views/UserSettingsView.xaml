@@ -95,13 +95,13 @@
                                     <TextBlock Text="{Binding Email}" />
 
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontWeight="DemiBold" VerticalAlignment="Center">
+                                        <TextBlock FontWeight="DemiBold" VerticalAlignment="Center" Margin="0 0 10 0">
                                             Active
                                         </TextBlock>
                                         <ToggleButton VerticalAlignment="Bottom"
                                             Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
                                             ToolTip="MaterialDesignSwitchDarkToggleButton"
-                                            IsChecked="{Binding IsActive}" />
+                                            IsChecked="{Binding IsUserActive}" />
                                     </StackPanel>
                                 </StackPanel>
 

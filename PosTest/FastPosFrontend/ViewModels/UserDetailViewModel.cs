@@ -17,7 +17,7 @@ namespace FastPosFrontend.ViewModels
         private string _firstName;
         private string _lastName;
         private string _email;
-        private bool _isActive;
+        private bool _isUserActive;
         private Brush _background;
 
         private User _model;
@@ -60,7 +60,7 @@ namespace FastPosFrontend.ViewModels
             FirstName = _model.FirstName;
             LastName = _model.LastName;
             Email = _model.Email;
-            IsActive = _model.IsActive;
+            IsUserActive = _model.IsUserActive;
             if (_model.Roles != null)
             {
                 UserRoles = new BindableCollection<Role>(_model.Roles);
@@ -141,10 +141,10 @@ namespace FastPosFrontend.ViewModels
         public BindableCollection<Role> UserRoles { get; set; } = new BindableCollection<Role>();
         public BindableCollection<string> PhoneNumbers { get; set; } = new BindableCollection<string>();
 
-        public bool IsActive
+        public bool IsUserActive
         {
-            get => _isActive;
-            set => Set(ref _isActive, value);
+            get => _isUserActive;
+            set => Set(ref _isUserActive, value);
         }
 
         public Brush Background

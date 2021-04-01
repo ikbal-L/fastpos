@@ -210,34 +210,6 @@ namespace FastPosFrontend.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
 
-        public void close()
-        {
-            Application.Current.MainWindow.Close();
-        }
-
-        public void PaginationTest()
-        {
-            int resp;
-            try
-            {
-                resp = _authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Check your server connection");
-                return;
-            }
-
-            PaginationTestViewModel paginationtesttViewModel =
-                new PaginationTestViewModel(
-                        //_productService,
-                        //_categorieService, 
-                        //_orderRepository
-                        );
-
-            paginationtesttViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(paginationtesttViewModel);
-        }
 
         public void LoginWithPin()
         {
@@ -255,29 +227,7 @@ namespace FastPosFrontend.ViewModels
             pinLoginViewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(pinLoginViewModel);
         }
-        public void CheckoutSettings()
-        {
-        /*    IsDialogOpen = false;
-            int resp;
-            try
-            {
-                //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-                resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Check your server connection");
-                return;
-            }
 
-            CheckoutSettingsViewModel checkoutSettingsViewModel =
-                    new CheckoutSettingsViewModel(30, 8
-                //        , _productService,
-                //_categorieService
-                      );
-            checkoutSettingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(checkoutSettingsViewModel);*/
-        }  
         
         public void CustomersSettings()
         {
@@ -286,15 +236,7 @@ namespace FastPosFrontend.ViewModels
             (this.Parent as Conductor<object>).ActivateItem(customerViewModel);
         }  
         
-        public void AdditivesSettings()
-        {
-            // authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-         //   _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            //_additiveService = new AdditiveService();
-         /*   AdditivesSettingsViewModel additivesSettingsViewModel = new AdditivesSettingsViewModel(/*_additiveService,*///30);
-            //additivesSettingsViewModel.Parent = this.Parent;
-        //    (this.Parent as Conductor<object>).ActivateItem(additivesSettingsViewModel);
-        }
+
         public void AdditivesOfProduct()
         {
             AdditivesOfProductViewModel AdditivesOfProduct = new AdditivesOfProductViewModel ();
