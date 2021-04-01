@@ -34,7 +34,7 @@ namespace FastPosFrontend.ViewModels.Settings
             var setting = Manager.LoadSettings();
             Settings = setting ?? new GeneralSettings();
             Settings.PropertyChanged += Settings_PropertyChanged;
-            setting.Initialized = true;
+            Settings.Initialized = true;
             this.Content = new GeneralSettingsView() { DataContext = this };
             
         }

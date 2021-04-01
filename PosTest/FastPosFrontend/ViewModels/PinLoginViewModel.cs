@@ -93,14 +93,7 @@ namespace FastPosFrontend.ViewModels
         {
             //IsDialogOpen = false;
             CheckoutViewModel checkoutViewModel =
-                new CheckoutViewModel(ActionConfig.NumberOfProductsPerPage
-                    //,
-                    //_productsService,
-                    //_categoriesService,
-                    //_orderService,
-                    //_waiterService,
-                    //_delivereyService,
-                    //_customerService
+                new CheckoutViewModel(
                 );
 
             checkoutViewModel.Parent = this.Parent;

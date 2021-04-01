@@ -14,6 +14,7 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:converters="clr-namespace:FastPosFrontend.Converters"
+        xmlns:helpers="clr-namespace:FastPosFrontend.Helpers"
         Title="{Binding WindowTitle}" Height="800" Width="1100"
         x:Name="AppMainViewWindow">
     <Window.Resources>
@@ -25,7 +26,11 @@
                     <ControlTemplate TargetType="Window">
                         <md:Card UniformCornerRadius="0">
 
-                            <StackPanel>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
                                 <md:ColorZone
                                     Padding="16"
                                     md:ShadowAssist.ShadowDepth="Depth2"
@@ -207,7 +212,7 @@
                                             Text="Fast Pos " />
                                     </DockPanel>
                                 </md:ColorZone>
-                                <md:DrawerHost
+                                <md:DrawerHost Grid.Row="1"
                                     IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
                                     <md:DrawerHost.LeftDrawerContent>
                                         <Grid>
@@ -216,7 +221,17 @@
                                                 <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
                                             <DockPanel Grid.Row="0" MinWidth="220" />
-
+                                            <ListBox ItemsSource="{Binding AppNavigationItems}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate DataType="helpers:AppScreen">
+                                                            <TextBlock Text="{Binding Title}"
+                                                                    Style="{StaticResource MaterialDesignButtonTextBlock}"
+                                                                    TextAlignment="Center"
+                                                                    HorizontalAlignment="Center"
+                                                                    Margin="20 5 "></TextBlock>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
                                             <Button Cursor="Hand"
                                                     MinWidth="220"
                                                     Background="Transparent"
@@ -230,13 +245,10 @@
 
                                     </md:DrawerHost.LeftDrawerContent>
 
-                                    <DockPanel>
+                                    <ContentPresenter  />
 
-                                        <ContentPresenter />
-
-                                    </DockPanel>
                                 </md:DrawerHost>
-                            </StackPanel>
+                            </Grid>
 
                         </md:Card>
                     </ControlTemplate>

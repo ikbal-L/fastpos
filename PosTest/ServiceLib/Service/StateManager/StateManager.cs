@@ -29,7 +29,7 @@ namespace ServiceLib.Service.StateManager
             _instance = new StateManager();
         }
 
-        public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = true) where TState : IState<TIdentifier> where TIdentifier : struct
+        public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = false) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
             if (!State.ContainsKey(key))
@@ -257,7 +257,7 @@ namespace ServiceLib.Service.StateManager
 
         public static void Fetch()
         {
-            _onFetchRequested();
+            _onFetchRequested?.Invoke();
         }
 
         public static void Associate<TMany, TOne>()

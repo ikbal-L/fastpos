@@ -31,7 +31,7 @@ using TaskExtensions = System.Threading.Tasks.TaskExtensions;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, INotifyViewModelInitialized
+    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, INotifyViewModelInitialized,IAppNavigationItem
     {
         
         #region Private fields
@@ -119,10 +119,20 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public CheckoutViewModel(int pageSize
+        public CheckoutViewModel(
             
         ) : base()
         {
+            this.Title = "Checkout";
+            var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
+            var setting = Manager.LoadSettings();
+            if (setting == null)
+            {
+                setting = new ProductLayoutConfiguration() { Rows = 5, Columns = 6 };
+                Manager.SaveSettings(setting);
+            }
+            var pageSize = setting.NumberOfProducts;
+
             _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
             CurrentCategoryPageIndex = 0;
@@ -134,15 +144,6 @@ namespace FastPosFrontend.ViewModels
                 itemsPerCategoryPage = configuration.NumberCategores;
             }
 
-
-            StateManager.Fetch();
-            StateManager.Associate<Additive,Product>();
-            StateManager.Associate<Product,Category>();
-            StateManager.Associate<Order,Table>();
-            StateManager.Associate<Order,Product>();
-            StateManager.Associate<Order,Deliveryman>();
-            StateManager.Associate<Order,Waiter>();
-            StateManager.Associate<Order,Customer>();
 
 
             #region Setup Tasks to Retrieve Data
@@ -184,16 +185,7 @@ namespace FastPosFrontend.ViewModels
             DeactivateLoadingScreen();
         }
 
-        private void _data_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsCompleted" && _data.IsCompleted)
-            {
-
-                Initialize();
-                IsReady = true;
-                ViewModelInitialized?.Invoke(this, new ViewModelInitializedEventArgs(true));
-            }
-        }
+        
 
         private NotifyAllTasksCompletion _data;
 
@@ -211,7 +203,13 @@ namespace FastPosFrontend.ViewModels
             var categories = _data.GetResult<ICollection<Category>>();
             var products = _data.GetResult<ICollection<Product>>();
 
-
+            StateManager.Associate<Additive, Product>();
+            StateManager.Associate<Product, Category>();
+            StateManager.Associate<Order, Table>();
+            StateManager.Associate<Order, Product>();
+            StateManager.Associate<Order, Deliveryman>();
+            StateManager.Associate<Order, Waiter>();
+            StateManager.Associate<Order, Customer>();
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
             ProductsPage = new BindableCollection<Product>();

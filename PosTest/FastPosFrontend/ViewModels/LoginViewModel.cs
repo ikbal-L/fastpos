@@ -20,7 +20,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class LoginViewModel : Screen
+    public class LoginViewModel : AppScreen
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -177,26 +177,13 @@ namespace FastPosFrontend.ViewModels
         public void Checkout()
         {
             IsDialogOpen = false;
-            var  Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
-            var setting = Manager.LoadSettings();
-            if (setting == null)
-            {
-             setting = new ProductLayoutConfiguration(){Rows = 5,Columns = 6};  
-             Manager.SaveSettings(setting);
-            }
-            var pageSize = setting.NumberOfProducts;
+           
+
             CheckoutViewModel checkoutViewModel =
-                new CheckoutViewModel(pageSize
-                //,_productService,
-                //_categorieService,
-                //_orderRepository,
-                //_waiterService,
-                //_deliverymanRepository,
-                //_customerService
-                );
-            checkoutViewModel.Parent = this.Parent;
-            checkoutViewModel.ViewModelInitialized+=ViewModelInitialized;
+                new CheckoutViewModel(){Parent = this.Parent};
             checkoutViewModel.ActivateLoadingScreen();
+            checkoutViewModel.ViewModelInitialized+=ViewModelInitialized;
+            
 
             //(this.Parent as Conductor<object>).ActivateItem(new LoadingScreenViewModel($"Loading {nameof(CheckoutViewModel)} ..."));
             //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });

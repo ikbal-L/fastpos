@@ -9,19 +9,40 @@ namespace FastPosFrontend.Helpers
         void DeactivateLoadingScreen();
     }
 
-    public class LazyScreen:Screen, ILazyScreen
+    public class AppScreen : Screen,IAppNavigationItem
+    {
+        private string _title;
+
+        public string Title
+        {
+            get => _title;
+            set => Set(ref _title, value);
+        }
+    }
+
+    public interface IAppNavigationItem
+    {
+    }
+
+    public interface IAppNavigationSubItem<T>:IAppNavigationItem where T : IAppNavigationItem
+    {
+    }
+
+    public abstract class LazyScreen : AppScreen, ILazyScreen
     {
         private readonly LoadingScreenViewModel _loadingScreen;
 
-        public LazyScreen(LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
+        protected LazyScreen(LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
-            _loadingScreen = new LoadingScreenViewModel($"Loading {GetType().Name}"){LoadingScreenType = loadingScreenType};
+            _loadingScreen = new LoadingScreenViewModel($"Loading {GetType().Name}")
+                {LoadingScreenType = loadingScreenType};
         }
 
-        public LazyScreen(string loadingMessage,LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
+        protected LazyScreen(string loadingMessage, LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
-            _loadingScreen = new LoadingScreenViewModel(loadingMessage) { LoadingScreenType = loadingScreenType };
+            _loadingScreen = new LoadingScreenViewModel(loadingMessage) {LoadingScreenType = loadingScreenType};
         }
+
         public void ActivateLoadingScreen()
         {
             var conductor = Parent as Conductor<object>;
@@ -32,7 +53,7 @@ namespace FastPosFrontend.Helpers
         {
             var conductor = Parent as Conductor<object>;
             conductor?.ActivateItem(this);
-            conductor?.DeactivateItem(_loadingScreen,true);
+            conductor?.DeactivateItem(_loadingScreen, true);
         }
     }
 }
