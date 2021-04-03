@@ -266,6 +266,8 @@
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Helpers\Icon.cs" />
+    <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
     <Compile Include="Helpers\NavigationItemConfigurationAttribute.cs" />
     <Compile Include="Helpers\NotifyAllTasksCompletion.cs" />
@@ -285,6 +287,7 @@
     <Compile Include="SL.Controls\VirtualizingWrapPanel.cs" />
     <Compile Include="ViewModels\AdditivesOfProductViewModel.cs" />
     <Compile Include="ViewModels\AdditivesSettingsViewModel.cs" />
+    <Compile Include="ViewModels\AppNavigationConductor.cs" />
     <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
@@ -361,6 +364,9 @@
     </Compile>
     <Compile Include="Views\DeliveryAccounting\PaymentHistoryView.xaml.cs">
       <DependentUpon>PaymentHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmbeddedCommandBarView.xaml.cs">
+      <DependentUpon>EmbeddedCommandBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
@@ -641,6 +647,10 @@
     <Page Include="Views\DeliveryAccounting\PaymentHistoryView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EmbeddedCommandBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LoadingView.xaml">
       <SubType>Designer</SubType>

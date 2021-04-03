@@ -52,7 +52,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
             }
         }
 
-
+        //TODO null exception 
         public decimal Total
         {
             get { return NotPaidOrdersViewModel.Total; }

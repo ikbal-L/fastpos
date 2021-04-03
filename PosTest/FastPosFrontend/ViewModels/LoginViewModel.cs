@@ -163,12 +163,12 @@ namespace FastPosFrontend.ViewModels
 
 
             (this.Parent as MainViewModel).IsLoggedIn = true;
-            
+
             //Checkout();
             CheckoutSettings();
 
 
-          
+
         }
         public void NumericKeyboard(PasswordBox passwordBox,string key)
         {

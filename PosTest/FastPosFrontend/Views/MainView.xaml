@@ -52,35 +52,37 @@
                                         </Style>
                                     </md:ColorZone.Style>
                                     <DockPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <ToggleButton
+                                        <!--<StackPanel Orientation="Horizontal">
+                                            
+                                        </StackPanel>-->
+
+                                        <ToggleButton
                                                 x:Name="AppMenuToggleButton"
                                                 IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                                                AutomationProperties.Name="HamburgerToggleButton">
-
-                                                <ToggleButton.Style>
-                                                    <Style TargetType="ToggleButton"
+                                                AutomationProperties.Name="HamburgerToggleButton"
+                                                DockPanel.Dock="Right">
+                                            <ToggleButton.Style>
+                                                <Style TargetType="ToggleButton"
                                                            BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsLoggedIn}"
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                          Value="True">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
 
-                                                            <DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
-                                                                <Setter Property="IsEnabled" Value="False"></Setter>
-                                                            </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
+                                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                                        </DataTrigger>
 
-                                                            <DataTrigger Binding="{Binding IsLoggedIn}"
+                                                        <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                          Value="False">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
 
-                                                    </Style>
-                                                </ToggleButton.Style>
-                                            </ToggleButton>
-                                        </StackPanel>
+                                                </Style>
+                                            </ToggleButton.Style>
+                                        </ToggleButton>
                                         <md:PopupBox
                                             DockPanel.Dock="Right"
                                             PlacementMode="BottomAndAlignRightEdges"
@@ -161,7 +163,17 @@
                                             </StackPanel>
                                         </md:PopupBox>
 
+                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}" >
+                                            <ContentControl.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedCommandBar}" Value="null">
 
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
                                         <md:Chip
                                             Content="Server"
 
@@ -234,8 +246,8 @@
                                     </DockPanel>
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"
-                                               IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
-                                    <md:DrawerHost.LeftDrawerContent>
+                                               IsRightDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
+                                    <md:DrawerHost.RightDrawerContent>
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
@@ -281,7 +293,7 @@
                                                     AutomationProperties.AutomationId="DemoItemPage" />
                                         </Grid>
 
-                                    </md:DrawerHost.LeftDrawerContent>
+                                    </md:DrawerHost.RightDrawerContent>
 
                                     <ContentPresenter />
 

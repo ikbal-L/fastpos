@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.EmbeddedCommandBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+            <ItemsControl x:Name="CommandsList" ItemsSource="{Binding Commands}">
+                
+                <ItemsControl.ItemTemplate>
+                   <ItemContainerTemplate>
+                    <Button  Command="{Binding Command}" 
+                             Style="{StaticResource MaterialDesignToolButton}"
+                             Width="50" Height="50"
+                             Margin="10 0"
+                             Content="{Binding Content}"
+                             Foreground="White"
+                             >
+                        
+                    </Button>
+                   </ItemContainerTemplate>
+            </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>   
+                    <ItemsPanelTemplate>
+                    <!--<UniformGrid Columns="{Binding Commands.Count}"></UniformGrid>-->
+                    <WrapPanel></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                  
+            </ItemsControl>
+    </Grid>
+</UserControl>

@@ -22,10 +22,12 @@ using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
+using MaterialDesignThemes.Wpf;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Icon = FastPosFrontend.Helpers.Icon;
 using Table = ServiceInterface.Model.Table;
 using TaskExtensions = System.Threading.Tasks.TaskExtensions;
 
@@ -125,6 +127,8 @@ namespace FastPosFrontend.ViewModels
         ) : base()
         {
             this.Title = "Checkout";
+            SetupEmbeddedCommandBar();
+
             var settingsManager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
             var setting = settingsManager.LoadSettings();
             if (setting == null)
@@ -173,6 +177,36 @@ namespace FastPosFrontend.ViewModels
             }
             //_data.PropertyChanged += _data_PropertyChanged;
             _data.AllTasksCompleted += OnAllTasksCompleted;
+        }
+
+        private void SetupEmbeddedCommandBar()
+        {
+            this.EmbeddedCommandBar = new EmbeddedCommandBarViewModel()
+            {
+                Commands = new BindableCollection<EmbeddedCommandBarCommand>()
+                {
+                    new EmbeddedCommandBarCommand(Icon.Get("NewOrderIcon"), o =>
+                    {
+                        NewOrder();
+                    } ),
+                    new EmbeddedCommandBarCommand(Icon.Get("TableIcon"), o =>
+                    {
+                        ShowDrawer(ListKind.Table);
+                    } ),
+                    new EmbeddedCommandBarCommand(Icon.Get("WaiterIcon"), o =>
+                    {
+                        ShowDrawer(ListKind.Waiter);
+                    } ),
+                    new EmbeddedCommandBarCommand(Icon.Get("DeliveryIcon"), o =>
+                    {
+                        ShowDrawer(ListKind.Deliverey);
+                    } ),
+                    new EmbeddedCommandBarCommand(Icon.Get("CustomerIcon"), o =>
+                    {
+                        ShowDrawer(ListKind.Customer);
+                    } )
+                }
+            };
         }
 
         public override void Initialize()
@@ -673,10 +707,7 @@ namespace FastPosFrontend.ViewModels
         {
             AdditivesVisibility = false;
             ProductsVisibility = true;
-            if (CurrentOrder != null)
-            {
-                CurrentOrder.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-            }
+            CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
             CurrentOrder = new Order(this.Orders);
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
@@ -1635,7 +1666,7 @@ namespace FastPosFrontend.ViewModels
             {
                 OrderManagementHelper.TrackItemForChange(oi, _diff);
             }
-            //OrderItemsCollectionViewSource.View.Refresh();
+            OrderItemsCollectionViewSource.View.Refresh();
 
             if (selectedproduct.IsPlatter && selectedproduct.IdAdditives?.Count > 0)
             {

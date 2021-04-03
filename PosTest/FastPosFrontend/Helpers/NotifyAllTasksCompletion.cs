@@ -53,7 +53,7 @@ namespace FastPosFrontend.Helpers
                 NotifyOfPropertyChange(nameof(Exception));
                 NotifyOfPropertyChange(nameof(ErrorMessage));
             }
-            else
+            else if (task.Status == TaskStatus.RanToCompletion)
             {
                 NotifyOfPropertyChange(nameof(IsSuccessfullyCompleted));
                 AllTasksCompleted?.Invoke(this,new AllTasksCompletedEventArgs(true));

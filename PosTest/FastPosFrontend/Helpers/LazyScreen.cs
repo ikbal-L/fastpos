@@ -15,12 +15,33 @@ namespace FastPosFrontend.Helpers
     public class AppScreen : Screen, IAppNavigationItem
     {
         private string _title;
+        private EmbeddedCommandBarViewModel _embeddedCommandBar;
 
         public string Title
         {
             get => _title;
             set => Set(ref _title, value);
         }
+
+        public EmbeddedCommandBarViewModel EmbeddedCommandBar
+        {
+            get => _embeddedCommandBar;
+            set => Set(ref _embeddedCommandBar, value);
+        }
+    }
+
+    public class EmbeddedCommandBarCommand
+    {
+        public EmbeddedCommandBarCommand(object content, Action<object> executeMethod, Func<object, bool> canExecuteMethod = null)
+        {
+            Content = content;
+            Command = canExecuteMethod== null ? 
+                new DelegateCommandBase(executeMethod) : 
+                new DelegateCommandBase(executeMethod, canExecuteMethod);
+        }
+        public object Content { get; set; }
+
+        public DelegateCommandBase Command { get; set; }
     }
 
     public interface IAppNavigationItem
@@ -75,6 +96,7 @@ namespace FastPosFrontend.Helpers
         {
             _loadingScreen = new LoadingScreenViewModel($"Loading {GetType().Name}")
                 {LoadingScreenType = loadingScreenType};
+            //ActivateLoadingScreen();
         }
 
         public bool IsReady
@@ -86,6 +108,7 @@ namespace FastPosFrontend.Helpers
         protected LazyScreen(string loadingMessage, LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
             _loadingScreen = new LoadingScreenViewModel(loadingMessage) {LoadingScreenType = loadingScreenType};
+            //ActivateLoadingScreen();
         }
 
         public void ActivateLoadingScreen()
