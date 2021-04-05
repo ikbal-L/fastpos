@@ -10,9 +10,23 @@ namespace ServiceLib.Service.StateManager
 {
     public partial class StateManager
     {
-        private static async Task FetchAsync<TState, TIdentifier>(string predicate) where TState : IState<TIdentifier> where TIdentifier : struct
+        public static async Task FetchAsync<TState, TIdentifier>(string predicate) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
+            //Decide on  either withAssociatedTypes or FetchWithAssociatedTypes
+            if (FetchwithAssociatedTypes.Contains(key))
+            {
+                var associations = associationManager.GetAssociationsOf<TState>();
+                if (associations!= null)
+                {
+                    foreach (var association in associations)
+                    {
+                        await CallMethodUsingReflection(nameof(FetchAsync), new object[] { null }, association, typeof(long));
+                    }
+                }
+
+            }
+            
             if (State[key] != null && !_refreshRequested) return;
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {

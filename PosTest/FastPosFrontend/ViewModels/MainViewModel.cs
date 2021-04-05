@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Net.NetworkInformation;
+using System.Collections.Generic;
 using FastPosFrontend.Helpers;
-using FastPosFrontend.ViewModels.Settings;
+using ServiceInterface.Model;
+using ServiceLib.helpers;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
@@ -14,15 +13,34 @@ namespace FastPosFrontend.ViewModels
 
         private string _windowTitle = WindowTitleDefault;
         private string _buttonStr = "Login";
-        private bool _isLoggedIn = false;
-        private bool _isDbServerOn = false;
-        private bool _isBackendServerOn = false;
+        private bool _isLoggedIn ;
+        private bool _isDbServerOn;
+        private bool _isBackendServerOn;
         private AppScreen _activeScreen;
 
         public MainViewModel()
         {
             IsBackendServerOn =ConnectionHelper.PingHost();
             IsDbServerOn = ConnectionHelper.PingHost(portNumber:3306);
+            Setup();
+        }
+
+        public void Setup()
+        {
+            var associationManager = AssociationManager.Instance;
+            associationManager.Register().Associate<Product>().With<Additive>().Using<Product, Additive>(
+                (products, additives) =>
+                {
+                    if (additives == null || products == null) return;
+                    foreach (var product in products)
+                    {
+                        if (product.IsPlatter)
+                        {
+                            product.MappingAfterReceiving(category: null, (List<Additive>)additives);
+
+                        }
+                    }
+                }).Build();
         }
         public bool IsLoggedIn
         {

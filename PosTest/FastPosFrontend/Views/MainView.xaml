@@ -34,7 +34,7 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <md:ColorZone
-                                    Padding="16"
+                                    Padding="10"
                                     md:ShadowAssist.ShadowDepth="Depth2"
                                     DockPanel.Dock="Top">
                                     <md:ColorZone.Style>
@@ -60,7 +60,8 @@
                                                 x:Name="AppMenuToggleButton"
                                                 IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                                                 AutomationProperties.Name="HamburgerToggleButton"
-                                                DockPanel.Dock="Right">
+                                                DockPanel.Dock="Left"
+                                                Foreground="White">
                                             <ToggleButton.Style>
                                                 <Style TargetType="ToggleButton"
                                                            BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
@@ -174,56 +175,71 @@
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
-                                        <md:Chip
+
+                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedContentBar}" DockPanel.Dock="Right">
+                                            <ContentControl.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedContentBar}" Value="null">
+
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+                                        <!--Processes Status--> 
+                                       <!--<StackPanel Orientation="Horizontal">
+                                            <md:Chip
                                             Content="Server"
 
                                             IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                             Margin="5 0">
-                                            <md:Chip.Style>
-                                                <Style TargetType="md:Chip">
-                                                    <Setter Property="IconBackground"
+                                                <md:Chip.Style>
+                                                    <Style TargetType="md:Chip">
+                                                        <Setter Property="IconBackground"
                                                             Value="{StaticResource WarningColorBrush}" />
-                                                    <Setter Property="Icon" Value="{md:PackIcon Server}" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsBackendServerOn}" Value="True">
-                                                            <Setter Property="IconBackground"
+                                                        <Setter Property="Icon" Value="{md:PackIcon Server}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsBackendServerOn}" Value="True">
+                                                                <Setter Property="IconBackground"
                                                                     Value="{StaticResource SuccessColorBrush}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsBackendServerOn}"
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsBackendServerOn}"
                                                                      Value="False">
-                                                            <Setter Property="IconBackground"
+                                                                <Setter Property="IconBackground"
                                                                     Value="{StaticResource ErrorColorBrush}" />
-                                                            <Setter Property="Icon" Value="{md:PackIcon ServerOff}" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </md:Chip.Style>
+                                                                <Setter Property="Icon" Value="{md:PackIcon ServerOff}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </md:Chip.Style>
 
-                                        </md:Chip>
-                                        <md:Chip
+                                            </md:Chip>
+                                            <md:Chip
                                             Content="Database"
                                             IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                             Margin="5 0">
-                                            <md:Chip.Style>
-                                                <Style TargetType="md:Chip">
-                                                    <Setter Property="IconBackground"
+                                                <md:Chip.Style>
+                                                    <Style TargetType="md:Chip">
+                                                        <Setter Property="IconBackground"
                                                             Value="{StaticResource WarningColorBrush}" />
-                                                    <Setter Property="Icon" Value="{md:PackIcon Database}" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsDbServerOn}" Value="True">
-                                                            <Setter Property="IconBackground"
+                                                        <Setter Property="Icon" Value="{md:PackIcon Database}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsDbServerOn}" Value="True">
+                                                                <Setter Property="IconBackground"
                                                                     Value="{StaticResource SuccessColorBrush}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsDbServerOn}" Value="False">
-                                                            <Setter Property="IconBackground"
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsDbServerOn}" Value="False">
+                                                                <Setter Property="IconBackground"
                                                                     Value="{StaticResource ErrorColorBrush}" />
-                                                            <Setter Property="Icon"
+                                                                <Setter Property="Icon"
                                                                     Value="{md:PackIcon DatabaseRemove}" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </md:Chip.Style>
-                                        </md:Chip>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </md:Chip.Style>
+                                            </md:Chip>
+                                        </StackPanel>-->
                                         <TextBlock
 
                                             HorizontalAlignment="Center"
@@ -246,8 +262,8 @@
                                     </DockPanel>
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"
-                                               IsRightDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
-                                    <md:DrawerHost.RightDrawerContent>
+                                               IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
+                                    <md:DrawerHost.LeftDrawerContent>
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
@@ -293,7 +309,7 @@
                                                     AutomationProperties.AutomationId="DemoItemPage" />
                                         </Grid>
 
-                                    </md:DrawerHost.RightDrawerContent>
+                                    </md:DrawerHost.LeftDrawerContent>
 
                                     <ContentPresenter />
 

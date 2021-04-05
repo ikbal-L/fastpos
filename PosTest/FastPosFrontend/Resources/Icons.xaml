@@ -5138,6 +5138,7 @@
     </Canvas>
     <md:PackIcon x:Key="NewOrderIcon" Kind="NewBox" Width="40" Height="40"></md:PackIcon>
     <md:PackIcon x:Key="DeliveryIcon" Kind="TruckFast" Width="40" Height="40"></md:PackIcon>
+    <md:PackIcon x:Key="DeliveryManIcon" Kind="TruckFast" Width="40" Height="40"></md:PackIcon>
     <md:PackIcon x:Key="CustomerIcon" Kind="Account" Width="40" Height="40"></md:PackIcon>
     <md:PackIcon x:Key="TableIcon" Kind="TableFurniture" Width="40" Height="40"></md:PackIcon>
     <Canvas x:Key="WaiterIcon" Width="40" Height="40">

@@ -75,7 +75,7 @@ namespace FastPosFrontend.ViewModels
             
         }
 
-        protected override void Setup()
+        protected sealed override void Setup()
         {
             var products = StateManager.GetAsync<Product>();
             var categories = StateManager.GetAsync<Category>();

@@ -34,8 +34,9 @@ namespace FastPosFrontend.Helpers
             {
                 await task;
             }
-            catch
+            catch(Exception e)
             {
+                throw e;
             }
             
             

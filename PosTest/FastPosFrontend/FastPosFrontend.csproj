@@ -368,6 +368,9 @@
     <Compile Include="Views\EmbeddedCommandBarView.xaml.cs">
       <DependentUpon>EmbeddedCommandBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EmbeddedContentBarView.xaml.cs">
+      <DependentUpon>EmbeddedContentBarView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
@@ -552,6 +555,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\DataTemplates\AppStatusBarTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\DataTemplates\OpenTable.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -649,6 +656,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EmbeddedCommandBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EmbeddedContentBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

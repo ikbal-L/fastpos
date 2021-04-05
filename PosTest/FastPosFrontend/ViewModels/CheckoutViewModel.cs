@@ -128,6 +128,7 @@ namespace FastPosFrontend.ViewModels
         {
             this.Title = "Checkout";
             SetupEmbeddedCommandBar();
+            SetupEmbeddedStatusBar();
 
             var settingsManager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
             var setting = settingsManager.LoadSettings();
@@ -185,27 +186,35 @@ namespace FastPosFrontend.ViewModels
             {
                 Commands = new BindableCollection<EmbeddedCommandBarCommand>()
                 {
-                    new EmbeddedCommandBarCommand(Icon.Get("NewOrderIcon"), o =>
+                    new EmbeddedCommandBarCommand(Icon.Get("NewOrder"), o =>
                     {
                         NewOrder();
                     } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("TableIcon"), o =>
+                    new EmbeddedCommandBarCommand(Icon.Get("Table"), o =>
                     {
                         ShowDrawer(ListKind.Table);
                     } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("WaiterIcon"), o =>
+                    new EmbeddedCommandBarCommand(Icon.Get("Waiter"), o =>
                     {
                         ShowDrawer(ListKind.Waiter);
                     } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("DeliveryIcon"), o =>
+                    new EmbeddedCommandBarCommand(Icon.Get("Delivery"), o =>
                     {
                         ShowDrawer(ListKind.Deliverey);
                     } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("CustomerIcon"), o =>
+                    new EmbeddedCommandBarCommand(Icon.Get("Customer"), o =>
                     {
                         ShowDrawer(ListKind.Customer);
                     } )
                 }
+            };
+        }
+
+        private void SetupEmbeddedStatusBar()
+        {
+            this.EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
+            {
+               EmbeddedStatusBarTemplate = Application.Current.FindResource("CheckoutStatusBarDataTemplate") as DataTemplate
             };
         }
 

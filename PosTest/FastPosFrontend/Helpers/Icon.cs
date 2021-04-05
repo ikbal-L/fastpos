@@ -6,7 +6,7 @@ namespace FastPosFrontend.Helpers
     {
         public static object Get(string key)
         {
-            return Application.Current.FindResource(key);
+            return Application.Current.FindResource($"{key}Icon");
         }
     }
 }

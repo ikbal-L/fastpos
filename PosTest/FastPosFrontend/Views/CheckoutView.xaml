@@ -76,67 +76,20 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="52" />
+                <!--<RowDefinition Height="10" />-->
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="25" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" Grid.Row="0">
+                <!--OrderItemList and Order Item Commands-->
+            <Grid Grid.Column="0" Grid.Row="0" Margin="0 0 8 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="58" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <!--Content="{Binding CurrentOrder.Table.Number,  FallbackValue=Tables,TargetNullValue=Tables}"-->
+                <Grid Grid.Column="1" >
 
-
-                <Button Grid.Column="0" Style="{StaticResource ButtonTopOrder}" Padding="0"
-                        Content="{materialdesign:PackIcon FileStarOutline,40}"
-                        caliburn:Message.Attach="[Event Click] = [Action NewOrder()]" />
-                <Button Grid.Column="1" Style="{StaticResource ButtonTopOrder}"
-                        caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('TABLE')]">
-                    <StackPanel>
-                        <TextBlock Text="{Binding SelectedTable.Number}" FontSize="18" FontWeight="Bold"
-                                   Margin="0 0 0 -13" HorizontalAlignment="Center"
-                                   Visibility="{Binding  SelectedTable, Converter={StaticResource ObjectToVisibility}}" />
-                        <materialdesign:PackIcon Kind="TableFurniture" Width="40" Height="40" Margin="0" />
-                    </StackPanel>
-                </Button>
-                <Button Grid.Column="2" Style="{StaticResource ButtonTopOrder}"
-                        caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('WAITER')]">
-                    <Canvas Width="40" Height="40">
-                        <Path Stretch="Fill" Width="40" Height="26" Canvas.Left="0" Canvas.Top="3"
-                              Fill="{Binding Path=Foreground, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"
-                              Data="M3,22h1.5h23.1H29c0.6,0,1-0.4,1-1s-0.4-1-1-1h-1c-0.2-5.7-4.1-10.4-9.3-11.7C18.9,7.9,19,7.5,19,7c0-1.7-1.3-3-3-3s-3,1.3-3,3c0,0.5,0.1,0.9,0.3,1.3C8.1,9.6,4.2,14.3,4,20H3c-0.6,0-1,0.4-1,1S2.4,22,3,22z" />
-                        <Path Stretch="Fill" Width="35" Height="3" Canvas.Left="3" Canvas.Top="31"
-                              Fill="{Binding Path=Foreground, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"
-                              Data="M5.5,24l0.8,1.5C6.4,25.8,6.8,26,7.2,26h17.7c0.4,0,0.7-0.2,0.9-0.5l0.8-1.5H5.5z" />
-                    </Canvas>
-                </Button>
-                <Button Grid.Column="3" Style="{StaticResource ButtonTopOrder}"
-                        Content="{materialdesign:PackIcon Kind=TruckFast, Size=40}"
-                        caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('DELIVEREY')]" />
-                <Button Grid.Column="4" Style="{StaticResource ButtonTopOrder}"
-                        Content="{materialdesign:PackIcon Kind=Account, Size=40}"
-                        caliburn:Message.Attach="[Event Click] = [Action ShowDrawer('CUSTOMER')]" />
-            </Grid>
-
-            <Grid Grid.Column="0" Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="54" />
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-                    <!--OrderItemsCollectionViewSource-->
-                    <!--ItemsSource="{Binding CurrentOrder.OrderItems}"-->
                     <ListBox Name="OrderitemsList" Grid.Row="0" Grid.RowSpan="1" Width="365"
                              ItemsSource="{Binding OrderItemsCollectionViewSource.View}"
                              SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
@@ -158,7 +111,10 @@
                         </ListBox.Style>
                     </ListBox>
                 </Grid>
-                <Grid Grid.Column="1"
+
+                <!--OrderItem Commands-->
+                <Grid Grid.Column="0" 
+                     
                       IsEnabled="{Binding ElementName=OrderitemsList, 
                             Path=SelectedItem, Converter={StaticResource ObjectToBoolConverter}}"
                       x:Name="OrderItemCommandsGrid">
@@ -208,12 +164,6 @@
                             IsEnabled="{Binding ElementName=OrderitemsList,Path=SelectedItem ,Converter={StaticResource ObjectToBoolConverter}}">
                         <materialdesign:PackIcon Kind="TagMinus" Height="30" Width="30" />
 
-                        <!--<Button.IsEnabled>
-                            <MultiBinding x:Uid="MultiBinding_1" Converter="{StaticResource NotNullEqualToZeroMultiValueConverter}">
-                                <Binding x:Uid="Binding_1" ElementName="OrderitemsList" Path="SelectedItem"></Binding>
-                                <Binding x:Uid="Binding_2" ElementName="CheckoutViewUserControl" Path="DataContext.CurrentOrder.DiscountAmount"></Binding>
-                            </MultiBinding>
-                        </Button.IsEnabled>-->
                     </Button>
                     <Button Grid.Row="5" Foreground="#2496ed" Background="WhiteSmoke"
                             IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
@@ -222,13 +172,7 @@
                         <materialdesign:PackIcon Kind="TagFaces" Height="30" Width="30" />
                     </Button>
 
-                    <!-- caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem()]" -->
-                    <!--<Button x:Uid="Button_12" Grid.Row="8" Foreground="#2496ed" Background="WhiteSmoke"
-                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource objectToBoolConverter}}"
-                            Style="{StaticResource ButtonRightOrder}">
-                        <materialdesign:PackIcon x:Uid="materialdesign:PackIcon_8" Kind="ChevronDoubleDown" Height="30" Width="30" />
-                    </Button>-->
-
+                
 
                 </Grid>
 
@@ -330,7 +274,7 @@
 
                         <Border Grid.Row="0" Grid.RowSpan="1"
                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=customer}">
-                            <!--<views:CustomerView x:Name="lcustomer" DataContext="{Binding CustomerViewModel}" />-->
+                           
                             <views:CustomerView x:Name="lcustomer" caliburn:View.Model="{Binding CustomerViewModel}" />
                         </Border>
 
@@ -343,19 +287,17 @@
                     </Grid>
                 </materialdesign:DrawerHost.TopDrawerContent>
             </materialdesign:DrawerHost>
-
-            <Grid Grid.Column="0" Grid.Row="2">
+                 <!--Numeric Zone & Order Keypad and Commands-->
+            <Grid Grid.Column="0" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
+                
+                             <!--Numeric Zone-->
                 <Grid Grid.Column="0" Grid.Row="0" Margin="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-
-                    </Grid.ColumnDefinitions>
-                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                    
+                    <Border Grid.Row="0"  BorderBrush="Black" BorderThickness="1">
                         <Border BorderBrush="White" BorderThickness="2" Background="Black">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -435,13 +377,13 @@
 
                 </Grid>
 
-
-                <Grid Grid.Row="4" Grid.RowSpan="1" HorizontalAlignment="Center">
+                    <!--Order Keypad and Commands--> 
+                <Grid Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-
+                        <!--NumKeyBoard-->
                     <Grid Grid.Column="1" Margin="2">
                         <Grid.Effect>
                             <DropShadowEffect BlurRadius="20" />
@@ -508,6 +450,8 @@
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('DEL')]" />
 
                     </Grid>
+
+                                              <!--OrderCommands-->
                     <Grid Grid.Column="0" Margin="4 2 2 2">
                         <Grid.Effect>
                             <DropShadowEffect BlurRadius="20" />
@@ -536,11 +480,6 @@
                                 caliburn:Message.Attach="[Event Click] = [Action CancelOrder()]" />
 
 
-                        <!--<Button x:Uid="Button_32" Grid.Row="2" Grid.Column="0"
-                                Content="{materialdesign:PackIcon  Kind=TransitTransfer, Size=30}"
-                                Style="{StaticResource ButtonStyle18}"
-                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('TRANSFER')]" />-->
-                        <!--caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('NOTE')]"-->
                         <Button Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon Printer, 30}"
                                 Style="{StaticResource ButtonStyle18}"
                                 caliburn:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" />
@@ -578,149 +517,10 @@
 
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="0">
-                <DockPanel Grid.Row="0" Grid.Column="1" Margin="0" LastChildFill="False">
-                    <Border Background="{Binding CurrentOrder.State, Converter={StaticResource OrderStateEnumToBrush}}"
-                            Width="50" Padding="0 0 0 0"
-                            Margin="0 0 0 3">
-                        <StackPanel>
-                            <Border CornerRadius="7" BorderThickness="2" BorderBrush="White" Width="35" Height="24"
-                                    Margin="0 2 0 -5"
-                                    Visibility="{Binding  CurrentOrder.Table, Converter={StaticResource ObjectToVisibility}}">
-                                <TextBlock Foreground="White" VerticalAlignment="Center"
-                                           Text="{Binding CurrentOrder.Table.Number}" FontSize="18" FontWeight="Bold"
-                                           Margin="0 0 0 0" HorizontalAlignment="Center" />
-                            </Border>
-                            <materialdesign:PackIcon
-                                Kind="{Binding CurrentOrder.Type, Converter={StaticResource OrderTypeEnumToMaterialDesignIcon}}"
-                                Width="30" Height="30"
-                                Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </StackPanel>
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentOrder}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                    </Border>
+            <!--OldStatBar here col 1 row 0-->
 
-                    <!--visibility of canvas {Binding  SelectedWaiter, Converter={StaticResource ObjectToVisibility}}-->
-                    <StackPanel Orientation="Horizontal" Background="{Binding SelectedWaiter.Background}"
-                                Margin="4 0 0 3">
-                        <Canvas Width="20" Height="20" VerticalAlignment="Top"
-                                Visibility="{Binding  SelectedWaiter, Converter={StaticResource ObjectToVisibility}}">
-                            <Path Stretch="Fill" Width="20" Height="13" Canvas.Left="0" Canvas.Top="3"
-                                  Fill="{Binding Path=Foreground, ElementName=waiterName}"
-                                  Data="M3,22h1.5h23.1H29c0.6,0,1-0.4,1-1s-0.4-1-1-1h-1c-0.2-5.7-4.1-10.4-9.3-11.7C18.9,7.9,19,7.5,19,7c0-1.7-1.3-3-3-3s-3,1.3-3,3c0,0.5,0.1,0.9,0.3,1.3C8.1,9.6,4.2,14.3,4,20H3c-0.6,0-1,0.4-1,1S2.4,22,3,22z" />
-                            <Path Stretch="Fill" Width="17" Height="2" Canvas.Left="2" Canvas.Top="18"
-                                  Fill="{Binding Path=Foreground, ElementName=waiterName}"
-                                  Data="M5.5,24l0.8,1.5C6.4,25.8,6.8,26,7.2,26h17.7c0.4,0,0.7-0.2,0.9-0.5l0.8-1.5H5.5z" />
-                        </Canvas>
-                        <TextBlock x:Name="waiterName" Width="120" Margin="-20 0 0 0" Padding="2"
-                                   FontSize="15" FontWeight="DemiBold"
-                                   TextWrapping="Wrap" VerticalAlignment="Center">
-                            <Run Text="    " />
-                            <Run Text="{Binding SelectedWaiter.Name}" />
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="Black" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedWaiter.IsDark}" Value="True">
-                                            <Setter Property="Foreground" Value="White" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Width="120"
-                                Background="{Binding SelectedDeliveryman.Background}" Margin="4 0 0 3">
-                        <materialdesign:PackIcon Kind="TruckFast" Width="20" Height="20"
-                                                 Visibility="{Binding  SelectedDeliveryman, Converter={StaticResource ObjectToVisibility}}"
-                                                 Foreground="{Binding ElementName=textblck, Path=Foreground}" />
-
-                        <TextBlock x:Name="textblck" Width="120" Padding="2" Margin="-20 0 0 0"
-                                   FontSize="15" FontWeight="DemiBold" VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   TextWrapping="WrapWithOverflow">
-                            <Run Text="    " />
-                            <Run Text="{Binding SelectedDeliveryman.Name}" />
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="Black" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedDeliveryman.IsDark}" Value="True">
-                                            <Setter Property="Foreground" Value="White" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <materialdesign:PackIcon Kind="Account" Width="20" Height="20" VerticalAlignment="Top" />
-                        <TextBlock Margin="-5 0 0 0" Width="100"
-                                   Text="{Binding  CurrentOrder.Customer.Name}" FontSize="16" FontWeight="Bold"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
-
-                    <Button DockPanel.Dock="Right" Padding="0"
-                            Content="{materialdesign:PackIcon AccountCircleOutline,30}"
-                            Style="{StaticResource ButtonTopOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action CloseCommand]" />
-
-                    <Button DockPanel.Dock="Right" Padding="0"
-                            Content="{materialdesign:PackIcon Power,25}"
-                            Style="{StaticResource ButtonTopOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action CloseCommand]" />
-
-                    <Button DockPanel.Dock="Right" Padding="0"
-                            Content="{materialdesign:PackIcon CogOutline,25}"
-                            Style="{StaticResource ButtonTopOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action SettingsCommand]" />
-
-                    <!--<Button DockPanel.Dock="Right" Padding="0"
-                            Content="{materialdesign:PackIcon AccountCashOutline,25}"
-                            Style="{StaticResource ButtonTopOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action AccountingCommand]" />
-
-                    <Button DockPanel.Dock="Right" Padding="0"
-                            Content="{materialdesign:PackIcon AccountCog,25}"
-                            Style="{StaticResource ButtonTopOrder}"
-                            caliburn:Message.Attach="[Event Click] = [Action UserSettingsCommand]" />-->
-
-                    <Menu IsMainMenu="True" DockPanel.Dock="Right">
-                        <MenuItem Height="30" Width="30">
-                            <MenuItem.Icon>
-                                <materialdesign:PackIcon Background="AliceBlue" Kind="CogOutline" Width="28"
-                                                         Height="28" />
-                            </MenuItem.Icon>
-                            <MenuItem Header="Offre">
-                                <MenuItem.Icon>
-                                    <materialdesign:PackIcon Kind="Offer" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="Option">
-                                <MenuItem.Icon>
-                                    <materialdesign:PackIcon Kind="ArrowDecisionOutline" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="Livreur" />
-                            <MenuItem Header="Serveur" />
-                            <MenuItem Header="Table" />
-                            <MenuItem Header="Client" />
-                            <MenuItem Header="Produit" />
-                        </MenuItem>
-                    </Menu>
-                </DockPanel>
-            </Grid>
-
-            <Grid Grid.Column="1" Grid.Row="1">
+                <!--ProductNavigation-->
+            <Grid Grid.Column="1" Grid.Row="0" x:Name="ProductNavGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
@@ -729,7 +529,7 @@
 
             </Grid>
 
-            <Grid Grid.Column="1" Grid.Row="2" Margin="2" Grid.RowSpan="2">
+            <Grid Grid.Column="1" Grid.Row="1" Margin="2" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
@@ -743,14 +543,15 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
+                <!--CATEGORY NAVIGATION-->
                 <Grid  Grid.Row="0" Grid.ColumnSpan="3" Margin="2 2 2 2">
                    
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <!--CATEGORY NAVIGATION-->
-                    <!--ItemsSource="{Binding Categories}"-->
+                  
+                   
                     <StackPanel Orientation="Horizontal" Margin="2 0 0 0" Height="60" >
                         <ItemsControl x:Name="Stack"  ItemsSource="{Binding PaginatedCategories.View}" >
                             <ItemsControl.ItemsPanel>
@@ -787,9 +588,7 @@
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                        
-                        <!--Visibility="{Binding CanExecuteMext,Converter={StaticResource BoolToVisibility}}"-->
-                        <!--Style="{StaticResource MaterialDesignFlatButton}"-->
-                        <!--Visibility="{Binding CanExecutePrevious,Converter={StaticResource BoolToVisibility}}"-->
+                   
                         <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
                                 x:Name="PreviousPqge" Style="{StaticResource ButtonStyle22}"
                                 caliburn:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
@@ -804,7 +603,7 @@
 
                 <!--ORDER NAVIGATION-->
 
-              <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="4">
+              <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="4" x:Name="DisplayOrderListByTypeControlGrid">
                   <Grid.RowDefinitions>
                       <RowDefinition Height="auto" />
                       <RowDefinition Height="auto" />
@@ -866,7 +665,8 @@
                         </StackPanel>
                     </RadioButton>
                 </Grid>
-                <Grid  Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"  Height="240">
+
+                <Grid  Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"  Height="240" x:Name="OrdersListByOrderType">
 
                     <subViews:TableButtomView Grid.Row="1" Grid.Column="1" Grid.RowSpan="4"
                                               DataContext="{Binding TablesViewModel}"

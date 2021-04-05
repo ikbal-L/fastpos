@@ -15,6 +15,7 @@ using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceLib.helpers;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
@@ -148,9 +149,11 @@ namespace FastPosFrontend.ViewModels
             }
 
             IsDialogOpen = true;
+            var associationManager = AssociationManager.Instance;
+            
 
             StateManager.Instance
-                .Manage(_productRepository,fetch:false)
+                .Manage(_productRepository,fetch:false,withAssociatedTypes:true)
                 .Manage(_categoryRepository,false)
                 .Manage(_additiveRepository,false)
                 .Manage(_orderRepository, fetch: false)
@@ -162,7 +165,9 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_userRepository);
 
 
-            (this.Parent as MainViewModel).IsLoggedIn = true;
+            
+
+                (this.Parent as MainViewModel).IsLoggedIn = true;
 
             //Checkout();
             CheckoutSettings();

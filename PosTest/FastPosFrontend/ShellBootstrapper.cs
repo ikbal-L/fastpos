@@ -104,6 +104,7 @@ namespace FastPosFrontend
 
         protected override void OnExit(object sender, EventArgs e)
         {
+            //EXCEPTION
             _backendServerProcess.Kill();
             base.OnExit(sender, e);
         }

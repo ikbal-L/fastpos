@@ -16,6 +16,7 @@ namespace FastPosFrontend.Helpers
     {
         private string _title;
         private EmbeddedCommandBarViewModel _embeddedCommandBar;
+        private EmbeddedContentBarViewModel _embeddedContentBar;
 
         public string Title
         {
@@ -27,6 +28,12 @@ namespace FastPosFrontend.Helpers
         {
             get => _embeddedCommandBar;
             set => Set(ref _embeddedCommandBar, value);
+        }
+
+        public EmbeddedContentBarViewModel EmbeddedContentBar
+        {
+            get => _embeddedContentBar;
+            set => Set(ref _embeddedContentBar, value);
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Exceptions;
@@ -16,10 +17,11 @@ namespace ServiceLib.Service.StateManager
         private static readonly IDictionary<Type, object> State;
         private static readonly IDictionary<Type, object> Service;
         private static readonly IDictionary<Type, Action> Association;
-        private static  Action _onFetchRequested;
+        private static readonly IList<Type> FetchwithAssociatedTypes;
+        private static  Action<string,bool> _onFetchRequested;
         private static bool _refreshRequested = false;
-        private static Action<ICollection<object>, ICollection<object>> OnAssociationRequested;
         private static StateManager _instance;
+        private static AssociationManager associationManager;
 
         static StateManager()
         {
@@ -27,11 +29,17 @@ namespace ServiceLib.Service.StateManager
             State = new Dictionary<Type, object>();
             Association = new Dictionary<Type, Action>();
             _instance = new StateManager();
+            associationManager = AssociationManager.Instance;
+            FetchwithAssociatedTypes = new List<Type>();
         }
 
-        public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = false) where TState : IState<TIdentifier> where TIdentifier : struct
+        public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = false, string predicate = "", bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
+            if (withAssociatedTypes)
+            {
+                FetchwithAssociatedTypes.Add(key);
+            }
             if (!State.ContainsKey(key))
             {
                 State.Add(key, null);
@@ -45,7 +53,10 @@ namespace ServiceLib.Service.StateManager
             if (fetch)
             {
                 _onFetchRequested += Fetch<TState, TIdentifier>;
-                Fetch<TState, TIdentifier>();
+                if (string.IsNullOrEmpty(predicate))
+                {
+                    Fetch<TState, TIdentifier>(null,withAssociatedTypes);
+                }
 
             }
             return _instance;
@@ -221,20 +232,27 @@ namespace ServiceLib.Service.StateManager
         
 
 
-        private static void Fetch<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
-        {
-            Fetch<TState,TIdentifier>(null);
-        }
-        private static void Fetch<TState, TIdentifier>(string predicate) where TState : IState<TIdentifier> where TIdentifier : struct
+       
+        private static void Fetch<TState, TIdentifier>(string predicate = null,bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
+            //Decide on  either withAssociatedTypes or FetchWithAssociatedTypes
+            if (FetchwithAssociatedTypes.Contains(key))
+            {
+                var associations = associationManager.GetAssociationsOf<TState>();
+                foreach (var association in associations)
+                {
+                    CallMethodUsingReflection(nameof(Fetch), new object[] {null, false}, association, typeof(long));
+                }
+                
+            }
             if (State[key] != null && !_refreshRequested) return;
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-                var (status, data) = string.IsNullOrEmpty(predicate)?service.Get(): service.Get(predicate);
+                var (status, data) = string.IsNullOrEmpty(predicate) ? service.Get() : service.Get(predicate);
                 //ServiceHelper.HandleStatusCodeErrors();
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
-                if ((HttpStatusCode)status== HttpStatusCode.NoContent)
+                if ((HttpStatusCode)status == HttpStatusCode.NoContent)
                 {
                     State[key] = new List<TState>();
                 }
@@ -244,6 +262,8 @@ namespace ServiceLib.Service.StateManager
                 }
 
             }
+
+
         }
 
         [Conditional("DEBUG")]
@@ -257,7 +277,7 @@ namespace ServiceLib.Service.StateManager
 
         public static void Fetch()
         {
-            _onFetchRequested?.Invoke();
+            _onFetchRequested?.Invoke(null,false);
         }
 
         public static void Associate<TMany, TOne>()
@@ -344,6 +364,15 @@ namespace ServiceLib.Service.StateManager
         
         public static TService GetService<TState, TService>() {
             return (TService) Service[typeof(TState)];
+        }
+
+        public static async Task CallMethodUsingReflection(string methodName, object[] methodArgs,params Type [] methodTypeArgs)
+        {
+            var stateManagerType =typeof(StateManager);
+            var targetMethodInfo =stateManagerType.GetMethod(methodName);
+            var targetMethod = targetMethodInfo?.MakeGenericMethod(methodTypeArgs);
+            var task =(Task) targetMethod?.Invoke(null, methodArgs);
+            if (task != null) await task.ConfigureAwait(false);
         }
     }
 
