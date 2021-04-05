@@ -14,6 +14,7 @@ namespace FastPosFrontend.ViewModels
 
         public AppNavigationConductor()
         {
+            KeepAliveScreens = new Dictionary<Type, T>();
         }
 
         public AppNavigationLookupItem SelectedNavigationItem
@@ -31,6 +32,8 @@ namespace FastPosFrontend.ViewModels
             get => _appNavigationItems;
             set => Set(ref _appNavigationItems, value);
         }
+
+        public Dictionary<Type,T> KeepAliveScreens { get; protected set; }
 
         public virtual void LoadNavigationItems()
         {
@@ -83,7 +86,26 @@ namespace FastPosFrontend.ViewModels
         public virtual void NavigateToItem(AppNavigationLookupItem navigationItem)
         {
             if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return;
+            if (navigationItem.KeepAlive)
+            {
+                if (KeepAliveScreens.ContainsKey(navigationItem.Target))
+                {
+                    var screen = KeepAliveScreens[navigationItem.Target];
+                    ActivateScreenByType(screen);
+                    return;
+                }
+
+                var keepAliveScreenInstance = (T)Activator.CreateInstance(navigationItem.Target);
+                KeepAliveScreens.Add(navigationItem.Target,keepAliveScreenInstance);
+                ActivateScreenByType(keepAliveScreenInstance);
+                return;
+            }
             var screenInstance = (T)Activator.CreateInstance(navigationItem.Target);
+            ActivateScreenByType(screenInstance);
+        }
+
+        private void ActivateScreenByType(T screenInstance)
+        {
             if (screenInstance is Screen screen)
             {
                 screen.Parent = this;
@@ -97,7 +119,6 @@ namespace FastPosFrontend.ViewModels
             {
                 ActivateItem(screenInstance);
             }
-
         }
     }
 }

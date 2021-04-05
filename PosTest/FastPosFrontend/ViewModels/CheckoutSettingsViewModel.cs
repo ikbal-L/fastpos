@@ -84,6 +84,7 @@ namespace FastPosFrontend.ViewModels
             if (_data.IsCompleted)
             {
                 Initialize();
+                IsReady = true;
 
             }
             //_data.PropertyChanged += _data_PropertyChanged;

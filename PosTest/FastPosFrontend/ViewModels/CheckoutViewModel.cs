@@ -22,18 +22,15 @@ using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
-using MaterialDesignThemes.Wpf;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 using Icon = FastPosFrontend.Helpers.Icon;
 using Table = ServiceInterface.Model.Table;
-using TaskExtensions = System.Threading.Tasks.TaskExtensions;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Checkout",target: typeof(CheckoutViewModel))]
+    [NavigationItemConfiguration(title:"Checkout",target: typeof(CheckoutViewModel),keepAlive:true)]
     public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, IAppNavigationItem
     {
         
@@ -610,11 +607,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public bool IsReady
-        {
-            get => _isReady;
-            set => Set(ref _isReady, value);
-        }
 
         #region Order Commands
 

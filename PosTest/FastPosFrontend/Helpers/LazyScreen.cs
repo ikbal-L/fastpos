@@ -62,10 +62,11 @@ namespace FastPosFrontend.Helpers
         private BindableCollection<AppNavigationLookupItem> _subItems;
 
 
-        public AppNavigationLookupItem(string title, Type target = null)
+        public AppNavigationLookupItem(string title, Type target = null,bool keepAlive = false)
         {
             _title = title;
             _target = target;
+            KeepAlive = keepAlive;
         }
 
         public string Title
@@ -80,6 +81,8 @@ namespace FastPosFrontend.Helpers
             set => Set(ref _target, value);
         }
 
+        public bool KeepAlive { get; set; }
+
         public BindableCollection<AppNavigationLookupItem> SubItems
         {
             get => _subItems;
@@ -87,7 +90,7 @@ namespace FastPosFrontend.Helpers
         }
 
         public static explicit operator AppNavigationLookupItem(NavigationItemConfigurationAttribute configuration) =>
-            new AppNavigationLookupItem(configuration.Title, configuration.Target);
+            new AppNavigationLookupItem(configuration.Title, configuration.Target,configuration.KeepAlive);
     }
 
   
@@ -120,6 +123,11 @@ namespace FastPosFrontend.Helpers
 
         public void ActivateLoadingScreen()
         {
+            if (IsReady)
+            {
+                DeactivateLoadingScreen();
+                return;
+            }
             var conductor = Parent as Conductor<object>;
             conductor?.ActivateItem(_loadingScreen);
         }
