@@ -58,6 +58,9 @@ namespace FastPosFrontend.ViewModels
         [Import(typeof(IUserRepository))]
         private IUserRepository _userRepository;
 
+        [Import(typeof(IRoleRepository))]
+        private IRoleRepository _roleRepository;
+
         private ObservableCollection<User> _Users;
 
         public ObservableCollection<User> Users
@@ -154,7 +157,7 @@ namespace FastPosFrontend.ViewModels
 
             StateManager.Instance
                 .Manage(_productRepository,fetch:false,withAssociatedTypes:true)
-                .Manage(_categoryRepository,false)
+                .Manage(_categoryRepository,false,withAssociatedTypes:true)
                 .Manage(_additiveRepository,false)
                 .Manage(_orderRepository, fetch: false)
                 .Manage(_tableRepository,false)
@@ -162,7 +165,8 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_waiterRepository,false)
                 .Manage(_deliverymanRepository,false)
                 .Manage(_paymentRepository)
-                .Manage(_userRepository);
+                .Manage(_userRepository,withAssociatedTypes:true)
+                .Manage(_roleRepository,false);
 
 
             

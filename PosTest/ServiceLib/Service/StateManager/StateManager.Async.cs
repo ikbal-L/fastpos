@@ -14,6 +14,7 @@ namespace ServiceLib.Service.StateManager
         {
             var key = typeof(TState);
             //Decide on  either withAssociatedTypes or FetchWithAssociatedTypes
+            //Bug if multiple tasks of GetAsync are executing data could be fetched multiple times
             if (FetchwithAssociatedTypes.Contains(key))
             {
                 var associations = associationManager.GetAssociationsOf<TState>();
@@ -34,6 +35,7 @@ namespace ServiceLib.Service.StateManager
                 //var (status, data) = await service.GetAsync();
                 //ServiceHelper.HandleStatusCodeErrors();
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
+                
                 if ((HttpStatusCode)status == HttpStatusCode.NoContent)
                 {
                     State[key] = new List<TState>();
@@ -42,6 +44,7 @@ namespace ServiceLib.Service.StateManager
                 {
                     State[key] = data;
                 }
+                associationManager.Map<TState>(State);
 
             }
         }

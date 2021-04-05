@@ -89,7 +89,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        public void MappingAfterReceiving( ICollection<Product> products)
+        public void MappingAfterReceiving( IEnumerable<Product> products)
         {
             if (ProductIds != null && products != null)
             {

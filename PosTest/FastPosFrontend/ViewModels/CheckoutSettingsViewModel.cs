@@ -77,9 +77,10 @@ namespace FastPosFrontend.ViewModels
 
         protected sealed override void Setup()
         {
-            var products = StateManager.GetAsync<Product>();
             var categories = StateManager.GetAsync<Category>();
-            _data = new NotifyAllTasksCompletion(products, categories);
+            var products = StateManager.GetAsync<Product>();
+
+            _data = new NotifyAllTasksCompletion(categories,products);
 
             if (_data.IsCompleted)
             {

@@ -22,26 +22,10 @@ namespace FastPosFrontend.ViewModels
         {
             IsBackendServerOn =ConnectionHelper.PingHost();
             IsDbServerOn = ConnectionHelper.PingHost(portNumber:3306);
-            Setup();
+            Associations.Setup();
         }
 
-        public void Setup()
-        {
-            var associationManager = AssociationManager.Instance;
-            associationManager.Register().Associate<Product>().With<Additive>().Using<Product, Additive>(
-                (products, additives) =>
-                {
-                    if (additives == null || products == null) return;
-                    foreach (var product in products)
-                    {
-                        if (product.IsPlatter)
-                        {
-                            product.MappingAfterReceiving(category: null, (List<Additive>)additives);
-
-                        }
-                    }
-                }).Build();
-        }
+        
         public bool IsLoggedIn
         {
             get => _isLoggedIn;

@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Collections.Generic;
+using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.Views;
@@ -9,7 +10,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("User Settings", typeof(UserSettingsViewModel), groupName: "Settings")]
-    public class UserSettingsViewModel : /*SettingsItemBase*/ AppScreen
+    public class UserSettingsViewModel : /*SettingsItemBase*/ LazyScreen
     {
         private User _selectedUser = null;
         private UserDetailViewModel _userDetailViewModel = null;
@@ -22,13 +23,11 @@ namespace FastPosFrontend.ViewModels
             //this.Content = new UserSettingsView() { DataContext = this };
             var userRepository = new UserRepository();
             var roleRepository = new RoleRepository();
-            StateManager.Instance.Manage(userRepository).Manage(roleRepository);
+            StateManager.Instance.Manage(userRepository,withAssociatedTypes:true).Manage(roleRepository);
 
-            StateManager.Associate<Role,User>();
-            var data = StateManager.Get<User>();
-
-            Users = new BindableCollection<User>(data);
+            
             IsEditing = false;
+            Setup();
 
 
         }
@@ -106,8 +105,26 @@ namespace FastPosFrontend.ViewModels
             ToastNotification.Notify("Select a user to delete");
         }
 
-        
 
+        protected override void Setup()
+        {
+            var users = StateManager.GetAsync<User>();
+            _data = new NotifyAllTasksCompletion(users);
+            if (_data.IsCompleted)
+            {
+                Initialize();
 
+            }
+            //_data.PropertyChanged += _data_PropertyChanged;
+            _data.AllTasksCompleted += OnAllTasksCompleted;
+        }
+
+        public override void Initialize()
+        {
+            //StateManager.Associate<Role, User>();
+
+            var data = _data.GetResult<ICollection<User>>();
+            Users = new BindableCollection<User>(data);
+        }
     }
 }

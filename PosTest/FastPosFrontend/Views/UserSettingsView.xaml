@@ -74,7 +74,7 @@
                          SelectedItem="{Binding SelectedUser}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel />
+                            <WrapPanel></WrapPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
@@ -85,7 +85,7 @@
                                     <materialDesign:PackIcon 
                                         HorizontalAlignment="Center" 
                                         Foreground="{Binding Background,
-                                        FallbackValue=#4a4c4f}" Kind="AccountCircle"  Width="120" Height="120" />
+                                        FallbackValue=Red}" Kind="AccountCircle"  Width="120" Height="120" />
                                     <TextBlock FontWeight="Bold" Margin="0 0 0 20" Text="{Binding Username}"
                                                FontSize="20"
                                                

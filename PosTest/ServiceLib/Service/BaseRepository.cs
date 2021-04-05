@@ -236,7 +236,7 @@ namespace ServiceLib.Service
             restApi.Prefix = "config";
         }
     }
-
+    [Export(typeof(IRoleRepository))]
     public class RoleRepository : BaseRepository<Role, long>, IRoleRepository
     {
         public RoleRepository()

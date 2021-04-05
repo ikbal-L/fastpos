@@ -9,7 +9,7 @@ namespace ServiceInterface.Model
     [DataContract]
     public class User : PropertyChangedBase,IState<long>
     {
-        private string _backgroundString;
+        private string _backgroundString = "#4a4c4f";
         private Brush _background;
         private Color? _backgroundColor;
         private Agent _agent;
@@ -88,7 +88,7 @@ namespace ServiceInterface.Model
         [Required(AllowEmptyStrings = false)]
         public string BackgroundString
         {
-            get => _backgroundString ?? /*"#f39c12";*/ "#4a4c4f";
+            get => _backgroundString ?? /*"#f39c12";*/"#4a4c4f";
             set
             {
                 _backgroundString = value;
@@ -99,10 +99,12 @@ namespace ServiceInterface.Model
 
         public virtual Brush Background
         {
-            get => _background ??= new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
+            get => _background ??= new SolidColorBrush((Color)ColorConverter.ConvertFromString(_backgroundString));
             set
             {
-                _background = (SolidColorBrush)value;
+               
+                Set(ref _background, (SolidColorBrush) value);
+                _backgroundString = ((SolidColorBrush) value)?.Color.ToString();
             }
         }
 

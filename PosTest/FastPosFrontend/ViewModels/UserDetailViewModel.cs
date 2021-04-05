@@ -1,11 +1,13 @@
-﻿using System.Drawing;
-using System.Linq;
+﻿using System.Linq;
+using System.Windows.Media;
 using Caliburn.Micro;
+using FastPosFrontend.Converters;
 using FastPosFrontend.Helpers;
 using PasswordGenerator;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Brush = System.Drawing.Brush;
 
 namespace FastPosFrontend.ViewModels
 {
@@ -18,7 +20,7 @@ namespace FastPosFrontend.ViewModels
         private string _lastName;
         private string _email;
         private bool _isUserActive;
-        private Brush _background;
+        private SolidColorBrush _background;
 
         private User _model;
 
@@ -60,6 +62,7 @@ namespace FastPosFrontend.ViewModels
             FirstName = _model.FirstName;
             LastName = _model.LastName;
             Email = _model.Email;
+            Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(_model.BackgroundString));
             IsUserActive = _model.IsUserActive;
             if (_model.Roles != null)
             {
@@ -82,6 +85,8 @@ namespace FastPosFrontend.ViewModels
             _model.PhoneNumbers = PhoneNumbers;
             _model.Roles = UserRoles.ToList();
             _model.RoleIds = UserRoles.Select(role => role.Id.Value).ToList();
+            _model.Background = Background;
+            //_model.BackgroundString = Background.Color.ToString();
         }
         public string Username
         {
@@ -147,7 +152,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _isUserActive, value);
         }
 
-        public Brush Background
+        public SolidColorBrush Background
         {
             get => _background;
             set => Set(ref _background, value);
