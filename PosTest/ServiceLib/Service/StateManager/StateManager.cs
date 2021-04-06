@@ -22,6 +22,7 @@ namespace ServiceLib.Service.StateManager
         private static bool _refreshRequested = false;
         private static StateManager _instance;
         private static AssociationManager associationManager;
+        private static readonly HashSet<Type> FetchLock;
 
         static StateManager()
         {
@@ -31,6 +32,7 @@ namespace ServiceLib.Service.StateManager
             _instance = new StateManager();
             associationManager = AssociationManager.Instance;
             FetchwithAssociatedTypes = new List<Type>();
+            FetchLock = new HashSet<Type>();
         }
 
         public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = false, string predicate = "", bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
@@ -70,7 +72,7 @@ namespace ServiceLib.Service.StateManager
             var key = typeof(TState);
             IsStateManaged<TState, TIdentifier>(key);
 
-            if (State[key] == null) Fetch<TState, TIdentifier>(predicate);
+            //if (State[key] == null) Fetch<TState, TIdentifier>(predicate);
 
 
             return State[key] as ICollection<TState>;

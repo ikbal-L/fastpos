@@ -13,6 +13,8 @@ namespace ServiceLib.Service.StateManager
         public static async Task FetchAsync<TState, TIdentifier>(string predicate) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
+            if (FetchLock.Contains(key)) return;
+            FetchLock.Add(key);
             //Decide on  either withAssociatedTypes or FetchWithAssociatedTypes
             //Bug if multiple tasks of GetAsync are executing data could be fetched multiple times
             if (FetchwithAssociatedTypes.Contains(key))
@@ -45,6 +47,7 @@ namespace ServiceLib.Service.StateManager
                     State[key] = data;
                 }
                 associationManager.Map<TState>(State);
+                FetchLock.Remove(key);
 
             }
         }

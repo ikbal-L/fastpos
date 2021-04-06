@@ -95,10 +95,12 @@ namespace FastPosFrontend.ViewModels
         public override void Initialize()
         {
 
-            _allProducts = _data.GetResult<ICollection<Product>>().ToList();
-            _allCategories = _data.GetResult<ICollection<Category>>().ToList();
-            StateManager.Associate<Additive, Product>();
-            StateManager.Associate<Product, Category>();
+            //_allProducts = _data.GetResult<ICollection<Product>>().ToList();
+            _allProducts = StateManager.Get<Product>().ToList();
+            //_allCategories = _data.GetResult<ICollection<Category>>().ToList();
+            _allCategories = StateManager.Get<Category>().ToList();
+            //StateManager.Associate<Additive, Product>();
+            //StateManager.Associate<Product, Category>();
 
             LoadCategoryPages();
             CurrentProducts = new BindableCollection<Product>();
