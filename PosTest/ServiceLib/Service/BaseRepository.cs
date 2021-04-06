@@ -173,6 +173,7 @@ namespace ServiceLib.Service
                     }
                     newOrderItem.Additives = oldOrderItem?.Additives;
                     newOrderItem.Order = oldOrderItem?.Order;
+                    newOrderItem.Product = oldOrderItem?.Product;
                 }
                 state.OrderItems = deserializedState.OrderItems;
                 deserializedState = null;

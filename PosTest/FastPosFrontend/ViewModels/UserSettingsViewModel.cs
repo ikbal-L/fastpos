@@ -28,6 +28,7 @@ namespace FastPosFrontend.ViewModels
             
             IsEditing = false;
             Setup();
+            OnReady();
 
 
         }
@@ -110,13 +111,13 @@ namespace FastPosFrontend.ViewModels
         {
             var users = StateManager.GetAsync<User>();
             _data = new NotifyAllTasksCompletion(users);
-            if (_data.IsCompleted)
-            {
-                Initialize();
+            //if (_data.IsCompleted)
+            //{
+            //    Initialize();
+            //    IsReady = true;
 
-            }
-            //_data.PropertyChanged += _data_PropertyChanged;
-            _data.AllTasksCompleted += OnAllTasksCompleted;
+            //}
+            //_data.AllTasksCompleted += OnAllTasksCompleted;
         }
 
         public override void Initialize()

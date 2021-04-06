@@ -89,14 +89,23 @@
                     </TextBlock>
 
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <!--<StackPanel Orientation="Horizontal">
                     <md:PackIcon Kind="Account" Width="20" Height="20" VerticalAlignment="Top" />
                     <TextBlock Margin="-5 0 0 0" Width="100"
-                                   Text="{Binding  CurrentOrder.Customer.Name}" FontSize="16" FontWeight="Bold"
-                                   VerticalAlignment="Center" />
-                </StackPanel>
+                               Text="{Binding  CurrentOrder.Customer.Name}" FontSize="16" FontWeight="Bold"
+                               VerticalAlignment="Center" />
+                </StackPanel>-->
+                <!--<md:Chip  >
+                    <md:Chip.Icon>
+                        <md:PackIcon Kind="Account" Width="20" Height="20" VerticalAlignment="Top" />
+                    </md:Chip.Icon>
+                    <TextBlock 
+                        Text="{Binding  CurrentOrder.Customer.Name}" FontSize="16" FontWeight="Bold"
+                        VerticalAlignment="Center" />
+                </md:Chip>-->
+               
 
-                <Menu IsMainMenu="True" DockPanel.Dock="Right">
+                <!--<Menu IsMainMenu="True" DockPanel.Dock="Right">
                     <MenuItem Height="30" Width="30">
                         <MenuItem.Icon>
                             <md:PackIcon Background="Aqua" Kind="CogOutline" Width="28"
@@ -118,7 +127,7 @@
                         <MenuItem Header="Client" />
                         <MenuItem Header="Produit" />
                     </MenuItem>
-                </Menu>
+                </Menu>-->
             </DockPanel>
         </Grid>
     </DataTemplate>

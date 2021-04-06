@@ -17,7 +17,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("Additive settings", typeof(AdditivesSettingsViewModel), groupName: "Settings")]
-    public class AdditivesSettingsViewModel : AppScreen
+    public class AdditivesSettingsViewModel : LazyScreen
     {
         private BindableCollection<Additive> _additives;
         private Additive _selectedAdditive;
@@ -34,22 +34,19 @@ namespace FastPosFrontend.ViewModels
 
         public AdditivesSettingsViewModel() : this(30)
         {
-            //this.Title = "Additives";
-            //this.Content = new AdditivesSettingsView() {DataContext = this};
+           
         }
 
         public AdditivesSettingsViewModel( /*IAdditiveService additiveService,*/ int additivePageSize)
         {
             IsDialogOpen = false;
-            //_additiveService = additiveService;
+          
             _additivePageSize = additivePageSize;
 
-            //_allAdditives = additiveService.GetAllAdditives(ref additiveStatusCode).ToList();
-
-            //var (additiveStatusCode, _allAdditives) = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives);
-            _allAdditives = StateManager.Get<Additive>().ToList();
             _isEditing = false;
-            PopulateAdditivesPage();
+            Setup();
+            OnReady();
+        
         }
 
         public BindableCollection<Additive> Additives
@@ -343,12 +340,6 @@ namespace FastPosFrontend.ViewModels
             IsDialogOpen = false;
         }
 
-        public void BackToLogin()
-        {
-            /*       LoginViewModel loginvm = new LoginViewModel();
-                   loginvm.Parent = this.Parent;
-                   (this.Parent as Conductor<object>).ActivateItem(loginvm);*/
-        }
 
         public void SelectAdditive(Additive additive)
         {
@@ -365,6 +356,20 @@ namespace FastPosFrontend.ViewModels
                 AdditiveToMove = null;
                 SelectedAdditive = null;
             }
+        }
+
+        protected override void Setup()
+        {
+            var additivesTask= StateManager.GetAsync<Additive>();
+           _data = new NotifyAllTasksCompletion(additivesTask);
+
+        }
+
+        public override void Initialize()
+        {
+
+            _allAdditives = StateManager.Get<Additive>().ToList();
+            PopulateAdditivesPage();
         }
     }
 }

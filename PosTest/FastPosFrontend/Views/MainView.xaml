@@ -52,10 +52,7 @@
                                         </Style>
                                     </md:ColorZone.Style>
                                     <DockPanel>
-                                        <!--<StackPanel Orientation="Horizontal">
-                                            
-                                        </StackPanel>-->
-
+                                   
                                         <ToggleButton
                                                 x:Name="AppMenuToggleButton"
                                                 IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"

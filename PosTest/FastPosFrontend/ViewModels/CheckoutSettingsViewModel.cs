@@ -71,6 +71,7 @@ namespace FastPosFrontend.ViewModels
             //StateManager.Fetch();
             
             Setup();
+            OnReady();
             
             
         }
@@ -82,14 +83,14 @@ namespace FastPosFrontend.ViewModels
 
             _data = new NotifyAllTasksCompletion(categories,products);
 
-            if (_data.IsCompleted)
-            {
-                Initialize();
-                IsReady = true;
+            //if (_data.IsCompleted)
+            //{
+            //    Initialize();
+            //    IsReady = true;
 
-            }
-            //_data.PropertyChanged += _data_PropertyChanged;
-            _data.AllTasksCompleted += OnAllTasksCompleted;
+            //}
+            ////_data.PropertyChanged += _data_PropertyChanged;
+            //_data.AllTasksCompleted += OnAllTasksCompleted;
         }
 
         public override void Initialize()

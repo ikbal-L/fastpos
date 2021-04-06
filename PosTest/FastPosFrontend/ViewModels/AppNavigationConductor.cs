@@ -82,6 +82,18 @@ namespace FastPosFrontend.ViewModels
             return groupItems;
         }
 
+        private protected virtual AppNavigationLookupItem LoadDefaultItem()
+        {
+           var item = (AppNavigationLookupItem)Assembly.GetExecutingAssembly().GetTypes()
+                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)))
+                .Select(type =>
+                    (NavigationItemConfigurationAttribute) type.GetCustomAttribute(
+                        typeof(NavigationItemConfigurationAttribute)))
+                .FirstOrDefault(attribute => attribute.IsDefault);
+           return item;
+
+        }
+
         //TODO possible cause of issue with loading lazy viewmodel with partially completed collection of tasks 
         public virtual void NavigateToItem(AppNavigationLookupItem navigationItem)
         {
@@ -119,6 +131,12 @@ namespace FastPosFrontend.ViewModels
             {
                 ActivateItem(screenInstance);
             }
+        }
+
+        public virtual void OnLogin()
+        {
+            var defaultItem = LoadDefaultItem();
+            NavigateToItem(defaultItem);
         }
     }
 }

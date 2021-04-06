@@ -7,7 +7,7 @@ namespace FastPosFrontend.Helpers
 {
     public interface ILazyScreen
     {
-        public bool IsReady { get; set; }
+        public bool IsReady { get;}
         void ActivateLoadingScreen();
         void DeactivateLoadingScreen();
     }
@@ -62,11 +62,12 @@ namespace FastPosFrontend.Helpers
         private BindableCollection<AppNavigationLookupItem> _subItems;
 
 
-        public AppNavigationLookupItem(string title, Type target = null,bool keepAlive = false)
+        public AppNavigationLookupItem(string title, Type target = null,bool keepAlive = false,bool isDefault = false)
         {
             _title = title;
             _target = target;
             KeepAlive = keepAlive;
+            IsDefault = isDefault;
         }
 
         public string Title
@@ -82,6 +83,7 @@ namespace FastPosFrontend.Helpers
         }
 
         public bool KeepAlive { get; set; }
+        public bool IsDefault { get; set; } 
 
         public BindableCollection<AppNavigationLookupItem> SubItems
         {
@@ -90,7 +92,7 @@ namespace FastPosFrontend.Helpers
         }
 
         public static explicit operator AppNavigationLookupItem(NavigationItemConfigurationAttribute configuration) =>
-            new AppNavigationLookupItem(configuration.Title, configuration.Target,configuration.KeepAlive);
+            new AppNavigationLookupItem(configuration.Title, configuration.Target,configuration.KeepAlive,isDefault:configuration.IsDefault);
     }
 
   
@@ -112,7 +114,7 @@ namespace FastPosFrontend.Helpers
         public bool IsReady
         {
             get => _isReady;
-            set => Set(ref _isReady, value);
+             protected set => Set(ref _isReady, value);
         }
 
         protected LazyScreen(string loadingMessage, LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
@@ -144,6 +146,16 @@ namespace FastPosFrontend.Helpers
         protected abstract void Setup();
         public abstract void Initialize();
 
+        protected virtual void OnReady()
+        {
+            if (_data.IsCompleted)
+            {
+                Initialize();
+                IsReady = true;
+
+            }
+            _data.AllTasksCompleted += OnAllTasksCompleted;
+        }
         protected virtual void OnAllTasksCompleted(object sender, AllTasksCompletedEventArgs e)
         {
             if (!e.IsTaskCollectionCompleted) return;

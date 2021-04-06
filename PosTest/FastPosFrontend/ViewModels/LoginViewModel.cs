@@ -159,7 +159,7 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_productRepository,fetch:false,withAssociatedTypes:true)
                 .Manage(_categoryRepository,false,withAssociatedTypes:true)
                 .Manage(_additiveRepository,false)
-                .Manage(_orderRepository, fetch: false)
+                .Manage(_orderRepository, fetch: false,withAssociatedTypes:true)
                 .Manage(_tableRepository,false)
                 .Manage(_customerRepository)
                 .Manage(_waiterRepository,false)
@@ -172,9 +172,13 @@ namespace FastPosFrontend.ViewModels
             
 
                 (this.Parent as MainViewModel).IsLoggedIn = true;
+                //(this.Parent as MainViewModel).IsLoggedIn = true;
+
 
             //Checkout();
-            CheckoutSettings();
+            //CheckoutSettings();
+        
+
 
 
 

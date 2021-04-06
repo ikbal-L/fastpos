@@ -35,6 +35,7 @@ namespace FastPosFrontend.ViewModels
                 if (value)
                 {
                     LoadNavigationItems();
+                    OnLogin();
                 }
             }
         }
@@ -105,7 +106,7 @@ namespace FastPosFrontend.ViewModels
         public void Logout()
         {
             StateManager.Flush();
-            ActiveScreen = new LoginViewModel();
+            ActiveScreen = new LoginViewModel {Parent = this};
             IsLoggedIn = false;
             ActivateItem(ActiveScreen);
         }

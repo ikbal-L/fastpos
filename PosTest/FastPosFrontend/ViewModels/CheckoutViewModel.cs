@@ -30,7 +30,7 @@ using Table = ServiceInterface.Model.Table;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration(title:"Checkout",target: typeof(CheckoutViewModel),keepAlive:true)]
+    [NavigationItemConfiguration(title:"Checkout",target: typeof(CheckoutViewModel),keepAlive:true,isDefault:true)]
     public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, IAppNavigationItem
     {
         
@@ -148,7 +148,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             Setup();
-            
+            OnReady();
           
             
         }
@@ -157,24 +157,26 @@ namespace FastPosFrontend.ViewModels
         /// </summary>
         protected override void Setup()
         {
-            var deliveryMen = StateManager.GetAsync<Deliveryman>();
-            var waiters = StateManager.GetAsync<Waiter>();
-            var tables = StateManager.GetAsync<Table>();
-            var customers = StateManager.GetAsync<Customer>();
-            var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
+
+            //var deliveryMen = StateManager.GetAsync<Deliveryman>();
+            //var waiters = StateManager.GetAsync<Waiter>();
+            //var tables = StateManager.GetAsync<Table>();
+            //var customers = StateManager.GetAsync<Customer>();
             var categories = StateManager.GetAsync<Category>();
-            var products = StateManager.GetAsync<Product>();
-          
+            var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
+
+            //var products = StateManager.GetAsync<Product>();
 
 
-            _data = new NotifyAllTasksCompletion(deliveryMen, waiters, tables, customers, unprocessedOrders, categories, products);
-            if (_data.IsCompleted)
-            {
-                Initialize();
 
-            }
-            //_data.PropertyChanged += _data_PropertyChanged;
-            _data.AllTasksCompleted += OnAllTasksCompleted;
+            _data = new NotifyAllTasksCompletion(categories,unprocessedOrders/*,deliveryMen, waiters, tables, customers, products*/);
+            //if (_data.IsCompleted)
+            //{
+            //    Initialize();
+            //    IsReady = true;
+
+            //}
+            //_data.AllTasksCompleted += OnAllTasksCompleted;
         }
 
         private void SetupEmbeddedCommandBar()
@@ -218,21 +220,29 @@ namespace FastPosFrontend.ViewModels
         public override void Initialize()
         {
 
-            var deliveryMen = _data.GetResult<ICollection<Deliveryman>>();
-            var waiter = _data.GetResult<ICollection<Waiter>>();
-            var tables = _data.GetResult<ICollection<Table>>();
-            var customers = _data.GetResult<ICollection<Customer>>();
-            var unprocessedOrders = _data.GetResult<ICollection<Order>>();
-            var categories = _data.GetResult<ICollection<Category>>();
-            var products = _data.GetResult<ICollection<Product>>();
+            //var deliveryMen = _data.GetResult<ICollection<Deliveryman>>();
+            //var waiter = _data.GetResult<ICollection<Waiter>>();
+            //var tables = _data.GetResult<ICollection<Table>>();
+            //var customers = _data.GetResult<ICollection<Customer>>();
+            //var unprocessedOrders = _data.GetResult<ICollection<Order>>();
+            //var categories = _data.GetResult<ICollection<Category>>();
+            //var products = _data.GetResult<ICollection<Product>>();
 
-            StateManager.Associate<Additive, Product>();
-            StateManager.Associate<Product, Category>();
-            StateManager.Associate<Order, Table>();
-            StateManager.Associate<Order, Product>();
-            StateManager.Associate<Order, Deliveryman>();
-            StateManager.Associate<Order, Waiter>();
-            StateManager.Associate<Order, Customer>();
+            var deliveryMen = StateManager.Get<Deliveryman>();
+            var waiter = StateManager.Get<Waiter>();
+            var tables = StateManager.Get<Table>();
+            var customers = StateManager.Get<Customer>();
+            var unprocessedOrders = StateManager.Get<Order>();
+            var categories = StateManager.Get<Category>();
+            var products = StateManager.Get<Product>();
+
+            //StateManager.Associate<Additive, Product>();
+            //StateManager.Associate<Product, Category>();
+            //StateManager.Associate<Order, Table>();
+            //StateManager.Associate<Order, Product>();
+            //StateManager.Associate<Order, Deliveryman>();
+            //StateManager.Associate<Order, Waiter>();
+            //StateManager.Associate<Order, Customer>();
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
             ProductsPage = new BindableCollection<Product>();

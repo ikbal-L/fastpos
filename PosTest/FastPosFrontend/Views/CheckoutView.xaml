@@ -85,8 +85,12 @@
                 <!--OrderItemList and Order Item Commands-->
             <Grid Grid.Column="0" Grid.Row="0" Margin="0 0 8 0">
                 <Grid.ColumnDefinitions>
+                    <!--<ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="58" />-->
+
                     <ColumnDefinition Width="58" />
                     <ColumnDefinition Width="*" />
+
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1" >
 
@@ -378,7 +382,7 @@
                 </Grid>
 
                     <!--Order Keypad and Commands--> 
-                <Grid Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Center">
+                <Grid Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Center" Margin="58 0 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
