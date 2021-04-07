@@ -41,9 +41,18 @@ namespace ServiceLib.Service
             return GenericRest.SaveThing<TState>(state, restApi.Action<TState>(EndPoint.Save),out errors).status;
         }
 
-        public virtual int Save(IEnumerable<TState> state)
+        public virtual (int status, IEnumerable<TState> state, IEnumerable<string> errors) Save(IEnumerable<TState> state)
         {
-            return GenericRest.SaveThing<IEnumerable<TState>>(state, restApi.Action<TState>(EndPoint.SaveMany),out _).status;
+            var result = GenericRest.SaveThing<IEnumerable<TState>>(state, restApi.Action<TState>(EndPoint.SaveMany));
+            
+            if (result.StatusCode == HttpStatusCode.OK|| result.StatusCode == HttpStatusCode.Created)
+            {
+                var content = JsonConvert.DeserializeObject<IEnumerable<TState>>(result.Content);
+                return ((int) result.StatusCode, content,null);
+            }
+            var errors = JsonConvert.DeserializeObject<IEnumerable<string>>(result.Content);
+            return ((int) result.StatusCode, null,errors);
+
         }
 
         public virtual int Delete(TIdentifier id)

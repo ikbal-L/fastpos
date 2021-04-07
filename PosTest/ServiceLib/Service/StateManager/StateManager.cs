@@ -147,18 +147,23 @@ namespace ServiceLib.Service.StateManager
             var key = typeof(TState);
             IEnumerable<string> errors = null;
 
-            if (state.Any(tState => tState.Id!= null ))
-            {
-                throw new ArgumentException("State must be unmanaged");
-            }
+            //if (state.Any(tState => tState.Id!= null ))
+            //{
+            //    throw new ArgumentException("State must be unmanaged");
+            //}
 
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-                var status = service.Save(state);
+                var result = service.Save(state);
+                var status = result.status;
 
-                if ((HttpStatusCode)status == HttpStatusCode.OK || (HttpStatusCode)status == HttpStatusCode.Created) return true;
+                if ((HttpStatusCode) status == HttpStatusCode.OK || (HttpStatusCode) status == HttpStatusCode.Created)
+                {
+                    State[key] = result.state;
+                    return true;
+                }
             }
-
+            
             return false;
         }
 

@@ -12,7 +12,7 @@ namespace ServiceInterface.Interface
         (int status, IEnumerable<TState>) Get(string subPath);
         (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids);
         int Save(TState state, out IEnumerable<string> errors);
-        int Save(IEnumerable<TState> state);
+        (int status, IEnumerable<TState> state,IEnumerable<string> errors) Save(IEnumerable<TState> state);
         int Delete(TIdentifier id);
         int Update(TState state, out IEnumerable<string> errors);
         (bool, TReturn) Update<TReturn>(TState state);
