@@ -1059,7 +1059,8 @@ namespace FastPosFrontend.ViewModels
                     CurrentOrder.State = OrderState.Ordered;
                     _diff.Clear();
                     SaveCurrentOrder();
-                    PrintDocument(PrintSource.Kitchen);
+
+                    //PrintDocument(PrintSource.Kitchen);
                     break;
 
                 case ActionButton.Table:

@@ -119,10 +119,10 @@ namespace ServiceInterface.Model
             set
             {
                 _discountAmount = value;
-                _discountPercentage = 0;
+                _discountPercentage = value*100/Total;
                 NotifyOfPropertyChange(() => DiscountAmount);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
-                //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+                
                 Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }
@@ -135,10 +135,10 @@ namespace ServiceInterface.Model
             set
             {
                 _discountPercentage = value;
-                _discountAmount = 0;
+                _discountAmount = (Total*_discountPercentage/100);
                 NotifyOfPropertyChange(() => DiscountPercentage);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
-                //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
+           
                 Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }

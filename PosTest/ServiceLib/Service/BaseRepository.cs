@@ -161,7 +161,7 @@ namespace ServiceLib.Service
                     state.Id = deserializedState.Id;
                 }
 
-                foreach (var newOrderItem in deserializedState.OrderItems)
+                foreach (var newOrderItem in deserializedState.OrderItems.ToList())
                 {
                     var oldOrderItem = state.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
                     if (oldOrderItem?.Additives != null)
@@ -174,6 +174,7 @@ namespace ServiceLib.Service
                     newOrderItem.Additives = oldOrderItem?.Additives;
                     newOrderItem.Order = oldOrderItem?.Order;
                     newOrderItem.Product = oldOrderItem?.Product;
+
                 }
                 state.OrderItems = deserializedState.OrderItems;
                 deserializedState = null;

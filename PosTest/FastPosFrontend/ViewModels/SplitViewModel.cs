@@ -315,7 +315,7 @@ namespace FastPosFrontend.ViewModels
             }
             catch (Exception)
             {
-                ToastNotification.Notify("Payed Amoount non valid", NotificationType.Warning);
+                ToastNotification.Notify("Payed Amount non valid", NotificationType.Warning);
                 return;
             }
             if (payedAmount < 0)
@@ -471,36 +471,48 @@ namespace FastPosFrontend.ViewModels
             {
                  Parent.CurrentOrder.State = OrderState.Splitted;
                  var parentCurrentOrder = Parent.CurrentOrder;
-                 resp1 = Parent.SaveOrder( ref parentCurrentOrder);
+
+                //TODO Revise Handling Order items of Split order
+                resp1 = Parent.SaveOrder( ref parentCurrentOrder);
                  Parent.CurrentOrder = parentCurrentOrder;
                  Parent.NotifyOfPropertyChange(() => Parent.CurrentOrder);
             }
             switch (resp1|| Parent.CurrentOrder.Id != null)
             {
                 case true:
-                    SplittedOrder.SplittedFrom = Parent.CurrentOrder;
+                    Parent.CurrentOrder.State = OrderState.Splitted;
+                    Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems
+                        .Where(x => SplittedOrder.OrderItems.Any(i => i.ProductId == x.ProductId))
+                        .ToList());
+                    var parentCurrentOrder = Parent.CurrentOrder;
+                    var resp = Parent.SaveOrder(ref parentCurrentOrder);
                     
-                    var resp2 = Parent.SaveOrder(ref _splitedOrder);
-                    SplittedOrder = _splitedOrder;
-                    NotifyOfPropertyChange(() => SplittedOrder);
-
-                    switch (resp2)
+                    if (resp)
                     {
-                        case true:
-                            CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());
-                            //TODO Fix Issue! Remove range not removing SplittedOrder.OrderItems from Parent.CurrentOrder.OrderItems 
-                            Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId==x.ProductId)).ToList());
-                            //SplittedOrder.OrderItems.Clear();
-                            //SplittedOrder.Id = null;
-                            SplittedOrder = new Order();
+                        SplittedOrder.SplittedFrom = Parent.CurrentOrder;
+
+                        var resp2 = Parent.SaveOrder(ref _splitedOrder);
+                        SplittedOrder = _splitedOrder;
+                        NotifyOfPropertyChange(() => SplittedOrder);
+
+                        switch (resp2)
+                        {
+                            case true:
+                                CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());
+                                //TODO Fix Issue! Remove range not removing SplittedOrder.OrderItems from Parent.CurrentOrder.OrderItems
+                                //Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId==x.ProductId)).ToList());
+                                //SplittedOrder.OrderItems.Clear();
+                                //SplittedOrder.Id = null;
+                                SplittedOrder = new Order();
                             
-                            break;
+                                break;
 
 
-                        default:
-                            //false
-                            ToastNotification.ErrorNotification(0);
-                            break;
+                            default:
+                                //false
+                                ToastNotification.ErrorNotification(0);
+                                break;
+                        }
                     }
 
                     break;

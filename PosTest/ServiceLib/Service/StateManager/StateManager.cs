@@ -334,6 +334,8 @@ namespace ServiceLib.Service.StateManager
         public static void Flush()
         {
             State.Clear();
+            FetchLock.Clear();
+
         }
 
         public static void Flush<TState>() where TState:IState<long>

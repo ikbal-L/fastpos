@@ -106,6 +106,7 @@ namespace FastPosFrontend.ViewModels
         public void Logout()
         {
             StateManager.Flush();
+            KeepAliveScreens.Clear();
             ActiveScreen = new LoginViewModel {Parent = this};
             IsLoggedIn = false;
             ActivateItem(ActiveScreen);
