@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FastPosFrontend.Views.Settings.DeliveryMan.AddEditDeliveryManView"
+﻿<UserControl x:Class="FastPosFrontend.Views.AddEditDeliveryManView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

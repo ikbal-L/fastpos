@@ -496,6 +496,7 @@
 
                                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                         VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                        caliburn:Message.Attach="[Event Click] = [Action RemoveCategoryFromList()]"
                                         Grid.Row="0" Margin="0 0 110 -20">
                                             <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                                         </Button>

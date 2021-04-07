@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace FastPosFrontend.Views.Settings.DeliveryMan
+namespace FastPosFrontend.Views
 {
     /// <summary>
     /// Interaction logic for GeneralSettings.xaml

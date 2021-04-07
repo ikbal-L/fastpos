@@ -259,9 +259,10 @@
                                     </DockPanel>
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"
-                                               IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}">
+                                               IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}"
+                                               >
                                     <md:DrawerHost.LeftDrawerContent>
-                                        <Grid>
+                                        <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="auto" />

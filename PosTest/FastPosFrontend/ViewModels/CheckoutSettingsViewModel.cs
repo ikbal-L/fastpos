@@ -502,7 +502,7 @@ namespace FastPosFrontend.ViewModels
                 //TODO Fixing removal of categories from the current Categories list
 
 
-                RemoveCategoryFromList<T>(selectedCategory);
+                RemoveCategoryFromList(selectedCategory);
             }
 
             CurrentTs[index] = new T { Rank = rank };
@@ -510,9 +510,9 @@ namespace FastPosFrontend.ViewModels
             SelectedFreeT = freeT;
         }
 
-        private void RemoveCategoryFromList<T>(Category selectedCategory) where T : Ranked, new()
+        private void RemoveCategoryFromList(Category selectedCategory)
         {
-            ManageCategoryProductsForDeletion<T>(selectedCategory);
+            ManageCategoryProductsForDeletion(selectedCategory);
 
 
             CurrentProducts.Clear();
@@ -544,7 +544,7 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-        private void ManageCategoryProductsForDeletion<T>(Category selectedCategory) where T : Ranked, new()
+        private void ManageCategoryProductsForDeletion(Category selectedCategory) 
         {
             if (selectedCategory.Products != null || selectedCategory.Products?.Count > 0)
             {

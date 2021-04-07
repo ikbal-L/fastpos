@@ -1,16 +1,16 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.ViewModels.Settings;
+using FastPosFrontend.Views;
 using FastPosFrontend.Views.Settings;
-using FastPosFrontend.Views.Settings.DeliveryMan;
 using ServiceInterface.Model;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
+namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Deliveryman Settings", typeof(DeliveryManSettengsViewModel), groupName: "Settings")]
-    public class DeliveryManSettengsViewModel : SettingsItemBase
+    [NavigationItemConfiguration("Deliveryman Settings", typeof(DeliveryManSettingsViewModel), groupName: "Settings")]
+    public class DeliveryManSettingsViewModel : LazyScreen
     {
         private ObservableCollection<Deliveryman> _Deliverymans;
 
@@ -45,14 +45,13 @@ namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
         }
         private AddEditDeliveryManViewModel _AddEditDeliveryManViewModel;
         private AddEditDeliveryManView _addEditDeliveryManView;
-        public DeliveryManSettengsViewModel() {
+        public DeliveryManSettingsViewModel() {
 
-            this.Title = "Delivery Mans";
-            this.Content = new DeliveryManSettingsView() { DataContext = this };
-            Deliverymans = new ObservableCollection<Deliveryman>(StateManager.Get<Deliveryman>());
-            _AddEditDeliveryManViewModel = new AddEditDeliveryManViewModel(this);
-            _addEditDeliveryManView = new AddEditDeliveryManView() { DataContext = _AddEditDeliveryManViewModel };
-            DailogContent = _addEditDeliveryManView;
+            //this.Title = "Delivery Mans";
+            //this.Content = new DeliveryManSettingsView() { DataContext = this };
+            Setup();
+            OnReady();
+            
         }
         public bool DeleteVisibility { get => SelectedDeliveryMan != null; }
         public bool EditVisibility { get => SelectedDeliveryMan != null; }
@@ -95,6 +94,19 @@ namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
                 })
             };
             
+        }
+
+        protected override void Setup()
+        {
+            _data = new NotifyAllTasksCompletion(StateManager.GetAsync<Deliveryman>());
+        }
+
+        public override void Initialize()
+        {
+            Deliverymans = new ObservableCollection<Deliveryman>(StateManager.Get<Deliveryman>());
+            _AddEditDeliveryManViewModel = new AddEditDeliveryManViewModel(this);
+            _addEditDeliveryManView = new AddEditDeliveryManView() { DataContext = _AddEditDeliveryManViewModel };
+            DailogContent = _addEditDeliveryManView;
         }
     }
 }

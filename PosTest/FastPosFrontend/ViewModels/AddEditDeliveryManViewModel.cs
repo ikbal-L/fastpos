@@ -4,10 +4,9 @@ using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using PosTest.Extensions;
 using ServiceInterface.Model;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
+namespace FastPosFrontend.ViewModels
 {
    public class AddEditDeliveryManViewModel : PropertyChangedBase
     {
@@ -51,8 +50,8 @@ namespace FastPosFrontend.ViewModels.Settings.DeliveryMan
             }
         }
 
-        private DeliveryManSettengsViewModel Parent { get; set; }
-        public AddEditDeliveryManViewModel(DeliveryManSettengsViewModel parent)
+        private DeliveryManSettingsViewModel Parent { get; set; }
+        public AddEditDeliveryManViewModel(DeliveryManSettingsViewModel parent)
         {
             Parent = parent;
             Numbers = new BindableCollection<string>();

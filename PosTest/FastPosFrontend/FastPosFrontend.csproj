@@ -311,15 +311,15 @@
     <Compile Include="ViewModels\Settings1ViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\AddEditCustomerViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\CustomerSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Settings\DeliveryMan\AddEditDeliveryManViewModel.cs" />
-    <Compile Include="ViewModels\Settings\DeliveryMan\DeliveryManSettengsViewModel.cs" />
+    <Compile Include="ViewModels\AddEditDeliveryManViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryManSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\DialogViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\PrintSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingItemBase.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\Settings\Waiter\AddEditWaiterViewModel.cs" />
-    <Compile Include="ViewModels\Settings\Waiter\WaiterSettengsViewModel.cs" />
+    <Compile Include="ViewModels\AddEditWaiterViewModel.cs" />
+    <Compile Include="ViewModels\WaiterSettingsViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\CustomerDetailViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
@@ -408,10 +408,10 @@
     <Compile Include="Views\Settings\Customer\CustomerSettingsView.xaml.cs">
       <DependentUpon>CustomerSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\DeliveryMan\AddEditDeliveryManView.xaml.cs">
+    <Compile Include="Views\AddEditDeliveryManView.xaml.cs">
       <DependentUpon>AddEditDeliveryManView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\DeliveryMan\DeliveryManSettingsView.xaml.cs">
+    <Compile Include="Views\DeliveryManSettingsView.xaml.cs">
       <DependentUpon>DeliveryManSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\DialogView.xaml.cs">
@@ -426,10 +426,10 @@
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\Waiter\AddEditWaiterView.xaml.cs">
+    <Compile Include="Views\AddEditWaiterView.xaml.cs">
       <DependentUpon>AddEditWaiterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\Waiter\WaiterSettingsView.xaml.cs">
+    <Compile Include="Views\WaiterSettingsView.xaml.cs">
       <DependentUpon>WaiterSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SplashScreenView.xaml.cs">
@@ -712,11 +712,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Settings\DeliveryMan\AddEditDeliveryManView.xaml">
+    <Page Include="Views\AddEditDeliveryManView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Settings\DeliveryMan\DeliveryManSettingsView.xaml">
+    <Page Include="Views\DeliveryManSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -736,11 +736,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Settings\Waiter\AddEditWaiterView.xaml">
+    <Page Include="Views\AddEditWaiterView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Settings\Waiter\WaiterSettingsView.xaml">
+    <Page Include="Views\WaiterSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -883,6 +883,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NewFolder1\" />
+    <Folder Include="ViewModels\Settings\DeliveryMan\" />
+    <Folder Include="ViewModels\Settings\Waiter\" />
+    <Folder Include="Views\Settings\DeliveryMan\" />
+    <Folder Include="Views\Settings\Waiter\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SL.Controls\colortool.txt" />

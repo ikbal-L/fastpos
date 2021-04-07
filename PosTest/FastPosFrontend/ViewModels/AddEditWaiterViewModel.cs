@@ -2,10 +2,9 @@
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using PosTest.Extensions;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels.Settings.Waiter
+namespace FastPosFrontend.ViewModels
 {
    public class AddEditWaiterViewModel: PropertyChangedBase
     {
@@ -27,8 +26,8 @@ namespace FastPosFrontend.ViewModels.Settings.Waiter
                 NotifyOfPropertyChange(nameof(Waiter));
             }
         }
-        private WaiterSettengsViewModel Parent { get; set; }
-        public AddEditWaiterViewModel(WaiterSettengsViewModel parent)
+        private WaiterSettingsViewModel Parent { get; set; }
+        public AddEditWaiterViewModel(WaiterSettingsViewModel parent)
         {
             Parent = parent;
         }

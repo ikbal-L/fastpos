@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace FastPosFrontend.Views.Settings.Waiter
+namespace FastPosFrontend.Views
 {
     /// <summary>
     /// Interaction logic for GeneralSettings.xaml

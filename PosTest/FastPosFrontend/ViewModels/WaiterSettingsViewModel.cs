@@ -1,16 +1,17 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.ViewModels.Settings;
+using FastPosFrontend.Views;
 using FastPosFrontend.Views.Settings;
-using FastPosFrontend.Views.Settings.Waiter;
-using ServiceLib.Service;
+using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels.Settings.Waiter
+namespace FastPosFrontend.ViewModels
 {
 
-    [NavigationItemConfiguration("Waiter Settings", typeof(WaiterSettengsViewModel), groupName: "Settings")]
-    public class WaiterSettengsViewModel: AppScreen
+    [NavigationItemConfiguration("Waiter Settings", typeof(WaiterSettingsViewModel), groupName: "Settings")]
+    public class WaiterSettingsViewModel: LazyScreen
     {
         private ObservableCollection<ServiceInterface.Model.Waiter> _Waiters;
 
@@ -44,14 +45,11 @@ namespace FastPosFrontend.ViewModels.Settings.Waiter
         }
         private AddEditWaiterViewModel _AddEditWaiterViewModel;
         private AddEditWaiterView _addEditWaiterView;
-        public WaiterSettengsViewModel() {
+        public WaiterSettingsViewModel() {
 
-            //this.Title = "Waiters";
-            //this.Content = new WaiterSettingsView() { DataContext = this };
-            Waiters = new ObservableCollection<ServiceInterface.Model.Waiter>(StateManager.Get<ServiceInterface.Model.Waiter>());
-            _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
-            _addEditWaiterView = new AddEditWaiterView() { DataContext = _AddEditWaiterViewModel };
-            DailogContent = _addEditWaiterView;
+            Setup();
+            OnReady();
+           
         }
         public bool DeleteVisibility { get => SelectedWaiter != null; }
         public bool EditVisibility { get => SelectedWaiter != null; }
@@ -93,6 +91,19 @@ namespace FastPosFrontend.ViewModels.Settings.Waiter
                 })
             };
             
+        }
+
+        protected override void Setup()
+        {
+            _data = new NotifyAllTasksCompletion(StateManager.GetAsync<Waiter>());
+        }
+
+        public override void Initialize()
+        {
+            Waiters = new ObservableCollection<ServiceInterface.Model.Waiter>(StateManager.Get<ServiceInterface.Model.Waiter>());
+            _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
+            _addEditWaiterView = new AddEditWaiterView() { DataContext = _AddEditWaiterViewModel };
+            DailogContent = _addEditWaiterView;
         }
     }
 }
