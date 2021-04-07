@@ -314,6 +314,7 @@ namespace FastPosFrontend.ViewModels
                         AdditivesVisibility = false;
                         ProductsVisibility = true;
                     }
+                    ShowProductAdditives(CurrentOrder?.SelectedOrderItem?.Product);
                 }
             }
         }

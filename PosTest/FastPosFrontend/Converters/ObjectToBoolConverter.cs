@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Data;
 using ServiceInterface.Model;
 
@@ -11,7 +12,7 @@ namespace FastPosFrontend.Converters
         {
             if (value is OrderItem item && item.Product!=null)
             {
-                if (item.Product.IsPlatter && item.Additives != null)
+                if (item.Product.IsPlatter && item.Additives != null&& item.Product.Additives.Any())
                 {
                     return true;
                 }
