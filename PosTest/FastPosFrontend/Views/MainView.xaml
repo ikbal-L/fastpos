@@ -152,7 +152,7 @@
                                                         </Style>
                                                     </Button.Style>
                                                 </Button>
-                                                <Separator Visibility="{Binding ElementName=LogoutAppWindowButton,Path=v}"></Separator>
+                                                <Separator Visibility="{Binding ElementName=LogoutAppWindowButton,Path=Visibility}"></Separator>
                                                 <Button x:Name="LogoutAppWindowButton"
                                                         cal:Message.Attach="Logout"
                                                         Content="Logout" FontWeight="SemiBold">

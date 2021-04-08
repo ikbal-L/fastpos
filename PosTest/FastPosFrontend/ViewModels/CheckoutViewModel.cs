@@ -1575,6 +1575,7 @@ namespace FastPosFrontend.ViewModels
             if (param == 0)
             {
                 item.DiscountAmount = item.Product.Price;
+               
                 return;
             }
 

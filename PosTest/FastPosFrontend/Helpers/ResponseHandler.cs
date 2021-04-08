@@ -39,7 +39,7 @@ namespace FastPosFrontend.Helpers
                     break;
                 case 422:
 
-                    errorMessage += " due to the following Errors:\n{errorsString}";
+                    errorMessage += $" due to the following Errors:\n{errorsString}";
                     ToastNotification.Notify(errorMessage);
                     Clipboard.SetText(errorMessage);
 

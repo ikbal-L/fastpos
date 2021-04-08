@@ -221,6 +221,10 @@ namespace FastPosFrontend.ViewModels
 
                 
             }
+            else
+            {
+                
+            }
         }
 
         public void Cancel()
@@ -294,7 +298,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
         }
-
+        //TODO must add delete set null to additive entity
         public void DeleteAdditive()
         {
             if (SelectedAdditive == null)
