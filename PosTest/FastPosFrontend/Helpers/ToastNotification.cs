@@ -29,7 +29,7 @@ namespace FastPosFrontend.Helpers
                            offsetY: 10);
 
                        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                           notificationLifetime: TimeSpan.FromSeconds(2),
+                           notificationLifetime: TimeSpan.FromSeconds(10),
                            maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
                        cfg.Dispatcher = Application.Current.Dispatcher;
@@ -55,7 +55,7 @@ namespace FastPosFrontend.Helpers
                 }
                 else if (type == NotificationType.Success)
                 {
-                    //notifier.ShowSuccess(message);
+                    notifier.ShowSuccess(message);
                 }
             }
             else

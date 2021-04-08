@@ -12,6 +12,7 @@
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:subViews="clr-namespace:FastPosFrontend.Views.SubViews"
+             xmlns:viewModels="clr-namespace:FastPosFrontend.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
@@ -206,6 +207,63 @@
         <DataTemplate x:Key="ProductDisplayLayoutTemplate">
             
         </DataTemplate>
+        <DataTemplate x:Key="CategoryTabItemHeaderTemplate" >
+            <materialdesign:Badged BadgePlacementMode="Right">
+
+                <materialdesign:Badged.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Value="true">
+
+                                <DataTrigger.Binding>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=TabItem}"
+                                             Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeCategories).Count"  Converter="{StaticResource NotZeroConverter}"/>
+                                </DataTrigger.Binding>
+                                <Setter Property="materialdesign:Badged.BadgeBackground" Value="{StaticResource ErrorColorBrush}"></Setter>
+                                <Setter Property="materialdesign:Badged.BadgeForeground" Value="White"></Setter>
+                                <Setter Property="materialdesign:Badged.Badge" >
+                                    <Setter.Value>
+                                        <Binding RelativeSource="{RelativeSource AncestorType=TabItem}"
+                                                 Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeCategories).Count" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </materialdesign:Badged.Style>
+                <TextBlock Text="Categories" Margin=" 5 5 20 5"></TextBlock>
+
+            </materialdesign:Badged>
+        </DataTemplate>
+        <DataTemplate x:Key="ProductTabItemHeaderTemplate" >
+            <materialdesign:Badged BadgePlacementMode="Right">
+                <materialdesign:Badged.Style>
+                   <Style>
+                       <Style.Triggers>
+                            <DataTrigger Value="true">
+
+                                <DataTrigger.Binding>
+                                    <Binding RelativeSource="{RelativeSource AncestorType=TabItem}"
+                                             Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeProducts).Count"  Converter="{StaticResource NotZeroConverter}"/>
+                                </DataTrigger.Binding>
+                                <Setter Property="materialdesign:Badged.BadgeBackground" Value="{StaticResource ErrorColorBrush}"></Setter>
+                                <Setter Property="materialdesign:Badged.BadgeForeground" Value="White"></Setter>
+                                <Setter Property="materialdesign:Badged.Badge" >
+                                    <Setter.Value>
+                                        <Binding RelativeSource="{RelativeSource AncestorType=TabItem}"
+                                                 Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeProducts).Count" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                       </Style.Triggers>
+                    </Style>
+                </materialdesign:Badged.Style>
+
+               
+                <TextBlock Text="Products" Margin=" 5 5 20 5"></TextBlock>
+
+            </materialdesign:Badged>
+        </DataTemplate>
     </UserControl.Resources>
 
     <materialdesign:DialogHost DialogTheme="Inherit" IsOpen="{Binding IsDialogOpen}" CloseOnClickAway="True">
@@ -239,7 +297,9 @@
 
                 <TabControl Style="{StaticResource MaterialDesignTabControl}" SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
                     caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]">
-                    <TabItem x:Name="CategoriesTabItem" Header="Categories" Tag="{Binding AllCategories}" TabIndex="0">
+                    <TabItem x:Name="CategoriesTabItem"  Tag="{Binding AllCategories}" TabIndex="0"
+                             HeaderTemplate="{StaticResource CategoryTabItemHeaderTemplate}">
+                        
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -277,7 +337,7 @@
                             </Grid>
                         </ScrollViewer>
                     </TabItem>
-                    <TabItem Header="Products" TabIndex="1">
+                    <TabItem HeaderTemplate="{StaticResource ProductTabItemHeaderTemplate}" TabIndex="1">
 
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="5">
                             <Grid>

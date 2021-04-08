@@ -21,7 +21,7 @@ using FastPosFrontend.Views;
 using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using NLog;
-using PosTest.Extensions;
+using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;

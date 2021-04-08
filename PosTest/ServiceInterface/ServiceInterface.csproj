@@ -105,6 +105,7 @@
     <Compile Include="Interface\IPath.cs" />
     <Compile Include="Interface\IProductService.cs" />
     <Compile Include="Interface\IRepository.cs" />
+    <Compile Include="Interface\IResponseHandler.cs" />
     <Compile Include="jsonConverters\TimespanConverter.cs" />
     <Compile Include="Model\Additive.cs" />
     <Compile Include="Model\Annex.cs" />

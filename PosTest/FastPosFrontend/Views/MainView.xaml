@@ -58,7 +58,7 @@
                                                 IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                                                 AutomationProperties.Name="HamburgerToggleButton"
                                                 DockPanel.Dock="Left"
-                                                Foreground="White">
+                                                Foreground="WhiteSmoke">
                                             <ToggleButton.Style>
                                                 <Style TargetType="ToggleButton"
                                                            BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
@@ -84,7 +84,8 @@
                                         <md:PopupBox
                                             DockPanel.Dock="Right"
                                             PlacementMode="BottomAndAlignRightEdges"
-                                            StaysOpen="False">
+                                            StaysOpen="False"
+                                            Foreground="WhiteSmoke">
                                             <StackPanel>
 
 
@@ -248,6 +249,8 @@
                                                 
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Text" Value="Fast Pos"></Setter>
+                                                    <Setter Property="FontWeight" Value="DemiBold"></Setter>
+                                                    <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
                                                             <Setter Property="Text" Value="{Binding SelectedNavigationItem.Title}"></Setter>

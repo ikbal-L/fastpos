@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
-using PosTest.Extensions;
+using ServiceInterface.ExtentionsMethod;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels

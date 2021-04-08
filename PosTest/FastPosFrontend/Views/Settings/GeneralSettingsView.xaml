@@ -9,47 +9,55 @@
     <StackPanel >
         <TextBlock Text="General Settings" FontSize="18" FontWeight="Bold" Margin="40 30 0 0"/>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Table Number" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                    VerticalAlignment="Top"
+            <TextBlock Text="Table Number" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
+                       VerticalAlignment="Center"/>
+            <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                    VerticalAlignment="Center"
                     AcceptsReturn="True"
                     Width="300"
-                    TextWrapping="Wrap"
                     Text="{Binding Settings.TableNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     VerticalScrollBarVisibility="Auto"
+                    materialDesign:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Number Of Categores Per Page" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                    VerticalAlignment="Top"
+            <TextBlock Text="Number Of Categores Per Page" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"
+                       VerticalAlignment="Center"/>
+            <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                    VerticalAlignment="Center"
                     AcceptsReturn="True"
                      Text="{Binding Settings.NumberCategores,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     Width="300"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"
+                    materialDesign:TextFieldAssist.TextFieldCornerRadius="0"
+
                   ></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Number Of Products Per Page" FontSize="16" Padding="15 10 0 15"  Width="400"  Margin="0 0 20 0"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                    VerticalAlignment="Top"
+            <TextBlock Text="Number Of Products Per Page" FontSize="16" Padding="15 10 0 15"  Width="400"  Margin="0 0 20 0"
+                       VerticalAlignment="Center"/>
+            <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                    VerticalAlignment="Center"
                     AcceptsReturn="True"
                     Text="{Binding Settings.NumberProducts,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     Width="300"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"
+                    materialDesign:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Server Host" FontSize="16" Padding="15 10 0 15"  Width="400"  Margin="0 0 20 0"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                    VerticalAlignment="Top"
+            <TextBlock Text="Server Host" FontSize="16" Padding="15 10 0 15"  Width="400"  Margin="0 0 20 0"
+                       VerticalAlignment="Center"/>
+            <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                    VerticalAlignment="Center"
                     AcceptsReturn="True"
                     Width="300"
                     Text="{Binding Settings.ServerHost,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"
+                    materialDesign:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
         </StackPanel>
     </StackPanel>

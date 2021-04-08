@@ -1144,8 +1144,15 @@ namespace FastPosFrontend.ViewModels
                     }
                     if (CurrentOrder.Type != OrderType.Delivery)
                     {
-                        ToastNotification.Notify("Type Order mast be Delivery", NotificationType.Warning);
-                        break;
+                        ToastNotification.Notify("Order type must be Delivery", NotificationType.Warning);
+                        return;
+                     
+                    }
+
+                    if (CurrentOrder.Deliveryman == null)
+                    {
+                        ToastNotification.Notify("Must assign a Deliveryman to Order", NotificationType.Warning);
+                        return;
                     }
                     CurrentOrder.State = OrderState.Delivered;
                     SaveCurrentOrder();

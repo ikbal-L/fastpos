@@ -26,6 +26,7 @@ using Product = ServiceInterface.Model.Product;
 using PosTest.ViewModels.Settings;
 using PosTest.Views;
 using PosTest.Extensions;
+using ServiceInterface.ExtentionsMethod;
 using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels

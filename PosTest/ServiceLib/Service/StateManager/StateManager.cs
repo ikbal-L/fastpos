@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -23,6 +24,7 @@ namespace ServiceLib.Service.StateManager
         private static StateManager _instance;
         private static AssociationManager associationManager;
         private static readonly HashSet<Type> FetchLock;
+        private static IResponseHandler _responseHandler;
 
         static StateManager()
         {
@@ -35,6 +37,10 @@ namespace ServiceLib.Service.StateManager
             FetchLock = new HashSet<Type>();
         }
 
+        public  void HandleErrorsUsing(IResponseHandler responseHandler)
+        {
+            _responseHandler = responseHandler;
+        }
         public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = false, string predicate = "", bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
@@ -93,8 +99,10 @@ namespace ServiceLib.Service.StateManager
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
                 var status = -1;
+                var action = state.Id == null ? StateManagementAction.Save : StateManagementAction.Update;
                 status = state.Id == null ? service.Save(state, out errors) : service.Update(state, out errors);
-
+                
+                _responseHandler.Handle<TState>(status,errors,action);
                 if ((HttpStatusCode)status == HttpStatusCode.OK || (HttpStatusCode)status == HttpStatusCode.Created)
                 {
                     if (State[key] is ICollection<TState> tState)
@@ -154,7 +162,20 @@ namespace ServiceLib.Service.StateManager
 
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-                var result = service.Save(state);
+                var tState = state.ToList();
+                if (tState.All(ts=>ts.Id!= null))
+                {
+                    var resultOfUpdate = service.Update(tState);
+                    if (resultOfUpdate.status!= 200 )
+                    {
+                        //TODO;
+                        
+                        return false;
+                    }
+                    return true;
+
+                }
+                var result = service.Save(tState);
                 var status = result.status;
 
                 if ((HttpStatusCode) status == HttpStatusCode.OK || (HttpStatusCode) status == HttpStatusCode.Created)

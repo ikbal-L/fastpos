@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
-using PosTest.Extensions;
+using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;

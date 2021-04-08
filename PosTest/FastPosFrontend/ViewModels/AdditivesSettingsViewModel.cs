@@ -212,12 +212,14 @@ namespace FastPosFrontend.ViewModels
 
         public void SaveAdditive()
         {
+            this.SelectedAdditive.Description = CopySelectedAdditive.Description;
+            this.SelectedAdditive.Background = CopySelectedAdditive.Background;
             if (StateManager.Save(SelectedAdditive))
             {
                 ToastNotification.Notify("Additive saved Successfully", NotificationType.Success);
                 IsEditing = false;
-                this.SelectedAdditive.Description = CopySelectedAdditive.Description;
-                this.SelectedAdditive.Background = CopySelectedAdditive.Background;
+
+                
             }
         }
 

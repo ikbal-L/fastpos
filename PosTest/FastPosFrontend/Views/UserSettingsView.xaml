@@ -80,12 +80,12 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="model:User">
                             <materialDesign:Card materialDesign:UniformCornerRadius="10" 
-                                                 materialDesign:ShadowAssist.ShadowDepth="Depth3" Width="220px" Margin="20" >
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth3" Width="220px" Margin="10" >
                                 <StackPanel Orientation="Vertical" Margin="30"  >
                                     <materialDesign:PackIcon 
                                         HorizontalAlignment="Center" 
                                         Foreground="{Binding Background,
-                                        FallbackValue=Red}" Kind="AccountCircle"  Width="120" Height="120" />
+                                        FallbackValue=Red}" Kind="AccountCircle"  Width="100" Height="100" />
                                     <TextBlock FontWeight="Bold" Margin="0 0 0 20" Text="{Binding Username}"
                                                FontSize="20"
                                                

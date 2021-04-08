@@ -23,6 +23,7 @@ namespace FastPosFrontend.ViewModels
             IsBackendServerOn =ConnectionHelper.PingHost();
             IsDbServerOn = ConnectionHelper.PingHost(portNumber:3306);
             Associations.Setup();
+            StateManager.Instance.HandleErrorsUsing(ResponseHandler.Handler);
         }
 
         

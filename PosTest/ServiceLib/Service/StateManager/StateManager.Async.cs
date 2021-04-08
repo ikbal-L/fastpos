@@ -36,6 +36,7 @@ namespace ServiceLib.Service.StateManager
                 var (status, data) = string.IsNullOrEmpty(predicate) ?await service.GetAsync() :await service.GetAsync(predicate);
                 //var (status, data) = await service.GetAsync();
                 //ServiceHelper.HandleStatusCodeErrors();
+                FetchLock.Remove(key);
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
                 
                 if ((HttpStatusCode)status == HttpStatusCode.NoContent)
@@ -47,7 +48,6 @@ namespace ServiceLib.Service.StateManager
                     State[key] = data;
                 }
                 associationManager.Map<TState>(State);
-                FetchLock.Remove(key);
 
             }
         }

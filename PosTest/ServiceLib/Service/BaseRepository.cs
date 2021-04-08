@@ -67,14 +67,23 @@ namespace ServiceLib.Service
             return GenericRest.UpdateThing<TState>(state, restApi.Action<TState>(EndPoint.Put, arg: state.Id), out errors).status;
         }
 
-        public virtual int Update(IEnumerable<TState> state)
-        {
-            return GenericRest.UpdateThing<IEnumerable<TState>>(state, restApi.Action<TState>(EndPoint.PutMany), out _).status;
-        }
+        
 
         public virtual (int status, IEnumerable<TState>) Get(object param)
         {
             throw new NotImplementedException();
+        }
+
+        public (int status, IEnumerable<string> errors) Update(IEnumerable<TState> state)
+        {
+            var result = GenericRest.UpdateThing(state, restApi.Action<TState>(EndPoint.PutMany));
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                return ((int)result.StatusCode, Array.Empty<string>());
+            }
+
+            var errors = JsonConvert.DeserializeObject<IEnumerable<string>>(result.Content);
+            return ((int)result.StatusCode, errors);
         }
 
         public (bool, TReturn) Save<TReturn>(TState state)
