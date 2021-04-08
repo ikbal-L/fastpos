@@ -136,6 +136,7 @@ namespace FastPosFrontend.ViewModels
         public virtual void OnLogin()
         {
             var defaultItem = LoadDefaultItem();
+            SelectedNavigationItem = defaultItem;
             NavigateToItem(defaultItem);
         }
     }

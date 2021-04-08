@@ -84,9 +84,18 @@
                                         <md:PopupBox
                                             DockPanel.Dock="Right"
                                             PlacementMode="BottomAndAlignRightEdges"
-                                            StaysOpen="False"
-                                            Foreground="WhiteSmoke">
-                                            <StackPanel>
+                                            StaysOpen="False">
+                                            <md:PopupBox.Style>
+                                                <Style TargetType="md:PopupBox">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                                            <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </md:PopupBox.Style>
+                                            <StackPanel Margin="10 0" >
+
 
 
                                                 <Button x:Name="CloseAppWindowButton"
@@ -143,9 +152,10 @@
                                                         </Style>
                                                     </Button.Style>
                                                 </Button>
+                                                <Separator Visibility="{Binding ElementName=LogoutAppWindowButton,Path=v}"></Separator>
                                                 <Button x:Name="LogoutAppWindowButton"
                                                         cal:Message.Attach="Logout"
-                                                        Content="Logout">
+                                                        Content="Logout" FontWeight="SemiBold">
                                                     <Button.Style>
                                                         <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
@@ -250,10 +260,10 @@
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Text" Value="Fast Pos"></Setter>
                                                     <Setter Property="FontWeight" Value="DemiBold"></Setter>
-                                                    <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
                                                             <Setter Property="Text" Value="{Binding SelectedNavigationItem.Title}"></Setter>
+                                                            <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>

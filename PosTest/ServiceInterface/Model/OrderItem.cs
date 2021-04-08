@@ -108,7 +108,8 @@ namespace ServiceInterface.Model
 
         public decimal CalcTotalDiscount()
         {
-            var totalDiscount = _discountAmount * (decimal)Quantity + Total * _discountPercentage / 100;
+            //var totalDiscount = _discountAmount * (decimal)Quantity + Total * _discountPercentage / 100;
+            var totalDiscount = _discountAmount * (decimal)Quantity ;
             return totalDiscount;
         }
 
