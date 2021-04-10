@@ -8,6 +8,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -283,7 +284,7 @@
                                             Grid.Column="1"
                                             Height="200"
                                             Width="250"
-                                            Color="{Binding SelectedColor, Converter={StaticResource SolidColorBrushToColorConverter}}"/>
+                                            Color="{Binding Background, Converter={StaticResource SolidColorBrushToColorConverter}}"/>
                                     </materialDesign:PopupBox>
                                 </materialDesign:Card>
 

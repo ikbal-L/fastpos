@@ -25,9 +25,9 @@
                                  Visibility="{Binding IsPlatter ,Converter={StaticResource boolToVisibilityConverter}}"
                                  ItemsSource="{Binding Additives}"
                                  ItemTemplate="{StaticResource AdditivesOfProductStyle}"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 
 
-                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto" 
                                  >
 
                         <ListBox.ItemContainerStyle>
@@ -38,7 +38,7 @@
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel />
+                                <UniformGrid></UniformGrid>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
 

@@ -87,7 +87,11 @@ namespace FastPosFrontend.ViewModels
         public bool IsEditing
         {
             get => _isEditing;
-            set => Set(ref _isEditing, value);
+            set
+            {
+                Set(ref _isEditing, value); 
+                NotifyOfPropertyChange(nameof(IsEditing));
+            }
         }
 
         public bool IsDialogOpen
@@ -257,6 +261,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
+            CopySelectedAdditive = SelectedAdditive.Clone();
             IsEditing = true;
         }
 

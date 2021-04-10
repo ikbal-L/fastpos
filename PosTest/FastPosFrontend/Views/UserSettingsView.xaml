@@ -52,16 +52,8 @@
         <materialDesign:DialogHost IsOpen="{Binding IsEditing}">
             <materialDesign:DialogHost.DialogContent>
 
-
-                <!--<local:UserDetailView 
-                    DataContext="{Binding UserDetailViewModel}"></local:UserDetailView>-->
-
                 <local:UserDetailView caliburn:View.Model="{Binding UserDetailViewModel}"
                 ></local:UserDetailView>
-                <!--<ContentControl Content="{Binding SubView}">
-
-                </ContentControl>-->
-
 
             </materialDesign:DialogHost.DialogContent>
             <Grid>
@@ -84,8 +76,7 @@
                                 <StackPanel Orientation="Vertical" Margin="30"  >
                                     <materialDesign:PackIcon 
                                         HorizontalAlignment="Center" 
-                                        Foreground="{Binding Background,
-                                        FallbackValue=Red}" Kind="AccountCircle"  Width="100" Height="100" />
+                                        Foreground="{Binding Background, UpdateSourceTrigger=PropertyChanged}" Kind="AccountCircle"  Width="100" Height="100" />
                                     <TextBlock FontWeight="Bold" Margin="0 0 0 20" Text="{Binding Username}"
                                                FontSize="20"
                                                

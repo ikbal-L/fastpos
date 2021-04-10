@@ -174,7 +174,6 @@
                             <materialdesign:ColorZone Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
                                 <StackPanel Orientation="Horizontal">
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                            Command="{x:Static materialdesign:Flipper.FlipCommand}"
                                             caliburn:Message.Attach="[Event Click] = [Action SaveAdditive()]">
                                         <StackPanel Orientation="Horizontal">
                                             <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right"
@@ -183,7 +182,6 @@
                                     </Button>
 
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                            Command="{x:Static materialdesign:Flipper.FlipCommand}"
                                             caliburn:Message.Attach="[Event Click] = [Action Cancel()]" Margin="10">
                                         <StackPanel Orientation="Horizontal">
                                             <materialdesign:PackIcon Kind="CloseBox" HorizontalAlignment="Right"
