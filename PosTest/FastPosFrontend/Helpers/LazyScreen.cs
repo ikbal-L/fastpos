@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.ViewModels;
@@ -106,7 +107,8 @@ namespace FastPosFrontend.Helpers
 
         protected LazyScreen(LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
-            _loadingScreen = new LoadingScreenViewModel($"Loading {GetType().Name}")
+            var title = this.GetType().GetCustomAttribute<NavigationItemConfigurationAttribute>()?.Title;
+            _loadingScreen = new LoadingScreenViewModel($"Loading {title}")
                 {LoadingScreenType = loadingScreenType};
             //ActivateLoadingScreen();
         }
