@@ -178,17 +178,18 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
-        <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate">
+        <StackPanel  Orientation="Vertical"  x:Name="AdditiveTemplate" Background="{Binding Background}">
             <Border x:Name="AdditiveSettingsClick"  BorderBrush="LightGray" BorderThickness="1"
                     cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
 
                     caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]" >
-                <StackPanel >
-                    <DockPanel Height="70" Width="100" Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}"  >
+                <StackPanel   >
+                    <DockPanel Height="70" Width="100"  >
 
 
-                        <Button  Width="30" Height="30"  Command="{x:Static materialdesign:Flipper.FlipCommand}"
-                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="35 20">
+                        <Button  Width="30" Height="30"  cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
+                                 caliburn:Message.Attach="[Event Click] = [Action CreateAdditive($this)]"
+                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0" Margin="35 20">
                             <materialdesign:PackIcon Kind="Plus" Height="20" Width="20" />
                             <Button.Style>
 

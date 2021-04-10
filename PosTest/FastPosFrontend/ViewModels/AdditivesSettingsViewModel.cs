@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -60,7 +61,7 @@ namespace FastPosFrontend.ViewModels
             get => _selectedAdditive;
             set
             {
-                CopySelectedAdditive = value?.Clone();
+                //CopySelectedAdditive = value?.Clone();
                 Set(ref _selectedAdditive, value);
             }
         }
@@ -210,25 +211,40 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        public void CreateAdditive(Additive additive)
+        {
+            if (SelectedAdditive == null)
+            {
+                SelectedAdditive = additive;
+            }
+            CopySelectedAdditive = additive.Clone();
+            IsEditing = true;
+        }
+
         public void SaveAdditive()
         {
             this.SelectedAdditive.Description = CopySelectedAdditive.Description;
             this.SelectedAdditive.Background = CopySelectedAdditive.Background;
             if (StateManager.Save(SelectedAdditive))
             {
-                ToastNotification.Notify("Additive saved Successfully", NotificationType.Success);
-                IsEditing = false;
-
                 
             }
             else
             {
-                
+                if (SelectedAdditive.Id== null)
+                {
+                    SelectedAdditive.Description = null;
+                    SelectedAdditive.Background = null;
+                }
             }
+
+            CopySelectedAdditive = null;
+            IsEditing = false;
         }
 
         public void Cancel()
         {
+            CopySelectedAdditive = null;
             SelectedAdditive = null;
             IsEditing = false;
         }
@@ -277,9 +293,16 @@ namespace FastPosFrontend.ViewModels
 
             var rank = (int) SelectedAdditive.Rank;
             var additive = new Additive(ClipBoardAdditive) {Rank = rank, Id = null};
-            StateManager.Save(additive);
+            var description = Regex.Replace(additive.Description, @"\([0-9]{1,2}\)", "");
+            var count = Additives.Where(a => a.Description != null).Count(a => a.Description.Contains(description));
 
-            Additives[rank - 1] = additive;
+            additive.Description = $"{description}({count})";
+            if (StateManager.Save(additive))
+            {
+                Additives[rank - 1] = additive;
+            }
+
+            ClipBoardAdditive = null;
         }
 
         public void MoveAdditive()
@@ -361,7 +384,10 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("You selected the same additive", NotificationType.Warning);
                 AdditiveToMove = null;
                 SelectedAdditive = null;
+                return;
             }
+
+            SelectedAdditive = additive;
         }
 
         protected override void Setup()

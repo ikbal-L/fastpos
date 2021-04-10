@@ -263,11 +263,13 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BrushToHexConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\SolidColorBrushToColorConverter.cs" />
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Helpers\Associations.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\Icon.cs" />
+    <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
     <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />

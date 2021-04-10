@@ -102,6 +102,7 @@ namespace ServiceLib.Service
             if ((int)response.StatusCode == 422)
             {
                 errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
+               
             }
 
             return ((int)response.StatusCode, thing);
@@ -268,12 +269,16 @@ namespace ServiceLib.Service
             return ((int)response.StatusCode,collection);
         }
 
-        public static int Delete<T>(string url)
+        public static (int status,IEnumerable<string> errors) Delete<T>(string url)
         {
             var resp = RestDelete(url);
 
-
-            return (int) resp.StatusCode;
+            if (resp.StatusCode!= HttpStatusCode.OK)
+            {
+                var errors = JsonConvert.DeserializeObject<IEnumerable<string>>(resp.Content);
+                return ((int) resp.StatusCode, errors);
+            }
+            return ((int)resp.StatusCode,default);
         }
         public static (int status, T) PostThing<T>(string path,object postObject)
         {

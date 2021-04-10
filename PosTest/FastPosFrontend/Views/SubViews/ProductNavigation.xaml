@@ -41,7 +41,7 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel/>
+                        <WrapPanel></WrapPanel>
                         <!--<Grid ex:ListGridContainerEx.Columns="6">
                             
                         </Grid>-->

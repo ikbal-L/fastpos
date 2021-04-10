@@ -16,7 +16,6 @@ namespace ServiceInterface.Model
         private string _description;
         private string _backgroundString;
         private SolidColorBrush _background;
-        private Color? _backgroundColor;
         private AdditiveState _state;
         private DateTime? _timeStamp;
 
@@ -61,11 +60,22 @@ namespace ServiceInterface.Model
         public Brush Background
         {
             get => new SolidColorBrush((Color) ColorConverter.ConvertFromString(BackgroundString));
+
             set
             {
-                Set(ref _background, (SolidColorBrush) value);
-                Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
-                Set(ref _backgroundColor, ((SolidColorBrush) value).Color, nameof(BackgroundColor));
+                Set(ref _background, (SolidColorBrush)value);
+                if (value != null)
+                {
+                    Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
+
+                }
+                else
+                {
+                    Set(ref _backgroundString, null);
+
+                }
+                NotifyOfPropertyChange(nameof(IsDark));
+                NotifyOfPropertyChange(nameof(Background));
             }
         }
 
@@ -79,7 +89,7 @@ namespace ServiceInterface.Model
             return result;
         }*/
 
-        
+
 
         public override bool Equals(object other)
         {
@@ -96,29 +106,13 @@ namespace ServiceInterface.Model
         {
             get
             {
-                var c = BackgroundColor.GetValueOrDefault();
+                var c = ((Background as SolidColorBrush)?.Color).GetValueOrDefault();
                 var d = (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
                 return (5 * c.G + 2 * c.R + c.B) <= 8 * 140;
             }
         }
 
-        public virtual Color? BackgroundColor
-        {
-            get
-            {
-                if (_backgroundColor == null)
-                {
-                    _backgroundColor = (Color) ColorConverter.ConvertFromString(BackgroundString);
-                }
-
-                return _backgroundColor;
-            }
-            set
-            {
-                Set(ref _backgroundColor, value);
-                NotifyOfPropertyChange(() => IsDark);
-            }
-        }
+     
 
         public override string ToString()
         {
@@ -129,7 +123,6 @@ namespace ServiceInterface.Model
             return new Additive()
             {
                 Background = this.Background,
-                BackgroundColor = this.BackgroundColor,
                 Description = this.Description,
                 BackgroundString = this.BackgroundString,
                 Id = this.Id,

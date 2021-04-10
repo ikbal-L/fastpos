@@ -190,17 +190,19 @@ namespace ServiceLib.Service.StateManager
 
         public static bool Delete<TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
         {
+            
             var key = typeof(TState);
-            IEnumerable<string> errors = null;
+            
 
             if (!(Service[key] is IRepository<TState, TIdentifier> service)) return false;
-            var status = -1;
+            
             if (state.Id == null)
             {
                 throw new InvalidOperationException("State must have an Id");
             }
 
-            status = service.Delete((TIdentifier)state.Id);
+            var (status,errors) = service.Delete((TIdentifier)state.Id);
+            _responseHandler.Handle<TState>(status,errors,StateManagementAction.Delete);
 
             if ((HttpStatusCode) status != HttpStatusCode.OK) return false;
             if ((State[key] is ICollection<TState> tState)) 

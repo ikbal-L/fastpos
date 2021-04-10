@@ -20,7 +20,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <!--caliburn:Message.Attach="[Event MouseDoubleClick] = [Action CheckAdditive($source,$eventArgs,$this)];"-->
-                    <ListBox x:Name="AdditiveSettingsList" 
+                    <ListBox x:Name="AdditiveSettingsList"  
                                  AllowDrop="True"
                                  Visibility="{Binding IsPlatter ,Converter={StaticResource boolToVisibilityConverter}}"
                                  ItemsSource="{Binding Additives}"

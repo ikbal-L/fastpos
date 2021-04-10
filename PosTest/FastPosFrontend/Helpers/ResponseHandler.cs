@@ -37,6 +37,9 @@ namespace FastPosFrontend.Helpers
                 case 204:
                     ToastNotification.Notify($"No {type.Name}s to {action}",NotificationType.Information);
                     break;
+                case 409:
+                    ToastNotification.Notify($"The {type.Name} you added already exists");
+                    break;
                 case 422:
 
                     errorMessage += $" due to the following Errors:\n{errorsString}";

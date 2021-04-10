@@ -105,6 +105,7 @@ namespace ServiceInterface.Model
                
                 Set(ref _background, (SolidColorBrush) value);
                 _backgroundString = ((SolidColorBrush) value)?.Color.ToString();
+                NotifyOfPropertyChange(nameof(Background));
             }
         }
 

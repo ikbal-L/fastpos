@@ -55,7 +55,7 @@ namespace ServiceLib.Service
 
         }
 
-        public virtual int Delete(TIdentifier id)
+        public virtual (int status, IEnumerable<string> errors) Delete(TIdentifier id)
         {
             return GenericRest.Delete<TState>(restApi.Action<TState>(EndPoint.Delete,id));
         }
