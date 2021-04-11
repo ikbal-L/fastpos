@@ -61,6 +61,20 @@ namespace FastPosFrontend.ViewModels
         [Import(typeof(IRoleRepository))]
         private IRoleRepository _roleRepository;
 
+
+        public LoginViewModel()
+        {
+            SetupEmbeddedStatusBar();
+        }
+
+        private void SetupEmbeddedStatusBar()
+        {
+            this.EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
+            {
+                EmbeddedStatusBarTemplate = Application.Current.FindResource("UserLoginBarDataTemplate") as DataTemplate
+            };
+        }
+
         private ObservableCollection<User> _Users;
 
         public ObservableCollection<User> Users
@@ -80,8 +94,21 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        //public String Username { get; set; }
-        //public String Password { get; set; }
+        public string Username
+        {
+            get
+            {
+                if (SelectedUser == null)
+                {
+                    return _userName;
+                }
+
+                return SelectedUser.Username;
+            }
+            set => Set(ref _userName, value);
+        }
+
+
 
         private bool _IsDialogOpen;
 
@@ -92,6 +119,7 @@ namespace FastPosFrontend.ViewModels
         }
 
         private string _Password;
+        private string _userName;
 
         public string Password
         {
