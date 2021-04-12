@@ -23,7 +23,7 @@ namespace FastPosFrontend.Helpers
 
         public void SaveSettings(T settings)
         {
-            string json = JsonConvert.SerializeObject(settings);
+            string json = JsonConvert.SerializeObject(settings,new JsonSerializerSettings(){NullValueHandling = NullValueHandling.Ignore});
             File.WriteAllText(_filePath, json);
         }
   

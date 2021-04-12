@@ -28,6 +28,13 @@ namespace ServiceLib.Service
 
         }
 
+        public HttpResponseMessage Authenticate(string user, string password, Terminal terminal, Annex annex)
+        {
+            
+            var response = _restAuthentification.Authenticate(user, password, terminal, annex );
+            return response;
+        }
+
         public int Authenticate(User user)
         {
             throw new NotImplementedException();
@@ -82,6 +89,49 @@ namespace ServiceLib.Service
             return (int)response.StatusCode;
         }
 
+
+        public HttpResponseMessage Authenticate(string user, string password,  Terminal terminal, Annex annex)
+        {
+            string json = JsonConvert.SerializeObject(
+                new AuthUser { Username = user, Password = password, TerminalId = terminal.Id },
+                Newtonsoft.Json.Formatting.None,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var url = UrlConfig.AuthUrl.Authenticate;
+            //var url = "http://127.0.0.1:5000/auth/login";
+            var client = new HttpClient();
+            HttpResponseMessage response;
+            response = client.PostAsync(url, data).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                response.Headers.TryGetValues("Authorization", out IEnumerable<string> values);
+                var token = values.First();
+                AuthProvider.Initialize<DefaultAuthProvider>(new object[] { new User { }, token, annex.Id });
+                var jsonContent = response.Content.ReadAsStringAsync().Result;
+                try
+                {
+                    if (!string.IsNullOrEmpty(jsonContent))
+                    {
+                        var permissions = JsonConvert.DeserializeObject<List<String>>(jsonContent);
+                        var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), permissions.ToArray());
+                        Thread.CurrentPrincipal = principal;
+                    }
+                }
+                catch (Exception)
+                {
+                    return response;
+                }
+
+                //return true;
+            }
+
+            return response;
+        }
         public int Authenticate(User user)
         {
             string json = JsonConvert.SerializeObject(

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows;
@@ -64,7 +68,7 @@ namespace FastPosFrontend.ViewModels
 
         public LoginViewModel()
         {
-            SetupEmbeddedStatusBar();
+            //SetupEmbeddedStatusBar();
         }
 
         private void SetupEmbeddedStatusBar()
@@ -108,6 +112,11 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _userName, value);
         }
 
+        public string Password
+        {
+            get => _password;
+            set => Set(ref _password, value);
+        }
 
 
         private bool _IsDialogOpen;
@@ -118,16 +127,27 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _IsDialogOpen, value);
         }
 
-        private string _Password;
+       
         private string _userName;
+        private string _password;
 
-        public string Password
+        public void SetPasswordAndLogin( object sender)
         {
-            get { return _Password; }
-            set { _Password = value;
-                NotifyOfPropertyChange(nameof(Password));
+            Password = (sender as PasswordBox)?.Password;
+            if (string.IsNullOrEmpty(Username))
+            {
+                ToastNotification.Notify("Enter a Password First", NotificationType.Error);
+                return;
             }
+
+            if (string.IsNullOrEmpty(Password))
+            {
+                ToastNotification.Notify("Enter a Password First",NotificationType.Error);
+                return;
+            }
+            Login();
         }
+
 
         protected override void OnActivate()
         {
@@ -141,11 +161,7 @@ namespace FastPosFrontend.ViewModels
             auths.Add("Can_login");
             var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), auths.ToArray());
             Thread.CurrentPrincipal = principal;
-            Users = new ObservableCollection<User>();
-            Users.Add(new User() { Username = "admin", Password = "admin" });
-            Users.Add(new User() { Username = "Elahbib ", Password = "admin", BackgroundColor = Color.FromRgb(66, 114, 192) });
-            Users.Add(new User() { Username = "Othman ", Password = "admin", BackgroundColor = Color.FromRgb(23, 43, 77) });
-            Users.Add(new User() { Username = "Djaber ", Password = "admin", BackgroundColor = Color.FromRgb(112, 192, 232) });
+           LoadLoginHistory();
 
 
         }
@@ -157,13 +173,14 @@ namespace FastPosFrontend.ViewModels
         
         public void Login()
         {
-            int resp;
+            HttpResponseMessage resp;
             try
             {
                 // resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-                resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
+                 resp = _authService.Authenticate(Username, Password, new Terminal { Id = 1 }, new Annex { Id = 1 });
+               
                 // resp = authService.Authenticate(new User(){Username = "admin",Password = "admin",Agent = Agent.Desktop});
-                if (resp == 401)
+                if ((int)resp.StatusCode == 401)
                 {
                     ToastNotification.Notify("Wrong username or password");
                     return;
@@ -196,10 +213,21 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_userRepository,withAssociatedTypes:true)
                 .Manage(_roleRepository,false);
 
+            var user = Users.FirstOrDefault(u => u.Username.Equals(Username));
+            var userBackground = resp.Headers.GetValues("user-meta-background").First();
 
-            
+            if (user == null)
+            {
+                user = new User() { Username = Username };
+                Users.Add(user);
+            }
+            user.BackgroundString = userBackground;
 
-                (this.Parent as MainViewModel).IsLoggedIn = true;
+            var loginHistory = new LoginHistory() {Users = Users.Select(u=> new User(){Username = u.Username,BackgroundString = u.BackgroundString}).ToList()};
+            var sm = new SettingsManager<LoginHistory>("login.history.json");
+            sm.SaveSettings(loginHistory);
+
+            (this.Parent as MainViewModel).IsLoggedIn = true;
                 //(this.Parent as MainViewModel).IsLoggedIn = true;
 
 
@@ -321,5 +349,21 @@ namespace FastPosFrontend.ViewModels
              viewModel.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(viewModel);
         }
+
+        private void LoadLoginHistory()
+        {
+            var sm = new SettingsManager<LoginHistory>("login.history.json");
+            var history = sm.LoadSettings();
+            Users = history?.Users == null ? 
+                new ObservableCollection<User>() : 
+                new ObservableCollection<User>(history.Users);
+
+        }
+    }
+
+    class LoginHistory
+    {
+        [DataMember]
+        public IList<User> Users { get; set; }
     }
 }

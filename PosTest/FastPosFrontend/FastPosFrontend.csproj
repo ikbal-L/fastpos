@@ -263,6 +263,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BrushToHexConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\IsStringNullOrEmptyValueConverter.cs" />
     <Compile Include="Converters\SolidColorBrushToColorConverter.cs" />
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
