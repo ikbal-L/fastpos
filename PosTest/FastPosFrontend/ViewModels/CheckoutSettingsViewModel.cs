@@ -914,10 +914,22 @@ namespace FastPosFrontend.ViewModels
             ListTouchDownEventHandler<Product>(sender, e, key);
         }
 
+        public void FreeCategoriesList_TouchDown(object sender, TouchEventArgs e)
+        {
+            var key = "FreeCategory";
+            ListTouchDownEventHandler<Category>(sender, e, key);
+        }
+
         public void ProductsList_TouchDown(object sender, TouchEventArgs e)
         {
             var key = "Product";
             ListTouchDownEventHandler<Product>(sender, e, key);
+        }
+
+        public void CategoriesList_TouchDown(object sender, TouchEventArgs e)
+        {
+            var key = "Category";
+            ListTouchDownEventHandler<Category>(sender, e, key);
         }
 
         public void DragContrinueHandler(object sender, QueryContinueDragEventArgs e)

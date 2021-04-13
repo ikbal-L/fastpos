@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Windows.Media;
+using Newtonsoft.Json;
 
 namespace ServiceInterface.Model
 {
@@ -192,13 +193,17 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public List<Permission> Permissions { get; set; }
+
+        [DataMember]
+        [JsonProperty("PrivilegeIds")]
+        public List<long> PermissionIds { get; set; }
     }
 
     [DataContract]
-    public class Permission
+    public class Permission : IState<long>
     {
         [DataMember]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         [DataMember]
         public string Description { get; set; }

@@ -264,6 +264,7 @@
     <Compile Include="Converters\BrushToHexConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\IsStringNullOrEmptyValueConverter.cs" />
+    <Compile Include="Converters\LessThanValueConverter.cs" />
     <Compile Include="Converters\SolidColorBrushToColorConverter.cs" />
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
@@ -312,6 +313,8 @@
     <Compile Include="ViewModels\PrintViewModel.cs" />
     <Compile Include="ViewModels\ProductEditViewModel.cs" />
     <Compile Include="ViewModels\ProductsViewModel.cs" />
+    <Compile Include="ViewModels\RoleDetailViewModel.cs" />
+    <Compile Include="ViewModels\RoleSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings1ViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\AddEditCustomerViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\CustomerSettingsViewModel.cs" />
@@ -402,6 +405,12 @@
     </Compile>
     <Compile Include="Views\ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleDetailView.xaml.cs">
+      <DependentUpon>RoleDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleSettingsView.xaml.cs">
+      <DependentUpon>RoleSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings1View.xaml.cs">
       <DependentUpon>Settings1View.xaml</DependentUpon>
@@ -703,6 +712,14 @@
     <Page Include="Views\ProductsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RoleDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RoleSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings1View.xaml">
       <Generator>MSBuild:Compile</Generator>

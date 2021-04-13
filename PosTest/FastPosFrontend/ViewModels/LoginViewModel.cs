@@ -64,6 +64,8 @@ namespace FastPosFrontend.ViewModels
 
         [Import(typeof(IRoleRepository))]
         private IRoleRepository _roleRepository;
+        [Import(typeof(IPermissionRepository))]
+        private IPermissionRepository _permissionRepository;
 
 
         public LoginViewModel()
@@ -213,7 +215,8 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_deliverymanRepository,false)
                 .Manage(_paymentRepository)
                 .Manage(_userRepository,withAssociatedTypes:true)
-                .Manage(_roleRepository,false);
+                .Manage(_roleRepository,withAssociatedTypes:true)
+                .Manage(_permissionRepository);
 
             var user = Users.FirstOrDefault(u => u.Username.Equals(Username));
             var userBackground = resp.Headers.GetValues("user-meta-background").First();

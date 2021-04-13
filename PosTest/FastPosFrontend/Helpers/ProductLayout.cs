@@ -3,10 +3,12 @@ using FastPosFrontend.ViewModels.SubViewModel;
 
 namespace FastPosFrontend.Helpers
 {
-    public class ProductLayout :PropertyChangedBase
+    public static class ProductLayout
     {
-        private static int _columns;
-        private static int _rows;
+        public static int Columns = 6;
+        public static int Rows = 5;
+        public static int New;
+        public static int Cols;
 
 
         static ProductLayout()
@@ -19,28 +21,11 @@ namespace FastPosFrontend.Helpers
                 settingsManager.SaveSettings(setting);
             }
 
-            _rows = setting.Rows;
-            _columns = setting.Columns;
+            Rows = setting.Rows;
+            Columns = setting.Columns;
+            Cols = Columns;
         }
 
-        private ProductLayout()
-        {
-            
-        }
-
-        public ProductLayout Instance => new ProductLayout();
-        
-
-        public int Columns
-        {
-            get => _columns;
-            set => Set(ref _columns, value);
-        }
-
-        public int Rows
-        {
-            get => _rows;
-            set => Set(ref _rows, value);
-        }
+       
     }
 }

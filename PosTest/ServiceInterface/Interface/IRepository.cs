@@ -85,6 +85,11 @@ namespace ServiceInterface.Interface
 
     }
 
+    public interface IPermissionRepository : IRepository<Permission, long>
+    {
+
+    }
+
     public interface IPaymentRepository: IRepository<Payment, long>
     {
         PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId);
