@@ -130,6 +130,8 @@ namespace FastPosFrontend.ViewModels
        
         private string _userName;
         private string _password;
+        private SettingsManager<LoginHistory> _loginHistoryManager;
+        private LoginHistory _loginHistory;
 
         public void SetPasswordAndLogin( object sender)
         {
@@ -223,9 +225,15 @@ namespace FastPosFrontend.ViewModels
             }
             user.BackgroundString = userBackground;
 
-            var loginHistory = new LoginHistory() {Users = Users.Select(u=> new User(){Username = u.Username,BackgroundString = u.BackgroundString}).ToList()};
+            _loginHistory = new LoginHistory() {Users = Users.Select(u=> new User(){Id = u.Id,Username = u.Username,BackgroundString = u.BackgroundString}).ToList()};
+            _loginHistory.LastLoggedUserByUsername = user.Username;
+            
+            if (user?.Id!= null)
+            {
+                _loginHistory.LastLoggedUserId = (long)user.Id;
+            }
             var sm = new SettingsManager<LoginHistory>("login.history.json");
-            sm.SaveSettings(loginHistory);
+            sm.SaveSettings(_loginHistory);
 
             (this.Parent as MainViewModel).IsLoggedIn = true;
                 //(this.Parent as MainViewModel).IsLoggedIn = true;
@@ -352,12 +360,28 @@ namespace FastPosFrontend.ViewModels
 
         private void LoadLoginHistory()
         {
-            var sm = new SettingsManager<LoginHistory>("login.history.json");
-            var history = sm.LoadSettings();
+             _loginHistoryManager = new SettingsManager<LoginHistory>("login.history.json");
+            var history = _loginHistoryManager.LoadSettings();
             Users = history?.Users == null ? 
                 new ObservableCollection<User>() : 
                 new ObservableCollection<User>(history.Users);
+            //if (history?.LastLoggedUserId!= null)
+            //{
+            //    SelectedUser = Users?.FirstOrDefault(u => u.Id == history.LastLoggedUserId);
+            //}
+            if (history?.LastLoggedUserByUsername != null)
+            {
+                SelectedUser = Users?.FirstOrDefault(u => u.Username == history.LastLoggedUserByUsername);
+            }
+        }
 
+        public void ForgetUser(User user)
+        {
+            if (Users!= null && Users.Any())
+            {
+                Users.Remove(user);
+            }
+            _loginHistoryManager.SaveSettings(_loginHistory);
         }
     }
 
@@ -365,5 +389,9 @@ namespace FastPosFrontend.ViewModels
     {
         [DataMember]
         public IList<User> Users { get; set; }
+
+        [DataMember]
+        public long LastLoggedUserId { get; set; }
+        public string LastLoggedUserByUsername { get; set; }
     }
 }

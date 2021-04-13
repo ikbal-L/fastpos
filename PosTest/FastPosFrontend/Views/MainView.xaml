@@ -275,7 +275,7 @@
                                                IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}"
                                                >
                                     <md:DrawerHost.LeftDrawerContent>
-                                        <Grid >
+                                        <Grid MinWidth="250"  >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="auto" />
@@ -285,7 +285,7 @@
                                                       Style="{StaticResource MaterialDesignTreeView}"
                                                       HorizontalAlignment="Left"
                                                       Margin="10 20"
-                                                      MinWidth="220" >
+                                                      >
                                                 <b:Interaction.Behaviors>
                                                     <extensions:BindableSelectedItemBehavior SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
                                                 </b:Interaction.Behaviors>

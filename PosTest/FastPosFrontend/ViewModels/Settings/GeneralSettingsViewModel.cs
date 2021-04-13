@@ -151,15 +151,16 @@ namespace FastPosFrontend.ViewModels.Settings
 
         public bool CreateTables(int limit)
         {
-            var baseNumber = StateManager.Get<Table>().Max(table => table.Number);
-            IList<Table> tables = new List<Table>(limit);
+            var tables = StateManager.Get<Table>();
+            var baseNumber = tables.Any()?tables.Max(table => table.Number):0;
+            IList<Table> newTables = new List<Table>(limit);
             for (int i = 1 ; i <= limit; i++)
             {
-                
-                tables.Add( new Table(){Number = baseNumber+i});
+
+                newTables.Add( new Table(){Number = baseNumber+i});
             }
 
-            var result = StateManager.Save(tables);
+            var result = StateManager.Save(newTables);
             if (result)
             {
                 
