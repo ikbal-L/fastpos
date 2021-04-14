@@ -267,7 +267,7 @@ namespace ServiceLib.Service
     }
 
     [Export(typeof(IPermissionRepository))]
-    public class PermissionRepository : BaseRepository<Permission, long>, IPermissionRepository
+    public class PermissionRepository : BaseRepository<Privilege, long>, IPermissionRepository
     {
         public PermissionRepository()
         {

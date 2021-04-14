@@ -192,21 +192,21 @@ namespace ServiceInterface.Model
         public string Name { get; set; }
 
         [DataMember]
-        public List<Permission> Permissions { get; set; }
+        public List<Privilege> Privileges { get; set; }
 
         [DataMember]
         [JsonProperty("PrivilegeIds")]
-        public List<long> PermissionIds { get; set; }
+        public List<long> PrivilegeIds { get; set; }
     }
 
     [DataContract]
-    public class Permission : IState<long>
+    public class Privilege : IState<long>
     {
         [DataMember]
         public long? Id { get; set; }
 
         [DataMember]
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         [DataMember]
         public string[] Permissions { get; set; }

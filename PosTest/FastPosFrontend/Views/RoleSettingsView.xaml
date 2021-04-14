@@ -37,9 +37,11 @@
                             <materialDesign:Card materialDesign:UniformCornerRadius="10" 
                                                  materialDesign:ShadowAssist.ShadowDepth="Depth3" Width="220px" Margin="10" >
                                 <StackPanel Orientation="Vertical" Margin="30"  >
-                                    <materialDesign:PackIcon 
-                                        HorizontalAlignment="Center" Kind="SecurityAccount"  Width="100" Height="100" />
-                                    <TextBlock FontWeight="Bold" Margin="0 0 0 20" Text="{Binding Name}"
+                                    <Border CornerRadius="50" Background="DarkOrange" Width="100" Height="100">
+                                        <materialDesign:PackIcon 
+                                            HorizontalAlignment="Center" Kind="SecurityAccount"   materialDesign:ButtonAssist.CornerRadius="50" VerticalAlignment="Center" Width="60" Height="60" Foreground="WhiteSmoke"/>
+                                    </Border>
+                                    <TextBlock FontWeight="Bold" Margin="0 5 0 20" Text="{Binding Name}"
                                                FontSize="20"
                                                
                                                HorizontalAlignment="Center" />

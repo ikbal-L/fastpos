@@ -85,7 +85,7 @@ namespace ServiceInterface.Interface
 
     }
 
-    public interface IPermissionRepository : IRepository<Permission, long>
+    public interface IPermissionRepository : IRepository<Privilege, long>
     {
 
     }

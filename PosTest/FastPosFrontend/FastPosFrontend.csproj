@@ -262,6 +262,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BrushToHexConverter.cs" />
+    <Compile Include="Converters\CollectionContainsItemConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\IsStringNullOrEmptyValueConverter.cs" />
     <Compile Include="Converters\LessThanValueConverter.cs" />

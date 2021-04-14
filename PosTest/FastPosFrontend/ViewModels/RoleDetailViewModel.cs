@@ -14,6 +14,7 @@ namespace FastPosFrontend.ViewModels
         public RoleDetailViewModel(RoleSettingsViewModel parent)
         {
             _parent = parent;
+            Privileges = new BindableCollection<Privilege>(StateManager.Get<Privilege>());
         }
         public string Name
         {
@@ -21,21 +22,24 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _name, value);
         }
 
-        public BindableCollection<Permission> Permissions { get; set; } 
-        public BindableCollection<Permission> RolePermissions { get; set; } 
+        public Role Model { get=>_model; set=> Set(ref _model,value); }
+        public BindableCollection<Privilege> Privileges { get; set; } 
+        public BindableCollection<Privilege> RolePrivileges { get; set; } 
 
         public void Edit(Role role)
         {
             Name = role?.Name;
-            Permissions = role?.Permissions == null
-                ? new BindableCollection<Permission>()
-                : new BindableCollection<Permission>(role.Permissions);
+            
+            RolePrivileges = role?.Privileges == null
+                ? new BindableCollection<Privilege>()
+                : new BindableCollection<Privilege>(role.Privileges);
             _model = role;
         }
 
         public void Create()
         {
-            Permissions = new BindableCollection<Permission>();
+            _model = new Role();
+            RolePrivileges = new BindableCollection<Privilege>();
         }
 
         public void SaveRole()
@@ -59,7 +63,20 @@ namespace FastPosFrontend.ViewModels
         private void CopyToModel()
         {
             _model.Name = Name;
-            _model.Permissions = Permissions.ToList();
+            _model.Privileges = RolePrivileges.ToList();
+            _model.PrivilegeIds = _model.Privileges.Where(p=>p.Id!= null).Select(p => (long) p.Id).ToList();
+        }
+
+        public void PrivilegeAction(Privilege privilege,bool isChecked)
+        {
+            if (isChecked)
+            {
+                RolePrivileges.Remove(privilege);
+            }
+            else
+            {
+                RolePrivileges.Add(privilege);
+            }
         }
     }
 }

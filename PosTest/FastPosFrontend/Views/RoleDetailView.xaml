@@ -6,8 +6,34 @@
              xmlns:local="clr-namespace:FastPosFrontend.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:viewModels="clr-namespace:FastPosFrontend.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate x:Key="FirstCell">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox  x:Name="CheckPrivilege"
+                          >
+                    <CheckBox.IsChecked>
+                        <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}" Mode="OneWay">
+                            <Binding RelativeSource="{RelativeSource AncestorType=ListView}" Path="DataContext.(viewModels:RoleDetailViewModel.RolePrivileges)"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=ListViewItem}" Path="Content"/>
+                        </MultiBinding>
+                    </CheckBox.IsChecked>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <cal:ActionMessage MethodName="PrivilegeAction">
+                                <cal:Parameter Value="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem},Path=Content}" />
+                                <cal:Parameter Value="{Binding ElementName=CheckPrivilege}" />
+                            </cal:ActionMessage>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </CheckBox>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
     <StackPanel Orientation="Vertical">
 
         <Grid Width="500" Margin="20">
@@ -19,7 +45,17 @@
             <TextBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                      materialDesign:HintAssist.Hint="Username" Margin="5"
                      Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" />
-            <ListView Grid.Row="1" ItemsSource="{Binding Permissions}" Height="300"></ListView>
+            <ListView Grid.Row="1" ItemsSource="{Binding Privileges}" Height="300" 
+                      >
+                <ListView.View>
+                    <GridView>
+                       
+                        <GridViewColumn Header="Privilege" DisplayMemberBinding="{Binding Name}" Width="400" ></GridViewColumn>
+                        <GridViewColumn CellTemplate="{StaticResource FirstCell}" 
+                                        Width="30"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
             
 
           

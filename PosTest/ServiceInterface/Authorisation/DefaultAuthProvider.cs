@@ -25,7 +25,7 @@ namespace ServiceInterface.Authorisation
             if (_user != null && _user.Roles != null)
             {
                 foreach (Role role in _user?.Roles)
-                    foreach (Permission permissioncategory in role?.Permissions)
+                    foreach (Privilege permissioncategory in role?.Privileges)
                     {
                         if (_userPermissions == null)
                             if (permissioncategory.Permissions != null)

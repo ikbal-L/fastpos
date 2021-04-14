@@ -27,15 +27,15 @@ namespace FastPosFrontend.Helpers
             AssociationManager.Register().Associate<Order>().With<Customer>().Using<Order, Customer>(AssociateOrdersWithCustomers).Build();
             AssociationManager.Register().Associate<Order>().With<Product>().Using<Order, Product>(AssociateOrdersWithProducts).Build();
             AssociationManager.Register().Associate<User>().With<Role>().Using<User, Role>(AssociateUsersWithRoles).Build();
-            AssociationManager.Register().Associate<Role>().With<Permission>().Using<Role, Permission>(AssociateRolesWithPermissions).Build();
+            AssociationManager.Register().Associate<Role>().With<Privilege>().Using<Role, Privilege>(AssociateRolesWithPermissions).Build();
         }
 
-        private static void AssociateRolesWithPermissions(IEnumerable<Role> roles, IEnumerable<Permission> permissions)
+        private static void AssociateRolesWithPermissions(IEnumerable<Role> roles, IEnumerable<Privilege> permissions)
         {
             foreach (var role in roles)
             {
-                var rolePermissions = permissions.Where(p => role.PermissionIds.Contains((long)p.Id));
-                role.Permissions = rolePermissions.ToList();
+                var rolePermissions = permissions.Where(p => role.PrivilegeIds.Contains((long)p.Id));
+                role.Privileges = rolePermissions.ToList();
             }
         }
 

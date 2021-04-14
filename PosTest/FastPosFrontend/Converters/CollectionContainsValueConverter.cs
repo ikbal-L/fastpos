@@ -23,7 +23,7 @@ namespace FastPosFrontend.Converters
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             //TODO must provide the convert back value
-            return new object[1];
+            throw new NotImplementedException();
         }
     }
 }
