@@ -19,6 +19,6 @@
                    Margin="10"
                    FontSize="20"
                    FontWeight="DemiBold"
-                   Foreground="{StaticResource InformationColorBrush}"></TextBlock>
+                   Foreground="{StaticResource PrimaryHueBrush}"></TextBlock>
     </StackPanel>
 </UserControl>
