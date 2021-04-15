@@ -87,7 +87,7 @@ namespace FastPosFrontend.SL.Controls
 
         private void RaiseKeyClickedEvent(string key)
         {
-            RaiseEvent(new VirtualKeyboardKeyClickedEventArgs(key));
+            RaiseEvent(new VirtualKeyboardKeyClickedEventArgs(KeyClickedEvent,this,key));
         }
     }
 
@@ -114,6 +114,11 @@ namespace FastPosFrontend.SL.Controls
             Key = key;
         }
 
-        public string Key { get; private set; }
+        public VirtualKeyboardKeyClickedEventArgs(RoutedEvent routedEvent, object source, string key) : base(routedEvent, source)
+        {
+            Key = key;
+        }
+
+        public string Key { get;  private set; }
     }
 }
