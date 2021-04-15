@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using FastPosFrontend.Helpers;
+using FastPosFrontend.SL.Controls;
 
 namespace FastPosFrontend.Views
 {
@@ -10,6 +12,11 @@ namespace FastPosFrontend.Views
         public LoginView()
         {
             InitializeComponent();
+        }
+
+        private void VirtualNumpadKeyboard_OnKeyClicked(object sender, VirtualKeyboardKeyClickedEventArgs e)
+        {
+            ToastNotification.Notify(e.Key);
         }
     }
 }

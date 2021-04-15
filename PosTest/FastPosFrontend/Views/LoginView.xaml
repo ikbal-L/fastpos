@@ -12,6 +12,7 @@
 
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:controls="clr-namespace:FastPosFrontend.SL.Controls"
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="800" Background="White">
     <UserControl.Resources>
@@ -112,7 +113,7 @@
                                      materialdesign:HintAssist.Hint="Password" VerticalAlignment="Bottom" />
                     </materialdesign:TransitioningContent>
 
-                    <Button Grid.Column="2"
+                    <!--<Button Grid.Column="2"
                             Content="LOGIN" VerticalAlignment="Bottom"
                             VerticalContentAlignment="Center"
                             Padding="5" Height="50"
@@ -132,8 +133,10 @@
                     <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatButton}"
                             Content="Login with Pin" VerticalAlignment="Bottom"
                             VerticalContentAlignment="Center"
-                            Padding="5" Height="50" />
+                            Padding="5" Height="50" />-->
+                    
                 </UniformGrid>
+                <controls:VirtualNumpadKeyboard KeyClicked="VirtualNumpadKeyboard_OnKeyClicked"></controls:VirtualNumpadKeyboard>
 
                 <!--<TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" Width="300"
                          materialdesign:HintAssist.Hint="Username"

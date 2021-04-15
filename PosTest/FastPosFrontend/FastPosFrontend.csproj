@@ -274,6 +274,7 @@
     <Compile Include="Helpers\Icon.cs" />
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
+    <Compile Include="SL.Controls\VirtualNumpadKeyboard.cs" />
     <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
     <Compile Include="Helpers\NavigationItemConfigurationAttribute.cs" />
@@ -623,6 +624,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SL.Controls\NumericKeypad.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
