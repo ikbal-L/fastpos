@@ -34,7 +34,27 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=PasswordLoginRegion,Path=IsVisible}"
                                              Value="true">
-                                    <Setter Property="Margin" Value="0 50 0 0" />
+                                    <!--<Setter Property="Margin" Value="0 50 0 0" />-->
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                                                    <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0 20 0 0" />
+                                                    <SplineThicknessKeyFrame KeyTime="00:00:00.3" Value="0 50 0 0" />
+                                                </ThicknessAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                                                        <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0 50 0 0" />
+                                                        <SplineThicknessKeyFrame KeyTime="00:00:00.3" Value="0 20 0 0" />
+                                                    </ThicknessAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
