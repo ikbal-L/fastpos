@@ -1,57 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using FastPosFrontend.Helpers;
 
 namespace FastPosFrontend.SL.Controls
 {
-    /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:FastPosFrontend.SL.Controls"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:FastPosFrontend.SL.Controls;assembly=FastPosFrontend.SL.Controls"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:VirtualNumpadKeyboard/>
-    ///
-    /// </summary>
-    public class VirtualNumpadKeyboard : Control,IVirtualKeyboardKeyClickedEventHandler,IVirtualKeyboardBackspaceKeyHoldClickedEventHandler
+    public class VirtualNumpadKeyboard : Control, IVirtualKeyboardKeyClickedEventHandler,
+        IVirtualKeyboardBackspaceKeyHoldClickedEventHandler
     {
         private List<Button> _numpadNumericKeys;
         private Button _numpadKeyEnterButton;
         private Button _numpadKeyBackspaceButton;
         private DispatcherTimer _dispatcherTimer;
+
+        public static readonly RoutedEvent KeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(KeyClickedEvent),
+            RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
 
         static VirtualNumpadKeyboard()
         {
@@ -77,13 +43,15 @@ namespace FastPosFrontend.SL.Controls
             if (_numpadKeyBackspaceButton != null)
             {
                 _numpadKeyBackspaceButton.Click += NumpadKey_Click;
-                _numpadKeyBackspaceButton.PreviewMouseLeftButtonDown += _numpadKeyBackspaceButton_PreviewMouseLeftButtonDown;
-                _numpadKeyBackspaceButton.PreviewMouseLeftButtonUp += _numpadKeyBackspaceButton_PreviewMouseLeftButtonUp;
-                
+                _numpadKeyBackspaceButton.PreviewMouseLeftButtonDown +=
+                    _numpadKeyBackspaceButton_PreviewMouseLeftButtonDown;
+                _numpadKeyBackspaceButton.PreviewMouseLeftButtonUp +=
+                    _numpadKeyBackspaceButton_PreviewMouseLeftButtonUp;
             }
+
             base.OnApplyTemplate();
         }
-        
+
         private void _numpadKeyBackspaceButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _dispatcherTimer.Start();
@@ -98,41 +66,48 @@ namespace FastPosFrontend.SL.Controls
         {
             ToastNotification.Notify("Clearing");
             _dispatcherTimer.Stop();
-            BackspaceKeyHoldClicked?.Invoke(this,new VirtualKeyboardBackspaceKeyHoldClickedEventArgs());
-
+            BackspaceKeyHoldClicked?.Invoke(this, new VirtualKeyboardBackspaceKeyHoldClickedEventArgs());
         }
 
-        
-
-        
 
         private void NumpadKey_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Control control)
-            {
-                var key = control.Tag as string;
-                KeyClicked?.Invoke(this,new VirtualKeyboardKeyClickedEventArgs(key));
-            }
+            if (!(sender is Control control)) return;
+            var key = control.Tag as string;
+            RaiseKeyClickedEvent(key);
         }
 
-        public event EventHandler<VirtualKeyboardKeyClickedEventArgs> KeyClicked;
+        public event VirtualKeyboardKeyClickedEventHandler KeyClicked
+        {
+            add => AddHandler(KeyClickedEvent, value);
+            remove => RemoveHandler(KeyClickedEvent, value);
+        }
+
         public event EventHandler<VirtualKeyboardBackspaceKeyHoldClickedEventArgs> BackspaceKeyHoldClicked;
+
+        private void RaiseKeyClickedEvent(string key)
+        {
+            RaiseEvent(new VirtualKeyboardKeyClickedEventArgs(key));
+        }
     }
+
+    public delegate void VirtualKeyboardKeyClickedEventHandler(object sender, VirtualKeyboardKeyClickedEventArgs e);
 
     public interface IVirtualKeyboardKeyClickedEventHandler
     {
-        event EventHandler<VirtualKeyboardKeyClickedEventArgs> KeyClicked;
+        event VirtualKeyboardKeyClickedEventHandler KeyClicked;
     }
+
     public interface IVirtualKeyboardBackspaceKeyHoldClickedEventHandler
     {
         event EventHandler<VirtualKeyboardBackspaceKeyHoldClickedEventArgs> BackspaceKeyHoldClicked;
     }
 
-    public class VirtualKeyboardBackspaceKeyHoldClickedEventArgs:EventArgs
-    {   
+    public class VirtualKeyboardBackspaceKeyHoldClickedEventArgs : EventArgs
+    {
     }
 
-    public class VirtualKeyboardKeyClickedEventArgs:EventArgs
+    public class VirtualKeyboardKeyClickedEventArgs : RoutedEventArgs
     {
         public VirtualKeyboardKeyClickedEventArgs(string key)
         {
