@@ -32,7 +32,6 @@ namespace FastPosFrontend.ViewModels.SubViewModel
         private string _name;
         private decimal _price;
         private string _unit;
-        private IAdditiveService _additiveService;
         private int _additivesPageSize;
         private bool _isPlatter;
 
@@ -43,8 +42,6 @@ namespace FastPosFrontend.ViewModels.SubViewModel
             this._source = sourceProduct;
             IsPlatter = sourceProduct.IsPlatter;
 
-
-            this._additiveService = new AdditiveService();
             this._additivesPageSize = additivesPageSize;
             PopulateAdditivesPage();
 
@@ -179,11 +176,8 @@ namespace FastPosFrontend.ViewModels.SubViewModel
             var comparer = new Comparer<Additive>();
             int StatusCode = 0;
             // var allAdditives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
-            var (status,allAdditives) = GenericRest.GetAll<Additive>(UrlConfig.AdditiveUrl.GetAllAdditives);
-            if (status!=200)
-            {
-                
-            }
+            var allAdditives = StateManager.Get<Additive>().ToList();
+            
             var filteredAdditives = new List<Additive>(allAdditives.Where(a => a.Rank != null));
             filteredAdditives.Sort(comparer);
             Additives = new BindableCollection<Additive>();

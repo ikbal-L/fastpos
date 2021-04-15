@@ -606,9 +606,10 @@ namespace FastPosFrontend.ViewModels
 
         public void CopyProduct()
         {
-            if (SelectedProduct.Category == null)
+            if (SelectedProduct.Category == null || SelectedProduct.Id == null)
             {
-                ToastNotification.Notify("We can't copy empty product",NotificationType.Warning);
+                ToastNotification.Notify("Select a non empty product to copy",NotificationType.Warning);
+                return;
             }
 
             ClipboardProduct = SelectedProduct;
