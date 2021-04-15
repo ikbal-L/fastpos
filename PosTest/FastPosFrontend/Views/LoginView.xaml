@@ -25,8 +25,21 @@
 
 
             <StackPanel>
+
                 <TextBlock Text="Welcome" FontSize="35" FontWeight="Medium" HorizontalAlignment="Center"
-                           Margin="0 50 0 0" />
+                           >
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="0 20 0 0"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=PasswordLoginRegion,Path=IsVisible}"
+                                             Value="true">
+                                    <Setter Property="Margin" Value="0 50 0 0" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <materialdesign:PackIcon HorizontalAlignment="Center"
                                          Foreground="{Binding SelectedUser.Background,FallbackValue=#4a4c4f}"
                                          Kind="AccountCircle" Width="120" Height="120" />
@@ -170,7 +183,7 @@
                                          Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                          materialdesign:HintAssist.Hint="Pincode" VerticalAlignment="Bottom"
                                          Margin="0 0 0 20"  />
-                            <controls:VirtualNumpadKeyboard KeyClicked="VirtualNumpadKeyboard_OnKeyClicked" />
+                            <controls:VirtualNumpadKeyboard KeyClicked="VirtualNumpadKeyboard_OnKeyClicked" Margin="0 0 0 10"  />
                             <Button Style="{StaticResource MaterialDesignFlatButton}"
                                     Content="Back" VerticalAlignment="Bottom"
                                     VerticalContentAlignment="Center"
