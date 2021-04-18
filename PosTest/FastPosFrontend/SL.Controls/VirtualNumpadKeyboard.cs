@@ -16,7 +16,7 @@ namespace FastPosFrontend.SL.Controls
         private Button _numpadKeyBackspaceButton;
         private DispatcherTimer _dispatcherTimer;
 
-        public static readonly RoutedEvent KeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(KeyClickedEvent),
+        public static readonly RoutedEvent KeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(KeyClicked),
             RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
 
         static VirtualNumpadKeyboard()
@@ -27,7 +27,7 @@ namespace FastPosFrontend.SL.Controls
 
         public override void OnApplyTemplate()
         {
-            _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background) {Interval = new TimeSpan(0, 0, 3)};
+            _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background) {Interval = new TimeSpan(0, 0,0, 2,500)};
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
             _numpadNumericKeys = new List<Button>();
             for (var i = 0; i <= 9; i++)
@@ -67,6 +67,7 @@ namespace FastPosFrontend.SL.Controls
             ToastNotification.Notify("Clearing");
             _dispatcherTimer.Stop();
             BackspaceKeyHoldClicked?.Invoke(this, new VirtualKeyboardBackspaceKeyHoldClickedEventArgs());
+            RaiseKeyClickedEvent("HoldBackspace");
         }
 
 

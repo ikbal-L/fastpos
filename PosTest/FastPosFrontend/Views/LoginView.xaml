@@ -203,11 +203,20 @@
                                          Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                          materialdesign:HintAssist.Hint="Pincode" VerticalAlignment="Bottom"
                                          Margin="0 0 0 20"  />
-                            <controls:VirtualNumpadKeyboard KeyClicked="VirtualNumpadKeyboard_OnKeyClicked" Margin="0 0 0 10"  />
+                            <controls:VirtualNumpadKeyboard  Margin="0 0 0 10" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="KeyClicked" >
+                                        <caliburn:ActionMessage MethodName="SetPinCode" >
+                                            <caliburn:Parameter Value="{Binding ElementName=UserPincode}" />
+                                            <caliburn:Parameter Value="$eventArgs" />
+                                        </caliburn:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </controls:VirtualNumpadKeyboard>
                             <Button Style="{StaticResource MaterialDesignFlatButton}"
                                     Content="Back" VerticalAlignment="Bottom"
                                     VerticalContentAlignment="Center"
-                                    Padding="5" Height="50">
+                                    Padding="5" Height="50" caliburn:Message.Attach="BackToLogin">
                                 <Button.Triggers>
                                     <EventTrigger RoutedEvent="Button.Click">
                                         <BeginStoryboard>

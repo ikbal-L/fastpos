@@ -15,6 +15,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.SL.Controls;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
@@ -120,6 +121,12 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _password, value);
         }
 
+        public string Pincode
+        {
+            get => _pincode;
+            set => Set(ref _pincode, value);
+        }
+
 
         private bool _IsDialogOpen;
 
@@ -134,6 +141,7 @@ namespace FastPosFrontend.ViewModels
         private string _password;
         private SettingsManager<LoginHistory> _loginHistoryManager;
         private LoginHistory _loginHistory;
+        private string _pincode;
 
         public void SetPasswordAndLogin( object sender)
         {
@@ -150,6 +158,38 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             Login();
+        }
+
+        public void SetPinCode(object target,VirtualKeyboardKeyClickedEventArgs e)
+        {
+            if (!(target is PasswordBox pincodeBox)) return;
+            switch (e.Key)
+            {
+                case "Enter":
+                    Login();
+                    return;
+                case "Backspace":
+                {
+                    var pincode = pincodeBox.Password;
+                    pincodeBox.Password = String.IsNullOrEmpty(pincode)
+                        ? String.Empty
+                        : pincode.Remove(pincode.Length - 1);
+                    Password = pincodeBox.Password;
+                    return;
+                }
+                case "HoldBackspace":
+                    pincodeBox.Password = string.Empty;
+                    Password = pincodeBox.Password;
+                    return;
+            }
+
+            pincodeBox.Password += e.Key;
+            Password = pincodeBox.Password;
+        }
+
+        public void BackToLogin()
+        {
+            Password = string.Empty;
         }
 
 
