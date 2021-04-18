@@ -89,7 +89,7 @@ namespace ServiceLib.Service.StateManager
             return Get<TState, TIdentifier>().FirstOrDefault(state=> state.Id.Equals(identifier));
         }
 
-        public static bool Save<TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
+        public static bool Save<TState, TIdentifier>(TState state) where TState : class, IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
             IsStateManaged<TState, TIdentifier>(key);
@@ -188,7 +188,7 @@ namespace ServiceLib.Service.StateManager
             return false;
         }
 
-        public static bool Delete<TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
+        public static bool Delete<TState, TIdentifier>(TState state) where TState : class, IState<TIdentifier> where TIdentifier : struct
         {
             
             var key = typeof(TState);

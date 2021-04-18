@@ -30,7 +30,7 @@ namespace ServiceLib.Service.StateManager
         }
 
 
-        public static bool Save<TState>(TState state) where TState : IState<long>
+        public static bool Save<TState>(TState state) where TState : class, IState<long>
         {
             return Save<TState, long>(state);
         }
@@ -47,7 +47,7 @@ namespace ServiceLib.Service.StateManager
             Refresh<TState, long>();
         }
 
-        public static bool Delete<TState>(TState state) where TState : IState<long>
+        public static bool Delete<TState>(TState state) where TState : class, IState<long>
         {
             return Delete<TState, long>(state);
         }

@@ -4,7 +4,8 @@ namespace ServiceInterface.Interface
 {
     public interface IResponseHandler
     {
-        void Handle<TState>(int status,IEnumerable<string> errors,StateManagementAction action,string source= "", bool overrideDefaultBehaviour = false);
+        void Handle<T>(int status, IEnumerable<string> errors, StateManagementAction action, string source = "",
+            bool overrideDefaultBehaviour = false, string identifier = "", T obj = null) where T : class;
     }
     public enum StateManagementAction
     {
