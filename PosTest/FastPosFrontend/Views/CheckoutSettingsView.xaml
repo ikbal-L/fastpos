@@ -527,8 +527,9 @@
                                               VerticalScrollBarVisibility="Disabled" Margin="1 10 0 0">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
                                             <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <ListBox DockPanel.Dock="Left" x:Name="CategoryList" AllowDrop="True"
                                                  ItemsSource="{Binding CurrentCategories}"
@@ -548,7 +549,8 @@
                                                     <Border x:Name="catBtn" Height="45" Padding="2" Margin="2"
                                                             cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
                                                             caliburn:Message.Attach="
-                                                    [Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]">
+                                                    [Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]"
+                                                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                                         <Border.Style>
                                                             <Style TargetType="Border">
                                                                 <Setter Property="Background"
@@ -599,19 +601,19 @@
                                             </ListBox.ItemContainerStyle>
                                         </ListBox>
 
-                                        <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1">
+                                        <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="2">
                                             <TextBlock Margin="16">Gestion Du Menu Categories</TextBlock>
                                         </materialdesign:ColorZone>
 
                                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0"
+                                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1"
                                                 Margin="0 0 10 -20"
                                                 caliburn:Message.Attach="[Event Click] = [Action CreateCategory()]">
                                             <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
                                         </Button>
 
                                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0"
+                                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1"
                                                 Margin="0 0 60 -20"
                                                 caliburn:Message.Attach="[Event Click] = [Action EditCategory(false)]">
                                             <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
@@ -620,16 +622,10 @@
                                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                                 caliburn:Message.Attach="[Event Click] = [Action RemoveCategoryFromList()]"
-                                                Grid.Row="0" Margin="0 0 110 -20">
+                                                Grid.Row="1" Margin="0 0 110 -20">
                                             <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                                         </Button>
 
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0"
-                                                Margin="0 0 180 -44"
-                                                caliburn:Message.Attach="[Event Click] = [Action Close()]">
-                                            <materialdesign:PackIcon Kind="Close" Height="22" Width="22" />
-                                        </Button>
 
                                     </Grid>
                                 </ScrollViewer>
