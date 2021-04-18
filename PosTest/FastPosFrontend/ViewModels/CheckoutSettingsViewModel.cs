@@ -512,17 +512,17 @@ namespace FastPosFrontend.ViewModels
 
         private void RemoveCategoryFromList(Category selectedCategory)
         {
-            ManageCategoryProductsForDeletion(selectedCategory);
 
-
-            CurrentProducts.Clear();
-            SelectedCategory = null;
-
-
-            if (StateManager.Save(selectedCategory))
+            if (ManageCategoryProductsForDeletion(selectedCategory))
             {
-                ToastNotification.Notify("Category was Save successfully ",NotificationType.Success);
+                CurrentProducts.Clear();
+                SelectedCategory = null;
+                if (StateManager.Save(selectedCategory))
+                {
+                    //ToastNotification.Notify("Category was Save successfully ", NotificationType.Success);
+                }
             }
+
         }
 
         private void RemoveProductFromList<T>(Product selectedProduct) where T : Ranked, new()
@@ -544,32 +544,27 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-        private void ManageCategoryProductsForDeletion(Category selectedCategory) 
+        private bool ManageCategoryProductsForDeletion(Category selectedCategory) 
         {
-            if (selectedCategory.Products != null || selectedCategory.Products?.Count > 0)
+            if (selectedCategory.Products == null || !selectedCategory.Products.Any()) return true;
+            selectedCategory.Products.ForEach(product =>
             {
+                product.Rank = null;
+                product.CategoryId = null;
+                product.Category = null;
 
-                selectedCategory.Products.ForEach(product =>
+                if (!FreeProducts.Contains(product))
                 {
-                    product.Rank = null;
-                    product.CategoryId = null;
-                    product.Category = null;
-
-                    if (!FreeProducts.Contains(product))
-                    {
-                        FreeProducts.Add(product);
-                    }
-                });
-                
-                if (StateManager.Save<Product>(selectedCategory.Products))
-                {
-                    selectedCategory.Products= null;
-                    selectedCategory.ProductIds = null;
+                    FreeProducts.Add(product);
                 }
+            });
 
-            }
+            if (!StateManager.Save<Product>(selectedCategory.Products)) return false;
+            selectedCategory.Products= null;
+            selectedCategory.ProductIds = null;
+            return true;
 
-            
+
         }
 
 

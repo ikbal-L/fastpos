@@ -364,7 +364,7 @@ namespace FastPosFrontend.ViewModels
                 Additives[index] = new Additive() {Rank = additiveToDelete.Rank};
                 additiveToDelete = null;
                 SelectedAdditive = null;
-                ToastNotification.Notify("Additive was deleted successfully", NotificationType.Success);
+                
             }
             else
             {

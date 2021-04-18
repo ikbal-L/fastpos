@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Windows;
 using Newtonsoft.Json;
@@ -15,10 +16,16 @@ namespace FastPosFrontend.Helpers
         }
 
         public static IResponseHandler Handler { get; }
-        public void Handle<TState>(int status,IEnumerable<string> errors,StateManagementAction action,string source = "",bool overrideDefaultBehaviour = false)
+        public void Handle<T>(int status,IEnumerable<string> errors,StateManagementAction action,string source = "",bool overrideDefaultBehaviour = false,string identifier = "",T obj = null) where T:class
         {
-            var type = typeof(TState);
-            var successMessage = $"{action}d {type.Name}(s) Successfully";
+            var type = typeof(T);
+            object entityIdentifier = null;
+            if (!string.IsNullOrEmpty(identifier)&& obj!= null)
+            {
+                entityIdentifier =type.GetProperty(identifier)?.GetValue(obj);
+            }
+            var successMessage = obj == null? $"{action}d {type.Name}(s) Successfully": $"{action}d {type.Name} {entityIdentifier} Successfully"
+                ;
             var errorsString = JsonConvert.SerializeObject(errors, new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented
