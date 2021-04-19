@@ -730,30 +730,6 @@ namespace FastPosFrontend.ViewModels
             ProductToMove = SelectedProduct;
         }
 
-        public void NewFreeProduct()
-        {
-            FreeProducts.Add(SelectedFreeProduct = new Product());
-        }
-
-        public void CopyFreeProduct()
-        {
-            if (SelectedFreeProduct == null)
-            {
-                return;
-            }
-
-            //   var product = new Product(SelectedFreeProduct);
-        }
-
-        public void CotegoryOfSelectFreeProductChanged(Category category)
-        {
-            ShowCategoryProducts(category);
-        }
-
-        public void DetailsProduct()
-        {
-            IsProductDetailsDrawerOpen = true;
-        }
 
         public void DeleteCategory()
         {
@@ -771,7 +747,7 @@ namespace FastPosFrontend.ViewModels
 
                     if (StateManager.Delete(SelectedFreeCategory))
                     {
-                        ToastNotification.Notify($"{SelectedFreeCategory.Name} {SelectedFreeCategory.GetType().Name}",NotificationType.Success);
+                        
                     }
                     
                 }
