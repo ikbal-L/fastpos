@@ -188,13 +188,19 @@ namespace ServiceInterface.Model
     }
 
     [DataContract]
-    public class Role:IState<long>
+    public class Role:PropertyChangedBase ,IState<long>
     {
+        private string _name;
+
         [DataMember]
         public long? Id { get; set; }
 
         [DataMember]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => Set(ref _name, value);
+        }
 
         [DataMember]
         public List<Privilege> Privileges { get; set; }
