@@ -31,7 +31,7 @@ using Table = ServiceInterface.Model.Table;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration(title:"Checkout",target: typeof(CheckoutViewModel),keepAlive:true,isDefault:true)]
-    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>, IAppNavigationItem
+    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>
     {
         
         #region Private fields
@@ -2017,7 +2017,15 @@ namespace FastPosFrontend.ViewModels
             CustomerViewModel?.CustomerDetailVm?.Cancel();
         }
 
+        public override bool CanNavigate()
+        {
+            if (Orders!= null&&Orders.Any(o=>o.Id == null))
+            {
+                ToastNotification.Notify("Save orders before Leaving",NotificationType.Warning);
+                return false;
+            }
 
-
+            return true;
+        }
     }
 }

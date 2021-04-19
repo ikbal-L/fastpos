@@ -18,7 +18,7 @@
 
     </UserControl.Resources>
 
-    <materialdesign:DialogHost IsOpen="{Binding IsEditing}">
+    <materialdesign:DialogHost IsOpen="{Binding IsEditing}" VerticalAlignment="Stretch">
         <materialdesign:DialogHost.DialogContent>
             <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm,diag:PresentationTraceSources.TraceLevel=High}" 
                                          ></subviews:CustomerDetailView>
@@ -34,7 +34,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
-            <materialdesign:ColorZone Mode="PrimaryDark" Grid.Row="0" Margin="0 0 0 20" CornerRadius="2" materialdesign:ShadowAssist.ShadowDepth="Depth2">
+            <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="0" Margin="0 0 0 20" CornerRadius="0" materialdesign:ShadowAssist.ShadowDepth="Depth2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -81,14 +81,14 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <Button Margin="5" Height="40" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" Foreground="White" >
+                        <Button Margin="5" Height="40" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" Foreground="White" Style="{StaticResource MaterialDesignFlatDarkBgButton}">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="Create &amp; Save"  FontWeight="Thin"></TextBlock>
                                 <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Margin="5" Height="40"  caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" Foreground="White">
-                            <StackPanel Orientation="Vertical">
+                        <Button Margin="5" Height="40"  caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" Foreground="White" Style="{StaticResource MaterialDesignFlatDarkBgButton}">
+                            <StackPanel Orientation="Vertical" >
                                 <TextBlock Text="Create &amp; Edit"  FontWeight="Thin"></TextBlock>
                                 <TextBlock Text="{Binding FilterString}"  FontSize="10" HorizontalAlignment="Center"></TextBlock>
                             </StackPanel>

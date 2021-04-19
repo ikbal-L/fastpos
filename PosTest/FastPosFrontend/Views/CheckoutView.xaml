@@ -183,10 +183,10 @@
             </Grid>
 
             <materialdesign:DrawerHost Panel.ZIndex="10" IsTopDrawerOpen="{Binding IsTopDrawerOpen}" Grid.Column="0"
-                                       Grid.Row="0" Grid.RowSpan="4">
+                                       Grid.Row="0" Grid.RowSpan="3">
                 <!--Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialdesign:DrawerHost}},Path=ActualHeight}"-->
                 <materialdesign:DrawerHost.TopDrawerContent>
-                    <Grid Width="400"
+                    <Grid 
                           >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
@@ -279,7 +279,7 @@
                         <Border Grid.Row="0" Grid.RowSpan="1"
                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=customer}">
                            
-                            <views:CustomerView x:Name="lcustomer" caliburn:View.Model="{Binding CustomerViewModel}" />
+                            <views:CustomerView x:Name="lcustomer" caliburn:View.Model="{Binding CustomerViewModel}"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                         </Border>
 
                         <Button Grid.Row="1" Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
