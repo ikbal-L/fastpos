@@ -98,7 +98,7 @@ namespace FastPosFrontend.Helpers
         {
             foreach (Order order in orders)
             {
-                order.MappingAfterReceiving(products);
+                order.MappingAfterReceiving(products.Where(p=>p.CategoryId!= null));
             }
         }
 
