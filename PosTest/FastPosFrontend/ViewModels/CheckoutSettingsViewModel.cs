@@ -96,12 +96,11 @@ namespace FastPosFrontend.ViewModels
         public override void Initialize()
         {
 
-            //_allProducts = _data.GetResult<ICollection<Product>>().ToList();
+       
             _allProducts = StateManager.Get<Product>().ToList();
-            //_allCategories = _data.GetResult<ICollection<Category>>().ToList();
+           
             _allCategories = StateManager.Get<Category>().ToList();
-            //StateManager.Associate<Additive, Product>();
-            //StateManager.Associate<Product, Category>();
+           
 
             LoadCategoryPages();
             CurrentProducts = new BindableCollection<Product>();
@@ -114,7 +113,7 @@ namespace FastPosFrontend.ViewModels
             ToSaveUpdate = new BindableCollection<object>();
             ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             SelectedProduct = new Product();
-            SelectedProduct.PropertyChanged += (sender, args) => { Save(); };
+         
             IsFlipped = false;
             IsCategory = false;
             SelectedCategory = CurrentCategories.FirstOrDefault();

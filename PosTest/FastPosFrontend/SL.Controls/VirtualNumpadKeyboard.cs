@@ -20,7 +20,7 @@ namespace FastPosFrontend.SL.Controls
 
         public static readonly RoutedEvent KeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(KeyClicked),
             RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
-        public readonly RoutedEvent EnterKeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(EnterKeyClicked),
+        public static readonly RoutedEvent EnterKeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(EnterKeyClicked),
             RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
 
         static VirtualNumpadKeyboard()
