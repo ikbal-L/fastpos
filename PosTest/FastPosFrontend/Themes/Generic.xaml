@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:FastPosFrontend"
     xmlns:controls="clr-namespace:FastPosFrontend.SL.Controls"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:ex="clr-namespace:FastPosFrontend.Extensions">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
@@ -26,19 +27,20 @@
                                 <Setter Property="Height" Value="70"></Setter>
                                 <Setter Property="FontSize" Value="24"></Setter>
                                 <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                <Setter Property="Focusable" Value="False"></Setter>
                             </Style>
 
                         </UniformGrid.Resources>
-                        <Button x:Name="Part_Numpad_Key_1_Button" Content="1" Tag="1"/>
-                        <Button x:Name="Part_Numpad_Key_2_Button" Content="2" Tag="2"/>
-                        <Button x:Name="Part_Numpad_Key_3_Button" Content="3" Tag="3"/>
-                        <Button x:Name="Part_Numpad_Key_4_Button" Content="4" Tag="4"/>
-                        <Button x:Name="Part_Numpad_Key_5_Button" Content="5" Tag="5"/>
-                        <Button x:Name="Part_Numpad_Key_6_Button" Content="6" Tag="6"/>
-                        <Button x:Name="Part_Numpad_Key_7_Button" Content="7" Tag="7"/>
-                        <Button x:Name="Part_Numpad_Key_8_Button" Content="8" Tag="8"/>
-                        <Button x:Name="Part_Numpad_Key_9_Button" Content="9" Tag="9"/>
-                        <Button x:Name="Part_Numpad_Key_Enter_Button"  Content="{materialDesign:PackIcon LoginVariant ,Size=30}" Tag="Enter" >
+                        <Button x:Name="Part_Numpad_Key_1_Button" Content="1" Tag="{ex:KeyboardKey NumPad1}"/>
+                        <Button x:Name="Part_Numpad_Key_2_Button" Content="2" Tag="{ex:KeyboardKey NumPad2}"/>
+                        <Button x:Name="Part_Numpad_Key_3_Button" Content="3" Tag="{ex:KeyboardKey NumPad3}"/>
+                        <Button x:Name="Part_Numpad_Key_4_Button" Content="4" Tag="{ex:KeyboardKey NumPad4}"/>
+                        <Button x:Name="Part_Numpad_Key_5_Button" Content="5" Tag="{ex:KeyboardKey NumPad5}"/>
+                        <Button x:Name="Part_Numpad_Key_6_Button" Content="6" Tag="{ex:KeyboardKey NumPad6}"/>
+                        <Button x:Name="Part_Numpad_Key_7_Button" Content="7" Tag="{ex:KeyboardKey NumPad7}"/>
+                        <Button x:Name="Part_Numpad_Key_8_Button" Content="8" Tag="{ex:KeyboardKey NumPad8}"/>
+                        <Button x:Name="Part_Numpad_Key_9_Button" Content="9" Tag="{ex:KeyboardKey NumPad9}"/>
+                        <Button x:Name="Part_Numpad_Key_Enter_Button"  Content="{materialDesign:PackIcon LoginVariant ,Size=30}" Tag="{ex:KeyboardKey Enter}" >
                             <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}" >
                                 <Setter Property="Width" Value="70"></Setter>
@@ -49,8 +51,8 @@
                             </Style>
                         </Button.Style>
                         </Button>
-                        <Button x:Name="Part_Numpad_Key_0_Button" Content="0" Tag="0" />
-                        <Button x:Name="Part_Numpad_Key_Backspace_Button" Content="{materialDesign:PackIcon BackspaceOutline,Size=30}" Tag="Backspace"></Button>
+                        <Button x:Name="Part_Numpad_Key_0_Button" Content="0" Tag="{ex:KeyboardKey NumPad0}" />
+                        <Button x:Name="Part_Numpad_Key_Backspace_Button" Content="{materialDesign:PackIcon BackspaceOutline,Size=30}" Tag="{ex:KeyboardKey Back}"></Button>
 
                     </UniformGrid>
                 </ControlTemplate>

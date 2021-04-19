@@ -14,9 +14,6 @@ namespace FastPosFrontend.Views
             InitializeComponent();
         }
 
-        private void VirtualNumpadKeyboard_OnKeyClicked(object sender, VirtualKeyboardKeyClickedEventArgs e)
-        {
-            ToastNotification.Notify(e.Key);
-        }
+        
     }
 }

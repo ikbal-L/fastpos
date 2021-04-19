@@ -199,19 +199,12 @@
                         </materialdesign:TransitioningContent.Style>
                         <StackPanel>
                             
-                            <PasswordBox x:Name="UserPincode"
-                                         Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                            <TextBox x:Name="UserPincode"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                          materialdesign:HintAssist.Hint="Pincode" VerticalAlignment="Bottom"
                                          Margin="0 0 0 20"  />
                             <controls:VirtualNumpadKeyboard  Margin="0 0 0 10" >
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="KeyClicked" >
-                                        <caliburn:ActionMessage MethodName="SetPinCode" >
-                                            <caliburn:Parameter Value="{Binding ElementName=UserPincode}" />
-                                            <caliburn:Parameter Value="$eventArgs" />
-                                        </caliburn:ActionMessage>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                         
                             </controls:VirtualNumpadKeyboard>
                             <Button Style="{StaticResource MaterialDesignFlatButton}"
                                     Content="Back" VerticalAlignment="Bottom"

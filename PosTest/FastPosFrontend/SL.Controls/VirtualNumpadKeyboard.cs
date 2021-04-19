@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,6 +16,7 @@ namespace FastPosFrontend.SL.Controls
         private Button _numpadKeyEnterButton;
         private Button _numpadKeyBackspaceButton;
         private DispatcherTimer _dispatcherTimer;
+        private const byte KEYEVENTF_KEYUP = 0x0002;
 
         public static readonly RoutedEvent KeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(KeyClicked),
             RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
@@ -27,7 +29,7 @@ namespace FastPosFrontend.SL.Controls
 
         public override void OnApplyTemplate()
         {
-            _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background) {Interval = new TimeSpan(0, 0,0, 2,500)};
+            _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background) {Interval = new TimeSpan(0, 0,0, 1,200)};
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
             _numpadNumericKeys = new List<Button>();
             for (var i = 0; i <= 9; i++)
@@ -64,19 +66,35 @@ namespace FastPosFrontend.SL.Controls
 
         private void _dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            ToastNotification.Notify("Clearing");
+            
             _dispatcherTimer.Stop();
-            BackspaceKeyHoldClicked?.Invoke(this, new VirtualKeyboardBackspaceKeyHoldClickedEventArgs());
-            RaiseKeyClickedEvent("HoldBackspace");
+            var vCtrlKey = KeyInterop.VirtualKeyFromKey(Key.LeftCtrl);
+            var vBackKey = KeyInterop.VirtualKeyFromKey(Key.Back);
+            var vscanCtrl = MapVirtualKey((uint) vCtrlKey, 0);
+            var vscanBack = MapVirtualKey((uint) vBackKey, 0);
+            
+            keybd_event((byte)vCtrlKey, (byte)vscanCtrl, 0, UIntPtr.Zero);
+            keybd_event((byte)vBackKey, (byte) vscanBack, 0, UIntPtr.Zero);
+            keybd_event((byte)vBackKey, (byte) vscanBack, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            keybd_event((byte)vCtrlKey, (byte) vscanCtrl, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            
         }
 
 
         private void NumpadKey_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Control control)) return;
-            var key = control.Tag as string;
+            var key = (Key)control.Tag;
             RaiseKeyClickedEvent(key);
+            var vKey = KeyInterop.VirtualKeyFromKey(key);
+            keybd_event((byte)vKey, 0, 0, UIntPtr.Zero);
         }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
         public event VirtualKeyboardKeyClickedEventHandler KeyClicked
         {
@@ -86,7 +104,7 @@ namespace FastPosFrontend.SL.Controls
 
         public event EventHandler<VirtualKeyboardBackspaceKeyHoldClickedEventArgs> BackspaceKeyHoldClicked;
 
-        private void RaiseKeyClickedEvent(string key)
+        private void RaiseKeyClickedEvent(Key key)
         {
             RaiseEvent(new VirtualKeyboardKeyClickedEventArgs(KeyClickedEvent,this,key));
         }
@@ -110,16 +128,16 @@ namespace FastPosFrontend.SL.Controls
 
     public class VirtualKeyboardKeyClickedEventArgs : RoutedEventArgs
     {
-        public VirtualKeyboardKeyClickedEventArgs(string key)
+        public VirtualKeyboardKeyClickedEventArgs(Key key)
         {
             Key = key;
         }
 
-        public VirtualKeyboardKeyClickedEventArgs(RoutedEvent routedEvent, object source, string key) : base(routedEvent, source)
+        public VirtualKeyboardKeyClickedEventArgs(RoutedEvent routedEvent, object source, Key key) : base(routedEvent, source)
         {
             Key = key;
         }
 
-        public string Key { get;  private set; }
+        public Key Key { get;  private set; }
     }
 }

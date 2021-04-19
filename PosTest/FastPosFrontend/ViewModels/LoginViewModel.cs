@@ -11,6 +11,7 @@ using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
@@ -165,10 +166,10 @@ namespace FastPosFrontend.ViewModels
             if (!(target is PasswordBox pincodeBox)) return;
             switch (e.Key)
             {
-                case "Enter":
+                case Key.Enter:
                     Login();
                     return;
-                case "Backspace":
+                case Key.Back:
                 {
                     var pincode = pincodeBox.Password;
                     pincodeBox.Password = String.IsNullOrEmpty(pincode)
@@ -177,7 +178,7 @@ namespace FastPosFrontend.ViewModels
                     Password = pincodeBox.Password;
                     return;
                 }
-                case "HoldBackspace":
+                case 0:
                     pincodeBox.Password = string.Empty;
                     Password = pincodeBox.Password;
                     return;
