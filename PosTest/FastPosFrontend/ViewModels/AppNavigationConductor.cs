@@ -11,6 +11,7 @@ namespace FastPosFrontend.ViewModels
     {
         private BindableCollection<AppNavigationLookupItem> _appNavigationItems;
         private AppNavigationLookupItem _selectedNavigationItem;
+        private AppScreen _activeScreen;
 
         public AppNavigationConductor()
         {
@@ -31,6 +32,12 @@ namespace FastPosFrontend.ViewModels
         {
             get => _appNavigationItems;
             set => Set(ref _appNavigationItems, value);
+        }
+
+        public AppScreen ActiveScreen
+        {
+            get => _activeScreen;
+            set => Set(ref _activeScreen, value);
         }
 
         public Dictionary<Type,T> KeepAliveScreens { get; protected set; }
@@ -118,19 +125,22 @@ namespace FastPosFrontend.ViewModels
 
         private void ActivateScreenByType(T screenInstance)
         {
-            if (screenInstance is Screen screen)
+            if (screenInstance is AppScreen screen)
             {
                 screen.Parent = this;
+                //if (ActiveScreen == null||ActiveScreen.CanNavigate())
+                    ActiveScreen = screen;
+                if (screenInstance is LazyScreen lazyScreen)
+                {
+                    lazyScreen.ActivateLoadingScreen();
+                }
+                else
+                {
+                    ActivateItem(screenInstance);
+                }
             }
 
-            if (screenInstance is LazyScreen lazyScreen)
-            {
-                lazyScreen.ActivateLoadingScreen();
-            }
-            else
-            {
-                ActivateItem(screenInstance);
-            }
+            
         }
 
         public virtual void OnLogin()

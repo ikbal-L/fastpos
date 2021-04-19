@@ -13,7 +13,7 @@ namespace FastPosFrontend.Helpers
         void DeactivateLoadingScreen();
     }
 
-    public class AppScreen : Screen, IAppNavigationItem
+    public class AppScreen : Screen, IAppNavigationTarget
     {
         private string _title;
         private EmbeddedCommandBarViewModel _embeddedCommandBar;
@@ -36,6 +36,11 @@ namespace FastPosFrontend.Helpers
             get => _embeddedContentBar;
             set => Set(ref _embeddedContentBar, value);
         }
+
+        public virtual bool CanNavigate()
+        {
+            return true;
+        }
     }
 
     public class EmbeddedCommandBarCommand
@@ -52,8 +57,9 @@ namespace FastPosFrontend.Helpers
         public DelegateCommandBase Command { get; set; }
     }
 
-    public interface IAppNavigationItem
+    public interface IAppNavigationTarget
     {
+        bool CanNavigate();
     }
 
     public class AppNavigationLookupItem : PropertyChangedBase

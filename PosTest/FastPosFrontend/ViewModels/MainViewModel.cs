@@ -16,7 +16,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isLoggedIn ;
         private bool _isDbServerOn;
         private bool _isBackendServerOn;
-        private AppScreen _activeScreen;
+        
 
         public MainViewModel()
         {
@@ -53,11 +53,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _isBackendServerOn, value);
         }
 
-        public AppScreen ActiveScreen
-        {
-            get => _activeScreen;
-            set => Set(ref _activeScreen, value);
-        }
+        
 
 
 
@@ -99,7 +95,7 @@ namespace FastPosFrontend.ViewModels
             LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};
             //UserSettingsViewModel userSettingsViewModel = new UserSettingsViewModel() { Parent = this };
             //ActivateItem(userSettingsViewModel);
-            ActivateItem(toActivateViewModel);
+            NavigateToItem(new AppNavigationLookupItem("Login",target:typeof(LoginViewModel)));
 
             //splashScreen.Close();
         }
