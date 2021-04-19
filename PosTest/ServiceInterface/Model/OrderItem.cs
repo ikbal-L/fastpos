@@ -203,7 +203,7 @@ namespace ServiceInterface.Model
 
         public bool CanAddAdditives
         { 
-            get => Product.IsPlatter && Product.Additives != null;
+            get => (Product!= null) && Product.IsPlatter && Product.Additives != null;
             set
             {
                 _canAddAdditives = value;
