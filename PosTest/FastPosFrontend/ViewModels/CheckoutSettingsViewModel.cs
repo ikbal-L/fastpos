@@ -534,6 +534,7 @@ namespace FastPosFrontend.ViewModels
 
                 selectedProduct.Category = null;
                 selectedProduct.CategoryId = null;
+                selectedProduct.Rank = null;
                 StateManager.Save<Product>(selectedProduct);
             }
             catch (AggregateException)
