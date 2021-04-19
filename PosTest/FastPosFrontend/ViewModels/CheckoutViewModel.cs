@@ -687,6 +687,8 @@ namespace FastPosFrontend.ViewModels
             else
             {
                 CurrentOrder = order;
+                CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
+                CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
             }
             
             //DisplayedOrder = order;
