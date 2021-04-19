@@ -44,8 +44,8 @@
             </ResourceDictionary.MergedDictionaries>
 
 
-            <FontFamily x:Key="DigitalFontFamily">/PosTest;Component/Fonts/#digital-7</FontFamily>
-            <FontFamily x:Key="DSDIGIFontFamily">/PosTest;Component/Fonts/#DS-DIGI</FontFamily>
+            <FontFamily x:Key="DigitalFontFamily">/FastPosFrontend;Component/Fonts/#digital-7</FontFamily>
+            <FontFamily x:Key="DSDIGIFontFamily">/FastPosFrontend;Component/Fonts/#DS-DIGI</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
