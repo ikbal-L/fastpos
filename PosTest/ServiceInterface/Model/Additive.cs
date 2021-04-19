@@ -37,7 +37,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Required(ErrorMessage = "Name must not be Null or Empty")]
-        [MinLength(5,ErrorMessage = "Name must not be under 5 charac")]
+        [MinLength(5, ErrorMessage = "Name must not be under 5 charac")]
         public string Description
         {
             get => _description;
@@ -63,17 +63,16 @@ namespace ServiceInterface.Model
 
             set
             {
-                Set(ref _background, (SolidColorBrush)value);
+                Set(ref _background, (SolidColorBrush) value);
                 if (value != null)
                 {
                     Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
-
                 }
                 else
                 {
                     Set(ref _backgroundString, null);
-
                 }
+
                 NotifyOfPropertyChange(nameof(IsDark));
                 NotifyOfPropertyChange(nameof(Background));
             }
@@ -88,7 +87,6 @@ namespace ServiceInterface.Model
                     additive.BackgroundString == BackgroundString;
             return result;
         }*/
-
 
 
         public override bool Equals(object other)
@@ -112,13 +110,8 @@ namespace ServiceInterface.Model
             }
         }
 
-     
 
-        public override string ToString()
-        {
-            return Description + " ";
-        }
-   public Additive Clone()
+        public Additive Clone()
         {
             return new Additive()
             {
@@ -133,8 +126,13 @@ namespace ServiceInterface.Model
                 Rank = this.Rank
             };
         }
+        public override string ToString()
+        {
+            return $"{Description}";
+        }
     }
-   
+
+
     public enum AdditiveState
     {
         Added,

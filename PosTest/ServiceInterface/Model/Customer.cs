@@ -69,5 +69,9 @@ namespace ServiceInterface.Model
                 Set(ref _mobile, value);
             }
         }
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
     }    
 }

@@ -9,28 +9,30 @@ namespace FastPosFrontend.Helpers
 {
     public class ResponseHandler : IResponseHandler
     {
-        
         static ResponseHandler()
         {
             Handler = new ResponseHandler();
         }
 
         public static IResponseHandler Handler { get; }
-        public void Handle<T>(int status,IEnumerable<string> errors,StateManagementAction action,string source = "",bool overrideDefaultBehaviour = false,string identifier = "",T obj = null) where T:class
+
+        public void Handle<T>(int status, IEnumerable<string> errors, StateManagementAction action, string source = "",
+            bool overrideDefaultBehaviour = false, T obj = null) where T : class
         {
             var type = typeof(T);
-            object entityIdentifier = null;
-            if (!string.IsNullOrEmpty(identifier)&& obj!= null)
-            {
-                entityIdentifier =type.GetProperty(identifier)?.GetValue(obj);
-            }
-            var successMessage = obj == null? $"{action}d {type.Name}(s) Successfully": $"{action}d {type.Name} {entityIdentifier} Successfully"
+
+            var successMessage = obj == null
+                    ? $"{action}d {type.Name}(s) Successfully"
+                    : $"{action}d {type.Name} {obj} Successfully"
                 ;
             var errorsString = JsonConvert.SerializeObject(errors, new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented
             });
-            var errorMessage = $" [{(HttpStatusCode)status}]: Unable to {action} {type.Name}(s)";
+            var errorMessage = obj == null
+                ? $" [{(HttpStatusCode) status}]: Unable to {action} {type.Name}(s)"
+                : $" [{(HttpStatusCode) status}]: Unable to {action} {type.Name} {obj}";
+            ;
             switch (status)
             {
                 case 200:
@@ -38,11 +40,12 @@ namespace FastPosFrontend.Helpers
 
                     if (action != StateManagementAction.Retrieve || overrideDefaultBehaviour)
                     {
-                        ToastNotification.Notify(successMessage, NotificationType.Success); 
+                        ToastNotification.Notify(successMessage, NotificationType.Success);
                     }
+
                     break;
                 case 204:
-                    ToastNotification.Notify($"No {type.Name}s to {action}",NotificationType.Information);
+                    ToastNotification.Notify($"No {type.Name}s to {action}", NotificationType.Information);
                     break;
                 case 409:
                     ToastNotification.Notify($"The {type.Name} you added already exists");
@@ -63,6 +66,4 @@ namespace FastPosFrontend.Helpers
             }
         }
     }
-
-    
 }

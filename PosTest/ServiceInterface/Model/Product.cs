@@ -320,5 +320,10 @@ namespace ServiceInterface.Model
         {
             throw new NotImplementedException();
         }
+
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
     }
 }

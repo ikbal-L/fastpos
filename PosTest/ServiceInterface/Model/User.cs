@@ -153,6 +153,11 @@ namespace ServiceInterface.Model
             get => _enabled;
             set => Set(ref _enabled, value);
         }
+
+        public override string ToString()
+        {
+            return $"{Username}";
+        }
     }
 
    
@@ -197,6 +202,11 @@ namespace ServiceInterface.Model
         [DataMember]
         [JsonProperty("PrivilegeIds")]
         public List<long> PrivilegeIds { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
     }
 
     [DataContract]
@@ -210,6 +220,11 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public string[] Permissions { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
 
     }
 

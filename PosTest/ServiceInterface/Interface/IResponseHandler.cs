@@ -5,7 +5,7 @@ namespace ServiceInterface.Interface
     public interface IResponseHandler
     {
         void Handle<T>(int status, IEnumerable<string> errors, StateManagementAction action, string source = "",
-            bool overrideDefaultBehaviour = false, string identifier = "", T obj = null) where T : class;
+            bool overrideDefaultBehaviour = false, T obj = null) where T : class;
     }
     public enum StateManagementAction
     {
