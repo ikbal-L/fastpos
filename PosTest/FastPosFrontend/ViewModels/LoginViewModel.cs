@@ -149,49 +149,38 @@ namespace FastPosFrontend.ViewModels
             Password = (sender as PasswordBox)?.Password;
             if (string.IsNullOrEmpty(Username))
             {
-                ToastNotification.Notify("Enter a Password First", NotificationType.Error);
+                ToastNotification.Notify("Enter a Username First", NotificationType.Error);
                 return;
             }
 
             if (string.IsNullOrEmpty(Password))
             {
-                ToastNotification.Notify("Enter a Password First",NotificationType.Error);
+                ToastNotification.Notify("Enter a Password First");
                 return;
             }
             Login();
         }
 
-        public void SetPinCode(object target,VirtualKeyboardKeyClickedEventArgs e)
+
+        public void SetPinCodeAndLogin(object sender)
         {
-            if (!(target is PasswordBox pincodeBox)) return;
-            switch (e.Key)
+            Password = (sender as PasswordBox)?.Password;
+            Pincode = (sender as PasswordBox)?.Password;
+            if (string.IsNullOrEmpty(Username))
             {
-                case Key.Enter:
-                    Login();
-                    return;
-                case Key.Back:
-                {
-                    var pincode = pincodeBox.Password;
-                    pincodeBox.Password = String.IsNullOrEmpty(pincode)
-                        ? String.Empty
-                        : pincode.Remove(pincode.Length - 1);
-                    Password = pincodeBox.Password;
-                    return;
-                }
-                case 0:
-                    pincodeBox.Password = string.Empty;
-                    Password = pincodeBox.Password;
-                    return;
+                ToastNotification.Notify("Enter a Username First");
+                return;
             }
 
-            pincodeBox.Password += e.Key;
-            Password = pincodeBox.Password;
+            if (string.IsNullOrEmpty(Password))
+            {
+                ToastNotification.Notify("Enter a Pincode First");
+                return;
+            }
+            Login();
         }
 
-        public void BackToLogin()
-        {
-            Password = string.Empty;
-        }
+
 
 
         protected override void OnActivate()

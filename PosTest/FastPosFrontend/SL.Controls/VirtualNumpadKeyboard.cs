@@ -20,6 +20,8 @@ namespace FastPosFrontend.SL.Controls
 
         public static readonly RoutedEvent KeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(KeyClicked),
             RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
+        public readonly RoutedEvent EnterKeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(EnterKeyClicked),
+            RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
 
         static VirtualNumpadKeyboard()
         {
@@ -40,7 +42,13 @@ namespace FastPosFrontend.SL.Controls
             }
 
             _numpadKeyEnterButton = this.Template.FindName("Part_Numpad_Key_Enter_Button", this) as Button;
-            if (_numpadKeyEnterButton != null) _numpadKeyEnterButton.Click += NumpadKey_Click;
+            if (_numpadKeyEnterButton != null)
+            {
+                _numpadKeyEnterButton.Click += NumpadKey_Click;
+                _numpadKeyEnterButton.Focusable = true;
+            }
+                
+            
             _numpadKeyBackspaceButton = this.Template.FindName("Part_Numpad_Key_Backspace_Button", this) as Button;
             if (_numpadKeyBackspaceButton != null)
             {
@@ -102,11 +110,21 @@ namespace FastPosFrontend.SL.Controls
             remove => RemoveHandler(KeyClickedEvent, value);
         }
 
+        public event VirtualKeyboardKeyClickedEventHandler EnterKeyClicked
+        {
+            add => AddHandler(EnterKeyClickedEvent, value);
+            remove => RemoveHandler(EnterKeyClickedEvent, value);
+        }
+
         public event EventHandler<VirtualKeyboardBackspaceKeyHoldClickedEventArgs> BackspaceKeyHoldClicked;
 
         private void RaiseKeyClickedEvent(Key key)
         {
             RaiseEvent(new VirtualKeyboardKeyClickedEventArgs(KeyClickedEvent,this,key));
+            if (key == Key.Enter)
+            {
+                RaiseEvent(new VirtualKeyboardKeyClickedEventArgs(EnterKeyClickedEvent,this,Key.Enter));
+            }
         }
     }
 
