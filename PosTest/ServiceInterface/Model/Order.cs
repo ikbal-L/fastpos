@@ -63,6 +63,9 @@ namespace ServiceInterface.Model
         [DataMember(IsRequired = true)] 
         public long? Id { get; set; }
 
+        [DataMember]
+        public int Number { get; set; }
+
         [DataMember] public string BuyerId { get; set; }
 
         [DataMember]

@@ -79,11 +79,11 @@
             <StackPanel>
                 <DockPanel>
                     <DockPanel.Width>
-                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="Width"
                                  Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="395" />
                     </DockPanel.Width>
                     <DockPanel.Height>
-                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="Height"
                                  Converter="{StaticResource ProductTemplateHeightConverter}"
                                  ConverterParameter="313,195,70" />
                     </DockPanel.Height>

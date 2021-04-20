@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
@@ -55,6 +56,7 @@ namespace FastPosFrontend.ViewModels
 
 
         private Order _currentOrder;
+        private int orderCount = 1;
 
         //private Order _displayedOrder;
         private Table _selectedTable;
@@ -123,7 +125,20 @@ namespace FastPosFrontend.ViewModels
             
         ) : base()
         {
-            this.Title = "Checkout";
+            if (AppConfigurationManager.Configuration.ContainsKey("OrderCountModifiedDate"))
+            {
+                var dateString = AppConfigurationManager.Configuration["OrderCountModifiedDate"];
+                if (DateTime.Today.ToString("yyyy-MM-dd").Equals(dateString))
+                {
+                    var count = AppConfigurationManager.Configuration["OrderCount"];
+                    orderCount = int.Parse(count);
+                }
+                else
+                {
+                    orderCount = 1;
+                }
+            }
+            
             SetupEmbeddedCommandBar();
             SetupEmbeddedStatusBar();
 
@@ -723,7 +738,9 @@ namespace FastPosFrontend.ViewModels
             ProductsVisibility = true;
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
-            CurrentOrder = new Order(this.Orders);
+            CurrentOrder = new Order(this.Orders){Number = orderCount};
+            orderCount++;
+
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
             //OrderItemsCollectionViewSource.View.Refresh();
             CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
@@ -2026,6 +2043,13 @@ namespace FastPosFrontend.ViewModels
             }
 
             return true;
+        }
+
+        protected override void OnDeactivate(bool close)
+        {
+            AppConfigurationManager.Save("OrderCountModifiedDate", DateTime.Today.ToString("yyyy-MM-dd"));
+            AppConfigurationManager.Save("OrderCount", orderCount);
+            base.OnDeactivate(close);
         }
     }
 }
