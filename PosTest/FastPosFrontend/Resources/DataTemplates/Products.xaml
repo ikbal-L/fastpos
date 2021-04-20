@@ -27,9 +27,16 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DockPanel
-                    Height="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualHeight,Converter={StaticResource ProductTemplateHeightConverter}}"
-                    Width="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualWidth,Converter={StaticResource ProductTemplateWidthConverter}}"
                     Background="{Binding Background}">
+                    <DockPanel.Width>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
+                                 Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="417,40" />
+                    </DockPanel.Width>
+                    <DockPanel.Height>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
+                                 Converter="{StaticResource ProductTemplateHeightConverter}"
+                                 ConverterParameter="313,85,10" />
+                    </DockPanel.Height>
                     <Border DockPanel.Dock="Top" Height="40">
                         <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
@@ -71,7 +78,17 @@
                 BorderBrush="LightGray" BorderThickness="1">
             <StackPanel>
                 <DockPanel>
-                    <Border DockPanel.Dock="Top" Height="48">
+                    <DockPanel.Width>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
+                                 Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="395" />
+                    </DockPanel.Width>
+                    <DockPanel.Height>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
+                                 Converter="{StaticResource ProductTemplateHeightConverter}"
+                                 ConverterParameter="313,195,70" />
+                    </DockPanel.Height>
+
+                    <Border DockPanel.Dock="Top">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
@@ -196,9 +213,8 @@
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
         <StackPanel Orientation="Vertical" x:Name="AdditiveTemplate" Background="{Binding Background}"
                     cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
-                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]" >
-            <Border BorderBrush="DarkGray" BorderThickness="1"
-                    >
+                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]">
+            <Border BorderBrush="DarkGray" BorderThickness="1">
                 <StackPanel>
                     <DockPanel Height="70" Width="100">
 
@@ -405,5 +421,22 @@
             </ListBox.ItemsPanel>
         </ListBox>
     </DataTemplate>
+
+    <Style x:Key="ListBoxItemDynamicLayoutStyle" TargetType="ListBoxItem">
+        <Setter Property="Width">
+            <Setter.Value>
+                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
+                         Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="395" />
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Height">
+            <Setter.Value>
+                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
+                         Converter="{StaticResource ProductTemplateHeightConverter}"
+                         ConverterParameter="313,195,70" />
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

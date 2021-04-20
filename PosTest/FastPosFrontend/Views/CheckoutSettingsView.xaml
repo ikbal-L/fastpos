@@ -301,15 +301,16 @@
             <Grid>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="360" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <materialdesign:Snackbar Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"
                                          HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-                <TabControl Style="{StaticResource MaterialDesignTabControl}"
-                            SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
-                            caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]">
+                <TabControl
+                    Style="{StaticResource MaterialDesignTabControl}"
+                    SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
+                    caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]">
                     <TabItem x:Name="CategoriesTabItem" Tag="{Binding AllCategories}" TabIndex="0"
                              HeaderTemplate="{StaticResource CategoryTabItemHeaderTemplate}">
 
@@ -427,7 +428,7 @@
                                                                      Converter="{StaticResource LessThanValueConverter}"
                                                                      ConverterParameter="4" />
                                                         </DataTrigger.Binding>
-                                                        <Setter Property="LastChildFill" Value="False"></Setter>
+                                                        <Setter Property="LastChildFill" Value="False" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -515,8 +516,7 @@
                                             </ListBox.ItemContainerStyle>
                                             <ListBox.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <UniformGrid Columns="{Binding ProductLayout.Columns}"
-                                                                 Rows="{Binding ProductLayout.Rows}" />
+                                                    <WrapPanel />
                                                 </ItemsPanelTemplate>
                                             </ListBox.ItemsPanel>
                                         </ListBox>
@@ -567,11 +567,11 @@
                                                         </Style.Triggers>-->
                                                             </Style>
                                                         </Border.Style>
-                                                        <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding Name}"
+                                                        <TextBlock FontWeight="Bold" FontSize="16"
+                                                                   Text="{Binding Name}"
                                                                    HorizontalAlignment="Center"
                                                                    VerticalAlignment="Center"
-                                                                   ToolTip="{Binding Description}"
-                                                                   >
+                                                                   ToolTip="{Binding Description}">
                                                             <TextBlock.Style>
                                                                 <Style TargetType="TextBlock">
                                                                     <Style.Triggers>

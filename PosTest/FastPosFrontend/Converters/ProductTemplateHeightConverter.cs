@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using FastPosFrontend.Helpers;
@@ -12,7 +13,10 @@ namespace FastPosFrontend.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            var conv = new LengthConverter();
             var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
+            var values = (parameter as string)?.Split(',')
+                .Select(s => (double) conv.ConvertFromString(s));
             var configuration = Manager.LoadSettings();
             int rows = 5;
             if (configuration!= null)
@@ -21,12 +25,13 @@ namespace FastPosFrontend.Converters
             }
 
 
-            var conv = new LengthConverter();
-            var ordersViewHeight =  (double)conv.ConvertFromString("313px");
-            var topBannerHeight = (double)conv.ConvertFromString("85px");
-            var extra = (double)conv.ConvertFromString("30px");
+            
+            //var ordersViewHeight =  (double)conv.ConvertFromString("313px");
+            //var topBannerHeight = (double)conv.ConvertFromString("85px");
+            //var extra = (double)conv.ConvertFromString("30px");
             var windowHeight = (double)value;
-            var newHeight = (windowHeight - ordersViewHeight - topBannerHeight - extra)/rows;
+            //var newHeight = (windowHeight - ordersViewHeight - topBannerHeight - extra)/rows;
+            var newHeight = (windowHeight - values.Sum())/rows;
             return newHeight;
         }
 
@@ -49,11 +54,12 @@ namespace FastPosFrontend.Converters
             }
 
             var conv = new LengthConverter();
-            var orderItemListWidth = (double)conv.ConvertFromString("417px");
-            var extra = (double)conv.ConvertFromString("50px");
+            var values = (parameter as string)?.Split(',')
+                .Select(s => (double)conv.ConvertFromString(s));
+            
             var windowWidth = (double)value;
 
-            var newWidth = (windowWidth - orderItemListWidth - extra) / cols;
+            var newWidth = (windowWidth - values.Sum()) / cols;
             return newWidth;
         }
 
