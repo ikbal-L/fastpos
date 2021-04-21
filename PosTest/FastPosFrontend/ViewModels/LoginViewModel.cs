@@ -164,6 +164,8 @@ namespace FastPosFrontend.ViewModels
 
         public void SetPinCodeAndLogin(object sender)
         {
+            
+
             Password = (sender as PasswordBox)?.Password;
             Pincode = (sender as PasswordBox)?.Password;
             if (string.IsNullOrEmpty(Username))
@@ -266,7 +268,7 @@ namespace FastPosFrontend.ViewModels
                 _loginHistory.LastLoggedUserId = (long)user.Id;
             }
             var sm = new SettingsManager<LoginHistory>("login.history.json");
-            sm.SaveSettings(_loginHistory);
+            AppConfigurationManager.Save(_loginHistory);
 
             (this.Parent as MainViewModel).IsLoggedIn = true;
                 //(this.Parent as MainViewModel).IsLoggedIn = true;
@@ -393,8 +395,7 @@ namespace FastPosFrontend.ViewModels
 
         private void LoadLoginHistory()
         {
-             _loginHistoryManager = new SettingsManager<LoginHistory>("login.history.json");
-            var history = _loginHistoryManager.LoadSettings();
+            var history = AppConfigurationManager.Configuration<LoginHistory>();
             Users = history?.Users == null ? 
                 new ObservableCollection<User>() : 
                 new ObservableCollection<User>(history.Users);
@@ -414,7 +415,7 @@ namespace FastPosFrontend.ViewModels
             {
                 Users.Remove(user);
             }
-            _loginHistoryManager.SaveSettings(_loginHistory);
+            AppConfigurationManager.Save(_loginHistory);
         }
     }
 

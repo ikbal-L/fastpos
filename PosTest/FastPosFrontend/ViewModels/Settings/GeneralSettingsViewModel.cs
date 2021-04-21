@@ -32,8 +32,7 @@ namespace FastPosFrontend.ViewModels.Settings
         public GeneralSettingsViewModel() {
             //this.Index = 1;
             this.Title = "General";
-            Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
-            var setting = Manager.LoadSettings();
+            var setting = AppConfigurationManager.Configuration<GeneralSettings>();
             Settings = setting ?? new GeneralSettings();
             Settings.PropertyChanged += Settings_PropertyChanged;
             Settings.Initialized = true;
@@ -43,7 +42,7 @@ namespace FastPosFrontend.ViewModels.Settings
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            Manager.SaveSettings(this.Settings);
+            AppConfigurationManager.Save(Settings);
         }
     }
     public class GeneralSettings: PropertyChangedBase

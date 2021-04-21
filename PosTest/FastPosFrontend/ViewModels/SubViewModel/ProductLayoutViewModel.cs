@@ -13,19 +13,12 @@ namespace FastPosFrontend.ViewModels.SubViewModel
 
         public ProductLayoutViewModel()
         {
-            Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
-            var configuration = Manager.LoadSettings();
-            _configuration = configuration;
-            if (_configuration == null)
-            {
-                _configuration = new ProductLayoutConfiguration(){Columns = 0,Rows = 0};
-            }
+           ;
+            _configuration = AppConfigurationManager.Configuration<ProductLayoutConfiguration>() ?? new ProductLayoutConfiguration(){Columns = 6,Rows = 5};
 
             Columns = _configuration.Columns;
             Rows = _configuration.Rows;
         }
-
-        public SettingsManager<ProductLayoutConfiguration> Manager { get; set; }
 
         [JsonProperty]
         public int Columns
@@ -47,7 +40,7 @@ namespace FastPosFrontend.ViewModels.SubViewModel
         {
             _configuration.Rows = Rows;
             _configuration.Columns = Columns;
-            Manager.SaveSettings(_configuration);
+            AppConfigurationManager.Save(_configuration);
         }
 
         

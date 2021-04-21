@@ -125,18 +125,13 @@ namespace FastPosFrontend.ViewModels
             
         ) : base()
         {
-            if (AppConfigurationManager.Configuration.ContainsKey("OrderCountModifiedDate"))
+            if (AppConfigurationManager.ContainsKey("OrderCountModifiedDate"))
             {
-                var dateString = AppConfigurationManager.Configuration["OrderCountModifiedDate"];
-                if (DateTime.Today.ToString("yyyy-MM-dd").Equals(dateString))
-                {
-                    var count = AppConfigurationManager.Configuration["OrderCount"];
-                    orderCount = int.Parse(count);
-                }
-                else
-                {
-                    orderCount = 1;
-                }
+                var dateString = AppConfigurationManager.Configuration<string>("OrderCountModifiedDate");
+                orderCount = DateTime.Today.ToString("yyyy-MM-dd")
+                    .Equals(dateString)
+                    ? Convert.ToInt32(AppConfigurationManager.Configuration("OrderCount"))
+                    : 1;
             }
             
             SetupEmbeddedCommandBar();
@@ -155,8 +150,8 @@ namespace FastPosFrontend.ViewModels
             MaxProductPageSize = pageSize;
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
-            var manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
-            var configuration = manager.LoadSettings();
+            var configuration = AppConfigurationManager.Configuration<GeneralSettings>();
+            
             if (configuration != null)
             {
                 itemsPerCategoryPage = configuration.NumberCategores;
