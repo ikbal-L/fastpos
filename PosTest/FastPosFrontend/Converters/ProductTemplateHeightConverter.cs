@@ -11,26 +11,26 @@ namespace FastPosFrontend.Converters
 {
     public class ProductTemplateHeightConverter : IValueConverter
     {
+        private readonly LengthConverter _lengthConverter = new LengthConverter();
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var conv = new LengthConverter();
-            var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
             var values = (parameter as string)?.Split(',')
-                .Select(s => (double) conv.ConvertFromString(s));
-            var configuration = Manager.LoadSettings();
+                .Select(s =>
+                {
+                    var length = _lengthConverter.ConvertFromString(s);
+                    if (length != null) return (double)length;
+                    return default;
+                });
+            var configuration = AppConfigurationManager.Configuration<ProductLayoutConfiguration>();
             int rows = 5;
             if (configuration!= null)
             {
                 rows = configuration.Rows;
             }
 
-
-            
-            //var ordersViewHeight =  (double)conv.ConvertFromString("313px");
-            //var topBannerHeight = (double)conv.ConvertFromString("85px");
-            //var extra = (double)conv.ConvertFromString("30px");
             var windowHeight = (double)value;
-            //var newHeight = (windowHeight - ordersViewHeight - topBannerHeight - extra)/rows;
             var newHeight = (windowHeight - values.Sum())/rows;
             return newHeight;
         }
@@ -43,19 +43,26 @@ namespace FastPosFrontend.Converters
 
     public class ProductTemplateWidthConverter : IValueConverter
     {
+        private LengthConverter _lengthConverter;
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
-            var configuration = Manager.LoadSettings();
-            int cols = 6;
+            
+            var configuration = AppConfigurationManager.Configuration<ProductLayoutConfiguration>();
+            var cols = 6;
             if (configuration != null)
             {
                 cols = configuration.Columns;
             }
 
-            var conv = new LengthConverter();
+            _lengthConverter = new LengthConverter();
             var values = (parameter as string)?.Split(',')
-                .Select(s => (double)conv.ConvertFromString(s));
+                .Select(s =>
+                {
+                    var length = _lengthConverter.ConvertFromString(s);
+                    if (length != null) return (double)length ;
+                    return default;
+                });
             
             var windowWidth = (double)value;
 
@@ -71,10 +78,12 @@ namespace FastPosFrontend.Converters
 
     public class CategoryTemplateWidthConverter : IValueConverter
     {
+        private readonly LengthConverter _lengthConverter = new LengthConverter();
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var Manager = new SettingsManager<GeneralSettings>("GeneralSettings.json");
-            var configuration = Manager.LoadSettings();
+           
+            var configuration = AppConfigurationManager.Configuration<GeneralSettings>();
             int cols = 6;
             if (configuration != null)
             {                                                               
@@ -85,9 +94,17 @@ namespace FastPosFrontend.Converters
             var orderItemListWidth = (double)conv.ConvertFromString("417px");
             var paginationButtonsWidth = (double) conv.ConvertFromString("70px");
             var extra = (double)conv.ConvertFromString("50px");
+
+            var values = (parameter as string)?.Split(',')
+                .Select(s =>
+                {
+                    var length = _lengthConverter.ConvertFromString(s);
+                    if (length != null) return (double)length;
+                    return default;
+                });
             var windowWidth = (double)value;
 
-            var newWidth = (windowWidth - orderItemListWidth - paginationButtonsWidth - extra) / cols;
+            var newWidth = (windowWidth - values.Sum()) / cols;
             return newWidth;
         }
 

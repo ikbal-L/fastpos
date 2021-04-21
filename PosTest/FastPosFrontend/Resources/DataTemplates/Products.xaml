@@ -30,7 +30,7 @@
                     Background="{Binding Background}">
                     <DockPanel.Width>
                         <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
-                                 Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="417,40" />
+                                 Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="417,10" />
                     </DockPanel.Width>
                     <DockPanel.Height>
                         <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"

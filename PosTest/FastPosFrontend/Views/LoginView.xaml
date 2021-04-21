@@ -217,7 +217,7 @@
                             <Button Style="{StaticResource MaterialDesignFlatButton}"
                                     Content="Back" VerticalAlignment="Bottom"
                                     VerticalContentAlignment="Center"
-                                    Padding="5" Height="50" caliburn:Message.Attach="BackToLogin">
+                                    Padding="5" Height="50">
                                 <Button.Triggers>
                                     <EventTrigger RoutedEvent="Button.Click">
                                         <BeginStoryboard>

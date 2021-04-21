@@ -42,9 +42,6 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>
-                        <!--<Grid ex:ListGridContainerEx.Columns="6">
-                            
-                        </Grid>-->
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

@@ -566,15 +566,19 @@
                             <ItemsControl.ItemTemplate>
                                 <!--caliburn:Message.Attach="[Event Click] = [Action CategorieFiltering($this)]"-->
                                 <DataTemplate DataType="{x:Type models:Category}">
-                                    <Button 
-                                            MinWidth="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ActualWidth,Converter={StaticResource CategoryTemplateWidthConverter}}" 
-                                            Height="60" Background="{Binding Background}"
+                                    <Button
+                                        Height="60" Background="{Binding Background}"
                                             Content="{Binding Name}"
                                             caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
                                             FontWeight="Bold"
                                             FontSize="16"
                                             Padding="3 0 0 5"
                                             Margin="3 0 0 0">
+                                        <Button.MinWidth>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
+                                                     Converter="{StaticResource CategoryTemplateWidthConverter}"
+                                                     ConverterParameter="417,70,75"/>
+                                        </Button.MinWidth>
                                         <Button.Style>
                                             <Style TargetType="Button">
                                                 <Style.Triggers>
