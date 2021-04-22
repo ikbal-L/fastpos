@@ -8,7 +8,7 @@ namespace ServiceInterface.Interface
     public interface IRepository<TState, in TIdentifier> where TState : IState<TIdentifier> where TIdentifier : struct
     {
         (int status, TState) Get(TIdentifier id);
-        (int status, IEnumerable<TState>) Get();
+        (int status, IEnumerable<TState> state) Get();
         (int status, IEnumerable<TState>) Get(string subPath);
         (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids);
         int Save(TState state, out IEnumerable<string> errors);

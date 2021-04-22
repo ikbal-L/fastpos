@@ -52,6 +52,12 @@ namespace ServiceInterface.StaticValues
         public  string Action<T>(EndPoint endPoint, object arg = null, string subPath = "",string resource = null)
         {
             _resource = resource?.ToLowerInvariant() ?? typeof(T).Name.ToLowerInvariant();
+            return Action(_resource, endPoint, arg, subPath);
+        }
+
+        public string Action(string resource, EndPoint endPoint, object arg = null, string subPath = "")
+        {
+            _resource = resource;
             _endpoint = endPoint.ToString();
 
             //var path = $"{_prefix}/{_resource}/{_endpoint.ToLowerInvariant()}/{pathVariable}";

@@ -21,7 +21,7 @@ namespace ServiceLib.Service
             return GenericRest.GetThing<TState>(RestApi.Action<TState>(EndPoint.Get,arg:id));
         }
 
-        public virtual (int status, IEnumerable<TState>) Get()
+        public virtual (int status, IEnumerable<TState> state) Get()
         {
             return GenericRest.GetAll<TState>(RestApi.Action<TState>(EndPoint.GetAll,resource:Resource));
         }
@@ -130,7 +130,7 @@ namespace ServiceLib.Service
     [Export(typeof(IProductRepository))]
     public class ProductRepository : BaseRepository<Product, long>, IProductRepository
     {
-        public override (int status, IEnumerable<Product>) Get()
+        public override (int status, IEnumerable<Product> state) Get()
         {
             var result = GenericRest.GetAll<Product>(RestApi.Action<Product>(EndPoint.GetAll));
             var products = result.Item2.Cast<Product>().ToList();

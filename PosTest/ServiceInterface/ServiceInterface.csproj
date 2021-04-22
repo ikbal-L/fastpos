@@ -112,6 +112,7 @@
     <Compile Include="Model\CashOperation.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\DailyExpenseReport.cs" />
     <Compile Include="Model\DebtPayement.cs" />
     <Compile Include="Model\Discard.cs" />
     <Compile Include="Model\Ingredient.cs" />
