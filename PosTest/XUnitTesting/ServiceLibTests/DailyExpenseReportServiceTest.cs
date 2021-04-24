@@ -30,14 +30,15 @@ namespace XUnitTesting.ServiceLibTests
             var data = new
             {
                 CashRegisterInitialAmount = 5000m,
-                CashRegisterActualAmount = 5700,
+                CashRegisterActualAmount = 5330,
                 Expenses = Array.Empty<decimal>()
             };
             var api = new RestApis();
             var result =
                 GenericRest.PostThing<DailyExpenseReport>(api.Action("dailyExpenseReport", EndPoint.Save), data);
-            Assert.Equal(200, result.status);
+            Assert.Equal(201, result.status);
             Assert.NotNull(result.Item2);
+            Assert.Equal(data.CashRegisterActualAmount,result.Item2.CashRegisterExpectedAmount);
         }
 
 

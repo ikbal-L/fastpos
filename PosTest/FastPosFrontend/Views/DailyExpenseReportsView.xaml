@@ -1,0 +1,284 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.DailyExpenseReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodels="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:converters="clr-namespace:FastPosFrontend.Converters"
+             d:DataContext="{d:DesignInstance Type= vm:DailyExpenseReportsViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignCaptionTextBlock}" x:Key="Caption">
+            <Setter Property="Opacity" Value=".68" />
+        </Style>
+        <converters:NegateBooleanValueConverter x:Key="NegateBooleanValueConverter" />
+    </UserControl.Resources>
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Report Input Data" Margin="20"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+
+                  md:ColorZoneAssist.Mode="PrimaryDark">
+            <Grid Grid.Row="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="10" TextElement.FontSize="16">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border VerticalAlignment="Stretch" Margin="0 5">
+                            <StackPanel Orientation="Horizontal">
+
+                                <TextBlock Text="Work Hours" VerticalAlignment="Bottom"
+                                           Style="{StaticResource Caption}" FontSize="20" />
+                                <md:PackIcon Grid.Column="1" Kind="ClockTimeNineOutline"
+                                             VerticalAlignment="Bottom"
+                                             HorizontalAlignment="Center"
+                                             Width="24" Height="24"
+                                             Margin="5 5" Opacity="0.68" />
+
+                            </StackPanel>
+                        </Border>
+                        <md:TimePicker Grid.Column="1"
+                                       Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
+                                       md:HintAssist.Hint="From" VerticalAlignment="Stretch" Margin="5"
+                                       VerticalContentAlignment="Center" />
+                        <md:TimePicker Grid.Column="2"
+                                       Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
+                                       md:HintAssist.Hint="To" VerticalAlignment="Stretch" Margin="5"
+                                       VerticalContentAlignment="Center" />
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border VerticalAlignment="Stretch" Margin="0 5">
+                            <StackPanel Orientation="Horizontal">
+
+                                <TextBlock Text="Cash Register" VerticalAlignment="Bottom"
+                                           Style="{StaticResource Caption}" FontSize="20" />
+                                <md:PackIcon Grid.Column="1" Kind="CashRegister"
+                                             VerticalAlignment="Bottom"
+                                             HorizontalAlignment="Center"
+                                             Width="24" Height="24"
+                                             Margin="5 5" Opacity="0.68" />
+
+                            </StackPanel>
+                        </Border>
+                        <TextBox Grid.Column="1"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 md:HintAssist.Hint="Initial Amount" VerticalAlignment="Stretch" Margin="5"
+                                 VerticalContentAlignment="Center"
+                                 md:TextFieldAssist.SuffixText="DA" />
+                        <TextBox Grid.Column="2"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 md:HintAssist.Hint="Actual Amount" VerticalAlignment="Stretch" Margin="5"
+                                 VerticalContentAlignment="Center"
+                                 md:TextFieldAssist.SuffixText="DA" />
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border VerticalAlignment="Stretch" Margin="0 5">
+                            <StackPanel Orientation="Horizontal">
+
+                                <TextBlock Text="Expenses" VerticalAlignment="Bottom"
+                                           Style="{StaticResource Caption}" FontSize="20" />
+                                <md:PackIcon Grid.Column="1" Kind="Dollar"
+                                             VerticalAlignment="Bottom"
+                                             HorizontalAlignment="Center"
+                                             Width="24" Height="24"
+                                             Margin="5 5" Opacity="0.68" />
+
+                            </StackPanel>
+                        </Border>
+                        <ListView Grid.Row="1" ItemsSource="{Binding ReportInputData.Expenses}"
+                                  SelectedItem="{Binding SelectedExpense}">
+                            <ListView.Resources>
+                                <Style TargetType="GridViewColumnHeader"
+                                       BasedOn="{StaticResource {x:Type GridViewColumnHeader }}">
+
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                </Style>
+
+                                <Style TargetType="GridViewHeaderRowPresenter">
+                                    <Setter Property="AllowsColumnReorder" Value="False" />
+                                    <Setter Property="AllowDrop" Value="False" />
+                                </Style>
+
+                            </ListView.Resources>
+                            <ListView.View>
+
+                                <GridView AllowsColumnReorder="False">
+
+                                    <GridView.Columns>
+                                        <GridViewColumn Width="180" DisplayMemberBinding="{Binding Description}">
+
+                                            <GridViewColumn.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+
+                                                             md:HintAssist.Hint="Description">
+                                                        <TextBox.Text>
+                                                            <Binding
+                                                                RelativeSource="{RelativeSource AncestorType= ListView}"
+                                                                Path="DataContext.ExpenseDescription"
+                                                                UpdateSourceTrigger="PropertyChanged"
+                                                                ValidatesOnNotifyDataErrors="True" />
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </DataTemplate>
+                                            </GridViewColumn.HeaderTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding Amount}">
+                                            <GridViewColumn.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                             md:HintAssist.Hint="Amount">
+                                                        <TextBox.Text>
+                                                            <Binding
+                                                                RelativeSource="{RelativeSource AncestorType= ListView}"
+                                                                Path="DataContext.ExpenseAmount"
+                                                                TargetNullValue=""
+                                                                UpdateSourceTrigger="PropertyChanged"
+                                                                ValidatesOnNotifyDataErrors="True" />
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </DataTemplate>
+                                            </GridViewColumn.HeaderTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate />
+                                            </GridViewColumn.CellTemplate>
+
+                                            <GridViewColumn.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <Button
+                                                        VerticalAlignment="Center"
+                                                        caliburn:Message.Attach="AddExpense" Content="Add">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button"
+                                                                   BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                                                <Setter Property="IsEnabled" Value="False" />
+                                                                <Style.Triggers>
+
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Value="false">
+                                                                                <Condition.Binding>
+                                                                                    <Binding
+                                                                                        Path="DataContext.IsExpenseFormClear"
+                                                                                        RelativeSource="{RelativeSource AncestorType=ListView}"
+                                                                                        UpdateSourceTrigger="PropertyChanged" />
+                                                                                </Condition.Binding>
+                                                                            </Condition>
+                                                                            <Condition Value="false">
+                                                                                <Condition.Binding>
+                                                                                    <Binding
+                                                                                        Path="DataContext.HasErrors"
+                                                                                        RelativeSource="{RelativeSource AncestorType=ListView}"
+                                                                                        UpdateSourceTrigger="PropertyChanged" />
+                                                                                </Condition.Binding>
+                                                                            </Condition>
+
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <MultiDataTrigger.Setters>
+                                                                            <Setter Property="IsEnabled" Value="True" />
+                                                                        </MultiDataTrigger.Setters>
+                                                                    </MultiDataTrigger>
+
+
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+
+                                                    </Button>
+                                                </DataTemplate>
+                                            </GridViewColumn.HeaderTemplate>
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Width="120">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate />
+                                            </GridViewColumn.CellTemplate>
+
+                                            <GridViewColumn.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <Button VerticalAlignment="Center"
+                                                            Content="Remove">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button"
+                                                                   BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Value="0">
+                                                                        <DataTrigger.Binding>
+                                                                            <Binding
+                                                                                RelativeSource="{RelativeSource AncestorType=ListView}"
+                                                                                Path="SelectedItems.Count" />
+                                                                        </DataTrigger.Binding>
+                                                                        <Setter Property="Button.IsEnabled"
+                                                                            Value="False" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Click">
+                                                                <caliburn:ActionMessage MethodName="RemoveExpense">
+                                                                    <caliburn:Parameter
+                                                                        Value="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItems}" />
+                                                                </caliburn:ActionMessage>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </GridViewColumn.HeaderTemplate>
+
+                                        </GridViewColumn>
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+
+                </Grid>
+
+
+            </Grid>
+        </GroupBox>
+        <GridSplitter Grid.Column="1" Width="2" />
+
+    </Grid>
+</UserControl>
