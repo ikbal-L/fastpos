@@ -273,9 +273,9 @@
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"
                                                IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}"
-                                               >
+                                               LeftDrawerCloseOnClickAway="True">
                                     <md:DrawerHost.LeftDrawerContent>
-                                        <Grid MinWidth="250"  >
+                                        <Grid MinWidth="250" >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="auto" />
@@ -349,9 +349,14 @@
         <WindowChrome GlassFrameThickness="0"
                       CornerRadius="0" />
     </WindowChrome.WindowChrome>
+    <!--<md:DialogHost IsOpen="{Binding IsMainDialogOpen}" >
+
+        <md:DialogHost.DialogContent>
+            <ContentControl cal:View.Model="{Binding MainDialog.ActiveItem}" />
+        </md:DialogHost.DialogContent>
+        
+    </md:DialogHost>-->
     <Grid>
-
         <ContentControl x:Name="ActiveItem" />
-
     </Grid>
 </Window>

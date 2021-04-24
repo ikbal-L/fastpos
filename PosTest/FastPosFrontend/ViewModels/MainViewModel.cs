@@ -13,20 +13,22 @@ namespace FastPosFrontend.ViewModels
 
         private string _windowTitle = WindowTitleDefault;
         private string _buttonStr = "Login";
-        private bool _isLoggedIn ;
+        private bool _isLoggedIn;
         private bool _isDbServerOn;
         private bool _isBackendServerOn;
-        
+        private MainDialog _mainDialog;
+        private bool _isMainDialogOpen;
+
 
         public MainViewModel()
         {
-            IsBackendServerOn =ConnectionHelper.PingHost();
-            IsDbServerOn = ConnectionHelper.PingHost(portNumber:3306);
+            IsBackendServerOn = ConnectionHelper.PingHost();
+            IsDbServerOn = ConnectionHelper.PingHost(portNumber: 3306);
             Associations.Setup();
             StateManager.Instance.HandleErrorsUsing(ResponseHandler.Handler);
         }
 
-        
+
         public bool IsLoggedIn
         {
             get => _isLoggedIn;
@@ -53,9 +55,6 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _isBackendServerOn, value);
         }
 
-        
-
-
 
         public String ButtonStr
         {
@@ -78,6 +77,45 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        public MainDialog MainDialog
+        {
+            get => _mainDialog;
+            set => Set(ref _mainDialog, value);
+        }
+
+        public bool IsMainDialogOpen
+        {
+            get => _isMainDialogOpen;
+            set => Set(ref _isMainDialogOpen, value);
+        }
+
+        public bool OpenDialog<T>() where T : Dialog
+        {
+            var dialog = Activator.CreateInstance<T>();
+            return OpenDialog(dialog);
+        }
+
+        public bool OpenDialog<T>(T dialog) where T : Dialog
+        {
+            MainDialog.ActivateItem(dialog);
+            IsMainDialogOpen = true;
+            return IsMainDialogOpen;
+        }
+
+        public bool CloseDialog<T>(T dialog) where T : Dialog
+        {
+            MainDialog.DeactivateItem(dialog, true);
+            IsMainDialogOpen = false;
+            return !IsMainDialogOpen;
+        }
+
+        public bool CloseDialog()
+        {
+            MainDialog.DeactivateItem(MainDialog.ActiveItem, true);
+            IsMainDialogOpen = false;
+            return !IsMainDialogOpen;
+        }
+
         protected override void OnActivate()
         {
             //var splashScreen = new SplashScreenView();
@@ -92,10 +130,12 @@ namespace FastPosFrontend.ViewModels
             //        splashScreen.Close();
             //    });
             //});
+            MainDialog = new MainDialog();
+            this.ActivateItem(MainDialog);
             LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};
             //UserSettingsViewModel userSettingsViewModel = new UserSettingsViewModel() { Parent = this };
             //ActivateItem(userSettingsViewModel);
-            NavigateToItem(new AppNavigationLookupItem("Login",target:typeof(LoginViewModel)));
+            NavigateToItem(new AppNavigationLookupItem("Login", target: typeof(LoginViewModel)));
 
             //splashScreen.Close();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Windows;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.ViewModels;
@@ -8,7 +9,7 @@ namespace FastPosFrontend.Helpers
 {
     public interface ILazyScreen
     {
-        public bool IsReady { get;}
+        public bool IsReady { get; }
         void ActivateLoadingScreen();
         void DeactivateLoadingScreen();
     }
@@ -43,18 +44,33 @@ namespace FastPosFrontend.Helpers
         }
     }
 
-    public class EmbeddedCommandBarCommand
+    public class EmbeddedCommandBarCommand : GenericCommand
     {
-        public EmbeddedCommandBarCommand(object content, Action<object> executeMethod, Func<object, bool> canExecuteMethod = null)
+        public EmbeddedCommandBarCommand(object content, Action<object> executeMethod,
+            Func<object, bool> canExecuteMethod = null) : base(content, executeMethod, canExecuteMethod)
+        {
+        }
+    }
+
+    public class GenericCommand
+    {
+        public GenericCommand(object content, Action<object> executeMethod, Func<object, bool> canExecuteMethod = null, string style ="")
         {
             Content = content;
-            Command = canExecuteMethod== null ? 
-                new DelegateCommandBase(executeMethod) : 
-                new DelegateCommandBase(executeMethod, canExecuteMethod);
+            Command = canExecuteMethod == null
+                ? new DelegateCommandBase(executeMethod)
+                : new DelegateCommandBase(executeMethod, canExecuteMethod);
+            if (!string.IsNullOrEmpty(style))
+            {
+                Style = Application.Current.FindResource(style) as Style;
+            }
         }
+            
         public object Content { get; set; }
 
         public DelegateCommandBase Command { get; set; }
+
+        public Style Style { get; set; } = null;
     }
 
     public interface IAppNavigationTarget
@@ -70,7 +86,8 @@ namespace FastPosFrontend.Helpers
         private int _index;
 
 
-        public AppNavigationLookupItem(string title, Type target = null,bool keepAlive = false,bool isDefault = false, bool isGroupingItem =false)
+        public AppNavigationLookupItem(string title, Type target = null, bool keepAlive = false, bool isDefault = false,
+            bool isGroupingItem = false)
         {
             _title = title;
             _target = target;
@@ -109,10 +126,10 @@ namespace FastPosFrontend.Helpers
         }
 
         public static explicit operator AppNavigationLookupItem(NavigationItemConfigurationAttribute configuration) =>
-            new AppNavigationLookupItem(configuration.Title, configuration.Target,configuration.KeepAlive,isDefault:configuration.IsDefault);
+            new AppNavigationLookupItem(configuration.Title, configuration.Target, configuration.KeepAlive,
+                isDefault: configuration.IsDefault);
     }
 
-  
 
     public abstract class LazyScreen : AppScreen, ILazyScreen, INotifyViewModelInitialized
     {
@@ -132,7 +149,7 @@ namespace FastPosFrontend.Helpers
         public bool IsReady
         {
             get => _isReady;
-             protected set => Set(ref _isReady, value);
+            protected set => Set(ref _isReady, value);
         }
 
         protected LazyScreen(string loadingMessage, LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
@@ -148,6 +165,7 @@ namespace FastPosFrontend.Helpers
                 DeactivateLoadingScreen();
                 return;
             }
+
             var conductor = Parent as Conductor<object>;
             conductor?.ActivateItem(_loadingScreen);
         }
@@ -170,10 +188,11 @@ namespace FastPosFrontend.Helpers
             {
                 Initialize();
                 IsReady = true;
-
             }
+
             _data.AllTasksCompleted += OnAllTasksCompleted;
         }
+
         protected virtual void OnAllTasksCompleted(object sender, AllTasksCompletedEventArgs e)
         {
             if (!e.IsTaskCollectionCompleted) return;

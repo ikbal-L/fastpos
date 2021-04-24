@@ -279,6 +279,7 @@
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
     <Compile Include="SL.Controls\VirtualNumpadKeyboard.cs" />
+    <Compile Include="ViewModels\AppDialogConductor.cs" />
     <Compile Include="ViewModels\DailyExpenseReportsViewModel.cs" />
     <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
@@ -370,6 +371,9 @@
     </Compile>
     <Compile Include="Views\DailyExpenseReportsView.xaml.cs">
       <DependentUpon>DailyExpenseReportsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenericDialogView.xaml.cs">
+      <DependentUpon>GenericDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeliveryAccounting\AllOrdersView.xaml.cs">
       <DependentUpon>AllOrdersView.xaml</DependentUpon>
@@ -668,6 +672,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DailyExpenseReportsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GenericDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
