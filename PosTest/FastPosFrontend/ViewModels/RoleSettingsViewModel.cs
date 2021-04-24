@@ -5,7 +5,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Role Settings", typeof(RoleSettingsViewModel), groupName: "Settings")]
+    [NavigationItemConfiguration("Role Settings", typeof(RoleSettingsViewModel),parentNavigationItem:typeof(UserSettingsViewModel))]
     public class RoleSettingsViewModel:LazyScreen
     {
         private BindableCollection<Role> _roles;

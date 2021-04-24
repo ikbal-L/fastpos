@@ -55,7 +55,7 @@ namespace ServiceInterface.Model
         [DataMember]
         // [Required(ErrorMessage = "Price is required")]
         // [RegularExpression(@"\-?\d+\.\d+",ErrorMessage = "Product Price must be a Decimal")]
-        [GreaterThan("0")]
+        [Min("1")]
         public decimal Price
         {
             get => _price;

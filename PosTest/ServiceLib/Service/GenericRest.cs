@@ -284,7 +284,7 @@ namespace ServiceLib.Service
         {
             var resp = RestPost(postObject,path);
             T t = default;
-            if (resp.StatusCode == HttpStatusCode.OK)
+            if (resp.StatusCode == HttpStatusCode.OK|| resp.StatusCode == HttpStatusCode.Created)
             {
                 //string s = t.ToString();
                 //                if (t.ToString() is Waiter)

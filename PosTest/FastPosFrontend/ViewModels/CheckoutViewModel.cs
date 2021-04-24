@@ -31,17 +31,19 @@ using Table = ServiceInterface.Model.Table;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration(title:"Checkout",target: typeof(CheckoutViewModel),keepAlive:true,isDefault:true)]
+    [NavigationItemConfiguration(
+        title: Constants.Navigation.Checkout, 
+        target: typeof(CheckoutViewModel),
+        keepAlive: true, isDefault: true)]
     public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>
     {
-        
         #region Private fields
 
         private static readonly bool IsRunningFromXUnit =
             AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.StartsWith("XUnitTesting"));
 
         private static string scanValue;
-        
+
 
         private BindableCollection<Additive> _additvesPage;
         private BindableCollection<Table> _tables;
@@ -93,8 +95,6 @@ namespace FastPosFrontend.ViewModels
 
         #region Constructors
 
-        
-
         void CalculateOrderElapsedTime()
         {
             while (true)
@@ -122,7 +122,6 @@ namespace FastPosFrontend.ViewModels
         }
 
         public CheckoutViewModel(
-            
         ) : base()
         {
             if (AppConfigurationManager.ContainsKey("OrderCountModifiedDate"))
@@ -133,7 +132,7 @@ namespace FastPosFrontend.ViewModels
                     ? Convert.ToInt32(AppConfigurationManager.Configuration("OrderCount"))
                     : 1;
             }
-            
+
             SetupEmbeddedCommandBar();
             SetupEmbeddedStatusBar();
 
@@ -141,9 +140,10 @@ namespace FastPosFrontend.ViewModels
             var setting = settingsManager.LoadSettings();
             if (setting == null)
             {
-                setting = new ProductLayoutConfiguration() { Rows = 5, Columns = 6 };
+                setting = new ProductLayoutConfiguration() {Rows = 5, Columns = 6};
                 settingsManager.SaveSettings(setting);
             }
+
             var pageSize = setting.NumberOfProducts;
 
             _diff = new Dictionary<int, OrderItem>();
@@ -151,7 +151,7 @@ namespace FastPosFrontend.ViewModels
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
             var configuration = AppConfigurationManager.Configuration<GeneralSettings>();
-            
+
             if (configuration != null)
             {
                 itemsPerCategoryPage = configuration.NumberCategores;
@@ -159,15 +159,13 @@ namespace FastPosFrontend.ViewModels
 
             Setup();
             OnReady();
-          
-            
         }
+
         /// <summary>
         /// The <c>Setup</c> Method sets up tasks to retrieve data and Notifications on task completion 
         /// </summary>
         protected override void Setup()
         {
-
             //var deliveryMen = StateManager.GetAsync<Deliveryman>();
             //var waiters = StateManager.GetAsync<Waiter>();
             //var tables = StateManager.GetAsync<Table>();
@@ -178,8 +176,8 @@ namespace FastPosFrontend.ViewModels
             //var products = StateManager.GetAsync<Product>();
 
 
-
-            _data = new NotifyAllTasksCompletion(categories,unprocessedOrders/*,deliveryMen, waiters, tables, customers, products*/);
+            _data = new NotifyAllTasksCompletion(categories,
+                unprocessedOrders /*,deliveryMen, waiters, tables, customers, products*/);
             //if (_data.IsCompleted)
             //{
             //    Initialize();
@@ -195,26 +193,11 @@ namespace FastPosFrontend.ViewModels
             {
                 Commands = new BindableCollection<EmbeddedCommandBarCommand>()
                 {
-                    new EmbeddedCommandBarCommand(Icon.Get("NewOrder"), o =>
-                    {
-                        NewOrder();
-                    } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("Table"), o =>
-                    {
-                        ShowDrawer(ListKind.Table);
-                    } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("Waiter"), o =>
-                    {
-                        ShowDrawer(ListKind.Waiter);
-                    } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("Delivery"), o =>
-                    {
-                        ShowDrawer(ListKind.Deliverey);
-                    } ),
-                    new EmbeddedCommandBarCommand(Icon.Get("Customer"), o =>
-                    {
-                        ShowDrawer(ListKind.Customer);
-                    } )
+                    new EmbeddedCommandBarCommand(Icon.Get("NewOrder"), o => { NewOrder(); }),
+                    new EmbeddedCommandBarCommand(Icon.Get("Table"), o => { ShowDrawer(ListKind.Table); }),
+                    new EmbeddedCommandBarCommand(Icon.Get("Waiter"), o => { ShowDrawer(ListKind.Waiter); }),
+                    new EmbeddedCommandBarCommand(Icon.Get("Delivery"), o => { ShowDrawer(ListKind.Deliverey); }),
+                    new EmbeddedCommandBarCommand(Icon.Get("Customer"), o => { ShowDrawer(ListKind.Customer); })
                 }
             };
         }
@@ -223,13 +206,13 @@ namespace FastPosFrontend.ViewModels
         {
             this.EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
             {
-               EmbeddedStatusBarTemplate = Application.Current.FindResource("CheckoutStatusBarDataTemplate") as DataTemplate
+                EmbeddedStatusBarTemplate =
+                    Application.Current.FindResource("CheckoutStatusBarDataTemplate") as DataTemplate
             };
         }
 
         public override void Initialize()
         {
-
             //var deliveryMen = _data.GetResult<ICollection<Deliveryman>>();
             //var waiter = _data.GetResult<ICollection<Waiter>>();
             //var tables = _data.GetResult<ICollection<Table>>();
@@ -273,7 +256,6 @@ namespace FastPosFrontend.ViewModels
                 Orders.Add(CurrentOrder);
             }
 
-            
 
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
@@ -282,7 +264,7 @@ namespace FastPosFrontend.ViewModels
             LoadCategoryPages();
 
 
-            PaginatedCategories = new CollectionViewSource { Source = Categories };
+            PaginatedCategories = new CollectionViewSource {Source = Categories};
 
             PaginatedCategories.Filter += PaginatedCategoriesOnFilter;
 
@@ -317,19 +299,20 @@ namespace FastPosFrontend.ViewModels
 
             if (e.PropertyName == nameof(Order.SelectedOrderItem))
             {
-                if (CurrentOrder?.SelectedOrderItem!= null)
+                if (CurrentOrder?.SelectedOrderItem != null)
                 {
                     if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
                     {
                         AdditivesVisibility = false;
                         ProductsVisibility = true;
                     }
+
                     ShowProductAdditives(CurrentOrder?.SelectedOrderItem?.Product);
                 }
             }
         }
 
-        
+
         private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
         {
             var orderItem = e.Item as OrderItem;
@@ -659,11 +642,10 @@ namespace FastPosFrontend.ViewModels
             NotifyOfPropertyChange(() => CurrentOrder);
             switch (resp)
             {
-
                 case true:
                     if (CurrentOrder.State == OrderState.Payed ||
                         CurrentOrder.State == OrderState.Canceled ||
-                        CurrentOrder.State == OrderState.Removed||CurrentOrder.State==OrderState.Delivered)
+                        CurrentOrder.State == OrderState.Removed || CurrentOrder.State == OrderState.Delivered)
                     {
                         RemoveCurrentOrderForOrdersList();
                     }
@@ -686,10 +668,10 @@ namespace FastPosFrontend.ViewModels
 
         public void ShowOrder(Order order)
         {
-            if (order == null ) return;
+            if (order == null) return;
 
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-            if (CurrentOrder== order)
+            if (CurrentOrder == order)
             {
                 CurrentOrder = null;
                 return;
@@ -700,7 +682,7 @@ namespace FastPosFrontend.ViewModels
                 CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
                 CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
             }
-            
+
             //DisplayedOrder = order;
 
             if (order.ShownCategory == null && order.Id != null)
@@ -713,7 +695,7 @@ namespace FastPosFrontend.ViewModels
             SelectedDeliveryman = CurrentOrder.Deliveryman;
             SelectedWaiter = CurrentOrder.Waiter;
             SelectedTable = CurrentOrder.Table;
-            
+
             CurrentCategory = CurrentOrder.ShownCategory;
 
             if (CurrentCategory != null && ProductsPage.Any(p => p?.Category != CurrentCategory))
@@ -733,7 +715,7 @@ namespace FastPosFrontend.ViewModels
             ProductsVisibility = true;
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
-            CurrentOrder = new Order(this.Orders){Number = orderCount};
+            CurrentOrder = new Order(this.Orders) {Number = orderCount};
             orderCount++;
 
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
@@ -764,8 +746,6 @@ namespace FastPosFrontend.ViewModels
                     IsTakeawayViewActive = false;
                     IsDeliveryViewActive = false;
                     IsInWaitingViewActive = false;
-
-
                 }
                 else
                 {
@@ -892,22 +872,25 @@ namespace FastPosFrontend.ViewModels
             loginvm.Parent = this.Parent;
             (this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
-       public void SettingsCommand() {
-           SettingsViewModel settingsViewModel = new SettingsViewModel(this) {Parent = this.Parent};
-           (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+
+        public void SettingsCommand()
+        {
+            SettingsViewModel settingsViewModel = new SettingsViewModel(this) {Parent = this.Parent};
+            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
 
-       public void AccountingCommand()
-       {
-            DeliveryAccountingViewModel vm = new DeliveryAccountingViewModel(){Parent =  this.Parent};
+        public void AccountingCommand()
+        {
+            DeliveryAccountingViewModel vm = new DeliveryAccountingViewModel() {Parent = this.Parent};
             (this.Parent as Conductor<object>).ActivateItem(vm);
         }
 
-       public void UserSettingsCommand()
-       {
-           //UserSettingsViewModel vm = new UserSettingsViewModel() { Parent = this.Parent };
-           //(this.Parent as Conductor<object>).ActivateItem(vm);
-       }
+        public void UserSettingsCommand()
+        {
+            //UserSettingsViewModel vm = new UserSettingsViewModel() { Parent = this.Parent };
+            //(this.Parent as Conductor<object>).ActivateItem(vm);
+        }
+
         IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
         {
             var categories = new HashSet<Category>();
@@ -968,7 +951,8 @@ namespace FastPosFrontend.ViewModels
         public void ShowProductAdditives(Product product)
         {
             AdditivesPage?.Clear();
-            if (product == null||!product.IsPlatter||(product.IsPlatter&& (product.IdAdditives==null|| product.IdAdditives.Count==0))) return;
+            if (product == null || !product.IsPlatter ||
+                (product.IsPlatter && (product.IdAdditives == null || product.IdAdditives.Count == 0))) return;
             var comparer = new Comparer<Additive>();
             var additives = product.Additives.ToList();
             additives.Sort(comparer);
@@ -989,7 +973,7 @@ namespace FastPosFrontend.ViewModels
                 cmd != ActionButton.Takeaway &&
                 cmd != ActionButton.Table &&
                 cmd != ActionButton.Served &&
-                cmd != ActionButton.Del&& cmd != ActionButton.DElIVERED)
+                cmd != ActionButton.Del && cmd != ActionButton.DElIVERED)
             {
                 ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
                 return;
@@ -1035,7 +1019,8 @@ namespace FastPosFrontend.ViewModels
                         NumericZone = "";
                         return;
                     }
-                        PriceAction(ref numericZone, CurrentOrder);
+
+                    PriceAction(ref numericZone, CurrentOrder);
                     NumericZone = numericZone;
                     break;
                 }
@@ -1049,7 +1034,7 @@ namespace FastPosFrontend.ViewModels
                     break;
                 }
                 case ActionButton.Payment:
-                    
+
                     PayementAction();
                     break;
 
@@ -1152,15 +1137,15 @@ namespace FastPosFrontend.ViewModels
                     CurrentOrder.State = OrderState.Served;
                     break;
                 case ActionButton.DElIVERED:
-                    if(CurrentOrder==null)
+                    if (CurrentOrder == null)
                     {
-                        return; 
+                        return;
                     }
+
                     if (CurrentOrder.Type != OrderType.Delivery)
                     {
                         ToastNotification.Notify("Order type must be Delivery", NotificationType.Warning);
                         return;
-                     
                     }
 
                     if (CurrentOrder.Deliveryman == null)
@@ -1168,6 +1153,7 @@ namespace FastPosFrontend.ViewModels
                         ToastNotification.Notify("Must assign a Deliveryman to Order", NotificationType.Warning);
                         return;
                     }
+
                     CurrentOrder.State = OrderState.Delivered;
                     SaveCurrentOrder();
                     break;
@@ -1177,7 +1163,6 @@ namespace FastPosFrontend.ViewModels
 
         private void PayementAction()
         {
-            
             var payedAmount = Convert.ToDecimal(NumericZone);
             if (payedAmount < 0)
             {
@@ -1221,15 +1206,16 @@ namespace FastPosFrontend.ViewModels
 
             var status = 200;
             Table table;
-            if ((table = Tables.FirstOrDefault(t=>t.Number==tableNumber)) == null)
-               
+            if ((table = Tables.FirstOrDefault(t => t.Number == tableNumber)) == null)
+
                 //TODO introduce table by id method in table repository 
-                table =StateManager.Get<Table>(tableNumber);
+                table = StateManager.Get<Table>(tableNumber);
             if (table == null)
             {
                 ToastNotification.Notify("Table not found", NotificationType.Warning);
                 return;
             }
+
             switch (status)
             {
                 case 200:
@@ -1243,10 +1229,9 @@ namespace FastPosFrontend.ViewModels
                 case 400:
                     if (ActionConfig.AllowUsingVirtualTable)
                     {
-                        
-                        if (StateManager.Save<Table>(new Table { IsVirtual = true, Number = tableNumber }))
+                        if (StateManager.Save<Table>(new Table {IsVirtual = true, Number = tableNumber}))
                         {
-                            ToastNotification.Notify("Creation of virtual table",NotificationType.Information);
+                            ToastNotification.Notify("Creation of virtual table", NotificationType.Information);
                             NewOrder();
                         }
                         else
@@ -1274,7 +1259,6 @@ namespace FastPosFrontend.ViewModels
 
             if (table == CurrentOrder?.Table)
             {
-                
                 SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             }
 
@@ -1314,7 +1298,8 @@ namespace FastPosFrontend.ViewModels
 
             if (order.OrderItems.Any((item => item.DiscountAmount > 0)))
             {
-                ToastNotification.Notify("Remove discount from order items in order to change the price of the order", NotificationType.Error);
+                ToastNotification.Notify("Remove discount from order items in order to change the price of the order",
+                    NotificationType.Error);
                 return;
             }
 
@@ -1349,7 +1334,7 @@ namespace FastPosFrontend.ViewModels
             else
             {
                 priceStr = string.Empty;
-                ToastNotification.Notify("New price less than the total price",NotificationType.Warning);
+                ToastNotification.Notify("New price less than the total price", NotificationType.Warning);
             }
 
             priceStr = "";
@@ -1369,7 +1354,9 @@ namespace FastPosFrontend.ViewModels
 
             if (order.OrderItems.Any((item => item.DiscountAmount > 0)))
             {
-                ToastNotification.Notify("Remove discount from order items in order to apply discount on order as a whole",NotificationType.Error);
+                ToastNotification.Notify(
+                    "Remove discount from order items in order to apply discount on order as a whole",
+                    NotificationType.Error);
                 return;
             }
 
@@ -1408,7 +1395,7 @@ namespace FastPosFrontend.ViewModels
             {
                 //Use Local to select message according to UI language
                 discStr = "";
-                ToastNotification.Notify("Discount bigger than total",NotificationType.Warning);
+                ToastNotification.Notify("Discount bigger than total", NotificationType.Warning);
                 //CurrentOrder.DiscountAmount = 0;
                 return;
             }
@@ -1461,7 +1448,7 @@ namespace FastPosFrontend.ViewModels
                     }
                     else
                     {
-                        ToastNotification.Notify("Invalid value for Percentagte",NotificationType.Warning);
+                        ToastNotification.Notify("Invalid value for Percentagte", NotificationType.Warning);
                     }
                 }
                 else
@@ -1492,6 +1479,7 @@ namespace FastPosFrontend.ViewModels
                 ProductsVisibility = true;
                 return;
             }
+
             if (!CurrentOrder.SelectedOrderItem.AddAdditives(additive))
             {
                 CurrentOrder.SelectedOrderItem.SelectedAdditive = null;
@@ -1521,14 +1509,14 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (CurrentOrder.SelectedOrderItem.TimeStamp==null)
+            if (CurrentOrder.SelectedOrderItem.TimeStamp == null)
             {
                 if (_diff.ContainsKey(CurrentOrder.SelectedOrderItem.GetHashCode()))
                 {
                     _diff.Remove(CurrentOrder.SelectedOrderItem.GetHashCode());
                 }
             }
-            
+
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
             if (CurrentOrder.SelectedOrderItem != null)
             {
@@ -1577,7 +1565,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (CurrentOrder.DiscountAmount>0)
+            if (CurrentOrder.DiscountAmount > 0)
             {
                 ToastNotification.Notify("Set order discount to 0 in order to apply a discount to selected order item");
                 NumericZone = "";
@@ -1589,7 +1577,7 @@ namespace FastPosFrontend.ViewModels
             if (param == 0)
             {
                 item.DiscountAmount = item.Product.Price;
-               
+
                 return;
             }
 
@@ -1633,7 +1621,7 @@ namespace FastPosFrontend.ViewModels
             NumericZone = string.Empty;
             if (item.Total < discount)
             {
-                ToastNotification.Notify("Discount Greater Than Price",NotificationType.Warning);
+                ToastNotification.Notify("Discount Greater Than Price", NotificationType.Warning);
                 return;
             }
 
@@ -1656,9 +1644,9 @@ namespace FastPosFrontend.ViewModels
 
         public void DoneScan(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && !string.IsNullOrEmpty(scanValue) )
+            if (e.Key == Key.Enter && !string.IsNullOrEmpty(scanValue))
             {
-                ToastNotification.Notify(scanValue,NotificationType.Information);
+                ToastNotification.Notify(scanValue, NotificationType.Information);
 
                 if (scanValue.Contains("BON"))
                 {
@@ -1701,6 +1689,7 @@ namespace FastPosFrontend.ViewModels
             {
                 OrderManagementHelper.TrackItemForChange(oi, _diff);
             }
+
             OrderItemsCollectionViewSource.View.Refresh();
 
             if (selectedproduct.IsPlatter && selectedproduct.IdAdditives?.Count > 0)
@@ -1792,9 +1781,9 @@ namespace FastPosFrontend.ViewModels
 
         public void SelectDeliveryMan(Deliveryman deliveryman)
         {
-            if (SelectedDeliveryman!= deliveryman)
+            if (SelectedDeliveryman != deliveryman)
             {
-                SelectedDeliveryman = deliveryman; 
+                SelectedDeliveryman = deliveryman;
             }
             else
             {
@@ -1813,6 +1802,7 @@ namespace FastPosFrontend.ViewModels
                 SelectedWaiter = null;
             }
         }
+
         public ListKind ListKind
         {
             get => _listKind;
@@ -1838,12 +1828,13 @@ namespace FastPosFrontend.ViewModels
             FixedDocument document = new FixedDocument();
             FixedPage fixedPage = new FixedPage();
 
-            
+
             DataTemplate dt = null;
             if (source == PrintSource.Checkout)
             {
                 dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
             }
+
             if (source == PrintSource.Kitchen)
             {
                 dt = Application.Current.FindResource("KitchenReceiptDataTemplate") as DataTemplate;
@@ -1857,14 +1848,14 @@ namespace FastPosFrontend.ViewModels
             contentOfPage.Content = _printOrder;
             _diff.Clear();
             var conv = new LengthConverter();
-    
-            double width = (double)conv.ConvertFromString("8cm");
-            
+
+            double width = (double) conv.ConvertFromString("8cm");
+
             double height = document.DocumentPaginator.PageSize.Height;
             contentOfPage.Width = width;
             document.DocumentPaginator.PageSize = new Size(width, height);
-            
-           // fixedPage.Width = contentOfPage.Width;
+
+            // fixedPage.Width = contentOfPage.Width;
             //fixedPage.Height = contentOfPage.Height;
             fixedPage.Children.Add(contentOfPage);
             PageContent pageContent = new PageContent();
@@ -1879,7 +1870,7 @@ namespace FastPosFrontend.ViewModels
             DateTime? recent = CurrentOrder.OrderItems.Max(oi => oi.TimeStamp);
             if (!ChangesMade)
             {
-                ToastNotification.Notify("You made no updates",NotificationType.Information);
+                ToastNotification.Notify("You made no updates", NotificationType.Information);
             }
 
             var value = new Order(order.Orders)
@@ -1921,37 +1912,35 @@ namespace FastPosFrontend.ViewModels
 
         public void PrintDocument(PrintSource source)
         {
-
             // PrintPreview();
 
 
-             FixedDocument fixedDocument = GenerateOrderReceipt(source);
-             var printers=  PrinterSettings.InstalledPrinters.Cast<string>().ToList();
+            FixedDocument fixedDocument = GenerateOrderReceipt(source);
+            var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
             //PrintDialog dialog = new PrintDialog();
             //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
             //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
 
             IList<PrinterItem> printerItems = null;
-           var PrinterItemSetting=  new SettingsManager<List<PrinterItem>>("PrintSettings.json");
-           if (source == PrintSource.Kitchen)
-           {
-               printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedKitchen).ToList();
-           }
+            var PrinterItemSetting = new SettingsManager<List<PrinterItem>>("PrintSettings.json");
+            if (source == PrintSource.Kitchen)
+            {
+                printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedKitchen).ToList();
+            }
 
-           if (source == PrintSource.Checkout)
-           {
-               printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedReceipt).ToList();
-           }
+            if (source == PrintSource.Checkout)
+            {
+                printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedReceipt).ToList();
+            }
 
             foreach (var e in printerItems)
             {
-                if ( printers.Contains(e.Name))
+                if (printers.Contains(e.Name))
                 {
                     PrintDialog dialog = new PrintDialog {PrintQueue = new PrintQueue(new PrintServer(), e.Name)};
                     dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
                 }
             }
-
 
 
             /* printdocumentimageablearea area = null;
@@ -2031,9 +2020,9 @@ namespace FastPosFrontend.ViewModels
 
         public override bool CanNavigate()
         {
-            if (Orders!= null&&Orders.Any(o=>o.Id == null))
+            if (Orders != null && Orders.Any(o => o.Id == null))
             {
-                ToastNotification.Notify("Save orders before Leaving",NotificationType.Warning);
+                ToastNotification.Notify("Save orders before Leaving", NotificationType.Warning);
                 return false;
             }
 

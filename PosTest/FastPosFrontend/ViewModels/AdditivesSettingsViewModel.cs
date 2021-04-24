@@ -17,7 +17,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Additive settings", typeof(AdditivesSettingsViewModel), groupName: "Settings")]
+    [NavigationItemConfiguration("Additive settings", typeof(AdditivesSettingsViewModel), parentNavigationItem:typeof(CheckoutSettingsViewModel))]
     public class AdditivesSettingsViewModel : LazyScreen
     {
         private BindableCollection<Additive> _additives;
