@@ -67,14 +67,16 @@ namespace FastPosFrontend.Helpers
         private string _title;
         private Type _target;
         private BindableCollection<AppNavigationLookupItem> _subItems;
+        private int _index;
 
 
-        public AppNavigationLookupItem(string title, Type target = null,bool keepAlive = false,bool isDefault = false)
+        public AppNavigationLookupItem(string title, Type target = null,bool keepAlive = false,bool isDefault = false, bool isGroupingItem =false)
         {
             _title = title;
             _target = target;
             KeepAlive = keepAlive;
             IsDefault = isDefault;
+            IsGroupingItem = isGroupingItem;
         }
 
         public string Title
@@ -90,12 +92,20 @@ namespace FastPosFrontend.Helpers
         }
 
         public bool KeepAlive { get; set; }
-        public bool IsDefault { get; set; } 
+        public bool IsDefault { get; set; }
+
+        public bool IsGroupingItem { get; set; }
 
         public BindableCollection<AppNavigationLookupItem> SubItems
         {
             get => _subItems;
             set => Set(ref _subItems, value);
+        }
+
+        public int Index
+        {
+            get => _index;
+            set => Set(ref _index, value);
         }
 
         public static explicit operator AppNavigationLookupItem(NavigationItemConfigurationAttribute configuration) =>

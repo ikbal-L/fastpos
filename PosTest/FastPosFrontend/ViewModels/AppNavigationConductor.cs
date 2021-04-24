@@ -40,15 +40,15 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _activeScreen, value);
         }
 
-        public Dictionary<Type,T> KeepAliveScreens { get; protected set; }
+        public Dictionary<Type, T> KeepAliveScreens { get; protected set; }
 
         public virtual void LoadNavigationItems()
         {
-
             var items = LoadSingleItems();
             var groupItems = LoadGroupItems();
             items.AddRange(groupItems);
-            AppNavigationItems = new BindableCollection<AppNavigationLookupItem>(items);
+            var result = items.AssignIndexes();
+            AppNavigationItems = new BindableCollection<AppNavigationLookupItem>(result);
         }
 
         /// <summary>
@@ -57,13 +57,12 @@ namespace FastPosFrontend.ViewModels
         /// <returns></returns>
         protected virtual List<AppNavigationLookupItem> LoadSingleItems()
         {
-            var items = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x => Attribute.IsDefined((MemberInfo) x, typeof(NavigationItemConfigurationAttribute)))
-                .Select(type =>
-                    (NavigationItemConfigurationAttribute)type.GetCustomAttribute(
-                        typeof(NavigationItemConfigurationAttribute)))
-                .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy && string.IsNullOrEmpty(attribute.GroupName))
-                .Select(attribute => (AppNavigationLookupItem)attribute).ToList();
+            var items = GetAppliedAttributes<NavigationItemConfigurationAttribute>(
+                    type => ! IsParentItem(type))
+                .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
+                                    string.IsNullOrEmpty(attribute.GroupName)
+                                    && attribute.ParentNavigationItem == null)
+                .Select(attribute => (AppNavigationLookupItem) attribute).ToList();
             return items;
         }
 
@@ -73,35 +72,78 @@ namespace FastPosFrontend.ViewModels
         /// <returns></returns>
         private protected virtual List<AppNavigationLookupItem> LoadGroupItems()
         {
-            var groupItems = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)))
-                .Select(type =>
-                    (NavigationItemConfigurationAttribute)type.GetCustomAttribute(
-                        typeof(NavigationItemConfigurationAttribute)))
+            var groupItems = 
+                GetAppliedAttributes<NavigationItemConfigurationAttribute>( )
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
-                                    !string.IsNullOrEmpty(attribute.GroupName))
+                                    !string.IsNullOrEmpty(attribute.GroupName
+                                    ))
                 .GroupBy(attribute => attribute.GroupName).Select((grouping) =>
-                    new AppNavigationLookupItem(grouping.Key)
+                    new AppNavigationLookupItem(grouping.Key, isGroupingItem: true)
                     {
                         SubItems = new BindableCollection<AppNavigationLookupItem>(
-                            grouping.Select(attribute => (AppNavigationLookupItem)attribute))
+                            grouping.Select(Selector))
                     }).ToList();
             return groupItems;
         }
 
+        private AppNavigationLookupItem Selector(NavigationItemConfigurationAttribute attribute)
+        {
+            var lookupItem = (AppNavigationLookupItem) attribute;
+            if (IsParentItem(attribute.Target))
+            {
+                lookupItem
+                    .SubItems = new BindableCollection<AppNavigationLookupItem>(GetChildren(attribute.Target));
+            }
+            return lookupItem;
+        }
+
+
+        private IEnumerable<TAttribute> GetAppliedAttributes<TAttribute>(Func<Type,bool> filter = null) where TAttribute : Attribute
+        {
+            var types = Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)));
+            if (filter!= null)
+            {
+                types = types.Where(filter).ToArray();
+            }
+
+            return types
+                .Select(type =>
+                    (TAttribute) type.GetCustomAttribute(
+                        typeof(TAttribute)));
+        }
+
+        private bool IsParentItem(Type target)
+        {
+            var result = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)))
+                .Select(type =>
+                    (NavigationItemConfigurationAttribute) type.GetCustomAttribute(
+                        typeof(NavigationItemConfigurationAttribute)))
+                .Any(attribute => attribute.ParentNavigationItem == target);
+            return result;
+        }
+
+        private IEnumerable<AppNavigationLookupItem> GetChildren(Type type)
+        {
+             return GetAppliedAttributes<NavigationItemConfigurationAttribute>()
+                .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
+                                    string.IsNullOrEmpty(attribute.GroupName)
+                                    && attribute.ParentNavigationItem == type).Select(attribute =>(AppNavigationLookupItem)attribute );
+        }
+
         private protected virtual AppNavigationLookupItem LoadDefaultItem()
         {
-           var item = (AppNavigationLookupItem)Assembly.GetExecutingAssembly().GetTypes()
+            var item = (AppNavigationLookupItem) Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)))
                 .Select(type =>
                     (NavigationItemConfigurationAttribute) type.GetCustomAttribute(
                         typeof(NavigationItemConfigurationAttribute)))
                 .FirstOrDefault(attribute => attribute.IsDefault);
-           return item;
-
+            return item;
         }
 
-        //TODO possible cause of issue with loading lazy viewmodel with partially completed collection of tasks 
         public virtual void NavigateToItem(AppNavigationLookupItem navigationItem)
         {
             if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return;
@@ -114,12 +156,13 @@ namespace FastPosFrontend.ViewModels
                     return;
                 }
 
-                var keepAliveScreenInstance = (T)Activator.CreateInstance(navigationItem.Target);
-                KeepAliveScreens.Add(navigationItem.Target,keepAliveScreenInstance);
+                var keepAliveScreenInstance = (T) Activator.CreateInstance(navigationItem.Target);
+                KeepAliveScreens.Add(navigationItem.Target, keepAliveScreenInstance);
                 ActivateScreenByType(keepAliveScreenInstance);
                 return;
             }
-            var screenInstance = (T)Activator.CreateInstance(navigationItem.Target);
+
+            var screenInstance = (T) Activator.CreateInstance(navigationItem.Target);
             ActivateScreenByType(screenInstance);
         }
 
@@ -129,7 +172,7 @@ namespace FastPosFrontend.ViewModels
             {
                 screen.Parent = this;
                 //if (ActiveScreen == null||ActiveScreen.CanNavigate())
-                    ActiveScreen = screen;
+                ActiveScreen = screen;
                 if (screenInstance is LazyScreen lazyScreen)
                 {
                     lazyScreen.ActivateLoadingScreen();
@@ -139,8 +182,6 @@ namespace FastPosFrontend.ViewModels
                     ActivateItem(screenInstance);
                 }
             }
-
-            
         }
 
         public virtual void OnLogin()
