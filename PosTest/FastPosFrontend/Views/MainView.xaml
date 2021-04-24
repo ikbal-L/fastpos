@@ -68,9 +68,9 @@
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
 
-                                                        <DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
+                                                        <!--<DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
                                                             <Setter Property="IsEnabled" Value="False"></Setter>
-                                                        </DataTrigger>
+                                                        </DataTrigger>-->
 
                                                         <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                          Value="False">
