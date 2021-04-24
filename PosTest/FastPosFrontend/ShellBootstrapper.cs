@@ -6,6 +6,9 @@ using NLog;
 using FastPosFrontend.ViewModels;
 using System.Windows;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.ViewModels.DeliveryAccounting;
+using FastPosFrontend.ViewModels.Settings;
+using FastPosFrontend.ViewModels.Settings.Customer;
 
 namespace FastPosFrontend
 {
@@ -25,7 +28,21 @@ namespace FastPosFrontend
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            //var splashScreen = new SplashScreenView();
+            NavigationIndexer.ImplicitIndex()
+                .Add<CheckoutViewModel>()
+                .Add<DeliveryAccountingViewModel>()
+                .Add<DailyExpenseReportsViewModel>()
+                .Add(Constants.Navigation.GroupNames.Settings)
+                .Add<CheckoutSettingsViewModel>()
+                .Add<GeneralSettingsViewModel>()
+                .Add<PrintSettingsViewModel>()
+                .Add<UserSettingsViewModel>()
+                .Add<RoleSettingsViewModel>()
+                .Add<AdditivesSettingsViewModel>()
+                .Add<DeliveryManSettingsViewModel>()
+                .Add<WaiterSettingsViewModel>()
+                .Add<CustomerSettingsViewModel>();
+
             //splashScreen.Show();
             //System.Threading.Thread.Sleep(7000);
             //splashScreen.Close();
@@ -35,88 +52,86 @@ namespace FastPosFrontend
             //databaseProcess.StartInfo.UseShellExecute = false;
             //databaseProcess.StartInfo.CreateNoWindow = true;
             //ReadProcessId();
-            var databaseProcess = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    WorkingDirectory = @"C:\xampp",
-                    FileName = @"C:\xampp\mysql_start.bat",
-                    Arguments = "bootrun",
-                    ErrorDialog = true,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
+            //var databaseProcess = new Process()
+            //{
+            //    StartInfo = new ProcessStartInfo()
+            //    {
+            //        WorkingDirectory = @"C:\xampp",
+            //        FileName = @"C:\xampp\mysql_start.bat",
+            //        Arguments = "bootrun",
+            //        ErrorDialog = true,
+            //        CreateNoWindow = true,
+            //        UseShellExecute = false,
 
-                },
-            };
+            //    },
+            //};
 
-            _backendServerProcess = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    WorkingDirectory = @"C:\Users\User\source\fastpos-backend",
-                    FileName = @"C:\Users\User\source\fastpos-backend\gradlew.bat",
-                    Arguments = "bootrun",
-                    ErrorDialog = true,
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-                    
-                }
-            };
-            if (!ConnectionHelper.PingHost(portNumber: 3306))
-            {
-                databaseProcess?.Start();
-            }
+            //_backendServerProcess = new Process()
+            //{
+            //    StartInfo = new ProcessStartInfo()
+            //    {
+            //        WorkingDirectory = @"C:\Users\User\source\fastpos-backend",
+            //        FileName = @"C:\Users\User\source\fastpos-backend\gradlew.bat",
+            //        Arguments = "bootrun",
+            //        ErrorDialog = true,
+            //        CreateNoWindow = true,
+            //        UseShellExecute = false
 
-            if (!ConnectionHelper.PingHost())
-            {
-                _backendServerProcess.Start();
-                //WriteProcessId(_backendServerProcess.Id);
-            }
+            //    }
+            //};
+            //if (!ConnectionHelper.PingHost(portNumber: 3306))
+            //{
+            //    databaseProcess?.Start();
+            //}
 
-            var stopWatch = Stopwatch.StartNew();
-            stopWatch.Start();
-            while (!ConnectionHelper.PingHost())
-            {
-                if (stopWatch.ElapsedMilliseconds >= 30000)
-                {
-                    stopWatch.Stop();
-                    //backendServerProcess.Kill();
-                    break;
-                }
-            }
+            //if (!ConnectionHelper.PingHost())
+            //{
+            //    _backendServerProcess.Start();
+            //    //WriteProcessId(_backendServerProcess.Id);
+            //}
 
-            if (stopWatch.IsRunning)
-            {
-                stopWatch.Stop();
-                DisplayRootViewFor<MainViewModel>();
-            }
-            else
-            {
-                MessageBox.Show("Error! Unable to start the server", "Server Connection Error", MessageBoxButton.OK,MessageBoxImage.Error);
-                this.Application.Shutdown(1);
-            }
+            //var stopWatch = Stopwatch.StartNew();
+            //stopWatch.Start();
+            //while (!ConnectionHelper.PingHost())
+            //{
+            //    if (stopWatch.ElapsedMilliseconds >= 30000)
+            //    {
+            //        stopWatch.Stop();
+            //        //backendServerProcess.Kill();
+            //        break;
+            //    }
+            //}
 
-            //DisplayRootViewFor<MainViewModel>();
-            
+            //if (stopWatch.IsRunning)
+            //{
+            //    stopWatch.Stop();
+            //    DisplayRootViewFor<MainViewModel>();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Error! Unable to start the server", "Server Connection Error", MessageBoxButton.OK,MessageBoxImage.Error);
+            //    this.Application.Shutdown(1);
+            //}
 
-
+            DisplayRootViewFor<MainViewModel>();
         }
 
         protected override void OnExit(object sender, EventArgs e)
         {
             //EXCEPTION
-           
+
             _backendServerProcess.Kill();
             base.OnExit(sender, e);
         }
 
         private static void WriteProcessId(int id)
         {
-            File.WriteAllText($"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}temp_pos.txt",$"{id}");
+            File.WriteAllText($"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}temp_pos.txt", $"{id}");
         }
+
         private static void ReadProcessId()
         {
-            var stringId = File.ReadAllText($"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}temp_pos.txt"); 
+            var stringId = File.ReadAllText($"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}temp_pos.txt");
             ;
             if (int.TryParse(stringId, out var id))
             {
