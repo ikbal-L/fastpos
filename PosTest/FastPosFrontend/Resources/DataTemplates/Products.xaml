@@ -70,7 +70,7 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
+    <!--<DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <Border x:Name="ProductSettingsClick"
                 cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
                 caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this,$eventArgs)]"
@@ -191,7 +191,7 @@
                             <Style.Triggers>
                                 <DataTrigger Value="True">
                                     <DataTrigger.Binding>
-                                        <!--<Binding RelativeSource="{RelativeSource Self}" Converter="{StaticResource EntityIdValueConverter}" ></Binding>-->
+                                        --><!--<Binding RelativeSource="{RelativeSource Self}" Converter="{StaticResource EntityIdValueConverter}" ></Binding>--><!--
                                         <MultiBinding
                                             Converter="{StaticResource MultiValueEqualityConverterWithTestOfNotEmptyProdcut}">
                                             <Binding ElementName="ProductSettingsList" Path="SelectedItem" />
@@ -208,135 +208,272 @@
             </StackPanel>
         </Border>
 
+    </DataTemplate>-->
+
+    <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
+        <Border BorderBrush="DarkGray" BorderThickness="1">
+            <Grid   Background="{Binding Background}"
+                       cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
+                       caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProduct($this)]" >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Border  Height="48">
+                    <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Border>
+                <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom">
+                    <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"
+                            CornerRadius="30" Width="20" Height="20">
+                        <materialdesign:PackIcon Kind="Done" Height="20" Width="20" />
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Hidden" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding
+                                                Converter="{StaticResource EqualToSelectedAndNotEmptyMultiValueConverter}">
+                                                <Binding ElementName="ProductSettingsList"
+                                                         Path="SelectedItem.Rank" />
+                                                <Binding Path="Rank" />
+                                                <Binding Path="Name" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                    <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
+                        <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding
+                                                Converter="{StaticResource MultiValueEqualityConverter}">
+                                                <Binding ElementName="ProductSettingsList"
+                                                         Path="DataContext.ClipboardProduct" />
+                                                <Binding RelativeSource="{RelativeSource self}"
+                                                         Path="DataContext" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <!--Move indicator-->
+                    <Border Width="20" Height="20" DockPanel.Dock="Right">
+                        <materialdesign:PackIcon Height="20" Width="20" Kind="ArrowExpandAll" Padding="0" />
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding
+                                                Converter="{StaticResource MultiValueEqualityConverter}">
+                                                <Binding ElementName="MoveButton" Path="Tag" />
+                                                <Binding RelativeSource="{RelativeSource self}"
+                                                         Path="DataContext" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </DockPanel>
+                <Button Grid.Row="1" 
+                    cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
+                    caliburn:Message.Attach="[Event Click] = [Action CreateProduct()]"
+                    VerticalAlignment="Center" HorizontalAlignment="Center" 
+                    Content="{materialdesign:PackIcon Kind=Plus ,Size=30}">
+
+                    <Button.Style>
+
+                        <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                               TargetType="Button">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding
+                                            Converter="{StaticResource EqualToSelectedAndEmptyMultiValueConverter }">
+                                            <Binding ElementName="ProductSettingsList"
+                                                     Path="SelectedItem.Rank" />
+                                            <Binding Path="Rank" />
+                                            <Binding Path="Name" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+
+            </Grid>
+
+
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="SettingsAdditive">
-        <StackPanel Orientation="Vertical" x:Name="AdditiveTemplate" Background="{Binding Background}"
-                    cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
-                    caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]">
-            <Border BorderBrush="DarkGray" BorderThickness="1">
-                <StackPanel>
-                    <DockPanel Height="70" Width="100">
+        <Border BorderBrush="DarkGray" BorderThickness="1">
+            <Grid   Background="{Binding Background}"
+                       cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
+                       caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+              
+                <Border  Height="48">
+                    <TextBlock Text="{Binding Path=Description}" FontSize="12" TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Border>
+                <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom">
+                    <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"
+                            CornerRadius="30" Width="20" Height="20">
+                        <materialdesign:PackIcon Kind="Done" Height="20" Width="20" />
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Hidden" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding
+                                                Converter="{StaticResource EqualToSelectedAndNotEmptyMultiValueConverter}">
+                                                <Binding ElementName="AdditiveSettingsList"
+                                                         Path="SelectedItem.Rank" />
+                                                <Binding Path="Rank" />
+                                                <Binding Path="Description" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                    <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
+                        <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding
+                                                Converter="{StaticResource MultiValueEqualityConverter}">
+                                                <Binding ElementName="AdditiveSettingsList"
+                                                         Path="DataContext.ClipBoardAdditive" />
+                                                <Binding RelativeSource="{RelativeSource self}"
+                                                         Path="DataContext" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <!--Move indicator-->
+                    <Border Width="20" Height="20" DockPanel.Dock="Right">
+                        <materialdesign:PackIcon Height="20" Width="20" Kind="ArrowExpandAll" Padding="0" />
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding
+                                                Converter="{StaticResource MultiValueEqualityConverter}">
+                                                <Binding ElementName="MoveButton" Path="Tag" />
+                                                <Binding RelativeSource="{RelativeSource self}"
+                                                         Path="DataContext" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </DockPanel>
+                <Button Grid.Row="1" 
+                    cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
+                    caliburn:Message.Attach="[Event Click] = [Action CreateAdditive($this)]"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="35 20"
+                    Content="{materialdesign:PackIcon Kind=Plus ,Size=30}">
+                    
+                    <Button.Style>
+
+                        <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                               TargetType="Button">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding
+                                            Converter="{StaticResource EqualToSelectedAndEmptyMultiValueConverter }">
+                                            <Binding ElementName="AdditiveSettingsList"
+                                                     Path="SelectedItem.Rank" />
+                                            <Binding Path="Rank" />
+                                            <Binding Path="Description" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
 
-                        <Button Width="30" Height="30"
-                                cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
-                                caliburn:Message.Attach="[Event Click] = [Action CreateAdditive($this)]"
-                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="35 20">
-                            <materialdesign:PackIcon Kind="Plus" Height="20" Width="20" />
-                            <Button.Style>
-
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                       TargetType="Button">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                    <Style.Triggers>
-                                        <DataTrigger Value="True">
-                                            <DataTrigger.Binding>
-                                                <MultiBinding
-                                                    Converter="{StaticResource EqualToSelectedAndEmptyMultiValueConverter }">
-                                                    <Binding ElementName="AdditiveSettingsList"
-                                                             Path="SelectedItem.Rank" />
-                                                    <Binding Path="Rank" />
-                                                    <Binding Path="Description" />
-                                                </MultiBinding>
-                                            </DataTrigger.Binding>
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Border DockPanel.Dock="Top" Height="48">
-                            <TextBlock Text="{Binding Path=Description}" FontSize="12" TextWrapping="Wrap"
-                                       TextAlignment="Center"
-                                       VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                                <Setter Property="Foreground" Value="White" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Border>
-                        <DockPanel LastChildFill="False">
-                            <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"
-                                    CornerRadius="30" Width="20" Height="20">
-                                <materialdesign:PackIcon Kind="Done" Height="20" Width="20" />
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                        <Style.Triggers>
-                                            <DataTrigger Value="True">
-                                                <DataTrigger.Binding>
-                                                    <MultiBinding
-                                                        Converter="{StaticResource EqualToSelectedAndNotEmptyMultiValueConverter}">
-                                                        <Binding ElementName="AdditiveSettingsList"
-                                                                 Path="SelectedItem.Rank" />
-                                                        <Binding Path="Rank" />
-                                                        <Binding Path="Description" />
-                                                    </MultiBinding>
-                                                </DataTrigger.Binding>
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
-                            <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
-                                <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                        <Style.Triggers>
-                                            <DataTrigger Value="True">
-                                                <DataTrigger.Binding>
-                                                    <MultiBinding
-                                                        Converter="{StaticResource MultiValueEqualityConverter}">
-                                                        <Binding ElementName="AdditiveSettingsList"
-                                                                 Path="DataContext.ClipBoardAdditive" />
-                                                        <Binding RelativeSource="{RelativeSource self}"
-                                                                 Path="DataContext" />
-                                                    </MultiBinding>
-                                                </DataTrigger.Binding>
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
-
-                            <!--Move indicator-->
-                            <Border Width="20" Height="20" DockPanel.Dock="Right">
-                                <materialdesign:PackIcon Height="20" Width="20" Kind="ArrowExpandAll" Padding="0" />
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                        <Style.Triggers>
-                                            <DataTrigger Value="True">
-                                                <DataTrigger.Binding>
-                                                    <MultiBinding
-                                                        Converter="{StaticResource MultiValueEqualityConverter}">
-                                                        <Binding ElementName="MoveButton" Path="Tag" />
-                                                        <Binding RelativeSource="{RelativeSource self}"
-                                                                 Path="DataContext" />
-                                                    </MultiBinding>
-                                                </DataTrigger.Binding>
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
-                        </DockPanel>
+            </Grid>
 
 
-                    </DockPanel>
-                </StackPanel>
-            </Border>
-        </StackPanel>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditivesOfProductStyle">
