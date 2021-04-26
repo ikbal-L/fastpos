@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.AdditiveDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:conv="clr-namespace:FastPosFrontend.Converters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:SolidColorBrushToColorConverter x:Key="SolidColorBrushToColorConverter"></conv:SolidColorBrushToColorConverter>
+    </UserControl.Resources>
+    <Border Width="450" Height="Auto" BorderThickness="1" 
+            BorderBrush="{DynamicResource PrimaryHueMidBrush}" ClipToBounds="True">
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Margin="20 10">
+                <TextBox materialDesign:HintAssist.Hint="Name"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 10 1 0" FontSize="24"
+                                         Text="{Binding Additive.Description}" />
+            </Border>
+
+            <!--<controls:ColorPalette  Grid.Row="1" CPColorBrush="{Binding Additive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>-->
+            <materialDesign:ColorPicker Grid.Row="1" MinHeight="200"  Margin="20 10"
+                                                        Color="{Binding Additive.Background,Converter={StaticResource SolidColorBrushToColorConverter}}" />
+            <materialDesign:ColorZone Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                            cal:Message.Attach="[Event Click] = [Action SaveAdditive()]">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right"
+                                                                     Width="25" Height="25" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                            cal:Message.Attach="[Event Click] = [Action Cancel()]" Margin="10">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseBox" HorizontalAlignment="Right"
+                                                                     Width="25" Height="25" />
+                        </StackPanel>
+                    </Button>
+                    <TextBlock Text="Edit Aditives" FontSize="16" Margin="10" />
+                </StackPanel>
+            </materialDesign:ColorZone>
+        </Grid>
+    </Border>
+</UserControl>
