@@ -32,6 +32,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isDialogOpen;
         private INotifyPropertyChanged _dialogViewModel;
         private WarningViewModel _warningViewModel;
+       
 
         public AdditivesSettingsViewModel() : this(30)
         {
@@ -99,6 +100,8 @@ namespace FastPosFrontend.ViewModels
             get => _isDialogOpen;
             set => Set(ref _isDialogOpen, value);
         }
+
+        public AdditiveDetailViewModel AdditiveDetailViewMode { get; set; }
 
         public INotifyPropertyChanged DialogViewModel
         {
@@ -221,36 +224,21 @@ namespace FastPosFrontend.ViewModels
             {
                 SelectedAdditive = additive;
             }
-            CopySelectedAdditive = additive.Clone();
-            IsEditing = true;
+            //CopySelectedAdditive = additive.Clone();
+            //IsEditing = true;
+            var mVm = (this.Parent as MainViewModel);
+            AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive, this);
+            mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
+            {
+                AdditiveDetailViewMode = null;
+            });
         }
 
-        public void SaveAdditive()
-        {
-            this.SelectedAdditive.Description = CopySelectedAdditive.Description;
-            this.SelectedAdditive.Background = CopySelectedAdditive.Background;
-            if (StateManager.Save(SelectedAdditive))
-            {
-                
-            }
-            else
-            {
-                if (SelectedAdditive.Id== null)
-                {
-                    SelectedAdditive.Description = null;
-                    SelectedAdditive.Background = null;
-                }
-            }
+        
 
-            CopySelectedAdditive = null;
-            IsEditing = false;
-        }
-
-        public void Cancel()
+        public void Close()
         {
-            CopySelectedAdditive = null;
-            SelectedAdditive = null;
-            IsEditing = false;
+            (this.Parent as MainViewModel)?.CloseDialog(AdditiveDetailViewMode);
         }
 
         public void EditAdditive()
@@ -262,7 +250,14 @@ namespace FastPosFrontend.ViewModels
             }
 
             CopySelectedAdditive = SelectedAdditive.Clone();
-            IsEditing = true;
+            //IsEditing = true;
+            var mVm = (this.Parent as MainViewModel);
+            AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive,this);
+            mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
+            {
+                
+                AdditiveDetailViewMode = null;
+            });
         }
 
         public void CopyAdditive()
