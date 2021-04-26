@@ -48,9 +48,9 @@ namespace FastPosFrontend.ViewModels
         private Category _selectedFreeCategory;
         private Category _categoryToMove;
         private bool _isFlipped;
-        private EditCategoryViewModel _editCategoryViewModel;
+        private CategoryDetailViewModel _categoryDetailViewModel;
         private bool _isCategory;
-        private EditProductViewModel _editProductViewModel;
+        private ProductDetailViewModel _productDetailViewModel;
         private Type _activeTab;
         private ProductLayoutViewModel _productLayout;
         private bool _isDialogOpen;
@@ -61,9 +61,14 @@ namespace FastPosFrontend.ViewModels
         {
             IsDialogOpen = false;
             ProductLayout = new ProductLayoutViewModel();
-            var Manager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
-            var setting = Manager.LoadSettings();
-            var pageSize = setting.NumberOfProducts;
+            ProductLayout.OnLayoutChanged(() =>
+            {
+                _productPageSize = ProductLayout.Configuration.NumberOfProducts;
+                var category = SelectedCategory;
+                SelectedCategory = null;
+                ShowCategoryProducts(category);
+            });
+            var pageSize = ProductLayout.Configuration.NumberOfProducts;
 
             ProductPageSize = pageSize;
             CategoryPageSize = 6;
@@ -142,16 +147,16 @@ namespace FastPosFrontend.ViewModels
         public BindableCollection<object> ToSaveUpdate { get; set; }
         public BindableCollection<Product> ToDeletge { get; set; }
 
-        public EditCategoryViewModel EditCategoryViewModel
+        public CategoryDetailViewModel CategoryDetailViewModel
         {
-            get => _editCategoryViewModel;
-            set => Set(ref _editCategoryViewModel, value);
+            get => _categoryDetailViewModel;
+            set => Set(ref _categoryDetailViewModel, value);
         }
 
-        public EditProductViewModel EditProductViewModel
+        public ProductDetailViewModel ProductDetailViewModel
         {
-            get => _editProductViewModel;
-            set => Set(ref _editProductViewModel, value);
+            get => _productDetailViewModel;
+            set => Set(ref _productDetailViewModel, value);
         }
 
         public bool IsSaveEnabled
@@ -160,9 +165,9 @@ namespace FastPosFrontend.ViewModels
             {
                 if (IsCategory)
                 {
-                    if (EditCategoryViewModel != null)
+                    if (CategoryDetailViewModel != null)
                     {
-                        return !EditCategoryViewModel.HasErrors;
+                        return !CategoryDetailViewModel.HasErrors;
                     }
                     else
                     {
@@ -171,8 +176,8 @@ namespace FastPosFrontend.ViewModels
                 }
                 else
                 {
-                    if (EditProductViewModel != null)
-                    { return !EditProductViewModel.HasErrors;
+                    if (ProductDetailViewModel != null)
+                    { return !ProductDetailViewModel.HasErrors;
                     }
                     else
                     {
@@ -228,10 +233,10 @@ namespace FastPosFrontend.ViewModels
             set
             {
                 Set(ref _selectedProduct, value);
-                if (EditProductViewModel != null)
+                if (ProductDetailViewModel != null)
                 {
-                    this.EditProductViewModel.Source = this.SelectedProduct;
-                    NotifyOfPropertyChange(() => EditProductViewModel);
+                    this.ProductDetailViewModel.Source = this.SelectedProduct;
+                    NotifyOfPropertyChange(() => ProductDetailViewModel);
                 }
 
                 ;
@@ -298,10 +303,10 @@ namespace FastPosFrontend.ViewModels
             set
             {
                 Set(ref _selectedCategory, value);
-                if (EditCategoryViewModel != null)
+                if (CategoryDetailViewModel != null)
                 {
-                    this.EditCategoryViewModel.Source = this.SelectedCategory;
-                    NotifyOfPropertyChange(() => EditCategoryViewModel);
+                    this.CategoryDetailViewModel.Source = this.SelectedCategory;
+                    NotifyOfPropertyChange(() => CategoryDetailViewModel);
                 }
             }
         }
@@ -369,21 +374,37 @@ namespace FastPosFrontend.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
-            //if ( category == SelectedCategory) return;
+            if (category == SelectedCategory) return;
+            SelectedCategory = category;
+            if (category?.Id == null)
+            {
+                CurrentProducts?.Clear();
+                return;
+            }
+            if (CurrentProducts?.Count> ProductPageSize)
+            {
+                foreach (var product in CurrentProducts.ToList())
+                {
+                    if (product.Rank> ProductPageSize)
+                    {
+                        CurrentProducts.Remove(product);
+                    }
+                }
+                return;
+            }
 
-            CurrentProducts.Clear();
-            if (category.Id == null) return;
-            var filteredProducts = _allProducts.Where(p => p.Category == category && p.Rank != null);
+            CurrentProducts?.Clear();
+
+            var filteredProducts = _allProducts.Where(p => p.Category == category && p.Rank != null).ToList();
 
             var comparer = new Comparer<Product>();
-            var listOfFliteredProducts = filteredProducts.ToList();
-            listOfFliteredProducts.Sort(comparer);
-            SelectedCategory = category;
-            RankedItemsCollectionHelper.LoadPagesFilled(source: listOfFliteredProducts, target: CurrentProducts,
+           
+            filteredProducts.Sort(comparer);
+            RankedItemsCollectionHelper.LoadPagesFilled(source: filteredProducts, target: CurrentProducts,
                 size: ProductPageSize, parameter: category);
         }
 
-        public void SelectProdcut(Product product, MouseEventArgs e)
+        public void SelectProduct(Product product)
         {
             SelectedProduct = product;
             if (ProductToMove != null)
@@ -450,14 +471,14 @@ namespace FastPosFrontend.ViewModels
         {
             if (IsCategory)
             {
-                EditCategoryViewModel.SaveCategory();
-                EditCategoryViewModel = null;
+                CategoryDetailViewModel.SaveCategory();
+                CategoryDetailViewModel = null;
                 IsCategory = false;
             }
             else
             {
-                EditProductViewModel.SaveProduct();
-                EditProductViewModel = null;
+                ProductDetailViewModel.SaveProduct();
+                ProductDetailViewModel = null;
             }
 
             IsFlipped = false;
@@ -467,11 +488,11 @@ namespace FastPosFrontend.ViewModels
         {
             if (IsCategory)
             {
-                EditCategoryViewModel = null;
+                CategoryDetailViewModel = null;
             }
             else
             {
-                EditProductViewModel = null;
+                ProductDetailViewModel = null;
             }
 
             IsFlipped = false;
@@ -976,6 +997,8 @@ namespace FastPosFrontend.ViewModels
                 else
                 {
                     SelectedProduct = targetProduct;
+                    if (SelectedProduct == receivedProduct) return;
+                    
                     var targetRank = targetProduct.Rank;
                     var receivedRank = receivedProduct.Rank;
                     targetProduct.Rank = receivedProduct.Rank;
@@ -1068,6 +1091,8 @@ namespace FastPosFrontend.ViewModels
                 {
                     CategoryToMove = incomingCategory;
                     SelectedCategory = targetCategory;
+                    if (SelectedCategory == CategoryToMove) return;
+                   
                     var index = CurrentCategories.IndexOf(CategoryToMove);
                     var cat = new Category() { Rank = CategoryToMove.Rank };
                     if (SelectedCategory.Equals(CategoryToMove))
@@ -1185,19 +1210,25 @@ namespace FastPosFrontend.ViewModels
 
         public void EditProduct()
         {
-            /*  if (SelectedProduct.Id == null)
+            if (SelectedProduct?.Id == null)
             {
                 ToastNotification.Notify("There is no Product to edit, select a valid cell!");
                 return;
-            }*/
+            }
 
-            IsCategory = false;
+
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
-            this.EditProductViewModel = new EditProductViewModel(ref this._selectedProduct);
-            EditProductViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
-            
+            this.ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
+            ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
+                var parent = (this.Parent as MainViewModel);
+            parent?.OpenDialog(ProductDetailViewModel)
+                .OnClose(() =>
+                {
+                    ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
+                    ProductDetailViewModel = null;
+                });
             NotifyOfPropertyChange((() => IsCategory));
-            IsFlipped = true;
+           
         }
 
         public void CreateProduct()
@@ -1212,7 +1243,16 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("Select an empty cell to create a new Product");
                 return;
             }
-            EditProduct();
+            if (SelectedCategory.Id == null || SelectedProduct == null) return;
+            this.ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
+            ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
+            var parent = (this.Parent as MainViewModel);
+            parent?.OpenDialog(ProductDetailViewModel)
+                .OnClose(() =>
+                {
+                    ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
+                    ProductDetailViewModel = null;
+                });
         }
 
         public void EditCategory(bool callFromCreate = false)
@@ -1223,10 +1263,11 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             IsCategory = true;
-            this.EditCategoryViewModel = new EditCategoryViewModel(ref this._selectedCategory);
-            EditCategoryViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
-            
-            IsFlipped = true;
+            this.CategoryDetailViewModel = new CategoryDetailViewModel(ref this._selectedCategory);
+            (this.Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel);
+            //CategoryDetailViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
+
+
         }
 
         public void CreateCategory()
@@ -1246,7 +1287,7 @@ namespace FastPosFrontend.ViewModels
 
         public void SavedProduct()
         {
-            EditProductViewModel = null;
+            ProductDetailViewModel = null;
             IsFlipped = false;
             IsCategory = false;
             if (SelectedProduct?.Id != null)
@@ -1263,8 +1304,8 @@ namespace FastPosFrontend.ViewModels
 
         public void ConfigureProductDisplayLayout()
         {
-            IsDialogOpen = true;
-            ProductLayout.Configuration.PropertyChanged += Configuration_PropertyChanged;
+            
+            (this.Parent as MainViewModel)?.OpenDialog(ProductLayout);
         }
 
         public void ApplyLayoutConfig()
