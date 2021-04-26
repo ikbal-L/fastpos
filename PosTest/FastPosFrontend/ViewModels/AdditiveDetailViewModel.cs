@@ -4,7 +4,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class AdditiveDetailViewModel:Dialog
+    public class AdditiveDetailViewModel:DialogContent
     {
         
 

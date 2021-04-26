@@ -275,422 +275,331 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <materialdesign:DialogHost DialogTheme="Inherit" IsOpen="{Binding IsDialogOpen}" CloseOnClickAway="True">
-        <materialdesign:DialogHost.DialogContent>
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal" Height="60" Margin="10 10 10 0">
-                    <TextBox Width="100" materialdesign:HintAssist.Hint="Columns"
-                             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                             Margin="10" Text="{Binding ProductLayout.Columns}" />
-                    <TextBox Width="100" materialdesign:HintAssist.Hint="Rows"
-                             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                             Margin="10" Text="{Binding ProductLayout.Rows}" />
-
-                </StackPanel>
-                <StackPanel Margin="10  10">
-                    <Button Style="{StaticResource MaterialDesignFlatButton}"
-                            caliburn:Message.Attach="[Event Click] = [Action ApplyLayoutConfig()]">
-                        Apply
-                    </Button>
-                </StackPanel>
-            </StackPanel>
-
-        </materialdesign:DialogHost.DialogContent>
-
+    <Grid>
         <Grid>
-            <Grid>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="360" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <materialdesign:Snackbar Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"
-                                         HorizontalAlignment="Center" VerticalAlignment="Top" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <materialdesign:Snackbar Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"
+                                     HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-                <TabControl
-                    Style="{StaticResource MaterialDesignTabControl}"
-                    SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
-                    caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]">
-                    <TabItem x:Name="CategoriesTabItem" Tag="{Binding AllCategories}" TabIndex="0"
-                             HeaderTemplate="{StaticResource CategoryTabItemHeaderTemplate}">
+            <TabControl
+                Style="{StaticResource MaterialDesignTabControl}"
+                SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
+                caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]">
+                <TabItem x:Name="CategoriesTabItem" Tag="{Binding AllCategories}" TabIndex="0"
+                         HeaderTemplate="{StaticResource CategoryTabItemHeaderTemplate}">
 
-                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
-                                      Padding="5">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-                                <ListBox x:Name="FreeCategorySettingsList" ItemsSource="{Binding FreeCategories}"
-                                         SelectedItem="{Binding SelectedFreeCategory}"
-                                         Grid.IsSharedSizeScope="True" AllowDrop="True"
-                                         caliburn:Message.Attach="[Event MouseMove] = [Action FreeCategoriesList_MouseMove($source, $eventArgs)];
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                                  Padding="5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <ListBox x:Name="FreeCategorySettingsList" ItemsSource="{Binding FreeCategories}"
+                                     SelectedItem="{Binding SelectedFreeCategory}"
+                                     Grid.IsSharedSizeScope="True" AllowDrop="True"
+                                     caliburn:Message.Attach="[Event MouseMove] = [Action FreeCategoriesList_MouseMove($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeCategoriesList_Drop($source, $eventArgs)];
                                          [Event TouchDown] = [Action FreeCategoriesList_TouchDown($source, $eventArgs)];">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                        </Style>
-                                    </ListBox.ItemContainerStyle>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type models:Category}">
-                                            <ContentControl x:Name="cc" Content="{Binding}"
-                                                            ContentTemplate="{DynamicResource freeCategoryListItemTemplate}" />
-                                            <DataTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
-                                                    <Setter TargetName="cc" Property="ContentTemplate"
-                                                            Value="{DynamicResource freeCategoryListSelectedItemTemplate}" />
-                                                </DataTrigger>
-                                            </DataTemplate.Triggers>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <materialdesign:ColorZone Grid.Row="1" Mode="PrimaryMid">
-                                    <TextBlock Margin="16">Gestion Des Categories</TextBlock>
-                                </materialdesign:ColorZone>
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0"
-                                        Margin="0 0 10 -20"
-                                        caliburn:Message.Attach="[Event Click] = [Action DeleteCategory]">
-                                    <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
-                                </Button>
-                            </Grid>
-                        </ScrollViewer>
-                    </TabItem>
-                    <TabItem HeaderTemplate="{StaticResource ProductTabItemHeaderTemplate}" TabIndex="1">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:Category}">
+                                        <ContentControl x:Name="cc" Content="{Binding}"
+                                                        ContentTemplate="{DynamicResource freeCategoryListItemTemplate}" />
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                                                <Setter TargetName="cc" Property="ContentTemplate"
+                                                        Value="{DynamicResource freeCategoryListSelectedItemTemplate}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <materialdesign:ColorZone Grid.Row="1" Mode="PrimaryMid">
+                                <TextBlock Margin="16">Gestion Des Categories</TextBlock>
+                            </materialdesign:ColorZone>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0"
+                                    Margin="0 0 10 -20"
+                                    caliburn:Message.Attach="[Event Click] = [Action DeleteCategory]">
+                                <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                            </Button>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem HeaderTemplate="{StaticResource ProductTabItemHeaderTemplate}" TabIndex="1">
 
-                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
-                                      Padding="5">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}"
-                                         SelectedItem="{Binding SelectedFreeProduct}"
-                                         Grid.IsSharedSizeScope="True" AllowDrop="True"
-                                         caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                                  Padding="5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ListBox x:Name="FreeProductSettingsList" ItemsSource="{Binding FreeProducts}"
+                                     SelectedItem="{Binding SelectedFreeProduct}"
+                                     Grid.IsSharedSizeScope="True" AllowDrop="True"
+                                     caliburn:Message.Attach="[Event PreviewMouseLeftButtonDown] = [Action FreeProductsList_PreviewMouseLeftButtonDown($source, $eventArgs)];
                                                               [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
                                                               [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
                                                               [Event TouchDown] = [Action FreeProductsList_TouchDown($source, $eventArgs)];">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                            <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                        </Style>
-                                    </ListBox.ItemContainerStyle>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type models:Product}">
-                                            <ContentControl x:Name="cc" Content="{Binding}"
-                                                            ContentTemplate="{DynamicResource textBlockTempl}" />
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1">
-                                    <TextBlock Margin="16">Gestion Des Produits</TextBlock>
-                                </materialdesign:ColorZone>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:Product}">
+                                        <ContentControl x:Name="cc" Content="{Binding}"
+                                                        ContentTemplate="{DynamicResource textBlockTempl}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1">
+                                <TextBlock Margin="16">Gestion Des Produits</TextBlock>
+                            </materialdesign:ColorZone>
 
 
-                                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                        Grid.Row="0" Margin="0 0 10 -20"
-                                        caliburn:Message.Attach="[Event Click] = [Action DeleteProduct]">
-                                    <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
-                                </Button>
-                            </Grid>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                    Grid.Row="0" Margin="0 0 10 -20"
+                                    caliburn:Message.Attach="[Event Click] = [Action DeleteProduct]">
+                                <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                            </Button>
+                        </Grid>
 
-                        </ScrollViewer>
-                    </TabItem>
-                </TabControl>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
 
-                <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Disabled" Padding="3.3">
-                    <materialdesign:Flipper IsFlipped="{Binding IsFlipped}"
-                                            Style="{StaticResource MaterialDesignCardFlipper}">
-                        <materialdesign:Flipper.FrontContent>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="2*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                <DockPanel>
+                    <DockPanel.Style>
+                        <Style TargetType="DockPanel">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Value="true">
+                                    <DataTrigger.Binding>
+                                        <Binding Path="ProductLayout.Rows"
+                                                 Converter="{StaticResource LessThanValueConverter}"
+                                                 ConverterParameter="4" />
+                                    </DataTrigger.Binding>
+                                    <Setter Property="LastChildFill" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DockPanel.Style>
 
-                                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled"
-                                              VerticalScrollBarVisibility="Disabled">
-                                    <DockPanel>
-                                        <DockPanel.Style>
-                                            <Style TargetType="DockPanel">
-                                                <Style.Triggers>
-                                                    <DataTrigger
-                                                        Value="true">
-                                                        <DataTrigger.Binding>
-                                                            <Binding Path="ProductLayout.Rows"
-                                                                     Converter="{StaticResource LessThanValueConverter}"
-                                                                     ConverterParameter="4" />
-                                                        </DataTrigger.Binding>
-                                                        <Setter Property="LastChildFill" Value="False" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </DockPanel.Style>
+                    <Grid DockPanel.Dock="Bottom" VerticalAlignment="Top">
+                        <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="0"
+                                                  VerticalAlignment="Bottom">
+                            <TextBlock Margin="16">Gestion Du Menu Produits</TextBlock>
+                        </materialdesign:ColorZone>
 
-                                        <Grid DockPanel.Dock="Bottom" VerticalAlignment="Top">
-                                            <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="0"
-                                                                      VerticalAlignment="Bottom">
-                                                <TextBlock Margin="16">Gestion Du Menu Produits</TextBlock>
-                                            </materialdesign:ColorZone>
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Grid.Row="0" Margin="0 0 10 5"
+                            caliburn:Message.Attach="[Event Click] = [Action CreateProduct()]">
+                            <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
+                        </Button>
 
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                Grid.Row="0" Margin="0 0 10 5"
-                                                caliburn:Message.Attach="[Event Click] = [Action CreateProduct()]">
-                                                <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
-                                            </Button>
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Grid.Row="0" Margin="0 0 60 5"
+                            caliburn:Message.Attach="[Event Click] = [Action EditProduct()]">
+                            <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
+                        </Button>
+                        <Button x:Name="MoveButton"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action MoveProductTo()]"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                Grid.Row="0" Margin="0 0 110 5"
+                                Tag="{Binding ProductToMove}">
+                            <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22" />
+                        </Button>
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Grid.Row="0" Margin="0 0 160 5">
+                            <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
+                        </Button>
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Grid.Row="0" Margin="0 0 210 5">
+                            <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
+                        </Button>
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Grid.Row="0" Margin="0 0 260 5">
+                            <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                        </Button>
 
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                Grid.Row="0" Margin="0 0 60 5"
-                                                caliburn:Message.Attach="[Event Click] = [Action EditProduct()]">
-                                                <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
-                                            </Button>
-                                            <Button x:Name="MoveButton"
-                                                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                    caliburn:Message.Attach="[Event Click] = [Action MoveProductTo()]"
-                                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                    Grid.Row="0" Margin="0 0 110 5"
-                                                    Tag="{Binding ProductToMove}">
-                                                <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22" />
-                                            </Button>
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                Grid.Row="0" Margin="0 0 160 5">
-                                                <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
-                                            </Button>
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                Grid.Row="0" Margin="0 0 210 5">
-                                                <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
-                                            </Button>
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                Grid.Row="0" Margin="0 0 260 5">
-                                                <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
-                                            </Button>
-
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                caliburn:Message.Attach="[Event Click] = [Action ConfigureProductDisplayLayout()]"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                Grid.Row="0" Margin="0 0 310 5">
-                                                <materialdesign:PackIcon Kind="Grid" Height="22" Width="22" />
-                                            </Button>
-                                        </Grid>
-                                        <ListBox x:Name="ProductSettingsList" ItemsSource="{Binding CurrentProducts}"
-                                                 Margin="2"
-                                                 AllowDrop="True"
-                                                 ItemTemplate="{StaticResource SettingsProduct}"
-                                                 SelectedItem="{Binding SelectedProduct}"
-                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                                 caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            caliburn:Message.Attach="[Event Click] = [Action ConfigureProductDisplayLayout()]"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Grid.Row="0" Margin="0 0 310 5">
+                            <materialdesign:PackIcon Kind="Grid" Height="22" Width="22" />
+                        </Button>
+                    </Grid>
+                    <ListBox x:Name="ProductSettingsList" ItemsSource="{Binding CurrentProducts}"
+                             Margin="2"
+                             AllowDrop="True"
+                             ItemTemplate="{StaticResource SettingsProduct}"
+                             SelectedItem="{Binding SelectedProduct}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                            [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
                                                            [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];
                                                            [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
-                                                 Tag="{Binding ClipboardProduct}"
-                                                 DockPanel.Dock="Top">
-                                            <ListBox.ItemContainerStyle>
-                                                <Style TargetType="ListBoxItem">
-                                                    <Setter Property="Padding" Value="0" />
-                                                    <Setter Property="Margin" Value="0" />
-                                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                                </Style>
-                                            </ListBox.ItemContainerStyle>
-                                            <ListBox.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel />
-                                                </ItemsPanelTemplate>
-                                            </ListBox.ItemsPanel>
-                                        </ListBox>
+                             Tag="{Binding ClipboardProduct}"
+                             DockPanel.Dock="Top">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="{Binding ProductLayout.Columns}"
+                                             Rows="{Binding ProductLayout.Rows}" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
 
-                                    </DockPanel>
-                                </ScrollViewer>
-                                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
-                                              VerticalScrollBarVisibility="Disabled" Margin="1 10 0 0">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <ListBox DockPanel.Dock="Left" x:Name="CategoryList" AllowDrop="True"
-                                                 ItemsSource="{Binding CurrentCategories}"
-                                                 SelectedItem="{Binding SelectedCategory}"
-                                                 Margin="5"
-                                                 caliburn:Message.Attach="
+                </DockPanel>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ListBox DockPanel.Dock="Left" x:Name="CategoryList" AllowDrop="True"
+                             ItemsSource="{Binding CurrentCategories}"
+                             Margin="5"
+                             caliburn:Message.Attach="
                                          [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];
                                          [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];
                                                  [Event TouchDown] = [Action CategoriesList_TouchDown($source, $eventArgs)];">
-                                            <ListBox.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <UniformGrid Columns="{x:Static helpers:ProductLayout.Cols}" />
-                                                </ItemsPanelTemplate>
-                                            </ListBox.ItemsPanel>
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate DataType="{x:Type models:Category}">
-                                                    <Border x:Name="catBtn" Height="45" Padding="2" Margin="2"
-                                                            cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
-                                                            caliburn:Message.Attach="
-                                                    [Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]"
-                                                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                                        <Border.Style>
-                                                            <Style TargetType="Border">
-                                                                <Setter Property="Background"
-                                                                        Value="{Binding Background,UpdateSourceTrigger=PropertyChanged}" />
-                                                                <!--<Style.Triggers>
-                                                            <DataTrigger x:Uid="DataTrigger_2" Binding="{Binding Id}" Value="{x:Null}">
-                                                                <Setter  x:Uid="Setter_19" Property="Background">
-                                                                    <Setter.Value>
-                                                                        <SolidColorBrush x:Uid="SolidColorBrush_1" Color="{DynamicResource {x:Static SystemColors.ControlLightColorKey}}"/>
-                                                                    </Setter.Value>
-                                                                </Setter>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="{x:Static helpers:ProductLayout.Cols}" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:Category}">
+                                <Border x:Name="catBtn"
+                                        Height="45" Padding="0"
+                                        cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
+                                        caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]"
+                                        CornerRadius="5"
+                                        Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}" 
+                                        Cursor="Hand" 
+                                        >
+
+                                    <Border 
+                                        BorderBrush="#66000000" 
+                                        BorderThickness="2.5" 
+                                        CornerRadius="5"
+                                        Padding="2">
+                                        <Grid>
+                                            <TextBlock FontWeight="Bold" FontSize="16"
+                                                   Text="{Binding Name}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   ToolTip="{Binding Description}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsDark}"
+                                                                     Value="True">
+                                                                <Setter Property="Foreground" Value="White" />
                                                             </DataTrigger>
-                                                        </Style.Triggers>-->
-                                                            </Style>
-                                                        </Border.Style>
-                                                        <TextBlock FontWeight="Bold" FontSize="16"
-                                                                   Text="{Binding Name}"
-                                                                   HorizontalAlignment="Center"
-                                                                   VerticalAlignment="Center"
-                                                                   ToolTip="{Binding Description}">
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsDark}"
-                                                                            Value="True">
-                                                                            <Setter Property="Foreground" Value="White" />
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                            <ListBox.ItemContainerStyle>
-                                                <Style TargetType="ListBoxItem">
-                                                    <Setter Property="Background" Value="AliceBlue" />
-                                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                                    <Setter Property="Padding" Value="0" />
-                                                    <Setter Property="Margin" Value="0" />
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsSelected" Value="True">
-                                                            <Setter Property="Background" Value="Aqua" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </ListBox.ItemContainerStyle>
-                                        </ListBox>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                
+                                <!--<Setter Property="Background" Value="AliceBlue" />-->
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="5" />
+                                <!--<Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="Red" />
+                                    </Trigger>
+                                </Style.Triggers>-->
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
 
-                                        <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="3" Padding="16">
-                                            <TextBlock VerticalAlignment="Center" FontSize="16">Gestion Du Menu Categories</TextBlock>
-                                        </materialdesign:ColorZone>
+                    <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="3" Padding="16">
+                        <TextBlock VerticalAlignment="Center" FontSize="16">Gestion Du Menu Categories</TextBlock>
+                    </materialdesign:ColorZone>
 
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
-                                                Margin="0 0 10 -20"
-                                                caliburn:Message.Attach="[Event Click] = [Action CreateCategory()]">
-                                            <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
-                                        </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
+                            Margin="0 0 10 -20"
+                            caliburn:Message.Attach="[Event Click] = [Action CreateCategory()]">
+                        <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
+                    </Button>
 
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
-                                                Margin="0 0 60 -20"
-                                                caliburn:Message.Attach="[Event Click] = [Action EditCategory(false)]">
-                                            <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
-                                        </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
+                            Margin="0 0 60 -20"
+                            caliburn:Message.Attach="[Event Click] = [Action EditCategory(false)]">
+                        <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
+                    </Button>
 
-                                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                                caliburn:Message.Attach="[Event Click] = [Action RemoveCategoryFromList()]"
-                                                Grid.Row="2" Margin="0 0 110 -20">
-                                            <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
-                                        </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            caliburn:Message.Attach="[Event Click] = [Action RemoveCategoryFromList()]"
+                            Grid.Row="2" Margin="0 0 110 -20">
+                        <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                    </Button>
 
 
-                                    </Grid>
-                                </ScrollViewer>
-
-                            </Grid>
-
-                        </materialdesign:Flipper.FrontContent>
-                        <materialdesign:Flipper.BackContent>
-                            <Border BorderThickness="1" Margin="10" BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                                    ClipToBounds="True">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="auto" />
-                                    </Grid.RowDefinitions>
-
-                                    <subViews:ProductEditView Grid.Row="0"
-                                                              DataContext="{Binding EditProductViewModel }" />
-
-                                    <Grid Grid.Row="0"
-                                          Visibility="{Binding IsCategory,Converter={StaticResource BooleanToVisibilityConverter}}">
-                                        <subViews:CategoryEditView Grid.Row="0" Background="White"
-
-                                                                   DataContext="{Binding EditCategoryViewModel}" />
-                                    </Grid>
-
-
-                                    <materialdesign:ColorZone Background="#FFAEEA00" Padding="6" Grid.Row="1"
-                                                              Margin="1">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                caliburn:Message.Attach="[Event Click] = [Action Save()]"
-                                                IsEnabled="{Binding IsSaveEnabled}">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <materialdesign:PackIcon Kind="ContentSave"
-                                                                             HorizontalAlignment="Right" Width="25"
-                                                                             Height="25" />
-                                                </StackPanel>
-                                            </Button>
-                                            <Button
-                                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                caliburn:Message.Attach="[Event Click] = [Action Cancel()]" Margin="10">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <materialdesign:PackIcon Kind="CloseBox"
-                                                                             HorizontalAlignment="Right" Width="25"
-                                                                             Height="25" />
-                                                </StackPanel>
-                                            </Button>
-                                            <TextBlock Text="Product Details" FontSize="24" Margin="10"
-                                                       FontWeight="DemiBold" />
-                                        </StackPanel>
-                                    </materialdesign:ColorZone>
-
-                                </Grid>
-                            </Border>
-                        </materialdesign:Flipper.BackContent>
-                    </materialdesign:Flipper>
-                </ScrollViewer>
+                </Grid>
 
 
             </Grid>
 
-        </Grid>
-    </materialdesign:DialogHost>
 
+        </Grid>
+
+    </Grid>
 </UserControl>

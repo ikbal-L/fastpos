@@ -15,7 +15,7 @@ namespace FastPosFrontend.Views
 
         public void onClickToggleButton(object sender, RoutedEventArgs args)
         {
-            //EditProductViewModel editProductViewModel = (EditProductViewModel) this.DataContext;
+            //ProductDetailViewModel editProductViewModel = (ProductDetailViewModel) this.DataContext;
             //editProductViewModel.CheckAdditive(sender,args,);
         }
     }

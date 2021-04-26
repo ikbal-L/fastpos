@@ -28,8 +28,13 @@
             </Border>
 
             <!--<controls:ColorPalette  Grid.Row="1" CPColorBrush="{Binding Additive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>-->
-            <materialDesign:ColorPicker Grid.Row="1" MinHeight="200"  Margin="20 10"
-                                                        Color="{Binding Additive.Background,Converter={StaticResource SolidColorBrushToColorConverter}}" />
+            <materialDesign:ColorPicker Grid.Row="1" MinHeight="200"  Margin="20 10">
+                <materialDesign:ColorPicker.Color>
+                    <Binding 
+                        Path="Additive.Background" 
+                        Converter="{StaticResource SolidColorBrushToColorConverter}" />
+                </materialDesign:ColorPicker.Color>
+            </materialDesign:ColorPicker>
             <materialDesign:ColorZone Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"

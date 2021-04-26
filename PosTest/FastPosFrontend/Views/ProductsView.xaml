@@ -25,7 +25,7 @@
     </FrameworkElement.Resources>
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen}">
         <materialDesign:DialogHost.DialogContent>
-            <subViews:ProductEditView/>
+            <local:ProductDetailView/>
         </materialDesign:DialogHost.DialogContent>
        
         <Grid>
