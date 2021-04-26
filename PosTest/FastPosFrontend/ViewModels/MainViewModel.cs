@@ -89,17 +89,19 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _isMainDialogOpen, value);
         }
 
-        public bool OpenDialog<T>() where T : Dialog
+        public DialogClosedHandler OpenDialog<T>() where T : Dialog
         {
             var dialog = Activator.CreateInstance<T>();
             return OpenDialog(dialog);
         }
 
-        public bool OpenDialog<T>(T dialog) where T : Dialog
+        public DialogClosedHandler OpenDialog<T>(T dialog) where T : Dialog
         {
+            dialog.Parent = MainDialog;
             MainDialog.ActivateItem(dialog);
             IsMainDialogOpen = true;
-            return IsMainDialogOpen;
+            
+            return MainDialog.DialogClosed;
         }
 
         public bool CloseDialog<T>(T dialog) where T : Dialog
