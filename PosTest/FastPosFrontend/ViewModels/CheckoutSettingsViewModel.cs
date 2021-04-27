@@ -1224,8 +1224,11 @@ namespace FastPosFrontend.ViewModels
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {
-                    ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
-                    ProductDetailViewModel = null;
+                    if (ProductDetailViewModel == null)
+                    {
+                        ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
+                        ProductDetailViewModel = null; 
+                    }
                 });
             NotifyOfPropertyChange((() => IsCategory));
            

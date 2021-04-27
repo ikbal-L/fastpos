@@ -383,8 +383,8 @@
     <Compile Include="Views\DailyExpenseReportsView.xaml.cs">
       <DependentUpon>DailyExpenseReportsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GenericDialogView.xaml.cs">
-      <DependentUpon>GenericDialogView.xaml</DependentUpon>
+    <Compile Include="Views\GenericDialogContentView.xaml.cs">
+      <DependentUpon>GenericDialogContentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeliveryAccounting\AllOrdersView.xaml.cs">
       <DependentUpon>AllOrdersView.xaml</DependentUpon>
@@ -697,7 +697,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GenericDialogView.xaml">
+    <Page Include="Views\GenericDialogContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

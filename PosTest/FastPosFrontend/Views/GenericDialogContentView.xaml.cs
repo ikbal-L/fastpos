@@ -18,9 +18,9 @@ namespace FastPosFrontend.Views
     /// <summary>
     /// Interaction logic for GenericDialogView.xaml
     /// </summary>
-    public partial class GenericDialogView : UserControl
+    public partial class GenericDialogContentView : UserControl
     {
-        public GenericDialogView()
+        public GenericDialogContentView()
         {
             InitializeComponent();
         }
