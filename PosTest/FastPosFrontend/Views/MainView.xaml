@@ -55,7 +55,6 @@
                                    
                                         <ToggleButton
                                                 x:Name="AppMenuToggleButton"
-                                                IsChecked="{Binding LeftBarVisibilty ,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                                                 AutomationProperties.Name="HamburgerToggleButton"
                                                 DockPanel.Dock="Left"
                                                 Foreground="WhiteSmoke">
@@ -68,13 +67,17 @@
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
 
-                                                        <!--<DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
+                                                        <DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
                                                             <Setter Property="IsEnabled" Value="False"></Setter>
-                                                        </DataTrigger>-->
+                                                        </DataTrigger>
 
                                                         <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                          Value="False">
                                                             <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MainDialog.IsDialogOpen}"
+                                                                     Value="true">
+                                                            <Setter Property="IsEnabled" Value="False" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
 
@@ -356,7 +359,8 @@
     </WindowChrome.WindowChrome>
   
     <Grid>
-        <md:DialogHost IsOpen="{Binding IsMainDialogOpen}" >
+        <md:DialogHost IsOpen="{Binding MainDialog.IsDialogOpen}" >
+
 
             <md:DialogHost.DialogContent>
                 <ContentControl cal:View.Model="{Binding MainDialog.ActiveItem}" />

@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using FastPosFrontend.ViewModels;
 using FastPosFrontend.ViewModels.SubViewModel;
 
 namespace FastPosFrontend.Helpers

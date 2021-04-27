@@ -715,7 +715,7 @@ namespace FastPosFrontend.ViewModels
             ProductsVisibility = true;
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
-            CurrentOrder = new Order(this.Orders) {Number = orderCount};
+            CurrentOrder = new Order(this.Orders) { OrderNumber = orderCount};
             orderCount++;
 
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;

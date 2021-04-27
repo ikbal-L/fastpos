@@ -20,21 +20,33 @@ namespace Attributes
             DoubleMinValue = doubleMinValue;
         }
 
-        public string GetErrorMessage(object obj, string displayName = "") => $"Value of {displayName} must be Greater  than {obj}.";
+        public string GetErrorMessage(object obj, string displayName = "") => $" Min Value of {displayName} must be {obj}.";
 
 
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             
-            if(value is double doubleValue && doubleValue <= DoubleMinValue)
+            if(value is double doubleValue && doubleValue < DoubleMinValue)
             {
                 return  new ValidationResult(GetErrorMessage(DoubleMinValue,validationContext.DisplayName));
             }
 
-            if (value is decimal decimalValue && decimalValue <= DecimalMinValue)
+            if (value is decimal decimalValue && decimalValue < DecimalMinValue)
             {
                 return new ValidationResult(GetErrorMessage(DecimalMinValue,validationContext.DisplayName));
+            }
+
+            if (value is string stringValue)
+            {
+                if (decimal.TryParse(stringValue,out decimalValue))
+                {
+                    if (decimalValue<DecimalMinValue)
+                    {
+                        return new ValidationResult(GetErrorMessage(DecimalMinValue, validationContext.DisplayName));
+                    }
+                }
+
             }
             
             return ValidationResult.Success;

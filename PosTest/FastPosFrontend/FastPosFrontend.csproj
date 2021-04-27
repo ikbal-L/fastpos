@@ -272,6 +272,10 @@
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\KeyboardKey.cs" />
+    <Compile Include="Extensions\Modifier.cs" />
+    <Compile Include="Extensions\ModifierBase.cs" />
+    <Compile Include="Extensions\ModifierCollection.cs" />
+    <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\Associations.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\Icon.cs" />
@@ -279,7 +283,9 @@
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
     <Compile Include="SL.Controls\VirtualNumpadKeyboard.cs" />
+    <Compile Include="ViewModels\AdditiveDetailViewModel.cs" />
     <Compile Include="ViewModels\AppDialogConductor.cs" />
+    <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportsViewModel.cs" />
     <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
@@ -338,9 +344,9 @@
     <Compile Include="ViewModels\SplitViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\CustomerDetailViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
-    <Compile Include="ViewModels\SubViewModel\EditCategoryViewModel.cs" />
-    <Compile Include="ViewModels\SubViewModel\EditProductViewModel.cs" />
-    <Compile Include="ViewModels\SubViewModel\ProductLayoutViewModel.cs" />
+    <Compile Include="ViewModels\CategoryDetailViewModel.cs" />
+    <Compile Include="ViewModels\ProductDetailViewModel.cs" />
+    <Compile Include="ViewModels\ProductLayoutViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\TakeAwayViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WaitingViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\WarningViewModel.cs" />
@@ -348,6 +354,9 @@
     <Compile Include="ViewModels\UserDetailViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="Events\ViewModelInitializedEventArgs.cs" />
+    <Compile Include="Views\AdditiveDetailView.xaml.cs">
+      <DependentUpon>AdditiveDetailView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AdditivesOfProductView.xaml.cs">
       <DependentUpon>AdditivesOfProductView.xaml</DependentUpon>
     </Compile>
@@ -368,6 +377,9 @@
     </Compile>
     <Compile Include="Views\CustomerView.xaml.cs">
       <DependentUpon>CustomerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DailyExpenseReportInputDataView.xaml.cs">
+      <DependentUpon>DailyExpenseReportInputDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DailyExpenseReportsView.xaml.cs">
       <DependentUpon>DailyExpenseReportsView.xaml</DependentUpon>
@@ -417,6 +429,9 @@
     <Compile Include="Views\PrintView.xaml.cs">
       <DependentUpon>PrintView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ProductLayoutView.xaml.cs">
+      <DependentUpon>ProductLayoutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
     </Compile>
@@ -465,8 +480,8 @@
     <Compile Include="Views\SplitView.xaml.cs">
       <DependentUpon>SplitView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubViews\CategoryEditView.xaml.cs">
-      <DependentUpon>CategoryEditView.xaml</DependentUpon>
+    <Compile Include="Views\CategoryDetailView.xaml.cs">
+      <DependentUpon>CategoryDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\CustomerDetailView.xaml.cs">
       <DependentUpon>CustomerDetailView.xaml</DependentUpon>
@@ -477,8 +492,8 @@
     <Compile Include="Views\SubViews\DelivereyView.xaml.cs">
       <DependentUpon>DelivereyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubViews\ProductEditView.xaml.cs">
-      <DependentUpon>ProductEditView.xaml</DependentUpon>
+    <Compile Include="Views\ProductDetailView.xaml.cs">
+      <DependentUpon>ProductDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\ProductNavigation.xaml.cs">
       <DependentUpon>ProductNavigation.xaml</DependentUpon>
@@ -643,6 +658,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\AdditiveDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AdditivesOfProductView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -670,6 +689,10 @@
     <Page Include="Views\CustomerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DailyExpenseReportInputDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DailyExpenseReportsView.xaml">
       <SubType>Designer</SubType>
@@ -735,6 +758,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\ProductLayoutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProductsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -799,7 +826,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SubViews\CategoryEditView.xaml">
+    <Page Include="Views\CategoryDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -815,7 +842,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SubViews\ProductEditView.xaml">
+    <Page Include="Views\ProductDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

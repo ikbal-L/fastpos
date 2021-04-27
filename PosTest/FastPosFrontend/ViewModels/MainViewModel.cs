@@ -17,7 +17,6 @@ namespace FastPosFrontend.ViewModels
         private bool _isDbServerOn;
         private bool _isBackendServerOn;
         private MainDialog _mainDialog;
-        private bool _isMainDialogOpen;
 
 
         public MainViewModel()
@@ -82,40 +81,26 @@ namespace FastPosFrontend.ViewModels
             get => _mainDialog;
             set => Set(ref _mainDialog, value);
         }
-
-        public bool IsMainDialogOpen
+        
+        public DialogClosedHandler OpenDialog<T>() where T : DialogContent, new()
         {
-            get => _isMainDialogOpen;
-            set => Set(ref _isMainDialogOpen, value);
-        }
-
-        public DialogClosedHandler OpenDialog<T>() where T : Dialog
-        {
-            var dialog = Activator.CreateInstance<T>();
+            var dialog = new T();
             return OpenDialog(dialog);
         }
 
-        public DialogClosedHandler OpenDialog<T>(T dialog) where T : Dialog
+        public DialogClosedHandler OpenDialog<T>(T dialog) where T : DialogContent
         {
-            dialog.Parent = MainDialog;
-            MainDialog.ActivateItem(dialog);
-            IsMainDialogOpen = true;
-            
-            return MainDialog.DialogClosed;
+            return MainDialog.Open(dialog);
         }
 
-        public bool CloseDialog<T>(T dialog) where T : Dialog
+        public bool CloseDialog<T>(T dialog) where T : DialogContent
         {
-            MainDialog.DeactivateItem(dialog, true);
-            IsMainDialogOpen = false;
-            return !IsMainDialogOpen;
+            return MainDialog.Close(dialog);
         }
 
         public bool CloseDialog()
         {
-            MainDialog.DeactivateItem(MainDialog.ActiveItem, true);
-            IsMainDialogOpen = false;
-            return !IsMainDialogOpen;
+            return MainDialog.Close();
         }
 
         protected override void OnActivate()

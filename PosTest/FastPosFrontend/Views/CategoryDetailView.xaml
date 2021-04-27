@@ -98,7 +98,7 @@
                                                  Height="25" />
                     </StackPanel>
                 </Button>
-                <TextBlock Text="Product Details" FontSize="24" Margin="10"
+                <TextBlock Text="Category Details" FontSize="24" Margin="10"
                            FontWeight="DemiBold" />
             </StackPanel>
         </materialDesign:ColorZone>
