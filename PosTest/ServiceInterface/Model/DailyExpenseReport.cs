@@ -6,15 +6,19 @@ using Caliburn.Micro;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class DailyExpenseReport:PropertyChangedBase
+    public class DailyExpenseReport:PropertyChangedBase,IState<long>
     {
+        public long? Id { get; set; }
+
         [DataMember]
         public DateTime IssuedDate { get; set; }
-
+        [DataMember]
         public Dictionary<string, decimal> CashPayments;
 
+        [DataMember]
         public Dictionary<string, decimal> DeliveryPayments;
-        
+
+        [DataMember]
         public Dictionary<string, decimal> Expenses;
 
         [DataMember]
@@ -28,6 +32,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public decimal CashRegisterExpectedAmount { get; set; }
         [DataMember]
-        public decimal CashRegisterActualAmount { get; set; }   
+        public decimal CashRegisterActualAmount { get; set; }
+
     }
 }

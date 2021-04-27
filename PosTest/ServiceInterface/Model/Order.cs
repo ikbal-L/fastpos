@@ -64,7 +64,7 @@ namespace ServiceInterface.Model
         public long? Id { get; set; }
 
         [DataMember]
-        public int Number { get; set; }
+        public int OrderNumber { get; set; }
 
         [DataMember] public string BuyerId { get; set; }
 

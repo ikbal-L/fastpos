@@ -95,4 +95,9 @@ namespace ServiceInterface.Interface
         PageList<Payment> getAllByDeliveryManPage(int pageNumber, int pageSize, long deliverymanId);
         List<Payment> getByDeliveryManAndDate(long deliverymanId, DateTime date);
     }
+
+    public interface IDailyExpenseReportRepository : IRepository<DailyExpenseReport, long>
+    {
+
+    }
 }

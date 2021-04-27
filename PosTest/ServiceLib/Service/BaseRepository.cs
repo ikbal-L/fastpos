@@ -276,4 +276,10 @@ namespace ServiceLib.Service
         }
     }
 
+    [Export(typeof(IDailyExpenseReportRepository))]
+    public class DailyExpenseReportRepository : BaseRepository<DailyExpenseReport, long>, IDailyExpenseReportRepository
+    {
+
+    }
+
 }
