@@ -1,25 +1,17 @@
-﻿using PosTest.Helpers;
-using PosTest.ViewModels.SubViewModel;
-using PosTest.Views.Settings;
-using PosTest.Views.SubViews;
-using ServiceInterface.Model;
-using ServiceLib.Service;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using PosTest.Helpers;
+using PosTest.Views.Settings;
+using PosTest.Views.Settings.Waiter;
 using ServiceLib.Service.StateManager;
 
-namespace PosTest.ViewModels.Settings
+namespace PosTest.ViewModels.Settings.Waiter
 {
     public class WaiterSettengsViewModel: SettingsItemBase
     {
-        private ObservableCollection<Waiter> _Waiters;
+        private ObservableCollection<ServiceInterface.Model.Waiter> _Waiters;
 
-        public ObservableCollection<Waiter> Waiters
+        public ObservableCollection<ServiceInterface.Model.Waiter> Waiters
         {
             get { return _Waiters; }
             set {
@@ -27,9 +19,9 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange((nameof(Waiters)));
             }
         }
-        private Waiter _SelectedWaiter;
+        private ServiceInterface.Model.Waiter _SelectedWaiter;
 
-        public Waiter SelectedWaiter
+        public ServiceInterface.Model.Waiter SelectedWaiter
         {
             get { return _SelectedWaiter; }
             set { _SelectedWaiter = value;
@@ -53,7 +45,7 @@ namespace PosTest.ViewModels.Settings
 
             this.Title = "Waiters";
             this.Content = new WaiterSettingsView() { DataContext = this };
-            Waiters = new ObservableCollection<Waiter>(StateManager.Get<Waiter>());
+            Waiters = new ObservableCollection<ServiceInterface.Model.Waiter>(StateManager.Get<ServiceInterface.Model.Waiter>());
             _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
             _addEditWaiterView = new AddEditWaiterView() { DataContext = _AddEditWaiterViewModel };
             DailogContent = _addEditWaiterView;
@@ -81,7 +73,7 @@ namespace PosTest.ViewModels.Settings
                 DataContext = new DialogViewModel("Are you sure to delete this Waiter?", "Check", "Ok", "Close", "No",
                 (e) =>
                 {
-                    if (StateManager.Delete<Waiter>(SelectedWaiter))
+                    if (StateManager.Delete<ServiceInterface.Model.Waiter>(SelectedWaiter))
                     {
 
                         Waiters.Remove(SelectedWaiter);

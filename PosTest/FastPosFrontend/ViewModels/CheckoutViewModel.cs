@@ -25,6 +25,7 @@ using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
+using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 using Icon = FastPosFrontend.Helpers.Icon;
 using Table = ServiceInterface.Model.Table;

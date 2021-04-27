@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Newtonsoft.Json;
+using ServiceLib.Service;
 using Action = System.Action;
 
 namespace FastPosFrontend.ViewModels

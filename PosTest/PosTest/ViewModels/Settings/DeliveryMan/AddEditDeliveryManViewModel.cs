@@ -1,18 +1,12 @@
-﻿using Caliburn.Micro;
-using PosTest.Extensions;
-using PosTest.Helpers;
-using ServiceInterface.Model;
-using ServiceLib.Service;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Caliburn.Micro;
+using PosTest.Helpers;
 using ServiceInterface.ExtentionsMethod;
+using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace PosTest.ViewModels.Settings
+namespace PosTest.ViewModels.Settings.DeliveryMan
 {
    public class AddEditDeliveryManViewModel : PropertyChangedBase
     {

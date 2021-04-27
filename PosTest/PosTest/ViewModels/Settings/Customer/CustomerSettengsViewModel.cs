@@ -1,25 +1,18 @@
-﻿using PosTest.Helpers;
-using PosTest.ViewModels.SubViewModel;
-using PosTest.Views.Settings;
-using PosTest.Views.SubViews;
-using ServiceInterface.Model;
-using ServiceLib.Service;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
+using PosTest.Helpers;
+using PosTest.Views.Settings;
+using PosTest.Views.Settings.Customer;
 using ServiceLib.Service.StateManager;
 
-namespace PosTest.ViewModels.Settings
+namespace PosTest.ViewModels.Settings.Customer
 {
     public class CustomerSettengsViewModel : SettingsItemBase
     {
-        private ObservableCollection<Customer> _Customers;
+        private ObservableCollection<ServiceInterface.Model.Customer> _Customers;
 
-        public ObservableCollection<Customer> Customers
+        public ObservableCollection<ServiceInterface.Model.Customer> Customers
         {
             get { return _Customers; }
             set {
@@ -50,13 +43,13 @@ namespace PosTest.ViewModels.Settings
             }
         }
 
-        public ObservableCollection<Customer> FilteredCustomers { get => new ObservableCollection<Customer>(Customers.Where(x => (x.Name?.ToLower().Contains(SearchString?.ToLower())??false) || (x.PhoneNumbers?.Any(n => n.ToLower().Contains(SearchString?.ToLower()))??false) || (x.Debit.ToString()?.ToLower().Contains(SearchString?.ToLower()) ??false))); }
+        public ObservableCollection<ServiceInterface.Model.Customer> FilteredCustomers { get => new ObservableCollection<ServiceInterface.Model.Customer>(Customers.Where(x => (x.Name?.ToLower().Contains(SearchString?.ToLower())??false) || (x.PhoneNumbers?.Any(n => n.ToLower().Contains(SearchString?.ToLower()))??false) || (x.Debit.ToString()?.ToLower().Contains(SearchString?.ToLower()) ??false))); }
 
         public CustomerSettengsViewModel() {
 
             this.Title = "Customers";
             this.Content = new CustomerSettingsView() { DataContext = this };
-            Customers = new ObservableCollection<Customer>(StateManager.Get<Customer>());
+            Customers = new ObservableCollection<ServiceInterface.Model.Customer>(StateManager.Get<ServiceInterface.Model.Customer>());
             _AddEditCustomerViewModel = new AddEditCustomerViewModel(this);
             _AddEditCustomerView = new AddEditCustomerView() { DataContext = _AddEditCustomerViewModel };
             DailogContent = _AddEditCustomerView;
@@ -66,12 +59,12 @@ namespace PosTest.ViewModels.Settings
             _AddEditCustomerViewModel.NewCustome();
             _AddEditCustomerViewModel.ChangeDailogSatate(true);
         }
-        public void EditCustomerAction(Customer _SelectedCustomer)
+        public void EditCustomerAction(ServiceInterface.Model.Customer _SelectedCustomer)
         {
             _AddEditCustomerViewModel.ChangeCustomer(_SelectedCustomer);
             _AddEditCustomerViewModel.ChangeDailogSatate(true);
         }
-        public void DeleteCustomerAction(Customer _SelectedCustomer) {
+        public void DeleteCustomerAction(ServiceInterface.Model.Customer _SelectedCustomer) {
             if (_SelectedCustomer == null)
             {
                 ToastNotification.Notify("Selected Customer First", NotificationType.Warning);
@@ -83,7 +76,7 @@ namespace PosTest.ViewModels.Settings
                 DataContext = new DialogViewModel("Are you sure to delete this Customer ?", "Check", "Ok", "Close", "No",
                 (e) =>
                 {
-                    if (StateManager.Delete<Customer>(_SelectedCustomer))
+                    if (StateManager.Delete<ServiceInterface.Model.Customer>(_SelectedCustomer))
                     {
 
                         Customers.Remove(_SelectedCustomer);

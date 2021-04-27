@@ -7,6 +7,7 @@ using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
+using ServiceLib.Service;
 
 namespace FastPosFrontend.Converters
 {

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
-        xmlns:sl="clr-namespace:Softline.Controls;assembly=SlCustomKeypad"
+        xmlns:slCustomKeypad="clr-namespace:SlCustomKeypad;assembly=SlCustomKeypad"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" >
     <Window.Resources>
@@ -107,7 +107,7 @@
                  SelectionMode="Multiple" 
                  />
 
-        <sl:NumericPad Name="pad" Grid.Row="4" AllowDotkey="True" AllowPercentKey="True" 
+        <slCustomKeypad:NumericPad Name="pad" Grid.Row="4" AllowDotkey="True" AllowPercentKey="True" 
                        Width="120" Background="Yellow" BorderThickness="15" BorderBrush="Green"
                        VerifyPercentValue="True"/>
         <TextBlock Text="{Binding ElementName=pad, Path=NumericValue}" Grid.Row="5" />

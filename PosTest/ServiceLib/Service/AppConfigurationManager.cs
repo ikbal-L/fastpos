@@ -4,7 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace FastPosFrontend
+namespace ServiceLib.Service
 {
     public static class AppConfigurationManager
     {

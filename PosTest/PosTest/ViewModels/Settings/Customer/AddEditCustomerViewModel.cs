@@ -1,18 +1,11 @@
-﻿using Caliburn.Micro;
-using PosTest.Extensions;
-using PosTest.Helpers;
-using ServiceInterface.Model;
-using ServiceLib.Service;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Caliburn.Micro;
+using PosTest.Helpers;
 using ServiceInterface.ExtentionsMethod;
 using ServiceLib.Service.StateManager;
 
-namespace PosTest.ViewModels.Settings
+namespace PosTest.ViewModels.Settings.Customer
 {
    public class AddEditCustomerViewModel : PropertyChangedBase
     {
@@ -24,8 +17,8 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(IsOpenDailog));
             }
         }
-        private Customer _Customer;
-        public Customer Customer
+        private ServiceInterface.Model.Customer _Customer;
+        public ServiceInterface.Model.Customer Customer
         {
             get { return _Customer; }
             set {
@@ -62,14 +55,14 @@ namespace PosTest.ViewModels.Settings
         }
         public void NewCustome()
         {
-            Customer = new  Customer();
+            Customer = new  ServiceInterface.Model.Customer();
             NewPhoneNumber = "";
             Numbers.Clear();
         }
         public void Save() {
            
             Customer.PhoneNumbers = Numbers;
-            if (StateManager.Save<Customer>(Customer))
+            if (StateManager.Save<ServiceInterface.Model.Customer>(Customer))
             {
                 int index=   Parent.Customers.IndexOf(Parent.Customers.FirstOrDefault(x => x.Id == Customer.Id));
                 if (index==-1)
@@ -95,7 +88,7 @@ namespace PosTest.ViewModels.Settings
         {
             IsOpenDailog = false;
         }
-        public void ChangeCustomer(Customer selectedCustomer)
+        public void ChangeCustomer(ServiceInterface.Model.Customer selectedCustomer)
         { 
             Customer = selectedCustomer.Clone();
             Numbers = selectedCustomer.PhoneNumbers.Clone();

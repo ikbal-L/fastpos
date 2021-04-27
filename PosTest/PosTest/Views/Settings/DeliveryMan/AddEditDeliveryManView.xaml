@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PosTest.Views.Settings.AddEditDeliveryManView"
+﻿<UserControl x:Class="PosTest.Views.Settings.DeliveryMan.AddEditDeliveryManView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

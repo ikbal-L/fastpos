@@ -120,7 +120,7 @@ namespace FastPosFrontend
         {
             //EXCEPTION
 
-            _backendServerProcess.Kill();
+            //_backendServerProcess.Kill();
             base.OnExit(sender, e);
         }
 

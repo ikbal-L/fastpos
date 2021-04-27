@@ -1,19 +1,12 @@
-﻿using PosTest.Helpers;
-using PosTest.ViewModels.SubViewModel;
-using PosTest.Views.Settings;
-using PosTest.Views.SubViews;
-using ServiceInterface.Model;
-using ServiceLib.Service;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using PosTest.Helpers;
+using PosTest.Views.Settings;
+using PosTest.Views.Settings.DeliveryMan;
+using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace PosTest.ViewModels.Settings
+namespace PosTest.ViewModels.Settings.DeliveryMan
 {
     public class DeliveryManSettengsViewModel : SettingsItemBase
     {

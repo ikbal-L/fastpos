@@ -69,7 +69,7 @@ namespace FastPosFrontend.ViewModels
 
         public void Execute()
         {
-            _handler.Invoke();
+            _handler?.Invoke();
         }
     }
 

@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using ServiceInterface;
 using ServiceInterface.Interface;
 
-namespace ServiceInterface.StaticValues
+namespace ServiceLib.Service
 {
     public  class RestApis
     {
         private static readonly string _scheme = "http";
-        private static readonly string _host = "localhost";
-        private static readonly int _port = 8080;
+        private static readonly string Host = "localhost";
+        private static readonly int Port = 8080;
         private static UriBuilder Builder;
       
         private static string _resource;
@@ -18,11 +17,19 @@ namespace ServiceInterface.StaticValues
 
         static RestApis()
         {
+            
+            ;
+            if (AppConfigurationManager.ContainsKey(nameof(Host)))
+            {
+                var values = (AppConfigurationManager.Configuration(nameof(Host)) as string)?.Split(':');
+                Host = values?[0];
+                Port = int.Parse(values?[1]!);
+            }
             Builder = new UriBuilder
             {
                 Scheme = _scheme,
-                Host = _host,
-                Port = _port
+                Host = Host,
+                Port = Port
             };
 
 
@@ -30,11 +37,12 @@ namespace ServiceInterface.StaticValues
 
         public RestApis()
         {
+            
             Builder = new UriBuilder
             {
                 Scheme = _scheme,
-                Host = _host,
-                Port = _port
+                Host = Host,
+                Port = Port
             };
         }
         public RestApis(string host,int port,string prefix)
@@ -77,10 +85,33 @@ namespace ServiceInterface.StaticValues
             Builder.Path = path.ToString();
             return Builder.Uri.ToString();
         }
+
+        public string Action(string endPoint, object arg = null, string subPath = "")
+        {
+
+            _endpoint = endPoint;
+
+
+
+            IPathBuilder builder = Path.Create(_endpoint);
+            if (arg != null)
+            {
+                builder.Arg(arg);
+            }
+
+            if (!string.IsNullOrEmpty(subPath))
+            {
+                builder.SubPath(subPath);
+            }
+
+            IPath path = builder.Build();
+            Builder.Path = path.ToString();
+            return Builder.Uri.ToString();
+        }
     }
 
     public enum EndPoint
     {
-        GetAll,Get,GetMany,Save,SaveMany,Put,PutMany,Delete,DeleteMany
+        GetAll,Get,GetMany,Save,SaveMany,Put,PutMany,Delete,DeleteMany,Login
     }
 }

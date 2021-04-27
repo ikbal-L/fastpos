@@ -1,17 +1,10 @@
-﻿using Caliburn.Micro;
-using PosTest.Extensions;
+﻿using System.Linq;
+using Caliburn.Micro;
 using PosTest.Helpers;
-using ServiceInterface.Model;
-using ServiceLib.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ServiceInterface.ExtentionsMethod;
 using ServiceLib.Service.StateManager;
 
-namespace PosTest.ViewModels.Settings
+namespace PosTest.ViewModels.Settings.Waiter
 {
    public class AddEditWaiterViewModel: PropertyChangedBase
     {
@@ -24,9 +17,9 @@ namespace PosTest.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(IsOpenDailog));
             }
         }
-        private Waiter _Waiter;
+        private ServiceInterface.Model.Waiter _Waiter;
 
-        public Waiter Waiter
+        public ServiceInterface.Model.Waiter Waiter
         {
             get { return _Waiter; }
             set { _Waiter = value;
@@ -42,15 +35,15 @@ namespace PosTest.ViewModels.Settings
         {
             IsOpenDailog = value;
         }
-        public void ChangeWaiter(Waiter waiter) {
+        public void ChangeWaiter(ServiceInterface.Model.Waiter waiter) {
             Waiter = waiter.Clone();
         }
         public void NewWaiter()
         {
-            Waiter =new  Waiter();
+            Waiter =new  ServiceInterface.Model.Waiter();
         }
         public void Save() {
-            if (StateManager.Save<Waiter>(Waiter))
+            if (StateManager.Save<ServiceInterface.Model.Waiter>(Waiter))
             {
                 int index=   Parent.Waiters.IndexOf(Parent.Waiters.FirstOrDefault(x => x.Id == Waiter.Id));
                 if (index==-1)

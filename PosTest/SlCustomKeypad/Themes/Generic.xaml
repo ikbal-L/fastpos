@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Softline.Controls">
+    xmlns:local="clr-namespace:SlCustomKeypad">
 
     <SolidColorBrush x:Key="DefaultForegroundBrush" Color="White"/>
     <SolidColorBrush x:Key="DefaultBackgroundBrush" Color="#555555"/>

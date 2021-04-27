@@ -101,7 +101,10 @@ namespace ServiceLib.Service
                 });
 
             var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var url = UrlConfig.AuthUrl.Authenticate;
+            var api = new RestApis();
+            
+            //var url = UrlConfig.AuthUrl.Authenticate;
+            var url = api.Action("login");
             //var url = "http://127.0.0.1:5000/auth/login";
             var client = new HttpClient();
             HttpResponseMessage response;

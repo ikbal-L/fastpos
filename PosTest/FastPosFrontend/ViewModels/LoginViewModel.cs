@@ -5,6 +5,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Security.Principal;
@@ -224,8 +225,14 @@ namespace FastPosFrontend.ViewModels
                     ToastNotification.Notify("Wrong username or password");
                     return;
                 }
-                
-               
+
+                if (resp.StatusCode!= HttpStatusCode.OK)
+                {
+                    ToastNotification.Notify(NotificationHelper.CHECK_SERVER_CONNECTION);
+
+                }
+
+
 
             }
             catch (AggregateException)

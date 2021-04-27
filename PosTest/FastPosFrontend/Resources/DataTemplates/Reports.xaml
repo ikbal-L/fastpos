@@ -345,7 +345,20 @@
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Text="Espèces" FontWeight="DemiBold"></TextBlock>
-                                <ListView Grid.Row="1"></ListView>
+                                <ListView Grid.Row="1" ItemsSource="{Binding CashPayments}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding Key}"></TextBlock>
+                                                <TextBlock Grid.Column="1" Text="{Binding Value}"></TextBlock>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Grid.RowDefinitions>
@@ -353,7 +366,20 @@
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Text="Livraison" FontWeight="DemiBold"></TextBlock>
-                                <ListView Grid.Row="1"></ListView>
+                                <ListView Grid.Row="1" ItemsSource="{Binding DeliveryPayments}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding Key}"></TextBlock>
+                                                <TextBlock Grid.Column="1" Text="{Binding Value}"></TextBlock>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
                             </Grid>
                         </Grid>
 
@@ -372,7 +398,16 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Text="Par Categorie" TextDecorations="Underline" FontWeight="DemiBold"></TextBlock>
-                        <ListView Grid.Row="1">
+                        <ListView Grid.Row="1" ItemsSource="{Binding EarningsByCategory}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.Columns>
+                                        <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}"></GridViewColumn>
+                                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding QuantityOfItems}"></GridViewColumn>
+                                        <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}"></GridViewColumn>
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
 
                         </ListView>
                     </Grid>

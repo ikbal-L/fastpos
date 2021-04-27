@@ -1,7 +1,4 @@
-﻿using Caliburn.Micro;
-using ServiceInterface.Interface;
-using ServiceInterface.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -9,24 +6,25 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using PosTest.Helpers;
+using Caliburn.Micro;
 using MaterialDesignThemes.Wpf;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
-using PosTest.ViewModels.SubViewModel;
-using ServiceLib.Service;
-using Product = ServiceInterface.Model.Product;
-using PosTest.ViewModels.Settings;
-using PosTest.Views;
 using PosTest.Extensions;
+using PosTest.Helpers;
+using PosTest.ViewModels.Settings;
+using PosTest.ViewModels.SubViewModel;
+using PosTest.Views;
 using ServiceInterface.ExtentionsMethod;
+using ServiceInterface.Interface;
+using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
 namespace PosTest.ViewModels
@@ -728,7 +726,7 @@ namespace PosTest.ViewModels
                 return;
             }
 
-         //   var product = new Product(SelectedFreeProduct);
+            //   var product = new Product(SelectedFreeProduct);
         }
 
         public void CotegoryOfSelectFreeProductChanged(Category category)
@@ -1078,7 +1076,7 @@ namespace PosTest.ViewModels
                     try
                     {
                         RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
-                             categories);
+                            categories);
                     }
                     catch (Exception ex)
                     {
@@ -1129,7 +1127,7 @@ namespace PosTest.ViewModels
             Category targetCategory = SelectedCategory;
             IList<Category> categories = CurrentCategories;
             RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingCategory, ref targetCategory,
-                 categories);
+                categories);
 
             try
             {
@@ -1182,7 +1180,7 @@ namespace PosTest.ViewModels
 
         public void EditProduct()
         {
-          /*  if (SelectedProduct.Id == null)
+            /*  if (SelectedProduct.Id == null)
             {
                 ToastNotification.Notify("There is no Product to edit, select a valid cell!");
                 return;
@@ -1281,24 +1279,24 @@ namespace PosTest.ViewModels
             }
         }
     }
-}
 
-public class Comparer<T> : IComparer<T> where T : Ranked
-{
-    public int Compare(T x, T y)
+    public class Comparer<T> : IComparer<T> where T : Ranked
     {
-        if (x.Equals(y))
+        public int Compare(T x, T y)
         {
-            return 0;
-        }
+            if (x.Equals(y))
+            {
+                return 0;
+            }
 
-        if (x.Rank > y.Rank)
-        {
-            return 1;
-        }
-        else
-        {
-            return -1;
+            if (x.Rank > y.Rank)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }

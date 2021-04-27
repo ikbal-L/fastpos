@@ -13,13 +13,16 @@ namespace ServiceInterface.Model
         [DataMember]
         public DateTime IssuedDate { get; set; }
         [DataMember]
-        public Dictionary<string, decimal> CashPayments;
+        public Dictionary<string, decimal> CashPayments { get; set; }
 
         [DataMember]
-        public Dictionary<string, decimal> DeliveryPayments;
+        public Dictionary<string, decimal> DeliveryPayments { get; set; }
 
         [DataMember]
-        public Dictionary<string, decimal> Expenses;
+        public Dictionary<string, decimal> Expenses { get; set; }
+        
+        [DataMember]
+        public List<EarningsCategoryGrouping> EarningsByCategory { get; set; }
 
         [DataMember]
         public decimal CashRegisterInitialAmount { get; set; }
@@ -34,5 +37,14 @@ namespace ServiceInterface.Model
         [DataMember]
         public decimal CashRegisterActualAmount { get; set; }
 
+    }
+
+    public class EarningsCategoryGrouping
+    {
+        public long id { get; set; }
+        public String Category { get; set; }
+        public int QuantityOfItems { get; set; }
+        public decimal Amount { get; set; }
+  
     }
 }
