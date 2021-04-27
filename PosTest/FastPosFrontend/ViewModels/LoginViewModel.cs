@@ -69,6 +69,9 @@ namespace FastPosFrontend.ViewModels
         [Import(typeof(IPermissionRepository))]
         private IPermissionRepository _permissionRepository;
 
+        [Import(typeof(IDailyExpenseReportRepository))]
+        private IDailyExpenseReportRepository _dailyExpenseReportRepository;
+
 
         public LoginViewModel()
         {
@@ -233,7 +236,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             IsDialogOpen = true;
-            var associationManager = AssociationManager.Instance;
+            
             
 
             StateManager.Instance
@@ -248,7 +251,8 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_paymentRepository)
                 .Manage(_userRepository,withAssociatedTypes:true)
                 .Manage(_roleRepository,withAssociatedTypes:true)
-                .Manage(_permissionRepository);
+                .Manage(_permissionRepository)
+                .Manage(_dailyExpenseReportRepository);
 
             var user = Users.FirstOrDefault(u => u.Username.Equals(Username));
             var userBackground = resp.Headers.GetValues("user-meta-background").First();
