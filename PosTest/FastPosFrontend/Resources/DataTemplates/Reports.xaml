@@ -180,7 +180,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border Margin="10"   Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm" Background="{Binding Converter={StaticResource ObjectToBarcodeValueConverter}}"></Border>
+                <Border Margin="10"   Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm" Background="{Binding OrderNumber, Converter={StaticResource ObjectToBarcodeValueConverter}}"></Border>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="12/12/2020 12:12:60"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client"/>
             </Grid>

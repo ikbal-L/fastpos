@@ -317,7 +317,7 @@
                                                     </DataTemplate>
                                                 </TreeView.Resources>
                                             </TreeView>
-                                            <Button Cursor="Hand"
+                                            <!--<Button Cursor="Hand"
                                                     MinWidth="220"
                                                     Background="Transparent"
                                                     Grid.Row="1"
@@ -325,7 +325,7 @@
                                                     BorderThickness="0"
                                                     cal:Message.Attach="Close()"
                                                     Content="Close" Padding="32 0 32 0"
-                                                    AutomationProperties.AutomationId="DemoItemPage" />
+                                                    AutomationProperties.AutomationId="DemoItemPage" />-->
                                         </Grid>
 
                                     </md:DrawerHost.LeftDrawerContent>

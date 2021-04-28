@@ -1014,7 +1014,7 @@ namespace FastPosFrontend.ViewModels
                 case ActionButton.Price:
                 {
                     string numericZone = NumericZone;
-                    if (CurrentOrder == null || CurrentOrder.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
+                    if (CurrentOrder?.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
                     {
                         ToastNotification.Notify("Add products before ...", NotificationType.Warning);
                         NumericZone = "";
@@ -1846,11 +1846,15 @@ namespace FastPosFrontend.ViewModels
 
             //contentOfPage.Content = CurrentOrder;
             //contentOfPage.Content = GenerateContent(CurrentOrder);
+            if (_printOrder == null)
+            {
+                _printOrder = CurrentOrder;
+            }
             contentOfPage.Content = _printOrder;
             _diff.Clear();
             var conv = new LengthConverter();
 
-            double width = (double) conv.ConvertFromString("8cm");
+            double width = (double) conv?.ConvertFromString("8cm");
 
             double height = document.DocumentPaginator.PageSize.Height;
             contentOfPage.Width = width;
@@ -1913,9 +1917,14 @@ namespace FastPosFrontend.ViewModels
 
         public void PrintDocument(PrintSource source)
         {
-            // PrintPreview();
+            PrintPreview(source);
 
 
+            //SilentPrint(source);
+        }
+
+        private void SilentPrint(PrintSource source)
+        {
             FixedDocument fixedDocument = GenerateOrderReceipt(source);
             var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
             //PrintDialog dialog = new PrintDialog();

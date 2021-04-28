@@ -316,6 +316,7 @@
     <Compile Include="ViewModels\DeliveryAccounting\DeliveryAccountingViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\PaymentHistoryViewModel.cs" />
+    <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelInitialized.cs" />
     <Compile Include="ViewModels\LoadingViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -334,7 +335,7 @@
     <Compile Include="ViewModels\AddEditDeliveryManViewModel.cs" />
     <Compile Include="ViewModels\DeliveryManSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\DialogViewModel.cs" />
-    <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\GeneralSettings.cs" />
     <Compile Include="ViewModels\Settings\PrintSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingItemBase.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
