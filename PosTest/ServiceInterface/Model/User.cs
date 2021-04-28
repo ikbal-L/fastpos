@@ -14,7 +14,7 @@ namespace ServiceInterface.Model
         private Brush _background;
         private Color? _backgroundColor;
         private Agent _agent;
-        private bool? _isActive = false;
+        
 
         [DataMember]
         public long? Id { get; set; }
@@ -57,8 +57,6 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public string PinCode { get; set; }
-
-        
         private string _username;
         private BindableCollection<string> _phoneNumbers;
         private bool _enabled = true;
@@ -76,14 +74,6 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public List<long> RoleIds { get; set; }
-
-        [DataMember]
-        public bool IsUserActive
-        {
-            get { return (bool) (_isActive==null?true:_isActive); }
-            set => Set(ref _isActive, value);
-        }
-
 
         [DataMember]
         [Required(AllowEmptyStrings = false)]

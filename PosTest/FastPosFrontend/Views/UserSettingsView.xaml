@@ -6,11 +6,13 @@
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:FastPosFrontend.Views"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
              xmlns:subviews="clr-namespace:FastPosFrontend.Views.SubViews"
              xmlns:convert="clr-namespace:FastPosFrontend.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800" x:Name="UserSettings">
+             d:DesignHeight="450" d:DesignWidth="800" x:Name="UserSettings"
+             d:DataContext="{d:DesignInstance vm:UserSettingsViewModel }">
     <UserControl.Resources>
         <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" x:Key="PhoneItemStyle"
                TargetType="Button">
@@ -63,7 +65,7 @@
                 </Grid.RowDefinitions>
                 <!--#region User list -->
                 <ListBox ItemsSource="{Binding Users}" FontSize="16" Margin="20"
-                         SelectedItem="{Binding SelectedUser}">
+                         SelectedItem="{Binding SelectedUser}" x:Name="Users">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel></WrapPanel>
@@ -92,7 +94,11 @@
                                         <ToggleButton VerticalAlignment="Bottom"
                                             Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
                                             ToolTip="MaterialDesignSwitchDarkToggleButton"
-                                            IsChecked="{Binding IsUserActive}" />
+                                            IsChecked="{Binding Enabled}"
+
+                                            caliburn:Action.TargetWithoutContext="{Binding ElementName=UserSettings,Path=DataContext}"
+                                            caliburn:Message.Attach="[Event Checked] = [Action UpdateUserOnEnabledChanged($datacontext)];
+                                                      [Event Unchecked] = [Action UpdateUserOnEnabledChanged($datacontext)]"/>
                                     </StackPanel>
                                 </StackPanel>
 

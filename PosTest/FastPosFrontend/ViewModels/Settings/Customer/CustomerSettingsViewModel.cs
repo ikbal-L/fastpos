@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Views.Settings;
 using FastPosFrontend.Views.Settings.Customer;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Customer

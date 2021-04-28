@@ -63,7 +63,7 @@ namespace FastPosFrontend.ViewModels
             LastName = _model.LastName;
             Email = _model.Email;
             Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(_model.BackgroundString));
-            IsUserActive = _model.IsUserActive;
+            IsUserActive = _model.Enabled;
             if (_model.Roles != null)
             {
                 UserRoles = new BindableCollection<Role>(_model.Roles);
@@ -86,6 +86,7 @@ namespace FastPosFrontend.ViewModels
             _model.Roles = UserRoles.ToList();
             _model.RoleIds = UserRoles.Select(role => role.Id.Value).ToList();
             _model.Background = Background;
+            _model.Enabled = IsUserActive;
             //_model.BackgroundString = Background.Color.ToString();
         }
         public string Username

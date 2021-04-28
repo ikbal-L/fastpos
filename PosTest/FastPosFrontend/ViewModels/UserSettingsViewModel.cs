@@ -10,17 +10,16 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("User Settings", typeof(UserSettingsViewModel), groupName: "Settings")]
-    public class UserSettingsViewModel : /*SettingsItemBase*/ LazyScreen
+    public class UserSettingsViewModel : LazyScreen
     {
         private User _selectedUser = null;
         private UserDetailViewModel _userDetailViewModel = null;
         private bool _isEditing = false;
-        //private UserDetailView _subView;
+    
 
         public UserSettingsViewModel()
         {
-            //this.Title = "User Settings";
-            //this.Content = new UserSettingsView() { DataContext = this };
+  
             var userRepository = new UserRepository();
             var roleRepository = new RoleRepository();
             StateManager.Instance.Manage(userRepository,withAssociatedTypes:true).Manage(roleRepository);
@@ -73,7 +72,7 @@ namespace FastPosFrontend.ViewModels
 
             IsEditing = true;
             UserDetailViewModel = new UserDetailViewModel(null,this);
-            //SubView = new UserDetailView(){DataContext = UserDetailViewModel};
+          
         }
 
         public void EditUser()
@@ -84,16 +83,11 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             UserDetailViewModel = new UserDetailViewModel(SelectedUser, this);
-            //SubView = new UserDetailView() {DataContext = UserDetailViewModel};
             IsEditing = true;
             
         }
 
-        //public UserDetailView SubView
-        //{
-        //    get => _subView;
-        //    set => Set(ref _subView, value);
-        //}
+      
 
         public void DeleteUser()
         {
@@ -111,13 +105,6 @@ namespace FastPosFrontend.ViewModels
         {
             var users = StateManager.GetAsync<User>();
             _data = new NotifyAllTasksCompletion(users);
-            //if (_data.IsCompleted)
-            //{
-            //    Initialize();
-            //    IsReady = true;
-
-            //}
-            //_data.AllTasksCompleted += OnAllTasksCompleted;
         }
 
         public override void Initialize()
@@ -126,6 +113,11 @@ namespace FastPosFrontend.ViewModels
 
             var data = _data.GetResult<ICollection<User>>();
             Users = new BindableCollection<User>(data);
+        }
+
+        public void UpdateUserOnEnabledChanged(User user)
+        {
+            StateManager.Save(user);
         }
     }
 }
