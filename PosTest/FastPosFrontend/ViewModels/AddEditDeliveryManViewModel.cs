@@ -33,7 +33,7 @@ namespace FastPosFrontend.ViewModels
 
         public BindableCollection<String> Numbers
         {
-            get { return numbres; }
+            get => numbres;
             set { numbres = value;
 
                 NotifyOfPropertyChange(nameof(Numbers));
@@ -92,7 +92,8 @@ namespace FastPosFrontend.ViewModels
         internal void ChangeDeliveryMan(Deliveryman selectedDeliveryMan)
         {
             Deliveryman = selectedDeliveryMan.Clone();
-            Numbers = Deliveryman.PhoneNumbers.Clone();
+            Numbers = Deliveryman.PhoneNumbers.Clone()??new BindableCollection<string>();
+
         }
 
         internal void NewDeliveryMan()
