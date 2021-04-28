@@ -18,7 +18,7 @@ namespace FastPosFrontend.Converters
             if (value!= null)
             {
                 BarcodeLib.Barcode b = new BarcodeLib.Barcode();
-                var stringToEncode = value.GetHashCode().ToString();
+                var stringToEncode = ((int)value).ToString("D8", CultureInfo.InvariantCulture);
                 var conv = new Int32Converter();
                 //int barcodeWidth = (int) conv.ConvertFromString("4cm");
                 //var barcodeHeight = (int) conv.ConvertFromString("2.5cm");
