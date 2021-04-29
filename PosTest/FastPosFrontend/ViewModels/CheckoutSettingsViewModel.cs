@@ -979,7 +979,11 @@ namespace FastPosFrontend.ViewModels
 
                 // Find the data behind the ListViewItem
                 Product targetProduct = (Product)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-
+                //if (targetProduct == null)
+                //{
+                //    var index = listView.ItemContainerGenerator.IndexFromContainer(listBoxItem)+1;
+                //    targetProduct = new Product(){Rank = index,Category = SelectedCategory};
+                //}
                 Product receivedProduct;
 
                 if (e.Data.GetDataPresent("FreeProduct"))

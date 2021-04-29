@@ -212,7 +212,7 @@
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <Border BorderBrush="DarkGray" BorderThickness="1">
-            <Grid   Background="{Binding Background}"
+            <Grid   Background="{Binding Background,FallbackValue=WhiteSmoke}"
                        cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
                        caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProduct($this)]" >
 
