@@ -531,6 +531,7 @@
                                         <Grid>
                                             <TextBlock FontWeight="Bold" FontSize="16"
                                                    Text="{Binding Name}"
+                                                   
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
                                                    ToolTip="{Binding Description}">

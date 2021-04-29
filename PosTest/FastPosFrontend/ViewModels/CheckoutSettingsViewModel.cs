@@ -103,6 +103,10 @@ namespace FastPosFrontend.ViewModels
 
        
             _allProducts = StateManager.Get<Product>().ToList();
+            _activeProducts = _allProducts
+                .Where(p => p.CategoryId != null && p.Category != null)
+                .OrderBy(p=>p.CategoryId)
+                .ThenBy(p=>p.Rank).ToList();
            
             _allCategories = StateManager.Get<Category>().ToList();
            
@@ -189,6 +193,7 @@ namespace FastPosFrontend.ViewModels
 
 
         private List<Product> _allProducts;
+        private List<Product> _activeProducts;
         private List<Category> _allCategories;
 
         public int ProductPageSize
@@ -395,11 +400,11 @@ namespace FastPosFrontend.ViewModels
 
             CurrentProducts?.Clear();
 
-            var filteredProducts = _allProducts.Where(p => p.Category == category && p.Rank != null).ToList();
+            var filteredProducts = _activeProducts.Where(p => p.Category == category && p.Rank != null).ToList();
 
-            var comparer = new Comparer<Product>();
+            //var comparer = new Comparer<Product>();
            
-            filteredProducts.Sort(comparer);
+            //filteredProducts.Sort(comparer);
             RankedItemsCollectionHelper.LoadPagesFilled(source: filteredProducts, target: CurrentProducts,
                 size: ProductPageSize, parameter: category);
         }

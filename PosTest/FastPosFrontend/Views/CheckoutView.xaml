@@ -118,7 +118,7 @@
 
                 <!--OrderItem Commands-->
                 <Grid Grid.Column="0" 
-                     
+                        
                       IsEnabled="{Binding ElementName=OrderitemsList, 
                             Path=SelectedItem, Converter={StaticResource ObjectToBoolConverter}}"
                       x:Name="OrderItemCommandsGrid">
