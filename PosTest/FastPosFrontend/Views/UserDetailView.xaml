@@ -10,7 +10,8 @@
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:UserDetailViewModel }">
     <UserControl.Resources>
         <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" x:Key="PhoneItemStyle"
                TargetType="Button">
@@ -49,6 +50,16 @@
     <StackPanel Orientation="Vertical">
 
         <Grid Width="500" Margin="20">
+            <Grid.Resources>
+                <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextFieldTextBox}">
+                    <Setter Property="Margin" Value="5"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="Margin" Value="5 5 5 25"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -60,17 +71,21 @@
                 <RowDefinition />
 
             </Grid.RowDefinitions>
-            <TextBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                     materialDesign:HintAssist.Hint="Username" Margin="5"
-                     Text="{Binding Username,UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="0" 
+                     materialDesign:HintAssist.Hint="Username"
+                     Text="{Binding Username,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}">
+                
+            </TextBox>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                         materialDesign:HintAssist.Hint="Password" Margin="5"
-                         Text="{Binding Password}" />
+                <TextBox 
+                         materialDesign:HintAssist.Hint="Password"
+                         Text="{Binding Password,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}" >
+                    
+                </TextBox>
                 <Button Grid.Column="1"
                         Style="{StaticResource MaterialDesignRaisedDarkButton}"
                         Height="40"
@@ -81,17 +96,20 @@
                     GENERATE
                 </Button>
             </Grid>
-            <TextBox Grid.Row="2" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                     materialDesign:HintAssist.Hint="PinCode" Margin="5" />
-            <TextBox Grid.Row="3" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                     materialDesign:HintAssist.Hint="First Name" Margin="5"
-                     Text="{Binding FirstName}" />
-            <TextBox Grid.Row="4" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                     materialDesign:HintAssist.Hint="Last Name" Margin="5"
-                     Text="{Binding LastName}" />
-            <TextBox Grid.Row="5" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                     materialDesign:HintAssist.Hint="Email" Margin="5"
-                     Text="{Binding Email}" />
+            <TextBox Grid.Row="2" 
+                     materialDesign:HintAssist.Hint="PinCode" />
+            <TextBox Grid.Row="3"
+                     materialDesign:HintAssist.Hint="First Name"
+                     Text="{Binding FirstName,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}" />
+            <TextBox Grid.Row="4" 
+                     materialDesign:HintAssist.Hint="Last Name" 
+                     Text="{Binding LastName,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}"/> 
+                
+          
+            <TextBox Grid.Row="5" 
+                     materialDesign:HintAssist.Hint="Email" 
+                     Text="{Binding Email,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}"/>
+                    
 
             <TabControl Grid.Row="6" Style="{StaticResource MaterialDesignTabControl}">
                 
@@ -314,6 +332,7 @@
                 Orientation="Horizontal">
                 <Button Style="{StaticResource MaterialDesignIconButton}"
                         Content="{materialDesign:PackIcon ContentSave}"
+                        IsEnabled="{Binding IsSaveEnabled}"
                         caliburn:Message.Attach="[Event Click] = [Action SaveUser()]" />
                 <Button Style="{StaticResource MaterialDesignIconButton}"
                         Content="{materialDesign:PackIcon Cancel}"

@@ -71,7 +71,7 @@ namespace FastPosFrontend.ViewModels
         {
 
             IsEditing = true;
-            UserDetailViewModel = new UserDetailViewModel(null,this);
+            UserDetailViewModel = new UserDetailViewModel(this);
           
         }
 
@@ -82,7 +82,7 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("Select a user to edit");
                 return;
             }
-            UserDetailViewModel = new UserDetailViewModel(SelectedUser, this);
+            UserDetailViewModel = new UserDetailViewModel( this, SelectedUser);
             IsEditing = true;
             
         }

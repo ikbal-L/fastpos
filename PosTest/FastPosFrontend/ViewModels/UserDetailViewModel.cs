@@ -1,4 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using Caliburn.Micro;
 using FastPosFrontend.Converters;
@@ -11,7 +17,7 @@ using Brush = System.Drawing.Brush;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class UserDetailViewModel: PropertyChangedBase
+    public class UserDetailViewModel: PropertyChangedBase,INotifyDataErrorInfo
     {
         private string _username;
         private string _password;
@@ -30,8 +36,12 @@ namespace FastPosFrontend.ViewModels
         private bool _isEditingPhone = false;
         private bool _isEditingRole = false;
         private string _newPhoneNumber;
+        private readonly Dictionary<string, ICollection<string>> _validationErrors =
+            new Dictionary<string, ICollection<string>>();
 
-        public UserDetailViewModel(User model, UserSettingsViewModel parent)
+        private bool _isSaveEnabled;
+
+        public UserDetailViewModel(UserSettingsViewModel parent, User model = null )
         {
             _parent = parent;
 
@@ -43,16 +53,12 @@ namespace FastPosFrontend.ViewModels
 
         private void InitializeModel(User model)
         {
-            if (model != null)
-            {
-                _model = model;
-                CopyFromModel();
-            }
-            else
-            {
-                _model = new User();
-            }
+            model??=new User(); 
+            _model = model;
+            CopyFromModel();
         }
+
+        
 
 
         private void CopyFromModel()
@@ -89,16 +95,31 @@ namespace FastPosFrontend.ViewModels
             _model.Enabled = IsUserActive;
             //_model.BackgroundString = Background.Color.ToString();
         }
+        [Required]
+        [MinLength(3)]
         public string Username
         {
             get => _username;
-            set => Set(ref _username, value);
+            set
+            {
+                Set(ref _username, value);
+                ValidateProperty(this, value);
+            }
         }
 
+        [Required]
+        [MinLength(6)]
         public string Password
         {
             get => _password;
-            set => Set(ref _password, value);
+            set
+            {
+                Set(ref _password, value);
+                if (_model?.Id == null)
+                {
+                    ValidateProperty(this, value);
+                }
+            }
         }
 
         public string PinCode
@@ -106,23 +127,40 @@ namespace FastPosFrontend.ViewModels
             get => _pinCode;
             set => Set(ref _pinCode, value);
         }
-
+        [Required]
+        [MinLength(3)]
         public string FirstName
         {
             get => _firstName;
-            set => Set(ref _firstName, value);
+            set
+            {
+                Set(ref _firstName, value);
+                ValidateProperty(this, value);
+            }
         }
 
+        [Required]
+        [MinLength(3)]
         public string LastName
         {
             get => _lastName;
-            set => Set(ref _lastName, value);
+            set
+            {
+                Set(ref _lastName, value);
+                ValidateProperty(this, value);
+            }
         }
 
+        [Required]
+        [EmailAddress]
         public string Email
         {
             get => _email;
-            set => Set(ref _email, value);
+            set
+            {
+                Set(ref _email, value);
+                ValidateProperty(this,value);
+            }
         }
 
         public Role SelectedRoleToAdd
@@ -253,6 +291,52 @@ namespace FastPosFrontend.ViewModels
         public void Cancel()
         {
             _parent.IsEditing = false;
+        }
+
+        private void RaiseErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)
+                || !_validationErrors.ContainsKey(propertyName))
+                return null;
+
+            return _validationErrors[propertyName];
+        }
+
+        public bool HasErrors => _validationErrors.Any();
+
+        public bool IsSaveEnabled
+        {
+            get => _isSaveEnabled;
+            set => Set(ref _isSaveEnabled, value);
+        }
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        protected void ValidateProperty(object instance, object value,[CallerMemberName] string propertyName="")
+        {
+            if (_validationErrors.ContainsKey(propertyName))
+                _validationErrors.Remove(propertyName);
+
+            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+            ValidationContext validationContext =
+                new ValidationContext(instance, null, null) { MemberName = propertyName };
+            if (!Validator.TryValidateProperty(value, validationContext, validationResults))
+            {
+                _validationErrors.Add(propertyName, new List<string>());
+                foreach (ValidationResult validationResult in validationResults)
+                {
+                    _validationErrors[propertyName].Add(validationResult.ErrorMessage);
+                }
+            }
+
+            IsSaveEnabled = _validationErrors.Count == 0;
+            NotifyOfPropertyChange(() => IsSaveEnabled);
+            RaiseErrorsChanged(propertyName);
         }
     }
 }
