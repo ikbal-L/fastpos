@@ -12,7 +12,7 @@
              mc:Ignorable="d" 
 
              d:DesignHeight="450" d:DesignWidth="600"
-             d:DataContext="{d:DesignData localvm:CheckoutViewModel, IsDesignTimeCreatable=False}" >
+             d:DataContext="{d:DesignInstance localvm:CheckoutViewModel, IsDesignTimeCreatable=False}" >
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BooleanToHiddenVisibilityConverter x:Key="booleanToHiddenVisibilityConverter" />
@@ -37,11 +37,15 @@
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="Margin" Value="0"/>
+                        <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel></WrapPanel>
+                       <UniformGrid 
+                           Rows="{Binding ProductLayout.Rows}"
+                           Columns="{Binding ProductLayout.Columns}"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

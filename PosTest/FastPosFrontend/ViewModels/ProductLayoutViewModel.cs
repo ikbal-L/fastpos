@@ -15,7 +15,6 @@ namespace FastPosFrontend.ViewModels
 
         public ProductLayoutViewModel()
         {
-           ;
             _configuration = AppConfigurationManager.Configuration<ProductLayoutConfiguration>() ?? new ProductLayoutConfiguration(){Columns = 6,Rows = 5};
 
             Columns = _configuration.Columns;

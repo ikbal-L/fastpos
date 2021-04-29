@@ -121,7 +121,7 @@ namespace FastPosFrontend.ViewModels
          
             IsFlipped = false;
             IsCategory = false;
-            SelectedCategory = CurrentCategories.FirstOrDefault();
+            //SelectedCategory = CurrentCategories.FirstOrDefault();
         }
 
         private void EditProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)

@@ -91,6 +91,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isTakeawayViewActive;
         private bool _isDeliveryViewActive;
         private bool _isReady;
+        private ProductLayoutConfiguration _productLayout;
 
         #endregion
 
@@ -137,15 +138,9 @@ namespace FastPosFrontend.ViewModels
             SetupEmbeddedCommandBar();
             SetupEmbeddedStatusBar();
 
-            var settingsManager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
-            var setting = settingsManager.LoadSettings();
-            if (setting == null)
-            {
-                setting = new ProductLayoutConfiguration() {Rows = 5, Columns = 6};
-                settingsManager.SaveSettings(setting);
-            }
+            _productLayout = AppConfigurationManager.Configuration<ProductLayoutConfiguration>() ?? new ProductLayoutConfiguration() { Columns = 6, Rows = 5 };
 
-            var pageSize = setting.NumberOfProducts;
+            var pageSize = _productLayout.NumberOfProducts;
 
             _diff = new Dictionary<int, OrderItem>();
             MaxProductPageSize = pageSize;
@@ -313,6 +308,11 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        public ProductLayoutConfiguration ProductLayout
+        {
+            get => _productLayout;
+            set => Set(ref _productLayout, value);
+        }
 
         private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
         {
