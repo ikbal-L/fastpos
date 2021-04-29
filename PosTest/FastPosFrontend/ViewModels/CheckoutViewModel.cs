@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Threading;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using Caliburn.Micro;
@@ -92,6 +93,9 @@ namespace FastPosFrontend.ViewModels
         private bool _isDeliveryViewActive;
         private bool _isReady;
         private ProductLayoutConfiguration _productLayout;
+        private bool _isOrderInfoShown;
+        private readonly DispatcherTimer _orderInfoCloseTimer;
+        
 
         #endregion
 
@@ -126,6 +130,12 @@ namespace FastPosFrontend.ViewModels
         public CheckoutViewModel(
         ) : base()
         {
+            _orderInfoCloseTimer = new DispatcherTimer(){Interval = new TimeSpan(0, 0, 3)};
+            _orderInfoCloseTimer.Tick += (sender, args) =>
+            {
+                IsOrderInfoShown = false;
+                _orderInfoCloseTimer.Stop();
+            };
             if (AppConfigurationManager.ContainsKey("OrderCountModifiedDate"))
             {
                 var dateString = AppConfigurationManager.Configuration<string>("OrderCountModifiedDate");
@@ -285,6 +295,11 @@ namespace FastPosFrontend.ViewModels
             ShowCategoryProducts(CurrentCategory);
         }
 
+        private void ShowOrderInfo()
+        {
+            IsOrderInfoShown = true;
+            _orderInfoCloseTimer.Start(); //auto close after one second
+        }
         private void CurrentOrder_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             //if (e.PropertyName == nameof(CurrentOrder.OrderItems))
@@ -292,7 +307,12 @@ namespace FastPosFrontend.ViewModels
             //    OrderItemsCollectionViewSource.Source = CurrentOrder.OrderItems;
             //    //OrderItemsCollectionViewSource.View.Refresh();
             //}
-
+            
+            if (e.PropertyName == nameof(Order.Customer)||e.PropertyName == nameof(Order.Type)
+            ||e.PropertyName == nameof(Order.Waiter)||e.PropertyName == nameof(Order.Table)|| e.PropertyName == nameof(Order.Deliveryman))
+            {
+                ShowOrderInfo();
+            }
             if (e.PropertyName == nameof(Order.SelectedOrderItem))
             {
                 if (CurrentOrder?.SelectedOrderItem != null)
@@ -600,6 +620,12 @@ namespace FastPosFrontend.ViewModels
                 givenAmount = value;
                 NotifyOfPropertyChange(() => GivenAmount);
             }
+        }
+
+        public bool IsOrderInfoShown
+        {
+            get => _isOrderInfoShown;
+            set => Set(ref _isOrderInfoShown, value);
         }
 
         public decimal? ReturnedAmount
