@@ -353,7 +353,7 @@
                                                     <ColumnDefinition Width="2*"></ColumnDefinition>
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Text="{Binding Key}"></TextBlock>
+                                                <TextBlock Grid.Column="0" Text="{Binding Key,StringFormat=TK- {0:D8} }" Foreground="Red" ></TextBlock>
                                                 <TextBlock Grid.Column="1" Text="{Binding Value}"></TextBlock>
                                             </Grid>
                                         </DataTemplate>
