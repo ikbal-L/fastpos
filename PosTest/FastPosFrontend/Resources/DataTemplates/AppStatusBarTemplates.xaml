@@ -5,12 +5,14 @@
                     xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface">
 
     <DataTemplate x:Key="CheckoutStatusBarDataTemplate" DataType="vm:CheckoutViewModel">
-        <md:PopupBox IsPopupOpen="{Binding IsOrderInfoShown}" PlacementMode="BottomAndAlignRightEdges">
+        <md:PopupBox 
+            IsPopupOpen="{Binding IsOrderInfoShown,Mode=TwoWay}" 
+            PlacementMode="BottomAndAlignRightEdges">
             <md:PopupBox.ToggleContent>
-                <md:PackIcon Kind="InfoCircleOutline" Width="25" Height="25" Foreground="WhiteSmoke"></md:PackIcon>
+                <md:PackIcon Kind="InfoCircle" Width="25" Height="25" Foreground="WhiteSmoke"></md:PackIcon>
             </md:PopupBox.ToggleContent>
             
-            <Grid Margin="20 10">
+            <Grid Margin="20 10" TextElement.FontSize="18">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
