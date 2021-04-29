@@ -163,7 +163,7 @@ namespace ServiceInterface.Model
         [Required]
         public string BackgroundString
         {
-            get => _backgroundString ?? (_backgroundString = "#ff12eaf3");
+            get => _backgroundString ?? (_backgroundString = "#FFF5F5F5");
             set => Set(ref _backgroundString, value);
         }
 
