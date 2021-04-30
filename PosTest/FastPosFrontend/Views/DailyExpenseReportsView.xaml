@@ -35,7 +35,7 @@
                 </ItemsPanelTemplate>
             </TabControl.ItemsPanel>
             <TabItem Header="Today's Report" >
-                <ScrollViewer HorizontalScrollBarVisibility="Visible" Margin=" 0 10" IsDeferredScrollingEnabled="True">
+                <ScrollViewer HorizontalScrollBarVisibility="Visible" Margin=" 0 10" >
                     <Grid Margin="0 0 0 40">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
