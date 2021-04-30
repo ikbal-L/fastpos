@@ -241,7 +241,7 @@
                 <TextBlock Text="Categories" Margin=" 5 5 20 5" />
 
             </materialdesign:Badged>
-        </DataTemplate>
+        </DataTemplate >
         <DataTemplate x:Key="ProductTabItemHeaderTemplate">
             <materialdesign:Badged BadgePlacementMode="Right">
                 <materialdesign:Badged.Style>
@@ -285,7 +285,7 @@
             <materialdesign:Snackbar Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"
                                      HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-            <TabControl
+            <TabControl Grid.Column="0"
                 Style="{StaticResource MaterialDesignTabControl}"
                 SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
                 caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]">
@@ -467,7 +467,7 @@
                              Margin="2"
                              AllowDrop="True"
                              ItemTemplate="{StaticResource SettingsProduct}"
-                             SelectedItem="{Binding SelectedProduct}"
+                             
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
                              caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
@@ -527,10 +527,21 @@
                                         BorderBrush="#66000000" 
                                         BorderThickness="2.5" 
                                         CornerRadius="5"
-                                        Padding="2">
+                                        Padding="2" >
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+
+                                                        <Setter Property="OpacityMask" Value="#66FFFFFF"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
                                         <Grid>
                                             <TextBlock FontWeight="Bold" FontSize="16"
                                                    Text="{Binding Name}"
+                                                   
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
                                                    ToolTip="{Binding Description}">

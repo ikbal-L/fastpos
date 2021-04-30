@@ -324,7 +324,7 @@
                                         <MultiBinding
                                             Converter="{StaticResource EqualToSelectedAndEmptyMultiValueConverter }">
                                             <Binding ElementName="ProductSettingsList"
-                                                     Path="SelectedItem.Rank" />
+                                                     Path="DataContext.SelectedProduct.Rank" />
                                             <Binding Path="Rank" />
                                             <Binding Path="Name" />
                                         </MultiBinding>

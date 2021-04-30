@@ -411,10 +411,11 @@ namespace FastPosFrontend.ViewModels
 
         public void SelectProduct(Product product)
         {
-            SelectedProduct = product;
+            
             if (ProductToMove != null)
             {
                 SelectedFreeCategory = null;
+                SelectedProduct = product;
                 var index = CurrentProducts.IndexOf(ProductToMove);
                 var prod = new Product { Rank = ProductToMove.Rank };
                 if (SelectedProduct.Equals(ProductToMove))
@@ -441,6 +442,7 @@ namespace FastPosFrontend.ViewModels
                 ProductToMove = null;
                 return;
             }
+            SelectedProduct = product;
 
             if (SelectedFreeProduct != null&& SelectedProduct?.Id == null)
             {
@@ -1005,8 +1007,8 @@ namespace FastPosFrontend.ViewModels
                 }
                 else
                 {
-                    SelectedProduct = targetProduct;
-                    if (SelectedProduct == receivedProduct) return;
+                    //SelectedProduct = targetProduct;
+                    if (targetProduct == receivedProduct) return;
                     
                     var targetRank = targetProduct.Rank;
                     var receivedRank = receivedProduct.Rank;
