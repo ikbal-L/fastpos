@@ -32,7 +32,7 @@
                 </ItemsPanelTemplate>
             </TabControl.ItemsPanel>
             <TabItem Header="Today's Report" >
-                <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                <ScrollViewer HorizontalScrollBarVisibility="Visible" Margin="10">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>

@@ -13,10 +13,10 @@ namespace ServiceInterface.Model
         [DataMember]
         public DateTime IssuedDate { get; set; }
         [DataMember]
-        public Dictionary<string, decimal> CashPayments { get; set; }
+        public Dictionary<int, decimal> CashPayments { get; set; }
 
         [DataMember]
-        public Dictionary<string, decimal> DeliveryPayments { get; set; }
+        public Dictionary<int, decimal> DeliveryPayments { get; set; }
 
         [DataMember]
         public Dictionary<string, decimal> Expenses { get; set; }
@@ -36,6 +36,8 @@ namespace ServiceInterface.Model
         public decimal CashRegisterExpectedAmount { get; set; }
         [DataMember]
         public decimal CashRegisterActualAmount { get; set; }
+
+        public int NumberOfPayments => (CashPayments?.Count ?? 0) + (DeliveryPayments?.Count ?? 0);
 
     }
 
