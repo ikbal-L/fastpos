@@ -22,7 +22,7 @@ namespace ServiceLib.Service
             if (AppConfigurationManager.ContainsKey(nameof(Host)))
             {
                 
-                var values = AppConfigurationManager.Configuration<GeneralSettings>()?.ServerHost?.Split(':');
+                var values = (AppConfigurationManager.Configuration(nameof(Host)) as string)?.Split(':');
                 Host = values?[0];
                 Port = int.Parse(values?[1]!);
             }

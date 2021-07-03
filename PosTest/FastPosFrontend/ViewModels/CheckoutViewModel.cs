@@ -95,7 +95,7 @@ namespace FastPosFrontend.ViewModels
         private ProductLayoutConfiguration _productLayout;
         private bool _isOrderInfoShown;
         private readonly DispatcherTimer _orderInfoCloseTimer;
-        
+        private string _lastModifiedOrderPropertyName;
 
         #endregion
 
@@ -312,6 +312,7 @@ namespace FastPosFrontend.ViewModels
             ||e.PropertyName == nameof(Order.Waiter)||e.PropertyName == nameof(Order.Table)|| e.PropertyName == nameof(Order.Deliveryman))
             {
                 ShowOrderInfo();
+                LastModifiedOrderPropertyName = e.PropertyName;
             }
             if (e.PropertyName == nameof(Order.SelectedOrderItem))
             {
@@ -401,6 +402,12 @@ namespace FastPosFrontend.ViewModels
                 _canExecutePrevious = value;
                 NotifyOfPropertyChange(() => CanExecutePrevious);
             }
+        }
+
+        public string LastModifiedOrderPropertyName
+        {
+            get => _lastModifiedOrderPropertyName;
+            set => Set(ref _lastModifiedOrderPropertyName, value);
         }
 
         public ICollectionView FilteredProducts { get; set; }
@@ -856,6 +863,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             Orders.Remove(CurrentOrder);
+            CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
             CurrentOrder = null;
             SetCurrentOrderTypeAndRefreshOrdersLists(null);
         }
@@ -1349,8 +1357,8 @@ namespace FastPosFrontend.ViewModels
             var newTotal = price;
             if (newTotal <= order.Total)
             {
-                var sumItemDiscounts = 0m;
-                order.OrderItems.ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
+                var sumItemDiscounts = order.OrderItems.Sum(item=> item.DiscountAmount);
+
                 order.DiscountAmount = order.Total - newTotal - sumItemDiscounts; // CurrentOrder.NewTotal;
                 if (order.DiscountAmount < 0 && order.Total > newTotal)
                 {
