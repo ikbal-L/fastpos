@@ -214,6 +214,11 @@ namespace FastPosFrontend.ViewModels
         public static void PriceAction(ref string priceStr, Order order)
         {
             decimal price;
+            if (!order.OrderItems.Any())
+            {
+                ToastNotification.Notify("Add Order items First!");
+                return;
+            }
             if (priceStr == "")
             {
                 order.DiscountAmount = order.Total;
@@ -464,6 +469,28 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        private void RemoveOrderItems()
+        {
+            Parent.CurrentOrder.OrderItems.ToList().ForEach(item =>
+            {
+                if (SplittedOrder.OrderItems.Any(orderItem =>orderItem.ProductId == item.ProductId )&& item.Quantity>1)
+                {
+                    item.Quantity--;
+                }
+                else
+                {
+                    Parent.CurrentOrder.OrderItems.Remove(item);
+                }
+            });
+        }
+        private void RemoveOrderItemsFromSplitViewOrder()
+        {
+            SplittedOrder.OrderItems.ToList().ForEach(item =>
+            {
+                var i = CurrentOrder.OrderItems.FirstOrDefault(oi => SplittedOrder.OrderItems.Any(spi=>spi.ProductId == oi.ProductId));
+                CurrentOrder.OrderItems.Remove(i);
+            });
+        }
         private void SaveSplittedOrder()
         {
             bool resp1=false;
@@ -480,10 +507,12 @@ namespace FastPosFrontend.ViewModels
             switch (resp1|| Parent.CurrentOrder.Id != null)
             {
                 case true:
-                    Parent.CurrentOrder.State = OrderState.Splitted;
-                    Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems
-                        .Where(x => SplittedOrder.OrderItems.Any(i => i.ProductId == x.ProductId))
-                        .ToList());
+                    //Parent.CurrentOrder.State = OrderState.Splitted;
+                    //Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems
+                    //    .Where(x => SplittedOrder.OrderItems.Any(i => i.ProductId == x.ProductId))
+                    //    .ToList());
+                    RemoveOrderItems();
+                    
                     var parentCurrentOrder = Parent.CurrentOrder;
                     var resp = Parent.SaveOrder(ref parentCurrentOrder);
                     
@@ -498,13 +527,22 @@ namespace FastPosFrontend.ViewModels
                         switch (resp2)
                         {
                             case true:
-                                CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());
+                                //CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());
+                                //CurrentOrder.OrderItems.ToList().ForEach(i =>
+                                //{
+                                //    if (SplittedOrder.OrderItems.Contains(i))
+                                //    {
+                                //        CurrentOrder.OrderItems.Remove(i);
+                                //    }
+                                //});
+                                RemoveOrderItemsFromSplitViewOrder();
                                 //TODO Fix Issue! Remove range not removing SplittedOrder.OrderItems from Parent.CurrentOrder.OrderItems
-                                //Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId==x.ProductId)).ToList());
+
                                 //SplittedOrder.OrderItems.Clear();
+                                //SplittedOrder.NotifyOfPropertyChange(() => SplittedOrder.NewTotal);
                                 //SplittedOrder.Id = null;
                                 SplittedOrder = new Order();
-                            
+
                                 break;
 
 
