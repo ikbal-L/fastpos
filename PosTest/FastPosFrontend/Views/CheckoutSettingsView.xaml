@@ -241,7 +241,7 @@
                 <TextBlock Text="Categories" Margin=" 5 5 20 5" />
 
             </materialdesign:Badged>
-        </DataTemplate>
+        </DataTemplate >
         <DataTemplate x:Key="ProductTabItemHeaderTemplate">
             <materialdesign:Badged BadgePlacementMode="Right">
                 <materialdesign:Badged.Style>
@@ -467,7 +467,7 @@
                              Margin="2"
                              AllowDrop="True"
                              ItemTemplate="{StaticResource SettingsProduct}"
-                             SelectedItem="{Binding SelectedProduct}"
+                             
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
                              caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];

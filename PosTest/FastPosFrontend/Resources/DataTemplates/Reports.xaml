@@ -4,36 +4,38 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:converters="clr-namespace:FastPosFrontend.Converters">
 
-    <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter"></converters:ObjectToBarcodeValueConverter>
-
+    <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
+    <converters:SumValuesConverter x:Key="SumValuesConverter" />
     <DataTemplate DataType="{x:Type models:OrderItem}" x:Key="OrderItemTicketDataTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}"  FontSize="10" />
-            <TextBlock Grid.Column="1" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left" FontSize="12"/>
-            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="12" />
-            <TextBlock  Grid.Column="3" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="12" />
+            <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}" FontSize="10" />
+            <TextBlock Grid.Column="1" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left"
+                       FontSize="12" />
+            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right" FontSize="12" />
+            <TextBlock Grid.Column="3" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"
+                       FontSize="12" />
 
-            <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="7" Margin="10 -4 0 0"
-                     Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"
+                          FontSize="7" Margin="10 -4 0 0"
+                          Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel/>
+                        <WrapPanel />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
-
 
 
         </Grid>
@@ -41,46 +43,53 @@
 
 
     <converters:OrderItemStateToIconConverter x:Key="OrderItemStateToIconConverter" />
-    <converters:OrderItemAdditiveStateToIconValueConverter x:Key="OrderItemAdditiveStateToIconValueConverter"></converters:OrderItemAdditiveStateToIconValueConverter>
+    <converters:OrderItemAdditiveStateToIconValueConverter x:Key="OrderItemAdditiveStateToIconValueConverter" />
 
-    <DataTemplate  DataType="{x:Type models:OrderItem}" x:Key="OrderItemKitchenReceiptDataTemplate">
-        <Grid >
+    <DataTemplate DataType="{x:Type models:OrderItem}" x:Key="OrderItemKitchenReceiptDataTemplate">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition  Width="5*"/>
-                <ColumnDefinition  Width="1*"/>
-                <ColumnDefinition  Width="1*"/>
-             
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}"  FontSize="10" Margin="2 5 "  VerticalAlignment="Center"/>
-            <materialDesign:PackIcon Grid.Column="1" Kind="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}" HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="2" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left" FontSize="12"/>
+            <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}" FontSize="10" Margin="2 5 "
+                       VerticalAlignment="Center" />
+            <materialDesign:PackIcon Grid.Column="1"
+                                     Kind="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}"
+                                     HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="2" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left"
+                       FontSize="12" />
 
 
-            <ItemsControl  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="8" Margin="10 -4 0 0"
-                           Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
-                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"
+                          FontSize="8" Margin="10 -4 0 0"
+                          Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate >
+                    <ItemsPanelTemplate>
                         <WrapPanel />
                     </ItemsPanelTemplate>
 
                 </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="Black" BorderThickness="1" Margin="5" CornerRadius="5">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Description}" Margin="3" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="{Binding Description}" Margin="3" VerticalAlignment="Center" />
                                 <materialDesign:PackIcon Width="10" Height="10" VerticalAlignment="Center" Margin="3">
 
                                     <materialDesign:PackIcon.Kind>
-                                        <MultiBinding Converter="{StaticResource OrderItemAdditiveStateToIconValueConverter}"  >
-                                            <Binding></Binding>
-                                            <Binding RelativeSource="{RelativeSource AncestorType=ItemsControl}" Path="DataContext.OrderItemAdditives"></Binding>
+                                        <MultiBinding
+                                            Converter="{StaticResource OrderItemAdditiveStateToIconValueConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource AncestorType=ItemsControl}"
+                                                     Path="DataContext.OrderItemAdditives" />
                                         </MultiBinding>
                                     </materialDesign:PackIcon.Kind>
                                 </materialDesign:PackIcon>
@@ -91,36 +100,35 @@
             </ItemsControl>
 
 
-
         </Grid>
     </DataTemplate>
-
 
 
     <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
         <Grid Margin="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/> <!--Header-->
-                <RowDefinition Height="8*"/> <!--Body-->
-                <RowDefinition Height="*"/> <!--Footer-->
+                <RowDefinition Height="1*" /> <!--Header-->
+                <RowDefinition Height="8*" /> <!--Body-->
+                <RowDefinition Height="*" /> <!--Footer-->
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Name="Headre">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />  
-                    <RowDefinition Height="auto"/>   
-                    <RowDefinition/>                 
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="1" BorderBrush="Black" CornerRadius="4" Padding="4 1">
+                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="1" BorderBrush="Black"
+                        CornerRadius="4" Padding="4 1">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0">
-                            <TextBlock DockPanel.Dock="Left"  Text="Restaurant Test"  />
-                            <TextBlock DockPanel.Dock="Right" Text="N:10"   />
-                            <TextBlock/>
+                            <TextBlock DockPanel.Dock="Left" Text="Restaurant Test" />
+                            <TextBlock DockPanel.Dock="Right" Text="N:10" />
+                            <TextBlock />
                         </DockPanel>
 
                         <!--<Rectangle Grid.Row="1" Width="50" Height="50" Stretch="Fill"   >
@@ -129,93 +137,96 @@
                             </Rectangle.Fill>
 
                         </Rectangle>-->
-                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address"/>
+                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address" />
                     </Grid>
                 </Border>
-                <TextBlock Grid.Row="2" Text="Caisse N:1"/>
-             </Grid>
+                <TextBlock Grid.Row="2" Text="Caisse N:1" />
+            </Grid>
 
             <Grid Grid.Row="1" Name="Body">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
 
                 <Grid x:Name="HeadListLabels">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Column="0" Text="Product"/>
-                    <TextBlock Grid.Column="1" Text="Qty"/>
-                    <TextBlock Grid.Column="2" Text="Price" TextAlignment="Center"/>
-                    <TextBlock Grid.Column="3" Text="Total" TextAlignment="Right"/>
-                    <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0.3"  BorderBrush="Black"/>
+                    <TextBlock Grid.Column="0" Text="Product" />
+                    <TextBlock Grid.Column="1" Text="Qty" />
+                    <TextBlock Grid.Column="2" Text="Price" TextAlignment="Center" />
+                    <TextBlock Grid.Column="3" Text="Total" TextAlignment="Right" />
+                    <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0.3" BorderBrush="Black" />
                 </Grid>
 
-                <ScrollViewer Grid.Row="2"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
-                   <ItemsControl ItemsSource="{Binding OrderItems}" ItemTemplate="{StaticResource OrderItemTicketDataTemplate}" />
+                <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding OrderItems}"
+                                  ItemTemplate="{StaticResource OrderItemTicketDataTemplate}" />
                 </ScrollViewer>
-                <Border  Grid.Row="3" BorderThickness="0.3"  BorderBrush="Black" Background="Black" />
-                
+                <Border Grid.Row="3" BorderThickness="0.3" BorderBrush="Black" Background="Black" />
+
             </Grid>
 
             <!--Footer-->
             <Grid Grid.Row="2" Name="Footer">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <Border Margin="10"   Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm" Background="{Binding OrderNumber, Converter={StaticResource ObjectToBarcodeValueConverter}}"></Border>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="12/12/2020 12:12:60"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client"/>
+                <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm"
+                        Background="{Binding OrderNumber, Converter={StaticResource ObjectToBarcodeValueConverter}}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="12/12/2020 12:12:60" />
+                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client" />
             </Grid>
         </Grid>
     </DataTemplate>
 
 
-
     <DataTemplate x:Key="KitchenReceiptDataTemplate" DataType="{x:Type models:Order}">
         <Grid Margin="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*" />
                 <!--Header-->
-                <RowDefinition Height="8*"/>
+                <RowDefinition Height="8*" />
                 <!--Body-->
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*" />
                 <!--Footer-->
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Name="Headre">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="1" BorderBrush="Black" CornerRadius="4" Padding="4 1">
+                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="1" BorderBrush="Black"
+                        CornerRadius="4" Padding="4 1">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0">
-                            <TextBlock DockPanel.Dock="Left"  Text="Kitchen Order Receipt"  />
-                            <TextBlock DockPanel.Dock="Right" Text="N:10"   />
-                            <TextBlock/>
+                            <TextBlock DockPanel.Dock="Left" Text="Kitchen Order Receipt" />
+                            <TextBlock DockPanel.Dock="Right" Text="N:10" />
+                            <TextBlock />
                         </DockPanel>
 
                         <!--<Rectangle Grid.Row="1" Width="50" Height="50" Stretch="Fill"   >
@@ -224,59 +235,62 @@
                             </Rectangle.Fill>
 
                         </Rectangle>-->
-                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address"/>
+                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address" />
                     </Grid>
                 </Border>
-                <TextBlock Grid.Row="2" Text="Caisse N:1"/>
+                <TextBlock Grid.Row="2" Text="Caisse N:1" />
             </Grid>
 
             <Grid Grid.Row="1" Name="Body">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
 
                 <Grid x:Name="HeadListLabels">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition  Width="4*"/>
-                        <ColumnDefinition  Width="1*"/>
-                        <ColumnDefinition  Width="1*"/>
-                        
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Column="0" Text="Product"/>
-                    <TextBlock Grid.Column="1" Text=" "/>
-                    <TextBlock Grid.Column="2" Text="Qty"/>
-                    <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0.3"  BorderBrush="Black"/>
+                    <TextBlock Grid.Column="0" Text="Product" />
+                    <TextBlock Grid.Column="1" Text=" " />
+                    <TextBlock Grid.Column="2" Text="Qty" />
+                    <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0.3" BorderBrush="Black" />
                 </Grid>
 
-                <ScrollViewer Grid.Row="2"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
-                    <ItemsControl ItemsSource="{Binding OrderItems}" ItemTemplate="{StaticResource OrderItemKitchenReceiptDataTemplate}" />
+                <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding OrderItems}"
+                                  ItemTemplate="{StaticResource OrderItemKitchenReceiptDataTemplate}" />
                 </ScrollViewer>
-                <Border  Grid.Row="3" BorderThickness="0.3"  BorderBrush="Black" Background="Black" />
-               
+                <Border Grid.Row="3" BorderThickness="0.3" BorderBrush="Black" Background="Black" />
+
             </Grid>
 
             <Grid Grid.Row="2" Name="Footer">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <!--<TextBlock x:Uid="TextBlock_20" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Barecode" HorizontalAlignment="Center"/>-->
-                <Border Margin="10"   Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm" Background="{Binding Converter={StaticResource ObjectToBarcodeValueConverter}}"></Border>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="12/12/2020 12:12:60"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client"/>
+                <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm"
+                        Background="{Binding Converter={StaticResource ObjectToBarcodeValueConverter}}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="12/12/2020 12:12:60" />
+                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client" />
             </Grid>
         </Grid>
     </DataTemplate>
@@ -284,99 +298,122 @@
         <Border BorderBrush="Black" BorderThickness="1" Width="600">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
 
                 </Grid.RowDefinitions>
                 <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Margin="10">
                     <TextBlock Text="Cloture de cais" HorizontalAlignment="Center"
-                               FontSize="16" FontWeight="DemiBold"></TextBlock>
+                               FontSize="16" FontWeight="DemiBold" />
                 </Border>
                 <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
                     <TextBlock Text="Fast Food: Arabi" HorizontalAlignment="Center"
-                               FontSize="16" FontWeight="DemiBold"></TextBlock>
+                               FontSize="16" FontWeight="DemiBold" />
                 </Border>
                 <Grid Grid.Row="2" x:Name="Info" Margin="10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Date: 19/4/2021"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Heure: 08:30 PM"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Date: 19/4/2021" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Heure: 08:30 PM" />
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Caisse: C1"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Session 14"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Caisse: C1" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Session 14" />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Ouverte le ..." Grid.ColumnSpan="2"/>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Cloture le ..." Grid.ColumnSpan="2"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Ouverte le ..." Grid.ColumnSpan="2" />
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Cloture le ..." Grid.ColumnSpan="2" />
                 </Grid>
                 <Grid Grid.Row="3" Margin="10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold"
-                               Text="Number de ventes 4" TextDecorations="Underline" ></TextBlock>
+                               Text="{Binding NumberOfPayments,StringFormat=Number de ventes {0}}"
+                               TextDecorations="Underline" />
                     <Grid Grid.Row="1" x:Name="EarningsSection">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Encaissement" TextDecorations="Underline" FontWeight="DemiBold"></TextBlock>
+                        <TextBlock Grid.Row="0" Text="Encaissement" TextDecorations="Underline" FontWeight="DemiBold" />
                         <Grid Grid.Row="1" Margin="30 5">
                             <Grid.RowDefinitions>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
+                                <RowDefinition />
+                                <RowDefinition />
 
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Text="Espèces" FontWeight="DemiBold"></TextBlock>
+                                <TextBlock Grid.Row="0" FontWeight="DemiBold">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Espèces &#x09;&#x09;X {0:D2}&#x09;&#x09;{1:C2}"
+                                                      xml:space="preserve">
+                                            <Binding Path="CashPayments.Count" />
+                                            <Binding Path="CashPayments.Values"
+                                                     Converter="{StaticResource SumValuesConverter}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ListView Grid.Row="1" ItemsSource="{Binding CashPayments}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Text="{Binding Key,StringFormat=TK- {0:D8} }" Foreground="Red" ></TextBlock>
-                                                <TextBlock Grid.Column="1" Text="{Binding Value}"></TextBlock>
-                                            </Grid>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
+                                                                  xml:space="preserve">
+                                                        <Binding Path="Key" />
+                                                        <Binding Path="Value" />
+                                                        </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Text="Livraison" FontWeight="DemiBold"></TextBlock>
-                                <ListView Grid.Row="1" ItemsSource="{Binding DeliveryPayments}">
+                                <TextBlock Grid.Row="0" FontWeight="DemiBold">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Livraison &#x09;X {0:D2}&#x09;&#x09;{1:C2}"
+                                                      xml:space="preserve">
+                                            <Binding Path="DeliveryPayments.Count" />
+                                            <Binding Path="DeliveryPayments.Values"
+                                                     Converter="{StaticResource SumValuesConverter}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ListView Grid.Row="1" ItemsSource="{Binding DeliveryPayments}" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid >
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Text="{Binding Key}"></TextBlock>
-                                                <TextBlock Grid.Column="1" Text="{Binding Value}"></TextBlock>
-                                            </Grid>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
+                                                                  xml:space="preserve">
+                                                        <Binding Path="Key" />
+                                                        <Binding Path="Value" />
+                                                        </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
@@ -386,25 +423,27 @@
                     </Grid>
                     <Grid Grid.Row="2" x:Name="CashRegisterInfoSection">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Controle de font de caisse" TextDecorations="Underline" FontWeight="DemiBold"></TextBlock>
-                        <StackPanel Grid.Row="1"></StackPanel>
+                        <TextBlock Grid.Row="0" Text="Controle de font de caisse" TextDecorations="Underline"
+                                   FontWeight="DemiBold" />
+                        <StackPanel Grid.Row="1" />
                     </Grid>
                     <Grid Grid.Row="3" x:Name="EarningsByCategorySection">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Par Categorie" TextDecorations="Underline" FontWeight="DemiBold"></TextBlock>
+                        <TextBlock Grid.Row="0" Text="Par Categorie" TextDecorations="Underline" FontWeight="DemiBold" />
                         <ListView Grid.Row="1" ItemsSource="{Binding EarningsByCategory}">
                             <ListView.View>
                                 <GridView>
                                     <GridView.Columns>
-                                        <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}"></GridViewColumn>
-                                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding QuantityOfItems}"></GridViewColumn>
-                                        <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}"></GridViewColumn>
+                                        <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" />
+                                        <GridViewColumn Header="Quantity"
+                                                        DisplayMemberBinding="{Binding QuantityOfItems}" />
+                                        <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" />
                                     </GridView.Columns>
                                 </GridView>
                             </ListView.View>
