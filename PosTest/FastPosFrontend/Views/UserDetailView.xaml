@@ -303,7 +303,7 @@
                                                              >
                                             <materialDesign:PopupBox.ToggleContentTemplate>
                                                 <DataTemplate>
-                                                    <Button Content="{materialDesign:PackIcon Eyedropper}" Command="{x:Code}"></Button>
+                                                    <Button Content="{materialDesign:PackIcon Eyedropper}" ></Button>
                                                 </DataTemplate>
                                             </materialDesign:PopupBox.ToggleContentTemplate>
                                             <materialDesign:ColorPicker

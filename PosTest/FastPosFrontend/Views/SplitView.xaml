@@ -12,7 +12,8 @@
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              Width="800" Height="500"
-            d:DesignWidth ="600" >
+            d:DesignWidth ="600"
+             d:DataContext="{d:DesignInstance src:SplitViewModel }">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -186,10 +187,10 @@
                             <Label Content="Returned" Foreground="#26ff26"  FontSize="15"  FontFamily="{StaticResource DigitalFontFamily}"/>
                             <Label FontSize="30" FontWeight="Bold" Foreground="#26ff26"  FontFamily="{StaticResource DigitalFontFamily}" HorizontalAlignment="Right">
                                 <Label.Style>
-                                    <Style>
+                                    <Style TargetType="Label">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SplittedOrder.Total}" Value="0">
-                                                <Setter Property="Label.Content" Value="{Binding ReturnedAmount}"/>
+                                                <Setter Property="Content" Value="{Binding ReturnedAmount}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

@@ -24,6 +24,7 @@ using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
+using MaterialDesignThemes.Wpf;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
@@ -1717,14 +1718,14 @@ namespace FastPosFrontend.ViewModels
                 OrderManagementHelper.TrackItemForChange(fetch, _diff);
             }
 
-            //CurrentOrder.AddOrderItem(product: selectedproduct, unitPrice: selectedproduct.Price, setSelected: true,
-            //    quantity: 1);
+            
             OrderItem oi = CurrentOrder.AddOrderItem(item, true);
             if ((fetch == null || fetch.State == OrderItemState.Removed))
             {
                 OrderManagementHelper.TrackItemForChange(oi, _diff);
             }
 
+            
             OrderItemsCollectionViewSource.View.Refresh();
 
             if (selectedproduct.IsPlatter && selectedproduct.IdAdditives?.Count > 0)

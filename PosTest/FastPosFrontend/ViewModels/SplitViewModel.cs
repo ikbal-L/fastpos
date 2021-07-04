@@ -367,7 +367,12 @@ namespace FastPosFrontend.ViewModels
                         //{
                         //    NumericZone = "";
                         //}
-                        
+                        if (!SplittedOrder.OrderItems.Any())
+                        {
+                            ToastNotification.Notify("Add items First!");
+                            return;
+                        }
+
                         if (!NumericZone.Contains("%"))
                         {
                             PriceAction(ref _numericZone, SplittedOrder); 
@@ -382,6 +387,12 @@ namespace FastPosFrontend.ViewModels
 
                 case ActionButton.Disc:
                     {
+                        if (!SplittedOrder.OrderItems.Any())
+                        {
+                            ToastNotification.Notify("Add items First!");
+                            return;
+                        }
+
                         if (IsDiscChecked)
                         {
                             IsPercentKeyAllowed = true;
@@ -395,6 +406,12 @@ namespace FastPosFrontend.ViewModels
                     }
                 case ActionButton.Itemprice:
                     {
+                        if (!SplittedOrder.OrderItems.Any())
+                        {
+                            ToastNotification.Notify("Add items First!");
+                            return;
+                        }
+
                         if (IsItemPriceChecked)
                         {
                             IsPercentKeyAllowed = false;
@@ -407,12 +424,15 @@ namespace FastPosFrontend.ViewModels
                         break;
                     }
                 case ActionButton.Payment:
-                    
-                    
+
+                    if (!SplittedOrder.OrderItems.Any())
+                    {
+                        ToastNotification.Notify("Add items First!");
+                        return;
+                    }
                     
                     PayementAction();
-                    GivenAmount = SplittedOrder.GivenAmount;
-                    ReturnedAmount = SplittedOrder.ReturnedAmount;
+                    
                     if (CurrentOrder.OrderItems.Count == 0)
                     {
                         Parent.RemoveCurrentOrderForOrdersList();
@@ -431,28 +451,16 @@ namespace FastPosFrontend.ViewModels
         public void BackFromSplitCommand()
         {
 
-            //if (SplitedOrder == null)
-            //{
-            //    Parent.IsDialogOpen = false;
-            //    return;
-            //}
-            //if (SplitedOrder.OrderItems == null)
-            //{
-            //    Parent.IsDialogOpen = false;
-            //    return;
-            //}
-            //if (SplitedOrder.OrderItems.Count() == 0)
-            //{
-            //    Parent.IsDialogOpen = false;
-            //    return;
-            //}
+            
             Parent.IsDialogOpen = false;
             Parent.DialogViewModel = null;
-            if (Parent.CurrentOrder != null)
-            {
-                CopyBackToCurrentOrderWithGroupingOfQuantities();
-            }
-            
+            CurrentOrder = null;
+            Parent.OrderItemsCollectionViewSource.Source = Parent.CurrentOrder.OrderItems;
+            //if (Parent.CurrentOrder != null)
+            //{
+            //    CopyBackToCurrentOrderWithGroupingOfQuantities();
+            //}
+
         }
 
         public void AddSplittedItemsCommand()
@@ -473,14 +481,17 @@ namespace FastPosFrontend.ViewModels
         {
             Parent.CurrentOrder.OrderItems.ToList().ForEach(item =>
             {
-                if (SplittedOrder.OrderItems.Any(orderItem =>orderItem.ProductId == item.ProductId )&& item.Quantity>1)
+                var itemCount = SplittedOrder.OrderItems.Count(orderItem => orderItem.ProductId == item.ProductId);
+                if (itemCount <= 0) return;
+                if (itemCount < item.Quantity)
                 {
-                    item.Quantity--;
+                    item.Quantity -= itemCount;
                 }
-                else
+                else 
                 {
                     Parent.CurrentOrder.OrderItems.Remove(item);
                 }
+
             });
         }
         private void RemoveOrderItemsFromSplitViewOrder()
@@ -535,6 +546,8 @@ namespace FastPosFrontend.ViewModels
                                 //        CurrentOrder.OrderItems.Remove(i);
                                 //    }
                                 //});
+                                GivenAmount = SplittedOrder.GivenAmount;
+                                ReturnedAmount = SplittedOrder.ReturnedAmount;
                                 RemoveOrderItemsFromSplitViewOrder();
                                 //TODO Fix Issue! Remove range not removing SplittedOrder.OrderItems from Parent.CurrentOrder.OrderItems
 
@@ -542,6 +555,8 @@ namespace FastPosFrontend.ViewModels
                                 //SplittedOrder.NotifyOfPropertyChange(() => SplittedOrder.NewTotal);
                                 //SplittedOrder.Id = null;
                                 SplittedOrder = new Order();
+                                NotifyOfPropertyChange(() => SplittedOrder);
+                                SplittedOrder.NotifyOfPropertyChange(() => SplittedOrder.NewTotal);
 
                                 break;
 
