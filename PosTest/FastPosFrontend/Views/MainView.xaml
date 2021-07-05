@@ -189,15 +189,28 @@
 
                                         <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedContentBar}" DockPanel.Dock="Right">
                                             <ContentControl.Style>
-                                                <Style>
+                                                <Style TargetType="ContentControl">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding ActiveItem.EmbeddedContentBar}" Value="null">
-
+                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
+
+                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedRightCommandBar}" DockPanel.Dock="Right">
+                                            <ContentControl.Style>
+                                                <Style TargetType="ContentControl">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedRightCommandBar}" Value="null">
+                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+
                                         <!--Processes Status--> 
                                        <!--<StackPanel Orientation="Horizontal">
                                             <md:Chip

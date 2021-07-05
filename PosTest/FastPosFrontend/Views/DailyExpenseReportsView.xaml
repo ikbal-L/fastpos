@@ -34,7 +34,7 @@
                     <UniformGrid Rows="1"></UniformGrid>
                 </ItemsPanelTemplate>
             </TabControl.ItemsPanel>
-            <TabItem Header="Today's Report" >
+            <TabItem Header="Form" >
                 <ScrollViewer HorizontalScrollBarVisibility="Visible" Margin=" 0 10" >
                     <Grid Margin="0 0 0 40">
                         <Grid.RowDefinitions>
@@ -46,16 +46,16 @@
                                 Content="Generate Report">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-                                    <Style.Triggers>
+                                    <!--<Style.Triggers>
                                         <DataTrigger Binding="{Binding IsReportGenerated}" Value="true">
                                             <Setter Property="Visibility" Value="Collapsed"></Setter>
                                         </DataTrigger>
-                                    </Style.Triggers>
+                                    </Style.Triggers>-->
                                 </Style>
                             </Button.Style>
                         </Button>
 
-                        <ContentControl ContentTemplate="{StaticResource {x:Type model:DailyExpenseReport}}" Content="{Binding Report}">
+                        <!--<ContentControl ContentTemplate="{StaticResource {x:Type model:DailyExpenseReport}}" Content="{Binding Report}">
                             <ContentControl.Style>
                                 <Style TargetType="ContentControl" >
                                     <Style.Triggers>
@@ -65,13 +65,35 @@
                                     </Style.Triggers>
                                 </Style>
                             </ContentControl.Style>
-                        </ContentControl>
+                        </ContentControl>-->
 
                     </Grid>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Previous Reports">
-              
+            <TabItem Header="Today's Report">
+                <ScrollViewer HorizontalScrollBarVisibility="Visible" Margin=" 0 10" >
+                    <Grid Margin="0 0 0 40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ContentControl 
+                            ContentTemplate="{StaticResource {x:Type model:DailyExpenseReport}}" 
+                            Content="{Binding Report}"
+                            Width="600">
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl" >
+                                    <!--<Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsReportGenerated}" Value="false">
+                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>-->
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+
+                    </Grid>
+                </ScrollViewer>
             </TabItem>
           
         </TabControl>

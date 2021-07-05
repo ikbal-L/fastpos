@@ -5141,6 +5141,7 @@
     <md:PackIcon x:Key="DeliveryManIcon" Kind="TruckFast" Width="40" Height="40"></md:PackIcon>
     <md:PackIcon x:Key="CustomerIcon" Kind="Account" Width="40" Height="40"></md:PackIcon>
     <md:PackIcon x:Key="TableIcon" Kind="TableFurniture" Width="40" Height="40"></md:PackIcon>
+    <md:PackIcon x:Key="PrintSalesReportIcon" Kind="Printer" Width="30" Height="30"></md:PackIcon>
     <Canvas x:Key="WaiterIcon" Width="40" Height="40">
         <Path Stretch="Fill" Width="40" Height="26" Canvas.Left="0" Canvas.Top="3"
              Fill="White"

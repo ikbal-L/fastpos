@@ -14,36 +14,6 @@ namespace FastPosFrontend.Helpers
         void DeactivateLoadingScreen();
     }
 
-    public class AppScreen : Screen, IAppNavigationTarget
-    {
-        private string _title;
-        private EmbeddedCommandBarViewModel _embeddedCommandBar;
-        private EmbeddedContentBarViewModel _embeddedContentBar;
-
-        public string Title
-        {
-            get => _title;
-            set => Set(ref _title, value);
-        }
-
-        public EmbeddedCommandBarViewModel EmbeddedCommandBar
-        {
-            get => _embeddedCommandBar;
-            set => Set(ref _embeddedCommandBar, value);
-        }
-
-        public EmbeddedContentBarViewModel EmbeddedContentBar
-        {
-            get => _embeddedContentBar;
-            set => Set(ref _embeddedContentBar, value);
-        }
-
-        public virtual bool CanNavigate()
-        {
-            return true;
-        }
-    }
-
     public class EmbeddedCommandBarCommand : GenericCommand
     {
         public EmbeddedCommandBarCommand(object content, Action<object> executeMethod,

@@ -871,8 +871,10 @@ namespace FastPosFrontend.ViewModels
 
         public void CancelOrder()
         {
-            if (CurrentOrder == null)
+            if (CurrentOrder?.Id == null)
             {
+                Orders.Remove(CurrentOrder);
+                CurrentOrder = null;
                 return;
             }
 
@@ -1967,15 +1969,15 @@ namespace FastPosFrontend.ViewModels
             //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
 
             IList<PrinterItem> printerItems = null;
-            var PrinterItemSetting = new SettingsManager<List<PrinterItem>>("PrintSettings.json");
+            var PrinterItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
             if (source == PrintSource.Kitchen)
             {
-                printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedKitchen).ToList();
+                printerItems = PrinterItemSetting.Where(item => item.SelectedKitchen).ToList();
             }
 
             if (source == PrintSource.Checkout)
             {
-                printerItems = PrinterItemSetting.LoadSettings().Where(item => item.SelectedReceipt).ToList();
+                printerItems = PrinterItemSetting.Where(item => item.SelectedReceipt).ToList();
             }
 
             foreach (var e in printerItems)
@@ -1987,12 +1989,6 @@ namespace FastPosFrontend.ViewModels
                 }
             }
 
-
-            /* printdocumentimageablearea area = null;
-             xpsdocumentwriter writer = printqueue.createxpsdocumentwriter(ref area);
-             size size = new size(area.mediasizewidth, area.mediasizeheight);
-             fixeddocument.documentpaginator.pagesize = size;
-             writer.write(fixeddocument.documentpaginator);*/
         }
 
 

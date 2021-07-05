@@ -295,7 +295,7 @@
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="{x:Type models:DailyExpenseReport}" DataType="models:DailyExpenseReport">
-        <Border BorderBrush="Black" BorderThickness="1" Width="600">
+        <Border BorderBrush="Black" BorderThickness="1" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -323,8 +323,8 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Date: 19/4/2021" />
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Heure: 08:30 PM" />
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding IssuedDate,StringFormat='Date: {0:d}',ConverterCulture='fr-DZ'}" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding IssuedDate,StringFormat='Heure: {0:t}',ConverterCulture='fr-DZ'}" />
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Caisse: C1" />
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Session 14" />
@@ -361,8 +361,8 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" FontWeight="DemiBold">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="Espèces &#x09;&#x09;X {0:D2}&#x09;&#x09;{1:C2}"
-                                                      xml:space="preserve">
+                                        <MultiBinding StringFormat="Espèces&#x09;X {0:D2}&#x09;{1:C2}"
+                                                       ConverterCulture="fr-DZ">
                                             <Binding Path="CashPayments.Count" />
                                             <Binding Path="CashPayments.Values"
                                                      Converter="{StaticResource SumValuesConverter}" />
@@ -372,13 +372,13 @@
                                 <ListView Grid.Row="1" ItemsSource="{Binding CashPayments}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Grid.Column="0" Margin="0 0 5 0">
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" >
 
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
-                                                                  xml:space="preserve">
+                                                                   ConverterCulture="fr-DZ">
                                                         <Binding Path="Key" />
-                                                        <Binding Path="Value" />
+                                                        <Binding Path="Value"  />
                                                         </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
@@ -393,8 +393,8 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" FontWeight="DemiBold">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="Livraison &#x09;X {0:D2}&#x09;&#x09;{1:C2}"
-                                                      xml:space="preserve">
+                                        <MultiBinding StringFormat="Livraison&#x09;X {0:D2}&#x09;&#x09;{1:C2}"
+                                                      >
                                             <Binding Path="DeliveryPayments.Count" />
                                             <Binding Path="DeliveryPayments.Values"
                                                      Converter="{StaticResource SumValuesConverter}" />

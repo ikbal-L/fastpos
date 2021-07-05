@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Printing;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using Caliburn.Micro;
+using FastPosFrontend.Enums;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.ViewModels.Settings;
 using NLog;
 using ServiceInterface.Model;
+using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
@@ -21,6 +30,7 @@ namespace FastPosFrontend.ViewModels
 
         public DailyExpenseReportsViewModel()
         {
+            SetupEmbeddedRightCommandBar();
             Setup();
             OnReady();
             
@@ -48,7 +58,16 @@ namespace FastPosFrontend.ViewModels
            
         }
 
-        
+        private void SetupEmbeddedRightCommandBar()
+        {
+            this.EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel()
+            {
+                Commands = new BindableCollection<EmbeddedCommandBarCommand>()
+                {
+                    new EmbeddedCommandBarCommand(Icon.Get("PrintSalesReport"), o => { PrintReport(); })
+                }
+            };
+        }
 
         public bool IsReportGenerated
         {
@@ -79,6 +98,70 @@ namespace FastPosFrontend.ViewModels
             {
                 vm.Dispose();
             });
+        }
+
+        private FixedDocument GeneratePrintReport()
+        {
+            FixedDocument document = new FixedDocument();
+            FixedPage fixedPage = new FixedPage();
+
+
+            DataTemplate dt = Application.Current.FindResource(typeof(DailyExpenseReport)) as DataTemplate;
+           
+
+            var contentOfPage = new UserControl();
+            contentOfPage.ContentTemplate = dt;
+
+            //contentOfPage.Content = CurrentOrder;
+            //contentOfPage.Content = GenerateContent(CurrentOrder);
+           
+            contentOfPage.Content = Report;
+           
+            var conv = new LengthConverter();
+
+            double width = (double)conv?.ConvertFromString("7cm");
+
+            double height = document.DocumentPaginator.PageSize.Height;
+            contentOfPage.Width = width;
+            document.DocumentPaginator.PageSize = new Size(width, height);
+
+            // fixedPage.Width = contentOfPage.Width;
+            //fixedPage.Height = contentOfPage.Height;
+            fixedPage.Children.Add(contentOfPage);
+            PageContent pageContent = new PageContent();
+            ((IAddChild)pageContent).AddChild(fixedPage);
+
+            document.Pages.Add(pageContent);
+            return document;
+        }
+
+        public void PrintReport()
+        {
+            ToastNotification.Notify("Printing");
+
+          
+                FixedDocument fixedDocument = GeneratePrintReport();
+                var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
+                //PrintDialog dialog = new PrintDialog();
+                //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+                //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+
+                IList<PrinterItem> printerItems = null;
+                var PrinterItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
+
+
+            printerItems = PrinterItemSetting.Where(item => item.SelectedReceipt).ToList();
+
+            foreach (var e in printerItems)
+            {
+                if (printers.Contains(e.Name))
+                {
+                    PrintDialog dialog = new PrintDialog { PrintQueue = new PrintQueue(new PrintServer(), e.Name) };
+                    dialog.PrintDocument(fixedDocument.DocumentPaginator, "DailyExpenseReport");
+                }
+            }
+
+            
         }
     }
 

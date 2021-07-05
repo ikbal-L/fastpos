@@ -138,8 +138,8 @@ namespace FastPosFrontend.ViewModels
 
         public void CreateAndSave()
         {
-            string name= Regex.Replace(FilterString, @"\d", "");
-            string mobile = Regex.Replace(FilterString, @"\D", "");
+            string name= Regex.Replace(FilterString, @"\s[0-9]+", "");
+            string mobile = Regex.Replace(FilterString, @"\w+\s", "");
            
             
             Customer customer = new Customer { Name = name, Mobile = mobile };
@@ -181,8 +181,8 @@ namespace FastPosFrontend.ViewModels
 
         public void CreateAndEdit()
         {
-            string mobile = Regex.Replace(FilterString, @"\D", "");
-            string name = Regex.Replace(FilterString, @"\d", "");
+            string name = Regex.Replace(FilterString, @"\s[0-9]+", "");
+            string mobile = Regex.Match(FilterString, @"\s[0-9]+").Value.Trim();
 
             Customer customer = new Customer { Name = name, Mobile = mobile };
             

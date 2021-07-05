@@ -276,6 +276,7 @@
     <Compile Include="Extensions\ModifierBase.cs" />
     <Compile Include="Extensions\ModifierCollection.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
+    <Compile Include="Helpers\AppScreen.cs" />
     <Compile Include="Helpers\Associations.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\Icon.cs" />
@@ -905,6 +906,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Resource Include="Resources\Entypo.ttf" />
     <Resource Include="Fonts\digital-7.ttf" />

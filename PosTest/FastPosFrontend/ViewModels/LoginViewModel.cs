@@ -167,6 +167,7 @@ namespace FastPosFrontend.ViewModels
 
 
         public void SetPinCodeAndLogin(object sender)
+        
         {
             
 

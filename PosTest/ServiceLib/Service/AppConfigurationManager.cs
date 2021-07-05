@@ -55,8 +55,9 @@ namespace ServiceLib.Service
         {
             key ??= typeof(T).Name ;
             if (!Configurations.ContainsKey(key)) return default;
-            if (!(Configurations[key] is JObject value)) return (T) Configurations[key];
-            var configurationString = value.ToString();
+            //if (!(Configurations[key] is JObject value)) return (T) Configurations[key];
+            if(!(Configurations[key].GetType() == typeof(JObject) || Configurations[key].GetType() == typeof(JArray))) return (T)Configurations[key];
+            var configurationString = Configurations[key].ToString();
             return JsonConvert.DeserializeObject<T>(configurationString);
 
         }

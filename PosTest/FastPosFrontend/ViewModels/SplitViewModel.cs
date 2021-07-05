@@ -455,7 +455,10 @@ namespace FastPosFrontend.ViewModels
             Parent.IsDialogOpen = false;
             Parent.DialogViewModel = null;
             CurrentOrder = null;
-            Parent.OrderItemsCollectionViewSource.Source = Parent.CurrentOrder.OrderItems;
+            if (Parent.CurrentOrder?.OrderItems!= null)
+            {
+                Parent.OrderItemsCollectionViewSource.Source = Parent.CurrentOrder.OrderItems;
+            }
             //if (Parent.CurrentOrder != null)
             //{
             //    CopyBackToCurrentOrderWithGroupingOfQuantities();
