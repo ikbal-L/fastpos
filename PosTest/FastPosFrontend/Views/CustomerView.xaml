@@ -17,7 +17,8 @@
             
     </UserControl.Resources>
 
-    <materialdesign:Flipper IsFlipped="{Binding IsEditing}" VerticalAlignment="Bottom">
+    <materialdesign:Flipper 
+        IsFlipped="{Binding IsEditing}"   >
         <materialdesign:Flipper.BackContent>
             <subviews:CustomerDetailView DataContext="{Binding CustomerDetailVm,diag:PresentationTraceSources.TraceLevel=High}" />
 
@@ -26,13 +27,18 @@
 
         </materialdesign:Flipper.BackContent>
         <materialdesign:Flipper.FrontContent>
-            <Grid Margin="0 50">
+            <StackPanel >
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="5*"/>
-                </Grid.RowDefinitions>
-                <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="0" Margin="0 0 0 20" CornerRadius="0" materialdesign:ShadowAssist.ShadowDepth="Depth2">
+                <!--<Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>-->
+                <materialdesign:ColorZone 
+                    Mode="PrimaryMid" 
+                    Grid.Row="0" 
+                    Margin="0 0 0 20" 
+                    CornerRadius="0" 
+                    materialdesign:ShadowAssist.ShadowDepth="Depth2">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -96,7 +102,7 @@
                 </materialdesign:ColorZone>
 
                 <ListBox    
-                Grid.Row="1" Margin="0" 
+                Grid.Row="1"  
                 Visibility="Visible" Background="White" 
                 ItemsSource="{Binding CustomerCollectionViewSource.View}">
 
@@ -118,7 +124,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </Grid>
+            </StackPanel>
         </materialdesign:Flipper.FrontContent>
     </materialdesign:Flipper>
 

@@ -8,7 +8,6 @@
              xmlns:controls="clr-namespace:FastPosFrontend.SL.Controls"
              xmlns:views="clr-namespace:FastPosFrontend.Views"
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
-             xmlns:system="clr-namespace:System;assembly=System.Collections"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"

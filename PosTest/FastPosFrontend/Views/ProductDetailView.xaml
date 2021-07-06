@@ -39,7 +39,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid  Margin="20" Width="600">
+        <Grid  Margin="20" Width="800">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -58,7 +58,7 @@
             <Border Grid.Row="1" Margin="2 5">
                 <TextBox materialdesign:HintAssist.Hint="Price" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      materialdesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding Price,UpdateSourceTrigger= PropertyChanged}" />
             </Border>
 
             <Border Grid.Row="2" Margin="2 5">
@@ -71,8 +71,8 @@
             <materialdesign:ColorPicker Grid.Row="3" MinHeight="150" Margin="2 5">
                 <materialdesign:ColorPicker.Color>
                     <Binding
-                    Path="Product.Background"
-                    Converter="{StaticResource SolidColorBrushToColorConverter}" />
+                    Path="Product.Background.Color"
+                     />
                 </materialdesign:ColorPicker.Color>
             </materialdesign:ColorPicker>
 

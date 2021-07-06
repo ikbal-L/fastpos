@@ -211,7 +211,7 @@
     </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
-        <Border BorderBrush="DarkGray" BorderThickness="1">
+        <Border BorderBrush="DarkGray" BorderThickness="1" >
             <Grid   Background="{Binding Background,FallbackValue=WhiteSmoke}"
                        cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
                        caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProduct($this)]" >
@@ -477,13 +477,20 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditivesOfProductStyle">
-        <StackPanel Orientation="Vertical" x:Name="AdditiveTemplate">
-            <Border x:Name="AdditiveSettingsClick" BorderBrush="LightGray" BorderThickness="1">
+        <StackPanel Orientation="Vertical" x:Name="AdditiveTemplate" Background="{Binding Background}">
+            <Border 
+                x:Name="AdditiveSettingsClick" 
+                BorderBrush="LightGray" 
+                BorderThickness="1" 
+                
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch">
                 <StackPanel>
-                    <DockPanel Height="70" Width="100" Background="{Binding Background}">
-                        <TextBlock Text="{Binding Path=Description}" FontSize="12" TextWrapping="Wrap"
+                    <DockPanel Height="70"  >
+                        <TextBlock Text="{Binding Path=Description}" FontSize="12" TextWrapping="NoWrap"
                                    TextAlignment="Center" DockPanel.Dock="Top" Margin="0 10"
-                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold"
+                                   ToolTip="{Binding Path=Description}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>

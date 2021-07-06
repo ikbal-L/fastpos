@@ -23,8 +23,6 @@
                          Visibility="{Binding IsPlatter ,Converter={StaticResource boolToVisibilityConverter}}"
                          ItemsSource="{Binding Additives}"
                          ItemTemplate="{StaticResource AdditivesOfProductStyle}"
-                                 
-
                          ScrollViewer.VerticalScrollBarVisibility="Auto" 
                 >
 
@@ -32,6 +30,8 @@
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Padding" Value="0" />
                             <Setter Property="Margin" Value="0" />
+                            <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemsPanel>

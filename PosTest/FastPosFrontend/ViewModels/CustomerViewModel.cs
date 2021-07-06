@@ -181,7 +181,7 @@ namespace FastPosFrontend.ViewModels
 
         public void CreateAndEdit()
         {
-            string name = Regex.Replace(FilterString, @"\s[0-9]+", "");
+            string name = Regex.Match(FilterString, @"\w+\s+").Value.Trim();
             string mobile = Regex.Match(FilterString, @"\s[0-9]+").Value.Trim();
 
             Customer customer = new Customer { Name = name, Mobile = mobile };

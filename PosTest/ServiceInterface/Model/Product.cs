@@ -167,7 +167,7 @@ namespace ServiceInterface.Model
             set => Set(ref _backgroundString, value);
         }
 
-        public virtual Brush Background
+        public virtual SolidColorBrush Background
         {
             get => _background ?? (_background =
                 new SolidColorBrush((Color) ColorConverter.ConvertFromString(BackgroundString)));
@@ -178,26 +178,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        public virtual Color? BackgroundColor
-        {
-            get
-            {
-                if (_backgroundColor == null)
-                {
-                    _backgroundColor = (Color) ColorConverter.ConvertFromString(BackgroundString);
-                }
-
-                return _backgroundColor;
-            }
-            set
-            {
-                _backgroundColor = value;
-                BackgroundString = _backgroundColor.ToString();
-                NotifyOfPropertyChange(() => BackgroundString);
-                Background = new SolidColorBrush((Color) _backgroundColor);
-                NotifyOfPropertyChange(() => IsDark);
-            }
-        }
+        
 
         [DataMember]
         //[DefaultValue(false)]
@@ -225,7 +206,7 @@ namespace ServiceInterface.Model
         {
             get
             {
-                var c = BackgroundColor.GetValueOrDefault();
+                var c = Background.Color;
                 var d = (5 * c.G + 2 * c.R + c.B) <= 8 * 128;
                 return (5 * c.G + 2 * c.R + c.B) <= 8 * 140;
             }

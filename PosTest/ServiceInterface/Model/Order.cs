@@ -540,6 +540,11 @@ namespace ServiceInterface.Model
                     new[] { nameof(TotalDiscountAmount) });
             }
         }
+
+        public override string ToString()
+        {
+            return $"Order #{OrderNumber}";
+        }
     }
 
     [DataContract]

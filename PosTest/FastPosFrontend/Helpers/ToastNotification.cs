@@ -29,7 +29,7 @@ namespace FastPosFrontend.Helpers
                            offsetY: 10);
 
                        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                           notificationLifetime: TimeSpan.FromSeconds(7),
+                           notificationLifetime: TimeSpan.FromSeconds(2),
                            maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
                        cfg.Dispatcher = Application.Current.Dispatcher;

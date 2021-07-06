@@ -1235,7 +1235,7 @@ namespace FastPosFrontend.ViewModels
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {
-                    if (ProductDetailViewModel == null)
+                    if (ProductDetailViewModel != null)
                     {
                         ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
                         ProductDetailViewModel = null; 
