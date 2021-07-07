@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace FastPosFrontend.Views.SubViews
+namespace FastPosFrontend.Views
 {
     /// <summary>
     /// Interaction logic for CustomerDetailView.xaml

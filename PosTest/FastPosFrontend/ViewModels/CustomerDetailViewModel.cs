@@ -8,10 +8,9 @@ using System.Runtime.CompilerServices;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels.SubViewModel
+namespace FastPosFrontend.ViewModels
 {
     public class CustomerDetailViewModel : PropertyChangedBase, INotifyDataErrorInfo
     {

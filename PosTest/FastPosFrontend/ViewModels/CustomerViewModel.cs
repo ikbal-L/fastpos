@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.SubViewModel;
+using FastPosFrontend.Views;
 using FastPosFrontend.Views.SubViews;
 using ServiceInterface.Model;
 using ServiceLib.Service;
@@ -181,7 +182,7 @@ namespace FastPosFrontend.ViewModels
 
         public void CreateAndEdit()
         {
-            string name = Regex.Match(FilterString, @"\w+\s+").Value.Trim();
+            string name = Regex.Match(FilterString, @"\w+\s*").Value.Trim();
             string mobile = Regex.Match(FilterString, @"\s[0-9]+").Value.Trim();
 
             Customer customer = new Customer { Name = name, Mobile = mobile };
@@ -189,16 +190,16 @@ namespace FastPosFrontend.ViewModels
             CustomerDetailVm = new CustomerDetailViewModel(customer);
             CustomerDetailVm.CommandExecuted += CustomerDetailViewModel_CommandExecuted;
             IsEditing = true;
-            DetailView= new CustomerDetailView(){DataContext = CustomerDetailVm};
+            //DetailView= new CustomerDetailView(){DataContext = CustomerDetailVm};
             FilterString = string.Empty;
             
         }
 
-        public CustomerDetailView DetailView
-        {
-            get => _detailView;
-            set => Set(ref _detailView, value);
-        }
+        //public CustomerDetailView DetailView
+        //{
+        //    get => _detailView;
+        //    set => Set(ref _detailView, value);
+        //}
 
         private void CustomerDetailViewModel_CommandExecuted(object sender, CommandExecutedEventArgs e)
         {

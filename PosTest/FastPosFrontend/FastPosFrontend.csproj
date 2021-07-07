@@ -344,7 +344,7 @@
     <Compile Include="ViewModels\AddEditWaiterViewModel.cs" />
     <Compile Include="ViewModels\WaiterSettingsViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
-    <Compile Include="ViewModels\SubViewModel\CustomerDetailViewModel.cs" />
+    <Compile Include="ViewModels\CustomerDetailViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel\DelivereyViewModel.cs" />
     <Compile Include="ViewModels\CategoryDetailViewModel.cs" />
     <Compile Include="ViewModels\ProductDetailViewModel.cs" />
@@ -485,11 +485,8 @@
     <Compile Include="Views\CategoryDetailView.xaml.cs">
       <DependentUpon>CategoryDetailView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubViews\CustomerDetailView.xaml.cs">
+    <Compile Include="Views\CustomerDetailView.xaml.cs">
       <DependentUpon>CustomerDetailView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SubViews\CustomerEditView.xaml.cs">
-      <DependentUpon>CustomerEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\DelivereyView.xaml.cs">
       <DependentUpon>DelivereyView.xaml</DependentUpon>
@@ -832,11 +829,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SubViews\CustomerDetailView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\SubViews\CustomerEditView.xaml">
+    <Page Include="Views\CustomerDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
