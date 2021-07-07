@@ -224,7 +224,7 @@
                                             <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
                                                        TextWrapping="WrapWithOverflow" FontWeight="DemiBold" />
                                             <materialdesign:PackIcon DockPanel.Dock="Left" Kind="Phone" />
-                                            <TextBlock DockPanel.Dock="Left" Text="{Binding PhoneNumber}" />
+                                            <TextBlock DockPanel.Dock="Left" Text="{Binding PhoneNumbers[0]}" />
                                         </DockPanel>
                                     </Button>
                                 </DataTemplate>
@@ -257,7 +257,7 @@
                                                        TextWrapping="WrapWithOverflow" FontWeight="DemiBold" />
                                             <materialdesign:PackIcon DockPanel.Dock="Left" Kind="Phone" Width="20"
                                                                      Height="20" VerticalAlignment="Center" />
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding PhoneNumber}" />
+                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding PhoneNumbers[0]}" />
                                         </DockPanel>
                                     </Button>
                                 </DataTemplate>

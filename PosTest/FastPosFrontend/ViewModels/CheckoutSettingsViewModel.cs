@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
@@ -30,7 +31,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("Checkout settings",target:typeof(CheckoutSettingsViewModel),groupName:"Settings")]
-    public class CheckoutSettingsViewModel : LazyScreen
+    public class CheckoutSettingsViewModel : LazyScreen,ISettingsController
     {
         private bool _IsProductDetailsDrawerOpen;
         private bool _IsDeleteCategoryDialogOpen;
@@ -103,12 +104,13 @@ namespace FastPosFrontend.ViewModels
 
        
             _allProducts = StateManager.Get<Product>().ToList();
-            _activeProducts = _allProducts
-                .Where(p => p.CategoryId != null && p.Category != null)
-                .OrderBy(p=>p.CategoryId)
-                .ThenBy(p=>p.Rank).ToList();
+            //_activeProducts = _allProducts
+            //    .Where(p => p.CategoryId != null && p.Category != null)
+            //    .OrderBy(p=>p.CategoryId)
+            //    .ThenBy(p=>p.Rank).ToList();
            
             _allCategories = StateManager.Get<Category>().ToList();
+            _allCategories.Where(c=>c.Rank!= null&& c.Products!= null).ToList().ForEach(c=>c.Products = c.Products.OrderBy(p => p.Rank).ToList());
            
 
             LoadCategoryPages();
@@ -379,6 +381,7 @@ namespace FastPosFrontend.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
+            SelectedProduct = null;
             if (category == SelectedCategory) return;
             SelectedCategory = category;
             if (category?.Id == null)
@@ -400,11 +403,12 @@ namespace FastPosFrontend.ViewModels
 
             CurrentProducts?.Clear();
 
-            var filteredProducts = _activeProducts.Where(p => p.Category == category && p.Rank != null).ToList();
+            //var filteredProducts = _activeProducts.Where(p => p.Category == category && p.Rank != null).ToList();
+            var filteredProducts = category.Products;
 
-            //var comparer = new Comparer<Product>();
-           
-            //filteredProducts.Sort(comparer);
+            var comparer = new Comparer<Product>();
+
+            filteredProducts.Sort(comparer);
             RankedItemsCollectionHelper.LoadPagesFilled(source: filteredProducts, target: CurrentProducts,
                 size: ProductPageSize, parameter: category);
         }
@@ -624,6 +628,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             PutProductInCellOf(SelectedProduct, SelectedFreeProduct);
+            //_activeProducts.Add(SelectedFreeProduct);
             FreeProducts.Remove(SelectedFreeProduct);
         }
 
@@ -666,7 +671,11 @@ namespace FastPosFrontend.ViewModels
             StateManager.Save<Product>(sourceProduct);
 
             SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
+            
+            //var insertIndex = SelectedCategory.Products.FindIndex(p=> p.Rank-1 == sourceProduct.Rank);
+            //SelectedCategory.Products.Insert(insertIndex,sourceProduct);
             SelectedCategory.Products.Add(sourceProduct);
+
             StateManager.Save<Category>(SelectedCategory);
 
         }
@@ -1178,6 +1187,8 @@ namespace FastPosFrontend.ViewModels
                     StateManager.Save(targetCategory);
                 }
 
+                incomingCategory.ProductIds = new List<long>();
+                incomingCategory.Products = new List<Product>();
                 StateManager.Save(incomingCategory);
        
             }
@@ -1337,6 +1348,18 @@ namespace FastPosFrontend.ViewModels
                     ShowCategoryProducts(SelectedCategory);
                 }
             }
+        }
+
+        public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+
+        public void RaiseSettingsUpdated()
+        {
+            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(_allProducts,_allCategories));
+        }
+
+        public override void BeforeNavigateAway()
+        {
+            RaiseSettingsUpdated();
         }
     }
 

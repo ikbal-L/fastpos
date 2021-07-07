@@ -171,11 +171,27 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="1.4*"/>
                         </Grid.RowDefinitions>
-                        <DockPanel Grid.Column="0" Grid.Row="0">
-                            <materialdesign:PackIcon Kind="CoinOutline" Width="25" Height="25" Padding="0" Foreground="#26ff26"/>
-                            <Label Content="{Binding SplittedOrder.NewTotal, StringFormat=N2}" FontSize="25" 
+                        <Button HorizontalContentAlignment="Stretch"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('CopyToNumericZone')]">
+                            <Button.Style>
+                                <Style TargetType="Button" >
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="Transparent">
+                                                    <ContentPresenter/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                            <DockPanel Grid.Column="0" Grid.Row="0">
+                                <materialdesign:PackIcon Kind="CoinOutline" Width="25" Height="25" Padding="0" Foreground="#26ff26"/>
+                                <Label Content="{Binding SplittedOrder.NewTotal, StringFormat=N2}" FontSize="25" 
                                        FontFamily="{StaticResource DigitalFontFamily}" Foreground="#26ff26" HorizontalAlignment="Right" FontWeight="Bold" />
-                        </DockPanel>
+                            </DockPanel>
+                        </Button>
                         <TextBox  Text="{Binding ElementName=keypad, Path=NumericValue}" Grid.Column="1" Grid.Row="2"
                                   Foreground="#26ff26" FontSize="35" FontFamily="{StaticResource DigitalFontFamily}" 
                                   HorizontalContentAlignment="Right" Padding="1 -2 1 1"  FontWeight="Bold"     />

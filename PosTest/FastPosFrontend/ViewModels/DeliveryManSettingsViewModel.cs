@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.Views;
@@ -10,7 +12,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItemConfiguration("Deliveryman Settings", typeof(DeliveryManSettingsViewModel), groupName: "Settings")]
-    public class DeliveryManSettingsViewModel : LazyScreen
+    public class DeliveryManSettingsViewModel : LazyScreen,ISettingsController
     {
         private ObservableCollection<Deliveryman> _Deliverymans;
 
@@ -107,6 +109,18 @@ namespace FastPosFrontend.ViewModels
             _AddEditDeliveryManViewModel = new AddEditDeliveryManViewModel(this);
             _addEditDeliveryManView = new AddEditDeliveryManView() { DataContext = _AddEditDeliveryManViewModel };
             DailogContent = _addEditDeliveryManView;
+        }
+
+        public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+
+        public void RaiseSettingsUpdated()
+        {
+            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(Deliverymans));
+        }
+
+        public override void BeforeNavigateAway()
+        {
+            RaiseSettingsUpdated();
         }
     }
 }

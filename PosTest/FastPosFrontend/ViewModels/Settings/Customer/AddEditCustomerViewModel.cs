@@ -69,6 +69,7 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
                 if (index==-1)
                 {
                     Parent.Customers.Add(Customer);
+                    Parent.NotifyCustomers();
                 }
                 else
                 {

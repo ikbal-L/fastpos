@@ -23,6 +23,7 @@ using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
+using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
 using MaterialDesignThemes.Wpf;
 using ServiceInterface.Model;
@@ -38,7 +39,7 @@ namespace FastPosFrontend.ViewModels
         title: Constants.Navigation.Checkout, 
         target: typeof(CheckoutViewModel),
         keepAlive: true, isDefault: true)]
-    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>
+    public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>,ISettingsListener
     {
         #region Private fields
 
@@ -185,13 +186,13 @@ namespace FastPosFrontend.ViewModels
 
             _data = new NotifyAllTasksCompletion(categories,
                 unprocessedOrders /*,deliveryMen, waiters, tables, customers, products*/);
-            //if (_data.IsCompleted)
-            //{
-            //    Initialize();
-            //    IsReady = true;
+            if (_data.IsCompleted)
+            {
+                Initialize();
+                IsReady = true;
 
-            //}
-            //_data.AllTasksCompleted += OnAllTasksCompleted;
+            }
+            _data.AllTasksCompleted += OnAllTasksCompleted;
         }
 
         private void SetupEmbeddedCommandBar()
@@ -2075,6 +2076,77 @@ namespace FastPosFrontend.ViewModels
             AppConfigurationManager.Save("OrderCountModifiedDate", DateTime.Today.ToString("yyyy-MM-dd"));
             AppConfigurationManager.Save("OrderCount", orderCount);
             base.OnDeactivate(close);
+        }
+
+        public Type [] SettingsControllers => new []
+        {
+            typeof(CheckoutSettingsViewModel),
+            typeof(CustomerSettingsViewModel),
+            typeof(WaiterSettingsViewModel),
+            typeof(DeliveryManSettingsViewModel),
+        };
+
+        public void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
+        {
+            if (sender.GetType() == typeof(CheckoutSettingsViewModel))
+            {
+                OnCheckoutSettingsUpdated(e);
+                return;
+            }
+
+            if (sender.GetType() == typeof(CustomerSettingsViewModel))
+            {
+                OnCustomerSettingsUpdated(e);
+                return;
+            }
+            if (sender.GetType() == typeof(WaiterSettingsViewModel))
+            {
+                OnWaiterSettingsUpdated(e);
+                return;
+            }
+            if (sender.GetType() == typeof(DeliveryManSettingsViewModel))
+            {
+                OnDeliverySettingsUpdated(e);
+                return;
+            }
+
+
+        }
+
+        private void OnCheckoutSettingsUpdated(SettingsUpdatedEventArgs e)
+        {
+            var products = e.Settings.FirstOrDefault(o => o is IEnumerable<Product>) as IEnumerable<Product>;
+            var categories = e.Settings.FirstOrDefault(o => o is IEnumerable<Category>) as IEnumerable<Category>;
+
+            AllProducts = products.ToList();
+            AllCategories = categories.ToList();
+            LoadCategoryPages();
+            PaginatedCategories.Source = Categories;
+            PaginatedCategories.View?.Refresh();
+            CurrentCategory = null;
+            ShowCategoryProducts(Categories[0]);
+        }
+
+        private void OnCustomerSettingsUpdated(SettingsUpdatedEventArgs e)
+        {
+            var customers = e.Settings.FirstOrDefault(o => o is IEnumerable<Customer>) as IEnumerable<Customer>;
+            CustomerViewModel.CustomerCollectionViewSource.Source = customers;
+            CustomerViewModel.CustomerCollectionViewSource.View.Refresh();
+
+        }
+
+        private void OnWaiterSettingsUpdated(SettingsUpdatedEventArgs e)
+        {
+            var waiters = e.Settings.FirstOrDefault(o => o is IEnumerable<Waiter>) as IEnumerable<Waiter>;
+            Waiters = new BindableCollection<Waiter>(waiters);
+
+        }
+
+        private void OnDeliverySettingsUpdated(SettingsUpdatedEventArgs e)
+        {
+            var deliverymen = e.Settings.FirstOrDefault(o => o is IEnumerable<Deliveryman>) as IEnumerable<Deliveryman>;
+            Delivereymen = new BindableCollection<Deliveryman>(deliverymen);
+
         }
     }
 }

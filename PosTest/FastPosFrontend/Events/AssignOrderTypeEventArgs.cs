@@ -6,4 +6,6 @@ namespace FastPosFrontend.Events
     {
         public OrderType OrderType { get; set; }
     }
+
+   
 }

@@ -352,7 +352,14 @@ namespace FastPosFrontend.ViewModels
 
         public void ActionKeyboard(ActionButton cmd)
         {
+            if (cmd == ActionButton.CopyToNumericZone)
+            {
+                NumericZone = SplittedOrder.NewTotal + "";
+                return;
+            }
+
             if (string.IsNullOrEmpty(NumericZone)) return;
+            
             switch (cmd)
             {
                 case ActionButton.Price:

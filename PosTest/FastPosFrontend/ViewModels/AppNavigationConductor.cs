@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Caliburn.Micro;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 
 namespace FastPosFrontend.ViewModels
@@ -163,6 +164,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             var screenInstance = (T) Activator.CreateInstance(navigationItem.Target);
+            SetSettingsListener(screenInstance);
             ActivateScreenByType(screenInstance);
         }
 
@@ -172,6 +174,7 @@ namespace FastPosFrontend.ViewModels
             {
                 screen.Parent = this;
                 //if (ActiveScreen == null||ActiveScreen.CanNavigate())
+                ActiveScreen?.BeforeNavigateAway();
                 ActiveScreen = screen;
                 if (screenInstance is LazyScreen lazyScreen)
                 {
@@ -190,5 +193,21 @@ namespace FastPosFrontend.ViewModels
             SelectedNavigationItem = defaultItem;
             NavigateToItem(defaultItem);
         }
+
+        public void  SetSettingsListener(object obj)
+        {
+            if (obj is ISettingsController settingsController)
+            {
+                foreach (var (_,instance) in KeepAliveScreens.Select(x => (x.Key, x.Value)))
+                {
+                    if (instance is ISettingsListener listener && listener.SettingsControllers.Contains(settingsController.GetType()) )
+                    {
+                        settingsController.SettingsUpdated += listener.OnSettingsUpdated;
+                    }
+                }
+            }
+        }
+
+        
     }
 }

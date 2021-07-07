@@ -38,5 +38,7 @@ namespace FastPosFrontend.Helpers
         {
             return true;
         }
+
+        public virtual void BeforeNavigateAway(){}
     }
 }

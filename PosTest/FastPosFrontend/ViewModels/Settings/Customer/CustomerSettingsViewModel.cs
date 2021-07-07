@@ -1,6 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Controls;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Views.Settings;
 using FastPosFrontend.Views.Settings.Customer;
@@ -9,7 +11,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels.Settings.Customer
 {
     [NavigationItemConfiguration("Customer Settings",target:typeof(CustomerSettingsViewModel), groupName: "Settings")]
-    public class CustomerSettingsViewModel : AppScreen
+    public class CustomerSettingsViewModel : AppScreen,ISettingsController
     {
         private ObservableCollection<ServiceInterface.Model.Customer> _Customers;
 
@@ -99,5 +101,17 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
             NotifyOfPropertyChange(nameof(FilteredCustomers));
 
         }
+
+      public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+
+      public void RaiseSettingsUpdated()
+      {
+            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(Customers));
+      }
+
+      public override void BeforeNavigateAway()
+      {
+          RaiseSettingsUpdated();
+      }
     }
 }

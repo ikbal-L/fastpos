@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.Views;
@@ -11,7 +13,7 @@ namespace FastPosFrontend.ViewModels
 {
 
     [NavigationItemConfiguration("Waiter Settings", typeof(WaiterSettingsViewModel), groupName: "Settings")]
-    public class WaiterSettingsViewModel: LazyScreen
+    public class WaiterSettingsViewModel: LazyScreen,ISettingsController
     {
         private ObservableCollection<ServiceInterface.Model.Waiter> _Waiters;
 
@@ -104,6 +106,18 @@ namespace FastPosFrontend.ViewModels
             _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
             _addEditWaiterView = new AddEditWaiterView() { DataContext = _AddEditWaiterViewModel };
             DailogContent = _addEditWaiterView;
+        }
+
+        public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+
+        public void RaiseSettingsUpdated()
+        {
+            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(Waiters));
+        }
+
+        public override void BeforeNavigateAway()
+        {
+            RaiseSettingsUpdated();
         }
     }
 }

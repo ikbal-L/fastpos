@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 using ServiceLib.helpers;
@@ -27,6 +30,10 @@ namespace FastPosFrontend.ViewModels
             StateManager.Instance.HandleErrorsUsing(ResponseHandler.Handler);
         }
 
+        public void SetSettingsListeners()
+        {
+            
+        }
 
         public bool IsLoggedIn
         {
