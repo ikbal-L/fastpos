@@ -89,7 +89,7 @@ namespace FastPosFrontend.Converters
             int cols = 6;
             if (configuration != null)
             {                                                               
-                cols = configuration.NumberCategores;
+                cols = configuration.NumberOfCategories;
             }
 
             var conv = new LengthConverter();

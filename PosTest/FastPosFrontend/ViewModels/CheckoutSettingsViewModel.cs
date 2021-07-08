@@ -72,7 +72,7 @@ namespace FastPosFrontend.ViewModels
             var pageSize = ProductLayout.Configuration.NumberOfProducts;
 
             ProductPageSize = pageSize;
-            CategoryPageSize = 6;
+            CategoryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
 
             //StateManager.Fetch();
             
@@ -197,6 +197,7 @@ namespace FastPosFrontend.ViewModels
         private List<Product> _allProducts;
         private List<Product> _activeProducts;
         private List<Category> _allCategories;
+        private int _numberOfCategoryRows;
 
         public int ProductPageSize
         {
@@ -336,6 +337,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _isCategory, value);
         }
 
+
         public SnackbarMessageQueue MessageQueue { get; } = new SnackbarMessageQueue();
 
         private void Notify(string Message)
@@ -372,9 +374,9 @@ namespace FastPosFrontend.ViewModels
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
             var maxRank = (int)categories.Max(c => c.Rank);
-            int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
-            nbpage = nbpage == 0 ? 1 : nbpage;
-            var size = nbpage * _categpryPageSize;
+            _numberOfCategoryRows = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
+            
+            var size = _numberOfCategoryRows * _categpryPageSize;
 
             RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: CurrentCategories, size: size);
         }
@@ -1308,6 +1310,17 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             EditCategory(true);
+        }
+
+        public void AddCategoryRow()
+        {
+            var baseRank = CategoryPageSize * _numberOfCategoryRows + 1;
+            _numberOfCategoryRows++;
+            var maxRank = CategoryPageSize * _numberOfCategoryRows;
+            for (var i = baseRank; i <= maxRank; i++)
+            {
+                CurrentCategories.Add(new Category(){Rank = i});
+            }
         }
 
         public void SavedProduct()

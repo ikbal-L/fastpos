@@ -481,15 +481,32 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <DockPanel>
-                                        <materialdesign:PackIcon Kind="CoinOutline" Width="40" Height="40" Padding="0"
-                                                                 Foreground="#26ff26" />
-                                        <TextBlock Foreground="#26ff26" TextAlignment="Right"
-                                                   FontFamily="{StaticResource DigitalFontFamily}"
-                                                   FontSize="32" Padding="0 5 0 0"
-                                                   Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
-                                                   caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]" />
-                                    </DockPanel>
+                                    <Button 
+                                        HorizontalContentAlignment="Stretch"
+                                        caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('CopyToNumericZone')]">
+                                        <Button.Style>
+                                            <Style TargetType="Button" >
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="Transparent">
+                                                                <ContentPresenter/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                        <DockPanel>
+                                            <materialdesign:PackIcon Kind="CoinOutline" Width="40" Height="40" Padding="0"
+                                                                     Foreground="#26ff26" />
+                                            <TextBlock Foreground="#26ff26" TextAlignment="Right"
+                                                       FontFamily="{StaticResource DigitalFontFamily}"
+                                                       FontSize="32" Padding="0 5 0 0"
+                                                       Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
+                                                       caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]" />
+                                        </DockPanel>
+                                    </Button>
                                     <DockPanel Grid.Row="2" Grid.Column="3">
                                         <materialdesign:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
                                                                  Height="30" Padding="0" Foreground="#26ff26" />

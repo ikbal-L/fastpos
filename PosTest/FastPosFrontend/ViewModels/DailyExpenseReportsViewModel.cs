@@ -106,7 +106,7 @@ namespace FastPosFrontend.ViewModels
             FixedPage fixedPage = new FixedPage();
 
 
-            DataTemplate dt = Application.Current.FindResource(typeof(DailyExpenseReport)) as DataTemplate;
+            DataTemplate dt = Application.Current.FindResource("DailyExpenseReportPrint") as DataTemplate;
            
 
             var contentOfPage = new UserControl();

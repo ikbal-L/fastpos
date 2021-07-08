@@ -162,7 +162,7 @@ namespace FastPosFrontend.ViewModels
 
             if (configuration != null)
             {
-                itemsPerCategoryPage = configuration.NumberCategores;
+                itemsPerCategoryPage = configuration.NumberOfCategories;
             }
 
             Setup();
@@ -1005,18 +1005,23 @@ namespace FastPosFrontend.ViewModels
 
         public void ActionKeyboard(ActionButton cmd)
         {
-            if (string.IsNullOrEmpty(NumericZone) &&
-                cmd != ActionButton.Split &&
-                cmd != ActionButton.Cmd &&
-                cmd != ActionButton.Deliverey &&
-                cmd != ActionButton.Takeaway &&
-                cmd != ActionButton.Table &&
-                cmd != ActionButton.Served &&
-                cmd != ActionButton.Del && cmd != ActionButton.DElIVERED)
+            if (cmd == ActionButton.CopyToNumericZone)
             {
-                ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
+                NumericZone = CurrentOrder.NewTotal + "";
                 return;
             }
+            //if (string.IsNullOrEmpty(NumericZone) &&
+            //    cmd != ActionButton.Split &&
+            //    cmd != ActionButton.Cmd &&
+            //    cmd != ActionButton.Deliverey &&
+            //    cmd != ActionButton.Takeaway &&
+            //    cmd != ActionButton.Table &&
+            //    cmd != ActionButton.Served &&
+            //    cmd != ActionButton.Del && cmd != ActionButton.DElIVERED)
+            //{
+            //    ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
+            //    return;
+            //}
 
             switch (cmd)
             {

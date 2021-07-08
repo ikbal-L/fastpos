@@ -15,7 +15,7 @@ namespace FastPosFrontend.ViewModels.Settings
         private int _tableNumber;
         private string _serverHost;
         private bool _initialized = false;
-        private int _numberCategores;
+        private int _numberOfCategories;
 
         public bool Initialized
         {
@@ -69,13 +69,13 @@ namespace FastPosFrontend.ViewModels.Settings
         
         [JsonProperty]
 
-        public int NumberCategores
+        public int NumberOfCategories
         {
-            get { return _numberCategores; }
+            get { return _numberOfCategories; }
             set
             {
-                _numberCategores = value;
-                NotifyOfPropertyChange(nameof(NumberCategores));
+                _numberOfCategories = value;
+                NotifyOfPropertyChange(nameof(NumberOfCategories));
             }
 
         }

@@ -26,7 +26,7 @@
             <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
                     VerticalAlignment="Center"
                     AcceptsReturn="True"
-                     Text="{Binding Settings.NumberCategores,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding Settings.NumberOfCategories,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     Width="300"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"

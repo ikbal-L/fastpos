@@ -454,4 +454,165 @@
             </Grid>
         </Border>
     </DataTemplate>
+
+    <DataTemplate x:Key="DailyExpenseReportPrint" DataType="models:DailyExpenseReport">
+        <Border BorderBrush="Black" BorderThickness="1" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Margin="10">
+                    <TextBlock Text="Cloture de cais" HorizontalAlignment="Center"
+                               FontSize="16" FontWeight="DemiBold" />
+                </Border>
+                <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
+                    <TextBlock Text="Fast Food: Arabi" HorizontalAlignment="Center"
+                               FontSize="16" FontWeight="DemiBold" />
+                </Border>
+                <Grid Grid.Row="2" x:Name="Info" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding IssuedDate,StringFormat='Date: {0:d}',ConverterCulture='fr-DZ'}" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding IssuedDate,StringFormat='Heure: {0:t}',ConverterCulture='fr-DZ'}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Caisse: C1" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Session 14" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Ouverte le ..." Grid.ColumnSpan="2" />
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Cloture le ..." Grid.ColumnSpan="2" />
+                </Grid>
+                <Grid Grid.Row="3" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold"
+                               Text="{Binding NumberOfPayments,StringFormat=Number de ventes {0}}"
+                               TextDecorations="Underline" />
+                    <Grid Grid.Row="1" x:Name="EarningsSection">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Encaissement" TextDecorations="Underline" FontWeight="DemiBold" />
+                        <Grid Grid.Row="1" Margin="30 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="DemiBold" xml:space="preserve">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Espèces X {0:D2}  {1:C2}"
+                                                       ConverterCulture="fr-DZ">
+                                            <Binding Path="CashPayments.Count" />
+                                            <Binding Path="CashPayments.Values"
+                                                     Converter="{StaticResource SumValuesConverter}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ListView Grid.Row="1" ItemsSource="{Binding CashPayments}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" >
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  TK-{0:D6} {1:C2}"
+                                                                   ConverterCulture="fr-DZ">
+                                                        <Binding Path="Key" />
+                                                        <Binding Path="Value"  />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="DemiBold">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Livraison&#x09;X {0:D2}&#x09;&#x09;{1:C2}"
+                                                      >
+                                            <Binding Path="DeliveryPayments.Count" />
+                                            <Binding Path="DeliveryPayments.Values"
+                                                     Converter="{StaticResource SumValuesConverter}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ListView Grid.Row="1" ItemsSource="{Binding DeliveryPayments}" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
+                                                                  xml:space="preserve">
+                                                        <Binding Path="Key" />
+                                                        <Binding Path="Value" />
+                                                        </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+                    <Grid Grid.Row="2" x:Name="CashRegisterInfoSection">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Controle de font de caisse" TextDecorations="Underline"
+                                   FontWeight="DemiBold" />
+                        <StackPanel Grid.Row="1" />
+                    </Grid>
+                    <Grid Grid.Row="3" x:Name="EarningsByCategorySection">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Par Categorie" TextDecorations="Underline" FontWeight="DemiBold" />
+                        <ListView Grid.Row="1" ItemsSource="{Binding EarningsByCategory}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.Columns>
+                                        <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" />
+                                        <GridViewColumn Header="Quantity"
+                                                        DisplayMemberBinding="{Binding QuantityOfItems}" />
+                                        <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" />
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
+
+                        </ListView>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </DataTemplate>
 </ResourceDictionary>
