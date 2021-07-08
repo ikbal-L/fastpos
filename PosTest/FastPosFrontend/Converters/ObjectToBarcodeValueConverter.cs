@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ServiceInterface.Model;
 
 
 namespace FastPosFrontend.Converters
@@ -18,7 +19,8 @@ namespace FastPosFrontend.Converters
             if (value!= null)
             {
                 BarcodeLib.Barcode b = new BarcodeLib.Barcode();
-                var stringToEncode = ((int)value).ToString("D8", CultureInfo.InvariantCulture);
+                var order = value as Order;
+                var stringToEncode = (order.OrderNumber).ToString("D8", CultureInfo.InvariantCulture);
                 var conv = new Int32Converter();
                 //int barcodeWidth = (int) conv.ConvertFromString("4cm");
                 //var barcodeHeight = (int) conv.ConvertFromString("2.5cm");

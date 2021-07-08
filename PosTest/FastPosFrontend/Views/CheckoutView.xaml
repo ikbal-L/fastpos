@@ -200,7 +200,10 @@
                                     <RadioButton Content="{Binding Number}" GroupName="groupName" FontSize="20"
                                                  FontWeight="Bold"
                                                  IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
-                                                 Style="{StaticResource ButtonTopOrderTable}" />
+                                                 Style="{StaticResource ButtonTopOrderTable}"
+                                                 >
+                                
+                                    </RadioButton>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemsPanel>

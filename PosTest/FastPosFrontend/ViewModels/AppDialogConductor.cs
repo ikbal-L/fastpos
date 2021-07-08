@@ -78,6 +78,7 @@ namespace FastPosFrontend.ViewModels
     {
         protected object _content;
         private AppDialogConductor _host;
+        private string _title;
 
         public DialogContent()
         {
@@ -99,6 +100,12 @@ namespace FastPosFrontend.ViewModels
         {
             get => _content;
             set => Set(ref _content, value);
+        }
+
+        public string Title
+        {
+            get => _title;
+            set => Set(ref _title, value);
         }
 
         public AppDialogConductor Host
@@ -132,6 +139,12 @@ namespace FastPosFrontend.ViewModels
             return new DefaultDialogBuilder(){Content = content};
         }
 
+        public static DefaultDialogBuilder Title(this DefaultDialogBuilder builder, string title)
+        {
+            builder.Title = title;
+            return builder;
+        }
+
         public static DefaultDialogBuilder Ok( this DefaultDialogBuilder builder ,Action<object> executeMethod, Func<object, bool> canExecuteMethod = null, string style = "")
         {
             builder.Ok =new GenericCommand("Ok",executeMethod,canExecuteMethod,style);
@@ -141,13 +154,14 @@ namespace FastPosFrontend.ViewModels
         public static GenericDialogContentViewModel Cancel(this DefaultDialogBuilder builder,Action<object> executeMethod, Func<object, bool> canExecuteMethod = null, string style = "")
         {
             builder.Cancel =new GenericCommand("Cancel", executeMethod, canExecuteMethod, style);
-            return new GenericDialogContentViewModel(builder.Content,builder.Ok,builder.Cancel);
+            return new GenericDialogContentViewModel(builder.Content,builder.Ok,builder.Cancel){Title = builder.Title};
         }
     }
 
     public  class DefaultDialogBuilder
     {
         public object Content { get; set; }
+        public string Title { get; set; }
         public GenericCommand Ok { get; set; }
         public GenericCommand Cancel { get; set; }
         

@@ -24,7 +24,7 @@
                     Foreground="WhiteSmoke"></md:PackIcon>
                 <TextBlock 
                     Grid.Column="1" 
-                    Text="Title Goes Here"
+                    Text="{Binding Title}"
                     Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                     VerticalAlignment="Center"
                     Foreground="WhiteSmoke"></TextBlock>

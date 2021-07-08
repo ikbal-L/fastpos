@@ -98,6 +98,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isOrderInfoShown;
         private readonly DispatcherTimer _orderInfoCloseTimer;
         private string _lastModifiedOrderPropertyName;
+        private Table _selectedOrderTable;
 
         #endregion
 
@@ -585,8 +586,14 @@ namespace FastPosFrontend.ViewModels
             set
             {
                 TableAction(value);
-                //Set(ref _selectedTable, value);
+                Set(ref _selectedTable, value);
             }
+        }
+
+        public Table SelectedOrderTable
+        {
+            get => _selectedOrderTable;
+            set => Set(ref _selectedOrderTable, value);
         }
 
         public BindableCollection<Table> Tables
@@ -731,6 +738,7 @@ namespace FastPosFrontend.ViewModels
             SelectedDeliveryman = CurrentOrder.Deliveryman;
             SelectedWaiter = CurrentOrder.Waiter;
             SelectedTable = CurrentOrder.Table;
+            //SelectedOrderTable = CurrentOrder.Table;
 
             CurrentCategory = CurrentOrder.ShownCategory;
 
@@ -1104,7 +1112,7 @@ namespace FastPosFrontend.ViewModels
                     _diff.Clear();
                     SaveCurrentOrder();
 
-                    //PrintDocument(PrintSource.Kitchen);
+                    PrintDocument(PrintSource.Kitchen);
                     break;
 
                 case ActionButton.Table:
@@ -1960,10 +1968,10 @@ namespace FastPosFrontend.ViewModels
 
         public void PrintDocument(PrintSource source)
         {
-            PrintPreview(source);
+            //PrintPreview(source);
 
 
-            //SilentPrint(source);
+            SilentPrint(source);
         }
 
         private void SilentPrint(PrintSource source)

@@ -28,7 +28,7 @@ namespace ServiceInterface.Model
         [DataMember]
         [Required(ErrorMessage = "Name must not be Null or Empty",AllowEmptyStrings = false)]
         [MinLength(2,ErrorMessage = "Name must not be under 2 characters ")]
-        [RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-0-9_\s]*$", ErrorMessage = "Use Latin, Arabic or Numeric Characters only ")]
+        //[RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-0-9_\s]*$", ErrorMessage = "Use Latin, Arabic or Numeric Characters only ")]
 
         public string Name
         {

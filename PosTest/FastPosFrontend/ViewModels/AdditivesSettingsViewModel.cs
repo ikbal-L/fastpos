@@ -338,6 +338,7 @@ namespace FastPosFrontend.ViewModels
             mVm?.OpenDialog(
                 DefaultDialog
                     .New("Are you sure to delete this Additive?")
+                    .Title("Delete additive")
                     .Ok(o =>
                     {
                         DeleteAdditiveAction(o);
