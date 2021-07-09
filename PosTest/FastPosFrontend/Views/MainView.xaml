@@ -177,10 +177,10 @@
 
                                         <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}" >
                                             <ContentControl.Style>
-                                                <Style>
+                                                <Style TargetType="ContentControl">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding ActiveItem.EmbeddedCommandBar}" Value="null">
-
+                                                                <Setter Property="Visibility" Value="Collapsed"></Setter>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>

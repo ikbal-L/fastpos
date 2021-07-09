@@ -130,7 +130,7 @@
                             <DataTemplate  DataType="model:Customer">
                                 <Button Height="60" Background="YellowGreen" 
                                 Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" 
-                                CommandParameter="{Binding}" >
+                                CommandParameter="{Binding}" HorizontalAlignment="Center">
                                     <StackPanel    Width="120"   Orientation="Vertical"  >
                                         <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                                         <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
@@ -138,6 +138,11 @@
                                 </Button>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                     </ListBox>
                 </Grid>
          

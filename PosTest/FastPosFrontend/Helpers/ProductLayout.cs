@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using FastPosFrontend.ViewModels;
+using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.SubViewModel;
+using ServiceLib.Service;
 
 namespace FastPosFrontend.Helpers
 {
@@ -10,21 +12,22 @@ namespace FastPosFrontend.Helpers
         public static int Rows = 5;
         public static int New;
         public static int Cols;
+        public static int CategoryCols;
 
 
         static ProductLayout()
         {
-            var settingsManager = new SettingsManager<ProductLayoutConfiguration>("product.layout.config");
-            var setting = settingsManager.LoadSettings();
+            var setting = AppConfigurationManager.Configuration<ProductLayoutConfiguration>();
             if (setting == null)
             {
                 setting = new ProductLayoutConfiguration() { Rows = 5, Columns = 6 };
-                settingsManager.SaveSettings(setting);
+                AppConfigurationManager.Save(nameof(ProductLayoutConfiguration),setting);
             }
 
             Rows = setting.Rows;
             Columns = setting.Columns;
             Cols = Columns;
+            CategoryCols = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
         }
 
        
