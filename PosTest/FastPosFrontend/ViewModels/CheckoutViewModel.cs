@@ -1149,10 +1149,8 @@ namespace FastPosFrontend.ViewModels
                     break;
 
                 case ActionButton.Split:
-                    IsDialogOpen = CurrentOrder != null
-                                   && CurrentOrder.OrderItems != null
-                                   && (CurrentOrder.OrderItems.Count > 1 ||
-                                       (CurrentOrder.OrderItems.Count == 1 && CurrentOrder.OrderItems[0].Quantity > 1));
+                    IsDialogOpen = CurrentOrder?.OrderItems != null && (CurrentOrder.OrderItems.Count > 1 ||
+                                                                        (CurrentOrder.OrderItems.Count == 1 && CurrentOrder.OrderItems[0].Quantity > 1));
                     if (IsDialogOpen == true)
                     {
                         DialogViewModel = new SplitViewModel(this);

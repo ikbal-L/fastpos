@@ -528,7 +528,7 @@ namespace FastPosFrontend.ViewModels
             switch (resp1|| Parent.CurrentOrder.Id != null)
             {
                 case true:
-                    //Parent.CurrentOrder.State = OrderState.Splitted;
+                    Parent.CurrentOrder.State = OrderState.Splitted;
                     //Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems
                     //    .Where(x => SplittedOrder.OrderItems.Any(i => i.ProductId == x.ProductId))
                     //    .ToList());

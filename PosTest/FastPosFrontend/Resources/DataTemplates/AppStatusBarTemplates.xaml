@@ -12,16 +12,28 @@
                 <md:PackIcon Kind="InfoCircle" Width="25" Height="25" Foreground="WhiteSmoke"></md:PackIcon>
             </md:PopupBox.ToggleContent>
             
-            <Grid Margin="20 10" TextElement.FontSize="18">
-                <Grid.RowDefinitions>
+            <StackPanel Margin="20 10" TextElement.FontSize="18" MinWidth="200">
+                <!--<Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
-                </Grid.RowDefinitions>
-            
-           
+                </Grid.RowDefinitions>-->
+
+
+                <StackPanel Grid.Row="0" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"  Text="Order #:" Margin="5 0"/>
+                        <TextBlock Grid.Column="1"  Text="{Binding CurrentOrder.OrderNumber}"/>
+                    </Grid>
+                    <Separator></Separator>
+                </StackPanel>
+
                 <StackPanel Grid.Row="0" >
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -77,7 +89,7 @@
                     </Grid>
                 </StackPanel>
 
-            </Grid>
+            </StackPanel>
         </md:PopupBox>
     </DataTemplate>
 
