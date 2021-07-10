@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using Attributes;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
@@ -27,7 +28,7 @@ namespace FastPosFrontend.ViewModels
 
         private bool _isSaveEnabled;
         private string _name;
-        private decimal _price;
+        private string _price;
         private string _unit;
         private int _additivesPageSize;
         private bool _isPlatter;
@@ -89,7 +90,7 @@ namespace FastPosFrontend.ViewModels
                 //Set(ref _unit, _source.Unit);
                 Product = product;
                 Name = _source.Name;
-                Price = _source.Price;
+                Price = $"{_source.Price}";
                 Unit = _source.Unit;
                 //NotifyOfPropertyChange(() => this.Product);
                 //NotifyOfPropertyChange(() => this.Name);
@@ -113,14 +114,18 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public decimal Price
+        [Decimal]
+        public string Price
         {
             get => _price;
             set
             {
                 Set(ref _price, value);
-                Product.Price = _price;
-                ValidateModelProperty(Product, Product.Price, nameof(Product.Price));
+                ValidateModelProperty(this, value, nameof(Price));
+                if (!_validationErrors.ContainsKey(nameof(Price)))
+                {
+                    Product.Price = decimal.Parse(Price);
+                }
             }
         }
 
