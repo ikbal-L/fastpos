@@ -8,7 +8,7 @@ namespace ServiceLib.Service
 {
     public static class AppConfigurationManager
     {
-        private static readonly string FileName = "FastPos.Config";
+        private static readonly string FileName = "FastPos.config";
         private static Dictionary<string, object> Configurations { get; set; }
 
 
@@ -76,7 +76,8 @@ namespace ServiceLib.Service
 
         private static string GetLocalFilePath(string fileName)
         {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var appData = Directory.GetCurrentDirectory();
             return Path.Combine(appData, fileName);
         }
 

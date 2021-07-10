@@ -904,6 +904,9 @@
     <Resource Include="Resources\Entypo.ttf" />
     <Resource Include="Fonts\digital-7.ttf" />
     <Resource Include="Fonts\DS-DIGI.ttf" />
+    <None Include="FastPos.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
