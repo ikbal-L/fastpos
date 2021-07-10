@@ -17,6 +17,8 @@ namespace FastPosFrontend.SL.Controls
         private Button _numpadKeyBackspaceButton;
         private DispatcherTimer _dispatcherTimer;
         private const byte KEYEVENTF_KEYUP = 0x0002;
+        private const byte BSCAN_ENTER_MAKE = 0x1C;
+        private const byte BSCAN_ENTER_BREAK = 0x9C;
 
         public static readonly RoutedEvent KeyClickedEvent = EventManager.RegisterRoutedEvent(nameof(KeyClicked),
             RoutingStrategy.Bubble, typeof(VirtualKeyboardKeyClickedEventHandler), typeof(VirtualNumpadKeyboard));
@@ -95,7 +97,9 @@ namespace FastPosFrontend.SL.Controls
             var key = (Key)control.Tag;
             RaiseKeyClickedEvent(key);
             var vKey = KeyInterop.VirtualKeyFromKey(key);
-            keybd_event((byte)vKey, 0, 0, UIntPtr.Zero);
+            
+            //keybd_event((byte)vKey, BSCAN_ENTER_MAKE, 0, UIntPtr.Zero);
+            //keybd_event((byte)vKey, BSCAN_ENTER_BREAK, KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
