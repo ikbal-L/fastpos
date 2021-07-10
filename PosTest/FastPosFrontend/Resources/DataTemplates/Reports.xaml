@@ -372,7 +372,7 @@
                                 <ListView Grid.Row="1" ItemsSource="{Binding CashPayments}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" >
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" Padding="0" Height="15">
 
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
@@ -384,6 +384,21 @@
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListViewItem">
+                                                        <Border   Padding="0">
+                                                            <ContentPresenter></ContentPresenter>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Padding" Value="0"></Setter>
+                                            <Setter Property="Margin" Value="0"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
                                 </ListView>
                             </Grid>
                             <Grid Grid.Row="1">
@@ -404,7 +419,7 @@
                                 <ListView Grid.Row="1" ItemsSource="{Binding DeliveryPayments}" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Grid.Column="0" Margin="0 0 5 0">
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" Padding="0" Height="15">
 
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
@@ -416,6 +431,21 @@
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListViewItem">
+                                                        <Border   Padding="0">
+                                                            <ContentPresenter></ContentPresenter>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Padding" Value="0"></Setter>
+                                            <Setter Property="Margin" Value="0"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
                                 </ListView>
                             </Grid>
                         </Grid>
@@ -533,7 +563,7 @@
                                 <ListView Grid.Row="1" ItemsSource="{Binding CashPayments}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" >
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" Padding="0" Height="15">
 
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="  TK-{0:D6} {1:C2}"
@@ -545,6 +575,21 @@
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListViewItem">
+                                                        <Border   Padding="0">
+                                                            <ContentPresenter></ContentPresenter>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Padding" Value="0"></Setter>
+                                            <Setter Property="Margin" Value="0"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
                                 </ListView>
                             </Grid>
                             <Grid Grid.Row="1">
@@ -565,7 +610,7 @@
                                 <ListView Grid.Row="1" ItemsSource="{Binding DeliveryPayments}" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Grid.Column="0" Margin="0 0 5 0">
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" Padding="0" Height="15">
 
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
@@ -577,6 +622,21 @@
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListViewItem">
+                                                        <Border   Padding="0">
+                                                            <ContentPresenter></ContentPresenter>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Padding" Value="0"></Setter>
+                                            <Setter Property="Margin" Value="0"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
                                 </ListView>
                             </Grid>
                         </Grid>
