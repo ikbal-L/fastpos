@@ -971,6 +971,7 @@ namespace FastPosFrontend.ViewModels
             int _categpryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
+            CategoryPageCount = nbpage;
             var size = nbpage * _categpryPageSize;
 
             RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: Categories, size: size);
@@ -985,7 +986,8 @@ namespace FastPosFrontend.ViewModels
             ProductsPage.Clear();
             ProductsVisibility = true;
             if (category?.Id == null) return;
-            var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
+            //var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
+            var filteredProducts = category.Products;
 
             var comparer = new Comparer<Product>();
             var listOfFliteredProducts = filteredProducts.ToList();

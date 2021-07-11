@@ -63,7 +63,7 @@ namespace FastPosFrontend.ViewModels
                     Background = _source.Background,
                     Price = _source.Price,
                     Unit = _source.Unit,
-                    IsPlatter = _source.IsPlatter
+                    IsPlatter = _source.IsPlatter,
                 };
 
                 
@@ -193,6 +193,10 @@ namespace FastPosFrontend.ViewModels
         public void SaveProduct()
         {
             Clone(source: ref _product, target: ref this._source);
+            if (!_source.Category.Products.Contains(_source))
+            {
+                _source.Category.Products.Add(_source);
+            }
             StateManager.Save<Product>(this._source);
             Host.Close(this);
         }

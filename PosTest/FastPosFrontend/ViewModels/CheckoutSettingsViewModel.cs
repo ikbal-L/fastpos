@@ -491,7 +491,7 @@ namespace FastPosFrontend.ViewModels
             else
             {
                 ProductDetailViewModel.SaveProduct();
-                ProductDetailViewModel = null;
+                //ProductDetailViewModel = null;
             }
 
             IsFlipped = false;
@@ -1277,8 +1277,11 @@ namespace FastPosFrontend.ViewModels
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {
-                    ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
-                    ProductDetailViewModel = null;
+                    if (ProductDetailViewModel!= null)
+                    {
+                        ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
+                        ProductDetailViewModel = null;
+                    }
                 });
         }
 
@@ -1290,7 +1293,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             IsCategory = true;
-            this.CategoryDetailViewModel = new CategoryDetailViewModel(ref this._selectedCategory);
+            this.CategoryDetailViewModel = new CategoryDetailViewModel(ref this._selectedCategory,_allCategories);
             (this.Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel);
             //CategoryDetailViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
 
@@ -1367,6 +1370,7 @@ namespace FastPosFrontend.ViewModels
 
         public void RaiseSettingsUpdated()
         {
+            
             SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(_allProducts,_allCategories));
         }
 

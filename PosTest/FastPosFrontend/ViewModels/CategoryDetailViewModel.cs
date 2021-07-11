@@ -20,12 +20,14 @@ namespace FastPosFrontend.ViewModels
         private string _name;
         private string _description;
         private bool _isSaveEnabled;
+        private List<Category> _categories;
 
-        public CategoryDetailViewModel(ref Category sourceCategory)
+        public CategoryDetailViewModel(ref Category sourceCategory, List<Category> categories)
         {
             
             
             this._source = sourceCategory;
+            _categories = categories;
             _category = new Category();
             CloneFromSource();
            
@@ -84,6 +86,10 @@ namespace FastPosFrontend.ViewModels
             Clone(source: ref _category, target: ref this._source);
             NotifyOfPropertyChange(() => Source);
             StateManager.Save<Category>(this._source);
+            if (!_categories.Contains(_source))
+            {
+                _categories.Add(_source);
+            }
             this.Host.Close(this);
         }
 
