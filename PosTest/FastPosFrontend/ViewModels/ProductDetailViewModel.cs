@@ -182,7 +182,7 @@ namespace FastPosFrontend.ViewModels
             var filteredAdditives = new List<Additive>(allAdditives.Where(a => a.Rank != null));
             filteredAdditives.Sort(comparer);
             Additives = new BindableCollection<Additive>();
-            var maxRank = (int) filteredAdditives.Max(a => a.Rank);
+            var maxRank =  filteredAdditives.Max(a => a.Rank)??1;
             int numberOfPages = (maxRank / _additivesPageSize) + (maxRank % _additivesPageSize == 0 ? 0 : 1);
             numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
             var size = numberOfPages * _additivesPageSize;

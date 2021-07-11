@@ -373,7 +373,7 @@ namespace FastPosFrontend.ViewModels
             var categories = new List<Category>(_allCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
-            var maxRank = (int)categories.Max(c => c.Rank);
+            var maxRank = categories.Max(c => c.Rank)??1;
             _numberOfCategoryRows = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             
             var size = _numberOfCategoryRows * _categpryPageSize;

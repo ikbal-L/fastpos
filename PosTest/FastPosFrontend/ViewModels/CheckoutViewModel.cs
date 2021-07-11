@@ -967,8 +967,8 @@ namespace FastPosFrontend.ViewModels
             var categories = new List<Category>(retrieveCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             Categories = new BindableCollection<Category>();
-            var maxRank = (int) categories.Max(c => c.Rank);
-            int _categpryPageSize = 10;
+            var maxRank =  categories.Max(c => c.Rank)??0;
+            int _categpryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
             var size = nbpage * _categpryPageSize;

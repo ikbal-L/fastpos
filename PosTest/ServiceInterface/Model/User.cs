@@ -82,7 +82,10 @@ namespace ServiceInterface.Model
             get => _backgroundString ?? /*"#f39c12";*/"#4a4c4f";
             set
             {
-                _backgroundString = value;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    _backgroundString = value;
+                }
                 NotifyOfPropertyChange(nameof(Background));
             }
 
