@@ -1,21 +1,23 @@
-﻿using FastPosFrontend.Helpers;
+﻿using System;
+using System.Linq;
+using FastPosFrontend.Events;
+using FastPosFrontend.Helpers;
+using ServiceInterface.Model;
 using ServiceLib.Service;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
   
     [NavigationItemConfiguration(title:"General Settings",typeof(GeneralSettingsViewModel),groupName:"Settings")]
-    public  class GeneralSettingsViewModel : AppScreen
+    public  class GeneralSettingsViewModel : AppScreen,ISettingsController
     {
-      
-        private SettingsManager<GeneralSettings> Manager;
-
-        private GeneralSettings generalSettings;
+        private GeneralSettings _generalSettings;
 
         public GeneralSettings Settings
         {
-            get { return generalSettings; }
-            set { generalSettings = value;
+            get => _generalSettings;
+            set { _generalSettings = value;
 
                 NotifyOfPropertyChange(nameof(Settings));
             }
@@ -26,15 +28,25 @@ namespace FastPosFrontend.ViewModels.Settings
             this.Title = "General";
             var setting = AppConfigurationManager.Configuration<GeneralSettings>();
             Settings = setting ?? new GeneralSettings();
+            if (!StateManager.Get<Table>().Any())
+            {
+                Settings.TableNumber = 0;
+            }
             Settings.PropertyChanged += Settings_PropertyChanged;
             Settings.Initialized = true;
-            //this.Content = new GeneralSettingsView() { DataContext = this };
+            
             
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             AppConfigurationManager.Save(Settings);
+        }
+
+        public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+        public override void BeforeNavigateAway()
+        {
+            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs());
         }
     }
 }

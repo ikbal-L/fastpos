@@ -208,7 +208,7 @@
                             </ListBox.ItemTemplate>
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel />
+                                   <UniformGrid Columns="5"></UniformGrid>
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
                         </ListBox>

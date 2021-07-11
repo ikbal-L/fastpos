@@ -2097,6 +2097,7 @@ namespace FastPosFrontend.ViewModels
             typeof(CustomerSettingsViewModel),
             typeof(WaiterSettingsViewModel),
             typeof(DeliveryManSettingsViewModel),
+            typeof(GeneralSettingsViewModel),
         };
 
         public void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
@@ -2120,6 +2121,11 @@ namespace FastPosFrontend.ViewModels
             if (sender.GetType() == typeof(DeliveryManSettingsViewModel))
             {
                 OnDeliverySettingsUpdated(e);
+                return;
+            }
+            if (sender.GetType() == typeof(GeneralSettingsViewModel))
+            {
+                OnGeneralSettingsUpdated(e);
                 return;
             }
 
@@ -2160,6 +2166,17 @@ namespace FastPosFrontend.ViewModels
             var deliverymen = e.Settings.FirstOrDefault(o => o is IEnumerable<Deliveryman>) as IEnumerable<Deliveryman>;
             Delivereymen = new BindableCollection<Deliveryman>(deliverymen);
 
+        }
+
+        private void OnGeneralSettingsUpdated(SettingsUpdatedEventArgs e)
+        {
+            var tables = StateManager.Get<Table>().ToList();
+            if (Tables.Count != tables.Count)
+            {
+                Tables = new BindableCollection<Table>(tables);
+                TablesViewModel = new TablesViewModel(this);
+            }
+            
         }
     }
 }
