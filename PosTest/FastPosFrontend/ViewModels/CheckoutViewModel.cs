@@ -2073,21 +2073,17 @@ namespace FastPosFrontend.ViewModels
             CustomerViewModel?.CustomerDetailVm?.Cancel();
         }
 
-        public override bool CanNavigate()
+        public override bool CanNavigate(Type navigationTargetType = null)
         {
-            if (Orders != null && Orders.Any(o => o.Id == null))
+            if (navigationTargetType == typeof(LoginViewModel))
             {
-                bool response = false;
-
-                //var result = MessageBox.Show("There are unsaved orders, Are you sure you want to logout?",
-                //    "Unsaved Orders!", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
-
-                //WarningViewModel = new WarningViewModel("Are you sure to delete this Order?", "Check", "Ok", "Close", "No",
-                //    o => CancelOrderAction(o), this, () => IsDialogOpen = false);
-                //DialogViewModel = WarningViewModel;
-                response = ModalDialogBox.Show("There are unsaved orders, Are you sure you want to logout?","Unsaved Orders!");
+                if (Orders != null && Orders.Any(o => o.Id == null))
+                {
                 
-                return response;
+                    var response = ModalDialogBox.Show("There are unsaved orders, Are you sure you want to logout?","Unsaved Orders!");
+                
+                    return response;
+                }
             }
 
             return true;

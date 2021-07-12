@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using FastPosFrontend.ViewModels;
 
 namespace FastPosFrontend.Helpers
@@ -34,7 +35,7 @@ namespace FastPosFrontend.Helpers
             set => Set(ref _embeddedContentBar, value);
         }
 
-        public virtual bool CanNavigate()
+        public virtual bool CanNavigate(Type navigationTargetType = null)
         {
             return true;
         }

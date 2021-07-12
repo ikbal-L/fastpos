@@ -45,7 +45,7 @@ namespace FastPosFrontend.Helpers
 
     public interface IAppNavigationTarget
     {
-        bool CanNavigate();
+        bool CanNavigate(Type navigationTargetType = null);
     }
 
     public class AppNavigationLookupItem : PropertyChangedBase

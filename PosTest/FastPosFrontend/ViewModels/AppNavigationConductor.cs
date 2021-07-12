@@ -172,7 +172,7 @@ namespace FastPosFrontend.ViewModels
             if (screenInstance is AppScreen screen)
             {
                 screen.Parent = this;
-                if (ActiveScreen != null && !ActiveScreen.CanNavigate()) return false;
+                if (ActiveScreen != null && !ActiveScreen.CanNavigate(screen.GetType())) return false;
                 
                 ActiveScreen?.BeforeNavigateAway();
                 ActiveScreen = screen;
