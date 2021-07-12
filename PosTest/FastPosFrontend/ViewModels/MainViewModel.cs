@@ -127,8 +127,7 @@ namespace FastPosFrontend.ViewModels
             MainDialog = new MainDialog();
             this.ActivateItem(MainDialog);
             LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};
-            //UserSettingsViewModel userSettingsViewModel = new UserSettingsViewModel() { Parent = this };
-            //ActivateItem(userSettingsViewModel);
+            
             NavigateToItem(new AppNavigationLookupItem("Login", target: typeof(LoginViewModel)));
 
             //splashScreen.Close();
@@ -136,11 +135,15 @@ namespace FastPosFrontend.ViewModels
 
         public void Logout()
         {
-            StateManager.Flush();
-            KeepAliveScreens.Clear();
-            ActiveScreen = new LoginViewModel {Parent = this};
-            IsLoggedIn = false;
-            ActivateItem(ActiveScreen);
+            LoginViewModel toActivateViewModel = new LoginViewModel { Parent = this };
+            if (NavigateToItem(new AppNavigationLookupItem("Login", target: typeof(LoginViewModel))))
+            {
+                StateManager.Flush();
+                KeepAliveScreens.Clear();
+                IsLoggedIn = false;
+            }
+            
+            
         }
     }
 

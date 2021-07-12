@@ -283,6 +283,9 @@
     <Compile Include="Helpers\Navigation.cs" />
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
+    <Compile Include="ModalDialogBox.xaml.cs">
+      <DependentUpon>ModalDialogBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SL.Controls\VirtualNumpadKeyboard.cs" />
     <Compile Include="ViewModels\AdditiveDetailViewModel.cs" />
     <Compile Include="ViewModels\AppDialogConductor.cs" />
@@ -593,6 +596,10 @@
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Helpers\ToastNotification.cs" />
+    <Page Include="ModalDialogBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\DataTemplates\Additives.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

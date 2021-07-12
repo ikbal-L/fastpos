@@ -145,35 +145,35 @@ namespace FastPosFrontend.ViewModels
             return item;
         }
 
-        public virtual void NavigateToItem(AppNavigationLookupItem navigationItem)
+        public virtual bool NavigateToItem(AppNavigationLookupItem navigationItem)
         {
-            if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return;
+            if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return false;
             if (navigationItem.KeepAlive)
             {
                 if (KeepAliveScreens.ContainsKey(navigationItem.Target))
                 {
                     var screen = KeepAliveScreens[navigationItem.Target];
-                    ActivateScreenByType(screen);
-                    return;
+                    return ActivateScreenByType(screen);
                 }
 
                 var keepAliveScreenInstance = (T) Activator.CreateInstance(navigationItem.Target);
                 KeepAliveScreens.Add(navigationItem.Target, keepAliveScreenInstance);
                 ActivateScreenByType(keepAliveScreenInstance);
-                return;
+                return ActivateScreenByType(keepAliveScreenInstance);
             }
 
             var screenInstance = (T) Activator.CreateInstance(navigationItem.Target);
             SetSettingsListener(screenInstance);
-            ActivateScreenByType(screenInstance);
+            return ActivateScreenByType(screenInstance);
         }
 
-        private void ActivateScreenByType(T screenInstance)
+        private bool ActivateScreenByType(T screenInstance)
         {
             if (screenInstance is AppScreen screen)
             {
                 screen.Parent = this;
-                //if (ActiveScreen == null||ActiveScreen.CanNavigate())
+                if (ActiveScreen != null && !ActiveScreen.CanNavigate()) return false;
+                
                 ActiveScreen?.BeforeNavigateAway();
                 ActiveScreen = screen;
                 if (screenInstance is LazyScreen lazyScreen)
@@ -184,7 +184,11 @@ namespace FastPosFrontend.ViewModels
                 {
                     ActivateItem(screenInstance);
                 }
+
+                return true;
             }
+
+            return false;
         }
 
         public virtual void OnLogin()
