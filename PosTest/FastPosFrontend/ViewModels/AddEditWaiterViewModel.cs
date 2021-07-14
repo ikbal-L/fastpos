@@ -56,7 +56,7 @@ namespace FastPosFrontend.ViewModels
             Waiter.PhoneNumbers ??= new BindableCollection<string>();
             Waiter.PhoneNumbers.Clear();
             Waiter.PhoneNumbers.Add(PhoneNumber);
-            if (StateManager.Save<ServiceInterface.Model.Waiter>(Waiter))
+            if (StateManager.Save(Waiter))
             {
                 int index=   Parent.Waiters.IndexOf(Parent.Waiters.FirstOrDefault(x => x.Id == Waiter.Id));
                 if (index==-1)
@@ -69,11 +69,11 @@ namespace FastPosFrontend.ViewModels
                     Parent.Waiters.Insert(index, Waiter);
                 }
                 IsOpenDailog = false;
-                ToastNotification.Notify("Save  Success", NotificationType.Success);
+                
             }
             else
             {
-                ToastNotification.Notify("Save  Fail");
+                
 
             }
         }

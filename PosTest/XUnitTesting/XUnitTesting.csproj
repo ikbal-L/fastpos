@@ -109,10 +109,6 @@
       <Project>{9af58e0b-e90f-408d-a3ed-476f62b7debb}</Project>
       <Name>FastPosFrontend</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PosTest\PosTest.csproj">
-      <Project>{5AB5CC56-7A2F-4446-8DC1-03C9A207B2F5}</Project>
-      <Name>PosTest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ServiceInterface\ServiceInterface.csproj">
       <Project>{07D0D89C-3A6C-4068-BBC0-14A3CB7FFAD4}</Project>
       <Name>ServiceInterface</Name>

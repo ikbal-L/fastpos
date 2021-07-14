@@ -70,6 +70,7 @@ namespace FastPosFrontend.ViewModels
             Email = _model.Email;
             Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(_model.BackgroundString));
             IsUserActive = _model.Enabled;
+            PinCode = _model.PinCode;
             if (_model.Roles != null)
             {
                 UserRoles = new BindableCollection<Role>(_model.Roles);
@@ -93,6 +94,7 @@ namespace FastPosFrontend.ViewModels
             _model.RoleIds = UserRoles.Select(role => role.Id.Value).ToList();
             _model.Background = Background;
             _model.Enabled = IsUserActive;
+            _model.PinCode = PinCode;
             //_model.BackgroundString = Background.Color.ToString();
         }
         [Required]

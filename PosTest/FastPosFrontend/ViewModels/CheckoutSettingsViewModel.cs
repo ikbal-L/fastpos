@@ -6,6 +6,7 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -736,7 +737,11 @@ namespace FastPosFrontend.ViewModels
             var product = ClipboardProduct.Clone();
             product.Category = SelectedCategory;
             product.Id = null;
-            product.Rank = null; 
+            product.Rank = null;
+            
+            var name = Regex.Replace(ClipboardProduct.Name, @"\([0-9]{1,2}\)", "");
+            var count = CurrentProducts.Where(a => a.Name != null).Count(a => a.Name.Contains(name));
+            product.Name = $"{name}({count})";
             var target = SelectedProduct;
             //PutProductInCellOf(SelectedProduct, product);
 

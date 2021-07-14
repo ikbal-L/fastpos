@@ -127,7 +127,7 @@
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0">
                             <TextBlock DockPanel.Dock="Left" Text="Restaurant Test" />
-                            <TextBlock DockPanel.Dock="Right" Text="N:10" />
+                            <TextBlock DockPanel.Dock="Right" Text="{Binding OrderNumber,StringFormat='N: {0:#}'}" />
                             <TextBlock />
                         </DockPanel>
 
@@ -140,7 +140,13 @@
                         <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address" />
                     </Grid>
                 </Border>
-                <TextBlock Grid.Row="2" Text="Caisse N:1" />
+                <UniformGrid Grid.Row="2" Columns="2" Rows="3">
+                    <TextBlock Text="{Binding Table.Number,StringFormat='Table # {0:#}',FallbackValue='Table: /'}" ></TextBlock>
+                    <TextBlock Text="{Binding Type}"></TextBlock>
+                    <TextBlock Text="{Binding Waiter.Name,StringFormat='Waiter: {0:#}',FallbackValue='Waiter: /'}"></TextBlock>
+                    <TextBlock Text="{Binding Deliveryman.Name,StringFormat='Deliveryman: {0:#}',FallbackValue='Deliveryman: /'}"></TextBlock>
+                    <TextBlock Grid.Row="2" Text="Caisse N:1" />
+                </UniformGrid>
             </Grid>
 
             <Grid Grid.Row="1" Name="Body">
@@ -191,8 +197,12 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm"
-                        Background="{Binding OrderNumber, Converter={StaticResource ObjectToBarcodeValueConverter}}" />
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="12/12/2020 12:12:60" />
+                        Background="{Binding  Converter={StaticResource ObjectToBarcodeValueConverter}}" />
+                <TextBlock Grid.Row="1" Grid.Column="0">
+                    <TextBlock.Text>
+                        <Binding Path="OrderTime" />
+                    </TextBlock.Text>
+                </TextBlock>
                 <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client" />
             </Grid>
         </Grid>

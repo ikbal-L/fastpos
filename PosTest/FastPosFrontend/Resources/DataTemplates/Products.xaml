@@ -222,20 +222,38 @@
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Border  Height="48">
-                    <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
-                               TextAlignment="Center"
-                               VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                        <Setter Property="Foreground" Value="White" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
+                <Border  Height="60">
+                    <StackPanel >
+                        <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Text="{Binding Path=Price}" FontSize="12" TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Price}" Value="0">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
                 </Border>
                 <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom">
                     <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"

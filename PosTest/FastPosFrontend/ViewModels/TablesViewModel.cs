@@ -63,7 +63,7 @@ namespace FastPosFrontend.ViewModels
             if (table != null)
             {
                 // Filter out products with price 25 or above
-                if (table.Orders.Cast<Order>().Count() > 0)
+                if (table.Orders!= null&& !table.Orders.IsEmpty)
                 {
                     e.Accepted = true;
                 }
@@ -109,7 +109,10 @@ namespace FastPosFrontend.ViewModels
                 var count = 0;
                 foreach (Table table in TablesView)
                 {
-                    count += table.Orders.Cast<Order>().Count();
+                    if (table.Orders!= null)
+                    {
+                        count += table.Orders.Cast<Order>().Count(); 
+                    }
                 }
                 return count;
             }

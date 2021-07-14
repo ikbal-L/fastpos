@@ -101,7 +101,7 @@
                     </Button>
                 </Grid>
                 <TextBox Grid.Row="2" 
-                     materialDesign:HintAssist.Hint="PinCode" />
+                     materialDesign:HintAssist.Hint="PinCode" Text="{Binding PinCode,UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox Grid.Row="3"
                      materialDesign:HintAssist.Hint="First Name"
                      Text="{Binding FirstName,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}" />
