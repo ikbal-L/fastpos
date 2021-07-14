@@ -35,15 +35,17 @@ namespace FastPosFrontend.Helpers
             ;
             switch (status)
             {
+
                 case 200:
                 case 201:
 
-                    if (action != StateManagementAction.Retrieve || overrideDefaultBehaviour)
-                    {
-                        ToastNotification.Notify(successMessage, NotificationType.Success);
-                    }
+                    //if (action != StateManagementAction.Retrieve || overrideDefaultBehaviour)
+                    //{
+                    //    ToastNotification.Notify(successMessage, NotificationType.Success);
+                    //}
 
                     break;
+
                 case 204:
                     ToastNotification.Notify($"No {type.Name}s to {action}", NotificationType.Information);
                     break;
