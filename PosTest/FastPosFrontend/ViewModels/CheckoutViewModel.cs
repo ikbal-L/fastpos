@@ -667,7 +667,7 @@ namespace FastPosFrontend.ViewModels
             bool resp;
             try
             {
-                resp = StateManager.Save<Order>(order);
+                resp = StateManager.Save(order);
             }
             catch (AggregateException)
             {
@@ -1020,18 +1020,18 @@ namespace FastPosFrontend.ViewModels
                 NumericZone = CurrentOrder.NewTotal + "";
                 return;
             }
-            //if (string.IsNullOrEmpty(NumericZone) &&
-            //    cmd != ActionButton.Split &&
-            //    cmd != ActionButton.Cmd &&
-            //    cmd != ActionButton.Deliverey &&
-            //    cmd != ActionButton.Takeaway &&
-            //    cmd != ActionButton.Table &&
-            //    cmd != ActionButton.Served &&
-            //    cmd != ActionButton.Del && cmd != ActionButton.DElIVERED)
-            //{
-            //    ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
-            //    return;
-            //}
+            if (string.IsNullOrEmpty(NumericZone) &&
+                cmd != ActionButton.Split &&
+                cmd != ActionButton.Cmd &&
+                cmd != ActionButton.Deliverey &&
+                cmd != ActionButton.Takeaway &&
+                cmd != ActionButton.Table &&
+                cmd != ActionButton.Served &&
+                cmd != ActionButton.Del && cmd != ActionButton.DElIVERED)
+            {
+                ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
+                return;
+            }
 
             switch (cmd)
             {
@@ -1680,6 +1680,8 @@ namespace FastPosFrontend.ViewModels
             if (discountPercent >= 0)
             {
                 item.DiscountPercentage = discountPercent;
+                NotifyOfPropertyChange(() => CurrentOrder);
+                return;
             }
 
             if (discountAmount >= 0)
