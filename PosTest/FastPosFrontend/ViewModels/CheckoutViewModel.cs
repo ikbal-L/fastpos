@@ -1017,7 +1017,7 @@ namespace FastPosFrontend.ViewModels
         {
             if (cmd == ActionButton.CopyToNumericZone)
             {
-                NumericZone = CurrentOrder.NewTotal + "";
+                if (CurrentOrder != null) NumericZone = CurrentOrder.NewTotal + "";
                 return;
             }
             if (string.IsNullOrEmpty(NumericZone) &&
