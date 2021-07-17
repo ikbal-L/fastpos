@@ -27,7 +27,7 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="Gray" BorderThickness="0 0 0 1" Grid.Row="0">
-                    <TextBlock Text="Customer" Padding="10" FontWeight="Bold" FontSize="16" />
+                    <TextBlock Text="Deliveryman" Padding="10" FontWeight="Bold" FontSize="16" />
                 </Border>
                 <StackPanel Grid.Row="1" Margin="0 20 0 50">
                         <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">

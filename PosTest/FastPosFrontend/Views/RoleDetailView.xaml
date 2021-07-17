@@ -43,7 +43,7 @@
 
             </Grid.RowDefinitions>
             <TextBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                     materialDesign:HintAssist.Hint="Username" Margin="5"
+                     materialDesign:HintAssist.Hint="Role Name" Margin="5"
                      Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" />
             <ListView Grid.Row="1" ItemsSource="{Binding Privileges}" Height="300" 
                       >
@@ -72,10 +72,11 @@
                                   ClipToBounds="True">
             <StackPanel
                 Orientation="Horizontal">
-                <Button Style="{StaticResource MaterialDesignIconButton}"
+                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                         Content="{materialDesign:PackIcon ContentSave}"
-                        cal:Message.Attach="[Event Click] = [Action SaveRole()]" />
-                <Button Style="{StaticResource MaterialDesignIconButton}"
+                        cal:Message.Attach="[Event Click] = [Action SaveRole()]"
+                        />
+                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                         Content="{materialDesign:PackIcon Cancel}"
                         Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
             </StackPanel>
