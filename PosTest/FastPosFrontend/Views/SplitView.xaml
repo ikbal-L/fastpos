@@ -192,9 +192,9 @@
                                        FontFamily="{StaticResource DigitalFontFamily}" Foreground="#26ff26" HorizontalAlignment="Right" FontWeight="Bold" />
                             </DockPanel>
                         </Button>
-                        <TextBox  Text="{Binding ElementName=keypad, Path=NumericValue}" Grid.Column="1" Grid.Row="2"
+                        <TextBlock  Text="{Binding ElementName=keypad, Path=NumericValue}" Grid.Column="1" Grid.Row="2"
                                   Foreground="#26ff26" FontSize="35" FontFamily="{StaticResource DigitalFontFamily}" 
-                                  HorizontalContentAlignment="Right" Padding="1 -2 1 1"  FontWeight="Bold"     />
+                                  HorizontalAlignment="Right" Padding="1 1 1 1"  FontWeight="Bold"   IsManipulationEnabled="False"  />
                         <DockPanel  Grid.Column="0" Grid.Row="1">
                             <materialdesign:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="25" Height="25" Padding="0" Foreground="#26ff26"/>
                             <TextBlock Text="{Binding SplittedOrder.TotalDiscountAmount,StringFormat={}{0:#.##}}" FontSize="13" FontWeight="Bold" Foreground="#26ff26"/>
