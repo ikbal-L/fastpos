@@ -293,19 +293,18 @@
                                            HorizontalAlignment="Left"
                                            TextAlignment="Center"
                                            ></TextBlock>
-                                    <materialDesign:Card  Background="{Binding ElementName=ColorPicker,Path=Color,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ColorToBrushConverter}}"
-                                                      materialDesign:UniformCornerRadius="10" 
+                                    <!--materialDesign:UniformCornerRadius="10"-->
+<materialDesign:Card  Background="{Binding ElementName=ColorPicker,Path=Color,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ColorToBrushConverter}}"
+                                                      
                                                       materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                          >
                                         <materialDesign:PopupBox HorizontalAlignment="Right"  
                                                              StaysOpen="True" 
                                                              PlacementMode="TopAndAlignRightEdges"
                                                              >
-                                            <materialDesign:PopupBox.ToggleContentTemplate>
-                                                <DataTemplate>
-                                                    <Button Content="{materialDesign:PackIcon Eyedropper}" ></Button>
-                                                </DataTemplate>
-                                            </materialDesign:PopupBox.ToggleContentTemplate>
+                                            <materialDesign:PopupBox.ToggleContent>
+                                                <materialDesign:PackIcon Kind="Eyedropper"></materialDesign:PackIcon>
+                                            </materialDesign:PopupBox.ToggleContent>
                                             <materialDesign:ColorPicker
                                             x:Name="ColorPicker"
                                             Grid.Column="1"
@@ -340,11 +339,11 @@
                                   ClipToBounds="True">
             <StackPanel
                 Orientation="Horizontal">
-                <Button Style="{StaticResource MaterialDesignIconButton}"
+                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                         Content="{materialDesign:PackIcon ContentSave}"
                         IsEnabled="{Binding IsSaveEnabled}"
                         caliburn:Message.Attach="[Event Click] = [Action SaveUser()]" />
-                <Button Style="{StaticResource MaterialDesignIconButton}"
+                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                         Content="{materialDesign:PackIcon Cancel}"
                         Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
             </StackPanel>
