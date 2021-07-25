@@ -311,7 +311,10 @@ namespace FastPosFrontend.ViewModels
             //    OrderItemsCollectionViewSource.Source = CurrentOrder.OrderItems;
             //    //OrderItemsCollectionViewSource.View.Refresh();
             //}
-            
+            if (e.PropertyName == nameof(Order.Table)&& CurrentOrder?.Table == null)
+            {
+                SelectedTable = null;
+            }
             if (e.PropertyName == nameof(Order.Customer)||e.PropertyName == nameof(Order.Type)
             ||e.PropertyName == nameof(Order.Waiter)||e.PropertyName == nameof(Order.Table)|| e.PropertyName == nameof(Order.Deliveryman))
             {
@@ -586,7 +589,10 @@ namespace FastPosFrontend.ViewModels
             get => _selectedTable;
             set
             {
-                TableAction(value);
+                if (value!= CurrentOrder?.Table)
+                {
+                    TableAction(value);
+                }
                 Set(ref _selectedTable, value);
             }
         }

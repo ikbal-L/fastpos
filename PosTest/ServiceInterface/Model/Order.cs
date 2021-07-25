@@ -343,9 +343,20 @@ namespace ServiceInterface.Model
                     (_table?.OrderViewSource.Source as ICollection<Order>)?.Remove(this);
                     _table?.OrderViewSource?.View?.Refresh();
                 }
+               
                 _table = value;
                 TableId = _table?.Id;
-               
+                if (value != null)
+                {
+                    var orders = (_table?.OrderViewSource.Source as ICollection<Order>);
+                    if (orders != null && !orders.Contains(this))
+                    {
+                        orders.Add(this);
+                    }
+                    
+                    _table?.OrderViewSource?.View?.Refresh();
+                }
+
                 NotifyOfPropertyChange(() => Table);
             }
         }
