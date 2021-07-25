@@ -883,6 +883,8 @@ namespace FastPosFrontend.ViewModels
             if (CurrentOrder?.Id == null)
             {
                 Orders.Remove(CurrentOrder);
+                WaitingViewModel?.Orders.Refresh();
+                WaitingViewModel?.NotifyOfPropertyChange(() => nameof(SubViewModel.WaitingViewModel.OrderCount));
                 CurrentOrder = null;
                 return;
             }

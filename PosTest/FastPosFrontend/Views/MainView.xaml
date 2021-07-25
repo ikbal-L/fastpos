@@ -264,7 +264,7 @@
                                                 </md:Chip.Style>
                                             </md:Chip>
                                         </StackPanel>-->
-                                        <TextBlock
+                                        <!--<TextBlock
 
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
@@ -284,7 +284,7 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
-                                        </TextBlock>
+                                        </TextBlock>-->
                                     </DockPanel>
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"

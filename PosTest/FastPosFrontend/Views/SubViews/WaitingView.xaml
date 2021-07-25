@@ -19,7 +19,8 @@
                  SelectedItem="{Binding SelectedOrder}"
                  Background="#a5a5a5"   
                  HorizontalContentAlignment="Left"
-                 VerticalContentAlignment="Center">
+                 VerticalContentAlignment="Center"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:Order}">
                         <Border  caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]">
