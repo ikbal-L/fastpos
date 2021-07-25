@@ -20,11 +20,12 @@ namespace FastPosFrontend.Converters
             {
                 BarcodeLib.Barcode b = new BarcodeLib.Barcode();
                 var order = value as Order;
-                var stringToEncode = (order.OrderNumber).ToString("D8", CultureInfo.InvariantCulture);
+                var orderNumberString = (order.OrderNumber).ToString("D8", CultureInfo.InvariantCulture);
+                var stringToEncode =$"BON-{orderNumberString}" ;
                 var conv = new Int32Converter();
                 //int barcodeWidth = (int) conv.ConvertFromString("4cm");
                 //var barcodeHeight = (int) conv.ConvertFromString("2.5cm");
-                Image image = b.Encode(BarcodeLib.TYPE.EAN8, StringToEncode: stringToEncode);
+                Image image = b.Encode(BarcodeLib.TYPE.CODE39Extended, StringToEncode: stringToEncode);
                 var bitmap = new System.Drawing.Bitmap(image);
                 var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(),
                     IntPtr.Zero,

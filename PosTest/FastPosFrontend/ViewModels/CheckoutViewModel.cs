@@ -6,6 +6,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Printing;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -1693,29 +1694,31 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void scanCodeBar(object sender, TextCompositionEventArgs e)
+        public void ScanCodeBar(object sender, TextCompositionEventArgs e)
         {
             scanValue += e.Text;
         }
 
         public void DoneScan(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && !string.IsNullOrEmpty(scanValue))
+            
+            if (e.Key == Key.Return )
             {
-                ToastNotification.Notify(scanValue, NotificationType.Information);
-
-                if (scanValue.Contains("BON"))
+                if (!string.IsNullOrEmpty(scanValue)&& scanValue.Contains("BON-"))
                 {
-                    CurrentOrder.State = OrderState.Ordered;
-                    NotifyOfPropertyChange(() => CurrentOrder);
+                    var orderNumberString =Regex.Replace(scanValue, @"\D","");
+                   
+                    if (int.TryParse(orderNumberString,out var  orderNumber))
+                    {
+                        CurrentOrder = Orders.FirstOrDefault(order => order.OrderNumber == orderNumber);
+                    }
+
+                    scanValue = "";
                 }
 
-                if (scanValue.Contains("cmd_print_pv"))
-                {
-                    PrintPreview(PrintSource.Kitchen);
-                }
+                
 
-                scanValue = "";
+                
             }
         }
 
@@ -1901,6 +1904,7 @@ namespace FastPosFrontend.ViewModels
 
             //contentOfPage.Content = CurrentOrder;
             //contentOfPage.Content = GenerateContent(CurrentOrder);
+
             if (_printOrder == null)
             {
                 _printOrder = CurrentOrder;
@@ -2187,5 +2191,21 @@ namespace FastPosFrontend.ViewModels
             }
             
         }
+
+        public void SetOrderPropToNull(OrderProp prop)
+        {
+            if (CurrentOrder!= null)
+            {
+                CurrentOrder.GetType().GetProperty(prop.ToString()).SetValue(CurrentOrder,null);
+            }
+        }
+    }
+
+    public enum OrderProp
+    {
+        Customer,
+        Deliveryman,
+        Waiter,
+        Table
     }
 }

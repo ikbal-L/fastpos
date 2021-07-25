@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
+using FastPosFrontend.Helpers;
 
 namespace FastPosFrontend.Views
 {
@@ -12,6 +14,7 @@ namespace FastPosFrontend.Views
             InitializeComponent();
         }
 
-     
+
+        
     }
 }

@@ -69,7 +69,8 @@
                             Content="{Binding Content}"
                             Margin="5"
                             Style="{Binding Style,TargetNullValue={StaticResource MaterialDesignFlatButton}}"
-                            Width="100"></Button>
+                            Width="100"
+                            IsDefault="{Binding IsDefault}"></Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>

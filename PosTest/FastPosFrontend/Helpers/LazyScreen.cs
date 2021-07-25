@@ -40,7 +40,9 @@ namespace FastPosFrontend.Helpers
 
         public DelegateCommandBase Command { get; set; }
 
-        public Style Style { get; set; } = null;
+        public bool IsDefault { get; set; } = false;
+
+        public Style Style { get; set; }
     }
 
     public interface IAppNavigationTarget

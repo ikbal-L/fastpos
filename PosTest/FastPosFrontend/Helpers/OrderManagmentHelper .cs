@@ -87,7 +87,7 @@ namespace FastPosFrontend.Helpers
                 oi.TimeStamp == recent && (oi.State == OrderItemState.Removed || oi.State == OrderItemState.Added));
             changedOrderItems = changedOrderItems.Concat(addedOrRemovedItems
             ).ToList();
-            return  new Order(){OrderItems = new BindableCollection<OrderItem>(changedOrderItems)};
+            return  new Order(){OrderItems = new BindableCollection<OrderItem>(changedOrderItems),OrderNumber = order.OrderNumber,Waiter = order.Waiter,Table = order.Table,Deliveryman = order.Deliveryman};
         }
     }
 }

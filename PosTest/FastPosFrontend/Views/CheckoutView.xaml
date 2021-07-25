@@ -19,7 +19,7 @@
              x:Name="CheckoutViewUserControl"
              mc:Ignorable="d"
              d:DesignWidth="900"
-             caliburn:Message.Attach="[Event TextInput] = [Action scanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action DoneScan($source, $eventArgs)]"
+             caliburn:Message.Attach="[Event TextInput] = [Action ScanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action DoneScan($source, $eventArgs)]"
              d:DataContext="{d:DesignInstance viewmodels:CheckoutViewModel}">
     <FrameworkElement.Resources>
         <ResourceDictionary>
@@ -176,6 +176,8 @@
                             caliburn:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(0)]">
                         <materialdesign:PackIcon Kind="TagFaces" Height="30" Width="30" />
                     </Button>
+                    
+
 
 
                 </Grid>
@@ -442,14 +444,15 @@
                                     <RowDefinition Height="1*" />
                                     <RowDefinition Height="2*" />
                                 </Grid.RowDefinitions>
+                                <TextBox Grid.Row="0" Grid.Column="1" Visibility="Visible" IsReadOnly="True"></TextBox>
                                 <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
                                         BorderBrush="CornflowerBlue">
-                                    <TextBox Foreground="#26ff26"
+                                    <TextBlock Foreground="#26ff26"
                                              Text="{Binding NumericZone, StringFormat='{}{0:0,0.00}'}"
                                              FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
-                                             HorizontalContentAlignment="Right">
-                                        <TextBox.Style>
-                                            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                             HorizontalAlignment="Right">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding ReturnedAmount}" Value="{x:Null}">
@@ -457,15 +460,15 @@
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </TextBox.Style>
-                                    </TextBox>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
+                                <!--<Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
                                         BorderBrush="CornflowerBlue">
-                                    <TextBox Foreground="#26ff26" IsReadOnly="True"
+                                    <TextBlock Foreground="Red" 
                                              Text="{Binding ReturnedAmount}"
                                              FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
-                                             HorizontalContentAlignment="Right" />
+                                             HorizontalAlignment="Right" />
                                 </Border>
 
                                 <Border Grid.Row="0" Grid.Column="1" BorderThickness="0 0 0 0"
@@ -474,9 +477,9 @@
                                         Text="{Binding GivenAmount,StringFormat='{}{0:0}.00'}"
                                         Visibility="{Binding GivenAmount, Converter={StaticResource NumberToVisibilityHidden}}"
                                         FontSize="26"
-                                        Foreground="#26ff26" FontFamily="{StaticResource DigitalFontFamily}"
+                                        Foreground="Red" FontFamily="{StaticResource DigitalFontFamily}"
                                         HorizontalAlignment="Right" />
-                                </Border>
+                                </Border>-->
 
                                 <Grid Grid.RowSpan="2">
                                     <Grid.RowDefinitions>
@@ -507,16 +510,19 @@
                                                        FontFamily="{StaticResource DigitalFontFamily}"
                                                        FontSize="32" Padding="0 5 0 0"
                                                        Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
-                                                       caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]" />
+                                                       caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]"
+                                                       x:Name="NewTotalTextBlock"/>
                                         </DockPanel>
                                     </Button>
-                                    <DockPanel Grid.Row="2" Grid.Column="3">
+                                    <DockPanel Grid.Row="2" Grid.Column="2">
                                         <materialdesign:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
                                                                  Height="30" Padding="0" Foreground="#26ff26" />
                                         <TextBlock Foreground="#26ff26" FontSize="28" DockPanel.Dock="Right"
                                                    TextAlignment="Right"
                                                    FontFamily="{StaticResource DigitalFontFamily}"
-                                                   Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,0.00}', Mode=OneWay}" />
+                                                   Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
+                                                   x:Name="TotalDiscountAmountTextBlock"
+                                                   />
                                     </DockPanel>
                                 </Grid>
                             </Grid>

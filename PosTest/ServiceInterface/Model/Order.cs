@@ -338,8 +338,14 @@ namespace ServiceInterface.Model
             get => _table;
             set
             {
+                if (value == null)
+                {
+                    (_table?.OrderViewSource.Source as ICollection<Order>)?.Remove(this);
+                    _table?.OrderViewSource?.View?.Refresh();
+                }
                 _table = value;
                 TableId = _table?.Id;
+               
                 NotifyOfPropertyChange(() => Table);
             }
         }
