@@ -19,7 +19,7 @@
              x:Name="CheckoutViewUserControl"
              mc:Ignorable="d"
              d:DesignWidth="900"
-             caliburn:Message.Attach="[Event TextInput] = [Action ScanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action DoneScan($source, $eventArgs)]"
+             caliburn:Message.Attach="[Event PreviewTextInput] = [Action ScanCodeBar($source, $eventArgs)];[Event KeyUp] = [Action DoneScan($source, $eventArgs)]"
              d:DataContext="{d:DesignInstance viewmodels:CheckoutViewModel}">
     <FrameworkElement.Resources>
         <ResourceDictionary>
@@ -445,7 +445,7 @@
                                     <RowDefinition Height="1*" />
                                     <RowDefinition Height="2*" />
                                 </Grid.RowDefinitions>
-                                <TextBox Grid.Row="0" Grid.Column="1" Visibility="Visible" IsReadOnly="True"></TextBox>
+                                <TextBox Grid.Row="0" Grid.Column="1" Visibility="Hidden" IsReadOnly="True" ></TextBox>
                                 <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
                                         BorderBrush="CornflowerBlue">
                                     <TextBlock Foreground="#26ff26"
