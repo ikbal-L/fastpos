@@ -11,7 +11,7 @@
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
             <TextBlock Text="Table Number" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
-            <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                     VerticalAlignment="Center"
                     AcceptsReturn="True"
                     Width="300"
@@ -23,7 +23,7 @@
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
             <TextBlock Text="Number Of Categories Per Page" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
-            <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                     VerticalAlignment="Center"
                     AcceptsReturn="True"
                      Text="{Binding Settings.NumberOfCategories,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -50,7 +50,7 @@
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
             <TextBlock Text="Server Host" FontSize="16" Padding="15 10 0 15"  Width="400"  Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
-            <TextBox  Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                     VerticalAlignment="Center"
                     AcceptsReturn="True"
                     Width="300"
