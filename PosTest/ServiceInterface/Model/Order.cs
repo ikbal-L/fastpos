@@ -340,7 +340,7 @@ namespace ServiceInterface.Model
             {
                 if (value == null)
                 {
-                    (_table?.OrderViewSource.Source as ICollection<Order>)?.Remove(this);
+                    (_table?.OrderViewSource?.Source as ICollection<Order>)?.Remove(this);
                     _table?.OrderViewSource?.View?.Refresh();
                 }
                
@@ -348,7 +348,7 @@ namespace ServiceInterface.Model
                 TableId = _table?.Id;
                 if (value != null)
                 {
-                    var orders = (_table?.OrderViewSource.Source as ICollection<Order>);
+                    var orders = (_table?.OrderViewSource?.Source as ICollection<Order>);
                     if (orders != null && !orders.Contains(this))
                     {
                         orders.Add(this);
