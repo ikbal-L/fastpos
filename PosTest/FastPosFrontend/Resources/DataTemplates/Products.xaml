@@ -222,7 +222,7 @@
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Border  Height="60">
+                <Border  >
                     <StackPanel >
                         <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
                                    TextAlignment="Center"

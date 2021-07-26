@@ -887,6 +887,13 @@ namespace FastPosFrontend.ViewModels
 
         public void CancelOrder()
         {
+            if (CurrentOrder == null)
+            {
+                ToastNotification.Notify("No order to remover / cancel!",NotificationType.Information);
+                return;
+            }
+
+            
             if (CurrentOrder?.Id == null)
             {
                 Orders.Remove(CurrentOrder);
