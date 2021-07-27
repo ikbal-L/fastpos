@@ -219,7 +219,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Border  >
@@ -237,7 +237,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBlock Text="{Binding Path=Price}" FontSize="12" TextWrapping="Wrap"
+                        <TextBlock Text="{Binding Path=Price,StringFormat='C2',ConverterCulture='fr-DZ'}" FontSize="12" TextWrapping="Wrap"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
                             <TextBlock.Style>
@@ -255,13 +255,13 @@
                         </TextBlock>
                     </StackPanel>
                 </Border>
-                <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom">
+                <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom" x:Name="ProductSelectionIndicator">
                     <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"
                             CornerRadius="30" Width="20" Height="20">
                         <materialdesign:PackIcon Kind="Done" Height="20" Width="20" />
                         <Border.Style>
                             <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Hidden" />
+                                <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
                                     <DataTrigger Value="True">
                                         <DataTrigger.Binding>
