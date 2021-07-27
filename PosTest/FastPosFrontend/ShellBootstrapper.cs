@@ -100,7 +100,15 @@ namespace FastPosFrontend
         {
             //EXCEPTION
 
-            _backendServerProcess.Kill();
+            try
+            {
+                _backendServerProcess.Kill();
+            }
+            catch (Exception)
+            {
+
+            }
+
             base.OnExit(sender, e);
         }
 

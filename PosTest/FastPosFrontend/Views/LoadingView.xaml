@@ -19,6 +19,6 @@
                    Margin="10"
                    FontSize="20"
                    FontWeight="DemiBold"
-                   Foreground="DodgerBlue"></TextBlock>
+                   Foreground="{DynamicResource PrimaryHueMidBrush}"></TextBlock>
     </StackPanel>
 </UserControl>
