@@ -462,7 +462,8 @@
                             <materialdesign:PackIcon Kind="Grid" Height="22" Width="22" />
                         </Button>
                     </Grid>
-                    <ListBox x:Name="ProductSettingsList" ItemsSource="{Binding CurrentProducts}"
+                    <materialdesign:TransitioningContent OpeningEffect="{materialdesign:TransitionEffect SlideInFromBottom}">
+                        <ListBox x:Name="ProductSettingsList" ItemsSource="{Binding CurrentProducts}"
                              Margin="2"
                              AllowDrop="True"
                              ItemTemplate="{StaticResource SettingsProduct}"
@@ -475,21 +476,22 @@
                                                            [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
                              Tag="{Binding ClipboardProduct}"
                              DockPanel.Dock="Top">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Padding" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="{Binding ProductLayout.Columns}"
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="{Binding ProductLayout.Columns}"
                                              Rows="{Binding ProductLayout.Rows}" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                    </ListBox>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+                    </materialdesign:TransitioningContent>
 
                 </DockPanel>
                 <DockPanel Grid.Row="1" x:Name="CategorySettingsControl" LastChildFill="False">
@@ -527,42 +529,54 @@
                         </Button>
 
                     </Grid>
-                    <ListBox 
+                    <ItemsControl 
                         DockPanel.Dock="Top" x:Name="CategoryList" AllowDrop="True"
                              ItemsSource="{Binding CurrentCategories}"
-                             Margin="5"
+                        Margin="5"
                              caliburn:Message.Attach="
                                          [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];
                                          [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];
-                                                 [Event TouchDown] = [Action CategoriesList_TouchDown($source, $eventArgs)];"
-                        >
-                        <ListBox.ItemsPanel>
+                                                 [Event TouchDown] = [Action CategoriesList_TouchDown($source, $eventArgs)];">
+                        <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="{x:Static helpers:ProductLayout.CategoryCols}"  />
                             </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:Category}">
-                                <Border x:Name="catBtn"
+                                <Button x:Name="catBtn"
                                         Height="45" Padding="0"
-                                        cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
-                                        caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowCategoryProducts($this)]"
-                                        CornerRadius="5"
+                                        cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}}"
+                                        caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
                                         Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}" 
                                         Cursor="Hand" 
-                                        >
+                                        Margin="5">
+
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                          
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+
+                                                    <!--<Setter Property="CornerRadius" Value="8"></Setter>-->
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
 
                                     <Border 
-                                        BorderBrush="#66000000" 
-                                        BorderThickness="2.5" 
-                                        CornerRadius="0"
                                         Padding="2" >
                                         <Border.Style>
                                             <Style TargetType="Border">
+                                                <Setter Property="OpacityMask" Value="#66FFFFFF"></Setter>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
 
-                                                        <Setter Property="OpacityMask" Value="#66FFFFFF"></Setter>
+                                                        <Setter Property="OpacityMask" Value="{x:Null}"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsMouseOver}" Value="true">
+
+                                                        <Setter Property="OpacityMask" Value="{x:Null}"></Setter>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -587,13 +601,13 @@
                                             </TextBlock>
                                         </Grid>
                                     </Border>
-                                </Border>
+                                </Button>
                             </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
+                        </ItemsControl.ItemTemplate>
+                        <!--<ItemsControl.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 
-                                <!--<Setter Property="Background" Value="AliceBlue" />-->
+                                --><!--<Setter Property="Background" Value="AliceBlue" />--><!--
                                 <Setter Property="VerticalContentAlignment" Value="Center" />
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
@@ -610,8 +624,8 @@
                                     </Setter.Value>
                                 </Setter>
                             </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
+                        </ItemsControl.ItemContainerStyle>-->
+                    </ItemsControl>
 
                 </DockPanel>
 

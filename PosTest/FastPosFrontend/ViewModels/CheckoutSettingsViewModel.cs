@@ -488,6 +488,9 @@ namespace FastPosFrontend.ViewModels
                 CategoryDetailViewModel.SaveCategory();
                 CategoryDetailViewModel = null;
                 IsCategory = false;
+                var category = SelectedCategory;
+                SelectedCategory = null;
+                ShowCategoryProducts(category);
             }
             else
             {
@@ -1299,7 +1302,12 @@ namespace FastPosFrontend.ViewModels
             }
             IsCategory = true;
             this.CategoryDetailViewModel = new CategoryDetailViewModel(ref this._selectedCategory,_allCategories);
-            (this.Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel);
+            (this.Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel).OnClose(() =>
+            {
+                var category = SelectedCategory;
+                SelectedCategory = null;
+                ShowCategoryProducts(category);
+            });
             //CategoryDetailViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
 
 

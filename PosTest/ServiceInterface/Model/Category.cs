@@ -46,7 +46,7 @@ namespace ServiceInterface.Model
         [Required(AllowEmptyStrings = false)]
         public string BackgroundString 
         { 
-            get => _backGroundString ?? "#ffffff";
+            get => _backGroundString ?? " #DEDEDE";
             set 
             { 
                 _backGroundString = value;
