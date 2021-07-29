@@ -16,9 +16,11 @@
         xmlns:converters="clr-namespace:FastPosFrontend.Converters"
         xmlns:helpers="clr-namespace:FastPosFrontend.Helpers"
         xmlns:extensions="clr-namespace:FastPosFrontend.Extensions"
-        xmlns:b="http://schemas.microsoft.com/xaml/behaviors" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         Title="{Binding WindowTitle}" Height="800" Width="1100"
-        x:Name="AppMainViewWindow">
+        x:Name="AppMainViewWindow"
+        d:DataContext="{d:DesignInstance vm:MainViewModel}">
     <Window.Resources>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
 
@@ -52,27 +54,28 @@
                                         </Style>
                                     </md:ColorZone.Style>
                                     <DockPanel>
-                                   
+
                                         <ToggleButton
-                                                x:Name="AppMenuToggleButton"
-                                                AutomationProperties.Name="HamburgerToggleButton"
-                                                DockPanel.Dock="Left"
-                                                Foreground="WhiteSmoke">
+                                            x:Name="AppMenuToggleButton"
+                                            AutomationProperties.Name="HamburgerToggleButton"
+                                            DockPanel.Dock="Left"
+                                            Foreground="WhiteSmoke">
                                             <ToggleButton.Style>
                                                 <Style TargetType="ToggleButton"
-                                                           BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
+                                                       BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsLoggedIn}"
-                                                                         Value="True">
+                                                                     Value="True">
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
 
-                                                        <DataTrigger Binding="{Binding ActiveScreen.IsReady}" Value="false">
-                                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                                        <DataTrigger Binding="{Binding ActiveScreen.IsReady}"
+                                                                     Value="false">
+                                                            <Setter Property="IsEnabled" Value="False" />
                                                         </DataTrigger>
 
                                                         <DataTrigger Binding="{Binding IsLoggedIn}"
-                                                                         Value="False">
+                                                                     Value="False">
                                                             <Setter Property="Visibility" Value="Collapsed" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding MainDialog.IsDialogOpen}"
@@ -92,13 +95,12 @@
                                                 <Style TargetType="md:PopupBox">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
-                                                            <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
+                                                            <Setter Property="Foreground" Value="WhiteSmoke" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </md:PopupBox.Style>
-                                            <StackPanel Margin="10 0" >
-
+                                            <StackPanel Margin="10 0">
 
 
                                                 <Button x:Name="CloseAppWindowButton"
@@ -155,7 +157,8 @@
                                                         </Style>
                                                     </Button.Style>
                                                 </Button>
-                                                <Separator Visibility="{Binding ElementName=LogoutAppWindowButton,Path=Visibility}"></Separator>
+                                                <Separator
+                                                    Visibility="{Binding ElementName=LogoutAppWindowButton,Path=Visibility}" />
                                                 <Button x:Name="LogoutAppWindowButton"
                                                         cal:Message.Attach="Logout"
                                                         Content="Logout" FontWeight="SemiBold">
@@ -175,95 +178,119 @@
                                             </StackPanel>
                                         </md:PopupBox>
 
-                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}" >
+                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}">
                                             <ContentControl.Style>
                                                 <Style TargetType="ContentControl">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedCommandBar}" Value="null">
-                                                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedCommandBar}"
+                                                                     Value="null">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
 
-                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedContentBar}" DockPanel.Dock="Right">
+                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedContentBar}"
+                                                        DockPanel.Dock="Right">
                                             <ContentControl.Style>
                                                 <Style TargetType="ContentControl">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedContentBar}" Value="null">
-                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedContentBar}"
+                                                                     Value="null">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
 
-                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedRightCommandBar}" DockPanel.Dock="Right">
+                                        <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedRightCommandBar}"
+                                                        DockPanel.Dock="Right">
                                             <ContentControl.Style>
                                                 <Style TargetType="ContentControl">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ActiveItem.EmbeddedRightCommandBar}" Value="null">
-                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        <DataTrigger
+                                                            Binding="{Binding ActiveItem.EmbeddedRightCommandBar}"
+                                                            Value="null">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
 
-                                        <!--Processes Status--> 
-                                       <!--<StackPanel Orientation="Horizontal">
+                                        <!--Processes Status-->
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsLoggedIn}"
+                                                                     Value="true">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
                                             <md:Chip
-                                            Content="Server"
-
-                                            IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                                            Margin="5 0">
+                                                Content="Server"
+                                                cal:Action.TargetWithoutContext="{Binding ActiveItem}"
+                                                cal:Message.Attach="[Event Click] = [Action StartBackendServer(false)]"
+                                                IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                                Margin="5 0">
                                                 <md:Chip.Style>
                                                     <Style TargetType="md:Chip">
+                                                       
                                                         <Setter Property="IconBackground"
-                                                            Value="{StaticResource WarningColorBrush}" />
-                                                        <Setter Property="Icon" Value="{md:PackIcon Server}" />
+                                                                Value="{StaticResource ErrorColorBrush}" />
+                                                        <Setter Property="Icon" Value="{md:PackIcon ServerOff}" />
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsBackendServerOn}" Value="True">
-                                                                <Setter Property="IconBackground"
-                                                                    Value="{StaticResource SuccessColorBrush}" />
-                                                            </DataTrigger>
                                                             <DataTrigger Binding="{Binding IsBackendServerOn}"
-                                                                     Value="False">
+                                                                         Value="True">
                                                                 <Setter Property="IconBackground"
-                                                                    Value="{StaticResource ErrorColorBrush}" />
-                                                                <Setter Property="Icon" Value="{md:PackIcon ServerOff}" />
+                                                                        Value="{StaticResource SuccessColorBrush}" />
+                                                                <Setter Property="Icon" Value="{md:PackIcon Server}" />
                                                             </DataTrigger>
+
+                                                            <DataTrigger
+                                                                Binding="{Binding IsAttemptingToStartBackendServer}"
+                                                                Value="true">
+                                                                <Setter Property="Cursor" Value="Wait" />
+                                                                <Setter Property="IconBackground"
+                                                                        Value="{StaticResource WarningColorBrush}" />
+                                                                <Setter Property="Icon" Value="{md:PackIcon Server}" />
+                                                            </DataTrigger>
+
                                                         </Style.Triggers>
                                                     </Style>
                                                 </md:Chip.Style>
 
                                             </md:Chip>
                                             <md:Chip
-                                            Content="Database"
-                                            IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                                            Margin="5 0">
+                                                Content="Database"
+                                                IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                                Margin="5 0">
                                                 <md:Chip.Style>
                                                     <Style TargetType="md:Chip">
                                                         <Setter Property="IconBackground"
-                                                            Value="{StaticResource WarningColorBrush}" />
+                                                                Value="{StaticResource WarningColorBrush}" />
                                                         <Setter Property="Icon" Value="{md:PackIcon Database}" />
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsDbServerOn}" Value="True">
                                                                 <Setter Property="IconBackground"
-                                                                    Value="{StaticResource SuccessColorBrush}" />
+                                                                        Value="{StaticResource SuccessColorBrush}" />
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding IsDbServerOn}" Value="False">
                                                                 <Setter Property="IconBackground"
-                                                                    Value="{StaticResource ErrorColorBrush}" />
+                                                                        Value="{StaticResource ErrorColorBrush}" />
                                                                 <Setter Property="Icon"
-                                                                    Value="{md:PackIcon DatabaseRemove}" />
+                                                                        Value="{md:PackIcon DatabaseRemove}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </md:Chip.Style>
                                             </md:Chip>
-                                        </StackPanel>-->
+                                        </StackPanel>
                                         <!--<TextBlock
 
                                             HorizontalAlignment="Center"
@@ -291,42 +318,44 @@
                                                IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}"
                                                LeftDrawerCloseOnClickAway="True">
                                     <md:DrawerHost.LeftDrawerContent>
-                                        <Grid MinWidth="250" >
+                                        <Grid MinWidth="250">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="MouseLeftButtonUp">
-                                                    <i:InvokeCommandAction Command="{x:Static md:DrawerHost.CloseDrawerCommand}"/>
+                                                    <i:InvokeCommandAction
+                                                        Command="{x:Static md:DrawerHost.CloseDrawerCommand}" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                            <DockPanel Grid.Row="0"  />
+                                            <DockPanel Grid.Row="0" />
                                             <TreeView Grid.Row="0" ItemsSource="{Binding AppNavigationItems}"
                                                       Style="{StaticResource MaterialDesignTreeView}"
                                                       HorizontalAlignment="Left"
-                                                      Margin="10 20"
-                                                      >
+                                                      Margin="10 20">
                                                 <b:Interaction.Behaviors>
-                                                    <extensions:BindableSelectedItemBehavior SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
+                                                    <extensions:BindableSelectedItemBehavior
+                                                        SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
                                                 </b:Interaction.Behaviors>
                                                 <TreeView.Resources>
                                                     <HierarchicalDataTemplate
                                                         DataType="{x:Type helpers:AppNavigationLookupItem}"
                                                         ItemsSource="{Binding SubItems}">
                                                         <TextBlock HorizontalAlignment="Center"
-                                                            Text="{Binding Title}"
-                                                            Margin="5"
-                                                            FontSize="16"
-                                                            Style="{StaticResource MaterialDesignButtonTextBlock}"/>
+                                                                   Text="{Binding Title}"
+                                                                   Margin="5"
+                                                                   FontSize="16"
+                                                                   Style="{StaticResource MaterialDesignButtonTextBlock}" />
                                                     </HierarchicalDataTemplate>
                                                     <DataTemplate
-                                                        DataType="{x:Type helpers:AppNavigationLookupItem}" x:Key="SubItem">
+                                                        DataType="{x:Type helpers:AppNavigationLookupItem}"
+                                                        x:Key="SubItem">
                                                         <TextBlock
                                                             Text="{Binding Title}"
                                                             Margin="5"
                                                             ToolTip="{Binding Title}"
-                                                            Style="{StaticResource MaterialDesignButtonTextBlock}"/>
+                                                            Style="{StaticResource MaterialDesignButtonTextBlock}" />
                                                     </DataTemplate>
                                                 </TreeView.Resources>
                                             </TreeView>
@@ -370,9 +399,9 @@
         <WindowChrome GlassFrameThickness="0"
                       CornerRadius="0" />
     </WindowChrome.WindowChrome>
-  
+
     <Grid>
-        <md:DialogHost IsOpen="{Binding MainDialog.IsDialogOpen}" >
+        <md:DialogHost IsOpen="{Binding MainDialog.IsDialogOpen}">
 
 
             <md:DialogHost.DialogContent>

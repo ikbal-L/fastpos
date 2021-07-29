@@ -2101,7 +2101,7 @@ namespace FastPosFrontend.ViewModels
                 if (Orders != null && Orders.Any(o => o.Id == null))
                 {
                 
-                    var response = ModalDialogBox.Show("There are unsaved orders, Are you sure you want to logout?","Unsaved Orders!");
+                    var response = ModalDialogBox.YesNo("There are unsaved orders, Are you sure you want to logout?","Unsaved Orders!").Show();
                 
                     return response;
                 }

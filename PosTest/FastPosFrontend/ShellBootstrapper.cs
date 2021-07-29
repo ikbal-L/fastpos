@@ -14,8 +14,8 @@ namespace FastPosFrontend
 {
     public class ShellBootstrapper : BootstrapperBase
     {
-        private Process _backendServerProcess;
 
+        private static Process _backendServerProcess;
         public ShellBootstrapper()
         {
             var config = new NLog.Config.LoggingConfiguration();
@@ -50,48 +50,8 @@ namespace FastPosFrontend
 
 
 
-            _backendServerProcess = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    FileName = "java",
-                    Arguments = "-jar model-0.0.1-SNAPSHOT.jar",
-                    ErrorDialog = true,
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-
-                }
-            };
-
-            if (!ConnectionHelper.PingHost())
-            {
-                _backendServerProcess.Start();
-                
-            }
-
-            var stopWatch = Stopwatch.StartNew();
-            stopWatch.Start();
-            while (!ConnectionHelper.PingHost())
-            {
-                if (stopWatch.ElapsedMilliseconds >= 30000)
-                {
-                    stopWatch.Stop();
-                    //backendServerProcess.Kill();
-                    break;
-                }
-            }
-
-            if (stopWatch.IsRunning)
-            {
-                stopWatch.Stop();
-                DisplayRootViewFor<MainViewModel>();
-                return;
-            }
-            else
-            {
-                MessageBox.Show("Error! Unable to start the server", "Server Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Application.Shutdown(1);
-            }
+            //_backendServerProcess = new Process()
+           
 
             DisplayRootViewFor<MainViewModel>();
         }
@@ -110,6 +70,46 @@ namespace FastPosFrontend
             }
 
             base.OnExit(sender, e);
+        }
+
+        public static bool StartBackendServer()
+        {
+
+            
+            _backendServerProcess ??= new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "java",
+                    Arguments = "-jar model-0.0.1-SNAPSHOT.jar",
+                    ErrorDialog = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                }
+            };
+
+            if (!ConnectionHelper.PingHost())
+            {
+                _backendServerProcess.Start();
+
+            }
+            else
+            {
+                return true;
+            }
+
+            var stopWatch = Stopwatch.StartNew();
+            stopWatch.Start();
+            while (!ConnectionHelper.PingHost())
+            {
+                if (stopWatch.ElapsedMilliseconds >= 100000)
+                {
+                    stopWatch.Stop();
+                    //backendServerProcess.Kill();
+                    break;
+                }
+            }
+            return stopWatch.IsRunning;
         }
 
     }

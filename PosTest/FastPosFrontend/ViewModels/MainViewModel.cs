@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
@@ -20,6 +21,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isDbServerOn;
         private bool _isBackendServerOn;
         private MainDialog _mainDialog;
+        private bool _isAttemptingToStartBackendServer;
 
 
         public MainViewModel()
@@ -59,6 +61,12 @@ namespace FastPosFrontend.ViewModels
         {
             get => _isBackendServerOn;
             set => Set(ref _isBackendServerOn, value);
+        }
+
+        public bool IsAttemptingToStartBackendServer
+        {
+            get => _isAttemptingToStartBackendServer;
+            set => Set(ref _isAttemptingToStartBackendServer, value);
         }
 
 
@@ -142,8 +150,28 @@ namespace FastPosFrontend.ViewModels
                 KeepAliveScreens.Clear();
                 IsLoggedIn = false;
             }
-            
-            
+
+            StartBackendServer(true);
+
+
+        }
+
+        public async Task StartBackendServer(bool updateInfoRequested = false)
+        {
+
+            if (!IsAttemptingToStartBackendServer)
+            {
+                if (IsBackendServerOn && !updateInfoRequested)
+                {
+                    ModalDialogBox.Ok("The backend server is already running!", "Info - Backend server Status").Show();
+                    return;
+                }
+                IsAttemptingToStartBackendServer = true;
+                var result = await Task.Run(ShellBootstrapper.StartBackendServer);
+                IsBackendServerOn = result;
+                IsAttemptingToStartBackendServer = false;
+
+            }
         }
     }
 
