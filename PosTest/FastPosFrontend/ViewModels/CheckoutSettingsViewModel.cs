@@ -199,6 +199,7 @@ namespace FastPosFrontend.ViewModels
         private List<Product> _activeProducts;
         private List<Category> _allCategories;
         private int _numberOfCategoryRows;
+        private Category _clipboardCategory;
 
         public int ProductPageSize
         {
@@ -294,6 +295,12 @@ namespace FastPosFrontend.ViewModels
             set { Set(ref _clipboardProduct, value); }
         }
 
+        public Category ClipboardCategory
+        {
+            get => _clipboardCategory;
+            set => Set(ref _clipboardCategory, value);
+        }
+
         public Product ProductToMove
         {
             get => _toMoveProduct;
@@ -384,6 +391,59 @@ namespace FastPosFrontend.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
+
+            if (CategoryToMove!= null)
+            {
+              
+                if (category == CategoryToMove)
+                {
+                    CategoryToMove = null;
+                    return;
+                }
+
+                var index = CurrentCategories.IndexOf(CategoryToMove);
+                var cat = new Category() { Rank = CategoryToMove.Rank };
+                if (category.Equals(CategoryToMove))
+                {
+                    CategoryToMove = null;
+                    return;
+                }
+
+                //PutCategoryInCellOf(SelectedCategory, CategoryToMove);
+                IList<Category> categories = CurrentCategories;
+                try
+                {
+                    RankedItemsCollectionHelper.InsertTElementInPositionOf(ref _categoryToMove, ref category,
+                        categories);
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    throw;
+#endif
+                    NLog.LogManager.GetCurrentClassLogger().Error(ex);
+                }
+
+                try
+                {
+                    if (category.Id != null)
+                    {
+                        StateManager.Save(category);
+                    }
+
+                    StateManager.Save(CategoryToMove);
+                    CurrentCategories = (BindableCollection<Category>)categories;
+                }
+                catch (AggregateException)
+                {
+                    ToastNotification.Notify("Problem connecting to server");
+                }
+                CategoryToMove = null;
+                SelectedCategory = null;
+                category = null;
+                CurrentProducts?.Clear();
+                return;
+            }
             SelectedProduct = null;
             if (category == SelectedCategory) return;
             SelectedCategory = category;
@@ -649,6 +709,17 @@ namespace FastPosFrontend.ViewModels
             ClipboardProduct = SelectedProduct;
         }
 
+        public void CopyCategory()
+        {
+            if (SelectedCategory?.Id == null)
+            {
+                ToastNotification.Notify("Select a non empty category to copy", NotificationType.Warning);
+                return;
+            }
+
+            ClipboardCategory = ClipboardCategory!= null ? null : SelectedCategory;
+        }
+
 
         public void OpenProdcutDetail()
         {
@@ -767,6 +838,62 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        public void PasteCategory()
+        {
+            if (ClipboardCategory == null)
+            {
+                ToastNotification.Notify("Copy a category before", NotificationType.Warning);
+                return;
+            }
+
+            if (SelectedCategory == null)
+            {
+                ToastNotification.Notify("Select a zone to copy in", NotificationType.Warning);
+                return;
+            }
+
+            if (SelectedCategory.Id != null)
+            {
+                Notify("Select an empty cell to paste category in!");
+                SelectedProduct = null;
+                return;
+            }
+
+            if (ClipboardCategory.Equals(SelectedCategory))
+            {
+                return;
+            }
+
+            //var product = new Product(ClipboardProduct);
+            var category = ClipboardCategory.Clone();
+            category.Id = null;
+            category.Rank = null;
+
+            var name = Regex.Replace(ClipboardCategory.Name, @"\([0-9]{1,2}\)", "");
+            var count = CurrentCategories.Where(a => a.Name != null).Count(a => a.Name.Contains(name));
+            category.Name = $"{name}({count})";
+            var target = SelectedCategory;
+            //PutProductInCellOf(SelectedProduct, product);
+
+            int targetRank = target.Rank.Value;
+            category.Rank = targetRank;
+            CurrentCategories[targetRank - 1] = category;
+
+
+            try
+            {
+                StateManager.Save(category);
+                ClipboardCategory = null;
+                //StateManager.Save(target);
+
+
+            }
+            catch (AggregateException)
+            {
+                ToastNotification.Notify("Problem connecting to server");
+            }
+        }
+
         public void MoveProductTo()
         {
             if (SelectedProduct?.Name == null || SelectedProduct.Category.Id == null)
@@ -776,6 +903,17 @@ namespace FastPosFrontend.ViewModels
             }
 
             ProductToMove = SelectedProduct;
+        }
+
+        public void MoveCategoryTo()
+        {
+            if (SelectedCategory?.Name == null )
+            {
+                ToastNotification.Notify("Selcect a category to move");
+                return;
+            }
+
+            CategoryToMove = CategoryToMove==null? SelectedCategory:null;
         }
 
 
@@ -888,7 +1026,7 @@ namespace FastPosFrontend.ViewModels
         }
 
         public static void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key,
-            string requiredPropertyName = "Name") where T : Ranked, new()
+            string requiredPropertyName = "Id") where T : Ranked, new()
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -899,7 +1037,7 @@ namespace FastPosFrontend.ViewModels
                 if (listBoxItem != null)
                 {
                     t = (T)listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-                    if (t == null || t.GetType().GetProperty(requiredPropertyName) == null)
+                    if (t == null || t.GetType().GetProperty(requiredPropertyName).GetValue(t) == null)
                     {
                         return;
                     }
@@ -1050,6 +1188,8 @@ namespace FastPosFrontend.ViewModels
                     {
                         ToastNotification.Notify("Problem connecting to server");
                     }
+
+                    SelectedProduct = null;
                 }
             }
         }
@@ -1121,7 +1261,11 @@ namespace FastPosFrontend.ViewModels
                 {
                     CategoryToMove = incomingCategory;
                     SelectedCategory = targetCategory;
-                    if (SelectedCategory == CategoryToMove) return;
+                    if (SelectedCategory == CategoryToMove)
+                    {
+                        CategoryToMove = null;
+                        return;
+                    }
                    
                     var index = CurrentCategories.IndexOf(CategoryToMove);
                     var cat = new Category() { Rank = CategoryToMove.Rank };
@@ -1161,7 +1305,7 @@ namespace FastPosFrontend.ViewModels
                         ToastNotification.Notify("Problem connecting to server");
                     }
                     CategoryToMove = null;
-                    SelectedCategory = incomingCategory;
+                    ShowCategoryProducts(null);
                     //CurrentCategories[index] = cat;
                     //CategoryToMove = null;
                 }

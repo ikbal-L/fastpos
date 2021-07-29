@@ -16,7 +16,8 @@
              xmlns:helpers="clr-namespace:FastPosFrontend.Helpers"
 
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModels:CheckoutSettingsViewModel}">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type models:Product}" x:Key="textBlockTempl">
             <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ActualWidth}">
@@ -241,7 +242,7 @@
                 <TextBlock Text="Categories" Margin=" 5 5 20 5" />
 
             </materialdesign:Badged>
-        </DataTemplate >
+        </DataTemplate>
         <DataTemplate x:Key="ProductTabItemHeaderTemplate">
             <materialdesign:Badged BadgePlacementMode="Right">
                 <materialdesign:Badged.Style>
@@ -286,15 +287,14 @@
                                      HorizontalAlignment="Center" VerticalAlignment="Top" />
 
             <TabControl Grid.Column="0"
-                Style="{StaticResource MaterialDesignTabControl}"
-                SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
-                caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]"
-                Margin="0 0 0 0 ">
+                        Style="{StaticResource MaterialDesignTabControl}"
+                        SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
+                        caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]"
+                        Margin="0 0 0 0 ">
                 <TabItem x:Name="CategoriesTabItem" Tag="{Binding AllCategories}" TabIndex="0"
                          HeaderTemplate="{StaticResource CategoryTabItemHeaderTemplate}">
 
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
-                                  >
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -462,20 +462,21 @@
                             <materialdesign:PackIcon Kind="Grid" Height="22" Width="22" />
                         </Button>
                     </Grid>
-                    <materialdesign:TransitioningContent OpeningEffect="{materialdesign:TransitionEffect SlideInFromBottom}">
+                    <materialdesign:TransitioningContent
+                        OpeningEffect="{materialdesign:TransitionEffect SlideInFromBottom}">
                         <ListBox x:Name="ProductSettingsList" ItemsSource="{Binding CurrentProducts}"
-                             Margin="2"
-                             AllowDrop="True"
-                             ItemTemplate="{StaticResource SettingsProduct}"
-                             
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
+                                 Margin="2"
+                                 AllowDrop="True"
+                                 ItemTemplate="{StaticResource SettingsProduct}"
+
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                 caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                            [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
                                                            [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];
                                                            [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
-                             Tag="{Binding ClipboardProduct}"
-                             DockPanel.Dock="Top">
+                                 Tag="{Binding ClipboardProduct}"
+                                 DockPanel.Dock="Top">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -487,7 +488,7 @@
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid Columns="{Binding ProductLayout.Columns}"
-                                             Rows="{Binding ProductLayout.Rows}" />
+                                                 Rows="{Binding ProductLayout.Rows}" />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
                         </ListBox>
@@ -496,121 +497,210 @@
                 </DockPanel>
                 <DockPanel Grid.Row="1" x:Name="CategorySettingsControl" LastChildFill="False">
                     <Grid DockPanel.Dock="Bottom">
-                        <materialdesign:ColorZone Mode="PrimaryMid" >
+                        <materialdesign:ColorZone Mode="PrimaryMid">
                             <TextBlock VerticalAlignment="Center" Margin="16">Gestion Du Menu Categories</TextBlock>
                         </materialdesign:ColorZone>
 
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
-                            Margin="0 0 10 5"
-                            caliburn:Message.Attach="[Event Click] = [Action CreateCategory()]">
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
+                                Margin="0 0 10 5"
+                                caliburn:Message.Attach="[Event Click] = [Action CreateCategory()]">
                             <materialdesign:PackIcon Kind="Plus" Height="22" Width="22" />
                         </Button>
 
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
-                            Margin="0 0 60 5"
-                            caliburn:Message.Attach="[Event Click] = [Action EditCategory(false)]">
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="2"
+                                Margin="0 0 60 5"
+                                caliburn:Message.Attach="[Event Click] = [Action EditCategory(false)]">
                             <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
                         </Button>
 
-                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        <Button x:Name="CategoryMoveButton"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                caliburn:Message.Attach="[Event Click] = [Action MoveCategoryTo()]"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                Grid.Row="0" Margin="0 0 110 5">
+                            <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22" />
+                        </Button>
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            caliburn:Message.Attach="[Event Click] = [Action PasteCategory()]"
                             VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                            caliburn:Message.Attach="[Event Click] = [Action RemoveCategoryFromList()]"
-                            Grid.Row="2" Margin="0 0 110 5">
+                            Grid.Row="0" Margin="0 0 160 5">
+                            <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
+                        </Button>
+                        <Button
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            caliburn:Message.Attach="[Event Click] = [Action CopyCategory()]"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Grid.Row="0" Margin="0 0 210 5">
+                            <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                caliburn:Message.Attach="[Event Click] = [Action RemoveCategoryFromList()]"
+                                Grid.Row="2" Margin="0 0 260 5">
                             <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                         </Button>
 
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                            caliburn:Message.Attach="[Event Click] = [Action AddCategoryRow()]"
-                             Margin="0 0 160 5">
+                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                caliburn:Message.Attach="[Event Click] = [Action AddCategoryRow()]"
+                                Margin="0 0 310 5">
                             <materialdesign:PackIcon Kind="TableRow" Height="22" Width="22" />
                         </Button>
 
                     </Grid>
-                    <ItemsControl 
+                    <ListBox
                         DockPanel.Dock="Top" x:Name="CategoryList" AllowDrop="True"
-                             ItemsSource="{Binding CurrentCategories}"
+                        ScrollViewer.PanningMode="None"
+                        ItemsSource="{Binding CurrentCategories}"
                         Margin="5"
-                             caliburn:Message.Attach="
+                        caliburn:Message.Attach="
                                          [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];
                                          [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];
-                                                 [Event TouchDown] = [Action CategoriesList_TouchDown($source, $eventArgs)];">
-                        <ItemsControl.ItemsPanel>
+                                                 [Event TouchMove] = [Action CategoriesList_TouchDown($source, $eventArgs)];"
+                        SelectedItem="{Binding SelectedCategory}">
+                        <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="{x:Static helpers:ProductLayout.CategoryCols}"  />
+                                <!--<UniformGrid Columns="{x:Static helpers:ProductLayout.CategoryCols}"  />-->
+                                <UniformGrid Columns="4" />
                             </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:Category}">
                                 <Button x:Name="catBtn"
-                                        Height="45" Padding="0"
-                                        cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}}"
-                                        caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
-                                        Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}" 
-                                        Cursor="Hand" 
-                                        Margin="5">
+                                        Height="60" Padding="0"
+                                        cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
+                                        caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)];"
+                                        Cursor="Hand"
+                                        Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}">
+                                    <!--[Event TouchUp] = [Action ShowCategoryProducts($this)]-->
 
                                     <Button.Style>
-                                        <Style TargetType="Button">
-                                          
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+                                        <Style TargetType="Button" >
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}">
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger
+                                                                            Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}"
+                                                                            Value="true">
 
-                                                    <!--<Setter Property="CornerRadius" Value="8"></Setter>-->
-                                                </DataTrigger>
-                                            </Style.Triggers>
+                                                                            <Setter Property="CornerRadius" Value="8" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                            <ContentPresenter />
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
                                         </Style>
                                     </Button.Style>
 
-                                    <Border 
-                                        Padding="2" >
+                                    <Border
+                                        BorderBrush="#66000000"
+                                        BorderThickness="2.5"
+                                        Padding="2">
                                         <Border.Style>
                                             <Style TargetType="Border">
-                                                <Setter Property="OpacityMask" Value="#66FFFFFF"></Setter>
+                                                <Setter Property="OpacityMask" Value="#66FFFFFF" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
-
-                                                        <Setter Property="OpacityMask" Value="{x:Null}"></Setter>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsMouseOver}" Value="true">
-
-                                                        <Setter Property="OpacityMask" Value="{x:Null}"></Setter>
+                                                    <DataTrigger
+                                                        Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}"
+                                                        Value="true">
+                                                        <Setter Property="OpacityMask" Value="{x:Null}" />
+                                                        <Setter Property="CornerRadius" Value="8" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <Grid>
+                                        <DockPanel>
+
+                                            <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
+                                                <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Value="True">
+                                                                <DataTrigger.Binding>
+                                                                    <MultiBinding
+                                                                        Converter="{StaticResource MultiValueEqualityConverter}">
+                                                                        <Binding ElementName="CategoryList"
+                                                                            Path="DataContext.ClipboardCategory" />
+                                                                        <Binding
+                                                                            RelativeSource="{RelativeSource AncestorType=ListBoxItem}"
+                                                                            Path="DataContext" />
+                                                                    </MultiBinding>
+                                                                </DataTrigger.Binding>
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+
+                                            <Border Width="20" Height="20" DockPanel.Dock="Right">
+                                                <materialdesign:PackIcon Height="20" Width="20" Kind="ArrowExpandAll"
+                                                                         Padding="0" />
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Value="True">
+                                                                <DataTrigger.Binding>
+                                                                    <MultiBinding
+                                                                        Converter="{StaticResource MultiValueEqualityConverter}">
+                                                                        <Binding ElementName="CategoryList"
+                                                                            Path="DataContext.CategoryToMove" />
+                                                                        <Binding
+                                                                            RelativeSource="{RelativeSource AncestorType=ListBoxItem}"
+                                                                            Path="DataContext" />
+                                                                    </MultiBinding>
+                                                                </DataTrigger.Binding>
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+
                                             <TextBlock FontWeight="Bold" FontSize="16"
-                                                   Text="{Binding Name}"
-                                                   
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   ToolTip="{Binding Description}">
+                                                       Text="{Binding Name}"
+
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       ToolTip="{Binding Description}">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsDark}"
-                                                                     Value="True">
+                                                                         Value="True">
                                                                 <Setter Property="Foreground" Value="White" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
-                                        </Grid>
+                                        </DockPanel>
                                     </Border>
                                 </Button>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <!--<ItemsControl.ItemContainerStyle>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
-                                
-                                --><!--<Setter Property="Background" Value="AliceBlue" />--><!--
+
+                                <!--<Setter Property="Background" Value="AliceBlue" />-->
                                 <Setter Property="VerticalContentAlignment" Value="Center" />
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Padding" Value="0" />
                                 <Setter Property="Margin" Value="5" />
 
@@ -618,14 +708,15 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
                                             <Border Background="Transparent">
-                                                <ContentPresenter/>
+                                                <ContentPresenter />
                                             </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
                             </Style>
-                        </ItemsControl.ItemContainerStyle>-->
-                    </ItemsControl>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+
 
                 </DockPanel>
 
