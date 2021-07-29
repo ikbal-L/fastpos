@@ -672,6 +672,8 @@
                                                 </Border.Style>
                                             </Border>
 
+
+
                                             <TextBlock FontWeight="Bold" FontSize="16"
                                                        Text="{Binding Name}"
 

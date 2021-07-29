@@ -15,16 +15,19 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:converters="clr-namespace:FastPosFrontend.Converters"
         xmlns:helpers="clr-namespace:FastPosFrontend.Helpers"
-        xmlns:extensions="clr-namespace:FastPosFrontend.Extensions"
+        xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         Title="{Binding WindowTitle}" Height="800" Width="1100"
         x:Name="AppMainViewWindow"
-        d:DataContext="{d:DesignInstance vm:MainViewModel}">
+        d:DataContext="{d:DesignInstance vm:MainViewModel}" WindowState="{ex:ScreenResolution Operator=LesserThanEquals,Width=1100}">
+
+    
     <Window.Resources>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
 
         <Style TargetType="local:MainView">
+           
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
@@ -335,7 +338,7 @@
                                                       HorizontalAlignment="Left"
                                                       Margin="10 20">
                                                 <b:Interaction.Behaviors>
-                                                    <extensions:BindableSelectedItemBehavior
+                                                    <ex:BindableSelectedItemBehavior
                                                         SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
                                                 </b:Interaction.Behaviors>
                                                 <TreeView.Resources>

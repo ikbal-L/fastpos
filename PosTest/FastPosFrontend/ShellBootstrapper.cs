@@ -62,7 +62,7 @@ namespace FastPosFrontend
 
             try
             {
-                _backendServerProcess.Kill();
+                _backendServerProcess?.Kill();
             }
             catch (Exception)
             {

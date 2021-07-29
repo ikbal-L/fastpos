@@ -868,6 +868,8 @@ namespace FastPosFrontend.ViewModels
             var category = ClipboardCategory.Clone();
             category.Id = null;
             category.Rank = null;
+            category.Products = new List<Product>();
+            category.ProductIds = new List<long>();
 
             var name = Regex.Replace(ClipboardCategory.Name, @"\([0-9]{1,2}\)", "");
             var count = CurrentCategories.Where(a => a.Name != null).Count(a => a.Name.Contains(name));

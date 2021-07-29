@@ -273,11 +273,13 @@
     <Compile Include="Converters\SolidColorBrushToColorConverter.cs" />
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Converters\SumValuesConverter.cs" />
+    <Compile Include="Enums\ComparaisonOperator.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\KeyboardKey.cs" />
     <Compile Include="Extensions\Modifier.cs" />
     <Compile Include="Extensions\ModifierBase.cs" />
     <Compile Include="Extensions\ModifierCollection.cs" />
+    <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\AppScreen.cs" />
     <Compile Include="Helpers\Associations.cs" />

@@ -15,8 +15,7 @@
         WindowStyle="None"
         SizeToContent="WidthAndHeight"
         AllowsTransparency="False"
-        WindowStartupLocation="CenterScreen"
-        >
+        WindowStartupLocation="CenterScreen">
     <!--<Window.Resources>
         <Style TargetType="views:MainView">
             <Setter Property="Template">

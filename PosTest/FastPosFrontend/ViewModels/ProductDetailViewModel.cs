@@ -60,7 +60,7 @@ namespace FastPosFrontend.ViewModels
                 {
                     Name = _source.Name,
                     Description = _source.Description,
-                    Background = _source.Background,
+                    Background = new SolidColorBrush(_source.Background.Color),
                     Price = _source.Price,
                     Unit = _source.Unit,
                     IsPlatter = _source.IsPlatter,
