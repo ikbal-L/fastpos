@@ -28,14 +28,28 @@ namespace FastPosFrontend
 
         private static ModalDialogBox Instance;
 
-        public static bool Show(string message, string title)
+        public bool Show()
         {
-            var vm = new GenericDialogContentViewModel(message, title,
-                new GenericCommand("Yes", o => { Instance.DialogResult = true; Instance.Close();}),
-                new GenericCommand("No", o => { Instance.DialogResult = false; Instance.Close();}));
-            Instance = new ModalDialogBox(){DataContext = vm};
             var  result = Instance.ShowDialog();
             return result != null && result.Value;
+            
+        }
+
+        public static ModalDialogBox YesNo(string message, string title)
+        {
+            var vm = new GenericDialogContentViewModel(message, title,
+                new GenericCommand("Yes", o => { Instance.DialogResult = true; Instance.Close(); }),
+                new GenericCommand("No", o => { Instance.DialogResult = false; Instance.Close(); }));
+            Instance = new ModalDialogBox() { DataContext = vm };
+            return Instance;
+        }
+
+        public static ModalDialogBox Ok(string message, string title)
+        {
+            var vm = new GenericDialogContentViewModel(message, title,
+                new GenericCommand("Ok", o => { Instance.DialogResult = null; Instance.Close(); }));
+            Instance = new ModalDialogBox() { DataContext = vm };
+            return Instance;
         }
     }
 }
