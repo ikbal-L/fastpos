@@ -1,5 +1,5 @@
 ﻿using Moq;
-using PosTest.ViewModels;
+using FastPosFrontend.ViewModels;
 using ServiceInterface.Interface;
 using System;
 using System.Collections.Generic;

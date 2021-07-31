@@ -1,4 +1,4 @@
-﻿using PosTest.Helpers;
+﻿using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 using Xunit;
 

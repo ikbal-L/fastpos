@@ -28,14 +28,25 @@ namespace FastPosFrontend.ViewModels.Settings
             this.Title = "General";
             var setting = AppConfigurationManager.Configuration<GeneralSettings>();
             Settings = setting ?? new GeneralSettings();
-            if (!StateManager.Get<Table>().Any())
+            Settings.PropertyChanged += Settings_PropertyChanged;
+           
+            var tables = StateManager.Get<Table>();
+            if (!tables.Any())
             {
                 Settings.TableNumber = 0;
             }
-            Settings.PropertyChanged += Settings_PropertyChanged;
+            else
+            {
+                if (tables.Count!= setting.TableNumber)
+                {
+                    setting.TableNumber = tables.Count;
+                }
+            }
+
             Settings.Initialized = true;
-            
-            
+
+
+
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

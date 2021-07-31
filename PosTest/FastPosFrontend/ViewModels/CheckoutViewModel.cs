@@ -1918,10 +1918,10 @@ namespace FastPosFrontend.ViewModels
             //contentOfPage.Content = CurrentOrder;
             //contentOfPage.Content = GenerateContent(CurrentOrder);
 
-            if (_printOrder == null)
-            {
-                _printOrder = CurrentOrder;
-            }
+            //if (_printOrder == null)
+            //{
+            //    _printOrder = CurrentOrder;
+            //}
             contentOfPage.Content = _printOrder;
             _diff.Clear();
             var conv = new LengthConverter();
@@ -1990,6 +1990,11 @@ namespace FastPosFrontend.ViewModels
         public void PrintDocument(PrintSource source)
         {
             //PrintPreview(source);
+            if (_printOrder == null)
+            {
+                ToastNotification.Notify("Select an order First");
+                return;
+            }
 
 
             SilentPrint(source);
@@ -1999,9 +2004,7 @@ namespace FastPosFrontend.ViewModels
         {
             FixedDocument fixedDocument = GenerateOrderReceipt(source);
             var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
-            //PrintDialog dialog = new PrintDialog();
-            //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
-            //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+ 
 
             IList<PrinterItem> printerItems = null;
             var PrinterItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");

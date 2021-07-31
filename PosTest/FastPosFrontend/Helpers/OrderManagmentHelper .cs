@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
+using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
 
 namespace FastPosFrontend.Helpers
@@ -73,21 +74,25 @@ namespace FastPosFrontend.Helpers
             var orderItems = order.OrderItems
                 .Where(oi =>
                     (oi.State == OrderItemState.IncreasedQuantity || oi.State == OrderItemState.DecreasedQuantity)&& oi.TimeStamp == recent);
-            if (orderItems != null)
+            foreach (var orderItem in orderItems)
             {
-                foreach (var orderItem in orderItems)
-                {
-                    var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
-                    var item = new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.UnitPrice, orderItem.Order){State = orderItem.State};
-                    changedOrderItems.Add(item);
-                } 
+                var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
+                var item = new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.UnitPrice, orderItem.Order){State = orderItem.State};
+                changedOrderItems.Add(item);
             }
 
             var addedOrRemovedItems = order.OrderItems.Where(oi =>
                 oi.TimeStamp == recent && (oi.State == OrderItemState.Removed || oi.State == OrderItemState.Added));
             changedOrderItems = changedOrderItems.Concat(addedOrRemovedItems
             ).ToList();
-            return  new Order(){OrderItems = new BindableCollection<OrderItem>(changedOrderItems),OrderNumber = order.OrderNumber,Waiter = order.Waiter,Table = order.Table,Deliveryman = order.Deliveryman};
+            var newOrder = order.Clone();
+            newOrder.Id = null;
+            newOrder.Table = order.Table;
+            newOrder.Waiter = order.Waiter;
+            newOrder.Deliveryman = order.Deliveryman;
+            newOrder.Customer = order.Customer;
+            newOrder.OrderItems = new BindableCollection<OrderItem>(changedOrderItems);
+            return  newOrder;
         }
     }
 }

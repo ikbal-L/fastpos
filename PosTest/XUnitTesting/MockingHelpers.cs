@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Caliburn.Micro;
 using Castle.Components.DictionaryAdapter.Xml;
-using PosTest.Helpers;
+using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 
 namespace XUnitTesting

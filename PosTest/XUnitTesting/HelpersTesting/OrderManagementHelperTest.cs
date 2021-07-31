@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using PosTest.Helpers;
+using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 using Xunit;
 

@@ -13,8 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
-using PosTest.Converters;
-using PosTest.Helpers;
+
 using ServiceInterface;
 using ServiceLib.Service.StateManager;
 
@@ -112,10 +111,10 @@ namespace ConsoleApp
             Console.WriteLine(t2-t1);
 
 
-            Console.WriteLine("------------------------------------------------------------");
-            Console.WriteLine(RestApis.Resource<Product>.Action(EndPoint.GetAll));
-            Console.WriteLine(RestApis.Resource<Product>.Action(EndPoint.Delete,arg:5));
-            Console.WriteLine(RestApis.Resource<Category>.Action(EndPoint.Delete, arg: 5));
+            //Console.WriteLine("------------------------------------------------------------");
+            //Console.WriteLine(RestApis.Resource<Product>.Action(EndPoint.GetAll));
+            //Console.WriteLine(RestApis.Resource<Product>.Action(EndPoint.Delete,arg:5));
+            //Console.WriteLine(RestApis.Resource<Category>.Action(EndPoint.Delete, arg: 5));
 
             var repo1 = new AdditiveBaseRepository();
             var repo2 = new ProductRepository();

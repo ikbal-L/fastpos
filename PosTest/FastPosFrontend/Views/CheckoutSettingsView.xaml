@@ -560,26 +560,26 @@
                         caliburn:Message.Attach="
                                          [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];
                                          [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];
-                                                 [Event TouchMove] = [Action CategoriesList_TouchDown($source, $eventArgs)];"
-                        SelectedItem="{Binding SelectedCategory}">
+                                                 
+                                                 [Event SelectionChanged] = [Action CategoryList_OnSelectionChanged($source, $eventArgs)];" >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <!--<UniformGrid Columns="{x:Static helpers:ProductLayout.CategoryCols}"  />-->
+                                <!--[Event TouchMove] = [Action CategoriesList_TouchDown($source, $eventArgs)];-->
                                 <UniformGrid Columns="4" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:Category}">
-                                <Button x:Name="catBtn"
+                                <Border x:Name="catBtn"
                                         Height="60" Padding="0"
-                                        cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox, AncestorLevel=1}}"
-                                        caliburn:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)];"
                                         Cursor="Hand"
-                                        Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}">
+                                        Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}"
+                                        >
                                     <!--[Event TouchUp] = [Action ShowCategoryProducts($this)]-->
 
-                                    <Button.Style>
-                                        <Style TargetType="Button" >
+                                    <!--<Button.Style>
+                                        <Style TargetType="Button">
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="Button">
@@ -602,7 +602,20 @@
                                                 </Setter.Value>
                                             </Setter>
                                         </Style>
-                                    </Button.Style>
+                                    </Button.Style>-->
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}"
+                                                    Value="true">
+
+                                                    <Setter Property="CornerRadius" Value="8" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
 
                                     <Border
                                         BorderBrush="#66000000"
@@ -673,10 +686,8 @@
                                             </Border>
 
 
-
                                             <TextBlock FontWeight="Bold" FontSize="16"
                                                        Text="{Binding Name}"
-
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        ToolTip="{Binding Description}">
@@ -691,9 +702,10 @@
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
+
                                         </DockPanel>
                                     </Border>
-                                </Button>
+                                </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                         <ListBox.ItemContainerStyle>

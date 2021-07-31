@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PosTest.Helpers;
-using PosTest.ViewModels;
+using FastPosFrontend.Helpers;
+using FastPosFrontend.Helpers;
+using FastPosFrontend.ViewModels;
 using ServiceInterface.Model;
 using Xunit;
 using XUnitTesting.ViewModelTesting;
@@ -106,7 +107,7 @@ namespace XUnitTesting.HelpersTesting
             
             //Arrange 
             List<Category> sourceList = MockingHelpers.GetAllCategories().Where(c => c.Rank != null).ToList();
-            var comparer = new PosTest.ViewModels.Comparer<Category>();
+            var comparer = new FastPosFrontend.ViewModels.Comparer<Category>();
             sourceList.Sort(comparer);
             IList<Category> targetList = new List<Category>();
 
@@ -127,7 +128,7 @@ namespace XUnitTesting.HelpersTesting
 
             //Arrange 
             List<Category> sourceList = MockingHelpers.GetAllCategories().Where(c => c.Rank != null).ToList();
-            var comparer = new PosTest.ViewModels.Comparer<Category>();
+            var comparer = new FastPosFrontend.ViewModels.Comparer<Category>();
             sourceList.Sort(comparer);
             IList<Category> targetList = new List<Category>();
 
@@ -150,7 +151,7 @@ namespace XUnitTesting.HelpersTesting
 
             //Arrange 
             List<Product> sourceList = MockingHelpers.GetAllProducts().Where(p => p.Rank != null).ToList();
-            var comparer = new PosTest.ViewModels.Comparer<Product>();
+            var comparer = new FastPosFrontend.ViewModels.Comparer<Product>();
             sourceList.Sort(comparer);
             IList<Product> targetList = new List<Product>();
 

@@ -1,4 +1,4 @@
-﻿using PosTest.ViewModels;
+﻿using FastPosFrontend.ViewModels;
 using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;

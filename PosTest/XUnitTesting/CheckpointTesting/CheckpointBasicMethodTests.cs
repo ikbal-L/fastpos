@@ -1,12 +1,12 @@
 ﻿using Caliburn.Micro;
-using PosTest.ViewModels;
+using FastPosFrontend.ViewModels;
 using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PosTest.Enums;
+using FastPosFrontend.Enums;
 using Xunit;
 
 namespace XUnitTesting.CheckpointTesting

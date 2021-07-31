@@ -1027,6 +1027,36 @@ namespace FastPosFrontend.ViewModels
             MouseMoveEventHandler<Category>(sender, e, key);
         }
 
+        public void CategoryList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count>0)
+            {
+                var category = e.AddedItems[0] as Category;
+                ShowCategoryProducts(category);
+            }
+        }
+
+        public void DragCategory(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Border border = (sender as Border);
+                if (border?.DataContext is Category t)
+                {
+                    
+                    if (t == null || t.GetType().GetProperty("Name").GetValue(t) == null)
+                    {
+                        return;
+                    }
+
+                    DataObject dragData = new DataObject("Category", t);
+                    DragDrop.DoDragDrop(border, dragData, DragDropEffects.Move);
+                }
+
+                e.Handled = true;
+            }
+        }
+
         public static void MouseMoveEventHandler<T>(object sender, MouseEventArgs e, string key,
             string requiredPropertyName = "Id") where T : Ranked, new()
         {
