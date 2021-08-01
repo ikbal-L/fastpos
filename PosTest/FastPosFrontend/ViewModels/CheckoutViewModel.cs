@@ -898,7 +898,7 @@ namespace FastPosFrontend.ViewModels
             {
                 Orders.Remove(CurrentOrder);
                 WaitingViewModel?.Orders.Refresh();
-                WaitingViewModel?.NotifyOfPropertyChange(() => nameof(SubViewModel.WaitingViewModel.OrderCount));
+                WaitingViewModel?.NotifyOfPropertyChange(nameof(WaitingViewModel.OrderCount));
                 CurrentOrder = null;
                 return;
             }
