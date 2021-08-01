@@ -26,11 +26,20 @@
                 Text="{Binding Rows}"
                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"></TextBox>
         </UniformGrid>
-        <Button 
-            Grid.Row="1"
-            Margin="10"
-            Content="Apply"
-            caliburn:Message.Attach="Apply"
-            Style="{StaticResource MaterialDesignFlatButton}"></Button>
+        <UniformGrid Grid.Row="1" Columns="2" Rows="1">
+            <Button 
+                Grid.Row="1"
+                Margin="10"
+                Content="Apply"
+                caliburn:Message.Attach="Apply"
+                Style="{StaticResource MaterialDesignFlatDarkBgButton}"/>
+
+            <Button 
+                Grid.Row="1"
+                Margin="10"
+                Content="Cancel"
+                caliburn:Message.Attach="Cancel"
+                Style="{StaticResource MaterialDesignFlatButton}"/>
+        </UniformGrid>
     </Grid>
 </UserControl>

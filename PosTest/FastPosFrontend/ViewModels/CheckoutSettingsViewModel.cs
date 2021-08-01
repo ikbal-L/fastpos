@@ -54,7 +54,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isCategory;
         private ProductDetailViewModel _productDetailViewModel;
         private Type _activeTab;
-        private ProductLayoutViewModel _productLayout;
+        private ProductLayoutViewModel _productLayoutViewModel;
         private bool _isDialogOpen;
 
         
@@ -62,15 +62,15 @@ namespace FastPosFrontend.ViewModels
         public CheckoutSettingsViewModel()
         {
             IsDialogOpen = false;
-            ProductLayout = new ProductLayoutViewModel();
-            ProductLayout.OnLayoutChanged(() =>
+            ProductLayoutViewModel = new ProductLayoutViewModel();
+            ProductLayoutViewModel.OnLayoutChanged(() =>
             {
-                _productPageSize = ProductLayout.Configuration.NumberOfProducts;
+                _productPageSize = ProductLayoutViewModel.Configuration.NumberOfProducts;
                 var category = SelectedCategory;
                 SelectedCategory = null;
                 ShowCategoryProducts(category);
             });
-            var pageSize = ProductLayout.Configuration.NumberOfProducts;
+            var pageSize = ProductLayoutViewModel.Configuration.NumberOfProducts;
 
             ProductPageSize = pageSize;
             CategoryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
@@ -225,11 +225,13 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _currentCategory, value);
         }
 
-        public ProductLayoutViewModel ProductLayout
+        public ProductLayoutViewModel ProductLayoutViewModel
         {
-            get => _productLayout;
-            set => Set(ref _productLayout, value);
+            get => _productLayoutViewModel;
+            set => Set(ref _productLayoutViewModel, value);
         }
+
+        public ProductLayout ProductLayout => ProductLayout.Instance;    
 
         public bool IsDialogOpen
         {
@@ -444,6 +446,11 @@ namespace FastPosFrontend.ViewModels
                 CurrentProducts?.Clear();
                 return;
             }
+            else if(SelectedFreeCategory!= null)
+            {
+                SelectedCategory = category;
+                AttachCategoryToList();
+            }
             SelectedProduct = null;
             if (category == SelectedCategory) return;
             SelectedCategory = category;
@@ -531,14 +538,14 @@ namespace FastPosFrontend.ViewModels
         {
             var freep = SelectedFreeProduct;
             RemoveTElementFromTList(SelectedProduct, ref freep, CurrentProducts, FreeProducts);
-            SelectedFreeProduct = freep;
+            //SelectedFreeProduct = freep;
         }
 
         public void RemoveCategoryFromList()
         {
             var freeCategory = SelectedFreeCategory;
             RemoveTElementFromTList(SelectedCategory, ref freeCategory, CurrentCategories, FreeCategories);
-            SelectedFreeCategory = freeCategory;
+            //SelectedFreeCategory = freeCategory;
         }
 
         public void Save()
@@ -604,7 +611,7 @@ namespace FastPosFrontend.ViewModels
 
             CurrentTs[index] = new T { Rank = rank };
             FreeTs.Add(freeT);
-            SelectedFreeT = freeT;
+            //SelectedFreeT = freeT;
         }
 
         private void RemoveCategoryFromList(Category selectedCategory)
@@ -1535,21 +1542,21 @@ namespace FastPosFrontend.ViewModels
         public void ConfigureProductDisplayLayout()
         {
             
-            (this.Parent as MainViewModel)?.OpenDialog(ProductLayout);
+            (this.Parent as MainViewModel)?.OpenDialog(ProductLayoutViewModel);
         }
 
         public void ApplyLayoutConfig()
         {
-            ProductLayout.Apply();
+            ProductLayoutViewModel.Apply();
         }
 
         private void Configuration_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ProductLayoutConfiguration.NumberOfProducts))
             {
-                if (ProductLayout.Configuration.NumberOfProducts>0)
+                if (ProductLayoutViewModel.Configuration.NumberOfProducts>0)
                 {
-                    _productPageSize = ProductLayout.Configuration.NumberOfProducts; 
+                    _productPageSize = ProductLayoutViewModel.Configuration.NumberOfProducts; 
                     ShowCategoryProducts(SelectedCategory);
                 }
             }

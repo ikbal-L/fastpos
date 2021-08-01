@@ -40,7 +40,6 @@
                                 </Grid.RowDefinitions>
                                 <md:ColorZone
                                     Padding="10"
-                                    md:ShadowAssist.ShadowDepth="Depth2"
                                     DockPanel.Dock="Top">
                                     <md:ColorZone.Style>
                                         <Style TargetType="md:ColorZone">

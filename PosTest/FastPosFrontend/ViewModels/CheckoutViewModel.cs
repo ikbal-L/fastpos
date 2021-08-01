@@ -2199,6 +2199,16 @@ namespace FastPosFrontend.ViewModels
 
         private void OnGeneralSettingsUpdated(SettingsUpdatedEventArgs e)
         {
+            if (e.Settings!= null&& e.Settings.Any(o => o is int))
+            {
+                int itemsPerCategoryPage = (int)e.Settings.First(o => o is int) ;
+                if (itemsPerCategoryPage!= this.itemsPerCategoryPage)
+                {
+                    this.itemsPerCategoryPage = itemsPerCategoryPage;
+                    LoadCategoryPages();
+                }
+            }
+            
             var tables = StateManager.Get<Table>().ToList();
             if (Tables.Count != tables.Count)
             {

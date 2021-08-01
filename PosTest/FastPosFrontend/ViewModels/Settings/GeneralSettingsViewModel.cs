@@ -51,13 +51,15 @@ namespace FastPosFrontend.ViewModels.Settings
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            
             AppConfigurationManager.Save(Settings);
         }
 
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
         public override void BeforeNavigateAway()
         {
-            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs());
+            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(Settings.NumberOfCategories));
+            ProductLayout.Instance.OnSettingsUpdated(this,new SettingsUpdatedEventArgs());
         }
     }
 }

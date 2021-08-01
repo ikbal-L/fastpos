@@ -46,6 +46,11 @@ namespace FastPosFrontend.ViewModels
             Host.Close(this);
         }
 
+        public void Cancel()
+        {
+            Host.Close(this);
+        }
+
         public void OnLayoutChanged(Action layoutChangedHandler)
         {
             _layoutChangedHandler = layoutChangedHandler;
