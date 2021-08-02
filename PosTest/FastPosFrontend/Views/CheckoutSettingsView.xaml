@@ -372,7 +372,8 @@
                                                               [Event MouseMove] = [Action FreeProductsList_MouseMove($source, $eventArgs)];
                                                               [Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                               [Event Drop] = [Action FreeProductsList_Drop($source, $eventArgs)];
-                                                              [Event PreviewTouchMove] = [Action FreeProductsList_TouchDown($source, $eventArgs)];">
+                                                              [Event PreviewTouchMove] = [Action FreeProductsList_TouchDown($source, $eventArgs)];"
+                                         ScrollViewer.PanningMode="VerticalOnly">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                             <Setter Property="IsSelected" Value="{Binding IsSelected}" />

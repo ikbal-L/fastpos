@@ -336,6 +336,11 @@
                                                       Style="{StaticResource MaterialDesignTreeView}"
                                                       HorizontalAlignment="Left"
                                                       Margin="10 20">
+                                                <TreeView.ItemContainerStyle>
+                                                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                                                        <Setter Property="IsExpanded" Value="True" />
+                                                    </Style>
+                                                </TreeView.ItemContainerStyle>
                                                 <b:Interaction.Behaviors>
                                                     <ex:BindableSelectedItemBehavior
                                                         SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
