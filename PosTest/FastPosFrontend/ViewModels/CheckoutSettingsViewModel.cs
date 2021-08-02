@@ -536,6 +536,13 @@ namespace FastPosFrontend.ViewModels
 
         public void RemoveProductFromCategory()
         {
+            if (SelectedProduct?.Id == null)
+            {
+                ToastNotification.Notify("Select a product First!");
+                return;
+            }
+
+
             var freep = SelectedFreeProduct;
             RemoveTElementFromTList(SelectedProduct, ref freep, CurrentProducts, FreeProducts);
             //SelectedFreeProduct = freep;
@@ -543,9 +550,25 @@ namespace FastPosFrontend.ViewModels
 
         public void RemoveCategoryFromList()
         {
+            bool result = true;
+            if (SelectedCategory?.Id == null)
+            {
+                ToastNotification.Notify("Select a category First!");
+                return;
+            }
+
+            if (SelectedCategory.Products != null && SelectedCategory.Products.Any())
+            {
+                 result = ModalDialogBox.YesNo("Do you want to remove this category and all of it associated products",
+                    "Remove Category").Show();
+                
+            }
+
+            if (!result) return;
             var freeCategory = SelectedFreeCategory;
             RemoveTElementFromTList(SelectedCategory, ref freeCategory, CurrentCategories, FreeCategories);
-            //SelectedFreeCategory = freeCategory;
+
+
         }
 
         public void Save()
@@ -1344,6 +1367,7 @@ namespace FastPosFrontend.ViewModels
                         ToastNotification.Notify("Problem connecting to server");
                     }
                     CategoryToMove = null;
+                    
                     ShowCategoryProducts(null);
                     //CurrentCategories[index] = cat;
                     //CategoryToMove = null;

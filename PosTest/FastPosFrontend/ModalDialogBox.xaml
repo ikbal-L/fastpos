@@ -15,7 +15,8 @@
         WindowStyle="None"
         SizeToContent="WidthAndHeight"
         AllowsTransparency="False"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
     <!--<Window.Resources>
         <Style TargetType="views:MainView">
             <Setter Property="Template">
@@ -58,8 +59,8 @@
         </GroupBox.Header>
         <StackPanel Margin="20">
 
-            <TextBlock Text="{Binding Content}" HorizontalAlignment="Stretch" Margin="20"
-                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"></TextBlock>
+            <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" Margin="20"
+                   Style="{StaticResource MaterialDesignButtonTextBlock}"></TextBlock>
             <HeaderedItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Stretch">
 
                 <ItemsControl.ItemTemplate>

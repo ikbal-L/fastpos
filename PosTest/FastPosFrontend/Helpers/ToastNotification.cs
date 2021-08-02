@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Windows;
 using ToastNotifications;
+using ToastNotifications.Core;
 using ToastNotifications.Lifetime;
+using ToastNotifications.Lifetime.Clear;
 using ToastNotifications.Messages;
 using ToastNotifications.Position;
 
@@ -29,7 +31,7 @@ namespace FastPosFrontend.Helpers
                            offsetY: 10);
 
                        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                           notificationLifetime: TimeSpan.FromSeconds(2),
+                           notificationLifetime: TimeSpan.FromSeconds(1.6),
                            maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
                        cfg.Dispatcher = Application.Current.Dispatcher;
@@ -39,24 +41,29 @@ namespace FastPosFrontend.Helpers
         public static void Notify(string message, NotificationType type = NotificationType.Error)
         {
             Notifier notifier = Instance;
+            var options = new MessageOptions(){NotificationClickAction = b => {
+                b.Close();
+            }};
             if (!IsRunningFromXUnit)
             {
                 if (type == NotificationType.Error)
                 {
-                    notifier.ShowError(message);
+                    notifier.ShowError(message,options);
                 }
                 else if (type == NotificationType.Information)
                 {
-                    notifier.ShowInformation(message);
+                    notifier.ShowInformation(message, options);
                 }
                 else if (type == NotificationType.Warning)
                 {
-                    notifier.ShowWarning(message);
+                    notifier.ShowWarning(message, options);
                 }
                 else if (type == NotificationType.Success)
                 {
-                    notifier.ShowSuccess(message);
+                    notifier.ShowSuccess(message, options);
                 }
+
+                
             }
             else
             {

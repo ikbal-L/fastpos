@@ -913,6 +913,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="Fonts\Cairo-Black.ttf" />
+    <Resource Include="Fonts\Cairo-Bold.ttf" />
+    <Resource Include="Fonts\Cairo-ExtraLight.ttf" />
+    <Resource Include="Fonts\Cairo-Light.ttf" />
+    <Resource Include="Fonts\Cairo-Regular.ttf" />
+    <Resource Include="Fonts\Cairo-SemiBold.ttf" />
     <Resource Include="Resources\Entypo.ttf" />
     <Resource Include="Fonts\digital-7.ttf" />
     <Resource Include="Fonts\DS-DIGI.ttf" />

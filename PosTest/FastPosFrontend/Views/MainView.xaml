@@ -92,7 +92,7 @@
                                         <md:PopupBox
                                             DockPanel.Dock="Right"
                                             PlacementMode="BottomAndAlignRightEdges"
-                                            StaysOpen="False">
+                                            StaysOpen="False" Margin="0 0 20 0">
                                             <md:PopupBox.Style>
                                                 <Style TargetType="md:PopupBox">
                                                     <Style.Triggers>
@@ -103,14 +103,16 @@
                                                 </Style>
                                             </md:PopupBox.Style>
                                             <StackPanel Margin="10 0">
+                                             
 
 
                                                 <Button x:Name="CloseAppWindowButton"
                                                         Command="{x:Static SystemCommands.CloseWindowCommand}"
-                                                        Content="Close" />
+                                                        Content="Close" FontSize="20" />
                                                 <Button x:Name="MaximizeAppWindowButton"
                                                         Command="{x:Static SystemCommands.MaximizeWindowCommand}"
-                                                        Content="Maximize">
+                                                        Content="Maximize"
+                                                        FontSize="20">
                                                     <Button.Style>
                                                         <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
@@ -127,7 +129,8 @@
                                                 </Button>
                                                 <Button x:Name="MinimizeAppWindowButton"
                                                         Command="{x:Static SystemCommands.MinimizeWindowCommand}"
-                                                        Content="Minimize">
+                                                        Content="Minimize"
+                                                        FontSize="20">
                                                     <Button.Style>
                                                         <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
@@ -144,7 +147,8 @@
                                                 </Button>
                                                 <Button x:Name="RestoreDownAppWindowButton"
                                                         Command="{x:Static SystemCommands.RestoreWindowCommand}"
-                                                        Content="Restore Down">
+                                                        Content="Restore Down"
+                                                        FontSize="20">
                                                     <Button.Style>
                                                         <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
@@ -163,7 +167,8 @@
                                                     Visibility="{Binding ElementName=LogoutAppWindowButton,Path=Visibility}" />
                                                 <Button x:Name="LogoutAppWindowButton"
                                                         cal:Message.Attach="Logout"
-                                                        Content="Logout" FontWeight="SemiBold">
+                                                        Content="Logout" FontWeight="SemiBold"
+                                                        FontSize="20">
                                                     <Button.Style>
                                                         <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
@@ -388,6 +393,8 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+
+            <Setter Property="TextElement.FontFamily" Value="{StaticResource CairoRegular}"></Setter>
         </Style>
     </Window.Resources>
     <Window.CommandBindings>
