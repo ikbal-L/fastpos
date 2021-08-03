@@ -1045,6 +1045,17 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        public void ExpandFreeItemsTabs(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent("Product") && !e.Data.GetDataPresent("Category")) return;
+            if (sender is Expander expander)
+            {
+                expander.IsExpanded = true;
+            }
+
+
+        }
+
         public void FreeCategoriesList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "FreeCategory";
@@ -1475,17 +1486,14 @@ namespace FastPosFrontend.ViewModels
 
         public void CreateProduct()
         {
-            if (SelectedProduct == null)
-            {
-                return;
-            }
+            
 
-            if (SelectedProduct.Id!= null)
+            if (SelectedProduct?.Id== null)
             {
                 ToastNotification.Notify("Select an empty cell to create a new Product");
                 return;
             }
-            if (SelectedCategory.Id == null || SelectedProduct == null) return;
+            if (SelectedCategory?.Id == null || SelectedProduct == null) return;
             this.ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             var parent = (this.Parent as MainViewModel);
@@ -1502,7 +1510,7 @@ namespace FastPosFrontend.ViewModels
 
         public void EditCategory(bool callFromCreate = false)
         {
-            if (!callFromCreate&& SelectedCategory.Id == null)
+            if (!callFromCreate&& SelectedCategory?.Id == null)
             {
                 ToastNotification.Notify("There is no category to edit, select a valid cell!");
                 return;

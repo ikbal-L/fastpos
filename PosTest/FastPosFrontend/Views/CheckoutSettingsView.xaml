@@ -289,7 +289,9 @@
             <Expander Grid.Column="0" ExpandDirection="Right" Style="{StaticResource MaterialDesignExpander}"
                       VerticalContentAlignment="Stretch"
                       BorderThickness="0 0 1 0" BorderBrush="DimGray"
-                      >
+                      caliburn:Message.Attach="[Event DragEnter] = [Action ExpandFreeItemsTabs($source, $eventArgs)]" 
+                      AllowDrop="True">
+
 
                 <Expander.Header>
                     <TextBlock

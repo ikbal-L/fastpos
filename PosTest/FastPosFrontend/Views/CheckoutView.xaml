@@ -197,7 +197,8 @@
                         <ListBox Grid.Row="0" x:Name="ltab"
                                  ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable,Mode=TwoWay}"
                                  Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=tab}"
-                                 VerticalAlignment="Top">
+                                 VerticalAlignment="Top" 
+                                 >
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:Table}">
                                     <RadioButton Content="{Binding Number}" GroupName="groupName" FontSize="20"
