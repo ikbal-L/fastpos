@@ -81,6 +81,8 @@ namespace FastPosFrontend.ViewModels.Settings
         }
 
         private string _numberProducts;
+        private string _restaurantName;
+
         [JsonProperty]
 
         public string NumberProducts
@@ -104,6 +106,14 @@ namespace FastPosFrontend.ViewModels.Settings
                 _serverHost = value;
                 NotifyOfPropertyChange(nameof(ServerHost));
             }
+        }
+
+
+        [JsonProperty]
+        public string RestaurantName
+        {
+            get => _restaurantName;
+            set => Set(ref _restaurantName, value);
         }
 
         public bool DeleteTables(int limit)

@@ -288,7 +288,8 @@
 
             <Expander Grid.Column="0" ExpandDirection="Right" Style="{StaticResource MaterialDesignExpander}"
                       VerticalContentAlignment="Stretch"
-                      BorderThickness="0 0 1 0" BorderBrush="DimGray">
+                      BorderThickness="0 0 1 0" BorderBrush="DimGray"
+                      >
 
                 <Expander.Header>
                     <TextBlock

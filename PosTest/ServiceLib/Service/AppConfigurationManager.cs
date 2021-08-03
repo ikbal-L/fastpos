@@ -63,11 +63,25 @@ namespace ServiceLib.Service
         }
         public static object Configuration(string key)
         {
-            return !Configurations.ContainsKey(key) ? default : Configurations[key];
+            if (!ContainsNestedProperties(key)) return !Configurations.ContainsKey(key) ? default : Configurations[key];
+            var sourcePropertyName = GetSourcePropertyName(key);
+            var subPath = GetNestedSubPath(key);
+            var value = VisitPath(Configurations[sourcePropertyName], subPath);
+            return value;
         }
         public static bool ContainsKey(string key)
         {
-            return Configurations.ContainsKey(key);
+            if (!ContainsNestedProperties(key))
+            {
+                return Configurations.ContainsKey(key);
+            }
+            else
+            {
+                var sourcePropertyName = GetSourcePropertyName(key);
+                var subPath = GetNestedSubPath(key);
+                var value = VisitPath(Configurations[sourcePropertyName], subPath);
+                return value != null;
+            }
         }
         public static bool ContainsKey<T>()
         {
@@ -85,6 +99,64 @@ namespace ServiceLib.Service
         {
             var configurationString = JsonConvert.SerializeObject(Configurations, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
             File.WriteAllText(GetLocalFilePath(FileName),configurationString);
+        }
+
+        public static bool ContainsNestedProperties(string propertyName)
+        {
+            return !string.IsNullOrEmpty(propertyName) && propertyName.Contains(".");
+        }
+
+        public static object VisitPath(object source ,string path)
+        {
+            if (string.IsNullOrEmpty(path)|| source == null) return null;
+            
+            if (ContainsNestedProperties(path))
+            {
+                var sourcePropertyName = GetSourcePropertyName(path);
+                var nestedSubPath = GetNestedSubPath(path);
+                var nested =source.GetType().GetProperty(sourcePropertyName)?.GetValue(source);
+               return VisitPath(nested, nestedSubPath);
+            }
+
+            if (source is JObject jObject)
+            {
+                return (jObject[path] as JValue)?.Value;
+            }
+            return source.GetType().GetProperty(path)?.GetValue(source);
+        }
+
+
+        public static (string source, string nested) GetSourcePropertyNameFromNestedPropertyName(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)) return (null, null);
+            var index = propertyName.IndexOf('.');
+            var sourcePropertyName = propertyName.Substring(0, index);
+            var nestedProperty = propertyName.Substring(index + 1);
+            return (sourcePropertyName, nestedProperty);
+        }
+
+        public static string GetSourcePropertyName(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)) return null;
+            var index = propertyName.IndexOf('.');
+            var sourcePropertyName = propertyName.Substring(0, index);
+            return sourcePropertyName;
+        }
+
+        public static string GetNestedSubPath(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName)) return null;
+            var index = propertyName.IndexOf('.');
+            var nestedProperty = propertyName.Substring(index + 1);
+            return nestedProperty;
+        }
+
+        public static object GetNestedPropertyValue(object source, string nestedPropertyName)
+        {
+            if (source == null || string.IsNullOrEmpty(nestedPropertyName)) return null;
+            var value = source.GetType().GetProperty(nestedPropertyName)?.GetValue(source);
+            return value;
+
         }
 
     }

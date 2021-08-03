@@ -3,14 +3,15 @@
                     xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:converters="clr-namespace:FastPosFrontend.Converters"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions">
 
     <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
     <converters:SumValuesConverter x:Key="SumValuesConverter" />
     <DataTemplate DataType="{x:Type models:OrderItem}" x:Key="OrderItemTicketDataTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="4*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*" />
@@ -106,7 +107,7 @@
 
 
     <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
-        <Grid Margin="3">
+        <Grid Margin="3"  Width="7cm">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" /> <!--Header-->
                 <RowDefinition Height="8*" /> <!--Body-->
@@ -127,7 +128,8 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0">
-                            <TextBlock DockPanel.Dock="Left" Text="Restaurant Test" />
+                            <TextBlock DockPanel.Dock="Left" Text="{Binding Source={ex:Config PropertyName=GeneralSettings.RestaurantName}, StringFormat='Restaurant {0:#}'}" />
+                            <!--<TextBlock DockPanel.Dock="Left" Text="Restaurant Mcdolina" />-->
                             <TextBlock DockPanel.Dock="Right" Text="{Binding OrderNumber,StringFormat='N: {0:#}'}" />
                             <TextBlock />
                         </DockPanel>
@@ -138,7 +140,125 @@
                             </Rectangle.Fill>
 
                         </Rectangle>-->
-                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="Address" />
+                        
+                    </Grid>
+                </Border>
+                <UniformGrid Grid.Row="2" Columns="2" Rows="3">
+                    <TextBlock Text="{Binding Table.Number,StringFormat='Table # {0:#}',FallbackValue='Table: /'}" ></TextBlock>
+                    <TextBlock Text="{Binding Type}"></TextBlock>
+                    <TextBlock Text="{Binding Waiter.Name,StringFormat='Waiter: {0:#}',FallbackValue='Waiter: /'}"></TextBlock>
+                    <TextBlock Text="{Binding Deliveryman.Name,StringFormat='Deliveryman: {0:#}',FallbackValue='Deliveryman: /'}"></TextBlock>
+                    <TextBlock Grid.Row="2" Text="Caisse N:1" />
+                </UniformGrid>
+            </Grid>
+
+            <Grid Grid.Row="1" Name="Body">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+
+                <Grid x:Name="HeadListLabels">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Text="Product" />
+                    <TextBlock Grid.Column="1" Text="Qty" />
+                    <TextBlock Grid.Column="2" Text="Price" TextAlignment="Center" />
+                    <TextBlock Grid.Column="3" Text="Total" TextAlignment="Right" />
+                    <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0.3" BorderBrush="Black" />
+                </Grid>
+
+                <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Disabled" Margin="0 0 5 0">
+                    <ItemsControl ItemsSource="{Binding OrderItems}"
+                                  ItemTemplate="{StaticResource OrderItemTicketDataTemplate}" />
+                </ScrollViewer>
+                <Border Grid.Row="3" BorderThickness="0.3" BorderBrush="Black" Background="Black" />
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Total" FontWeight="Bold" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="1" Text="{Binding NewTotal}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                </Grid>
+
+            </Grid>
+
+            <!--Footer-->
+            <Grid Grid.Row="2" Name="Footer">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Height="2cm"
+                        Background="{Binding  Converter={StaticResource ObjectToBarcodeValueConverter}}" />
+                <TextBlock Grid.Row="1" Grid.Column="0">
+                    <TextBlock.Text>
+                        <Binding Path="OrderTime" />
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="" />
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+
+
+    <DataTemplate x:Key="CustomerTicketDataTemplatePrintPreview" DataType="{x:Type models:Order}">
+        <Grid Margin="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <!--Header-->
+                <RowDefinition Height="8*" />
+                <!--Body-->
+                <RowDefinition Height="*" />
+                <!--Footer-->
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Name="Headre">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="1" BorderBrush="Black"
+                        CornerRadius="4" Padding="4 1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0">
+                            <TextBlock DockPanel.Dock="Left" Text="{Binding Source={ex:Config PropertyName=GeneralSettings.RestaurantName}, StringFormat='Restaurant {0:#}'}" />
+                            <!--<TextBlock DockPanel.Dock="Left" Text="Restaurant Mcdolina" />-->
+                            <TextBlock DockPanel.Dock="Right" Text="{Binding OrderNumber,StringFormat='N: {0:#}'}" />
+                            <TextBlock />
+                        </DockPanel>
+
+                        <!--<Rectangle Grid.Row="1" Width="50" Height="50" Stretch="Fill"   >
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="../logo.jpg"/>
+                            </Rectangle.Fill>
+
+                        </Rectangle>-->
+
                     </Grid>
                 </Border>
                 <UniformGrid Grid.Row="2" Columns="2" Rows="3">
@@ -184,6 +304,14 @@
                                   ItemTemplate="{StaticResource OrderItemTicketDataTemplate}" />
                 </ScrollViewer>
                 <Border Grid.Row="3" BorderThickness="0.3" BorderBrush="Black" Background="Black" />
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Total" FontWeight="Bold" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="1" Text="{Binding NewTotal}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                </Grid>
 
             </Grid>
 
@@ -197,14 +325,14 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Width="4cm" Height="2cm"
+                <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Height="2cm"
                         Background="{Binding  Converter={StaticResource ObjectToBarcodeValueConverter}}" />
                 <TextBlock Grid.Row="1" Grid.Column="0">
                     <TextBlock.Text>
                         <Binding Path="OrderTime" />
                     </TextBlock.Text>
                 </TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Text="Test Client" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="" />
             </Grid>
         </Grid>
     </DataTemplate>

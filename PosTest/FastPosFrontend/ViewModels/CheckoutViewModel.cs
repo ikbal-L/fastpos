@@ -1255,16 +1255,21 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
+
             CurrentOrder.GivenAmount = payedAmount;
             CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
             CurrentOrder.State = OrderState.Payed;
             NumericZone = "";
             GivenAmount = CurrentOrder.GivenAmount;
             ReturnedAmount = CurrentOrder.ReturnedAmount;
+            _printOrder = _currentOrder;
             SaveCurrentOrder();
             GivenAmount = 0;
             ReturnedAmount = null;
             AdditivesVisibility = false;
+            PrintDocument(PrintSource.Checkout);
+
+
         }
 
         private void TableAction(int tableNumber)

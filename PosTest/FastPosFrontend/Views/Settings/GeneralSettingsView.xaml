@@ -3,11 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vms ="clr-namespace:FastPosFrontend.ViewModels.Settings"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vms:GeneralSettingsViewModel}">
     <StackPanel >
         <TextBlock Text="General Settings" FontSize="18" FontWeight="Bold" Margin="40 30 0 0"/>
+        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
+            <TextBlock Text="Restaurant Name" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
+                       VerticalAlignment="Center"/>
+            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                      VerticalAlignment="Center"
+                      AcceptsReturn="True"
+                      Width="300"
+                      Text="{Binding Settings.RestaurantName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                      VerticalScrollBarVisibility="Auto"
+                      md:TextFieldAssist.TextFieldCornerRadius="0"
+            ></TextBox>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
             <TextBlock Text="Table Number" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
@@ -17,7 +31,7 @@
                     Width="300"
                     Text="{Binding Settings.TableNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     VerticalScrollBarVisibility="Auto"
-                    materialDesign:TextFieldAssist.TextFieldCornerRadius="0"
+                    md:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
@@ -30,7 +44,7 @@
                     Width="300"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"
-                    materialDesign:TextFieldAssist.TextFieldCornerRadius="0"
+                    md:TextFieldAssist.TextFieldCornerRadius="0"
 
                   />
         </StackPanel>
@@ -57,7 +71,7 @@
                     Text="{Binding Settings.ServerHost,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"
-                    materialDesign:TextFieldAssist.TextFieldCornerRadius="0"
+                    md:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
         </StackPanel>
     </StackPanel>

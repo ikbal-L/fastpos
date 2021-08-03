@@ -123,7 +123,9 @@
                 Content="{Binding CurrentOrder.Customer.Name}"
                 ToolTip="اسم الزبون"
                 Icon="{md:PackIcon User}"
-                cal:Message.Attach="[Event DeleteClick] = [Action SetOrderPropToNull('Customer')]"/>
+                cal:Message.Attach="[Event DeleteClick] = [Action SetOrderPropToNull('Customer')]">
+                
+            </md:Chip>
             <md:Chip
                 Content="{Binding CurrentOrder.Table.Number}"
                 ToolTip="رقم الطاولة"
