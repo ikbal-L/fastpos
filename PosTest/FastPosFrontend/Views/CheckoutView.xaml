@@ -817,7 +817,7 @@
 
                     <RadioButton x:Name="waitingCheckBtn" Grid.Row="3" GroupName="BottomBtn"
                                  Style="{StaticResource ButtonTabDesactive}"
-                                 IsChecked="{Binding IsInWaitingViewActive, Mode=TwoWay}">
+                                 IsChecked="{Binding IsInWaitingViewActive, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
 
                         <StackPanel Orientation="Horizontal">
                             <materialdesign:PackIcon Kind="TimerOutline" />

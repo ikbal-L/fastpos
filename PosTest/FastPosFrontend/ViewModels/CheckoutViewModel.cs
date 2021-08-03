@@ -370,7 +370,10 @@ namespace FastPosFrontend.ViewModels
         public bool IsInWaitingViewActive
         {
             get => _isInWaitingViewActive;
-            set => Set(ref _isInWaitingViewActive, value);
+            set {
+                Set(ref _isInWaitingViewActive, value);
+                NotifyOfPropertyChange(nameof(IsInWaitingViewActive));
+            }
         }
 
         public bool IsTableViewActive
@@ -2131,6 +2134,13 @@ namespace FastPosFrontend.ViewModels
 
         public void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
         {
+            IsTableViewActive = false;
+            IsTakeawayViewActive = false;
+            IsDeliveryViewActive = false;
+            IsInWaitingViewActive = true;
+            WaitingViewModel.OrderViewSource.View.Refresh();
+            //this.Refresh();
+
             if (sender.GetType() == typeof(CheckoutSettingsViewModel))
             {
                 OnCheckoutSettingsUpdated(e);
@@ -2225,6 +2235,9 @@ namespace FastPosFrontend.ViewModels
                 CurrentOrder.GetType().GetProperty(prop.ToString()).SetValue(CurrentOrder,null);
             }
         }
+
+      
+        
     }
 
     public enum OrderProp
