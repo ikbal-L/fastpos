@@ -79,7 +79,6 @@ namespace FastPosFrontend.ViewModels
                 }
                 else
                 {
-                    product.IsPlatter = true;
                     product.IdAdditives = new List<long>();
                     product.Additives = new BindableCollection<Additive>();
                 }

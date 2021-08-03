@@ -15,10 +15,10 @@
         <Border  BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueMidBrush}" >
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <ListBox x:Name="AdditiveSettingsList"  
+                <ListBox Grid.Row="1" x:Name="AdditiveSettingsList"  
                          AllowDrop="True"
                          Visibility="{Binding IsPlatter ,Converter={StaticResource boolToVisibilityConverter}}"
                          ItemsSource="{Binding Additives}"
@@ -42,7 +42,7 @@
 
                 </ListBox>
                     
-                <StackPanel  Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel  Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Grid.Row="1"  Margin="8 16"
                     >Additives</TextBlock>
                     <ToggleButton Margin="8 16" IsChecked="{Binding IsPlatter,Mode=TwoWay}"></ToggleButton>

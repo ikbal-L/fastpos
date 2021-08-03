@@ -1488,12 +1488,12 @@ namespace FastPosFrontend.ViewModels
         {
             
 
-            if (SelectedProduct?.Id== null)
+            if (SelectedProduct== null)
             {
                 ToastNotification.Notify("Select an empty cell to create a new Product");
                 return;
             }
-            if (SelectedCategory?.Id == null || SelectedProduct == null) return;
+            if (SelectedCategory?.Id == null) return;
             this.ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             var parent = (this.Parent as MainViewModel);

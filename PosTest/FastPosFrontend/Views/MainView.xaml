@@ -61,7 +61,8 @@
                                             x:Name="AppMenuToggleButton"
                                             AutomationProperties.Name="HamburgerToggleButton"
                                             DockPanel.Dock="Left"
-                                            Foreground="WhiteSmoke">
+                                            Foreground="WhiteSmoke"
+                                            Margin="5 0 0 0">
                                             <ToggleButton.Style>
                                                 <Style TargetType="ToggleButton"
                                                        BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
