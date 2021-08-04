@@ -46,7 +46,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0" Text="{Binding Quantity, StringFormat=' {0}x'}" HorizontalAlignment="Left" FontSize="16"/>
-            <TextBlock Grid.Column="1" Text="{Binding Path=ProductName}"  FontSize="16" />
+            <TextBlock Grid.Column="1" Text="{Binding Path=ProductName}"  FontSize="16" TextWrapping="WrapWithOverflow" />
             <TextBlock Grid.Column="2" Text="{Binding UnitPrice}" HorizontalAlignment="Right"  FontSize="16" />
             <TextBlock     Grid.Column="3" 
                            Text="{Binding Path=TotalDiscountAmount}" 

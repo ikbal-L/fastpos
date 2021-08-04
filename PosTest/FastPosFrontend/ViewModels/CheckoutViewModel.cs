@@ -1580,7 +1580,7 @@ namespace FastPosFrontend.ViewModels
 
         public void RemoveOrerItem()
         {
-            if (CurrentOrder.SelectedOrderItem == null)
+            if (CurrentOrder?.SelectedOrderItem == null)
             {
                 return;
             }
@@ -1607,7 +1607,7 @@ namespace FastPosFrontend.ViewModels
 
         public void AddOneToQuantity()
         {
-            if (CurrentOrder.SelectedOrderItem == null)
+            if (CurrentOrder?.SelectedOrderItem == null)
             {
                 return;
             }
@@ -1618,7 +1618,7 @@ namespace FastPosFrontend.ViewModels
 
         public void SubtractOneFromQuantity()
         {
-            if (CurrentOrder.SelectedOrderItem == null)
+            if (CurrentOrder?.SelectedOrderItem == null)
             {
                 return;
             }
@@ -1636,7 +1636,7 @@ namespace FastPosFrontend.ViewModels
             if (String.IsNullOrEmpty(NumericZone) && param != 0)
                 return;
 
-            if (CurrentOrder.SelectedOrderItem == null)
+            if (CurrentOrder?.SelectedOrderItem == null)
             {
                 return;
             }
