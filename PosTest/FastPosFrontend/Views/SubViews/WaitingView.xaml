@@ -19,8 +19,8 @@
                  SelectedItem="{Binding SelectedOrder}"
                  Background="#a5a5a5"   
                  HorizontalContentAlignment="Left"
-                 VerticalContentAlignment="Center"
-                 ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 >
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:Order}">
                         <Border  caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]">
@@ -62,7 +62,7 @@
 
                                 <Border Margin="0 3" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Background="#895737">
                                     <DockPanel LastChildFill="True" >
-                                        <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="CoinOutline"/>
+                                        <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="Dollar"/>
                                         <Label Grid.Column="3" Grid.Row="1"  Padding="0" Margin="0 -1 0 0"
                                            Content="{Binding NewTotal}" 
                                            Foreground="White"

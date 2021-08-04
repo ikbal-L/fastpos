@@ -19,12 +19,12 @@
                 md:HintAssist.Hint="Columns"
                 Margin="5"
                 Text="{Binding Columns}"
-                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"></TextBox>
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"></TextBox>
             <TextBox 
                 md:HintAssist.Hint="Rows"
                 Margin="5"
                 Text="{Binding Rows}"
-                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"></TextBox>
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"></TextBox>
         </UniformGrid>
         <UniformGrid Grid.Row="1" Columns="2" Rows="1">
             <Button 

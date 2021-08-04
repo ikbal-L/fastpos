@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MahappTutorial
+namespace FastPosFrontend.Views.Components
 {
     /// <summary>
-    /// Interaction logic for PrivateView.xaml
+    /// Interaction logic for OrderTabinationView.xaml
     /// </summary>
-    public partial class PrivateView : Window
+    public partial class OrderTabinationView : UserControl
     {
-        public PrivateView()
+        public OrderTabinationView()
         {
             InitializeComponent();
         }

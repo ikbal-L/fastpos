@@ -31,11 +31,11 @@
                 <StackPanel Grid.Row="1" Margin="0 20 0 50">
                     <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
                         <TextBlock Text="Name" Margin="0 5 0 5"/>
-                            <TextBox Width="250"  Text="{Binding Waiter.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+                            <TextBox Width="250"  Text="{Binding Waiter.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Phone"  Margin="0 5 0 5"/>
-                            <TextBox Width="250" Text="{Binding PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+                            <TextBox Width="250" Text="{Binding PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
                     </StackPanel>
                 </StackPanel>
                 <materialdesign:ColorZone Mode="PrimaryMid" Padding="1" Grid.Row="2" Effect="{DynamicResource MaterialDesignShadowDepth5}">

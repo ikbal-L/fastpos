@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MahappTutorial
+namespace FastPosFrontend.Views.Components
 {
     /// <summary>
-    /// Interaction logic for AboutView.xaml
+    /// Interaction logic for OrderItemToolbar.xaml
     /// </summary>
-    public partial class AboutView : Window
+    public partial class OrderItemToolbar : UserControl
     {
-        public AboutView()
+        public OrderItemToolbar()
         {
             InitializeComponent();
         }

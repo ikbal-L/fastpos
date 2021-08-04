@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.Components.CategoryPaginationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FastPosFrontend.Views.Components"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:converters="clr-namespace:FastPosFrontend.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:CategoryTemplateWidthConverter x:Key="CategoryTemplateWidthConverter" />
+    </UserControl.Resources>
+    <Grid Grid.Row="0" Grid.ColumnSpan="3" Margin="2 2 2 2">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="2 0 0 0" Height="60">
+            <ItemsControl x:Name="CategoryPagination" ItemsSource="{Binding PaginatedCategories.View}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+
+                    <DataTemplate DataType="{x:Type models:Category}">
+                        <Button
+                                        Height="60" Background="{Binding Background}"
+                                        Content="{Binding Name}"
+                                        cal:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
+                                        FontWeight="Bold"
+                                        FontSize="16"
+                                        Padding="3 0 0 5"
+                                        Margin="3 0 0 0">
+                            <Button.MinWidth>
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}"
+                                                     Path="ActualWidth"
+                                                     Converter="{StaticResource CategoryTemplateWidthConverter}"
+                                                     ConverterParameter="417,60,60" />
+                            </Button.MinWidth>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+
+            <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
+                                x:Name="PreviousPqge" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
+                                Content="{materialDesign:PackIcon ChevronDoubleLeft,30}" />
+
+            <Button DockPanel.Dock="Right" Height="60" Width="35" x:Name="NextPage"
+                                Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action PaginateCategories('NEXT')]"
+                                Content="{materialDesign:PackIcon ChevronDoubleRight,30}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

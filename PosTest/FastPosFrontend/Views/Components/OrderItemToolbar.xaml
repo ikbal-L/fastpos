@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.Components.OrderItemToolbar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FastPosFrontend.Views.Components"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:FastPosFrontend.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <converters:ObjectToBoolConverter   x:Key="ObjectToBooleanConverter"/>
+    </UserControl.Resources>
+    <Grid Grid.Column="0"
+
+          IsEnabled="{Binding ElementName=OrderitemsList, 
+                            Path=SelectedItem, Converter={StaticResource ObjectToBoolConverter}}"
+          x:Name="OrderItemCommandsGrid">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Foreground="#2496ed" Background="WhiteSmoke"
+                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
+
+                            cal:Message.Attach="[Event Click] = [Action RemoveOrerItem()]"
+                            Style="{StaticResource ButtonRightOrder}">
+            <materialDesign:PackIcon Kind="TrashCanOutline" Height="30" Width="30" />
+        </Button>
+        <Button Grid.Row="1" Foreground="#2496ed" Background="WhiteSmoke"
+                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
+                            Style="{StaticResource ButtonRightOrder}"
+                            cal:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage()]">
+            <materialDesign:PackIcon Kind="ShapePlus" Height="30" Width="30" />
+        </Button>
+        <Button Grid.Row="2" Foreground="#2496ed" Background="WhiteSmoke"
+                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
+                            Style="{StaticResource ButtonRightOrder}"
+                            cal:Message.Attach="[Event Click] = [Action AddOneToQuantity()]">
+
+            <materialDesign:PackIcon Kind="Plus" Height="30" Width="30" />
+
+        </Button>
+        <Button Grid.Row="3" Foreground="#2496ed" Background="WhiteSmoke"
+                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
+                            Style="{StaticResource ButtonRightOrder}"
+                            cal:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity()]">
+            <materialDesign:PackIcon Kind="Minus" Height="30" Width="30" />
+        </Button>
+        <Button Grid.Row="4" Foreground="#2496ed" Background="WhiteSmoke"
+
+                            Style="{StaticResource ButtonRightOrder}"
+                            cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]"
+                            IsEnabled="{Binding ElementName=OrderitemsList,Path=SelectedItem ,Converter={StaticResource ObjectToBoolConverter}}">
+            <materialDesign:PackIcon Kind="TagMinus" Height="30" Width="30" />
+
+        </Button>
+        <Button Grid.Row="5" Foreground="#2496ed" Background="WhiteSmoke"
+                            IsEnabled="{Binding ElementName=OrderitemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
+                            Style="{StaticResource ButtonRightOrder}"
+                            cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(0)]">
+            <materialDesign:PackIcon Kind="TagFaces" Height="30" Width="30" />
+        </Button>
+
+
+    </Grid>
+</UserControl>

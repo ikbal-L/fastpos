@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
-            <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" materialdesign:HintAssist.Hint="Search Delivery Man" Margin="5 20 0 0" Text="{Binding SearchDeliveryMan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}" materialdesign:HintAssist.Hint="Search Delivery Man" Margin="5 20 0 0" Text="{Binding SearchDeliveryMan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <ListBox  
                 BorderThickness="1"
                 BorderBrush="Gray"
@@ -51,7 +51,7 @@
                             <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Column="0" Margin="0 0 0 5" Grid.Row="0">
-                            <materialdesign:PackIcon  Kind="CoinOutline" Width="40" Height="40" Padding="0"
+                            <materialdesign:PackIcon  Kind="CoinsOutline" Width="40" Height="40" Padding="0"
                                                                  Foreground="#26ff26" />
                             <TextBlock  Foreground="#26ff26" TextAlignment="Right"
                                                    FontFamily="{StaticResource DigitalFontFamily}"
@@ -89,7 +89,7 @@
                             <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Column="0" Margin="0 0 0 5" Grid.Row="0">
-                            <materialdesign:PackIcon  Kind="CoinOutline" Width="40" Height="40" Padding="0"
+                            <materialdesign:PackIcon  Kind="CoinsOutline" Width="40" Height="40" Padding="0"
                                                                  Foreground="#26ff26" />
                             <TextBlock  Foreground="#26ff26" TextAlignment="Right"
                                                    FontFamily="{StaticResource DigitalFontFamily}"

@@ -6,12 +6,12 @@ using ServiceInterface.Model;
 
 namespace FastPosFrontend.ViewModels.SubViewModel
 {
-    public class DelivereyViewModel : PropertyChangedBase
+    public class DeliveryViewModel : PropertyChangedBase
     {
         private Order _selectedOrder;
         private ICollectionView _orders;
         
-        public DelivereyViewModel(CheckoutViewModel checkoutViewModel)
+        public DeliveryViewModel(CheckoutViewModel checkoutViewModel)
         {
             Parent = checkoutViewModel;
             OrderViewSource = new CollectionViewSource();

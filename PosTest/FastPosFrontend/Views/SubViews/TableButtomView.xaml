@@ -58,18 +58,11 @@
 
         </ResourceDictionary>
     </FrameworkElement.Resources>
-    <Grid>
-        <!--<Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>-->
+    <Grid Background="Red">
+        
 
         <ListBox Name="tablesList" ItemsSource="{Binding Tables}"  SelectedItem="{Binding SelectedTable}" 
-                 Grid.Row="1" Grid.ColumnSpan="2" Background="#a5a5a5" Height="240">
+                Background="#a5a5a5"  VerticalAlignment="Stretch" VerticalContentAlignment="Stretch">
 
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Table}">

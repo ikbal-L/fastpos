@@ -10,20 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MahappTutorial
+namespace FastPosFrontend.Views.Components
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for CategoryPaginationControl.xaml
     /// </summary>
-    public partial class Window1 : UserControl
-
+    public partial class CategoryPaginationControl : UserControl
     {
-        public Window1()
+        public CategoryPaginationControl()
         {
             InitializeComponent();
-            
         }
     }
 }

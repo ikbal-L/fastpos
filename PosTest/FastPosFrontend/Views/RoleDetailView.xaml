@@ -42,7 +42,7 @@
                 <RowDefinition />
 
             </Grid.RowDefinitions>
-            <TextBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+            <TextBox Grid.Row="0" Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      materialDesign:HintAssist.Hint="Role Name" Margin="5"
                      Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" />
             <ListView Grid.Row="1" ItemsSource="{Binding Privileges}" Height="300" 

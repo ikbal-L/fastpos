@@ -240,7 +240,7 @@
                 </StackPanel>
 
 
-                <!--<TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" Width="300"
+                <!--<TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}" Width="300"
                          materialdesign:HintAssist.Hint="Username"
                          Margin="5" />
                 <PasswordBox x:Name="Password"

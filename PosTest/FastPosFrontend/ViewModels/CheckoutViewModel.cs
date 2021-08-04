@@ -57,7 +57,7 @@ namespace FastPosFrontend.ViewModels
         private WarningViewModel _warningViewModel;
         private TablesViewModel _tablesViewModel;
         private WaitingViewModel _waitingViewModel;
-        private DelivereyViewModel _delivereyViewModel;
+        private DeliveryViewModel _deliveryViewModel;
         private TakeawayViewModel _takeAwayViewModel;
         private CustomerViewModel _customerViewModel;
 
@@ -291,7 +291,7 @@ namespace FastPosFrontend.ViewModels
             AdditivesVisibility = false;
 
             TakeAwayViewModel = new TakeawayViewModel(this);
-            DelivereyViewModel = new DelivereyViewModel(this);
+            DeliveryViewModel = new DeliveryViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
@@ -491,7 +491,7 @@ namespace FastPosFrontend.ViewModels
                 }
             }
 
-            DelivereyViewModel.SelectedOrder = DelivereyViewModel.Orders.Cast<Order>().Where(o => o == CurrentOrder)
+            DeliveryViewModel.SelectedOrder = DeliveryViewModel.Orders.Cast<Order>().Where(o => o == CurrentOrder)
                 .FirstOrDefault();
 
             TakeAwayViewModel.SelectedOrder = TakeAwayViewModel.Orders.Cast<Order>().Where(o => o == CurrentOrder)
@@ -567,12 +567,12 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _customerViewModel, value);
         }
 
-        public DelivereyViewModel DelivereyViewModel
+        public DeliveryViewModel DeliveryViewModel
         {
-            get => _delivereyViewModel;
+            get => _deliveryViewModel;
             set
             {
-                _delivereyViewModel = value;
+                _deliveryViewModel = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -834,10 +834,10 @@ namespace FastPosFrontend.ViewModels
             }
 
 
-            DelivereyViewModel.OrderViewSource.View.Refresh();
+            DeliveryViewModel.OrderViewSource.View.Refresh();
             WaitingViewModel.OrderViewSource.View.Refresh();
             TakeAwayViewModel.OrderViewSource.View.Refresh();
-            DelivereyViewModel.NotifyOfPropertyChange(() => DelivereyViewModel.OrderCount);
+            DeliveryViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
             WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
             TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
 

@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MahappTutorial
+namespace FastPosFrontend.Views.Components
 {
     /// <summary>
-    /// Interaction logic for HomeView.xaml
+    /// Interaction logic for OrderCommandsControl.xaml
     /// </summary>
-    public partial class HomeView : Window
+    public partial class OrderCommandsControl : UserControl
     {
-        public HomeView()
+        public OrderCommandsControl()
         {
             InitializeComponent();
         }

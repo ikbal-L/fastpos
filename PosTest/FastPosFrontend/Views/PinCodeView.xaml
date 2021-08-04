@@ -30,7 +30,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!--Background="Black" FontSize="30" Foreground="White"-->
-                <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"   Text="{Binding PinCode}" 
+                <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"   Text="{Binding PinCode}" 
                          Height="50" Margin="3"></TextBox>
                 
             </Grid>

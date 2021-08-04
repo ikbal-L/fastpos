@@ -97,9 +97,13 @@ namespace FastPosFrontend.SL.Controls
             var key = (Key)control.Tag;
             RaiseKeyClickedEvent(key);
             var vKey = KeyInterop.VirtualKeyFromKey(key);
-            
-            //keybd_event((byte)vKey, BSCAN_ENTER_MAKE, 0, UIntPtr.Zero);
-            //keybd_event((byte)vKey, BSCAN_ENTER_BREAK, KEYEVENTF_KEYUP, UIntPtr.Zero);
+
+            if (key!= Key.Enter && key!= Key.Return)
+            {
+                keybd_event((byte)vKey, 0, 0, UIntPtr.Zero);
+                keybd_event((byte)vKey, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            }
+
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
