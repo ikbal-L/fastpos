@@ -15,35 +15,36 @@
 
         <converters:ObjectToBoolConverter x:Key="ObjectToBooleanConverter" />
     </UserControl.Resources>
-    <ToolBarTray Orientation="Vertical" IsLocked="True" Style="{StaticResource MaterialDesignToolBarTray}">
+    <ToolBarTray Orientation="Vertical" IsLocked="True" Style="{StaticResource MaterialDesignToolBarTray}"
+                 Background="{StaticResource MaterialDesignPaper}">
         <ToolBar Grid.Column="0"
-
+                Background="{StaticResource MaterialDesignPaper}"
                  IsEnabled="{Binding CurrentOrder, Converter={StaticResource ObjectToBoolConverter}}"
                  x:Name="OrderItemCommandsGrid" Style="{StaticResource MaterialDesignToolBar}">
 
 
-            <Button Grid.Row="0" Foreground="#2496ed" Background="WhiteSmoke"
+            <Button Grid.Row="0" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action RemoveOrerItem()]"
                     Content="{md:PackIcon Delete,Size=30}" />
-            <Button Grid.Row="1" Foreground="#2496ed" Background="WhiteSmoke"
+            <Button Grid.Row="1" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage()]"
                     Content="{md:PackIcon ShapePlus,Size=30}" />
-            <Button Grid.Row="2" Foreground="#2496ed" Background="WhiteSmoke"
+            <Button Grid.Row="2" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action AddOneToQuantity()]"
                     Content="{md:PackIcon AddBox,Size=30}" />
-            <Button Grid.Row="3" Foreground="#2496ed" Background="WhiteSmoke"
+            <Button Grid.Row="3" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity()]"
                     Content="{md:PackIcon MinusBox,Size=30}" />
-            <Button Grid.Row="4" Foreground="#2496ed" Background="WhiteSmoke"
+            <Button Grid.Row="4" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
 
                     cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]"
                     IsEnabled="{Binding ElementName=OrderItemsList,Path=SelectedItem ,Converter={StaticResource ObjectToBoolConverter}}"
                     Content="{md:PackIcon TagMinus, Size=30}" />
-            <Button Grid.Row="5" Foreground="#2496ed" Background="WhiteSmoke"
+            <Button Grid.Row="5" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(0)]"
                     Content="{md:PackIcon TagFaces,Size=30}" />

@@ -42,6 +42,7 @@
                 <ResourceDictionary Source="/Resources/DataTemplates/Additives.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Reports.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/AppStatusBarTemplates.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Drawers.xaml"/>
 
                 <!--ToastNotifications-->
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />

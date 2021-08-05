@@ -116,9 +116,13 @@
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]" />
 
-            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ButtonStyle18}"
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" Style="{StaticResource ButtonStyle18}"
                                 Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVERED')]" />
+
+            <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" Style="{StaticResource ButtonStyle18}"
+                    Content="{materialdesign:PackIcon TestTube, 30}"
+                    cal:Message.Attach="[Event Click] = [Action TestDrawer]" />
 
             <Button Grid.Row="3" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }"
                                 Style="{StaticResource ButtonStyle18}"

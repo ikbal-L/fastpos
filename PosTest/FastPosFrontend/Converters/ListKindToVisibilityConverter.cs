@@ -16,7 +16,7 @@ namespace FastPosFrontend.Converters
 
             if (listkind == ListKind.Customer && p== "customer")
                 return Visibility.Visible;
-            if (listkind == ListKind.Deliverey && p == "delivrey")
+            if (listkind == ListKind.Delivery && p == "delivrey")
                 return Visibility.Visible;
             if (listkind == ListKind.Table && p == "tab")
                 return Visibility.Visible;

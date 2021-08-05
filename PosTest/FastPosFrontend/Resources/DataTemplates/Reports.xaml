@@ -1,10 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+                    xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:converters="clr-namespace:FastPosFrontend.Converters"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions">
+                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
+                    xmlns:cal="http://www.caliburnproject.org"
+                    xmlns:views="clr-namespace:FastPosFrontend.Views">
 
     <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
     <converters:SumValuesConverter x:Key="SumValuesConverter" />
@@ -821,4 +824,6 @@
             </Grid>
         </Border>
     </DataTemplate>
+
+   
 </ResourceDictionary>

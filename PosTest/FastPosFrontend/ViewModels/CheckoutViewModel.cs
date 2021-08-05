@@ -206,7 +206,7 @@ namespace FastPosFrontend.ViewModels
                     new EmbeddedCommandBarCommand(Icon.Get("NewOrder"), o => { NewOrder(); }),
                     new EmbeddedCommandBarCommand(Icon.Get("Table"), o => { ShowDrawer(ListKind.Table); }),
                     new EmbeddedCommandBarCommand(Icon.Get("Waiter"), o => { ShowDrawer(ListKind.Waiter); }),
-                    new EmbeddedCommandBarCommand(Icon.Get("Delivery"), o => { ShowDrawer(ListKind.Deliverey); }),
+                    new EmbeddedCommandBarCommand(Icon.Get("Delivery"), o => { ShowDrawer(ListKind.Delivery); }),
                     new EmbeddedCommandBarCommand(Icon.Get("Customer"), o => { ShowDrawer(ListKind.Customer); })
                 }
             };
@@ -297,6 +297,15 @@ namespace FastPosFrontend.ViewModels
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
+            //AppDrawerConductor.Instance.InitTop(this, "CheckoutWaiterDrawer", this,tag:typeof(Waiter));
+            //AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: typeof(Deliveryman));
+            //AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: typeof(Table));
+            //AppDrawerConductor.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: typeof(Customer));
+
+            AppDrawerConductor.Instance.InitTop(this, "CheckoutWaiterDrawer", this, tag: ListKind.Waiter);
+            AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
+            AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
+            AppDrawerConductor.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
         }
 
         private void ShowOrderInfo()
@@ -1027,6 +1036,8 @@ namespace FastPosFrontend.ViewModels
 
             RankedItemsCollectionHelper.LoadPagesNotFilled(source: additives, target: AdditivesPage,
                 size: MaxProductPageSize);
+            AdditivesVisibility = true;
+            ProductsVisibility = false;
         }
 
 
@@ -1788,14 +1799,13 @@ namespace FastPosFrontend.ViewModels
 
         public void GoToAdditiveButtonsPage()
         {
-            if (CurrentOrder.SelectedOrderItem == null)
+            if (CurrentOrder?.SelectedOrderItem == null)
             {
                 return;
             }
 
             var currentOrderSelectedOrderItem = CurrentOrder.SelectedOrderItem;
-            AdditivesVisibility = true;
-            ProductsVisibility = false;
+            
             ShowProductAdditives(currentOrderSelectedOrderItem.Product);
         }
 
@@ -1895,8 +1905,10 @@ namespace FastPosFrontend.ViewModels
 
         public void ShowDrawer(ListKind listKind)
         {
-            ListKind = listKind;
-            IsTopDrawerOpen = true;
+            //ListKind = listKind;
+            //IsTopDrawerOpen = true;
+            AppDrawerConductor.Instance.OpenTop(this, listKind);
+
         }
 
         public void Handle(AssignOrderTypeEventArgs message)
@@ -2241,8 +2253,13 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-      
-        
+        public void TestDrawer()
+        {
+            //AppDrawerConductor.Instance.OpenTop(this,typeof(Customer));
+        }
+
+
+
     }
 
     public enum OrderProp

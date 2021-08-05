@@ -22,6 +22,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isBackendServerOn;
         private MainDialog _mainDialog;
         private bool _isAttemptingToStartBackendServer;
+        private AppDrawerConductor _drawer = AppDrawerConductor.Instance;
 
 
         public MainViewModel()
@@ -96,7 +97,13 @@ namespace FastPosFrontend.ViewModels
             get => _mainDialog;
             set => Set(ref _mainDialog, value);
         }
-        
+
+        public AppDrawerConductor Drawer
+        {
+            get => _drawer;
+            set => Set(ref _drawer, value);
+        }
+
         public DialogClosedHandler OpenDialog<T>() where T : DialogContent, new()
         {
             var dialog = new T();

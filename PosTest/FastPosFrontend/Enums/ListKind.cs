@@ -4,7 +4,7 @@
     {
         Table,
         Waiter,
-        Deliverey,
+        Delivery,
         Customer
     }
 }

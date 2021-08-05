@@ -20,14 +20,15 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         Title="{Binding WindowTitle}" Height="800" Width="1100"
         x:Name="AppMainViewWindow"
-        d:DataContext="{d:DesignInstance vm:MainViewModel}" WindowState="{ex:ScreenResolution Operator=LesserThanEquals,Width=1100}">
+        d:DataContext="{d:DesignInstance vm:MainViewModel}"
+        WindowState="{ex:ScreenResolution Operator=LesserThanEquals,Width=1100}">
 
-    
+
     <Window.Resources>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
 
         <Style TargetType="local:MainView">
-           
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
@@ -104,7 +105,6 @@
                                                 </Style>
                                             </md:PopupBox.Style>
                                             <StackPanel Margin="10 0">
-                                             
 
 
                                                 <Button x:Name="CloseAppWindowButton"
@@ -248,7 +248,7 @@
                                                 Margin="5 0">
                                                 <md:Chip.Style>
                                                     <Style TargetType="md:Chip">
-                                                       
+
                                                         <Setter Property="IconBackground"
                                                                 Value="{StaticResource ErrorColorBrush}" />
                                                         <Setter Property="Icon" Value="{md:PackIcon ServerOff}" />
@@ -324,7 +324,12 @@
                                 </md:ColorZone>
                                 <md:DrawerHost Grid.Row="1"
                                                IsLeftDrawerOpen="{Binding ElementName=AppMenuToggleButton, Path=IsChecked}"
-                                               LeftDrawerCloseOnClickAway="True">
+                                               LeftDrawerCloseOnClickAway="True"
+                                               TopDrawerContentTemplate="{Binding Drawer.Top.Template}"
+                                               TopDrawerContent="{Binding Drawer.Top}"
+                                               IsTopDrawerOpen="{Binding Drawer.IsTopDrawerOpen}"
+                                               TopDrawerBackground="Transparent"
+                                               >
                                     <md:DrawerHost.LeftDrawerContent>
                                         <Grid MinWidth="250">
                                             <Grid.RowDefinitions>
@@ -343,7 +348,8 @@
                                                       HorizontalAlignment="Left"
                                                       Margin="10 20">
                                                 <TreeView.ItemContainerStyle>
-                                                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                                                    <Style TargetType="{x:Type TreeViewItem}"
+                                                           BasedOn="{StaticResource MaterialDesignTreeViewItem}">
                                                         <Setter Property="IsExpanded" Value="True" />
                                                     </Style>
                                                 </TreeView.ItemContainerStyle>
@@ -395,7 +401,7 @@
                 </Setter.Value>
             </Setter>
 
-            <Setter Property="TextElement.FontFamily" Value="{StaticResource CairoRegular}"></Setter>
+            <Setter Property="TextElement.FontFamily" Value="{StaticResource CairoRegular}" />
         </Style>
     </Window.Resources>
     <Window.CommandBindings>

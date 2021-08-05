@@ -178,6 +178,4 @@ namespace FastPosFrontend.ViewModels
         public GenericCommand Cancel { get; set; }
 
     }
-
-
 }
