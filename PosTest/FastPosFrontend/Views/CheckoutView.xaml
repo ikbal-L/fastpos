@@ -52,300 +52,158 @@
                 <subViews:WarningView />
             </DataTemplate>
 
-            <helpers:TableViewTemplateSelector x:Key="tableViewSelector"
-                                               TableFullView="{StaticResource tableFullView}"
-                                               TableButtomView="{StaticResource tableButtomView}" />
             
-            <convert:ListKindToVisibilityConverter x:Key="listKindToVisibilityConverter" />
+            
+          
            
             
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
-    <materialdesign:DialogHost IsOpen="{Binding IsDialogOpen ,FallbackValue='False'}"
-                               caliburn:Message.Attach="[Event DialogClosing] = [Action DialogClosing()]">
-        <materialdesign:DialogHost.DialogContent>
-            <ContentControl Content="{Binding DialogViewModel}"
-                            ContentTemplateSelector="{StaticResource tableViewSelector}" />
-        </materialdesign:DialogHost.DialogContent>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="3*" />
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="65" />
+            <ColumnDefinition Width="365" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="55*" />
+            <RowDefinition Height="45*" />
+            
+        </Grid.RowDefinitions>
+
+        <!--#region ROW 0 OrderItem Toolbar/List ProductList  -->
+        <comp:OrderItemToolbar Grid.Column="0" Grid.Row="0" />
+        <ListBox Name="OrderItemsList" Grid.Column="1" Grid.Row="0"
+                 ItemsSource="{Binding OrderItemsCollectionViewSource.View}"
+                 SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
+                 ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
+                 HorizontalContentAlignment="Stretch"
+                 AlternationCount="2"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListBox.Style>
+                <Style TargetType="ListBox" BasedOn="{StaticResource MaterialDesignListBox}">
+                    <Setter Property="Background" Value="#bfdbf7" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=OrderItemsList, Path=ItemsSource}"
+                                     Value="{x:Null}">
+                            <Setter Property="Background" Value="White" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>
+        </ListBox>
+        <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" />
+        <!--#endregion-->
+
+        <!--Numeric Zone & Order Keypad and Commands-->
+        <Grid Grid.Column="0" Grid.Row="1" ColumnSpan="2">
             <Grid.RowDefinitions>
-
-                <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="25" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="65" />
+                <ColumnDefinition Width="365" />
+               
+            </Grid.ColumnDefinitions>
+            <!--Numeric Zone-->
 
-            <!--OrderItemList and Order Item Commands-->
-            <Grid Grid.Column="0" Grid.Row="0" Margin="0 0 8 0">
-                <Grid.ColumnDefinitions>
-
-
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-
-                </Grid.ColumnDefinitions>
-
-                <ListBox Name="OrderItemsList" Grid.Column="1" Width="365"
-                         ItemsSource="{Binding OrderItemsCollectionViewSource.View}"
-                         SelectedItem="{Binding Path=CurrentOrder.SelectedOrderItem, Mode=TwoWay}"
-                         ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
-                         HorizontalContentAlignment="Stretch"
-                         AlternationCount="2"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                    <ListBox.Style>
-                        <Style TargetType="ListBox">
-                            <Setter Property="Background" Value="#bfdbf7" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=OrderItemsList, Path=ItemsSource}"
-                                             Value="{x:Null}">
-                                    <Setter Property="Background" Value="White" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListBox.Style>
-                </ListBox>
-
-
-                <!--OrderItem Commands-->
-                <comp:OrderItemToolbar Grid.Column="0" Grid.Row="0" />
-
-            </Grid>
-
-            <materialdesign:DrawerHost Panel.ZIndex="10" IsTopDrawerOpen="{Binding IsTopDrawerOpen}" Grid.Column="0"
-                                       Grid.Row="0" Grid.RowSpan="3">
-                <!--Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type materialdesign:DrawerHost}},Path=ActualHeight}"-->
-                <materialdesign:DrawerHost.TopDrawerContent>
+            <Border Grid.Column="1" Grid.Row="0" Margin="0 2" x:Name="NumericZoneGrid" BorderBrush="Black" BorderThickness="1">
+                <Border BorderBrush="White" BorderThickness="2" Background="Black">
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
-
-                        <ListBox Grid.Row="0" x:Name="ltab"
-                                 ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable,Mode=TwoWay}"
-                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=tab}"
-                                 VerticalAlignment="Top">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type models:Table}">
-                                    <RadioButton Content="{Binding Number}" GroupName="groupName" FontSize="20"
-                                                 FontWeight="Bold"
-                                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
-                                                 Style="{StaticResource ButtonTopOrderTable}" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="5" VerticalAlignment="Center" />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                        </ListBox>
-
-                        <ListBox Grid.Row="0" x:Name="lwaiter"
-                                 ItemsSource="{Binding Waiters}" SelectedItem="{Binding SelectedWaiter, Mode=TwoWay}"
-                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=waiter}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type models:Waiter}">
-                                    <Button Width="120" Height="70"
-                                            caliburn:Message.Attach="[Event Click] = [Action SelectWaiter($this)]"
-                                            Style="{StaticResource ButtonTopOrderDelivereyman}"
-                                            Background="{Binding Background}">
-                                        <DockPanel>
-                                            <!--<materialdesign:PackIcon DockPanel.Dock="Left" Kind="TruckFast" Width="20" Height="20"/>-->
-                                            <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
-                                                       TextWrapping="WrapWithOverflow" FontWeight="DemiBold" />
-                                            <materialdesign:PackIcon DockPanel.Dock="Left" Kind="Phone" />
-                                            <TextBlock DockPanel.Dock="Left" Text="{Binding PhoneNumbers[0]}" />
-                                        </DockPanel>
-                                    </Button>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Margin" Value="0" />
-                                    <Setter Property="Padding" Value="2" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                        </ListBox>
-
-                        <ListBox Grid.Row="0" Grid.RowSpan="2" x:Name="ldelivrey"
-                                 ItemsSource="{Binding Delivereymen}"
-                                 SelectedItem="{Binding SelectedDeliveryman, Mode=TwoWay}"
-                                 Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter} , ConverterParameter=delivrey}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type models:Deliveryman}">
-                                    <Button Width="120" Height="70"
-                                            caliburn:Message.Attach="[Event Click] = [Action SelectDeliveryMan($this)]"
-                                            Style="{StaticResource ButtonTopOrderDelivereyman}"
-                                            Background="{Binding Background}">
-                                        <DockPanel>
-                                            <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
-                                                       TextWrapping="WrapWithOverflow" FontWeight="DemiBold" />
-                                            <materialdesign:PackIcon DockPanel.Dock="Left" Kind="Phone" Width="20"
-                                                                     Height="20" VerticalAlignment="Center" />
-                                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding PhoneNumbers[0]}" />
-                                        </DockPanel>
-                                    </Button>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Margin" Value="0" />
-                                    <Setter Property="Padding" Value="2" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                        </ListBox>
-
-                        <views:CustomerView x:Name="lcustomer" caliburn:View.Model="{Binding CustomerViewModel}"
-                                            Grid.Row="0"
-                                            Visibility="{Binding ListKind, Converter={StaticResource listKindToVisibilityConverter}, ConverterParameter=customer}" />
-
-
-                        <Button Grid.Row="1" Command="{x:Static materialdesign:DrawerHost.CloseDrawerCommand}"
-                                CommandParameter="{x:Static Dock.Top}"
-                                Style="{DynamicResource MaterialDesignFlatButton}"
-                                caliburn:Message.Attach="[Event Click] = [Action CloseDrawer()]"
-                                Margin="10" VerticalAlignment="Center" Content="CLOSE" />
-
-                    </Grid>
-                </materialdesign:DrawerHost.TopDrawerContent>
-            </materialdesign:DrawerHost>
-            <!--Numeric Zone & Order Keypad and Commands-->
-            <Grid Grid.Column="0" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!--Numeric Zone-->
-                <Grid Grid.Column="0" Grid.Row="0" Margin="2" x:Name="NumericZoneGrid">
-
-                    <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
-                        <Border BorderBrush="White" BorderThickness="2" Background="Black">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="3*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*" />
-                                    <RowDefinition Height="2*" />
-                                </Grid.RowDefinitions>
-                                <TextBox Grid.Row="0" Grid.Column="1" Visibility="Hidden" IsReadOnly="True" />
-                                <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
-                                        BorderBrush="CornflowerBlue">
-                                    <TextBlock Foreground="#26ff26"
-                                               Text="{Binding NumericZone, StringFormat='{}{0:0,0.00}'}"
-                                               FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
-                                               HorizontalAlignment="Right">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ReturnedAmount}" Value="{x:Null}">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </Border>
-
-
-                                <Grid Grid.RowSpan="2">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-
-                                    <Button
-                                        HorizontalContentAlignment="Stretch"
-                                        caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('CopyToNumericZone')]">
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="Button">
-                                                            <Border Background="Transparent">
-                                                                <ContentPresenter />
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Button.Style>
-                                        <DockPanel>
-                                            <materialdesign:PackIcon Kind="Dollar" Width="40" Height="40" Padding="0"
-                                                                     Foreground="#26ff26" />
-                                            <TextBlock Foreground="#26ff26" TextAlignment="Right"
-                                                       FontFamily="{StaticResource DigitalFontFamily}"
-                                                       FontSize="32" Padding="0 5 0 0"
-                                                       Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
-                                                       caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]"
-                                                       x:Name="NewTotalTextBlock" />
-                                        </DockPanel>
-                                    </Button>
-                                    <DockPanel Grid.Row="2" Grid.Column="2">
-                                        <materialdesign:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
-                                                                 Height="30" Padding="0" Foreground="#26ff26" />
-                                        <TextBlock Foreground="#26ff26" FontSize="28" DockPanel.Dock="Right"
-                                                   TextAlignment="Right"
-                                                   FontFamily="{StaticResource DigitalFontFamily}"
-                                                   Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
-                                                   x:Name="TotalDiscountAmountTextBlock" />
-                                    </DockPanel>
-                                </Grid>
-                            </Grid>
-
-
+                        <TextBox Grid.Row="0" Grid.Column="1" Visibility="Hidden" IsReadOnly="True" />
+                        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
+                                BorderBrush="CornflowerBlue">
+                            <TextBlock Foreground="#26ff26"
+                                       Text="{Binding NumericZone, StringFormat='{}{0:0,0.00}'}"
+                                       FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
+                                       HorizontalAlignment="Right">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ReturnedAmount}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Border>
-                    </Border>
 
 
-                </Grid>
+                        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
 
-                <!--Order Keypad and Commands-->
-                <comp:OrderCommandsControl Grid.Row="1" />
+                            <Button
+                                HorizontalContentAlignment="Stretch"
+                                caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('CopyToNumericZone')]"
+                                Style="{StaticResource ContainerButtonStyle}">
+                                   
+                                <DockPanel>
+                                    <materialdesign:PackIcon Kind="Dollar" Width="30" Height="30" Padding="0"
+                                                             Foreground="#26ff26" />
+                                    <TextBlock Foreground="#26ff26" TextAlignment="Right"
+                                               FontFamily="{StaticResource DigitalFontFamily}"
+                                               FontSize="32" Padding="0 5 0 0"
+                                               Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
+                                               caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]"
+                                               x:Name="NewTotalTextBlock" />
+                                </DockPanel>
+                            </Button>
+                            <DockPanel Grid.Row="1" >
+                                <materialdesign:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
+                                                         Height="30" Padding="0" Foreground="#26ff26" />
+                                <TextBlock Foreground="#26ff26" FontSize="28" DockPanel.Dock="Right"
+                                           TextAlignment="Right"
+                                           FontFamily="{StaticResource DigitalFontFamily}"
+                                           Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
+                                           x:Name="TotalDiscountAmountTextBlock" />
+                            </DockPanel>
+                        </Grid>
+                    </Grid>
 
 
-            </Grid>
+                </Border>
+            </Border>
 
-            <!--ProductNavigation-->
-            <subViews:ProductNavigation Grid.Column="1" Grid.Row="0" />
 
-            <Grid Grid.Column="1" Grid.Row="1" Margin="2" Grid.RowSpan="2">
-              
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
+            <comp:OrderCommandsControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" />
 
-                </Grid.RowDefinitions>
-
-                <!--CATEGORY NAVIGATION-->
-                <comp:CategoryPaginationControl />
-                <!--ORDER NAVIGATION-->
-                <comp:OrderTabinationView Grid.Column="0" Grid.Row="1" />
-
-            </Grid>
 
         </Grid>
 
-    </materialdesign:DialogHost>
+        
+
+        <Grid Grid.Column="2" Grid.Row="1" Margin="2" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+
+            </Grid.RowDefinitions>
+
+            <comp:CategoryPaginationControl Grid.Row="0" />
+          
+            <comp:OrderTabinationView  Grid.Row="1" />
+
+        </Grid>
+
+    </Grid>
 
 </UserControl>

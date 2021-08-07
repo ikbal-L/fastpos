@@ -5,10 +5,11 @@ using FastPosFrontend.Enums;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
+using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class SplitViewModel : PropertyChangedBase
+    public class SplitViewModel : DialogContent
     {
         private bool _isDiscChecked;
         private Order _currentOrder;
@@ -466,11 +467,8 @@ namespace FastPosFrontend.ViewModels
             {
                 Parent.OrderItemsCollectionViewSource.Source = Parent.CurrentOrder.OrderItems;
             }
-            //if (Parent.CurrentOrder != null)
-            //{
-            //    CopyBackToCurrentOrderWithGroupingOfQuantities();
-            //}
 
+            Host.Close(this);
         }
 
         public void AddSplittedItemsCommand()
@@ -589,6 +587,9 @@ namespace FastPosFrontend.ViewModels
             
         }
         #endregion
+
+
+        
 
     }
 }

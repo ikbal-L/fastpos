@@ -298,6 +298,8 @@
     <Compile Include="ViewModels\AppDrawerConductor.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportsViewModel.cs" />
+    <Compile Include="ViewModels\DefaultDialog.cs" />
+    <Compile Include="ViewModels\DialogContent.cs" />
     <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
     <Compile Include="Helpers\NavigationItemConfigurationAttribute.cs" />

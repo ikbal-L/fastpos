@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 
+
 namespace FastPosFrontend.ViewModels
 {
     public class AppNavigationConductor<T> : Conductor<T>, IAppNavigationConductor where T : class

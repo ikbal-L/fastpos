@@ -51,7 +51,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Grid.Row="0" Content="{materialdesign:PackIcon Kind=CoinsOutline, Size=50}"  />
+                <Label Grid.Column="0" Grid.Row="0" Content="{materialdesign:PackIcon Kind=Dollar, Size=50}"  />
                 <Label Grid.Column="1" Grid.Row="0" FontSize="35"  FontWeight="Bold" Content="{Binding CurrentOrder.Total, StringFormat=N2}"
                        VerticalAlignment="Center"
                        FontFamily="{StaticResource DigitalFontFamily}" />
@@ -187,7 +187,7 @@
                                 </Style>
                             </Button.Style>
                             <DockPanel Grid.Column="0" Grid.Row="0">
-                                <materialdesign:PackIcon Kind="CoinsOutline" Width="25" Height="25" Padding="0" Foreground="#26ff26"/>
+                                <materialdesign:PackIcon Kind="Dollar" Width="25" Height="25" Padding="0" Foreground="#26ff26"/>
                                 <Label Content="{Binding SplittedOrder.NewTotal, StringFormat=N2}" FontSize="25" 
                                        FontFamily="{StaticResource DigitalFontFamily}" Foreground="#26ff26" HorizontalAlignment="Right" FontWeight="Bold" />
                             </DockPanel>
@@ -239,7 +239,7 @@
                                       AllowDotkey="True"
                                       AllowPercentKey="{Binding IsPercentKeyAllowed}"/>
 
-                <Button Grid.Column="3" Grid.Row="1" Content="{materialdesign:PackIcon Kind=CoinsOutline, Size=30}" 
+                <Button Grid.Column="3" Grid.Row="1" Content="{materialdesign:PackIcon Kind=Dollar, Size=30}" 
                         Style="{StaticResource ButtonStyle18radio}"
                                  cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]" />
 

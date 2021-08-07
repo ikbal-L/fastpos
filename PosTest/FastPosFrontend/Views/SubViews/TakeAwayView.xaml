@@ -60,7 +60,7 @@
 
                             <Border Margin="0 3" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Background="#895737">
                                 <DockPanel LastChildFill="True" >
-                                    <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="CoinsOutline"/>
+                                    <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="Dollar"/>
                                     <Label Grid.Column="3" Grid.Row="1"  Padding="0" Margin="0 -1 0 0"
                                            Content="{Binding NewTotal}" 
                                            Foreground="White"
@@ -99,7 +99,7 @@
                                         </DataTrigger.Binding>
                                         <!--Binding="{Binding ElementName=ordersList, Path=SelectedItem}" Value="{Binding}">-->
                                         <Setter Property="BorderThickness" Value="3"></Setter>
-                                        <Setter Property="BorderBrush" Value="#ffd23f"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

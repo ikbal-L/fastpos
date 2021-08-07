@@ -101,12 +101,12 @@
                     <Setter Property="Margin" Value="0 0 5 0"></Setter>
                     <Setter Property="IconBackground" Value="{DynamicResource PrimaryHueDarkBrush}"></Setter>
                     <Setter Property="IconForeground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"></Setter>
-                    <Setter Property="IsDeletable" Value="True"></Setter>
+                    <!--<Setter Property="IsDeletable" Value="True"></Setter>-->
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Content}" Value="{x:Null}">
                             <Setter Property="IconBackground" Value="DarkGray"></Setter>
                             <Setter Property="IconForeground" Value="LightGray"></Setter>
-                            <Setter Property="IsDeletable" Value="False"></Setter>
+                            <!--<Setter Property="IsDeletable" Value="False"></Setter>-->
 
                         </DataTrigger>
                     </Style.Triggers>
@@ -123,24 +123,24 @@
                 Content="{Binding CurrentOrder.Customer.Name}"
                 ToolTip="اسم الزبون"
                 Icon="{md:PackIcon User}"
-                cal:Message.Attach="[Event DeleteClick] = [Action SetOrderPropToNull('Customer')]">
+                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]">
                 
             </md:Chip>
             <md:Chip
                 Content="{Binding CurrentOrder.Table.Number}"
                 ToolTip="رقم الطاولة"
                 Icon="{md:PackIcon TableFurniture}"
-                cal:Message.Attach="[Event DeleteClick] = [Action SetOrderPropToNull('Table')]"/>
+                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Table')]"/>
             <md:Chip
                 Content="{Binding CurrentOrder.Waiter.Name}"
                 ToolTip="اسم النادل"
                 Icon="W"
-                cal:Message.Attach="[Event DeleteClick] = [Action SetOrderPropToNull('Waiter')]"/>
+                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Waiter')]"/>
             <md:Chip
                 Content="{Binding CurrentOrder.Deliveryman.Name}"
                 ToolTip="عامل التوصيل"
                 Icon="{md:PackIcon TruckFast}"
-                cal:Message.Attach="[Event DeleteClick] = [Action SetOrderPropToNull('Deliveryman')]"/>
+                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Deliveryman')]"/>
         </StackPanel>
     </DataTemplate>
 

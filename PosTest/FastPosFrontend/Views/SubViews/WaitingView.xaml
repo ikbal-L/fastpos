@@ -101,7 +101,7 @@
                                             </DataTrigger.Binding>
                                             <!--Binding="{Binding ElementName=ordersList, Path=SelectedItem}" Value="{Binding}">-->
                                             <Setter Property="BorderThickness" Value="3"></Setter>
-                                            <Setter Property="BorderBrush" Value="#ffd23f"/>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

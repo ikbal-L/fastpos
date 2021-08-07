@@ -915,17 +915,23 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            WarningViewModel = new WarningViewModel("Are you sure to delete this Order?", "Check", "Ok", "Close", "No",
-                o => CancelOrderAction(o), this, () => IsDialogOpen = false);
-            DialogViewModel = WarningViewModel;
-            IsDialogOpen = true;
+            //WarningViewModel = new WarningViewModel("Are you sure to delete this Order?", "Check", "Ok", "Close", "No",
+            //    o => CancelOrderAction(o), this, () => IsDialogOpen = false);
+
+            //DialogViewModel = WarningViewModel;
+            //IsDialogOpen = true;
+            var response = ModalDialogBox.YesNo("Are you sure you want to Cancel this Order?", "Cancel Order").Show();
+            if (response)
+            {
+                CancelOrderAction(this);
+            }
         }
 
 
         public void CancelOrderAction(object param)
         {
             var checkoutViewModel = param as CheckoutViewModel;
-            if (checkoutViewModel.CurrentOrder.State == null)
+            if (checkoutViewModel?.CurrentOrder.State == null)
             {
                 checkoutViewModel.CurrentOrder.State = OrderState.Removed;
             }
@@ -1185,7 +1191,8 @@ namespace FastPosFrontend.ViewModels
                                                                         (CurrentOrder.OrderItems.Count == 1 && CurrentOrder.OrderItems[0].Quantity > 1));
                     if (IsDialogOpen == true)
                     {
-                        DialogViewModel = new SplitViewModel(this);
+                        //DialogViewModel = new SplitViewModel(this);
+                        (this.Parent as MainViewModel)?.OpenDialog(new SplitViewModel(this));
                     }
                     else
                     {

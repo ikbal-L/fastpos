@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <converters:CategoryTemplateWidthConverter x:Key="CategoryTemplateWidthConverter" />
     </UserControl.Resources>
-    <Grid Grid.Row="0" Grid.ColumnSpan="3" Margin="2 2 2 2">
+    <Grid  Margin="2 2 2 2">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -45,8 +45,8 @@
                                                      Converter="{StaticResource CategoryTemplateWidthConverter}"
                                                      ConverterParameter="417,60,60" />
                             </Button.MinWidth>
-                            <Button.Style>
-                                <Style TargetType="Button">
+                            <Button.Style >
+                                <Style TargetType="Button" >
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsDark}" Value="True">
                                             <Setter Property="Foreground" Value="White" />
@@ -60,18 +60,24 @@
             </ItemsControl>
         </StackPanel>
 
-        <StackPanel Grid.Column="0" Orientation="Horizontal">
+        <UniformGrid Grid.Column="0"  Columns="2" Rows="1">
 
 
-            <Button DockPanel.Dock="Right" Height="60" Width="35" VerticalAlignment="Center"
-                                x:Name="PreviousPqge" Style="{StaticResource ButtonStyle22}"
+            <Button DockPanel.Dock="Right" Height="60"  VerticalAlignment="Center"
+                                x:Name="PreviousPqge" Style="{StaticResource MaterialDesignFlatMidBgButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
-                                Content="{materialDesign:PackIcon ChevronDoubleLeft,30}" />
+                                Content="{materialDesign:PackIcon ChevronDoubleLeft,22}"
+                                Padding="4"
+                                materialDesign:ButtonAssist.CornerRadius="0"
+                                Margin="2"/>
 
-            <Button DockPanel.Dock="Right" Height="60" Width="35" x:Name="NextPage"
-                                Style="{StaticResource ButtonStyle22}"
+            <Button DockPanel.Dock="Right" Height="60"  x:Name="NextPage"
+                                Style="{StaticResource MaterialDesignFlatMidBgButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('NEXT')]"
-                                Content="{materialDesign:PackIcon ChevronDoubleRight,30}" />
-        </StackPanel>
+                                Content="{materialDesign:PackIcon ChevronDoubleRight,22}" 
+                                Padding="4"
+                                materialDesign:ButtonAssist.CornerRadius="0"
+                                Margin="2"/>
+        </UniformGrid>
     </Grid>
 </UserControl>

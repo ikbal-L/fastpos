@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels;
 using Action = System.Action;
@@ -77,53 +75,6 @@ namespace FastPosFrontend.ViewModels
     }
 
 
-    public class DialogContent : Screen
-    {
-        protected object _content;
-        private AppDialogConductor _host;
-        private string _title;
-
-        public DialogContent()
-        {
-
-        }
-
-        public DialogContent(object content)
-        {
-            Content = content;
-        }
-
-        public DialogContent(object content, IList<GenericCommand> commands)
-        {
-            Content = content;
-            Commands = new BindableCollection<GenericCommand>(commands);
-        }
-
-        public BindableCollection<GenericCommand> Commands { get; set; }
-
-        public object Content
-        {
-            get => _content;
-            set => Set(ref _content, value);
-        }
-
-        public string Title
-        {
-            get => _title;
-            set => Set(ref _title, value);
-        }
-
-        public AppDialogConductor Host
-        {
-            get => _host;
-            set
-            {
-                Set(ref _host, value);
-                Parent = value;
-            }
-        }
-    }
-
     public class MainDialog : AppDialogConductor
     {
 
@@ -139,35 +90,6 @@ namespace FastPosFrontend.ViewModels
 
         
 
-    }
-
-    public static class DefaultDialog
-
-    {
-        public static DefaultDialogBuilder New(object content)
-        {
-            return new DefaultDialogBuilder() {Content = content};
-        }
-
-        public static DefaultDialogBuilder Title(this DefaultDialogBuilder builder, string title)
-        {
-            builder.Title = title;
-            return builder;
-        }
-
-        public static DefaultDialogBuilder Ok(this DefaultDialogBuilder builder, Action<object> executeMethod,
-            Func<object, bool> canExecuteMethod = null, string style = "")
-        {
-            builder.Ok = new GenericCommand("Ok", executeMethod, canExecuteMethod, style);
-            return builder;
-        }
-
-        public static GenericDialogContentViewModel Cancel(this DefaultDialogBuilder builder,
-            Action<object> executeMethod, Func<object, bool> canExecuteMethod = null, string style = "")
-        {
-            builder.Cancel = new GenericCommand("Cancel", executeMethod, canExecuteMethod, style);
-            return new GenericDialogContentViewModel(builder.Content, builder.Title, builder.Ok, builder.Cancel);
-        }
     }
 
     public class DefaultDialogBuilder
