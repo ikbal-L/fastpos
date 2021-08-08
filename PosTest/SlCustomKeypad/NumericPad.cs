@@ -151,7 +151,7 @@ namespace SlCustomKeypad
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            foreach (var child in ((this.GetVisualChild(0) as Border).Child as Grid).Children)
+            foreach (var child in ((GetVisualChild(0) as Border).Child as Grid).Children)
             {
                 var btn = child as Button;
                 btn.Click += Button_Click;
@@ -332,7 +332,7 @@ namespace SlCustomKeypad
                 throw new ArgumentNullException("executeMethod", "executeMethod cannot be null.");
 
             this.executeMethod = executeMethod;
-            this.canExecuteMethod = null;
+            canExecuteMethod = null;
         }
 
         /// <summary>

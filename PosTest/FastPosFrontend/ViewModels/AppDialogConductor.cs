@@ -48,7 +48,7 @@ namespace FastPosFrontend.ViewModels
         public bool Close()
         {
             OnClose();
-            this.DeactivateItem(this.ActiveItem, true);
+            DeactivateItem(ActiveItem, true);
             IsDialogOpen = false;
             return !IsDialogOpen;
         }

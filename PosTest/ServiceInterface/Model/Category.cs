@@ -57,7 +57,7 @@ namespace ServiceInterface.Model
             set
             {
                 Set(ref _backGround, (SolidColorBrush) value);
-                Set(ref _backGroundString, this._backGround.Color.ToString(), nameof(BackgroundString));
+                Set(ref _backGroundString, _backGround.Color.ToString(), nameof(BackgroundString));
                 Set(ref _backgroundColor, ((SolidColorBrush)value).Color, nameof(BackgroundColor));
 
             }

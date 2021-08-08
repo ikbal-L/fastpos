@@ -35,7 +35,7 @@ namespace ServiceInterface.Model
             OrderItems.CollectionChanged +=
                 (s, e) =>
                 {
-                    if (OrderItems.Count == 0) this.DiscountAmount = 0;
+                    if (OrderItems.Count == 0) DiscountAmount = 0;
                     NotifyOfPropertyChange(() => Total);
                     NotifyOfPropertyChange(() => TotalDiscountAmount);
                     NotifyOfPropertyChange(() => NewTotal);
@@ -50,7 +50,7 @@ namespace ServiceInterface.Model
 
         public Order(BindableCollection<Order> orders) : this()
         {
-            this.Orders = orders;
+            Orders = orders;
             ProductsVisibility = true;
             ShownAdditivesPage = new BindableCollection<Additive>();
         }
@@ -452,9 +452,9 @@ namespace ServiceInterface.Model
             }
 
 
-            this.TableId = Table?.Id;
-            this.CustomerId = Customer?.Id;
-            this.DeliverymanId = Deliveryman?.Id;
+            TableId = Table?.Id;
+            CustomerId = Customer?.Id;
+            DeliverymanId = Deliveryman?.Id;
         }
 
         public void MappingAfterReceiving(IEnumerable<Product> products)

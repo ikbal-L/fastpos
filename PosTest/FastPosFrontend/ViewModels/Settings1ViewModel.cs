@@ -59,7 +59,7 @@ namespace FastPosFrontend.ViewModels
             IAdditiveService additiveService*/
             )
         {
-            this._pageSize = pageSize;
+            _pageSize = pageSize;
             //this._productService = productService;
             //_categorieService = categorieService;
             //_additiveService = additiveService;
@@ -70,8 +70,8 @@ namespace FastPosFrontend.ViewModels
         public void CloseCommand()
         {
             LoginViewModel loginvm = new LoginViewModel();
-            loginvm.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+            loginvm.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(loginvm);
         }
 
     }

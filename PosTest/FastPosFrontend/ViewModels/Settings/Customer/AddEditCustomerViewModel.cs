@@ -98,14 +98,14 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
         public void AddPhoneNumber() {
             if (!string.IsNullOrEmpty(NewPhoneNumber))
             {
-                this.Numbers.Add(NewPhoneNumber);
+                Numbers.Add(NewPhoneNumber);
                 NewPhoneNumber = "";
             }
-            NotifyOfPropertyChange(() => this.Customer.PhoneNumbers);
+            NotifyOfPropertyChange(() => Customer.PhoneNumbers);
         }
         public void DeletePhoneNumber(string number)
         {
-            this.Customer.PhoneNumbers.Remove(number);
+            Customer.PhoneNumbers.Remove(number);
         }
     }
 }

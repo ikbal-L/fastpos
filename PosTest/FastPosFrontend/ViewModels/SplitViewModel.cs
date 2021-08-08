@@ -71,12 +71,12 @@ namespace FastPosFrontend.ViewModels
                                 float qty = oitem.Quantity;
                                 while (qty >= 1)
                                 {
-                                    CurrentOrder.AddOrderItem(oitem.Product, oitem.UnitPrice, false, 1, false);
+                                    CurrentOrder.AddOrderItem(oitem.Product, false, 1, false);
                                     qty--;
                                 }
                                 if (qty > 0)
                                 {
-                                    CurrentOrder.AddOrderItem(oitem.Product, oitem.UnitPrice, false, qty, false);
+                                    CurrentOrder.AddOrderItem(oitem.Product, false, qty, false);
                                 }
                             }
                         }

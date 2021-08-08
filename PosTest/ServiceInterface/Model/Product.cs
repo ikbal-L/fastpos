@@ -171,7 +171,7 @@ namespace ServiceInterface.Model
             set
             {
                 Set(ref _background, ((SolidColorBrush) value));
-                Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
+                Set(ref _backgroundString, _background.Color.ToString(), nameof(BackgroundString));
             }
         }
 
@@ -212,36 +212,36 @@ namespace ServiceInterface.Model
 
         public void MappingBeforeSending()
         {
-            if (this.CategoryId <= 0 && this.Category != null)
+            if (CategoryId <= 0 && Category != null)
             {
-                this.CategoryId = (long) this.Category.Id;
+                CategoryId = (long) Category.Id;
             }
 
 
 
 
-            if (this.IsPlatter)
+            if (IsPlatter)
             {
-                if (this.Additives != null)
+                if (Additives != null)
                 {
-                    if (this.IdAdditives == null)
+                    if (IdAdditives == null)
                     {
-                        this.IdAdditives = new List<long>();
+                        IdAdditives = new List<long>();
                     }
                     else
                     {
-                        this.IdAdditives.Clear();
+                        IdAdditives.Clear();
                     }
 
-                    foreach (var a in this.Additives)
+                    foreach (var a in Additives)
                     {
-                        this.IdAdditives.Add((long)a.Id);
+                        IdAdditives.Add((long)a.Id);
                     }
                 }
 
-                if (this.Ingredients != null)
+                if (Ingredients != null)
                 {
-                    foreach (var ing in this.Ingredients)
+                    foreach (var ing in Ingredients)
                     {
                         if (ing.Product != null)
                         {
@@ -253,38 +253,38 @@ namespace ServiceInterface.Model
                 
 
 
-            if (this.CategoryId == null)
+            if (CategoryId == null)
             {
-                this.Rank = null;
+                Rank = null;
             }
 
-            if (this.Rank == null)
+            if (Rank == null)
             {
-                this.CategoryId = null;
+                CategoryId = null;
             }
         }
 
         public void MappingAfterReceiving(Category category, List<Additive> additives)
         {
-            if (category != null && this.CategoryId == category.Id)
+            if (category != null && CategoryId == category.Id)
             {
-                this.Category = category;
-                this.CategoryId = category.Id;
+                Category = category;
+                CategoryId = category.Id;
             }
 
             //else
             //{
             //    throw new MappingException("Id category different of CategoryId of the related Product");
             //}
-            if (this.IsPlatter &&
-                this.IdAdditives != null && additives != null )
+            if (IsPlatter &&
+                IdAdditives != null && additives != null )
             {
-                this.Additives = new BindableCollection<Additive>();
+                Additives = new BindableCollection<Additive>();
                 foreach (var a in additives)
                 {
-                    if (this.IdAdditives.Any(id => id == a.Id))
+                    if (IdAdditives.Any(id => id == a.Id))
                     {
-                        this.Additives.Add(a);
+                        Additives.Add(a);
                     }
                     //else
                     //{

@@ -200,8 +200,8 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
                     break;
                 case ActionButton.BackOut:
                     LoginViewModel loginvm = new LoginViewModel();
-                    loginvm.Parent = this.Parent;
-                    (this.Parent as Conductor<object>).ActivateItem(loginvm);
+                    loginvm.Parent = Parent;
+                    (Parent as Conductor<object>).ActivateItem(loginvm);
                     break;
 
              

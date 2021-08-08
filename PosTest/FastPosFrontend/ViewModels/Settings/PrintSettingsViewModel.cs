@@ -98,7 +98,7 @@ namespace FastPosFrontend.ViewModels.Settings
         }
         public PrinterItem(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
 

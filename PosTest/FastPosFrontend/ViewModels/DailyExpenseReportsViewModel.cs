@@ -56,7 +56,7 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedRightCommandBar()
         {
-            this.EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel()
+            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel()
             {
                 Commands = new BindableCollection<EmbeddedCommandBarCommand>()
                 {
@@ -82,7 +82,7 @@ namespace FastPosFrontend.ViewModels
 
         public void Generate()
         {
-            var parent = this.Parent as MainViewModel;
+            var parent = Parent as MainViewModel;
             var vm = new DailyExpenseReportInputDataViewModel(this);
             vm.OnReportGenerated(report =>
             {

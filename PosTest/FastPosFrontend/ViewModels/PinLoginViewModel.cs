@@ -95,8 +95,8 @@ namespace FastPosFrontend.ViewModels
                 new CheckoutViewModel(
                 );
 
-            checkoutViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+            checkoutViewModel.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(checkoutViewModel);
         }
 
         

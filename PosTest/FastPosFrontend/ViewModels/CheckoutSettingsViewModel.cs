@@ -237,7 +237,7 @@ namespace FastPosFrontend.ViewModels
                 Set(ref _selectedProduct, value);
                 if (ProductDetailViewModel != null)
                 {
-                    this.ProductDetailViewModel.Source = this.SelectedProduct;
+                    ProductDetailViewModel.Source = SelectedProduct;
                     NotifyOfPropertyChange(() => ProductDetailViewModel);
                 }
 
@@ -313,7 +313,7 @@ namespace FastPosFrontend.ViewModels
                 Set(ref _selectedCategory, value);
                 if (CategoryDetailViewModel != null)
                 {
-                    this.CategoryDetailViewModel.Source = this.SelectedCategory;
+                    CategoryDetailViewModel.Source = SelectedCategory;
                     NotifyOfPropertyChange(() => CategoryDetailViewModel);
                 }
             }
@@ -1458,9 +1458,9 @@ namespace FastPosFrontend.ViewModels
 
 
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
-            this.ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
+            ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
-                var parent = (this.Parent as MainViewModel);
+                var parent = (Parent as MainViewModel);
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {
@@ -1484,9 +1484,9 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             if (SelectedCategory?.Id == null) return;
-            this.ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
+            ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
-            var parent = (this.Parent as MainViewModel);
+            var parent = (Parent as MainViewModel);
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {
@@ -1506,8 +1506,8 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             IsCategory = true;
-            this.CategoryDetailViewModel = new CategoryDetailViewModel(ref this._selectedCategory,_allCategories);
-            (this.Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel).OnClose(() =>
+            CategoryDetailViewModel = new CategoryDetailViewModel(ref _selectedCategory,_allCategories);
+            (Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel).OnClose(() =>
             {
                 var category = SelectedCategory;
                 SelectedCategory = null;
@@ -1564,7 +1564,7 @@ namespace FastPosFrontend.ViewModels
         public void ConfigureProductDisplayLayout()
         {
             
-            (this.Parent as MainViewModel)?.OpenDialog(ProductLayoutViewModel);
+            (Parent as MainViewModel)?.OpenDialog(ProductLayoutViewModel);
         }
 
         public void ApplyLayoutConfig()

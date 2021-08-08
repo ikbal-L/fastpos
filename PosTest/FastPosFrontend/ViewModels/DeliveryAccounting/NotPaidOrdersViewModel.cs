@@ -70,15 +70,15 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
         }
         private DeliveryAccountingViewModel Parent { get;  set; }
         public NotPaidOrdersViewModel(DeliveryAccountingViewModel deliveryAccountingViewModel) {
-            this.Parent = deliveryAccountingViewModel;
+            Parent = deliveryAccountingViewModel;
             Orders = new ObservableCollection<Order>();
         }
         public void UpdateDatas()
         {
 
-            if (this._SelectedDeliveryman != null)
+            if (_SelectedDeliveryman != null)
             {
-                   var res = StateManager.GetService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, this._SelectedDeliveryman.Id.Value);
+                   var res = StateManager.GetService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, _SelectedDeliveryman.Id.Value);
                     Orders = res != null ? new ObservableCollection<Order>(res) : new ObservableCollection<Order>();
                  GetDeliveryManPayment();
                  NotifyOfAllPropertyChange();
@@ -101,7 +101,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
 
         }
         public void GetDeliveryManPayment() {
-                 var res = StateManager.GetService<Payment, IPaymentRepository>().getByDeliveryManAndDate(this._SelectedDeliveryman.Id.Value,DateTime.Now);
+                 var res = StateManager.GetService<Payment, IPaymentRepository>().getByDeliveryManAndDate(_SelectedDeliveryman.Id.Value,DateTime.Now);
                      Payments = res != null ? new ObservableCollection<Payment>(res) : new ObservableCollection<Payment>();
                      PaymentVisibility = Payments.Count > 0;
                      PaymentVisivilityBtn = Payments.Count > 0 && Orders.Count > 0;

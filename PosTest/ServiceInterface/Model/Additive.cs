@@ -63,7 +63,7 @@ namespace ServiceInterface.Model
                 Set(ref _background, (SolidColorBrush) value);
                 if (value != null)
                 {
-                    Set(ref _backgroundString, this._background.Color.ToString(), nameof(BackgroundString));
+                    Set(ref _backgroundString, _background.Color.ToString(), nameof(BackgroundString));
                 }
                 else
                 {
@@ -112,15 +112,15 @@ namespace ServiceInterface.Model
         {
             return new Additive()
             {
-                Background = this.Background,
-                Description = this.Description,
-                BackgroundString = this.BackgroundString,
-                Id = this.Id,
-                IdIngrediants = this.IdIngrediants,
-                Ingrediants = this.Ingrediants,
-                IsNotifying = this.IsNotifying,
-                ParentOrderItem = this.ParentOrderItem,
-                Rank = this.Rank
+                Background = Background,
+                Description = Description,
+                BackgroundString = BackgroundString,
+                Id = Id,
+                IdIngrediants = IdIngrediants,
+                Ingrediants = Ingrediants,
+                IsNotifying = IsNotifying,
+                ParentOrderItem = ParentOrderItem,
+                Rank = Rank
             };
         }
         public override string ToString()

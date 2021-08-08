@@ -37,13 +37,13 @@ namespace FastPosFrontend.ViewModels
             int additivesPageSize = 30)
         {
             
-            this._source = sourceProduct;
+            _source = sourceProduct;
             IsPlatter = sourceProduct.IsPlatter;
 
-            this._additivesPageSize = additivesPageSize;
+            _additivesPageSize = additivesPageSize;
             PopulateAdditivesPage();
 
-            this._source = sourceProduct;
+            _source = sourceProduct;
             
             CloneFromSource();
 
@@ -191,12 +191,12 @@ namespace FastPosFrontend.ViewModels
 
         public void SaveProduct()
         {
-            Clone(source: ref _product, target: ref this._source);
+            Clone(source: ref _product, target: ref _source);
             if (!_source.Category.Products.Contains(_source))
             {
                 _source.Category.Products.Add(_source);
             }
-            StateManager.Save<Product>(this._source);
+            StateManager.Save<Product>(_source);
             Host.Close(this);
         }
 
@@ -302,7 +302,7 @@ namespace FastPosFrontend.ViewModels
             {
                 Set(ref _source, value);
                 CloneFromSource();
-                NotifyOfPropertyChange(() => this.Product);
+                NotifyOfPropertyChange(() => Product);
             }
         }
 

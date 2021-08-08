@@ -224,7 +224,7 @@ namespace FastPosFrontend.ViewModels
             }
             //CopySelectedAdditive = additive.Clone();
             //IsEditing = true;
-            var mVm = (this.Parent as MainViewModel);
+            var mVm = (Parent as MainViewModel);
             AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive, this);
             mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
             {
@@ -236,7 +236,7 @@ namespace FastPosFrontend.ViewModels
 
         public void Close()
         {
-            (this.Parent as MainViewModel)?.CloseDialog(AdditiveDetailViewMode);
+            (Parent as MainViewModel)?.CloseDialog(AdditiveDetailViewMode);
         }
 
         public void EditAdditive()
@@ -249,7 +249,7 @@ namespace FastPosFrontend.ViewModels
 
             CopySelectedAdditive = SelectedAdditive.Clone();
             //IsEditing = true;
-            var mVm = (this.Parent as MainViewModel);
+            var mVm = (Parent as MainViewModel);
             AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive,this);
             mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
             {
@@ -332,7 +332,7 @@ namespace FastPosFrontend.ViewModels
             //    (o) => DeleteAdditiveAction(o), this, () => IsDialogOpen = false);
             //DialogViewModel = WarningViewModel;
             //IsDialogOpen = true;
-            var mVm = (this.Parent as MainViewModel);
+            var mVm = (Parent as MainViewModel);
             mVm?.OpenDialog(
                 DefaultDialog
                     .New("Are you sure to delete this Additive?")

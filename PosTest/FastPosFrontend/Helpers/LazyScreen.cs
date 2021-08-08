@@ -112,7 +112,7 @@ namespace FastPosFrontend.Helpers
 
         protected LazyScreen(LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
-            var title = this.GetType().GetCustomAttribute<NavigationItemConfigurationAttribute>()?.Title;
+            var title = GetType().GetCustomAttribute<NavigationItemConfigurationAttribute>()?.Title;
             _loadingScreen = new LoadingScreenViewModel($"Loading {title}")
                 {LoadingScreenType = loadingScreenType};
             //ActivateLoadingScreen();

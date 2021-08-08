@@ -36,8 +36,8 @@ namespace FastPosFrontend.ViewModels
         public void Close()
         {
             LoginViewModel loginvm = new LoginViewModel();
-            loginvm.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+            loginvm.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(loginvm);
         }
     }
 }

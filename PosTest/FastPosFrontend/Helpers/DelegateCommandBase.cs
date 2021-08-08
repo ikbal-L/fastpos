@@ -30,7 +30,7 @@ namespace FastPosFrontend.Helpers
                 throw new ArgumentNullException("executeMethod", "executeMethod cannot be null.");
 
             this.executeMethod = executeMethod;
-            this.canExecuteMethod = null;
+            canExecuteMethod = null;
         }
 
         /// <summary>

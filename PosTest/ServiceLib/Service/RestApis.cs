@@ -48,7 +48,7 @@ namespace ServiceLib.Service
         }
         public RestApis(string host,int port,string prefix)
         {
-            this._prefix = prefix;
+            _prefix = prefix;
             Builder = new UriBuilder(){Scheme = _scheme,Host = host,Port = port,};
         }
 

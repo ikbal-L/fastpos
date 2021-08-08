@@ -42,7 +42,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
         public bool NextBtnEnabled { get => Count > (_PageNumber + 1) * _PageSize; }
         private DeliveryAccountingViewModel Parent { get; set; }
         public AllOrdersViewModel(DeliveryAccountingViewModel deliveryAccountingViewModel) {
-            this.Parent = deliveryAccountingViewModel;
+            Parent = deliveryAccountingViewModel;
             FilterOrderState = new FilterOrderState();
             FilterOrderState.PropertyChanged += FilterOrderState_PropertyChanged;
         }
@@ -55,7 +55,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
         public void UpdateDatas()
         {
 
-            if (this._SelectedDeliveryman != null)
+            if (_SelectedDeliveryman != null)
             {
                 var res = StateManager.GetService<Order, IOrderRepository>().getAllByDeliveryManAndStatePage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value, FilterOrderState.GetStates());
   

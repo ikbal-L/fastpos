@@ -134,7 +134,7 @@ namespace FastPosFrontend.ViewModels
             //    });
             //});
             MainDialog = new MainDialog();
-            this.ActivateItem(MainDialog);
+            ActivateItem(MainDialog);
             LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};
             
             NavigateToItem(new AppNavigationLookupItem("Login", target: typeof(LoginViewModel)));

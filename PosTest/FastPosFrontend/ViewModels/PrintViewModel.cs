@@ -22,7 +22,7 @@ namespace FastPosFrontend.ViewModels
 
         public void NavigateBackToPreviousScreen()
         {
-            ((MainViewModel) this.Parent).ActivateItem(PreviousScreen);
+            ((MainViewModel) Parent).ActivateItem(PreviousScreen);
         }
     }
 }

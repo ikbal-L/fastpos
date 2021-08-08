@@ -32,7 +32,7 @@ namespace ServiceInterface
 
         public  IPath Arg(object value)
         {
-            this._argValue = value;
+            _argValue = value;
             return this;
         }
 
@@ -44,8 +44,8 @@ namespace ServiceInterface
 
         public IPath Build()
         {
-            if (this._parentPath == null) return this;
-            return this._parentPath.Build();
+            if (_parentPath == null) return this;
+            return _parentPath.Build();
         }
 
         private string FormatPathAsString()

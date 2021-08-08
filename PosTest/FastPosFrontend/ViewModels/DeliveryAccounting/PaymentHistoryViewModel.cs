@@ -43,13 +43,13 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
 
         private DeliveryAccountingViewModel Parent { get; set; }
         public PaymentHistoryViewModel(DeliveryAccountingViewModel deliveryAccountingViewModel) {
-            this.Parent = deliveryAccountingViewModel;
+            Parent = deliveryAccountingViewModel;
         }
 
         public void UpdateDatas()
         {
 
-            if (this._SelectedDeliveryman != null)
+            if (_SelectedDeliveryman != null)
             {
                 var res = StateManager.GetService<Payment, IPaymentRepository>().getAllByDeliveryManPage( _PageNumber, _PageSize,_SelectedDeliveryman.Id.Value);
                 

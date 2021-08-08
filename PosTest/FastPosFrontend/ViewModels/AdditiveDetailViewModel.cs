@@ -26,8 +26,8 @@ namespace FastPosFrontend.ViewModels
 
         public void SaveAdditive()
         {
-            this._source.Description = Additive.Description;
-            this._source.Background = Additive.Background;
+            _source.Description = Additive.Description;
+            _source.Background = Additive.Background;
             if (StateManager.Save(_source))
             {
 

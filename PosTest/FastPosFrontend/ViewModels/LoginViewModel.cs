@@ -75,7 +75,7 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedStatusBar()
         {
-            this.EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
+            EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
             {
                 EmbeddedStatusBarTemplate = Application.Current.FindResource("UserLoginBarDataTemplate") as DataTemplate
             };
@@ -186,9 +186,9 @@ namespace FastPosFrontend.ViewModels
 
         protected override void OnActivate()
         {
-            (this.Parent as MainViewModel).IsLoggedIn = false;
+            (Parent as MainViewModel).IsLoggedIn = false;
             base.OnActivate();
-            this.Compose();
+            Compose();
            
 
             List<string> auths = new List<string>();
@@ -276,7 +276,7 @@ namespace FastPosFrontend.ViewModels
             var sm = new SettingsManager<LoginHistory>("login.history.json");
             AppConfigurationManager.Save(_loginHistory);
 
-            (this.Parent as MainViewModel).IsLoggedIn = true;
+            (Parent as MainViewModel).IsLoggedIn = true;
                 //(this.Parent as MainViewModel).IsLoggedIn = true;
 
 
@@ -302,7 +302,7 @@ namespace FastPosFrontend.ViewModels
            
 
             CheckoutViewModel checkoutViewModel =
-                new CheckoutViewModel(){Parent = this.Parent};
+                new CheckoutViewModel(){Parent = Parent};
             checkoutViewModel.ActivateLoadingScreen();
             checkoutViewModel.ViewModelInitialized+=ViewModelInitialized;
 
@@ -314,7 +314,7 @@ namespace FastPosFrontend.ViewModels
 
 
             var checkoutSettingsViewModel =
-                new CheckoutSettingsViewModel() { Parent = this.Parent };
+                new CheckoutSettingsViewModel() { Parent = Parent };
             checkoutSettingsViewModel.ActivateLoadingScreen();
             checkoutSettingsViewModel.ViewModelInitialized += ViewModelInitialized;
 
@@ -325,7 +325,7 @@ namespace FastPosFrontend.ViewModels
             var checkoutViewModel = sender as CheckoutViewModel;
             if (e.IsInitialized)
             {
-                (this.Parent as Conductor<object>).ActivateItem(checkoutViewModel);
+                (Parent as Conductor<object>).ActivateItem(checkoutViewModel);
             }
         }
 
@@ -333,8 +333,8 @@ namespace FastPosFrontend.ViewModels
         {
             _authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
             Settings1ViewModel settingsViewModel = new Settings1ViewModel(30/*, _productService, _categorieService, _additiveService*/);
-            settingsViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+            settingsViewModel.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
 
 
@@ -351,24 +351,24 @@ namespace FastPosFrontend.ViewModels
                     //_customerService
                 );
             
-            pinLoginViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(pinLoginViewModel);
+            pinLoginViewModel.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(pinLoginViewModel);
         }
 
         
         public void CustomersSettings()
         {
             CustomerViewModel customerViewModel = new CustomerViewModel(null/*,_customerService*/);
-            customerViewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(customerViewModel);
+            customerViewModel.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(customerViewModel);
         }  
         
 
         public void AdditivesOfProduct()
         {
             AdditivesOfProductViewModel AdditivesOfProduct = new AdditivesOfProductViewModel ();
-            AdditivesOfProduct.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(AdditivesOfProduct);
+            AdditivesOfProduct.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(AdditivesOfProduct);
         }
 
         //This method load th DLL file containing the implemetation of IProductService 
@@ -395,8 +395,8 @@ namespace FastPosFrontend.ViewModels
             }
             //     SettingsViewModel settingsViewModel = new SettingsViewModel();
             DeliveryAccountingViewModel viewModel = new DeliveryAccountingViewModel();
-             viewModel.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(viewModel);
+             viewModel.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(viewModel);
         }
 
         private void LoadLoginHistory()

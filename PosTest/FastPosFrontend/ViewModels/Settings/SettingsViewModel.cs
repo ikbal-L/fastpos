@@ -42,7 +42,7 @@ namespace FastPosFrontend.ViewModels.Settings
             SelectedItem = SettingItems?.FirstOrDefault();
         }
         public void  Close() {
-            (this.Parent as Conductor<object>).ActivateItem(ParentVeiwModel);
+            (Parent as Conductor<object>).ActivateItem(ParentVeiwModel);
         }
       public void  HideenLeftBar(SettingsItemBase obj) {
             LeftBarVisibilty = false;

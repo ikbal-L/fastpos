@@ -25,7 +25,7 @@ namespace FastPosFrontend.ViewModels.Settings
 
         public GeneralSettingsViewModel() {
             //this.Index = 1;
-            this.Title = "General";
+            Title = "General";
             var setting = AppConfigurationManager.Configuration<GeneralSettings>();
             Settings = setting ?? new GeneralSettings();
             Settings.PropertyChanged += Settings_PropertyChanged;

@@ -37,12 +37,12 @@ namespace FastPosFrontend.SL.Controls
             _numpadNumericKeys = new List<Button>();
             for (var i = 0; i <= 9; i++)
             {
-                if (!(this.Template.FindName($"Part_Numpad_Key_{i}_Button", this) is Button numpadKey)) continue;
+                if (!(Template.FindName($"Part_Numpad_Key_{i}_Button", this) is Button numpadKey)) continue;
                 numpadKey.Click += NumpadKey_Click;
                 _numpadNumericKeys.Add(numpadKey);
             }
 
-            _numpadKeyEnterButton = this.Template.FindName("Part_Numpad_Key_Enter_Button", this) as Button;
+            _numpadKeyEnterButton = Template.FindName("Part_Numpad_Key_Enter_Button", this) as Button;
             if (_numpadKeyEnterButton != null)
             {
                 _numpadKeyEnterButton.Click += NumpadKey_Click;
@@ -50,7 +50,7 @@ namespace FastPosFrontend.SL.Controls
             }
                 
             
-            _numpadKeyBackspaceButton = this.Template.FindName("Part_Numpad_Key_Backspace_Button", this) as Button;
+            _numpadKeyBackspaceButton = Template.FindName("Part_Numpad_Key_Backspace_Button", this) as Button;
             if (_numpadKeyBackspaceButton != null)
             {
                 _numpadKeyBackspaceButton.Click += NumpadKey_Click;

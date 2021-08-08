@@ -112,14 +112,14 @@ namespace FastPosFrontend.ViewModels
         public void AddPhoneNumber() {
             if (!string.IsNullOrEmpty(NewPhoneNumner))
             {
-                this.Numbers.Add(NewPhoneNumner);
+                Numbers.Add(NewPhoneNumner);
                 NewPhoneNumner = "";
             }
-            NotifyOfPropertyChange(() => this.Deliveryman.PhoneNumbers);
+            NotifyOfPropertyChange(() => Deliveryman.PhoneNumbers);
         }
         public void DeletePhoneNumber(string number)
         {
-            this.Numbers.Remove(number);
+            Numbers.Remove(number);
            // this.Deliveryman.PhoneNumbers.Remove(number);
         }
     }

@@ -25,7 +25,7 @@ namespace FastPosFrontend.ViewModels
         {
             
             
-            this._source = sourceCategory;
+            _source = sourceCategory;
             _categories = categories;
             _category = new Category();
             CloneFromSource();
@@ -75,26 +75,26 @@ namespace FastPosFrontend.ViewModels
             {
                 Set(ref _source, value);
                 CloneFromSource();
-                NotifyOfPropertyChange(() => this.Category);
+                NotifyOfPropertyChange(() => Category);
             }
         }
 
 
         public void SaveCategory()
         {
-            Clone(source: ref _category, target: ref this._source);
+            Clone(source: ref _category, target: ref _source);
             NotifyOfPropertyChange(() => Source);
-            StateManager.Save<Category>(this._source);
+            StateManager.Save<Category>(_source);
             if (!_categories.Contains(_source))
             {
                 _categories.Add(_source);
             }
-            this.Host.Close(this);
+            Host.Close(this);
         }
 
         public void Cancel()
         {
-            this.Host.Close(this);
+            Host.Close(this);
         }
 
         
