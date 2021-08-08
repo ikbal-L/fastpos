@@ -3,10 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels;
 using FastPosFrontend.ViewModels.Settings;
-using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.Converters

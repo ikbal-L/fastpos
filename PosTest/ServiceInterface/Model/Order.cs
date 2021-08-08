@@ -1,11 +1,8 @@
 ﻿using Caliburn.Micro;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using ServiceInterface.Authorisation;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -378,7 +375,7 @@ namespace ServiceInterface.Model
 
         public bool AdditivesVisibility { get; set; }
 
-        public OrderItem AddOrderItem(Product product, decimal unitPrice, bool setSelected, float quantity = 1,
+        public OrderItem AddOrderItem(Product product, bool setSelected, float quantity = 1,
             bool groupByProduct = true)
         {
             OrderItem item;
@@ -389,7 +386,7 @@ namespace ServiceInterface.Model
                 ).All(oi=> oi.State == OrderItemState.Removed)
             )
             {
-                item = new OrderItem(product, quantity, unitPrice, this) {State = OrderItemState.Added};
+                item = new OrderItem(product, quantity, this) {State = OrderItemState.Added};
                 item.TimeStamp = null;
                 OrderItems.Add(item);
             }
@@ -409,7 +406,7 @@ namespace ServiceInterface.Model
 
         public OrderItem AddOrderItem(OrderItem orderItem, bool setSelected = false)
         {
-            return AddOrderItem(orderItem.Product, orderItem.UnitPrice, setSelected, orderItem.Quantity);
+            return AddOrderItem(orderItem.Product,  setSelected, orderItem.Quantity);
         }
 
 

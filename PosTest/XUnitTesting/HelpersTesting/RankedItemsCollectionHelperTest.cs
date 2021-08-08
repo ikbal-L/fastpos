@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FastPosFrontend.Helpers;
-using FastPosFrontend.Helpers;
-using FastPosFrontend.ViewModels;
 using ServiceInterface.Model;
 using Xunit;
-using XUnitTesting.ViewModelTesting;
 namespace XUnitTesting.HelpersTesting
 {
     public class RankedItemsCollectionHelperTest

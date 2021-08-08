@@ -4,17 +4,11 @@ using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using System;
-using System.Collections;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
-using System.Web.ModelBinding;
-using Newtonsoft.Json.Linq;
 
 namespace ServiceLib.Service
 {

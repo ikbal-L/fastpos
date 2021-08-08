@@ -3,7 +3,6 @@ using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.ViewModels;
 using FastPosFrontend.ViewModels.Settings;
-using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.Helpers

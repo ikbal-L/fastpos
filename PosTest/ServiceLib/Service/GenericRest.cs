@@ -3,10 +3,8 @@ using ServiceInterface.Authorisation;
 using System.Net;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using ServiceInterface.Model;
 using System;
 using System.Threading.Tasks;
-using RestSharp.Serialization.Json;
 
 namespace ServiceLib.Service
 {

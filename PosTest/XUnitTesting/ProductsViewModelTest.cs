@@ -1,11 +1,6 @@
 ﻿using Moq;
 using FastPosFrontend.ViewModels;
 using ServiceInterface.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace XUnitTesting

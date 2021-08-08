@@ -7,13 +7,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using Caliburn.Micro;
-using FastPosFrontend.Converters;
 using FastPosFrontend.Helpers;
 using PasswordGenerator;
 using ServiceInterface.Model;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
-using Brush = System.Drawing.Brush;
 
 namespace FastPosFrontend.ViewModels
 {

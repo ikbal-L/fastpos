@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Caliburn.Micro;
 using FastPosFrontend.Enums;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
-using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels
 {

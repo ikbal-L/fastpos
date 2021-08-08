@@ -8,10 +8,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Attributes;
 using Caliburn.Micro;
-using FastPosFrontend.Helpers;
 using Newtonsoft.Json;
 using ServiceInterface.Model;
-using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels

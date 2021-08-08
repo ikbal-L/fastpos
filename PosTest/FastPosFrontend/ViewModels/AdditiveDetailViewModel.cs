@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using ServiceInterface.Model;
+﻿using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels

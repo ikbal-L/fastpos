@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using Caliburn.Micro;
-using FastPosFrontend.Helpers;
 using ServiceInterface.ExtentionsMethod;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-   public class AddEditWaiterViewModel: PropertyChangedBase
+    public class AddEditWaiterViewModel: PropertyChangedBase
     {
         private bool _IsOpenDailog ;
 

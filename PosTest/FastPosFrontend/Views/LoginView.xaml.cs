@@ -1,6 +1,4 @@
 ﻿using System.Windows.Controls;
-using FastPosFrontend.Helpers;
-using FastPosFrontend.SL.Controls;
 
 namespace FastPosFrontend.Views
 {

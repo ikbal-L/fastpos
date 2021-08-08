@@ -4,7 +4,6 @@ using System.Windows;
 using ToastNotifications;
 using ToastNotifications.Core;
 using ToastNotifications.Lifetime;
-using ToastNotifications.Lifetime.Clear;
 using ToastNotifications.Messages;
 using ToastNotifications.Position;
 

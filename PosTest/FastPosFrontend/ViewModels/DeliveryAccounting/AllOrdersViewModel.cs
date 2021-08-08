@@ -4,12 +4,11 @@ using System.Linq;
 using Caliburn.Micro;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
-using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.DeliveryAccounting
 {
-   public class AllOrdersViewModel: PropertyChangedBase
+    public class AllOrdersViewModel: PropertyChangedBase
     {
         public decimal Total
         {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;

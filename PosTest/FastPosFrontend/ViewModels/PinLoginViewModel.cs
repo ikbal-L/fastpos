@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
 using Caliburn.Micro;
 using ServiceInterface.Interface;
-using ServiceInterface.StaticValues;
 
 namespace FastPosFrontend.ViewModels
 {

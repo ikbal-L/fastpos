@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels;
 using ServiceInterface.Model;
-using ServiceInterface.StaticValues;
 using ServiceLib.Service;
-using ServiceLib.Service.StateManager;
 using Xunit;
 
 namespace XUnitTesting.ServiceLibTests

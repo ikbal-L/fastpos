@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
-using FastPosFrontend.ViewModels.Settings;
-using FastPosFrontend.Views;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;

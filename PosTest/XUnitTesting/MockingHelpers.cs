@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Caliburn.Micro;
-using Castle.Components.DictionaryAdapter.Xml;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 

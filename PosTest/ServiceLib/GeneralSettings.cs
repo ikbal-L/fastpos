@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Caliburn.Micro;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace ServiceLib
 {

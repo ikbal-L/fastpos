@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.UI.WebControls;
-using System.Windows;
+﻿using System.Windows;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 

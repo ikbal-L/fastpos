@@ -1,18 +1,13 @@
 ﻿using Newtonsoft.Json;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
-using ServiceInterface.StaticValues;
-using ServiceLib;
 using ServiceLib.Service;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 
 using ServiceInterface;
 using ServiceLib.Service.StateManager;

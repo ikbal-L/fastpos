@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
-using ServiceInterface.Model;
-using ServiceLib.helpers;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ServiceInterface.Authorisation;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;

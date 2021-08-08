@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
-using FastPosFrontend.Views.Settings;
 using Newtonsoft.Json;
 using ServiceLib.Service;
 

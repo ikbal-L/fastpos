@@ -7,7 +7,6 @@ using System.Windows.Data;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels;
 using FastPosFrontend.ViewModels.Settings;
-using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Model;
 
 namespace FastPosFrontend.Converters

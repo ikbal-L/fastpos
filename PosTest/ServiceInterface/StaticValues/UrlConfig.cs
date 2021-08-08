@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ServiceInterface.StaticValues
+﻿namespace ServiceInterface.StaticValues
 {
     public static class UrlConfig
     {

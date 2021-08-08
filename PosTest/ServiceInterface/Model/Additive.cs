@@ -1,12 +1,9 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using System.Web.Script.Serialization;
 using System.Windows.Media;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 
 namespace ServiceInterface.Model

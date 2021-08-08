@@ -8,7 +8,6 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using EndPoint = ServiceLib.Service.EndPoint;
 
 namespace ServiceLib.Service
 {
