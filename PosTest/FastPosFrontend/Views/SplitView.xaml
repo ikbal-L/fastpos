@@ -11,7 +11,7 @@
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             Width="800" Height="500"
+             Width="900" Height="510"
             d:DesignWidth ="600"
              d:DataContext="{d:DesignInstance src:SplitViewModel }">
 
@@ -199,9 +199,10 @@
                             <materialdesign:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="25" Height="25" Padding="0" Foreground="#26ff26"/>
                             <TextBlock Text="{Binding SplittedOrder.TotalDiscountAmount,StringFormat={}{0:#.##}}" FontSize="13" FontWeight="Bold" Foreground="#26ff26"/>
                         </DockPanel>
-                        <DockPanel  Grid.Column="1" Grid.Row="1">
+                        <DockPanel  Grid.Column="1" Grid.Row="1" >
                             <Label Content="Returned" Foreground="#26ff26"  FontSize="15"  FontFamily="{StaticResource DigitalFontFamily}"/>
-                            <Label FontSize="30" FontWeight="Bold" Foreground="#26ff26"  FontFamily="{StaticResource DigitalFontFamily}" HorizontalAlignment="Right">
+                            <Label FontSize="30" FontWeight="Bold" Foreground="#26ff26"  FontFamily="{StaticResource DigitalFontFamily}" HorizontalAlignment="Right"
+                                   >
                                 <Label.Style>
                                     <Style TargetType="Label">
                                         <Style.Triggers>

@@ -538,6 +538,7 @@ namespace FastPosFrontend.ViewModels
                     if (resp)
                     {
                         SplittedOrder.SplittedFrom = Parent.CurrentOrder;
+                        Parent?.SetSplitOrderNumber();
 
                         var resp2 = Parent.SaveOrder(ref _splitedOrder);
                         SplittedOrder = _splitedOrder;
@@ -546,14 +547,8 @@ namespace FastPosFrontend.ViewModels
                         switch (resp2)
                         {
                             case true:
-                                //CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());CurrentOrder.OrderItems.RemoveRange(CurrentOrder.OrderItems.Where(x=>SplittedOrder.OrderItems.Any(i=>i.ProductId== x.ProductId)).ToList());
-                                //CurrentOrder.OrderItems.ToList().ForEach(i =>
-                                //{
-                                //    if (SplittedOrder.OrderItems.Contains(i))
-                                //    {
-                                //        CurrentOrder.OrderItems.Remove(i);
-                                //    }
-                                //});
+                                
+                                Parent?.PrintDocument(PrintSource.CheckoutSplit);
                                 GivenAmount = SplittedOrder.GivenAmount;
                                 ReturnedAmount = SplittedOrder.ReturnedAmount;
                                 RemoveOrderItemsFromSplitViewOrder();
