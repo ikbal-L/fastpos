@@ -23,7 +23,6 @@ namespace FastPosFrontend.ViewModels
         private BindableCollection<Additive> _additives;
         private Additive _selectedAdditive;
         private Additive _copySelectedAdditive;
-        private IAdditiveService _additiveService;
         private List<Additive> _allAdditives;
         private int _additivePageSize;
         private bool _isEditing;
