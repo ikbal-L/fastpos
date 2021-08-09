@@ -76,6 +76,14 @@ namespace FastPosFrontend.Helpers
                     (oi.State == OrderItemState.IncreasedQuantity || oi.State == OrderItemState.DecreasedQuantity)&& oi.TimeStamp == recent);
             foreach (var orderItem in orderItems)
             {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
+                var item = new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.Order){State = orderItem.State};
+                changedOrderItems.Add(item);
+=======
+>>>>>>> 973f72bdb72dddaccda112103e32ce7dd7e7ba80
                 if (diff.ContainsKey(orderItem.GetHashCode()))
                 {
                     var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
@@ -92,6 +100,10 @@ namespace FastPosFrontend.Helpers
 
                 
                 
+<<<<<<< HEAD
+=======
+>>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+>>>>>>> 973f72bdb72dddaccda112103e32ce7dd7e7ba80
             }
 
             var addedOrRemovedItems = order.OrderItems.Where(oi =>
