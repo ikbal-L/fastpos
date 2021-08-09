@@ -1200,16 +1200,13 @@ namespace FastPosFrontend.ViewModels
                                                                         (CurrentOrder.OrderItems.Count == 1 && CurrentOrder.OrderItems[0].Quantity > 1));
                     if (IsDialogOpen == true)
                     {
-                        //DialogViewModel = new SplitViewModel(this);
-<<<<<<< HEAD
-                        (Parent as MainViewModel)?.OpenDialog(new SplitViewModel(this));
-=======
+
                         SplitViewModel = new SplitViewModel(this);
                         (this.Parent as MainViewModel)?.OpenDialog(SplitViewModel).OnClose(() =>
                         {
                             SplitViewModel = null;
                         });
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
                     }
                     else
                     {

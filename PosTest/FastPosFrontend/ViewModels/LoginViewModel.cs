@@ -329,21 +329,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-<<<<<<< HEAD
-      
-=======
-<<<<<<< HEAD
-        public void Settings()
-        {
-            _authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            Settings1ViewModel settingsViewModel = new Settings1ViewModel(30/*, _productService, _categorieService, _additiveService*/);
-            settingsViewModel.Parent = Parent;
-            (Parent as Conductor<object>).ActivateItem(settingsViewModel);
-        }
-=======
-      
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
->>>>>>> 973f72bdb72dddaccda112103e32ce7dd7e7ba80
+
 
 
         public void LoginWithPin()

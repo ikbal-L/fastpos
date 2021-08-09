@@ -534,13 +534,10 @@ namespace FastPosFrontend.ViewModels
                     var resp = _parent.SaveOrder(ref parentCurrentOrder);
                     
                     if (resp)
-                    {
-<<<<<<< HEAD
+
                         SplittedOrder.SplittedFrom = _parent.CurrentOrder;
-=======
-                        SplittedOrder.SplittedFrom = Parent.CurrentOrder;
-                        Parent?.SetSplitOrderNumber();
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+                   _parent?.SetSplitOrderNumber();
+
 
                         var resp2 = _parent.SaveOrder(ref _splitedOrder);
                         SplittedOrder = _splitedOrder;
@@ -549,8 +546,8 @@ namespace FastPosFrontend.ViewModels
                         switch (resp2)
                         {
                             case true:
-                                
-                                Parent?.PrintDocument(PrintSource.CheckoutSplit);
+
+                                _parent?.PrintDocument(PrintSource.CheckoutSplit);
                                 GivenAmount = SplittedOrder.GivenAmount;
                                 ReturnedAmount = SplittedOrder.ReturnedAmount;
                                 RemoveOrderItemsFromSplitViewOrder();
@@ -570,7 +567,7 @@ namespace FastPosFrontend.ViewModels
                                 //false
                                 ToastNotification.ErrorNotification(0);
                                 break;
-                        }
+                        
                     }
 
                     break;

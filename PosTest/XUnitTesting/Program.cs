@@ -1,27 +1,16 @@
-<<<<<<< HEAD
+
 ﻿using Newtonsoft.Json;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using System;
-=======
-﻿using System;
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
-using System.Collections.Generic;
+ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Net.Http;
 using System.Threading.Tasks;
-<<<<<<< HEAD
-
-=======
-using Newtonsoft.Json;
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
-using ServiceInterface;
-using ServiceInterface.Interface;
-using ServiceInterface.Model;
-using ServiceLib.Service;
-using ServiceLib.Service.StateManager;
+ using ServiceInterface;
+ using ServiceLib.Service.StateManager;
 
 namespace ConsoleApp
 {

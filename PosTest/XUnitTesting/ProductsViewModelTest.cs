@@ -7,7 +7,7 @@ namespace XUnitTesting
 {
     public class ProductsViewModelTest
     {
-        ProductsViewModel _viewModel;
+        
         private Mock<IProductService> _IProductServiceMock;
 
         public ProductsViewModelTest()
