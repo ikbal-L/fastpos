@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 
 namespace ServiceLib.helpers

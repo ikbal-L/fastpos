@@ -111,6 +111,8 @@
     <Compile Include="helpers\AssociationBuilder.cs" />
     <Compile Include="helpers\AssociationHelpers.cs" />
     <Compile Include="helpers\AssociationManager.cs" />
+    <Compile Include="OrderEx.cs" />
+    <Compile Include="OrderItemEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AppConfigurationManager.cs" />
     <Compile Include="Service\CustomerService.cs" />
@@ -118,7 +120,6 @@
     <Compile Include="Service\Authentification.cs" />
     <Compile Include="Service\CategoryService.cs" />
     <Compile Include="Service\GenericRest.cs" />
-    <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\ProductMappingException.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\BaseRepository.cs" />

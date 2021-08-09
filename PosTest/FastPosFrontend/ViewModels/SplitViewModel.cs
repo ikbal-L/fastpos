@@ -12,7 +12,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isDiscChecked;
         private Order _currentOrder;
         private Order _splitedOrder;
-        CheckoutViewModel Parent;
+        CheckoutViewModel _parent;
         private string _numericZone;
         private bool _isItemPriceChecked;
         private bool _isTotalPriceChecked;
@@ -46,10 +46,10 @@ namespace FastPosFrontend.ViewModels
 
         public SplitViewModel(CheckoutViewModel parent)
         {
-            Parent = parent;
+            _parent = parent;
             SplittedOrder = new Order();
             CurrentOrder = new Order();
-            if (Parent != null)
+            if (_parent != null)
             {
                 CopyCurrentOrderWithSeparationOfQuantities();
             }
@@ -59,7 +59,7 @@ namespace FastPosFrontend.ViewModels
         private void CopyCurrentOrderWithSeparationOfQuantities()
         {
             
-            Parent.CurrentOrder.OrderItems.ToList().ForEach(
+            _parent.CurrentOrder.OrderItems.ToList().ForEach(
                         oitem =>
                         {
                             if (oitem.Quantity <= 1)
@@ -84,12 +84,12 @@ namespace FastPosFrontend.ViewModels
         } 
         private void CopyBackToCurrentOrderWithGroupingOfQuantities()
         {
-            Parent.CurrentOrder.OrderItems.Clear();
+            _parent.CurrentOrder.OrderItems.Clear();
             
             CurrentOrder.OrderItems.ToList().ForEach(
                         oitem =>
                         {
-                            Parent.CurrentOrder.AddOrderItem(oitem);
+                            _parent.CurrentOrder.AddOrderItem(oitem);
                         }
                     );
         }
@@ -441,7 +441,7 @@ namespace FastPosFrontend.ViewModels
                     
                     if (CurrentOrder.OrderItems.Count == 0)
                     {
-                        Parent.RemoveCurrentOrderForOrdersList();
+                        _parent.RemoveCurrentOrderForOrdersList();
                         //BackFromSplitCommand();
                     }
                     break;
@@ -458,12 +458,12 @@ namespace FastPosFrontend.ViewModels
         {
 
             
-            Parent.IsDialogOpen = false;
-            Parent.DialogViewModel = null;
+            _parent.IsDialogOpen = false;
+            _parent.DialogViewModel = null;
             CurrentOrder = null;
-            if (Parent.CurrentOrder?.OrderItems!= null)
+            if (_parent.CurrentOrder?.OrderItems!= null)
             {
-                Parent.OrderItemsCollectionViewSource.Source = Parent.CurrentOrder.OrderItems;
+                _parent.OrderItemsCollectionViewSource.Source = _parent.CurrentOrder.OrderItems;
             }
 
             Host.Close(this);
@@ -485,7 +485,7 @@ namespace FastPosFrontend.ViewModels
 
         private void RemoveOrderItems()
         {
-            Parent.CurrentOrder.OrderItems.ToList().ForEach(item =>
+            _parent.CurrentOrder.OrderItems.ToList().ForEach(item =>
             {
                 var itemCount = SplittedOrder.OrderItems.Count(orderItem => orderItem.ProductId == item.ProductId);
                 if (itemCount <= 0) return;
@@ -495,7 +495,7 @@ namespace FastPosFrontend.ViewModels
                 }
                 else 
                 {
-                    Parent.CurrentOrder.OrderItems.Remove(item);
+                    _parent.CurrentOrder.OrderItems.Remove(item);
                 }
 
             });
@@ -511,33 +511,33 @@ namespace FastPosFrontend.ViewModels
         private void SaveSplittedOrder()
         {
             bool resp1=false;
-            if (Parent.CurrentOrder.Id == null)
+            if (_parent.CurrentOrder.Id == null)
             {
-                 Parent.CurrentOrder.State = OrderState.Splitted;
-                 var parentCurrentOrder = Parent.CurrentOrder;
+                 _parent.CurrentOrder.State = OrderState.Splitted;
+                 var parentCurrentOrder = _parent.CurrentOrder;
 
                 //TODO Revise Handling Order items of Split order
-                resp1 = Parent.SaveOrder( ref parentCurrentOrder);
-                 Parent.CurrentOrder = parentCurrentOrder;
-                 Parent.NotifyOfPropertyChange(() => Parent.CurrentOrder);
+                resp1 = _parent.SaveOrder( ref parentCurrentOrder);
+                 _parent.CurrentOrder = parentCurrentOrder;
+                 _parent.NotifyOfPropertyChange(() => _parent.CurrentOrder);
             }
-            switch (resp1|| Parent.CurrentOrder.Id != null)
+            switch (resp1|| _parent.CurrentOrder.Id != null)
             {
                 case true:
-                    Parent.CurrentOrder.State = OrderState.Splitted;
+                    _parent.CurrentOrder.State = OrderState.Splitted;
                     //Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems
                     //    .Where(x => SplittedOrder.OrderItems.Any(i => i.ProductId == x.ProductId))
                     //    .ToList());
                     RemoveOrderItems();
                     
-                    var parentCurrentOrder = Parent.CurrentOrder;
-                    var resp = Parent.SaveOrder(ref parentCurrentOrder);
+                    var parentCurrentOrder = _parent.CurrentOrder;
+                    var resp = _parent.SaveOrder(ref parentCurrentOrder);
                     
                     if (resp)
                     {
-                        SplittedOrder.SplittedFrom = Parent.CurrentOrder;
+                        SplittedOrder.SplittedFrom = _parent.CurrentOrder;
 
-                        var resp2 = Parent.SaveOrder(ref _splitedOrder);
+                        var resp2 = _parent.SaveOrder(ref _splitedOrder);
                         SplittedOrder = _splitedOrder;
                         NotifyOfPropertyChange(() => SplittedOrder);
 

@@ -1,4 +1,5 @@
-﻿using FastPosFrontend.ViewModels;
+﻿using FastPosFrontend.Helpers;
+using FastPosFrontend.ViewModels;
 using ServiceInterface.Model;
 using System;
 using Xunit;
@@ -20,8 +21,8 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //checkoutVM.AddOrderItem(p2);
             //checkoutVM.ActionKeyboard(ActionButton.Split);
             SplitViewModel splitVm = new SplitViewModel(null);
-            splitVm.SplittedOrder.AddOrderItem(product: p, unitPrice: p.Price, setSelected: true, quantity: 1);
-            splitVm.SplittedOrder.AddOrderItem(product: p2, unitPrice: p2.Price, setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p,  setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p2,  setSelected: true, quantity: 1);
 
             //Assert
             Assert.Equal(2, splitVm.SplittedOrder.OrderItems.Count);
@@ -43,8 +44,8 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //checkoutVM.AddOrderItem(p2);
             //checkoutVM.ActionKeyboard(ActionButton.Split);
             SplitViewModel splitVm = new SplitViewModel(null);
-            splitVm.SplittedOrder.AddOrderItem(product: p, unitPrice: p.Price, setSelected: true, quantity: 1);
-            splitVm.SplittedOrder.AddOrderItem(product: p2, unitPrice: p2.Price, setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p,  setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p2,  setSelected: true, quantity: 1);
             splitVm.IsTotalPriceChecked = true;
             splitVm.NumericZone = "1";
 
@@ -89,8 +90,8 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //checkoutVM.AddOrderItem(p2);
             //checkoutVM.ActionKeyboard(ActionButton.Split);
             SplitViewModel splitVm = new SplitViewModel(null);
-            splitVm.SplittedOrder.AddOrderItem(product: p, unitPrice: p.Price, setSelected: true, quantity: 1);
-            splitVm.SplittedOrder.AddOrderItem(product: p2, unitPrice: p2.Price, setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p, setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p2,  setSelected: true, quantity: 1);
             splitVm.IsDiscChecked = true;
             splitVm.NumericZone = "1";
 
@@ -131,8 +132,8 @@ namespace XUnitTesting.CheckpointTesting.SplitTesting
             //checkoutVM.AddOrderItem(p2);
             //checkoutVM.ActionKeyboard(ActionButton.Split);
             SplitViewModel splitVm = new SplitViewModel(null);
-            splitVm.SplittedOrder.AddOrderItem(product: p, unitPrice: p.Price, setSelected: true, quantity: 1);
-            splitVm.SplittedOrder.AddOrderItem(product: p2, unitPrice: p2.Price, setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p,  setSelected: true, quantity: 1);
+            splitVm.SplittedOrder.AddOrderItem(product: p2,  setSelected: true, quantity: 1);
             splitVm.IsDiscChecked = true;
             splitVm.NumericZone += "1";
             splitVm.NumericZone += "2";

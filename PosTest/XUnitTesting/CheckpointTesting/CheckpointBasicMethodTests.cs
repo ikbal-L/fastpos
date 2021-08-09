@@ -93,7 +93,7 @@ namespace XUnitTesting.CheckpointTesting
             //Arrange
             var checkoutVM = new CheckoutViewModel();
             var p = new Product() { Id=2, Description="desc2", Name= "awesome", Price=6};
-            var orderItem = new OrderItem(p, 5, 120, new Order());
+            var orderItem = new OrderItem(p,  120, new Order());
             checkoutVM.CurrentOrder = new Order();
             checkoutVM.CurrentOrder.SelectedOrderItem = orderItem;
 

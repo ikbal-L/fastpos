@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
@@ -26,7 +25,6 @@ using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
-using MaterialDesignThemes.Wpf;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
@@ -199,7 +197,7 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedCommandBar()
         {
-            this.EmbeddedCommandBar = new EmbeddedCommandBarViewModel()
+            EmbeddedCommandBar = new EmbeddedCommandBarViewModel()
             {
                 Commands = new BindableCollection<EmbeddedCommandBarCommand>()
                 {
@@ -214,7 +212,7 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedStatusBar()
         {
-            this.EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
+            EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
             {
                 EmbeddedStatusBarTemplate =
                     Application.Current.FindResource("CheckoutStatusBarDataTemplate") as DataTemplate
@@ -778,7 +776,7 @@ namespace FastPosFrontend.ViewModels
             ProductsVisibility = true;
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
-            CurrentOrder = new Order(this.Orders) { OrderNumber = orderCount};
+            CurrentOrder = new Order(Orders) { OrderNumber = orderCount};
             orderCount++;
 
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
@@ -950,20 +948,20 @@ namespace FastPosFrontend.ViewModels
         {
             StateManager.Flush();
             LoginViewModel loginvm = new LoginViewModel();
-            loginvm.Parent = this.Parent;
-            (this.Parent as Conductor<object>).ActivateItem(loginvm);
+            loginvm.Parent = Parent;
+            (Parent as Conductor<object>).ActivateItem(loginvm);
         }
 
         public void SettingsCommand()
         {
-            SettingsViewModel settingsViewModel = new SettingsViewModel(this) {Parent = this.Parent};
-            (this.Parent as Conductor<object>).ActivateItem(settingsViewModel);
+            SettingsViewModel settingsViewModel = new SettingsViewModel(this) {Parent = Parent};
+            (Parent as Conductor<object>).ActivateItem(settingsViewModel);
         }
 
         public void AccountingCommand()
         {
-            DeliveryAccountingViewModel vm = new DeliveryAccountingViewModel() {Parent = this.Parent};
-            (this.Parent as Conductor<object>).ActivateItem(vm);
+            DeliveryAccountingViewModel vm = new DeliveryAccountingViewModel() {Parent = Parent};
+            (Parent as Conductor<object>).ActivateItem(vm);
         }
 
         public void UserSettingsCommand()
@@ -1192,7 +1190,7 @@ namespace FastPosFrontend.ViewModels
                     if (IsDialogOpen == true)
                     {
                         //DialogViewModel = new SplitViewModel(this);
-                        (this.Parent as MainViewModel)?.OpenDialog(new SplitViewModel(this));
+                        (Parent as MainViewModel)?.OpenDialog(new SplitViewModel(this));
                     }
                     else
                     {
@@ -1574,7 +1572,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (!CurrentOrder.SelectedOrderItem.AddAdditives(additive))
+            if (!CurrentOrder.SelectedOrderItem.AddAdditive(additive))
             {
                 CurrentOrder.SelectedOrderItem.SelectedAdditive = null;
                 CurrentOrder.SelectedOrderItem.SelectedAdditive =
@@ -1771,7 +1769,7 @@ namespace FastPosFrontend.ViewModels
                 NewOrder();
             }
 
-            var item = new OrderItem(selectedproduct, 1, selectedproduct.Price, CurrentOrder);
+            var item = new OrderItem(selectedproduct, 1, CurrentOrder);
 
             var fetch = CurrentOrder.OrderItems.FirstOrDefault(i =>
                 i.ProductId == selectedproduct.Id && i.TimeStamp != null);
@@ -1990,8 +1988,8 @@ namespace FastPosFrontend.ViewModels
             if (CurrentOrder == null) return;
 
             var doc = GenerateOrderReceipt(source);
-            PrintViewModel pvm = new PrintViewModel {Document = doc, PreviousScreen = this, Parent = this.Parent};
-            (this.Parent as MainViewModel).ActivateItem(pvm);
+            PrintViewModel pvm = new PrintViewModel {Document = doc, PreviousScreen = this, Parent = Parent};
+            (Parent as MainViewModel).ActivateItem(pvm);
 
             //var xpsDoc = GenerateXpsDocument($"customerReceipt{DateTime.Now.ToFileTime()}");
             //WriteXpsDocument(doc, xpsDoc);

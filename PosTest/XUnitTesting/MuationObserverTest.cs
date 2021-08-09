@@ -33,6 +33,9 @@ namespace XUnitTesting
             mutationObserver.Commit(orderItem1, nameof(OrderItem.Quantity),orderItem1.Quantity);
             var result = mutationObserver.IsMutated(orderItem1, nameof(OrderItem.Quantity));
             Assert.True(result);
+            mutationObserver.Push(orderItem1);
+            var result2 = mutationObserver.IsMutated(orderItem1, nameof(OrderItem.Quantity));
+            Assert.False(result2);
 
         }
     }

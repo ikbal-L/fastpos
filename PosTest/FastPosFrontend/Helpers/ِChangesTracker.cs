@@ -69,42 +69,55 @@ namespace FastPosFrontend.Helpers
 
     public class Mutations
     {
-        private Dictionary<object, ( object initial,object commited)> _values;
-        private bool initCommit = false;
-        public Mutations(params object [] props)
+        private Dictionary<object, Mutation> _values;
+      
+        public Mutations(params string [] props)
         {
-            _values = new Dictionary<object, (object initial, object commited)>();
+            _values = new Dictionary<object, Mutation>();
             foreach (var prop in props)
             {
-                _values.Add(prop, (null,null));
+                _values.Add(prop,new Mutation() );
             }
         }
-        public bool InitCommit(object prop,object value)
+        public bool InitCommit(object prop, object value)
         {
-            _values[prop] = (value, value);
+            _values[prop] = new Mutation() { Initial= value};
             return true;
         }
         public void Commit(object prop, object value)
         {
             var mutation = _values[prop];
-            mutation.commited = value;
+            mutation.Commited = value; 
+            mutation.HasCommitted = true;
             _values[prop] = mutation;
         }
         public void Push()
         {
-            foreach (var kv in _values)
+            foreach (var key in _values.Keys.ToList())
             {
-                var (_,commited) = _values[kv.Key];
-                _values[kv.Key] = (commited, null);
+                var mutation = _values[key];
+                mutation.Initial = mutation.Commited;
+                mutation.Commited = null;
+                mutation.HasCommitted = false;
             }
         }
 
         public bool IsMutated(object prop)
         {
-            var(initial,commited) = _values[prop];
-            return !initial.Equals(commited);
+            var mutation = _values[prop];
+            return mutation.HasCommitted&&!mutation.Initial.Equals(mutation.Commited);
         }
         
     }
+
+
+    public class Mutation
+    {
     
+        public object Initial { get; set; }
+
+        public object Commited { get; set; }
+
+        public bool HasCommitted { get; set; } = false;
+    }  
 }

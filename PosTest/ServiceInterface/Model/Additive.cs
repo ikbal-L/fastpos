@@ -24,8 +24,6 @@ namespace ServiceInterface.Model
         {
             Id = additive.Id;
             Description = additive.Description;
-            //Ingrediants = additive.Ingrediants;
-            //ParentOrderItem = additive.ParentOrderItem;
             BackgroundString = additive.BackgroundString;
             Rank = additive.Rank;
         }
@@ -127,6 +125,8 @@ namespace ServiceInterface.Model
         {
             return $"{Description}";
         }
+
+        
     }
 
 

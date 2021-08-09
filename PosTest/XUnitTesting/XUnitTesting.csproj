@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -87,6 +88,7 @@
     <Compile Include="HelpersTesting\EntityValidationHelperTest.cs" />
     <Compile Include="HelpersTesting\OrderManagementHelperTest.cs" />
     <Compile Include="HelpersTesting\RankedItemsCollectionHelperTest.cs" />
+    <Compile Include="MuationObserverTest.cs" />
     <Compile Include="ProductsViewModelTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
