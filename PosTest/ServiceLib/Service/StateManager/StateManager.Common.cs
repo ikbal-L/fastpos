@@ -14,7 +14,7 @@ namespace ServiceLib.Service.StateManager
 
         public static ICollection<TState> Get<TState>(string predicate = "") where TState : IState<long>
         {
-            return Get<TState, long>(predicate:predicate);
+            return Get<TState, long>(predicate);
         }
 
         public static TState Get<TState>(long identifier) where TState : IState<long>

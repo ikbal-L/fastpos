@@ -1,17 +1,27 @@
+<<<<<<< HEAD
 ﻿using Newtonsoft.Json;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using System;
+=======
+﻿using System;
+>>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Net.Http;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 
+=======
+using Newtonsoft.Json;
+>>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
 using ServiceInterface;
+using ServiceInterface.Interface;
+using ServiceInterface.Model;
+using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
-
 
 namespace ConsoleApp
 {
@@ -20,24 +30,10 @@ namespace ConsoleApp
         //[Import]
         //string message;
 
-        [Import(typeof(IProductService))]
-
-        private IProductService productService = null;
-
-        [Import(typeof(ICategoryService))]
-        private ICategoryService categorieService = null;
+        
 
         [Import(typeof(IAuthentification))]
-        private  IAuthentification authService = null;
-
-        [Import(typeof(IAdditiveService))]
-        private IAdditiveService additiveService = null;
-
-        [Import(typeof(IOrderService))]
-        private IOrderService orderService = null;
-
-       [Import(typeof(IDelivereyService))]
-        private IDelivereyService delivereyService = null;
+        private  IAuthentification _authService;
 
 
         static HttpClient client = new HttpClient();
@@ -93,7 +89,7 @@ namespace ConsoleApp
 
             //var status = productService.SaveProduct(p);
             // var token = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id=1});
-            var token = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id=1});
+            var token = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id=1});
             //var resp1 = productService.SaveProducts(FakeServices.Products);
             //var resp2 = categorieService.SaveCategories(FakeServices.Categories);
             //var resp3 = additiveService.SaveAdditives(FakeServices.Additives);
@@ -170,7 +166,7 @@ namespace ConsoleApp
 
     public class MessageBox
     {
-        [Export()]
+        [Export]
         public string MyMessage
         {
             get { return "This is my example message."; }

@@ -323,7 +323,6 @@
     <Compile Include="ViewModels\AdditivesOfProductViewModel.cs" />
     <Compile Include="ViewModels\AdditivesSettingsViewModel.cs" />
     <Compile Include="ViewModels\AppNavigationConductor.cs" />
-    <Compile Include="ViewModels\CategoryTabViewModel.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
@@ -342,10 +341,8 @@
     <Compile Include="ViewModels\PinLoginViewModel.cs" />
     <Compile Include="ViewModels\PrintViewModel.cs" />
     <Compile Include="ViewModels\ProductEditViewModel.cs" />
-    <Compile Include="ViewModels\ProductsViewModel.cs" />
     <Compile Include="ViewModels\RoleDetailViewModel.cs" />
     <Compile Include="ViewModels\RoleSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Settings1ViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\AddEditCustomerViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\CustomerSettingsViewModel.cs" />
     <Compile Include="ViewModels\AddEditDeliveryManViewModel.cs" />
@@ -468,9 +465,6 @@
     </Compile>
     <Compile Include="Views\RoleSettingsView.xaml.cs">
       <DependentUpon>RoleSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings1View.xaml.cs">
-      <DependentUpon>Settings1View.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\Customer\AddEditCustomerView.xaml.cs">
       <DependentUpon>AddEditCustomerView.xaml</DependentUpon>
@@ -822,10 +816,6 @@
     <Page Include="Views\RoleSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Settings1View.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Settings\Customer\AddEditCustomerView.xaml">
       <Generator>MSBuild:Compile</Generator>

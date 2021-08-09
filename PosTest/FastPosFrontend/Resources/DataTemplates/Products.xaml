@@ -554,16 +554,16 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="MyItemTemplate">
-        <Control x:Name="myControl" Template="{StaticResource ProductGridTemplate}" />
+    <!--<DataTemplate x:Key="MyItemTemplate">
+        <Control x:Name="myControl" Template="{DynamicResource ProductGridTemplate}" />
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding ListViewSwitcher}" Value="True">
                 <Setter TargetName="myControl" Property="Template" Value="{StaticResource ProductKanbanTemplate}" />
             </DataTrigger>
         </DataTemplate.Triggers>
-    </DataTemplate>
+    </DataTemplate>-->
 
-    <DataTemplate DataType="{x:Type local:CategoryItem}">
+    <!--<DataTemplate DataType="{x:Type local:CategoryItem}">
         <ListBox Grid.Row="0" BorderThickness="0"
                  Background="#4CFFFFFF"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -582,7 +582,7 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <Style x:Key="ListBoxItemDynamicLayoutStyle" TargetType="ListBoxItem">
         <Setter Property="Width">
