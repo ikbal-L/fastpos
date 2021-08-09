@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Collections.ObjectModel;
 
 namespace ServiceInterface.Model
 {
@@ -17,7 +16,7 @@ namespace ServiceInterface.Model
                    AppDomain.CurrentDomain.GetAssemblies().Any(
                        a => a.FullName.StartsWith("XUnitTesting"));
         private float _quantity;
-        private BindableCollection<Additive> _additives;
+        private ObservableCollection<Additive> _additives;
         private Additive __selectedAdditive;
         private bool _canAddAdditives;
         private decimal _discountAmount = 0;
@@ -26,22 +25,22 @@ namespace ServiceInterface.Model
 
         public OrderItem() 
         {
-            //Additives = new BindableCollection<Additive>();
+            
         }
 
-        public OrderItem(Product product, float quantity, decimal unitPrice, Order order) : this()
+        public OrderItem(Product product, float quantity, Order order) : this()
         {
             Order = order;
             Product = product;
             ProductName = product?.Name;
             if (product?.Id != null)
             {
-                ProductId = (long)product?.Id ;
+                ProductId = (long)product.Id ;
+                UnitPrice = product.Price;
             }
-            UnitPrice = unitPrice;
             Quantity = quantity;
             OrderItemAdditives = new List<OrderItemAdditive>();
-            Additives = new BindableCollection<Additive>();
+            Additives = new ObservableCollection<Additive>();
         }
 
         [DataMember]
@@ -81,7 +80,7 @@ namespace ServiceInterface.Model
                 Order?.NotifyOfPropertyChange(nameof(Order.Total));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 Order?.NotifyOfPropertyChange(nameof(TotalDiscountAmount));
-                //Order.Total = Order.Total + UnitPrice * (decimal)(_quantity - oldQuqntity);
+               
             } 
         }
 
@@ -96,10 +95,7 @@ namespace ServiceInterface.Model
         {
             get 
             {
-                //either _discountAmount==0 or _discountPercentage==0
                 
-                //NotifyOfPropertyChange(() => DiscountAmount);
-                //Order.NotifyOfPropertyChange(nameof(Order.DiscountAmount));
                 Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 return CalcTotalDiscount();
@@ -108,7 +104,7 @@ namespace ServiceInterface.Model
 
         public decimal CalcTotalDiscount()
         {
-            //var totalDiscount = _discountAmount * (decimal)Quantity + Total * _discountPercentage / 100;
+        
             var totalDiscount = _discountAmount * (decimal)Quantity ;
             return totalDiscount;
         }
@@ -191,7 +187,7 @@ namespace ServiceInterface.Model
         private OrderItemState _state;
         private string _productName;
 
-        public BindableCollection<Additive> Additives 
+        public ObservableCollection<Additive> Additives 
         { 
             get => _additives;
             set
@@ -229,39 +225,9 @@ namespace ServiceInterface.Model
         public Product Product { get; set; }
 
         //returns false if exists (did not add this additive)
-        public bool AddAdditives(Additive additive)
-        {
-            if (this.Additives == null)
-            {
-                this.Additives = new BindableCollection<Additive>();
-            }
-            if (Additives.Count>0 && Additives.Any(a => a.Equals(additive)))
-            {
-                return false;
-            }
-            var additive1 = new Additive(additive);
-            additive1.ParentOrderItem = this;
-            this.Additives.Add(additive1);
-            if (additive1.Id != null) this.OrderItemAdditives.Add(new OrderItemAdditive(){AdditiveId = (long) additive1.Id,OrderItemId =  this.Id,State = AdditiveState.Added});
-            return true;
-        }
+       
 
-        public void RemoveAdditive(Additive additive)
-        {
-
-            
-            if (Order.Id==null)
-            {
-                
-                OrderItemAdditives.RemoveAll(orderItemAdditive => orderItemAdditive.AdditiveId == additive.Id);
-
-            }
-            else
-            {
-                OrderItemAdditives.Find(oia => oia.AdditiveId == additive.Id).State = AdditiveState.Removed;
-            }
-            Additives.Remove(additive);
-        }
+       
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -326,4 +292,6 @@ namespace ServiceInterface.Model
         IncreasedQuantity,
         DecreasedQuantity
     }
+
+
 }

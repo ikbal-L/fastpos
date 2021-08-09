@@ -61,7 +61,7 @@ namespace FastPosFrontend.Helpers
         {
             if (!diff.ContainsKey(item.GetHashCode()))
             {
-                var value = new OrderItem(item.Product, item.Quantity, item.UnitPrice, item.Order)
+                var value = new OrderItem(item.Product, item.Quantity, item.Order)
                     {TimeStamp = item.TimeStamp,ProductName = item.ProductName,ProductId = item.ProductId};
                 diff.Add(item.GetHashCode(), value);
             }
@@ -77,7 +77,7 @@ namespace FastPosFrontend.Helpers
             foreach (var orderItem in orderItems)
             {
                 var refItem = diff.First(d => d.Key == orderItem.GetHashCode()).Value;
-                var item = new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.UnitPrice, orderItem.Order){State = orderItem.State};
+                var item = new OrderItem(orderItem.Product, orderItem.Quantity - refItem.Quantity, orderItem.Order){State = orderItem.State};
                 changedOrderItems.Add(item);
             }
 
