@@ -98,6 +98,7 @@ namespace FastPosFrontend.ViewModels
         private readonly DispatcherTimer _orderInfoCloseTimer;
         private string _lastModifiedOrderPropertyName;
         private Table _selectedOrderTable;
+        private SplitViewModel _splitViewModel;
 
         #endregion
 
@@ -594,6 +595,12 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        public SplitViewModel SplitViewModel
+        {
+            get => _splitViewModel;
+            set => Set(ref _splitViewModel, value);
+        }
+
         public Table SelectedTable
         {
             get => _selectedTable;
@@ -1033,7 +1040,12 @@ namespace FastPosFrontend.ViewModels
         {
             AdditivesPage?.Clear();
             if (product == null || !product.IsPlatter ||
-                (product.IsPlatter && (product.IdAdditives == null || product.IdAdditives.Count == 0))) return;
+                (product.IsPlatter && (product.IdAdditives == null || product.IdAdditives.Count == 0)))
+            {
+                AdditivesVisibility = false;
+                ProductsVisibility = true;
+                return;
+            }
             var comparer = new Comparer<Additive>();
             var additives = product.Additives.ToList();
             additives.Sort(comparer);
@@ -1145,7 +1157,6 @@ namespace FastPosFrontend.ViewModels
 
                     _printOrder = OrderManagementHelper.GetChangesFromOrder(CurrentOrder, _diff);
                     CurrentOrder.State = OrderState.Ordered;
-                    _diff.Clear();
                     SaveCurrentOrder();
 
                     PrintDocument(PrintSource.Kitchen);
@@ -1190,7 +1201,15 @@ namespace FastPosFrontend.ViewModels
                     if (IsDialogOpen == true)
                     {
                         //DialogViewModel = new SplitViewModel(this);
+<<<<<<< HEAD
                         (Parent as MainViewModel)?.OpenDialog(new SplitViewModel(this));
+=======
+                        SplitViewModel = new SplitViewModel(this);
+                        (this.Parent as MainViewModel)?.OpenDialog(SplitViewModel).OnClose(() =>
+                        {
+                            SplitViewModel = null;
+                        });
+>>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
                     }
                     else
                     {
@@ -1601,7 +1620,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (CurrentOrder.SelectedOrderItem.TimeStamp == null)
+            if (CurrentOrder?.SelectedOrderItem?.TimeStamp == null)
             {
                 if (_diff.ContainsKey(CurrentOrder.SelectedOrderItem.GetHashCode()))
                 {
@@ -1927,14 +1946,17 @@ namespace FastPosFrontend.ViewModels
 
 
             DataTemplate dt = null;
-            if (source == PrintSource.Checkout)
+            switch (source)
             {
-                dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
-            }
-
-            if (source == PrintSource.Kitchen)
-            {
-                dt = Application.Current.FindResource("KitchenReceiptDataTemplate") as DataTemplate;
+                case PrintSource.Checkout:
+                case PrintSource.CheckoutSplit:
+                    dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
+                    break;
+                case PrintSource.Kitchen:
+                    dt = Application.Current.FindResource("KitchenReceiptDataTemplate") as DataTemplate;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(source), source, null);
             }
 
             var contentOfPage = new UserControl();
@@ -2015,12 +2037,29 @@ namespace FastPosFrontend.ViewModels
         public void PrintDocument(PrintSource source)
         {
             //PrintPreview(source);
-            if (_printOrder == null)
+            if (_printOrder == null&& source == PrintSource.Kitchen)
             {
                 ToastNotification.Notify("Select an order First");
                 return;
             }
 
+            if(CurrentOrder == null && source == PrintSource.Checkout)
+            {
+                ToastNotification.Notify("Select an order First");
+                return;
+            }
+
+            if (SplitViewModel?.SplittedOrder == null && source == PrintSource.CheckoutSplit)
+            {
+                return;
+            }
+
+            _printOrder = source switch
+            {
+                PrintSource.Checkout => CurrentOrder,
+                PrintSource.CheckoutSplit => SplitViewModel?.SplittedOrder,
+                _ => _printOrder
+            };
 
             SilentPrint(source);
         }
@@ -2032,15 +2071,15 @@ namespace FastPosFrontend.ViewModels
  
 
             IList<PrinterItem> printerItems = null;
-            var PrinterItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
+            var printerItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
             if (source == PrintSource.Kitchen)
             {
-                printerItems = PrinterItemSetting.Where(item => item.SelectedKitchen).ToList();
+                printerItems = printerItemSetting.Where(item => item.SelectedKitchen).ToList();
             }
 
-            if (source == PrintSource.Checkout)
+            if (source == PrintSource.Checkout|| source == PrintSource.CheckoutSplit)
             {
-                printerItems = PrinterItemSetting.Where(item => item.SelectedReceipt).ToList();
+                printerItems = printerItemSetting.Where(item => item.SelectedReceipt).ToList();
             }
 
             foreach (var e in printerItems)
@@ -2258,9 +2297,12 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void TestDrawer()
+        public void SetSplitOrderNumber()
         {
-            //AppDrawerConductor.Instance.OpenTop(this,typeof(Customer));
+            if (SplitViewModel?.SplittedOrder == null) return;
+            
+            SplitViewModel.SplittedOrder.OrderNumber = orderCount;
+            orderCount++;
         }
 
 
