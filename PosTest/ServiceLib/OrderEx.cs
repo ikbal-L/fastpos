@@ -19,8 +19,7 @@ namespace FastPosFrontend.Helpers
                 ).All(oi => oi.State == OrderItemState.Removed)
             )
             {
-                item = new OrderItem(product, quantity, order) { State = OrderItemState.Added };
-                item.TimeStamp = null;
+                item = new OrderItem(product, quantity, order) {State = OrderItemState.Added, TimeStamp = null};
                 order.OrderItems.Add(item);
             }
             else
