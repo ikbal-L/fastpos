@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
-<<<<<<< HEAD
-=======
+
 using Caliburn.Micro;
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.ObjectModel;
@@ -39,16 +38,15 @@ namespace ServiceInterface.Model
             ProductName = product?.Name;
             if (product?.Id != null)
             {
-<<<<<<< HEAD
+
                 ProductId = (long)product.Id ;
                 UnitPrice = product.Price;
             }
-=======
-                ProductId = (long) product?.Id;
-            }
 
-            UnitPrice = unitPrice;
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
+
+          
+
             Quantity = quantity;
             OrderItemAdditives = new List<OrderItemAdditive>();
             Additives = new ObservableCollection<Additive>();
@@ -88,13 +86,11 @@ namespace ServiceInterface.Model
                 Order?.NotifyOfPropertyChange(nameof(Order.Total));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 Order?.NotifyOfPropertyChange(nameof(TotalDiscountAmount));
-<<<<<<< HEAD
+
                
             } 
-=======
-           
-            }
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+ 
+
         }
 
         [DataMember]
@@ -109,10 +105,7 @@ namespace ServiceInterface.Model
         {
             get
             {
-<<<<<<< HEAD
-                
-=======
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
                 Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 return CalcTotalDiscount();
@@ -121,13 +114,10 @@ namespace ServiceInterface.Model
 
         public decimal CalcTotalDiscount()
         {
-<<<<<<< HEAD
-        
-            var totalDiscount = _discountAmount * (decimal)Quantity ;
-=======
-            //var totalDiscount = _discountAmount * (decimal)Quantity + Total * _discountPercentage / 100;
+
+
             var totalDiscount = _discountAmount * (decimal) Quantity;
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
             return totalDiscount;
         }
 
@@ -209,13 +199,10 @@ namespace ServiceInterface.Model
         private OrderItemState _state;
         private string _productName;
 
-<<<<<<< HEAD
-        public ObservableCollection<Additive> Additives 
-        { 
-=======
-        public BindableCollection<Additive> Additives
+
+        public ObservableCollection<Additive> Additives
         {
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
             get => _additives;
             set
             {
@@ -244,12 +231,7 @@ namespace ServiceInterface.Model
 
         public Product Product { get; set; }
 
-<<<<<<< HEAD
-        //returns false if exists (did not add this additive)
-       
 
-       
-=======
 
         public bool AddAdditives(Additive additive)
         {
@@ -280,7 +262,7 @@ namespace ServiceInterface.Model
 
             Additives.Remove(additive);
         }
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -343,10 +325,10 @@ namespace ServiceInterface.Model
         IncreasedQuantity,
         DecreasedQuantity
     }
-<<<<<<< HEAD
+
 
 
 }
-=======
-}
->>>>>>> 37cb1aeaa4e09e2418262597c5db17f97bc2e1b7
+
+
+
