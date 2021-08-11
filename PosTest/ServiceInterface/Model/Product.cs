@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Media;
+using Utilities.Attributes;
 
 namespace ServiceInterface.Model
 {
@@ -28,6 +29,7 @@ namespace ServiceInterface.Model
         [Required(ErrorMessage = "Product Name must not be Null or Empty")]
         [MinLength(5, ErrorMessage = "Product Name must not be under 5 characters ")]
         //[RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z0-9-_\s]*$", ErrorMessage = "Use Latin or Arabic Characters only ")]
+        [ObservePropertyMutation]
         public string Name
         {
             get => _name;

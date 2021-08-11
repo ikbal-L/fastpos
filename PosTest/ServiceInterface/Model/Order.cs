@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using ServiceInterface.jsonConverters;
+using Utilities.Attributes;
 
 namespace ServiceInterface.Model
 {
@@ -296,6 +297,7 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
+        [ObserveMutations(MutationObserverFlags.CollectionObservingItems)]
         public BindableCollection<OrderItem> OrderItems
         {
             get => _orderItems;

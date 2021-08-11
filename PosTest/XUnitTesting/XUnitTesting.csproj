@@ -121,6 +121,10 @@
       <Project>{38a71e46-d5e4-4c98-8de7-9e7c50deecdb}</Project>
       <Name>ServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{6c71020b-93dd-48eb-9fc4-9e728825d046}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

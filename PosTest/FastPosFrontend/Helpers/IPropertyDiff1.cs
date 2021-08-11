@@ -2,6 +2,6 @@
 {
     public interface IPropertyDiff
     {
-        void Invoke(object obj, Mutation mutation);
+        void Invoke(object obj, PropertyMutation mutation);
     }
 }

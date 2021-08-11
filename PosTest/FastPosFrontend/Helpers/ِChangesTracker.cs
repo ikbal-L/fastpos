@@ -1,19 +1,22 @@
 ﻿using FastPosFrontend.Extensions;
+using ServiceInterface.Model;
 using System;
 
 using System.Collections.Generic;
 using System.Linq;
-
-
+using Utilities.Extensions;
+using Utilities.Extensions.Collections;
+using Utilities.Extensions.Types;
+using Utilities.Attributes;
 
 namespace FastPosFrontend.Helpers
 {
-    public class Mutation
+    public class PropertyMutation
     {
-        public Mutation(string propertyName, object mutatedObject)
+        public PropertyMutation(string propertyName, object mutatedObject)
         {
             PropertyName = propertyName;
-            Initial = mutatedObject.GetPropertyValue(propertyName);
+            Initial = mutatedObject?.GetPropertyValue(propertyName);
         }
 
         public string PropertyName { get; }
@@ -24,181 +27,77 @@ namespace FastPosFrontend.Helpers
         public bool IsCommitted { get; set; }
     }
 
-    public class CollectionMutationObserver<T>
-    {
-        private ICollection<T> _mutatedCollection;
-        private readonly List<ObjectMutationObserver<T>> _itemsMutationObservers;
-        private readonly List<string> _collectionItemObservedProperties;
-
-
-        public CollectionMutationObserver(ICollection<T> source, bool isObservingItems = false, params string[] properties)
-        {
-            _itemsMutationObservers = new List<ObjectMutationObserver<T>>();
-            _collectionItemObservedProperties = new List<string>();
-            _collectionItemObservedProperties.AddRange(properties);
-            Source = source.ToList();
-            IsObservingItems = isObservingItems;
-            if (isObservingItems)
-            {
-                Source.ToList().ForEach(item =>
-                {
-                    _itemsMutationObservers.Add(new ObjectMutationObserver<T>(item,properties));
-                });
-            }
-        }
-
-        public ICollection<T> Source { get; private set; }
-
-        public bool IsObservingItems { get; }
-
-        public bool HasCommitedChanges { get; private set; }
-
-
-        public ICollection<T> GetAddedItems(ICollection<T> mutatedCollection)
-        {
-            if (!HasCommitedChanges) return null;
-            return mutatedCollection.Except(Source).ToList();
-        }
-
-        public ICollection<T> GetRemovedItems(ICollection<T> mutatedCollection)
-        {
-            if (!HasCommitedChanges) return null;
-            return Source.Except(mutatedCollection).ToList();
-        }
-
-        public bool IsMutated()
-        {
-            return GetMutationTypes().Any();
-        }
-
-        public CollectionMutationType[] GetMutationTypes()
-        {
-            if (!HasCommitedChanges) return Array.Empty<CollectionMutationType>();
-
-            var hasRemoveItems = GetRemovedItems(_mutatedCollection)?.Any()?? false;
-            var hasAddedItems = GetAddedItems(_mutatedCollection)?.Any()??false;
-
-            List< CollectionMutationType > mutations = new List<CollectionMutationType>();
-            mutations.Add(CollectionMutationType.ItemsAdded,hasAddedItems);
-            mutations.Add(CollectionMutationType.ItemsRemoved,hasRemoveItems);
-
-            if (!IsObservingItems)
-            {
-                return mutations.ToArray();
-            }
-
-            var hasMutatedItems = _itemsMutationObservers.Any(observer => observer.IsMutated());
-            mutations.Add(CollectionMutationType.ItemsMutated,hasMutatedItems);
-            return mutations.ToArray();
-        }
-
-        public void Commit(ICollection<T> mutatedCollection)
-        {
-            _mutatedCollection = mutatedCollection;
-            if (IsObservingItems)
-            {
-                _itemsMutationObservers.ForEach(observer =>
-                {
-                    if (_mutatedCollection.Contains(observer.Source))
-                    {
-                        observer.Commit();
-                    }
-                });
-            }
-            HasCommitedChanges = true;
-        }
-
-        public void Push()
-        {
-           
-            if (IsObservingItems)
-            {
-
-                var removedItems = GetRemovedItems(_mutatedCollection);
-                var addedItems = GetAddedItems(_mutatedCollection);
-
-                
-                PushAllCollectionItems();
-
-                /*
-                 * NOTE: Must be called after pushing all the previous items 
-                 * because newly addeditems are have no mutations to push
-                 */
-                ObserveAddedCollectionItemsAfterCommit(addedItems);
-            }
-
-            Source = _mutatedCollection;
-            _mutatedCollection = null;
-            HasCommitedChanges = false;
-        }
-
-        private void UnobserveAllRemovedItemsAfterCommit(ICollection<T> removedItems)
-        {
-            if (removedItems == null) return;
-            _itemsMutationObservers.RemoveAll(o => removedItems.Contains(o.Source));
-        }
-
-        private void ObserveAddedCollectionItemsAfterCommit(ICollection<T> addedItems)
-        {
-            if (addedItems == null) return;
-            var addedItemsObservers = addedItems.Select(item => new ObjectMutationObserver<T>(item, _collectionItemObservedProperties.ToArray()));
-            _itemsMutationObservers.AddRange(addedItemsObservers);
-        }
-
-        private void PushAllCollectionItems()
-        {
-            _itemsMutationObservers?.ForEach(observer =>
-            {
-                if (_mutatedCollection.Contains(observer.Source))
-                {
-                    observer.Push();
-                }
-            });
-        }
-    }
-
     public enum CollectionMutationType
     {
         ItemsAdded,ItemsRemoved,ItemsMutated
     }
 
 
-    public interface IObjectMutationObserver
+    public interface IMutationObserver
     {
         void Commit();
         void Push();
         bool IsMutated();
     }
 
-    public class ObjectMutationObserver<T> : IObjectMutationObserver
+    public interface IMutationObserver<T> : IMutationObserver
     {
-        private readonly Dictionary<string, Mutation> _mutations;
         public T Source { get; }
+    }
+
+
+
+    public interface IObjectMutationObserver<T>: IMutationObserver<T>
+    {
+        
+    }
+
+    public class ObjectMutationObserver<T> : IObjectMutationObserver<T>
+    {
+        private readonly Dictionary<string, PropertyMutation> _mutations;
+        
+        public T Source { get; private set; }
+
+        public bool IsInitialized { get; private set; }
 
         public ICollection<string> ObservedProperties => _mutations.Keys;
-        public ICollection<Mutation> Mutations => _mutations.Values;
 
-        public ObjectMutationObserver(T source)
-        {
-            Source = source;
-            _mutations = new Dictionary<string, Mutation>();
-        }
+        public PropertyMutation this[string property] => _mutations[property];
+
 
         public ObjectMutationObserver(T source, params string[] properties)
         {
+            _mutations = new Dictionary<string, PropertyMutation>();
+            if (source!= null)
+            {
+                Init(source, properties);
+            }
+        }
+
+        private void Init(T source, params string[] properties)
+        {
             Source = source;
-            _mutations = new Dictionary<string, Mutation>();
+            if (properties.Length == 0)
+            {
+                properties = typeof(T).GetPropertyNamesDecoratedBy<ObservePropertyMutationAttribute>().ToArray();
+
+            }
             properties.ToList()
-                .ForEach(propertyName => { _mutations.Add(propertyName, new Mutation(propertyName, source)); });
+                      .ForEach(propertyName => { _mutations.Add(propertyName, new PropertyMutation(propertyName, source)); });
+            IsInitialized = true;
+            
         }
 
         public void Commit()
         {
-            foreach (var pair in _mutations)
+            if (IsInitialized)
             {
-                var (property, mutation) = pair.ToTuple();
-                mutation.Committed = Source.GetPropertyValue(property);
-                mutation.IsCommitted = true;
+                foreach (var pair in _mutations)
+                {
+                    var (property, mutation) = pair.ToTuple();
+                    mutation.Committed = Source.GetPropertyValue(property);
+                    mutation.IsCommitted = true;
+                } 
             }
         }
 
@@ -218,7 +117,7 @@ namespace FastPosFrontend.Helpers
 
                 if (mutation.IsCommitted)
                 {
-                    if (mutation.Committed == null && mutation.Initial == null) return false;
+                    if (mutation.Initial == null && mutation.Committed == null) return false;
                     if (mutation.Initial == null && mutation.Committed!= null) return true;
                     if (mutation.Initial != null && mutation.Committed== null) return true;
                    return !mutation.Committed.Equals(mutation.Initial);
@@ -227,18 +126,27 @@ namespace FastPosFrontend.Helpers
             
             });
         }
+
+        public void LateInit(T source)
+        {
+            if (IsInitialized) throw new InvalidOperationException($"{this} was already initialized");
+            Init(source);
+        }
     }
 
-    class DiffGenerator<T>
+    public class DiffGenerator<T>where T:new()
     {
-        public T Generate(ObjectMutationObserver<T> mutationObserver,params (string property,IPropertyDiff propertyDiff)[] generator)
+        public static T Generate(ObjectMutationObserver<T> mutationObserver,params (string property,IPropertyDiff propertyDiff)[] generator)
         {
             //mutationObserver.ObservedProperties
             //mutationObserver.Mutations
+            var t = new T();
             generator.ToList().ForEach(p => {
-            
-                p.property
+
+                var mutation = mutationObserver[p.property];
+                p.propertyDiff.Invoke(t, mutation);
             });
+            return t;
         }
 
         
@@ -253,12 +161,18 @@ namespace FastPosFrontend.Helpers
             _propertyMutationHanlder = propertyMutationHanlder;
         }
 
-        public void Invoke(object obj, Mutation mutation)
+        public void Invoke(object obj, PropertyMutation mutation)
         {
-            var value = _propertyMutationHanlder.Invoke((TProperty)mutation.Initial, (TProperty)mutation.Committed);
-            obj.GetType().GetProperty(mutation.PropertyName).SetValue(obj, value);
+            if (mutation?.Initial is TProperty initial && mutation?.Committed is TProperty committed)
+            {
+                var value = _propertyMutationHanlder.Invoke(initial, committed);
+                obj.GetType().GetProperty(mutation.PropertyName).SetValue(obj, value);
+            }
+            
         }
     }
+
+    
 
 
 

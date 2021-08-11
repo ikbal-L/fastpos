@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Attributes
 {
 
-    [System.AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property)]
+    [AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property)]
     public class MinAttribute: ValidationAttribute
     {
         public double DoubleMinValue { get; }

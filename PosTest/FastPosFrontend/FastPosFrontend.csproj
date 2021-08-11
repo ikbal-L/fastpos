@@ -276,7 +276,6 @@
     <Compile Include="Enums\ComparaisonOperator.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\Config.cs" />
-    <Compile Include="Extensions\ExtentionMethods.cs" />
     <Compile Include="Extensions\KeyboardKey.cs" />
     <Compile Include="Extensions\Modifier.cs" />
     <Compile Include="Extensions\ModifierBase.cs" />
@@ -285,11 +284,14 @@
     <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\AppScreen.cs" />
     <Compile Include="Helpers\Associations.cs" />
+    <Compile Include="Helpers\CollectionMutationObserver.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Helpers\ICollectionMutationObserver.cs" />
     <Compile Include="Helpers\Icon.cs" />
     <Compile Include="Helpers\IPropertyDiff.cs" />
     <Compile Include="Helpers\IPropertyDiff1.cs" />
     <Compile Include="Helpers\Navigation.cs" />
+    <Compile Include="Helpers\ObjectGraphMutationObserver.cs" />
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
     <Compile Include="Helpers\ِChangesTracker.cs" />
@@ -991,6 +993,10 @@
     <ProjectReference Include="..\ServiceLib\ServiceLib.csproj">
       <Project>{38a71e46-d5e4-4c98-8de7-9e7c50deecdb}</Project>
       <Name>ServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{6c71020b-93dd-48eb-9fc4-9e728825d046}</Project>
+      <Name>Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

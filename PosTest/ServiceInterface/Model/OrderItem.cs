@@ -5,10 +5,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 
 using Caliburn.Micro;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.ObjectModel;
+using Utilities.Attributes;
 
 namespace ServiceInterface.Model
 {
@@ -73,6 +73,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Range(1, float.MaxValue)]
+        [ObservePropertyMutation]
         public float Quantity
         {
             get => _quantity;
@@ -199,7 +200,7 @@ namespace ServiceInterface.Model
         private OrderItemState _state;
         private string _productName;
 
-
+        [ObserveMutations(MutationObserverFlags.Collection)]
         public ObservableCollection<Additive> Additives
         {
 
@@ -228,7 +229,7 @@ namespace ServiceInterface.Model
             }
         }
 
-
+        [ObserveMutations(MutationObserverFlags.Object)]
         public Product Product { get; set; }
 
 
