@@ -4,7 +4,7 @@
 
 namespace Utilities.Attributes  
 {
-    [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public class ObservePropertyMutationAttribute : Attribute
     {
        
@@ -15,14 +15,10 @@ namespace Utilities.Attributes
 
     }
 
-    [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public class ObserveMutationsAttribute : Attribute
     {
-        // See the attribute guidelines at 
-        //  http://go.microsoft.com/fwlink/?LinkId=85236
-        readonly string positionalString;
-
-        // This is a positional argument
+      
         public ObserveMutationsAttribute(MutationObserverFlags flag)
         {
             switch (flag)

@@ -7,11 +7,16 @@ using Utilities.Attributes;
 using System.Reflection;
 using Utilities.Extensions;
 
-namespace FastPosFrontend.Helpers
+namespace Utilities.Mutation.Observers
 {
     public class ObjectGraphMutationObserver<T>:IMutationObserver<T>
     {
         public T Source { get; private set ; }
+
+        public bool IsInitialized { get; private set; }
+
+        public bool HasCommitedChanges { get; private set; }
+
         public ObjectMutationObserver<T> _rootMutationObserver;
         private Dictionary<string,IMutationObserver> _observerNodes;
         public ObjectGraphMutationObserver(T root , params PropertyInfo[] properties)
@@ -72,7 +77,7 @@ namespace FastPosFrontend.Helpers
             var observerType = typeof(CollectionMutationObserver<>);
             Type[] args = { property.PropertyType.GetGenericArguments()[0] };
             var propertyObserverType = observerType.MakeGenericType(args);
-            var collectionObserver = Activator.CreateInstance(propertyObserverType, property.GetValue(source),isObservingItems);
+            var collectionObserver = Activator.CreateInstance(propertyObserverType, property.GetValue(source),isObservingItems,true);
             return (IMutationObserver)collectionObserver;
         }
         private IMutationObserver CreateObjectMutationObserver(T source, PropertyInfo property)
@@ -109,12 +114,14 @@ namespace FastPosFrontend.Helpers
         {
             _observerNodes.Values.ToList().ForEach(n => n.Commit());
             _rootMutationObserver.Commit();
+            HasCommitedChanges = true;
         }
 
         public void Push()
         {
             _observerNodes.Values.ToList().ForEach(n => n.Push());
             _rootMutationObserver.Push();
+            HasCommitedChanges = false;
         }
 
         public bool IsMutated()
@@ -127,7 +134,8 @@ namespace FastPosFrontend.Helpers
         public static bool CanCreateMutationObserverGraph(Type type)
         {
             var properties = type.GetPropertiesDecoratedBy<ObserveMutationsAttribute>();
-            return properties.Any(p=> IsPropertyObserverAnObjectMutationObserver(p));
+            //return properties.Any(p=> IsPropertyObserverAnObjectMutationObserver(p));
+            return properties.Any();
         }
 
         private static bool IsPropertyObserverAnObjectMutationObserver(PropertyInfo property)

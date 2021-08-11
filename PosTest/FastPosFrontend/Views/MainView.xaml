@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:FastPosFrontend.Views"
         xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
         mc:Ignorable="d"
-
         WindowStyle="None"
         AllowsTransparency="False"
         WindowStartupLocation="CenterScreen"

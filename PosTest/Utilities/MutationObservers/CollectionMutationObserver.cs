@@ -5,39 +5,47 @@ using System.Linq;
 using Utilities.Extensions.Collections;
 using Utilities.Extensions.Types;
 using Utilities.Attributes;
-using System.Runtime.CompilerServices;
+using Utilities.Mutation.Observers.Extentions;
+using System.Reflection;
 
-namespace FastPosFrontend.Helpers
+namespace Utilities.Mutation.Observers
 {
     public class CollectionMutationObserver<T> : ICollectionMutationObserver<T>
     {
         private ICollection<T> _mutatedCollection;
         private readonly List<IMutationObserver<T>> _itemsMutationObservers;
-        private readonly List<string> _collectionItemObservedProperties;
+        private readonly string [] _objectObservedProperties;
+        private readonly PropertyInfo [] _objectGraphObservedProperties;
         private readonly bool _isSourceCollectionReadonly;
-        
+        private readonly bool _isGraphConstructionEnabled;
+
 
         public bool IsInitialized { get; private set; }
-        public CollectionMutationObserver(ICollection<T> source, bool isObservingItems = false, params string[] properties) 
+        public CollectionMutationObserver(ICollection<T> source, bool isObservingItems = false, bool isGraphConstructionEnabled = true, params string[] properties)
         {
             _itemsMutationObservers = new List<IMutationObserver<T>>();
             _isSourceCollectionReadonly = true;
             IsObservingItems = isObservingItems;
+            _isGraphConstructionEnabled = isGraphConstructionEnabled;
             properties = GetDecoratedPropertiesIfEmpty(properties);
-            _collectionItemObservedProperties = new List<string>(properties);
+
+            if (_isGraphConstructionEnabled && isObservingItems)
+            {
+                _objectGraphObservedProperties = typeof(T).GetPropertiesDecoratedBy<ObserveMutationsAttribute>().ToArray();
+            }
+
+            _objectObservedProperties = properties;
             if (source != null)
             {
                 Init(source);
             }
-
-
         }
 
         private void Init(ICollection<T> source)
         {
             Source = source.ToList();
             _mutatedCollection = source;
-            SetItemsMutationObservers(_collectionItemObservedProperties.ToArray());
+            SetItemsMutationObservers();
             IsInitialized = true;
         }
 
@@ -52,38 +60,46 @@ namespace FastPosFrontend.Helpers
             return properties;
         }
 
-        private void SetItemsMutationObservers(params string[] properties)
+        private void SetItemsMutationObservers()
         {
             
             if (IsObservingItems)
             {
-                var constructGraph = true;
+
                 var canCreate = ObjectGraphMutationObserver<T>.CanCreateMutationObserverGraph(typeof(T));
-                if (! constructGraph)
+                if (!(_isGraphConstructionEnabled && canCreate))
                 {
-                    Source.ToList().ForEach(item =>
-                    {
-                        _itemsMutationObservers.Add(new ObjectMutationObserver<T>(item, properties));
-                    });
+                    Source.ToList().ForEach(AddObjectMutationObserver);
                 }
                 else
                 {
-                    var graphProperties = typeof(T).GetPropertiesDecoratedBy<ObserveMutationsAttribute>().ToArray();
-                    Source.ToList().ForEach(item =>
-                    {
-                        _itemsMutationObservers.Add(new ObjectGraphMutationObserver<T>(item, graphProperties));
-                    });
+                    Source.ToList().ForEach(AddObjectGraphMutationObserver);
                 }
             }
         }
 
-        
+        private void AddObjectGraphMutationObserver(T item)
+        {
+            _itemsMutationObservers.Add(new ObjectGraphMutationObserver<T>(item, _objectGraphObservedProperties));
+        }
+
+        private void AddObjectMutationObserver(T item)
+        {
+            _itemsMutationObservers.Add(new ObjectMutationObserver<T>(item, _objectObservedProperties));
+        }
+
 
         public ICollection<T> Source { get; private set; }
 
         public bool IsObservingItems { get; }
 
         public bool HasCommitedChanges { get; private set; }
+
+        public IMutationObserver this[T obj]
+        {
+            get=> _itemsMutationObservers.FirstOrDefault(i => i.Source.Equals(obj));
+
+        }
 
 
         public ICollection<T> GetAddedItems(ICollection<T> mutatedCollection)
@@ -129,50 +145,76 @@ namespace FastPosFrontend.Helpers
 
         public void Commit(ICollection<T> mutatedCollection)
         {
-            MethodGuard();
+            this.MethodGuard();
             _mutatedCollection = mutatedCollection;
             Commit();
         }
 
         public void Push()
         {
-            MethodGuard();
+            this.MethodGuard();
             if (!HasCommitedChanges) throw new InvalidOperationException("Can't Call push if no changes are commited");
             if (IsObservingItems)
             {
 
-                var removedItems = GetRemovedItems(_mutatedCollection);
-                var addedItems = GetAddedItems(_mutatedCollection);
-
-                UnobserveAllRemovedItemsAfterCommit(removedItems);
+                UnobserveAllRemovedItemsAfterCommit();
 
                 PushAllCollectionItems();
 
-                /*
-                 * NOTE: Must be called after pushing all the previous items 
-                 * because newly addeditems are have no mutations to push
-                 */
-                ObserveAddedCollectionItemsAfterCommit(addedItems);
+
+                ObserveAddedCollectionItemsAfterCommit();
             }
 
             Source = _mutatedCollection;
             if (!_isSourceCollectionReadonly)
             {
-                _mutatedCollection = null; 
+                _mutatedCollection = null;
             }
             HasCommitedChanges = false;
         }
 
-        private void UnobserveAllRemovedItemsAfterCommit(ICollection<T> removedItems)
+        public bool CommitAndPushAddedItems()
         {
+            HasCommitedChanges = true;
+            ObserveAddedCollectionItemsAfterCommit();
+            HasCommitedChanges = false;
+            return true;
+        }
+
+        public void ObserveItem(T item)
+        {
+            if (!IsObservingItems)
+            {
+                throw new InvalidOperationException("Tyring to observe an item of a collection that is not observing individual item mutations.");
+            }
+            var canCreate = ObjectGraphMutationObserver<T>.CanCreateMutationObserverGraph(typeof(T));
+            if (_isGraphConstructionEnabled&& canCreate)
+            {
+                AddObjectGraphMutationObserver(item);
+            }
+            else
+            {
+                AddObjectMutationObserver(item);
+            }
+        }
+
+        private void UnobserveAllRemovedItemsAfterCommit()
+        {
+            var removedItems = GetRemovedItems(_mutatedCollection);
             if (removedItems == null) return;
             _itemsMutationObservers.RemoveAll(o => removedItems.Contains(o.Source));
         }
 
-        private void ObserveAddedCollectionItemsAfterCommit(ICollection<T> addedItems)
+
+        /*
+                 * NOTE: Must be called after pushing all the previous items 
+                 * because newly addeditems are have no mutations to push
+                 */
+        private void ObserveAddedCollectionItemsAfterCommit()
         {
+            var addedItems = GetAddedItems(_mutatedCollection);
             if (addedItems == null) return;
-            var addedItemsObservers = addedItems.Select(item => new ObjectMutationObserver<T>(item, _collectionItemObservedProperties.ToArray()));
+            var addedItemsObservers = addedItems.Select(item => new ObjectMutationObserver<T>(item, _objectObservedProperties.ToArray()));
             _itemsMutationObservers.AddRange(addedItemsObservers);
         }
 
@@ -189,6 +231,7 @@ namespace FastPosFrontend.Helpers
 
         public void Commit()
         {
+            this.MethodGuard();
             if (IsObservingItems)
             {
                 _itemsMutationObservers.ForEach(observer =>
@@ -208,31 +251,5 @@ namespace FastPosFrontend.Helpers
             Init(source);
         }
 
-        private void MethodGuard([CallerMemberName] string method ="")
-        {
-            
-
-            switch (method)
-            {
-
-                case nameof(Commit):
-                case nameof(Push):
-                case nameof(IsMutated):
-                case nameof(GetMutationTypes):
-                case nameof(GetAddedItems):
-                case nameof(GetRemovedItems):
-                    if (!IsInitialized) throw new InvalidOperationException($"Can't Call {method} if {nameof(CollectionMutationObserver<T>)} is not initialized");
-                    break;
-                default:
-                    break;
-            }
-        }
-
     }
-
-
-
-
-
-
 }

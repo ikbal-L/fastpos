@@ -13,6 +13,9 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -45,6 +48,12 @@
     <Compile Include="Class1.cs" />
     <Compile Include="ExtentionMethods.cs" />
     <Compile Include="MinAttribute.cs" />
+    <Compile Include="MutationObservers\CollectionMutationObserver.cs" />
+    <Compile Include="MutationObservers\IMutationObserver.cs" />
+    <Compile Include="MutationObservers\MutationObserverEx.cs" />
+    <Compile Include="MutationObservers\ObjectGraphMutationObserver.cs" />
+    <Compile Include="MutationObservers\ObjectMutationObserver.cs" />
+    <Compile Include="MutationObservers\PropertyMutation.cs" />
     <Compile Include="ObservePropertyMutationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

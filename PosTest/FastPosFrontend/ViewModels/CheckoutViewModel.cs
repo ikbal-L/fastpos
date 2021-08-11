@@ -29,6 +29,7 @@ using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Utilities.Mutation.Observers;
 using Icon = FastPosFrontend.Helpers.Icon;
 using Table = ServiceInterface.Model.Table;
 
@@ -222,13 +223,7 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            //var deliveryMen = _data.GetResult<ICollection<Deliveryman>>();
-            //var waiter = _data.GetResult<ICollection<Waiter>>();
-            //var tables = _data.GetResult<ICollection<Table>>();
-            //var customers = _data.GetResult<ICollection<Customer>>();
-            //var unprocessedOrders = _data.GetResult<ICollection<Order>>();
-            //var categories = _data.GetResult<ICollection<Category>>();
-            //var products = _data.GetResult<ICollection<Product>>();
+
 
             var deliveryMen = StateManager.Get<Deliveryman>();
             var waiter = StateManager.Get<Waiter>();
@@ -238,15 +233,11 @@ namespace FastPosFrontend.ViewModels
             var categories = StateManager.Get<Category>();
             var products = StateManager.Get<Product>();
 
-            //StateManager.Associate<Additive, Product>();
-            //StateManager.Associate<Product, Category>();
-            //StateManager.Associate<Order, Table>();
-            //StateManager.Associate<Order, Product>();
-            //StateManager.Associate<Order, Deliveryman>();
-            //StateManager.Associate<Order, Waiter>();
-            //StateManager.Associate<Order, Customer>();
+
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
+            OrdersCollectionObserver = new CollectionMutationObserver<Order>(Orders,true,true);
+
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
@@ -296,16 +287,15 @@ namespace FastPosFrontend.ViewModels
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
-            //AppDrawerConductor.Instance.InitTop(this, "CheckoutWaiterDrawer", this,tag:typeof(Waiter));
-            //AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: typeof(Deliveryman));
-            //AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: typeof(Table));
-            //AppDrawerConductor.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: typeof(Customer));
+
 
             AppDrawerConductor.Instance.InitTop(this, "CheckoutWaiterDrawer", this, tag: ListKind.Waiter);
             AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
             AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
             AppDrawerConductor.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
         }
+
+        public CollectionMutationObserver<Order> OrdersCollectionObserver { get; set; }
 
         private void ShowOrderInfo()
         {
@@ -791,6 +781,9 @@ namespace FastPosFrontend.ViewModels
             CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
             //DisplayedOrder = CurrentOrder;
             Orders.Add(CurrentOrder);
+
+            OrdersCollectionObserver.ObserveItem(CurrentOrder);
+
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
             ReturnedAmount = null;
@@ -1154,6 +1147,9 @@ namespace FastPosFrontend.ViewModels
 
                     var b2 = OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
                     ChangesMade = b1 || b2;
+
+                    OrdersCollectionObserver.Commit();
+                    ChangesMade = OrdersCollectionObserver[CurrentOrder].IsMutated();
 
                     _printOrder = OrderManagementHelper.GetChangesFromOrder(CurrentOrder, _diff);
                     CurrentOrder.State = OrderState.Ordered;

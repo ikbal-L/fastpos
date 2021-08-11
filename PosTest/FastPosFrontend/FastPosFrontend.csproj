@@ -284,14 +284,9 @@
     <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\AppScreen.cs" />
     <Compile Include="Helpers\Associations.cs" />
-    <Compile Include="Helpers\CollectionMutationObserver.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
-    <Compile Include="Helpers\ICollectionMutationObserver.cs" />
     <Compile Include="Helpers\Icon.cs" />
-    <Compile Include="Helpers\IPropertyDiff.cs" />
-    <Compile Include="Helpers\IPropertyDiff1.cs" />
     <Compile Include="Helpers\Navigation.cs" />
-    <Compile Include="Helpers\ObjectGraphMutationObserver.cs" />
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
     <Compile Include="Helpers\ِChangesTracker.cs" />

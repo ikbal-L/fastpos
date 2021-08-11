@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Utilities.Attributes;
+using Utilities.Mutation.Observers;
 using Xunit;
 
 namespace XUnitTesting
@@ -12,6 +13,41 @@ namespace XUnitTesting
     public class MuationObserverTest
     {
         [Fact]
+        public void MutationObservers_CreateAGraphMutationObserverWithTypeNotDecoratedByObserveMutationsAttribute_ThrowArgumentException()
+        {
+            var ex = Assert.Throws<ArgumentException>(() => {
+
+                var o = new ObjectGraphMutationObserver<Additive>(new Additive());
+            });
+            Assert.Contains($"contains no properties decorated by {nameof(ObserveMutationsAttribute)}", ex.Message);
+        }
+
+        [Fact]
+        public void MutationObservers_CallCommitWhenObserverIsNotInitialized_ThrowsInvalidOperationException()
+        {
+            
+            var orderItemObserver = new ObjectMutationObserver<OrderItem>(null,nameof(OrderItem.Quantity));
+            var collectionObserver =new CollectionMutationObserver<OrderItem>(null);
+            var graphObserver =new CollectionMutationObserver<OrderItem>(null);
+            Assert.Throws<InvalidOperationException>(orderItemObserver.Commit);
+            Assert.Throws<InvalidOperationException>(collectionObserver.Commit);
+            Assert.Throws<InvalidOperationException>(graphObserver.Commit);
+
+        }
+
+        [Fact]
+        public void MutationObservers_CallPushWhenObserverIsNotInitialized_ThrowsInvalidOperationException()
+        {
+
+            var orderItemObserver = new ObjectMutationObserver<OrderItem>(null, nameof(OrderItem.Quantity));
+            var collectionObserver = new CollectionMutationObserver<OrderItem>(null);
+            var graphObserver = new CollectionMutationObserver<OrderItem>(null);
+            Assert.Throws<InvalidOperationException>(orderItemObserver.Push);
+            Assert.Throws<InvalidOperationException>(collectionObserver.Push);
+            Assert.Throws<InvalidOperationException>(graphObserver.Push);
+
+        }
+
         public void Test()
         {
             
@@ -22,7 +58,7 @@ namespace XUnitTesting
 
 
             var list = new List<OrderItem>() { orderItem1, orderItem2 ,orderItem4};
-            var collectionMutationObserver = new CollectionMutationObserver<OrderItem>(list,isObservingItems:true, nameof(OrderItem.Quantity));
+            var collectionMutationObserver = new CollectionMutationObserver<OrderItem>(list,isObservingItems:true,properties: nameof(OrderItem.Quantity));
             list.Remove(orderItem1);
             list.Add(orderItem3);
             orderItem4.Quantity = 10;
@@ -103,9 +139,10 @@ namespace XUnitTesting
             observer2.Commit();
             Assert.True(observer.IsMutated());
             Assert.True(observer2.IsMutated());
-            var propertyDiff = new PropertyDiff<float>((f1,f2)=> f2-f1);
-            var diffItem = DiffGenerator<OrderItem>.Generate(observer,(prop,propertyDiff));
-            Assert.Equal(10, diffItem.Quantity);
+
+            //var propertyDiff = new PropertyDiff<float>((f1,f2)=> f2-f1);
+            //var diffItem = DiffGenerator<OrderItem>.Generate(observer,(prop,propertyDiff));
+            //Assert.Equal(10, diffItem.Quantity);
             
         }
 
@@ -113,11 +150,7 @@ namespace XUnitTesting
         public void  Test3()
         {
             
-           var ex=  Assert.Throws<ArgumentException>(()=> {
-
-                var o = new ObjectGraphMutationObserver<Additive>(new Additive());
-            });
-            Assert.Contains($"contains no properties decorated by {nameof(ObserveMutationsAttribute)}", ex.Message);
+           
             var orderItem = new OrderItem() { Additives = new System.Collections.ObjectModel.ObservableCollection<Additive>()};
             orderItem.Additives.Add(new Additive() { Description="d1"});
             orderItem.Additives.Add(new Additive() { Description="d2"});
