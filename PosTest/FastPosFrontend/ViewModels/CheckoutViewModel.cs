@@ -172,30 +172,14 @@ namespace FastPosFrontend.ViewModels
             OnReady();
         }
 
-        /// <summary>
-        /// The <c>Setup</c> Method sets up tasks to retrieve data and Notifications on task completion 
-        /// </summary>
+        
         protected override void Setup()
         {
-            //var deliveryMen = StateManager.GetAsync<Deliveryman>();
-            //var waiters = StateManager.GetAsync<Waiter>();
-            //var tables = StateManager.GetAsync<Table>();
-            //var customers = StateManager.GetAsync<Customer>();
             var categories = StateManager.GetAsync<Category>();
             var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
 
-            //var products = StateManager.GetAsync<Product>();
-
-
             _data = new NotifyAllTasksCompletion(categories,
-                unprocessedOrders /*,deliveryMen, waiters, tables, customers, products*/);
-            if (_data.IsCompleted)
-            {
-                Initialize();
-                IsReady = true;
-
-            }
-            _data.AllTasksCompleted += OnAllTasksCompleted;
+                unprocessedOrders);
         }
 
         private void SetupEmbeddedCommandBar()
@@ -289,7 +273,6 @@ namespace FastPosFrontend.ViewModels
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
 
-
             AppDrawerConductor.Instance.InitTop(this, "CheckoutWaiterDrawer", this, tag: ListKind.Waiter);
             AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
             AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
@@ -301,15 +284,11 @@ namespace FastPosFrontend.ViewModels
         private void ShowOrderInfo()
         {
             IsOrderInfoShown = true;
-            _orderInfoCloseTimer.Start(); //auto close after one second
+            _orderInfoCloseTimer.Start(); 
         }
         private void CurrentOrder_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //if (e.PropertyName == nameof(CurrentOrder.OrderItems))
-            //{
-            //    OrderItemsCollectionViewSource.Source = CurrentOrder.OrderItems;
-            //    //OrderItemsCollectionViewSource.View.Refresh();
-            //}
+      
             if (e.PropertyName == nameof(Order.Table)&& CurrentOrder?.Table == null)
             {
                 SelectedTable = null;
@@ -1019,7 +998,6 @@ namespace FastPosFrontend.ViewModels
             ProductsPage.Clear();
             ProductsVisibility = true;
             if (category?.Id == null) return;
-            //var filteredProducts = AllProducts.Where(p => p.Category == category && p.Rank != null);
             var filteredProducts = category.Products;
 
             var comparer = new Comparer<Product>();
@@ -1141,36 +1119,21 @@ namespace FastPosFrontend.ViewModels
 
                     var stamp = DateTime.Now;
 
-
                     _printOrder = null;
 
-                    var b1 = OrderManagementHelper.StampAndSetOrderItemState(stamp, CurrentOrder.OrderItems, _diff);
-
-                    var b2 = OrderManagementHelper.StampAdditives(stamp, CurrentOrder.OrderItems);
-                    ChangesMade = b1 || b2;
-
                     OrdersCollectionObserver.Commit();
-                    ChangesMade = OrdersCollectionObserver[CurrentOrder].IsMutated();
+                    var currentOrderObserver = OrdersCollectionObserver[CurrentOrder] as ObjectGraphMutationObserver<Order>;
+                    var removedItems = (currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>)?.GetRemovedItems();
+                    ChangesMade = currentOrderObserver.IsMutated();
 
-                    OrdersCollectionObserver[CurrentOrder].GetDifference<Order>((o)=> {
+                    if (ChangesMade)
+                    {
+                       
+                        _printOrder = OrdersCollectionObserver[CurrentOrder].GetDifference(OrderHelper.GetOrderChanges);
+                        OrdersCollectionObserver.Push(); 
+                    }
+                    CurrentOrder.OrderItems.AddRange(removedItems);
 
-                        if (o is ObjectGraphMutationObserver<Order> og)
-                        {
-                           var orderItemCO =  og[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
-                            var added = orderItemCO.GetAddedItems();
-                            var removed = orderItemCO.GetRemovedItems();
-                            var mutated = orderItemCO.GetMutatedItems(t=> {
-
-                                var src = t.Source;
-                                var item = src.Clone();
-                                var propertyMutation = t[nameof(OrderItem.Quantity)]
-                            
-                            });
-                        }
-                    
-                    });
-
-                    _printOrder = OrderManagementHelper.GetChangesFromOrder(CurrentOrder, _diff);
                     CurrentOrder.State = OrderState.Ordered;
                     SaveCurrentOrder();
 
@@ -1939,13 +1902,8 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void ShowDrawer(ListKind listKind)
-        {
-            //ListKind = listKind;
-            //IsTopDrawerOpen = true;
-            AppDrawerConductor.Instance.OpenTop(this, listKind);
-
-        }
+        public void ShowDrawer(ListKind listKind) =>AppDrawerConductor.Instance.OpenTop(this, listKind);
+     
 
         public void Handle(AssignOrderTypeEventArgs message)
         {
@@ -1974,13 +1932,7 @@ namespace FastPosFrontend.ViewModels
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
 
-            //contentOfPage.Content = CurrentOrder;
-            //contentOfPage.Content = GenerateContent(CurrentOrder);
 
-            //if (_printOrder == null)
-            //{
-            //    _printOrder = CurrentOrder;
-            //}
             contentOfPage.Content = _printOrder;
             _diff.Clear();
             var conv = new LengthConverter();
@@ -1991,8 +1943,6 @@ namespace FastPosFrontend.ViewModels
             contentOfPage.Width = width;
             document.DocumentPaginator.PageSize = new Size(width, height);
 
-            // fixedPage.Width = contentOfPage.Width;
-            //fixedPage.Height = contentOfPage.Height;
             fixedPage.Children.Add(contentOfPage);
             PageContent pageContent = new PageContent();
             ((IAddChild) pageContent).AddChild(fixedPage);
@@ -2025,25 +1975,7 @@ namespace FastPosFrontend.ViewModels
             PrintViewModel pvm = new PrintViewModel {Document = doc, PreviousScreen = this, Parent = Parent};
             (Parent as MainViewModel).ActivateItem(pvm);
 
-            //var xpsDoc = GenerateXpsDocument($"customerReceipt{DateTime.Now.ToFileTime()}");
-            //WriteXpsDocument(doc, xpsDoc);
 
-            //PrintDocument();
-        }
-
-
-        public XpsDocument GenerateXpsDocument(string name)
-        {
-            //XpsDocument document = new XpsDocument($"/Printing/{name}.xps",FileAccess.ReadWrite);
-            XpsDocument document = new XpsDocument($"{name}.xps", FileAccess.ReadWrite);
-            return document;
-        }
-
-        public void WriteXpsDocument(FixedDocument fixedDocument, XpsDocument xpsDocument)
-        {
-            XpsDocumentWriter xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
-            xpsDocumentWriter.Write(fixedDocument);
-            xpsDocument.Close();
         }
 
         public void PrintDocument(PrintSource source)
@@ -2316,9 +2248,6 @@ namespace FastPosFrontend.ViewModels
             SplitViewModel.SplittedOrder.OrderNumber = orderCount;
             orderCount++;
         }
-
-
-
     }
 
     public enum OrderProp

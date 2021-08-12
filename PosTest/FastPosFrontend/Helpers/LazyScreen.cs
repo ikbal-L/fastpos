@@ -151,6 +151,10 @@ namespace FastPosFrontend.Helpers
 
         public event EventHandler<ViewModelInitializedEventArgs> ViewModelInitialized;
 
+
+        /// <summary>
+        /// The <c>Setup</c> Method sets up tasks to retrieve data and Notifications on task completion 
+        /// </summary>
         protected abstract void Setup();
         public abstract void Initialize();
 
@@ -160,6 +164,7 @@ namespace FastPosFrontend.Helpers
             {
                 Initialize();
                 IsReady = true;
+                return;
             }
 
             _data.AllTasksCompleted += OnAllTasksCompleted;

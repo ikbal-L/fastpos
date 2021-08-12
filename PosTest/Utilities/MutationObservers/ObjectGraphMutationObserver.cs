@@ -9,7 +9,7 @@ using Utilities.Extensions;
 
 namespace Utilities.Mutation.Observers
 {
-    public class ObjectGraphMutationObserver<T>:IMutationObserver<T>
+    public class ObjectGraphMutationObserver<T>:IObjectMutationObserver<T>
     {
         public T Source { get; private set ; }
 
@@ -26,45 +26,55 @@ namespace Utilities.Mutation.Observers
                 throw new ArgumentException($"{typeof(T).FullName} contains no properties decorated by {nameof(ObserveMutationsAttribute)}");
             }
             Source = root;
+            IsInitialized = root != null;
             _rootMutationObserver = new ObjectMutationObserver<T>(root);
             _observerNodes = new Dictionary<string, IMutationObserver>();
+            properties = GetPropertiesIfEmpty(properties);
+
+            InitGraphNodes(root, properties);
+
+        }
+
+        private static PropertyInfo[] GetPropertiesIfEmpty(PropertyInfo[] properties)
+        {
             if (!properties.Any())
             {
                 properties = typeof(T).GetPropertiesDecoratedBy<ObserveMutationsAttribute>().ToArray();
             }
-             
+
+            return properties;
+        }
+
+        private void InitGraphNodes(T root, PropertyInfo[] properties)
+        {
             if (properties.Any())
             {
 
                 properties.Where(FilterByCollectionMutationFlag)
-                .ToList().ForEach(p => {
+                .ToList().ForEach(p =>
+                {
                     var collectionObserver = CreateCollectionObserver(root, p);
                     _observerNodes.Add(p.Name, collectionObserver);
 
                 });
 
-
-
                 properties.Where(this.FilterByObjectMutationFlag).ToList().ForEach(p =>
                 {
-                    var mutationObserver= CreateMutationObserver(root, p);
+                    var mutationObserver = CreateMutationObserver(root, p);
                     _observerNodes.Add(p.Name, mutationObserver);
 
                 });
-               
-            }
 
+            }
         }
 
-        
-
-        public bool FilterByCollectionMutationFlag(PropertyInfo property)
+        private bool FilterByCollectionMutationFlag(PropertyInfo property)
         {
             var attribute = property.GetDecoratingAttribute<ObserveMutationsAttribute>();
             return attribute.IsCollectionObserver|| attribute.IsCollectionObservingItemsObserver; 
         }
 
-        public bool FilterByObjectMutationFlag(PropertyInfo property)
+        private bool FilterByObjectMutationFlag(PropertyInfo property)
         {
             var attribute = property.GetDecoratingAttribute<ObserveMutationsAttribute>();
             return attribute.IsObjectObserver;
@@ -77,7 +87,7 @@ namespace Utilities.Mutation.Observers
             var observerType = typeof(CollectionMutationObserver<>);
             Type[] args = { property.PropertyType.GetGenericArguments()[0] };
             var propertyObserverType = observerType.MakeGenericType(args);
-            var collectionObserver = Activator.CreateInstance(propertyObserverType, property.GetValue(source),isObservingItems,true);
+            var collectionObserver = Activator.CreateInstance(propertyObserverType, property.GetValue(source),isObservingItems,true,this);
             return (IMutationObserver)collectionObserver;
         }
         private IMutationObserver CreateObjectMutationObserver(T source, PropertyInfo property)
@@ -112,14 +122,20 @@ namespace Utilities.Mutation.Observers
 
         public void Commit()
         {
-            _observerNodes.Values.ToList().ForEach(n => n.Commit());
+            _observerNodes.Values.ToList().ForEach(n => {
+
+                if (n.IsInitialized)
+                {
+                    n.Commit();
+                }
+            });
             _rootMutationObserver.Commit();
             HasCommitedChanges = true;
         }
 
         public void Push()
         {
-            _observerNodes.Values.ToList().ForEach(n => n.Push());
+            _observerNodes.Values.Where(n=>n.IsInitialized).ToList().ForEach(n => n.Push());
             _rootMutationObserver.Push();
             HasCommitedChanges = false;
         }
@@ -167,6 +183,16 @@ namespace Utilities.Mutation.Observers
             }
 
             return false;
+        }
+
+        public TSource GetDifference<TSource>(Func<IMutationObserver, TSource> generator) where TSource : class
+        {
+            return generator.Invoke(this);
+        }
+
+        public IPropertyMutation GetPropertyMutation(string propertyName)
+        {
+            return ((IObjectMutationObserver)_rootMutationObserver).GetPropertyMutation(propertyName);
         }
     }
 

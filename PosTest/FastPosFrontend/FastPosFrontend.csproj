@@ -287,6 +287,7 @@
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\Icon.cs" />
     <Compile Include="Helpers\Navigation.cs" />
+    <Compile Include="Helpers\OrderHelper.cs" />
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
     <Compile Include="Helpers\ِChangesTracker.cs" />

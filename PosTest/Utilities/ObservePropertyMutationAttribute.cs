@@ -19,7 +19,7 @@ namespace Utilities.Attributes
     public class ObserveMutationsAttribute : Attribute
     {
       
-        public ObserveMutationsAttribute(MutationObserverFlags flag)
+        public ObserveMutationsAttribute(MutationObserverFlags flag,params Predicate<object>[] exclude)
         {
             switch (flag)
             {
@@ -39,14 +39,13 @@ namespace Utilities.Attributes
         public bool IsObjectObserver { get; }
         public bool IsCollectionObserver { get; }
         public bool IsCollectionObservingItemsObserver { get; }
+
+        public Predicate<object>[] ExclutionPredicates { get;}
     }
     
     public enum MutationObserverFlags
     {
         Object, Collection,CollectionObservingItems
     }
-
-
-
 
 }

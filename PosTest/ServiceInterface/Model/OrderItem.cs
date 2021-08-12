@@ -31,6 +31,20 @@ namespace ServiceInterface.Model
             
         }
 
+        public OrderItem(OrderItem orderItem)
+        {
+            Id = orderItem.Id;
+            Product = orderItem.Product;
+            ProductId = orderItem.ProductId;
+            ProductName = orderItem.ProductName;
+            Quantity = orderItem.Quantity;
+            UnitPrice = orderItem.UnitPrice;
+            DiscountAmount = orderItem.DiscountAmount;
+            DiscountPercentage = orderItem.DiscountPercentage;
+            Additives = orderItem.Additives;
+
+        }
+
         public OrderItem(Product product, float quantity, Order order) : this()
         {
             Order = order;
@@ -234,35 +248,7 @@ namespace ServiceInterface.Model
 
 
 
-        public bool AddAdditives(Additive additive)
-        {
-            Additives ??= new BindableCollection<Additive>();
-            if (Additives.Count > 0 && Additives.Any(a=> a.Equals(additive)))
-            {
-                return false;
-            }
-
-            var additive1 = new Additive(additive) {ParentOrderItem = this};
-            Additives.Add(additive1);
-            if (additive1.Id != null)
-                OrderItemAdditives.Add(new OrderItemAdditive
-                    {AdditiveId = (long) additive1.Id, OrderItemId = Id, State = AdditiveState.Added});
-            return true;
-        }
-
-        public void RemoveAdditive(Additive additive)
-        {
-            if (Order.Id == null)
-            {
-                OrderItemAdditives.RemoveAll(orderItemAdditive => orderItemAdditive.AdditiveId == additive.Id);
-            }
-            else
-            {
-                OrderItemAdditives.Find(oia => oia.AdditiveId == additive.Id).State = AdditiveState.Removed;
-            }
-
-            Additives.Remove(additive);
-        }
+        
 
 
 

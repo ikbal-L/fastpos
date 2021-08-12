@@ -50,6 +50,7 @@
     <Compile Include="MinAttribute.cs" />
     <Compile Include="MutationObservers\CollectionMutationObserver.cs" />
     <Compile Include="MutationObservers\IMutationObserver.cs" />
+    <Compile Include="MutationObservers\IPropertyMutation.cs" />
     <Compile Include="MutationObservers\MutationObserverEx.cs" />
     <Compile Include="MutationObservers\ObjectGraphMutationObserver.cs" />
     <Compile Include="MutationObservers\ObjectMutationObserver.cs" />

@@ -16,12 +16,15 @@ namespace Utilities.Mutation.Observers
     public interface IMutationObserver<T> : IMutationObserver
     {
         T Source { get; }
-    }
 
-    public interface IObjectMutationObserver<T> : IMutationObserver<T>
+    }
+    public interface IObjectMutationObserver
     {
-        
-        
+        IPropertyMutation GetPropertyMutation(string propertyName);
+    }
+    public interface IObjectMutationObserver<T> : IMutationObserver<T>, IObjectMutationObserver
+    {
+       
     }
 
     public interface ICollectionMutationObserver : IMutationObserver

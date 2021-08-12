@@ -3,7 +3,7 @@ using Utilities.Extensions;
 
 namespace Utilities.Mutation
 {
-    public class PropertyMutation
+    public class PropertyMutation : IPropertyMutation
     {
         public PropertyMutation(string propertyName, object mutatedObject)
         {
@@ -22,7 +22,7 @@ namespace Utilities.Mutation
 
     public interface IPropertyDiff
     {
-        void Invoke(object obj, PropertyMutation mutation);
+        void Invoke(object obj, IPropertyMutation mutation);
     }
     public class PropertyDiff<TProperty> : IPropertyDiff
     {
@@ -33,7 +33,7 @@ namespace Utilities.Mutation
             _propertyMutationHanlder = propertyMutationHanlder;
         }
 
-        public void Invoke(object obj, PropertyMutation mutation)
+        public void Invoke(object obj, IPropertyMutation mutation)
         {
             if (mutation?.Initial is TProperty initial && mutation?.Committed is TProperty committed)
             {

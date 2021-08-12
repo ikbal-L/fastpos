@@ -40,5 +40,7 @@ namespace FastPosFrontend.Helpers
             }
             orderItem.Additives.Remove(additive);
         }
+
+        
     }
 }

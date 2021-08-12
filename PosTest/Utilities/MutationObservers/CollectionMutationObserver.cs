@@ -19,10 +19,12 @@ namespace Utilities.Mutation.Observers
         private readonly bool _isSourceCollectionReadonly;
         private readonly bool _isGraphConstructionEnabled;
 
+        private object _owner;
 
         public bool IsInitialized { get; private set; }
-        public CollectionMutationObserver(ICollection<T> source, bool isObservingItems = false, bool isGraphConstructionEnabled = true, params string[] properties)
+        public CollectionMutationObserver(ICollection<T> source, bool isObservingItems = false, bool isGraphConstructionEnabled = true,object owner = null, params string[] properties)
         {
+            _owner = owner;
             _itemsMutationObservers = new List<IMutationObserver<T>>();
             _isSourceCollectionReadonly = true;
             IsObservingItems = isObservingItems;
@@ -105,14 +107,22 @@ namespace Utilities.Mutation.Observers
         public ICollection<T> GetAddedItems(ICollection<T> mutatedCollection = null)
         {
             if (!HasCommitedChanges) return null;
-            return mutatedCollection.Except(Source).ToList();
+            if (mutatedCollection!= null)
+            {
+                _mutatedCollection = mutatedCollection; 
+            }
+            return _mutatedCollection.Except(Source).ToList();
         }
 
         public ICollection<T> GetRemovedItems(ICollection<T> mutatedCollection = null)
         {
             if (!IsInitialized) return null;
             if (!HasCommitedChanges) return null;
-            return Source?.Except(mutatedCollection).ToList();
+            if (mutatedCollection != null)
+            {
+                _mutatedCollection = mutatedCollection;
+            }
+            return Source?.Except(_mutatedCollection).ToList();
         }
 
         public ICollection<T> GetMutatedItems(Func<IMutationObserver<T>, T> transform = null,ICollection<T> mutatedCollection = null)
@@ -157,6 +167,7 @@ namespace Utilities.Mutation.Observers
         public void Commit(ICollection<T> mutatedCollection)
         {
             this.MethodGuard();
+            
             _mutatedCollection = mutatedCollection;
             Commit();
         }
@@ -235,7 +246,10 @@ namespace Utilities.Mutation.Observers
             {
                 if (_mutatedCollection.Contains(observer.Source))
                 {
-                    observer.Push();
+                    if (observer.IsInitialized)
+                    {
+                        observer.Push(); 
+                    }
                 }
             });
         }
@@ -249,7 +263,10 @@ namespace Utilities.Mutation.Observers
                 {
                     if (_mutatedCollection.Contains(observer.Source))
                     {
-                        observer.Commit();
+                        if (observer.IsInitialized)
+                        {
+                            observer.Commit(); 
+                        }
                     }
                 });
             }
@@ -262,5 +279,9 @@ namespace Utilities.Mutation.Observers
             Init(source);
         }
 
+        public TSource GetDifference<TSource>(Func<IMutationObserver, TSource> generator) where TSource : class
+        {
+            throw new NotImplementedException();
+        }
     }
 }

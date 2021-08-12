@@ -23,7 +23,8 @@ namespace Utilities.Mutation.Observers
 
         public bool HasCommitedChanges { get; private set; }
 
-        public PropertyMutation this[string property] => _mutations[property];
+
+
 
 
         public ObjectMutationObserver(T source, params string[] properties)
@@ -102,6 +103,11 @@ namespace Utilities.Mutation.Observers
         {
             return generator?.Invoke(this);
         }
+
+        public IPropertyMutation GetPropertyMutation(string propertyName)
+        {
+            return _mutations[propertyName];
+        }
     }
 
     
@@ -115,7 +121,7 @@ namespace Utilities.Mutation.Observers
             var t = new T();
             generator.ToList().ForEach(p => {
 
-                var mutation = mutationObserver[p.property];
+                var mutation = mutationObserver.GetPropertyMutation(p.property);
                 p.propertyDiff.Invoke(t, mutation);
             });
             return t;
