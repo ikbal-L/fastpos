@@ -102,17 +102,28 @@ namespace Utilities.Mutation.Observers
         }
 
 
-        public ICollection<T> GetAddedItems(ICollection<T> mutatedCollection)
+        public ICollection<T> GetAddedItems(ICollection<T> mutatedCollection = null)
         {
             if (!HasCommitedChanges) return null;
             return mutatedCollection.Except(Source).ToList();
         }
 
-        public ICollection<T> GetRemovedItems(ICollection<T> mutatedCollection)
+        public ICollection<T> GetRemovedItems(ICollection<T> mutatedCollection = null)
         {
             if (!IsInitialized) return null;
             if (!HasCommitedChanges) return null;
             return Source?.Except(mutatedCollection).ToList();
+        }
+
+        public ICollection<T> GetMutatedItems(Func<IMutationObserver<T>, T> transform = null,ICollection<T> mutatedCollection = null)
+        {
+            if (!IsInitialized) return null;
+            if (!HasCommitedChanges) return null;
+            return _itemsMutationObservers.Where(o=> o.IsMutated()).Select(o=> {
+
+                if (transform == null) return o.Source;
+                return transform.Invoke(o);
+            }).ToList();
         }
 
         public bool IsMutated()

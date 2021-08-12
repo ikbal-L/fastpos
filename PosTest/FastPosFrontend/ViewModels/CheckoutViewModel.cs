@@ -25,6 +25,7 @@ using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
+using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
@@ -1150,6 +1151,24 @@ namespace FastPosFrontend.ViewModels
 
                     OrdersCollectionObserver.Commit();
                     ChangesMade = OrdersCollectionObserver[CurrentOrder].IsMutated();
+
+                    OrdersCollectionObserver[CurrentOrder].GetDifference<Order>((o)=> {
+
+                        if (o is ObjectGraphMutationObserver<Order> og)
+                        {
+                           var orderItemCO =  og[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
+                            var added = orderItemCO.GetAddedItems();
+                            var removed = orderItemCO.GetRemovedItems();
+                            var mutated = orderItemCO.GetMutatedItems(t=> {
+
+                                var src = t.Source;
+                                var item = src.Clone();
+                                var propertyMutation = t[nameof(OrderItem.Quantity)]
+                            
+                            });
+                        }
+                    
+                    });
 
                     _printOrder = OrderManagementHelper.GetChangesFromOrder(CurrentOrder, _diff);
                     CurrentOrder.State = OrderState.Ordered;

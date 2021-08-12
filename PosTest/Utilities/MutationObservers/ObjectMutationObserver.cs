@@ -97,6 +97,11 @@ namespace Utilities.Mutation.Observers
             if (IsInitialized) throw new InvalidOperationException($"{this} was already initialized");
             Init(source);
         }
+
+        public TSource GetDifference<TSource>(Func<IMutationObserver, TSource> generator) where TSource:class
+        {
+            return generator?.Invoke(this);
+        }
     }
 
     

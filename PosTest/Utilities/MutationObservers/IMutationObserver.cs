@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Utilities.Mutation.Observers
 {
@@ -9,6 +10,8 @@ namespace Utilities.Mutation.Observers
         void Commit();
         void Push();
         bool IsMutated();
+        //TSource GetSource<TSource>();
+        TSource GetDifference<TSource>(Func<IMutationObserver,TSource> generator)where TSource:class;
     }
     public interface IMutationObserver<T> : IMutationObserver
     {
@@ -17,7 +20,8 @@ namespace Utilities.Mutation.Observers
 
     public interface IObjectMutationObserver<T> : IMutationObserver<T>
     {
-
+        
+        
     }
 
     public interface ICollectionMutationObserver : IMutationObserver
