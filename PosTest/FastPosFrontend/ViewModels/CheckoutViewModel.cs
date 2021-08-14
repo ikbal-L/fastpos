@@ -1113,7 +1113,7 @@ namespace FastPosFrontend.ViewModels
                 case ActionButton.Cmd:
                     if (CurrentOrder?.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
                     {
-                        ToastNotification.Notify("Add products before ...", NotificationType.Warning);
+                        ToastNotification.Notify("Add products before...", NotificationType.Warning);
                         return;
                     }
 
@@ -1121,19 +1121,25 @@ namespace FastPosFrontend.ViewModels
 
                     _printOrder = null;
 
-                    OrdersCollectionObserver.Commit();
+                    //OrdersCollectionObserver.Commit();
                     var currentOrderObserver = OrdersCollectionObserver[CurrentOrder] as ObjectGraphMutationObserver<Order>;
-                    var removedItems = (currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>)?.GetRemovedItems();
+                    currentOrderObserver.Commit();
+                    var orderitemsCollectionObserver = currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
+                    var removedItems = orderitemsCollectionObserver?.GetRemovedItems(CurrentOrder.OrderItems).ToList();
+                    removedItems.ForEach(i => i.State = OrderItemState.Removed);
                     ChangesMade = currentOrderObserver.IsMutated();
 
                     if (ChangesMade)
                     {
-                       
                         _printOrder = OrdersCollectionObserver[CurrentOrder].GetDifference(OrderHelper.GetOrderChanges);
-                        OrdersCollectionObserver.Push(); 
+                        //OrdersCollectionObserver.Push();
+                        currentOrderObserver.Push();
                     }
-                    CurrentOrder.OrderItems.AddRange(removedItems);
 
+                   
+
+                    CurrentOrder.OrderItems.AddRange(removedItems);
+                    orderitemsCollectionObserver.CommitAndPushAddedItems((i) => i.State != OrderItemState.Removed);
                     CurrentOrder.State = OrderState.Ordered;
                     SaveCurrentOrder();
 
@@ -1595,19 +1601,19 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (CurrentOrder?.SelectedOrderItem?.TimeStamp == null)
-            {
-                if (_diff.ContainsKey(CurrentOrder.SelectedOrderItem.GetHashCode()))
-                {
-                    _diff.Remove(CurrentOrder.SelectedOrderItem.GetHashCode());
-                }
-            }
+            //if (CurrentOrder?.SelectedOrderItem?.TimeStamp == null)
+            //{
+            //    if (_diff.ContainsKey(CurrentOrder.SelectedOrderItem.GetHashCode()))
+            //    {
+            //        _diff.Remove(CurrentOrder.SelectedOrderItem.GetHashCode());
+            //    }
+            //}
 
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
-            if (CurrentOrder.SelectedOrderItem != null)
-            {
-                OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff);
-            }
+            //if (CurrentOrder.SelectedOrderItem != null)
+            //{
+            //    OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff);
+            //}
 
             OrderItemsCollectionViewSource.View.Refresh();
 
@@ -2031,7 +2037,14 @@ namespace FastPosFrontend.ViewModels
                 if (printers.Contains(e.Name))
                 {
                     PrintDialog dialog = new PrintDialog {PrintQueue = new PrintQueue(new PrintServer(), e.Name)};
-                    dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+                    try
+                    {
+                        dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
             }
 

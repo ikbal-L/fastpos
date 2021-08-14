@@ -18,7 +18,7 @@ namespace Utilities.Mutation.Observers
         private readonly PropertyInfo [] _objectGraphObservedProperties;
         private readonly bool _isSourceCollectionReadonly;
         private readonly bool _isGraphConstructionEnabled;
-
+        private Func<T, bool> _exclude = (item)=> true;
         private object _owner;
 
         public bool IsInitialized { get; private set; }
@@ -183,11 +183,12 @@ namespace Utilities.Mutation.Observers
 
                 PushAllCollectionItems();
 
-
                 ObserveAddedCollectionItemsAfterCommit();
             }
 
-            Source = _mutatedCollection;
+
+            //
+            Source = _mutatedCollection.ToList();
             if (!_isSourceCollectionReadonly)
             {
                 _mutatedCollection = null;
@@ -195,12 +196,24 @@ namespace Utilities.Mutation.Observers
             HasCommitedChanges = false;
         }
 
-        public bool CommitAndPushAddedItems()
+        public bool CommitAndPushAddedItems(Func<T, bool> exclude = null)
         {
+            _exclude = exclude;
             HasCommitedChanges = true;
             ObserveAddedCollectionItemsAfterCommit();
+
+            Source = _mutatedCollection.ToList();
+            if (!_isSourceCollectionReadonly)
+            {
+                _mutatedCollection = null;
+            }
             HasCommitedChanges = false;
             return true;
+        }
+
+        public void Exclude(Func<T,bool> predicate)
+        {
+            _itemsMutationObservers.RemoveAll(o=> predicate.Invoke(o.Source));
         }
 
         public void ObserveItem(T item)
@@ -229,14 +242,14 @@ namespace Utilities.Mutation.Observers
 
 
         /*
-                 * NOTE: Must be called after pushing all the previous items 
-                 * because newly addeditems are have no mutations to push
-                 */
+         * NOTE: Must be called after pushing all the previous items 
+         * because newly addeditems are have no mutations to push
+         */
         private void ObserveAddedCollectionItemsAfterCommit()
         {
             var addedItems = GetAddedItems(_mutatedCollection);
             if (addedItems == null) return;
-            var addedItemsObservers = addedItems.Select(item => new ObjectMutationObserver<T>(item, _objectObservedProperties.ToArray()));
+            var addedItemsObservers = addedItems.Where(_exclude).Select(item => new ObjectMutationObserver<T>(item, _objectObservedProperties.ToArray()));
             _itemsMutationObservers.AddRange(addedItemsObservers);
         }
 

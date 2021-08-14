@@ -19,7 +19,7 @@ namespace FastPosFrontend.Helpers
                 var orderItemCO = og[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
                 var added = orderItemCO.GetAddedItems().ToList();
                 var removed = orderItemCO.GetRemovedItems().ToList();
-                removed.ForEach(i => i.State = OrderItemState.Removed);
+               
 
                 //og.Source.OrderItems.AddRange(removed);
                 var mutated = orderItemCO.GetMutatedItems(t =>
@@ -40,7 +40,8 @@ namespace FastPosFrontend.Helpers
                         src.State = OrderItemState.DecreasedQuantity;
                     }
                     item.State = src.State;
-                    item.Quantity = committed - initial;
+                    //item.Quantity = committed - initial;
+                    item.Quantity = Math.Abs(committed - initial);
                     return item;
 
                 });
@@ -54,9 +55,6 @@ namespace FastPosFrontend.Helpers
             return null;
         }
 
-        public static bool IgnoreRemovedOrderItem()
-        {
-
-        }
+       
     }
 }

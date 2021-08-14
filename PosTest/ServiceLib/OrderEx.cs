@@ -58,17 +58,18 @@ namespace FastPosFrontend.Helpers
         {
             if (item == null) return;
 
-            //Total -= item.Total;
 
-            if (item.TimeStamp == null)
-            {
-                order.OrderItems.Remove(item);
+            order.OrderItems.Remove(item);
 
-            }
-            else
-            {
-                item.State = OrderItemState.Removed;
-            }
+            //if (item.TimeStamp == null)
+            //{
+            //    order.OrderItems.Remove(item);
+
+            //}
+            //else
+            //{
+            //    item.State = OrderItemState.Removed;
+            //}
         }
 
         public static void MappingBeforeSending(this Order order)
