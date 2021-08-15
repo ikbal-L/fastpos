@@ -21,11 +21,9 @@ using Caliburn.Micro;
 using FastPosFrontend.Enums;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
-using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
-using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
@@ -48,38 +46,28 @@ namespace FastPosFrontend.ViewModels
             AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.StartsWith("XUnitTesting"));
 
         private static string scanValue;
-
-
         private BindableCollection<Additive> _additvesPage;
         private BindableCollection<Table> _tables;
         private BindableCollection<Product> _productsPage;
-
         private WarningViewModel _warningViewModel;
         private TablesViewModel _tablesViewModel;
         private WaitingViewModel _waitingViewModel;
         private DeliveryViewModel _deliveryViewModel;
         private TakeawayViewModel _takeAwayViewModel;
         private CustomerViewModel _customerViewModel;
-
-
         private Order _currentOrder;
         private int orderCount = 1;
-
-        //private Order _displayedOrder;
         private Table _selectedTable;
         private Deliveryman _selectedDeliveryman;
         private Waiter _selectedWaiter;
         private ListKind _listKind;
-
         private string _numericZone;
-
         private bool _productsVisibility;
         private bool _canExecuteNext;
         private bool _canExecutePrevious;
         private bool _additivesVisibility;
         private bool _IsDialogOpen;
         private bool _IsTopDrawerOpen;
-
         private INotifyPropertyChanged _dialogViewModel;
         private decimal givenAmount;
         private decimal? _returnedAmount;
@@ -441,15 +429,6 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _additvesPage, value);
         }
 
-        //public Order DisplayedOrder
-        //{
-        //    get => _displayedOrder;
-        //    set
-        //    {
-        //        _displayedOrder = value;
-        //        NotifyOfPropertyChange();
-        //    }
-        //}
 
         private void SetSelectedInListedOrdersDisplayedOrder()
         {
@@ -497,7 +476,6 @@ namespace FastPosFrontend.ViewModels
                 else
                 {
                     _currentOrder = value;
-                    //_displayedOrder = value;
                 }
 
                 SetSelectedInListedOrdersDisplayedOrder();
@@ -720,7 +698,6 @@ namespace FastPosFrontend.ViewModels
                 CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
             }
 
-            //DisplayedOrder = order;
 
             if (order.ShownCategory == null && order.Id != null)
             {
@@ -732,7 +709,6 @@ namespace FastPosFrontend.ViewModels
             SelectedDeliveryman = CurrentOrder.Deliveryman;
             SelectedWaiter = CurrentOrder.Waiter;
             SelectedTable = CurrentOrder.Table;
-            //SelectedOrderTable = CurrentOrder.Table;
 
             CurrentCategory = CurrentOrder.ShownCategory;
 
@@ -895,11 +871,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            //WarningViewModel = new WarningViewModel("Are you sure to delete this Order?", "Check", "Ok", "Close", "No",
-            //    o => CancelOrderAction(o), this, () => IsDialogOpen = false);
-
-            //DialogViewModel = WarningViewModel;
-            //IsDialogOpen = true;
+  
             var response = ModalDialogBox.YesNo("Are you sure you want to Cancel this Order?", "Cancel Order").Show();
             if (response)
             {
@@ -925,52 +897,6 @@ namespace FastPosFrontend.ViewModels
         }
 
         #endregion
-
-        public void CloseCommand()
-        {
-            StateManager.Flush();
-            LoginViewModel loginvm = new LoginViewModel();
-            loginvm.Parent = Parent;
-            (Parent as Conductor<object>).ActivateItem(loginvm);
-        }
-
-        public void SettingsCommand()
-        {
-            SettingsViewModel settingsViewModel = new SettingsViewModel(this) {Parent = Parent};
-            (Parent as Conductor<object>).ActivateItem(settingsViewModel);
-        }
-
-        public void AccountingCommand()
-        {
-            DeliveryAccountingViewModel vm = new DeliveryAccountingViewModel() {Parent = Parent};
-            (Parent as Conductor<object>).ActivateItem(vm);
-        }
-
-        public void UserSettingsCommand()
-        {
-            //UserSettingsViewModel vm = new UserSettingsViewModel() { Parent = this.Parent };
-            //(this.Parent as Conductor<object>).ActivateItem(vm);
-        }
-
-        IEnumerable<Category> RetrieveCategories(IEnumerable<Product> products)
-        {
-            var categories = new HashSet<Category>();
-            foreach (var p in products)
-            {
-                categories.Add(p.Category);
-                if (p.Category.Products == null)
-                {
-                    p.Category.Products = new List<Product>();
-                }
-
-                if (!p.Category.Products.Any(pr => pr == p))
-                {
-                    p.Category.Products.Add(p);
-                }
-            }
-
-            return categories;
-        }
 
         public bool ChangesMade { get; set; }
 
@@ -1302,7 +1228,7 @@ namespace FastPosFrontend.ViewModels
             Table table;
             if ((table = Tables.FirstOrDefault(t => t.Number == tableNumber)) == null)
 
-                //TODO introduce table by id method in table repository 
+
                 table = StateManager.Get<Table>(tableNumber);
             if (table == null)
             {
@@ -1330,7 +1256,7 @@ namespace FastPosFrontend.ViewModels
                         }
                         else
                         {
-                            //ToastNotification.ErrorNotification(status2);
+
                         }
                     }
 
@@ -1448,9 +1374,7 @@ namespace FastPosFrontend.ViewModels
 
             if (order.OrderItems.Any((item => item.DiscountAmount > 0)))
             {
-                ToastNotification.Notify(
-                    "Remove discount from order items in order to apply discount on order as a whole",
-                    NotificationType.Error);
+                ToastNotification.Notify("Remove discount from order items in order to apply discount on order as a whole",NotificationType.Error);
                 return;
             }
 
@@ -1603,19 +1527,9 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            //if (CurrentOrder?.SelectedOrderItem?.TimeStamp == null)
-            //{
-            //    if (_diff.ContainsKey(CurrentOrder.SelectedOrderItem.GetHashCode()))
-            //    {
-            //        _diff.Remove(CurrentOrder.SelectedOrderItem.GetHashCode());
-            //    }
-            //}
 
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
-            //if (CurrentOrder.SelectedOrderItem != null)
-            //{
-            //    OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff);
-            //}
+
 
             OrderItemsCollectionViewSource.View.Refresh();
 
@@ -1875,7 +1789,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-
         public void SelectDeliveryMan(Deliveryman deliveryman)
         {
             if (SelectedDeliveryman != deliveryman)
@@ -1988,7 +1901,7 @@ namespace FastPosFrontend.ViewModels
 
         public void PrintDocument(PrintSource source)
         {
-            //PrintPreview(source);
+
             if (_printOrder == null&& source == PrintSource.Kitchen)
             {
                 ToastNotification.Notify("Select an order First");
@@ -2159,7 +2072,6 @@ namespace FastPosFrontend.ViewModels
             IsDeliveryViewActive = false;
             IsInWaitingViewActive = true;
             WaitingViewModel.OrderViewSource.View.Refresh();
-            //this.Refresh();
 
             if (sender.GetType() == typeof(CheckoutSettingsViewModel))
             {

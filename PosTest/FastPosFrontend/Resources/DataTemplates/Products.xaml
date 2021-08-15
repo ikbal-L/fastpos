@@ -325,7 +325,7 @@
                         </Border.Style>
                     </Border>
                 </DockPanel>
-                <Button Grid.Row="1" 
+                <Button 
                     cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
                     caliburn:Message.Attach="[Event Click] = [Action CreateProduct()]"
                     VerticalAlignment="Center" HorizontalAlignment="Center" 

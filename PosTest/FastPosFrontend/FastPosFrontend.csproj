@@ -1005,7 +1005,6 @@
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder1\" />
     <Folder Include="ViewModels\Settings\DeliveryMan\" />
     <Folder Include="ViewModels\Settings\Waiter\" />
     <Folder Include="Views\Settings\DeliveryMan\" />
