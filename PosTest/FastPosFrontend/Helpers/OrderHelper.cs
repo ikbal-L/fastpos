@@ -2,10 +2,7 @@
 using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utilities.Mutation.Observers;
 
 namespace FastPosFrontend.Helpers
@@ -45,7 +42,14 @@ namespace FastPosFrontend.Helpers
                     return item;
 
                 });
+
                 var newOrder = og.Source.Clone();
+
+                newOrder.Customer = og.Source.Customer;
+                newOrder.Waiter = og.Source.Waiter;
+                newOrder.Deliveryman = og.Source.Deliveryman;
+                newOrder.Table = og.Source.Table;
+
                 newOrder.OrderItems = new BindableCollection<OrderItem>();
                 newOrder.OrderItems.AddRange(added);
                 newOrder.OrderItems.AddRange(removed);
@@ -55,6 +59,5 @@ namespace FastPosFrontend.Helpers
             return null;
         }
 
-       
     }
 }

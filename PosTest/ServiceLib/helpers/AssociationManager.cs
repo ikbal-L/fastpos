@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ServiceLib.helpers
 {
-    public partial class AssociationManager : IAssociationManager,IAssociationBuilder
+    public partial class AssociationManager 
     {
        
 
@@ -52,29 +52,37 @@ namespace ServiceLib.helpers
 
         }
 
-        public IOneToMany Register()
+        public void Associate<TOne, TMany>(Action<IEnumerable<TOne>, IEnumerable<TMany>> map)
         {
-            return new AssociationBuilder(this);
+            var keyOfTOne = typeof(TOne);
+            var KeyOfTMany = typeof(TMany);
+
+            Action<IEnumerable<object>, IEnumerable<object>> mapWrapper = (one, many) =>
+            {
+                if (one is IEnumerable<TOne> enumerablOfTOne && many is IEnumerable<TMany> enumerablOfTMany)
+                {
+                    map(enumerablOfTOne, enumerablOfTMany);
+                }
+                else
+                {
+#if DEBUG
+                    throw new InvalidOperationException(
+                $"Expected{typeof(TOne)} got type of {one.GetType()},Expected{typeof(TMany)} got type of {many.GetType()}"); 
+#endif
+                }
+            };
+            if (!_associations.ContainsKey(keyOfTOne))
+            {
+                _associations.Add(keyOfTOne, new Dictionary<Type, Action<IEnumerable<object>, IEnumerable<object>>>());
+                
+            }
+            _associations[keyOfTOne].Add(KeyOfTMany, mapWrapper);
+
         }
 
-        private partial class AssociationBuilder:IOneToMany,IManyToOne,IAssociationAction, IAssociationBuild
-        {
-        }
-
-       
-
 
     }
 
-    public interface IAssociationBuilder
-    {
-         IOneToMany Register();
 
-    }
-    public interface IAssociationBuild
-    {
-        IAssociationBuilder Build();
-
-    }
 
 }

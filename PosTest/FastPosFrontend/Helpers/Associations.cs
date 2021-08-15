@@ -19,15 +19,15 @@ namespace FastPosFrontend.Helpers
 
         public static void Setup()
         {
-            AssociationManager.Register().Associate<Product>().With<Additive>().Using<Product, Additive>(AssociateProductsWithAdditives).Build();
-            AssociationManager.Register().Associate<Category>().With<Product>().Using<Category, Product>(AssociateCategoriesWithProducts).Build();
-            AssociationManager.Register().Associate<Order>().With<Table>().Using<Order, Table>(AssociateOrdersWithTables).Build();
-            AssociationManager.Register().Associate<Order>().With<Waiter>().Using<Order, Waiter>(AssociateOrdersWithWaiters).Build();
-            AssociationManager.Register().Associate<Order>().With<Deliveryman>().Using<Order, Deliveryman>(AssociateOrdersWithDeliveryMen).Build();
-            AssociationManager.Register().Associate<Order>().With<Customer>().Using<Order, Customer>(AssociateOrdersWithCustomers).Build();
-            AssociationManager.Register().Associate<Order>().With<Product>().Using<Order, Product>(AssociateOrdersWithProducts).Build();
-            AssociationManager.Register().Associate<User>().With<Role>().Using<User, Role>(AssociateUsersWithRoles).Build();
-            AssociationManager.Register().Associate<Role>().With<Privilege>().Using<Role, Privilege>(AssociateRolesWithPermissions).Build();
+            AssociationManager.Associate<Product, Additive>(AssociateProductsWithAdditives);
+            AssociationManager.Associate<Category, Product>(AssociateCategoriesWithProducts);
+            AssociationManager.Associate<Order, Table>(AssociateOrdersWithTables);
+            AssociationManager.Associate<Order, Waiter>(AssociateOrdersWithWaiters);
+            AssociationManager.Associate<Order, Deliveryman>(AssociateOrdersWithDeliveryMen);
+            AssociationManager.Associate<Order, Customer>(AssociateOrdersWithCustomers);
+            AssociationManager.Associate<Order, Product>(AssociateOrdersWithProducts);
+            AssociationManager.Associate<User, Role>(AssociateUsersWithRoles);
+            AssociationManager.Associate<Role, Privilege>(AssociateRolesWithPermissions);
         }
 
         private static void AssociateRolesWithPermissions(IEnumerable<Role> roles, IEnumerable<Privilege> permissions)

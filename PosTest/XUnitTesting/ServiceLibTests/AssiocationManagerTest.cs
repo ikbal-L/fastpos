@@ -28,12 +28,8 @@ namespace XUnitTesting.ServiceLibTests
 
             //act
 
-            associationManager
-                .Register()
-                .Associate<Product>()
-                .With<Additive>()
-                .Using<Product, Additive>(Map)
-                .Build();
+            associationManager.Associate<Product, Additive>(Map);
+
             var action = associationManager.GetMapper<Product, Additive>();
             
 

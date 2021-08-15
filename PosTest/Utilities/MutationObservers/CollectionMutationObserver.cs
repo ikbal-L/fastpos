@@ -198,7 +198,10 @@ namespace Utilities.Mutation.Observers
 
         public bool CommitAndPushAddedItems(Func<T, bool> exclude = null)
         {
-            _exclude = exclude;
+            if (exclude!= null)
+            {
+                _exclude = exclude; 
+            }
             HasCommitedChanges = true;
             ObserveAddedCollectionItemsAfterCommit();
 
@@ -231,6 +234,13 @@ namespace Utilities.Mutation.Observers
             {
                 AddObjectMutationObserver(item);
             }
+        }
+
+        public bool UnObserve(T item)
+        {
+            var itemObserver = _itemsMutationObservers.FirstOrDefault(o => o.Source.Equals(item));
+            if (itemObserver == null) return false;
+            return _itemsMutationObservers.Remove(itemObserver);
         }
 
         private void UnobserveAllRemovedItemsAfterCommit()

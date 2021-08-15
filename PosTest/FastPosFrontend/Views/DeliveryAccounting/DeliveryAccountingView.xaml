@@ -51,7 +51,7 @@
                             <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Column="0" Margin="0 0 0 5" Grid.Row="0">
-                            <materialdesign:PackIcon  Kind="CoinsOutline" Width="40" Height="40" Padding="0"
+                            <materialdesign:PackIcon  Kind="Dollar" Width="40" Height="40" Padding="0"
                                                                  Foreground="#26ff26" />
                             <TextBlock  Foreground="#26ff26" TextAlignment="Right"
                                                    FontFamily="{StaticResource DigitalFontFamily}"

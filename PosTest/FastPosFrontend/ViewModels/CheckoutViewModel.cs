@@ -870,6 +870,8 @@ namespace FastPosFrontend.ViewModels
             }
 
             Orders.Remove(CurrentOrder);
+            var result = OrdersCollectionObserver?.UnObserve(CurrentOrder);
+
             CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
             CurrentOrder = null;
             SetCurrentOrderTypeAndRefreshOrdersLists(null);
@@ -1993,7 +1995,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if(CurrentOrder == null && source == PrintSource.Checkout)
+            if(_printOrder == null && source == PrintSource.Checkout)
             {
                 ToastNotification.Notify("Select an order First");
                 return;
@@ -2006,7 +2008,7 @@ namespace FastPosFrontend.ViewModels
 
             _printOrder = source switch
             {
-                PrintSource.Checkout => CurrentOrder,
+                PrintSource.Checkout => _printOrder,
                 PrintSource.CheckoutSplit => SplitViewModel?.SplittedOrder,
                 _ => _printOrder
             };

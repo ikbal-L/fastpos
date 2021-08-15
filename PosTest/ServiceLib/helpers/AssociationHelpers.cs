@@ -160,29 +160,6 @@ namespace ServiceLib.helpers
             return _association[key];
         }
     }
-
-
-    public interface IAssociationManager
-    {
-        
-        
-   
-
-    }
-
-    public interface IOneToMany
-    {
-        IManyToOne Associate<TOne>();
-    }
-
-    public interface IManyToOne
-    {
-        IAssociationAction With<TMany>();
-    }
-
-    public interface IAssociationAction
-    {
-        IAssociationBuild Using<TOne, TMany>(Action<IEnumerable<TOne>, IEnumerable<TMany>> map);
-    }
+ 
 
 }

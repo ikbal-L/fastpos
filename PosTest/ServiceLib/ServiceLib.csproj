@@ -108,7 +108,6 @@
     <Compile Include="Exceptions\StateNotManagedException.cs" />
     <Compile Include="FakeServices.cs" />
     <Compile Include="GeneralSettings.cs" />
-    <Compile Include="helpers\AssociationBuilder.cs" />
     <Compile Include="helpers\AssociationHelpers.cs" />
     <Compile Include="helpers\AssociationManager.cs" />
     <Compile Include="OrderEx.cs" />
