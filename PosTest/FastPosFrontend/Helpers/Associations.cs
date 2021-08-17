@@ -11,10 +11,7 @@ namespace FastPosFrontend.Helpers
             
         static Associations()
         {
-            AssociationManager = AssociationManager.Instance;
-           
-
-            
+            AssociationManager = AssociationManager.Instance;    
         }
 
         public static void Setup()

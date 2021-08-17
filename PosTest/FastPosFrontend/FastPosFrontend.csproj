@@ -292,7 +292,6 @@
     <Compile Include="Helpers\OrderHelper.cs" />
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
-    <Compile Include="Helpers\ِChangesTracker.cs" />
     <Compile Include="ModalDialogBox.xaml.cs">
       <DependentUpon>ModalDialogBox.xaml</DependentUpon>
     </Compile>
@@ -612,7 +611,6 @@
     <Compile Include="Helpers\EntityValidationHelper.cs" />
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\NotificationType.cs" />
-    <Compile Include="Helpers\OrderManagmentHelper .cs" />
     <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />

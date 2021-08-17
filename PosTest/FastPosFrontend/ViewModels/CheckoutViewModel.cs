@@ -1543,7 +1543,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            OrderManagementHelper.TrackItemForChange(CurrentOrder.SelectedOrderItem, _diff);
+           
             CurrentOrder.SelectedOrderItem.Quantity += 1;
         }
 
@@ -1557,7 +1557,7 @@ namespace FastPosFrontend.ViewModels
             var orderItem = CurrentOrder.SelectedOrderItem;
             if (orderItem.Quantity <= 1)
                 return;
-            OrderManagementHelper.TrackItemForChange(orderItem, _diff);
+           
             orderItem.Quantity -= 1;
         }
 
@@ -1686,21 +1686,9 @@ namespace FastPosFrontend.ViewModels
 
             var item = new OrderItem(selectedproduct, 1, CurrentOrder);
 
-            var fetch = CurrentOrder.OrderItems.FirstOrDefault(i =>
-                i.ProductId == selectedproduct.Id && i.TimeStamp != null);
-            if (fetch != null)
-            {
-                OrderManagementHelper.TrackItemForChange(fetch, _diff);
-            }
-
-            
+ 
             OrderItem oi = CurrentOrder.AddOrderItem(item, true);
-            if ((fetch == null || fetch.State == OrderItemState.Removed))
-            {
-                OrderManagementHelper.TrackItemForChange(oi, _diff);
-            }
 
-            
             OrderItemsCollectionViewSource.View.Refresh();
 
             if (selectedproduct.IsPlatter && selectedproduct.IdAdditives?.Count > 0)
