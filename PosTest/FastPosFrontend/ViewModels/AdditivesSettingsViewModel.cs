@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -15,7 +16,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Additive settings", typeof(AdditivesSettingsViewModel), parentNavigationItem:typeof(CheckoutSettingsViewModel))]
+    [NavigationItem("Additive settings", typeof(AdditivesSettingsViewModel), parentNavigationItem:typeof(CheckoutSettingsViewModel))]
     public class AdditivesSettingsViewModel : LazyScreen
     {
         private BindableCollection<Additive> _additives;

@@ -8,12 +8,12 @@ using FastPosFrontend.Helpers;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
-
+using FastPosFrontend.Navigation;
 namespace FastPosFrontend.ViewModels.DeliveryAccounting
 {
 
 
-    [NavigationItemConfiguration("Delivery Accounting", typeof(DeliveryAccountingViewModel))]
+    [NavigationItem("Delivery Accounting", typeof(DeliveryAccountingViewModel))]
     public class DeliveryAccountingViewModel: AppScreen
     {
         private ObservableCollection<Deliveryman> _Deliverymans;

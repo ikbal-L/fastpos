@@ -5,6 +5,7 @@ using NLog;
 using FastPosFrontend.ViewModels;
 using System.Windows;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
@@ -42,15 +43,7 @@ namespace FastPosFrontend
                 .Add<WaiterSettingsViewModel>()
                 .Add<CustomerSettingsViewModel>();
 
-            //splashScreen.Show();
-            //System.Threading.Thread.Sleep(7000);
-            //splashScreen.Close();
 
-
-
-
-            //_backendServerProcess = new Process()
-           
 
             DisplayRootViewFor<MainViewModel>();
         }

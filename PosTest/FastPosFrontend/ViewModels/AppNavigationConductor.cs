@@ -5,14 +5,14 @@ using System.Reflection;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
-
+using FastPosFrontend.Navigation;
 
 namespace FastPosFrontend.ViewModels
 {
     public class AppNavigationConductor<T> : Conductor<T>, IAppNavigationConductor where T : class
     {
-        private BindableCollection<AppNavigationLookupItem> _appNavigationItems;
-        private AppNavigationLookupItem _selectedNavigationItem;
+        private BindableCollection<NavigationLookupItem> _appNavigationItems;
+        private NavigationLookupItem _selectedNavigationItem;
         private AppScreen _activeScreen;
 
         public AppNavigationConductor()
@@ -20,7 +20,7 @@ namespace FastPosFrontend.ViewModels
             KeepAliveScreens = new Dictionary<Type, T>();
         }
 
-        public AppNavigationLookupItem SelectedNavigationItem
+        public NavigationLookupItem SelectedNavigationItem
         {
             get => _selectedNavigationItem;
             set
@@ -30,7 +30,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public BindableCollection<AppNavigationLookupItem> AppNavigationItems
+        public BindableCollection<NavigationLookupItem> AppNavigationItems
         {
             get => _appNavigationItems;
             set => Set(ref _appNavigationItems, value);
@@ -50,51 +50,51 @@ namespace FastPosFrontend.ViewModels
             var groupItems = LoadGroupItems();
             items.AddRange(groupItems);
             var result = items.AssignIndexes();
-            AppNavigationItems = new BindableCollection<AppNavigationLookupItem>(result);
+            AppNavigationItems = new BindableCollection<NavigationLookupItem>(result);
         }
 
         /// <summary>
-        /// Load Single <see cref="AppNavigationLookupItem"/> Instances from Classes decorated by <see cref="NavigationItemConfigurationAttribute"/>, and  that have no Sub NavigationItems
+        /// Load Single <see cref="NavigationLookupItem"/> Instances from Classes decorated by <see cref="NavigationItemAttribute"/>, and  that have no Sub NavigationItems
         /// </summary>
         /// <returns></returns>
-        protected virtual List<AppNavigationLookupItem> LoadSingleItems()
+        protected virtual List<NavigationLookupItem> LoadSingleItems()
         {
-            var items = GetAppliedAttributes<NavigationItemConfigurationAttribute>(
+            var items = GetAppliedAttributes<NavigationItemAttribute>(
                     type => ! IsParentItem(type))
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
                                     string.IsNullOrEmpty(attribute.GroupName)
                                     && attribute.ParentNavigationItem == null)
-                .Select(attribute => (AppNavigationLookupItem) attribute).ToList();
+                .Select(attribute => (NavigationLookupItem) attribute).ToList();
             return items;
         }
 
         /// <summary>
-        /// Load Group <see cref="AppNavigationLookupItem"/> Instances from Classes decorated by <see cref="NavigationItemConfigurationAttribute"/>, By Grouping them using <see cref="NavigationItemConfigurationAttribute.GroupName"/>
+        /// Load Group <see cref="NavigationLookupItem"/> Instances from Classes decorated by <see cref="NavigationItemAttribute"/>, By Grouping them using <see cref="NavigationItemAttribute.GroupName"/>
         /// </summary>
         /// <returns></returns>
-        private protected virtual List<AppNavigationLookupItem> LoadGroupItems()
+        private protected virtual List<NavigationLookupItem> LoadGroupItems()
         {
             var groupItems = 
-                GetAppliedAttributes<NavigationItemConfigurationAttribute>( )
+                GetAppliedAttributes<NavigationItemAttribute>( )
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
                                     !string.IsNullOrEmpty(attribute.GroupName
                                     ))
                 .GroupBy(attribute => attribute.GroupName).Select((grouping) =>
-                    new AppNavigationLookupItem(grouping.Key, isGroupingItem: true)
+                    new NavigationLookupItem(grouping.Key, isGroupingItem: true)
                     {
-                        SubItems = new BindableCollection<AppNavigationLookupItem>(
+                        SubItems = new BindableCollection<NavigationLookupItem>(
                             grouping.Select(Selector))
                     }).ToList();
             return groupItems;
         }
 
-        private AppNavigationLookupItem Selector(NavigationItemConfigurationAttribute attribute)
+        private NavigationLookupItem Selector(NavigationItemAttribute attribute)
         {
-            var lookupItem = (AppNavigationLookupItem) attribute;
+            var lookupItem = (NavigationLookupItem) attribute;
             if (IsParentItem(attribute.Target))
             {
                 lookupItem
-                    .SubItems = new BindableCollection<AppNavigationLookupItem>(GetChildren(attribute.Target));
+                    .SubItems = new BindableCollection<NavigationLookupItem>(GetChildren(attribute.Target));
             }
             return lookupItem;
         }
@@ -104,7 +104,7 @@ namespace FastPosFrontend.ViewModels
         {
             var types = Assembly.GetExecutingAssembly()
                 .GetTypes()
-                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)));
+                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemAttribute)));
             if (filter!= null)
             {
                 types = types.Where(filter).ToArray();
@@ -119,34 +119,34 @@ namespace FastPosFrontend.ViewModels
         private bool IsParentItem(Type target)
         {
             var result = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)))
+                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemAttribute)))
                 .Select(type =>
-                    (NavigationItemConfigurationAttribute) type.GetCustomAttribute(
-                        typeof(NavigationItemConfigurationAttribute)))
+                    (NavigationItemAttribute) type.GetCustomAttribute(
+                        typeof(NavigationItemAttribute)))
                 .Any(attribute => attribute.ParentNavigationItem == target);
             return result;
         }
 
-        private IEnumerable<AppNavigationLookupItem> GetChildren(Type type)
+        private IEnumerable<NavigationLookupItem> GetChildren(Type type)
         {
-             return GetAppliedAttributes<NavigationItemConfigurationAttribute>()
+             return GetAppliedAttributes<NavigationItemAttribute>()
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
                                     string.IsNullOrEmpty(attribute.GroupName)
-                                    && attribute.ParentNavigationItem == type).Select(attribute =>(AppNavigationLookupItem)attribute );
+                                    && attribute.ParentNavigationItem == type).Select(attribute =>(NavigationLookupItem)attribute );
         }
 
-        private protected virtual AppNavigationLookupItem LoadDefaultItem()
+        private protected virtual NavigationLookupItem LoadDefaultItem()
         {
-            var item = (AppNavigationLookupItem) Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemConfigurationAttribute)))
+            var item = (NavigationLookupItem) Assembly.GetExecutingAssembly().GetTypes()
+                .Where(x => Attribute.IsDefined(x, typeof(NavigationItemAttribute)))
                 .Select(type =>
-                    (NavigationItemConfigurationAttribute) type.GetCustomAttribute(
-                        typeof(NavigationItemConfigurationAttribute)))
+                    (NavigationItemAttribute) type.GetCustomAttribute(
+                        typeof(NavigationItemAttribute)))
                 .FirstOrDefault(attribute => attribute.IsDefault);
             return item;
         }
 
-        public virtual bool NavigateToItem(AppNavigationLookupItem navigationItem)
+        public virtual bool NavigateToItem(NavigationLookupItem navigationItem)
         {
             if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return false;
             if (navigationItem.KeepAlive)

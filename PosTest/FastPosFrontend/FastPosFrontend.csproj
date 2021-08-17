@@ -282,17 +282,25 @@
     <Compile Include="Extensions\ModifierCollection.cs" />
     <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
+    <Compile Include="Navigation\NavigationLookupItem.cs" />
     <Compile Include="Helpers\AppScreen.cs" />
     <Compile Include="Helpers\Associations.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\Icon.cs" />
-    <Compile Include="Helpers\Navigation.cs" />
+    <Compile Include="Navigation\INavigationItem.cs" />
+    <Compile Include="Navigation\NavigationIndexer.cs" />
     <Compile Include="Helpers\OrderHelper.cs" />
     <Compile Include="Helpers\ProductLayout.cs" />
     <Compile Include="Helpers\ResponseHandler.cs" />
     <Compile Include="Helpers\ِChangesTracker.cs" />
     <Compile Include="ModalDialogBox.xaml.cs">
       <DependentUpon>ModalDialogBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SL.Controls\MDColorPalette\AnotherCommandImplementation.cs" />
+    <Compile Include="SL.Controls\MDColorPalette\ButtonAssist.cs" />
+    <Compile Include="SL.Controls\MDColorPalette\MDColorPaletteViewModel.cs" />
+    <Compile Include="SL.Controls\MDColorPalette\MDColorPalette.xaml.cs">
+      <DependentUpon>MDColorPalette.xaml</DependentUpon>
     </Compile>
     <Compile Include="SL.Controls\VirtualNumpadKeyboard.cs" />
     <Compile Include="ViewModels\AdditiveDetailViewModel.cs" />
@@ -304,7 +312,7 @@
     <Compile Include="ViewModels\DialogContent.cs" />
     <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
-    <Compile Include="Helpers\NavigationItemConfigurationAttribute.cs" />
+    <Compile Include="Navigation\NavigationItemAttribute.cs" />
     <Compile Include="Helpers\NotifyAllTasksCompletion.cs" />
     <Compile Include="Helpers\NotifyTaskCompletion.cs" />
     <Compile Include="ShellBootstrapper.cs" />
@@ -331,6 +339,7 @@
     <Compile Include="ViewModels\DeliveryAccounting\DeliveryAccountingViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\PaymentHistoryViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelInitialized.cs" />
     <Compile Include="ViewModels\LoadingViewModel.cs" />
@@ -442,9 +451,6 @@
     <Compile Include="Views\OpenTableView.xaml.cs">
       <DependentUpon>OpenTableView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PaginationTestView.xaml.cs">
-      <DependentUpon>PaginationTestView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\PinCodeView.xaml.cs">
       <DependentUpon>PinCodeView.xaml</DependentUpon>
     </Compile>
@@ -544,14 +550,14 @@
     <Compile Include="Views\UserSettingsView.xaml.cs">
       <DependentUpon>UserSettingsView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Design\Additives.xaml">
+    <Page Include="Resources\Design\Additives.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Design\CurrentOrder.xaml">
+    <Page Include="Resources\Design\CurrentOrder.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Design\Products.xaml">
+    <Page Include="Resources\Design\Products.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -607,9 +613,7 @@
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\NotificationType.cs" />
     <Compile Include="Helpers\OrderManagmentHelper .cs" />
-    <Compile Include="Helpers\ProductMapper.cs" />
     <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
-    <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Helpers\ToastNotification.cs" />
@@ -676,6 +680,10 @@
     <Page Include="SL.Controls\ColorTool.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SL.Controls\MDColorPalette\MDColorPalette.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SL.Controls\NumericKeypad.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -782,10 +790,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\OpenTableView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\PaginationTestView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -961,21 +965,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\add.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\close.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\minus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\option.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\reddelete.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Attributes\Attributes.csproj">

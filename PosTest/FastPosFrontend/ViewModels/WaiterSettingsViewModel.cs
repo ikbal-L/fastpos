@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.Views;
 using FastPosFrontend.Views.Settings;
@@ -12,7 +13,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
 
-    [NavigationItemConfiguration("Waiter Settings", typeof(WaiterSettingsViewModel), groupName: "Settings")]
+    [NavigationItem("Waiter Settings", typeof(WaiterSettingsViewModel), groupName: "Settings")]
     public class WaiterSettingsViewModel: LazyScreen,ISettingsController
     {
         private ObservableCollection<ServiceInterface.Model.Waiter> _Waiters;

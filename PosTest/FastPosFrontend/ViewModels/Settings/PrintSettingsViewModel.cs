@@ -3,12 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using Newtonsoft.Json;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
-    [NavigationItemConfiguration("Print Settings", typeof(PrintSettingsViewModel), groupName: "Settings")]
+    [NavigationItem("Print Settings", typeof(PrintSettingsViewModel), groupName: "Settings")]
     public class PrintSettingsViewModel : AppScreen
     {
         private ObservableCollection<PrinterItem> _Printers;

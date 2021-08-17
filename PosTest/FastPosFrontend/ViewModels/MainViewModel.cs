@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
@@ -137,7 +138,7 @@ namespace FastPosFrontend.ViewModels
             ActivateItem(MainDialog);
             LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};
             
-            NavigateToItem(new AppNavigationLookupItem("Login", target: typeof(LoginViewModel)));
+            NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel)));
 
             //splashScreen.Close();
         }
@@ -145,7 +146,7 @@ namespace FastPosFrontend.ViewModels
         public void Logout()
         {
             LoginViewModel toActivateViewModel = new LoginViewModel { Parent = this };
-            if (NavigateToItem(new AppNavigationLookupItem("Login", target: typeof(LoginViewModel))))
+            if (NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel))))
             {
                 StateManager.Flush();
                 KeepAliveScreens.Clear();

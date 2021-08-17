@@ -2,6 +2,7 @@
 using System.Linq;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
@@ -9,7 +10,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels.Settings
 {
   
-    [NavigationItemConfiguration(title:"General Settings",typeof(GeneralSettingsViewModel),groupName:"Settings")]
+    [NavigationItem(title:"General Settings",typeof(GeneralSettingsViewModel),groupName:"Settings")]
     public  class GeneralSettingsViewModel : AppScreen,ISettingsController
     {
         private GeneralSettings _generalSettings;

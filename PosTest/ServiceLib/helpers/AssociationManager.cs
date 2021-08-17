@@ -6,11 +6,9 @@ namespace ServiceLib.helpers
 {
     public partial class AssociationManager 
     {
-       
 
         private readonly Dictionary<Type, Dictionary<Type, Action<IEnumerable<object>, IEnumerable<object>>>> _associations;
         
-
         private AssociationManager()
         {
             _associations = new Dictionary<Type, Dictionary<Type, Action<IEnumerable<object>, IEnumerable<object>>>>();

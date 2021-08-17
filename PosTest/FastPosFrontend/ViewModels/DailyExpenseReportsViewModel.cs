@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Markup;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.Settings;
 using ServiceInterface.Model;
 using ServiceLib.Service;
@@ -17,7 +18,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration(title: "Daily Expense Reports", target: typeof(DailyExpenseReportsViewModel))]
+    [NavigationItem(title: "Daily Expense Reports", target: typeof(DailyExpenseReportsViewModel))]
     public class DailyExpenseReportsViewModel : LazyScreen
     {
         

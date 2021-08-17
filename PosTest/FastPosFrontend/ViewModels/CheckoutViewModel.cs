@@ -15,12 +15,11 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Threading;
-using System.Windows.Xps;
-using System.Windows.Xps.Packaging;
 using Caliburn.Micro;
 using FastPosFrontend.Enums;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
@@ -34,7 +33,7 @@ using Table = ServiceInterface.Model.Table;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration(
+    [NavigationItem(
         title: Constants.Navigation.Checkout, 
         target: typeof(CheckoutViewModel),
         keepAlive: true, isDefault: true)]

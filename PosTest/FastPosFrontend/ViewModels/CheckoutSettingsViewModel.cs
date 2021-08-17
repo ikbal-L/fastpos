@@ -12,6 +12,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.Settings;
 using MaterialDesignThemes.Wpf;
 using ServiceInterface.ExtentionsMethod;
@@ -21,7 +22,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Checkout settings",target:typeof(CheckoutSettingsViewModel),groupName:"Settings")]
+    [NavigationItem("Checkout settings",target:typeof(CheckoutSettingsViewModel),groupName:"Settings")]
     public class CheckoutSettingsViewModel : LazyScreen,ISettingsController
     {
         private bool _IsProductDetailsDrawerOpen;

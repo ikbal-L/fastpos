@@ -219,7 +219,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
+                 
                 </Grid.RowDefinitions>
 
                 <Border  >
@@ -255,9 +255,10 @@
                         </TextBlock>
                     </StackPanel>
                 </Border>
-                <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom" x:Name="ProductSelectionIndicator">
+                <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom" x:Name="ProductIndicators">
                     <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"
-                            CornerRadius="30" Width="20" Height="20">
+                            CornerRadius="30" Width="20" Height="20" 
+                            x:Name="ProductSelectionIndicator">
                         <materialdesign:PackIcon Kind="Done" Height="20" Width="20" />
                         <Border.Style>
                             <Style TargetType="Border">
@@ -279,7 +280,7 @@
                             </Style>
                         </Border.Style>
                     </Border>
-                    <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
+                    <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right" x:Name="ProductCopyIndecator" >
                         <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
                         <Border.Style>
                             <Style TargetType="Border">
@@ -303,7 +304,7 @@
                     </Border>
 
                     <!--Move indicator-->
-                    <Border Width="20" Height="20" DockPanel.Dock="Right">
+                    <Border Width="20" Height="20" DockPanel.Dock="Right" x:Name="ProductMoveIndecator">
                         <materialdesign:PackIcon Height="20" Width="20" Kind="ArrowExpandAll" Padding="0" />
                         <Border.Style>
                             <Style TargetType="Border">
@@ -329,7 +330,8 @@
                     cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
                     caliburn:Message.Attach="[Event Click] = [Action CreateProduct()]"
                     VerticalAlignment="Center" HorizontalAlignment="Center" 
-                    Content="{materialdesign:PackIcon Kind=Plus ,Size=30}">
+                    Content="{materialdesign:PackIcon Kind=Plus ,Size=30}"
+                    x:Name="CreateProductBtn">
 
                     <Button.Style>
 

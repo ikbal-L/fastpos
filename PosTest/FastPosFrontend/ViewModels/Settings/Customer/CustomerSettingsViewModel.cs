@@ -4,13 +4,14 @@ using System.Linq;
 using System.Windows.Controls;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.Views.Settings;
 using FastPosFrontend.Views.Settings.Customer;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Customer
 {
-    [NavigationItemConfiguration("Customer Settings",target:typeof(CustomerSettingsViewModel), groupName: "Settings")]
+    [NavigationItem("Customer Settings",target:typeof(CustomerSettingsViewModel), groupName: "Settings")]
     public class CustomerSettingsViewModel : AppScreen,ISettingsController
     {
         private ObservableCollection<ServiceInterface.Model.Customer> _Customers;

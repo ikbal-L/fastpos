@@ -2,7 +2,7 @@
 using System.Linq;
 using Caliburn.Micro;
 
-namespace FastPosFrontend.Helpers
+namespace FastPosFrontend.Navigation
 {
     public static class NavigationIndexer
     {
@@ -11,10 +11,35 @@ namespace FastPosFrontend.Helpers
 
         public interface IIndexer
         {
+            IIndexer Add<T>();
+            IIndexer Add(string groupName);
         }
 
         class Indexer : IIndexer
         {
+            public  IIndexer Add<T>()
+            {
+                var key = typeof(T).Name;
+                if (!Indexes.ContainsKey(key))
+                {
+                    LastAddedIndex++;
+                    Indexes.Add(key, LastAddedIndex);
+                }
+
+                return this;
+            }
+
+            public  IIndexer Add( string groupName)
+            {
+
+                if (!Indexes.ContainsKey(groupName))
+                {
+                    LastAddedIndex++;
+                    Indexes.Add(groupName, LastAddedIndex);
+                }
+
+                return this;
+            }
         }
 
         public static IIndexer ImplicitIndex()
@@ -22,30 +47,7 @@ namespace FastPosFrontend.Helpers
             return new Indexer();
         }
 
-        public static IIndexer Add<T>(this IIndexer indexer)
-        {
-            var key = typeof(T).Name;
-            if (!Indexes.ContainsKey(key))
-            {
-                LastAddedIndex++;
-                Indexes.Add(key, LastAddedIndex);
-            }
-
-            return indexer;
-        }
-        public static IIndexer Add(this IIndexer indexer,string groupName)
-        {
-            
-            if (!Indexes.ContainsKey(groupName))
-            {
-                LastAddedIndex++;
-                Indexes.Add(groupName, LastAddedIndex);
-            }
-
-            return indexer;
-        }
-
-        public static List<AppNavigationLookupItem> AssignIndexes(this IEnumerable<AppNavigationLookupItem> items)
+        public static List<NavigationLookupItem> AssignIndexes(this IEnumerable<NavigationLookupItem> items)
         {
             var appNavigationLookupItems = items.ToList();
             appNavigationLookupItems.ForEach(item =>
@@ -66,7 +68,7 @@ namespace FastPosFrontend.Helpers
                 {
                     item.SubItems?.AssignIndexes();
                     var result = item.SubItems?.OrderBy(lookupItem => lookupItem.Index).ToList();
-                    item.SubItems = new BindableCollection<AppNavigationLookupItem>(result);
+                    item.SubItems = new BindableCollection<NavigationLookupItem>(result);
                 }
             });
             return appNavigationLookupItems.OrderBy(item => item.Index).ToList();

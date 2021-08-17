@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.DeliveryAccounting;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -22,7 +23,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("Login",target:typeof(LoginViewModel),NavigationItemLoadingStrategy.OnStartup)]
+    [NavigationItem("Login",target:typeof(LoginViewModel),NavigationItemLoadingStrategy.OnStartup)]
     public class LoginViewModel : AppScreen
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();

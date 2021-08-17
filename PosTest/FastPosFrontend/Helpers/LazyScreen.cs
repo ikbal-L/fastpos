@@ -4,6 +4,7 @@ using System.Windows;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.ViewModels;
+using FastPosFrontend.Navigation;
 
 namespace FastPosFrontend.Helpers
 {
@@ -50,58 +51,6 @@ namespace FastPosFrontend.Helpers
         bool CanNavigate(Type navigationTargetType = null);
     }
 
-    public class AppNavigationLookupItem : PropertyChangedBase
-    {
-        private string _title;
-        private Type _target;
-        private BindableCollection<AppNavigationLookupItem> _subItems;
-        private int _index;
-
-
-        public AppNavigationLookupItem(string title, Type target = null, bool keepAlive = false, bool isDefault = false,
-            bool isGroupingItem = false)
-        {
-            _title = title;
-            _target = target;
-            KeepAlive = keepAlive;
-            IsDefault = isDefault;
-            IsGroupingItem = isGroupingItem;
-        }
-
-        public string Title
-        {
-            get => _title;
-            set => Set(ref _title, value);
-        }
-
-        public Type Target
-        {
-            get => _target;
-            set => Set(ref _target, value);
-        }
-
-        public bool KeepAlive { get; set; }
-        public bool IsDefault { get; set; }
-
-        public bool IsGroupingItem { get; set; }
-
-        public BindableCollection<AppNavigationLookupItem> SubItems
-        {
-            get => _subItems;
-            set => Set(ref _subItems, value);
-        }
-
-        public int Index
-        {
-            get => _index;
-            set => Set(ref _index, value);
-        }
-
-        public static explicit operator AppNavigationLookupItem(NavigationItemConfigurationAttribute configuration) =>
-            new AppNavigationLookupItem(configuration.Title, configuration.Target, configuration.KeepAlive,
-                isDefault: configuration.IsDefault);
-    }
-
 
     public abstract class LazyScreen : AppScreen, ILazyScreen, INotifyViewModelInitialized
     {
@@ -112,7 +61,7 @@ namespace FastPosFrontend.Helpers
 
         protected LazyScreen(LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
-            var title = GetType().GetCustomAttribute<NavigationItemConfigurationAttribute>()?.Title;
+            var title = GetType().GetCustomAttribute<NavigationItemAttribute>()?.Title;
             _loadingScreen = new LoadingScreenViewModel($"Loading {title}")
                 {LoadingScreenType = loadingScreenType};
             //ActivateLoadingScreen();

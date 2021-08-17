@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItemConfiguration("User Settings", typeof(UserSettingsViewModel), groupName: "Settings")]
+    [NavigationItem("User Settings", typeof(UserSettingsViewModel), groupName: "Settings")]
     public class UserSettingsViewModel : LazyScreen
     {
         private User _selectedUser = null;
