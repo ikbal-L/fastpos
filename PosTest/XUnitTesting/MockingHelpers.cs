@@ -58,25 +58,7 @@ namespace XUnitTesting
         }
         public static void ModifySomeItems(List<OrderItem> orderItems, Dictionary<int, OrderItem> diff)
         {
-            orderItems.Where(oi=> oi.TimeStamp==null).ToList().ForEach(oi=> OrderManagementHelper.TrackItemForChange(oi,diff));
-            //Modify item 1
-            var item1 = orderItems[0];
-            OrderManagementHelper.TrackItemForChange(item1, diff);
-            item1.Quantity++;
-            //Modify item 2 
-            var item2 = orderItems[1];
-            OrderManagementHelper.TrackItemForChange(item2, diff);
-            item2.Quantity--;
-            //Modify item 3 
-            var item3 = orderItems[2];
-            OrderManagementHelper.TrackItemForChange(item3, diff);
-            item3.State = OrderItemState.Removed;
-            //Modify item 1
-            var item4 = orderItems[3];
-            item4.TimeStamp = null;
-            item4.State = OrderItemState.Added;
-            OrderManagementHelper.TrackItemForChange(item4, diff);
-            item4.Quantity++;
+           
         }
         public static object GetRandomEnumValueFromEnumType(Type enumType)
         {

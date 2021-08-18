@@ -271,6 +271,7 @@
     <Compile Include="Converters\IsStringNullOrEmptyValueConverter.cs" />
     <Compile Include="Converters\LessThanValueConverter.cs" />
     <Compile Include="Converters\SolidColorBrushToColorConverter.cs" />
+    <Compile Include="Converters\StaticResourceConverter.cs" />
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Converters\SumValuesConverter.cs" />
     <Compile Include="Enums\ComparaisonOperator.cs" />
@@ -282,6 +283,9 @@
     <Compile Include="Extensions\ModifierCollection.cs" />
     <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
+    <Compile Include="Navigation\NavigationDrawerView.xaml.cs">
+      <DependentUpon>NavigationDrawerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Navigation\NavigationLookupItem.cs" />
     <Compile Include="Helpers\AppScreen.cs" />
     <Compile Include="Helpers\Associations.cs" />
@@ -549,6 +553,10 @@
     <Compile Include="Views\UserSettingsView.xaml.cs">
       <DependentUpon>UserSettingsView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Navigation\NavigationDrawerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Design\Additives.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -13,12 +13,12 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
 
-    [NavigationItem("Waiter Settings", typeof(WaiterSettingsViewModel), groupName: "Settings")]
+    [NavigationItem("Waiter Settings", typeof(WaiterSettingsViewModel),"", groupName: "Settings")]
     public class WaiterSettingsViewModel: LazyScreen,ISettingsController
     {
-        private ObservableCollection<ServiceInterface.Model.Waiter> _Waiters;
+        private ObservableCollection<Waiter> _Waiters;
 
-        public ObservableCollection<ServiceInterface.Model.Waiter> Waiters
+        public ObservableCollection<Waiter> Waiters
         {
             get { return _Waiters; }
             set {
@@ -26,9 +26,9 @@ namespace FastPosFrontend.ViewModels
                 NotifyOfPropertyChange((nameof(Waiters)));
             }
         }
-        private ServiceInterface.Model.Waiter _SelectedWaiter;
+        private Waiter _SelectedWaiter;
 
-        public ServiceInterface.Model.Waiter SelectedWaiter
+        public Waiter SelectedWaiter
         {
             get { return _SelectedWaiter; }
             set { _SelectedWaiter = value;

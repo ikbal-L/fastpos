@@ -154,9 +154,10 @@
         <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Center" materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True">
             <ItemsControl ItemsSource="{Binding Swatches,RelativeSource={RelativeSource AncestorType=local:MDColorPalette}}" x:Name="SwatchesList" VirtualizingStackPanel.IsVirtualizing="True" >
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type materialDesignColors:ISwatch}">
+                    <DataTemplate >
                         <StackPanel Orientation="Horizontal">
                             <!--<TextBlock Text="{Binding Name}" Width="80" VerticalAlignment="Center" />-->
+                            <Border CornerRadius="50" Width="50" Height="50" Background="{Binding Hues[0],Converter={StaticResource ColorToBrushConverter}}"></Border>
                             <ItemsControl ItemsSource="{Binding Hues}" ItemTemplate="{StaticResource SwatchColorTemplate}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>

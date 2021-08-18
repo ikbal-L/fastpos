@@ -11,6 +11,7 @@ namespace FastPosFrontend.Navigation
         Type ParentNavigationItem { get; }
         Type Target { get; }
         string Title { get; }
+        string IconResKey { get; }
     }
 
     public enum NavigationItemLoadingStrategy

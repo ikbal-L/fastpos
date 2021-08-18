@@ -10,7 +10,8 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
-             xmlns:views="clr-namespace:FastPosFrontend.Views">
+             xmlns:views="clr-namespace:FastPosFrontend.Views"
+             xmlns:mdcp="clr-namespace:FastPosFrontend.SL.Controls.MDColorPalette">
     <FrameworkElement.Resources>
         <ResourceDictionary>
 
@@ -42,7 +43,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid  Margin="20" Width="600">
+        <Grid  Margin="20" MaxWidth="900">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -66,13 +67,15 @@
 
           
 
-            <materialDesign:ColorPicker Grid.Row="2" MinHeight="150" Margin="2 5">
+            <!--<materialDesign:ColorPicker Grid.Row="2" MinHeight="150" Margin="2 5">
                 <materialDesign:ColorPicker.Color>
                     <Binding
                     Path="Category.Background"
                     Converter="{StaticResource SolidColorBrushToColorConverter}" />
                 </materialDesign:ColorPicker.Color>
-            </materialDesign:ColorPicker>
+            </materialDesign:ColorPicker>-->
+
+            <mdcp:MDColorPalette MDColor="{Binding Category.Background}" Grid.Row="2"  Margin="2 5"></mdcp:MDColorPalette>
         </Grid>
         <materialDesign:ColorZone Grid.Row="1" Padding="6"
                                   Mode="PrimaryDark"

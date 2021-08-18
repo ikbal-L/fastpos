@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="FastPosFrontend.Navigation.NavigationDrawerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FastPosFrontend.Navigation"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:converters="clr-namespace:FastPosFrontend.Converters"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
+             xmlns:navigation="clr-namespace:FastPosFrontend.Navigation">
+    <UserControl.Resources>
+        <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
+        <converters:StaticResourceConverter x:Key="StaticResourceConverter" />
+    </UserControl.Resources>
+    <md:ColorZone Mode="Standard" ClipToBounds="False" VerticalAlignment="Stretch">
+        <Grid MinWidth="250" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonUp">
+                    <i:InvokeCommandAction
+                                                        Command="{x:Static md:DrawerHost.CloseDrawerCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DockPanel Grid.Row="0" />
+            <TreeView Grid.Row="0" ItemsSource="{Binding AppNavigationItems}"
+                                                      Style="{StaticResource MaterialDesignTreeView}"
+                                                      HorizontalAlignment="Left"
+                                                      Margin="10 20">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}"
+                                                           BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <b:Interaction.Behaviors>
+                    <ex:BindableSelectedItemBehavior
+                                                        SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
+                </b:Interaction.Behaviors>
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate
+                                                        DataType="{x:Type navigation:NavigationLookupItem}"
+                                                        ItemsSource="{Binding SubItems}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ContentControl 
+                                                                Content="{Binding IconResKey,Converter={StaticResource StaticResourceConverter}}" 
+                                                                VerticalContentAlignment="Center">
+
+                            </ContentControl>
+                            <TextBlock
+                                                                   Grid.Column="1"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Text="{Binding Title}"
+                                                                   Margin="5 0"
+                                                                   FontSize="16"
+                                                                   Style="{StaticResource MaterialDesignButtonTextBlock}" />
+                        </Grid>
+                    </HierarchicalDataTemplate>
+                    <DataTemplate
+                                                        DataType="{x:Type navigation:NavigationLookupItem}"
+                                                        x:Key="SubItem">
+                        <TextBlock
+                                                            Text="{Binding Title}"
+                                                            Margin="5"
+                                                            ToolTip="{Binding Title}"
+                                                            Style="{StaticResource MaterialDesignButtonTextBlock}" />
+                    </DataTemplate>
+                </TreeView.Resources>
+            </TreeView>
+
+        </Grid>
+    </md:ColorZone>
+</UserControl>

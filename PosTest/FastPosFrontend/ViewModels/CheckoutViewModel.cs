@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Printing;
-using System.IO;
 using System.Linq;
 using System.Printing;
 using System.Text.RegularExpressions;
@@ -35,7 +34,7 @@ namespace FastPosFrontend.ViewModels
 {
     [NavigationItem(
         title: Constants.Navigation.Checkout, 
-        target: typeof(CheckoutViewModel),
+        target: typeof(CheckoutViewModel),"",
         keepAlive: true, isDefault: true)]
     public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>,ISettingsListener
     {
@@ -1666,11 +1665,7 @@ namespace FastPosFrontend.ViewModels
                     }
 
                     scanValue = "";
-                }
-
-                
-
-                
+                }   
             }
         }
 
@@ -1920,9 +1915,10 @@ namespace FastPosFrontend.ViewModels
         {
             FixedDocument fixedDocument = GenerateOrderReceipt(source);
             var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
- 
 
+            
             IList<PrinterItem> printerItems = null;
+           
             var printerItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
             if (source == PrintSource.Kitchen)
             {

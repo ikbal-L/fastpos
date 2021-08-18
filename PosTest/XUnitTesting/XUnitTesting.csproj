@@ -86,7 +86,6 @@
     <Compile Include="CheckpointTesting\SplitTesting\CommandFunctionsTesting.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="HelpersTesting\EntityValidationHelperTest.cs" />
-    <Compile Include="HelpersTesting\OrderManagementHelperTest.cs" />
     <Compile Include="HelpersTesting\RankedItemsCollectionHelperTest.cs" />
     <Compile Include="MuationObserverTest.cs" />
     <Compile Include="ProductsViewModelTest.cs" />

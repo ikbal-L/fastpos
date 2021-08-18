@@ -23,7 +23,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("Login",target:typeof(LoginViewModel),NavigationItemLoadingStrategy.OnStartup)]
+    [NavigationItem("Login",target:typeof(LoginViewModel),"",NavigationItemLoadingStrategy.OnStartup)]
     public class LoginViewModel : AppScreen
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();

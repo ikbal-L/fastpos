@@ -7,7 +7,8 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
                     xmlns:cal="http://www.caliburnproject.org"
-                    xmlns:views="clr-namespace:FastPosFrontend.Views">
+                    xmlns:views="clr-namespace:FastPosFrontend.Views"
+                    xmlns:navigation="clr-namespace:FastPosFrontend.Navigation">
 
     <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
     <converters:SumValuesConverter x:Key="SumValuesConverter" />
@@ -170,6 +171,10 @@
                 <views:CustomerView x:Name="lcustomer" cal:View.Model="{Binding Content.CustomerViewModel}"/>
             </materialDesign:ColorZone>
         </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="AppNavigationDrawer" DataType="{x:Type vm:Drawer}">
+        <navigation:NavigationDrawerView cal:View.Model="{Binding Content}" ></navigation:NavigationDrawerView>
     </DataTemplate>
 
 </ResourceDictionary>

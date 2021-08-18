@@ -10,7 +10,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels.Settings
 {
   
-    [NavigationItem(title:"General Settings",typeof(GeneralSettingsViewModel),groupName:"Settings")]
+    [NavigationItem(title:"General Settings",typeof(GeneralSettingsViewModel),"",groupName:"Settings")]
     public  class GeneralSettingsViewModel : AppScreen,ISettingsController
     {
         private GeneralSettings _generalSettings;

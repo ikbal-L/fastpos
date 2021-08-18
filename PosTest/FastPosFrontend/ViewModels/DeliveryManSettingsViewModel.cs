@@ -11,7 +11,7 @@ using ServiceLib.Service.StateManager;
 using FastPosFrontend.Navigation;
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("Deliveryman Settings", typeof(DeliveryManSettingsViewModel), groupName: "Settings")]
+    [NavigationItem("Deliveryman Settings", typeof(DeliveryManSettingsViewModel),"", groupName: "Settings")]
     public class DeliveryManSettingsViewModel : LazyScreen,ISettingsController
     {
         private ObservableCollection<Deliveryman> _Deliverymans;

@@ -26,6 +26,7 @@
 
     <Window.Resources>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
+        <converters:StaticResourceConverter x:Key="StaticResourceConverter" />
 
         <Style TargetType="local:MainView">
 
@@ -330,66 +331,7 @@
                                                IsTopDrawerOpen="{Binding Drawer.IsTopDrawerOpen}"
                                                TopDrawerBackground="Transparent"
                                                >
-                                    <md:DrawerHost.LeftDrawerContent>
-                                        <Grid MinWidth="250">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="auto" />
-                                            </Grid.RowDefinitions>
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseLeftButtonUp">
-                                                    <i:InvokeCommandAction
-                                                        Command="{x:Static md:DrawerHost.CloseDrawerCommand}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                            <DockPanel Grid.Row="0" />
-                                            <TreeView Grid.Row="0" ItemsSource="{Binding AppNavigationItems}"
-                                                      Style="{StaticResource MaterialDesignTreeView}"
-                                                      HorizontalAlignment="Left"
-                                                      Margin="10 20">
-                                                <TreeView.ItemContainerStyle>
-                                                    <Style TargetType="{x:Type TreeViewItem}"
-                                                           BasedOn="{StaticResource MaterialDesignTreeViewItem}">
-                                                        <Setter Property="IsExpanded" Value="True" />
-                                                    </Style>
-                                                </TreeView.ItemContainerStyle>
-                                                <b:Interaction.Behaviors>
-                                                    <ex:BindableSelectedItemBehavior
-                                                        SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}" />
-                                                </b:Interaction.Behaviors>
-                                                <TreeView.Resources>
-                                                    <HierarchicalDataTemplate
-                                                        DataType="{x:Type navigation:NavigationLookupItem}"
-                                                        ItemsSource="{Binding SubItems}">
-                                                        <TextBlock HorizontalAlignment="Center"
-                                                                   Text="{Binding Title}"
-                                                                   Margin="5"
-                                                                   FontSize="16"
-                                                                   Style="{StaticResource MaterialDesignButtonTextBlock}" />
-                                                    </HierarchicalDataTemplate>
-                                                    <DataTemplate
-                                                        DataType="{x:Type navigation:NavigationLookupItem}"
-                                                        x:Key="SubItem">
-                                                        <TextBlock
-                                                            Text="{Binding Title}"
-                                                            Margin="5"
-                                                            ToolTip="{Binding Title}"
-                                                            Style="{StaticResource MaterialDesignButtonTextBlock}" />
-                                                    </DataTemplate>
-                                                </TreeView.Resources>
-                                            </TreeView>
-                                            <!--<Button Cursor="Hand"
-                                                    MinWidth="220"
-                                                    Background="Transparent"
-                                                    Grid.Row="1"
-                                                    FontWeight="Medium"
-                                                    BorderThickness="0"
-                                                    cal:Message.Attach="Close()"
-                                                    Content="Close" Padding="32 0 32 0"
-                                                    AutomationProperties.AutomationId="DemoItemPage" />-->
-                                        </Grid>
-
-                                    </md:DrawerHost.LeftDrawerContent>
+                                 
 
                                     <ContentPresenter />
 

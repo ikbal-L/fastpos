@@ -3,22 +3,22 @@ using Caliburn.Micro;
 
 namespace FastPosFrontend.Navigation
 {
-    public class NavigationLookupItem : PropertyChangedBase,INavigationItem
+    public class NavigationLookupItem : PropertyChangedBase, INavigationItem
     {
         private string _title;
         private Type _target;
         private IObservableCollection<NavigationLookupItem> _subItems;
         private int _index;
 
-
         public NavigationLookupItem(string title, Type target = null, bool keepAlive = false, bool isDefault = false,
-            bool isGroupingItem = false)
+            bool isGroupingItem = false,string iconResKey="")
         {
             _title = title;
             _target = target;
             KeepAlive = keepAlive;
             IsDefault = isDefault;
             IsGroupingItem = isGroupingItem;
+            IconResKey = iconResKey;
         }
 
         public string Title
@@ -56,8 +56,10 @@ namespace FastPosFrontend.Navigation
 
         public Type ParentNavigationItem => throw new NotImplementedException();
 
+        public string IconResKey { get; }
+
         public static explicit operator NavigationLookupItem(NavigationItemAttribute configuration) =>
             new NavigationLookupItem(configuration.Title, configuration.Target, configuration.KeepAlive,
-                isDefault: configuration.IsDefault);
+                isDefault: configuration.IsDefault,iconResKey:configuration.IconResKey);
     }
 }

@@ -9,7 +9,7 @@ using ServiceLib.Service;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
-    [NavigationItem("Print Settings", typeof(PrintSettingsViewModel), groupName: "Settings")]
+    [NavigationItem("Print Settings", typeof(PrintSettingsViewModel),"", groupName: "Settings")]
     public class PrintSettingsViewModel : AppScreen
     {
         private ObservableCollection<PrinterItem> _Printers;

@@ -22,6 +22,8 @@ namespace FastPosFrontend.ViewModels
 
         public MainViewModel()
         {
+            AppDrawerConductor.Instance.InitLeft(this, "AppNavigationDrawer", this);
+            AppDrawerConductor.Instance.OpenTop(this);
             IsBackendServerOn = ConnectionHelper.PingHost();
             IsDbServerOn = ConnectionHelper.PingHost(portNumber: 3306);
             Associations.Setup();

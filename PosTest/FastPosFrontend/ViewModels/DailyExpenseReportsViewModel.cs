@@ -18,7 +18,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem(title: "Daily Expense Reports", target: typeof(DailyExpenseReportsViewModel))]
+    [NavigationItem(title: "Daily Expense Reports", target: typeof(DailyExpenseReportsViewModel),"")]
     public class DailyExpenseReportsViewModel : LazyScreen
     {
         
