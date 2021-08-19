@@ -174,7 +174,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AppNavigationDrawer" DataType="{x:Type vm:Drawer}">
-        <navigation:NavigationDrawerView cal:View.Model="{Binding Content}" ></navigation:NavigationDrawerView>
+        <navigation:NavigationDrawerView DataContext="{Binding Content}" ></navigation:NavigationDrawerView>
     </DataTemplate>
 
 </ResourceDictionary>

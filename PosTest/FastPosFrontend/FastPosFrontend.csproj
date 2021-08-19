@@ -299,6 +299,12 @@
     <Compile Include="ModalDialogBox.xaml.cs">
       <DependentUpon>ModalDialogBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SL.Controls\AppBar.xaml.cs">
+      <DependentUpon>AppBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SL.Controls\AppContainer.xaml.cs">
+      <DependentUpon>AppContainer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SL.Controls\MDColorPalette\AnotherCommandImplementation.cs" />
     <Compile Include="SL.Controls\MDColorPalette\ButtonAssist.cs" />
     <Compile Include="SL.Controls\MDColorPalette\MDColorPaletteViewModel.cs" />
@@ -557,6 +563,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\ControlTemplates\Templates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Design\Additives.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -678,6 +688,14 @@
     <Page Include="Resources\Styles\OrderItemListStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SL.Controls\AppBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SL.Controls\AppContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SL.Controls\ColorPalette.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -22,8 +22,12 @@ namespace FastPosFrontend.ViewModels
 
         public MainViewModel()
         {
+
+            OpenNavigationDrawerCommand = new DelegateCommandBase((o)=> {
+                AppDrawerConductor.Instance.OpenLeft(this);
+            });
             AppDrawerConductor.Instance.InitLeft(this, "AppNavigationDrawer", this);
-            AppDrawerConductor.Instance.OpenTop(this);
+            
             IsBackendServerOn = ConnectionHelper.PingHost();
             IsDbServerOn = ConnectionHelper.PingHost(portNumber: 3306);
             Associations.Setup();
@@ -34,6 +38,7 @@ namespace FastPosFrontend.ViewModels
         {
             
         }
+        public DelegateCommandBase OpenNavigationDrawerCommand { get; set; }
 
         public bool IsLoggedIn
         {
