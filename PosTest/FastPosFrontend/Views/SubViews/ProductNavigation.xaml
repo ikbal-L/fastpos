@@ -38,6 +38,8 @@
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="Margin" Value="0"/>
                         <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
                         <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
@@ -45,7 +47,8 @@
                     <ItemsPanelTemplate>
                        <UniformGrid 
                            Rows="{Binding ProductLayout.Rows}"
-                           Columns="{Binding ProductLayout.Columns}"/>
+                           Columns="{Binding ProductLayout.Columns}"
+                           />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

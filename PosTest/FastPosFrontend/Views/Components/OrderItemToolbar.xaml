@@ -39,6 +39,22 @@
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity()]"
                     Content="{md:PackIcon MinusBox,Size=30}" />
+            <md:PopupBox  Style="{StaticResource MaterialDesignPopupBox}"
+                         PlacementMode="RightAndAlignMiddles"
+                         StaysOpen="True" 
+                         HorizontalAlignment="Center"
+                         
+                         PopupHorizontalOffset="30"
+                         >
+                <md:PopupBox.ToggleContent>
+                    <md:PackIcon Kind="ShoppingCartPlus" Width="30" Height="30" Foreground="{DynamicResource PrimaryHueMidBrush}" ></md:PackIcon>
+                </md:PopupBox.ToggleContent>
+                <StackPanel Margin="5" Orientation="Horizontal">
+                    <TextBox Text="{Binding CurrentOrder.SelectedOrderItem.Quantity}" MaxWidth="60"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <Button Content="Apply" Margin="10 0" Style="{StaticResource MaterialDesignFlatButton}"></Button>
+                </StackPanel>
+            </md:PopupBox>
             <Button Grid.Row="4" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
 
                     cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]"

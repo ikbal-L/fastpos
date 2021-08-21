@@ -73,7 +73,8 @@
                         </Border>
                     </UniformGrid>
 
-                    <views:AdditivesOfProductView Grid.Row="2" Margin="0 10 0 0 " />
+                    
+                    <mdcp:MDColorPalette Grid.Row="2" Margin="0 10 0 0 "  MDColor="{Binding RelativeSource={RelativeSource AncestorType=local:ProductDetailView},Path=DataContext.Product.Background.Color}" />
 
 
 
@@ -81,9 +82,8 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Color" TabIndex="1">
-                <mdcp:MDColorPalette MDColor="{Binding RelativeSource={RelativeSource AncestorType=local:ProductDetailView},Path=DataContext.Product.Background.Color}" />
-
+            <TabItem Header="Additives" TabIndex="1">
+                <views:AdditivesOfProductView  Margin="0 10 0 0 " />
             </TabItem>
         </TabControl>
         <materialdesign:ColorZone Grid.Row="1" Padding="6"

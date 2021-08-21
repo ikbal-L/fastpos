@@ -17,8 +17,15 @@
     <converters:LengthPropertyConverter x:Key="LengthPropertyConverter" />
     <converters:IsStringNullOrEmptyValueConverter x:Key="IsStringNullOrEmptyValueConverter" />
     <DataTemplate DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
-        <StackPanel Orientation="Vertical" x:Name="ProductTemplate">
-            <Button x:Name="ProductClick" Style="{StaticResource ButtonStyle1}">
+        <Grid  x:Name="ProductTemplate" 
+                    VerticalAlignment="Stretch"
+               HorizontalAlignment="Stretch">
+            <Button x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" 
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch" 
+                    VerticalContentAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cal:ActionMessage MethodName="AddOrderItem">
@@ -27,8 +34,10 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DockPanel
-                    Background="{Binding Background}">
-                    <DockPanel.Width>
+                    Background="{Binding Background}" 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch">
+                    <!--<DockPanel.Width>
                         <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
                                  Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="417,10" />
                     </DockPanel.Width>
@@ -36,7 +45,7 @@
                         <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
                                  Converter="{StaticResource ProductTemplateHeightConverter}"
                                  ConverterParameter="313,85,10" />
-                    </DockPanel.Height>
+                    </DockPanel.Height>-->
                     <Border DockPanel.Dock="Top" Height="40">
                         <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
@@ -67,7 +76,7 @@
                     </Border>
                 </DockPanel>
             </Button>
-        </StackPanel>
+        </Grid>
     </DataTemplate>
 
     <!--<DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
@@ -221,40 +230,37 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                  
                 </Grid.RowDefinitions>
-
-                <Border  >
-                    <StackPanel >
-                        <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                            <Setter Property="Foreground" Value="White" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock Text="{Binding Path=Price,StringFormat='C2',ConverterCulture='fr-DZ'}" FontSize="12" TextWrapping="Wrap"
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{Binding Path=Price,StringFormat='C2',ConverterCulture='fr-DZ'}" FontSize="12" TextWrapping="Wrap"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                            <Setter Property="Foreground" Value="White" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Price}" Value="0">
-                                            <Setter Property="Visibility" Value="Hidden" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                </Border>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Price}" Value="0">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
                 <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom" x:Name="ProductIndicators">
                     <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"
                             CornerRadius="30" Width="20" Height="20" 

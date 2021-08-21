@@ -24,13 +24,14 @@ namespace FastPosFrontend.SL.Controls.MDColorPalette
 
         private static string[] _exclude= { "Brown" , "Grey" , "Blue Grey" };
 
-        private static List<ISwatch> _swatches = SwatchHelper.Swatches.Where(s => !_exclude.Contains(s.Name)).ToList();
+        private static List<ISwatch> _swatches = SwatchHelper.Swatches.Where(s => !_exclude.Contains(s.Name)).Select(s=> new Swatch(s)).ToList<ISwatch>();
 
         public MDColorPalette()
         {
             
             InitializeComponent();
             Swatches = _swatches;
+            
             ChangeHueCommand = new AnotherCommandImplementation(ChangeHue);
         }
 
@@ -76,5 +77,30 @@ namespace FastPosFrontend.SL.Controls.MDColorPalette
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertName));
         }
 
+    }
+
+    public interface ISwatch
+    {
+        string Name { get; }
+        List<Color> Hues { get; }
+    }
+
+    public class Swatch : ISwatch
+    {
+
+        public Swatch(string name, IEnumerable<Color> hues)
+        {
+            Name = name;
+            Hues = new List<Color>(hues);
+        }
+
+        public Swatch(MaterialDesignColors.ISwatch swatch)
+        {
+            Name = swatch.Name;
+            Hues = new List<Color>(swatch.Hues);
+        }
+        public string Name { get; private  set; }
+
+        public List<Color> Hues { get; private set; }
     }
 }
