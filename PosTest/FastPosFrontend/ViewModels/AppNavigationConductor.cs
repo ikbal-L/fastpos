@@ -148,6 +148,8 @@ namespace FastPosFrontend.ViewModels
 
         public virtual bool NavigateToItem(NavigationLookupItem navigationItem)
         {
+            if (navigationItem == null) return false;
+            
             if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return false;
             if (navigationItem.KeepAlive)
             {

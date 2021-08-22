@@ -8,7 +8,6 @@ namespace FastPosFrontend.Helpers
     {
         private string _title;
         private EmbeddedCommandBarViewModel _embeddedCommandBar;
-        private EmbeddedContentBarViewModel _embeddedContentBar;
         private EmbeddedCommandBarViewModel _embeddedRightCommandBar;
 
         public string Title
@@ -29,11 +28,7 @@ namespace FastPosFrontend.Helpers
             set => Set(ref _embeddedRightCommandBar, value);
         }
 
-        public EmbeddedContentBarViewModel EmbeddedContentBar
-        {
-            get => _embeddedContentBar;
-            set => Set(ref _embeddedContentBar, value);
-        }
+        
 
         public virtual bool CanNavigate(Type navigationTargetType = null)
         {

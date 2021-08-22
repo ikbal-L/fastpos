@@ -75,7 +75,7 @@
                 </materialDesign:ColorPicker.Color>
             </materialDesign:ColorPicker>-->
 
-            <mdcp:MDColorPalette MDColor="{Binding Category.Background}" Grid.Row="2"  Margin="2 5"></mdcp:MDColorPalette>
+            <mdcp:MDColorPalette MDColor="{Binding Category.Background.Color}" Grid.Row="2"  Margin="2 5"></mdcp:MDColorPalette>
         </Grid>
         <materialDesign:ColorZone Grid.Row="1" Padding="6"
                                   Mode="PrimaryDark"

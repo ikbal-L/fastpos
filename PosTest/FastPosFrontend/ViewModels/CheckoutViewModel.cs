@@ -170,26 +170,14 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedCommandBar()
         {
-            EmbeddedCommandBar = new EmbeddedCommandBarViewModel()
-            {
-                Commands = new BindableCollection<EmbeddedCommandBarCommand>()
-                {
-                    new EmbeddedCommandBarCommand(Icon.Get("NewOrder"), o => { NewOrder(); }),
-                    new EmbeddedCommandBarCommand(Icon.Get("Table"), o => { ShowDrawer(ListKind.Table); }),
-                    new EmbeddedCommandBarCommand(Icon.Get("Waiter"), o => { ShowDrawer(ListKind.Waiter); }),
-                    new EmbeddedCommandBarCommand(Icon.Get("Delivery"), o => { ShowDrawer(ListKind.Delivery); }),
-                    new EmbeddedCommandBarCommand(Icon.Get("Customer"), o => { ShowDrawer(ListKind.Customer); })
-                }
-            };
+            EmbeddedCommandBar = new EmbeddedCommandBarViewModel(this,"CheckoutCommandBar");
+            
         }
 
         private void SetupEmbeddedStatusBar()
         {
-            EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
-            {
-                EmbeddedStatusBarTemplate =
-                    Application.Current.FindResource("CheckoutStatusBarDataTemplate") as DataTemplate
-            };
+            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutStatusBarDataTemplate");
+            
         }
 
         public override void Initialize()

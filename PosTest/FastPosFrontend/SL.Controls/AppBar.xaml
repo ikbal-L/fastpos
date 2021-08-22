@@ -35,6 +35,7 @@
                                             DockPanel.Dock="Left"
                                             Foreground="WhiteSmoke"
                                             Margin="5 0 0 0"
+                IsChecked="{Binding Drawer.IsNavigationDrawerOpen,Mode=OneWay}"
                 Command="{Binding OpenNavigationDrawerCommand}">
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton"
@@ -171,13 +172,12 @@
                 </ContentControl.Style>
             </ContentControl>
 
-            <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedContentBar}"
+            <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedRightCommandBar}"
                                                         DockPanel.Dock="Right">
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ActiveItem.EmbeddedContentBar}"
-                                                                     Value="null">
+                            <DataTrigger Binding="{Binding ActiveItem.EmbeddedRightCommandBar}" Value="null">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -185,20 +185,7 @@
                 </ContentControl.Style>
             </ContentControl>
 
-            <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedRightCommandBar}"
-                                                        DockPanel.Dock="Right">
-                <ContentControl.Style>
-                    <Style TargetType="ContentControl">
-                        <Style.Triggers>
-                            <DataTrigger
-                                                            Binding="{Binding ActiveItem.EmbeddedRightCommandBar}"
-                                                            Value="null">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
+            
 
             <!--Processes Status-->
             <StackPanel Orientation="Horizontal">

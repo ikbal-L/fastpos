@@ -188,6 +188,54 @@
         </Grid>
     </DataTemplate>
 
-    
+    <DataTemplate x:Key="CheckoutCommandBar" >
+        <StackPanel>
+            <UniformGrid Rows="1">
+                <Panel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
+                        <!--<Setter Property="VerticalAlignment" Value="Center"/>-->
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="Width" Value="40"/>
+                        <Setter Property="Height" Value="40"/>
+                    </Style>
+                </Panel.Resources>
+                <Button Content="{md:PackIcon Kind=NewBox,Size=30}" cal:Message.Attach="[Event Click] = [ Action NewOrder()]" />
+                <Button Content="{md:PackIcon Kind=TableFurniture,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]" />
+                <Button Content="{md:PackIcon Kind=NewBox,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Waiter')]" />
+                <Button Content="{md:PackIcon Kind=TruckFast,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Delivery')]" />
+                <Button Content="{md:PackIcon Kind=Account,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Customer')]" />
+            </UniformGrid>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DailyExpenseReportRightCommandBar">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+            <Panel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
+                    <!--<Setter Property="VerticalAlignment" Value="Center"/>-->
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Margin" Value="3"/>
+                    <Setter Property="Width" Value="40"/>
+                    <Setter Property="Height" Value="40"/>
+                </Style>
+            </Panel.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Button  Content="{md:PackIcon Kind=Magnify,Size=30}" />
+               
+
+                <TextBox Style="{StaticResource}" />
+
+            </StackPanel>
+            <UniformGrid Rows="1">
+               
+          
+                <Button Content="{md:PackIcon Kind=Printer,Size=30}"
+                        cal:Message.Attach="[Event Click] = [Action PrintReport]"/>
+                <Button Content="{md:PackIcon Kind=Plus,Size=30}"
+                        cal:Message.Attach="[Event Click] = [Action Generate]"/>
+            </UniformGrid>
+        </StackPanel>
+    </DataTemplate>
 
 </ResourceDictionary>

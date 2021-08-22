@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using Caliburn.Micro;
+using static FastPosFrontend.ViewModels.AppDrawerConductor;
 
 namespace FastPosFrontend.ViewModels
 {
@@ -21,14 +23,31 @@ namespace FastPosFrontend.ViewModels
         private Drawer _right;
         private Drawer _top;
         private Drawer _bottom;
+        private Drawer _navigationDrawer;
 
         private AppDrawerConductor()
         {
             _drawerContents =
                 new Dictionary<(object owner, DrawerPosition position, object tag), (object template, object content)>();
             _cache = new Dictionary<object, object>();
+            this.PropertyChanged += AppDrawerConductor_PropertyChanged;
         }
 
+        private void AppDrawerConductor_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IsRightDrawerOpen)|| e.PropertyName == nameof(IsLeftDrawerOpen))
+            {
+                if (NavigationDrawer.Position == DrawerPosition.Left)
+                {
+                    IsNavigationDrawerOpen = IsLeftDrawerOpen;
+                }
+                else
+                {
+                    IsNavigationDrawerOpen = IsRightDrawerOpen;
+
+                }
+            }
+        }
 
         public static AppDrawerConductor Instance { get; } = new AppDrawerConductor();
 
@@ -66,6 +85,14 @@ namespace FastPosFrontend.ViewModels
             get => _isRightDrawerOpen;
             set => Set(ref _isRightDrawerOpen, value);
         }
+        private bool _isNavigationDrawerOpen;
+
+        public bool IsNavigationDrawerOpen
+        {
+            get { return _isNavigationDrawerOpen; }
+            set { Set(ref _isNavigationDrawerOpen, value); }
+        }
+
 
 
         public Drawer Left
@@ -91,6 +118,13 @@ namespace FastPosFrontend.ViewModels
             get => _bottom;
             set => Set(ref _bottom, value);
         }
+
+        public Drawer NavigationDrawer
+        {
+            get { return _navigationDrawer; }
+            set { Set(ref _navigationDrawer, value); }
+        }
+
 
         public enum DrawerPosition
         {
@@ -126,6 +160,17 @@ namespace FastPosFrontend.ViewModels
         public void InitBottom(object owner, object resKey, object content, object tag = null)
         {
             Init(DrawerPosition.Bottom, owner, resKey, content, tag);
+        }
+
+        public void InitNavigationDrawer(object owner, object resKey, object content)
+        {
+            DrawerPosition position = DrawerPosition.Left;
+            if (Thread.CurrentThread.CurrentUICulture.Name.Contains("ar"))
+            {
+                position = DrawerPosition.Right;
+            }
+            var template = Application.Current.FindResource(resKey);
+            NavigationDrawer = new Drawer() { Content = content, Template = template ,Position = position};
         }
 
         public bool Open(DrawerPosition position, object owner, object tag = null)
@@ -190,6 +235,36 @@ namespace FastPosFrontend.ViewModels
         {
             return Open(DrawerPosition.Bottom, owner, tag);
         }
+
+        public void OpenNavigationDrawer()
+        {
+            if (!IsNavigationDrawerOpen)
+            {
+                if (NavigationDrawer.Position == DrawerPosition.Left)
+                {
+                    Left = NavigationDrawer;
+                    IsLeftDrawerOpen = true;
+                }
+                else
+                {
+                    Right = NavigationDrawer;
+                    IsRightDrawerOpen = true;
+                }
+            }
+            else
+            {
+                if (NavigationDrawer.Position == DrawerPosition.Left)
+                {
+                    Left = null;
+                    IsLeftDrawerOpen = false;
+                }
+                else
+                {
+                    Right = null;
+                    IsRightDrawerOpen = false;
+                }
+            }
+        }
     }
 
     public class Drawer : PropertyChangedBase
@@ -215,5 +290,7 @@ namespace FastPosFrontend.ViewModels
             get => _visibility;
             set => Set(ref _visibility, value);
         }
+
+        public DrawerPosition Position { get; set; }
     }
 }

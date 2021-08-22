@@ -76,10 +76,7 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedStatusBar()
         {
-            EmbeddedContentBar = new EmbeddedContentBarViewModel(this)
-            {
-                EmbeddedStatusBarTemplate = Application.Current.FindResource("UserLoginBarDataTemplate") as DataTemplate
-            };
+            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this, "UserLoginBarDataTemplate");
         }
 
         private ObservableCollection<User> _Users;

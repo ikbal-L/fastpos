@@ -21,12 +21,12 @@
                                                IsLeftDrawerOpen="{Binding Drawer.IsLeftDrawerOpen}"
                                                LeftDrawerContentTemplate="{Binding Drawer.Left.Template}"                
                                                LeftDrawerContent="{Binding Drawer.Left}"
-                                               LeftDrawerCloseOnClickAway="False"
                                                TopDrawerContentTemplate="{Binding Drawer.Top.Template}"
                                                TopDrawerContent="{Binding Drawer.Top}"
                                                IsTopDrawerOpen="{Binding Drawer.IsTopDrawerOpen}"
                                                TopDrawerBackground="Transparent"
-                                               >
+                                               LeftDrawerCloseOnClickAway="True"
+                                               RightDrawerCloseOnClickAway="True">
                     <ContentPresenter />
 
                 </md:DrawerHost>

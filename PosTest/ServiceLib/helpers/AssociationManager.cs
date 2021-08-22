@@ -64,8 +64,8 @@ namespace ServiceLib.helpers
                 else
                 {
 #if DEBUG
-                    throw new InvalidOperationException(
-                $"Expected{typeof(TOne)} got type of {one.GetType()},Expected{typeof(TMany)} got type of {many.GetType()}"); 
+                //    throw new InvalidOperationException(
+                //$"Expected{typeof(TOne)} got type of {one.GetType()},Expected{typeof(TMany)} got type of {many.GetType()}"); 
 #endif
                 }
             };

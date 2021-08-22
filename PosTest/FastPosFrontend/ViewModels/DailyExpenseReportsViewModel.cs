@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Printing;
-using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Markup;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.Settings;
+using MaterialDesignThemes.Wpf;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
@@ -43,11 +47,15 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            var reports = StateManager.Get<DailyExpenseReport>();
-            Reports = (reports != null && reports.Any())
-                ? new BindableCollection<DailyExpenseReport>(reports)
-                : new BindableCollection<DailyExpenseReport>();
-            Report =  reports?.FirstOrDefault(r => r.IssuedDate == DateTime.Today.Date);
+            _reports = StateManager.Get<DailyExpenseReport>();
+
+            Reports = (CollectionView)CollectionViewSource.GetDefaultView(_reports);
+            //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateYear)));
+            //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateMonth)));
+            //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.CashPaymentsTotal)));
+            //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.DeliveryPaymentsTotal)));
+
+            Report =  _reports?.FirstOrDefault(r => r.IssuedDate == DateTime.Today.Date);
             if (Report!= null)
             {
                 IsReportGenerated = true;
@@ -57,13 +65,7 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedRightCommandBar()
         {
-            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel()
-            {
-                Commands = new BindableCollection<EmbeddedCommandBarCommand>()
-                {
-                    new EmbeddedCommandBarCommand(Icon.Get("PrintSalesReport"), o => { PrintReport(); })
-                }
-            };
+            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this,"DailyExpenseReportRightCommandBar");
         }
 
         public bool IsReportGenerated
@@ -72,13 +74,40 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _isReportGenerated, value);
         }
 
+        private bool _isOpennedReportTabOpen;
+
+        public bool IsOpennedReportTabOpen
+        {
+            get { return _isOpennedReportTabOpen; }
+            set { Set(ref _isOpennedReportTabOpen , value); }
+        }
+
+
         public DailyExpenseReport Report
         {
             get => _report;
             set => Set(ref _report, value);
         }
+        private DailyExpenseReport _opennedReport;
 
-        public BindableCollection<DailyExpenseReport> Reports { get; set; }
+        public DailyExpenseReport OpennedReport
+        {
+            get { return _opennedReport; }
+            set { Set(ref _opennedReport, value); }
+        }
+        private int _selectedTabIndex;
+
+        public int SelectedTabIndex
+        {
+            get { return _selectedTabIndex; }
+            set { Set(ref _selectedTabIndex ,value); }
+        }
+
+        private ICollection<DailyExpenseReport> _reports;
+
+        //public ObservableCollection<DailyExpenseReport> Reports { get; set; }
+
+        public CollectionView Reports { get; private set; }
 
 
         public void Generate()
@@ -109,9 +138,6 @@ namespace FastPosFrontend.ViewModels
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
 
-            //contentOfPage.Content = CurrentOrder;
-            //contentOfPage.Content = GenerateContent(CurrentOrder);
-           
             contentOfPage.Content = Report;
            
             var conv = new LengthConverter();
@@ -122,8 +148,7 @@ namespace FastPosFrontend.ViewModels
             contentOfPage.Width = width;
             document.DocumentPaginator.PageSize = new Size(width, height);
 
-            // fixedPage.Width = contentOfPage.Width;
-            //fixedPage.Height = contentOfPage.Height;
+
             fixedPage.Children.Add(contentOfPage);
             PageContent pageContent = new PageContent();
             ((IAddChild)pageContent).AddChild(fixedPage);
@@ -139,9 +164,6 @@ namespace FastPosFrontend.ViewModels
           
                 FixedDocument fixedDocument = GeneratePrintReport();
                 var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
-                //PrintDialog dialog = new PrintDialog();
-                //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
-                //dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
 
                 IList<PrinterItem> printerItems = null;
                 var PrinterItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
@@ -160,50 +182,19 @@ namespace FastPosFrontend.ViewModels
 
             
         }
-    }
 
-    [DataContract]
-    public class DailyExpenseReportInputData : PropertyChangedBase
-    {
-        private decimal _cashRegisterInitialAmount;
-        private decimal _cashRegisterActualAmount;
-        private DateTime _workTimeStart;
-        private DateTime _workTimeEnd;
-
-        public DailyExpenseReportInputData()
+        public void OpenReport(DailyExpenseReport selected)
         {
-          
+            OpennedReport = selected;
+            
+            IsOpennedReportTabOpen = true;
         }
 
-        [DataMember]
-        public decimal CashRegisterInitialAmount
+        public void CloseReport()
         {
-            get => _cashRegisterInitialAmount;
-            set => Set(ref _cashRegisterInitialAmount, value);
+            OpennedReport = null;
+            IsOpennedReportTabOpen = false;
         }
-
-        [DataMember]
-        public decimal CashRegisterActualAmount
-        {
-            get => _cashRegisterActualAmount;
-            set => Set(ref _cashRegisterActualAmount, value);
-        }
-
-        public DateTime WorkTimeStart
-        {
-            get => _workTimeStart;
-            set => Set(ref _workTimeStart, value);
-        }
-
-        public DateTime WorkTimeEnd
-        {
-            get => _workTimeEnd;
-            set => Set(ref _workTimeEnd, value);
-        }
-        [DataMember]
-        public Dictionary<string,decimal> Expenses { get; set; }
-
-        
     }
 
     public class Expense:PropertyChangedBase

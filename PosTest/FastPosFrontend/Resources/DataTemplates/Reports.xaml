@@ -472,8 +472,11 @@
                                FontSize="16" FontWeight="DemiBold" />
                 </Border>
                 <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
-                    <TextBlock Text="Fast Food: Arabi" HorizontalAlignment="Center"
+                    <TextBlock Text="{Binding Source={ex:Config PropertyName=GeneralSettings.RestaurantName}, StringFormat='Fast Food: {0:#}'}" HorizontalAlignment="Center"
                                FontSize="16" FontWeight="DemiBold" />
+                    
+
+
                 </Border>
                 <Grid Grid.Row="2" x:Name="Info" Margin="10">
                     <Grid.ColumnDefinitions>

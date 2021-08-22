@@ -150,8 +150,8 @@
     <Reference Include="MaterialDesignExtensions, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c5ebccebe084d64f, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignExtensions.3.3.0\lib\net45\MaterialDesignExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="MaterialDesignThemes.Wpf, Version=4.0.0.2422, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignThemes.4.0.0\lib\net452\MaterialDesignThemes.Wpf.dll</HintPath>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=4.1.0.2556, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.4.1.0\lib\net452\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -265,9 +265,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Converters\BorderClipConverter.cs" />
     <Compile Include="Converters\BrushToHexConverter.cs" />
     <Compile Include="Converters\CollectionContainsItemConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\DisplayNameConverter.cs" />
     <Compile Include="Converters\ExpanderRotateAngleConverter.cs" />
     <Compile Include="Converters\IsStringNullOrEmptyValueConverter.cs" />
     <Compile Include="Converters\LessThanValueConverter.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="Converters\StaticResourceConverter.cs" />
     <Compile Include="Converters\StringJoinConverter.cs" />
     <Compile Include="Converters\SumValuesConverter.cs" />
+    <Compile Include="Converters\TestValueConverter.cs" />
     <Compile Include="Enums\ComparaisonOperator.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\Config.cs" />
@@ -316,6 +319,7 @@
     <Compile Include="ViewModels\AdditiveDetailViewModel.cs" />
     <Compile Include="ViewModels\AppDialogConductor.cs" />
     <Compile Include="ViewModels\AppDrawerConductor.cs" />
+    <Compile Include="ViewModels\DailyExpenseReportInputData.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportsViewModel.cs" />
     <Compile Include="ViewModels\DefaultDialog.cs" />
@@ -445,9 +449,6 @@
     </Compile>
     <Compile Include="Views\EmbeddedCommandBarView.xaml.cs">
       <DependentUpon>EmbeddedCommandBarView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EmbeddedContentBarView.xaml.cs">
-      <DependentUpon>EmbeddedContentBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
@@ -690,6 +691,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\Styles\MaterialDesignTheme\MaterialDesignTheme.TabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Styles\OrderItemListStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -799,10 +804,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EmbeddedCommandBarView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EmbeddedContentBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1032,11 +1033,11 @@
     <Resource Include="SL.Controls\colortool.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" />
+  <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets'))" />
+    <Error Condition="!Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets'))" />
   </Target>
 </Project>

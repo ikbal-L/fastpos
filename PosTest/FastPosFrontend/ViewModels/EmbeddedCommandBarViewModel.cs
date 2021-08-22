@@ -6,43 +6,19 @@ namespace FastPosFrontend.ViewModels
 {
     public class EmbeddedCommandBarViewModel: PropertyChangedBase
     {
-        private BindableCollection<EmbeddedCommandBarCommand> _commands;
-        private double _size = 40;
-
-        public BindableCollection<EmbeddedCommandBarCommand> Commands
+        public EmbeddedCommandBarViewModel(object context,string resourseKey)
         {
-            get => _commands;
-            set => Set(ref _commands, value);
+            Context = context;
+            DataTemplate = Application.Current.FindResource(resourseKey) as DataTemplate;
         }
 
-        public double Size
-        {
-            get => _size;
-            set => Set(ref _size, value);
-        }
+        public object Context { get; private set; }
+
+        public DataTemplate DataTemplate { get; private set; }
+
+
     }
 
-    public class EmbeddedContentBarViewModel : PropertyChangedBase
-    {
-        private DataTemplate _embeddedStatusBarTemplate;
-        private object _owner;
-
-        public EmbeddedContentBarViewModel(object owner)
-        {
-            _owner = owner;
-        }
-
-        public DataTemplate EmbeddedStatusBarTemplate
-        {
-            get => _embeddedStatusBarTemplate;
-            set => Set(ref _embeddedStatusBarTemplate, value);
-        }
-
-        public object Owner
-        {
-            get => _owner;
-            set => Set(ref _owner, value);
-        }
-    }
+   
 
 }

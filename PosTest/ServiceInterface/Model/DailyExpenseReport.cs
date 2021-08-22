@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using Caliburn.Micro;
 
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class DailyExpenseReport:PropertyChangedBase,IState<long>
+    public class DailyExpenseReport : PropertyChangedBase, IState<long>
     {
         public long? Id { get; set; }
 
@@ -20,7 +22,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public Dictionary<string, decimal> Expenses { get; set; }
-        
+
         [DataMember]
         public List<EarningsCategoryGrouping> EarningsByCategory { get; set; }
 
@@ -38,6 +40,13 @@ namespace ServiceInterface.Model
         public decimal CashRegisterActualAmount { get; set; }
 
         public int NumberOfPayments => (CashPayments?.Count ?? 0) + (DeliveryPayments?.Count ?? 0);
+
+        public decimal CashPaymentsTotal => CashPayments.Values.Sum();
+        public decimal DeliveryPaymentsTotal => DeliveryPayments.Values.Sum();
+
+        public int IssuedDateYear => IssuedDate.Year;
+        [DisplayName(displayName: "Issued Month")]
+        public int IssuedDateMonth => IssuedDate.Month;
 
     }
 
