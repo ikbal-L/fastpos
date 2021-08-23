@@ -11,5 +11,7 @@ namespace FastPosFrontend.Views
         {
             InitializeComponent();
         }
+
+        
     }
 }

@@ -353,6 +353,7 @@
     <Compile Include="ViewModels\DeliveryAccounting\DeliveryAccountingViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\PaymentHistoryViewModel.cs" />
+    <Compile Include="ViewModels\ExpenseForm.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelInitialized.cs" />
@@ -569,6 +570,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\DataTemplates\AppBarMenus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Design\Additives.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -642,10 +647,6 @@
     <Page Include="Resources\DataTemplates\Additives.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\DataTemplates\AppStatusBarTemplates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\DataTemplates\Drawers.xaml">
       <SubType>Designer</SubType>
@@ -1031,6 +1032,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SL.Controls\colortool.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\snippets.txt">
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />

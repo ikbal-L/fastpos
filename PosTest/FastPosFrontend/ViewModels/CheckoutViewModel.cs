@@ -170,13 +170,13 @@ namespace FastPosFrontend.ViewModels
 
         private void SetupEmbeddedCommandBar()
         {
-            EmbeddedCommandBar = new EmbeddedCommandBarViewModel(this,"CheckoutCommandBar");
+            EmbeddedCommandBar = new EmbeddedCommandBarViewModel(this,"CheckoutLeftCommandBar");
             
         }
 
         private void SetupEmbeddedStatusBar()
         {
-            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutStatusBarDataTemplate");
+            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutStatusBar");
             
         }
 

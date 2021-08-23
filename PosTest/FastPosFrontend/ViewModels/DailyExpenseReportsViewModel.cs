@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.Linq;
 using System.Printing;
 using System.Windows;
@@ -50,6 +51,8 @@ namespace FastPosFrontend.ViewModels
             _reports = StateManager.Get<DailyExpenseReport>();
 
             Reports = (CollectionView)CollectionViewSource.GetDefaultView(_reports);
+            Reports.Filter += FilterReportsByIssuedDate;
+              
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateYear)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateMonth)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.CashPaymentsTotal)));
@@ -61,6 +64,18 @@ namespace FastPosFrontend.ViewModels
                 IsReportGenerated = true;
             }
            
+        }
+
+        private bool FilterReportsByIssuedDate(object o)
+        {
+            if (o is DailyExpenseReport r)
+            {
+                if (string.IsNullOrEmpty(UserSearchQuery)) return true;
+
+                var date = r.IssuedDate.ToString("d", new CultureInfo("fr-DZ"));
+                return date.Contains(UserSearchQuery);
+            }
+            return false;
         }
 
         private void SetupEmbeddedRightCommandBar()
@@ -95,7 +110,7 @@ namespace FastPosFrontend.ViewModels
             get { return _opennedReport; }
             set { Set(ref _opennedReport, value); }
         }
-        private int _selectedTabIndex;
+        private int _selectedTabIndex =1;
 
         public int SelectedTabIndex
         {
@@ -110,10 +125,25 @@ namespace FastPosFrontend.ViewModels
         public CollectionView Reports { get; private set; }
 
 
+        private string _userSearchQuery;
+
+        public string UserSearchQuery
+        {
+            get { return _userSearchQuery; }
+            set { 
+                Set(ref _userSearchQuery, value);
+                Reports.Refresh();
+            }
+        }
+
+       
+
+
         public void Generate()
         {
             var parent = Parent as MainViewModel;
-            var vm = new DailyExpenseReportInputDataViewModel(this);
+
+            var vm = new DailyExpenseReportInputDataViewModel(this,Report);
             vm.OnReportGenerated(report =>
             {
                 Report = report;
@@ -126,7 +156,7 @@ namespace FastPosFrontend.ViewModels
             });
         }
 
-        private FixedDocument GeneratePrintReport()
+        private FixedDocument GeneratePrintReport(DailyExpenseReport report)
         {
             FixedDocument document = new FixedDocument();
             FixedPage fixedPage = new FixedPage();
@@ -138,7 +168,7 @@ namespace FastPosFrontend.ViewModels
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
 
-            contentOfPage.Content = Report;
+            contentOfPage.Content = report;
            
             var conv = new LengthConverter();
 
@@ -159,10 +189,29 @@ namespace FastPosFrontend.ViewModels
 
         public void PrintReport()
         {
-            ToastNotification.Notify("Printing");
+            DailyExpenseReport report = null;
+            if (SelectedTabIndex == 1)
+            {
+                ToastNotification.Notify("Nothing to print");
+                return;
+            }
+
+            if (SelectedTabIndex ==0)
+            {
+                report = Report;
+            }
+            if (SelectedTabIndex == 2)
+            {
+                report = OpennedReport;
+            }
+            if (report == null)
+            {
+                ToastNotification.Notify("Select a report to print");
+            }
+            
 
           
-                FixedDocument fixedDocument = GeneratePrintReport();
+                FixedDocument fixedDocument = GeneratePrintReport(report);
                 var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
 
                 IList<PrinterItem> printerItems = null;
@@ -188,6 +237,7 @@ namespace FastPosFrontend.ViewModels
             OpennedReport = selected;
             
             IsOpennedReportTabOpen = true;
+            
         }
 
         public void CloseReport()
@@ -203,4 +253,6 @@ namespace FastPosFrontend.ViewModels
 
         public decimal Amount { get; set; }
     }
+
+    
 }

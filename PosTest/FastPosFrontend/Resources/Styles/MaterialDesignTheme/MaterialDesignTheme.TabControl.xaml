@@ -88,7 +88,7 @@
     
      -->
     
-    <Style TargetType="{x:Type TabItem}" x:Key="MaterialDesignTabItem">
+    <!--<Style TargetType="{x:Type TabItem}" x:Key="MaterialDesignTabItem">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}"/>
@@ -197,7 +197,7 @@
 
     <Style TargetType="{x:Type TabItem}" x:Key="MaterialDesignTabItemCompact" BasedOn="{StaticResource MaterialDesignTabItem}">
         <Setter Property="Height" Value="48" />
-    </Style>
+    </Style>-->
     
     
     
