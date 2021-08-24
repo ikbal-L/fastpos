@@ -281,6 +281,7 @@
     <Compile Include="Enums\ComparaisonOperator.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\Config.cs" />
+    <Compile Include="Extensions\EventFocusAttachment.cs" />
     <Compile Include="Extensions\KeyboardKey.cs" />
     <Compile Include="Extensions\Modifier.cs" />
     <Compile Include="Extensions\ModifierBase.cs" />
