@@ -293,6 +293,21 @@ namespace ServiceLib.Service
 
         }
 
+        public static (int status, T) UpdateThing<T>(string path, object postObject)
+        {
+            var resp = RestPut(postObject, path);
+            T t = default;
+            if (resp.StatusCode == HttpStatusCode.OK)
+            {
+                //string s = t.ToString();
+                //                if (t.ToString() is Waiter)
+                //                  Console.WriteLine(s);
+                t = JsonConvert.DeserializeObject<T>(resp.Content);
+            }
+            return ((int)resp.StatusCode, t);// ;products
+
+        }
+
         public static int DeleteThing(string url, object payload = null)
         {
 

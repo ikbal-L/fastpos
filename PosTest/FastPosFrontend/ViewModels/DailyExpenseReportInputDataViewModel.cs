@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Attributes;
 using Caliburn.Micro;
+using FastPosFrontend.Helpers;
 using Newtonsoft.Json;
 using ServiceInterface.Model;
 using ServiceLib.Service;
@@ -112,7 +113,12 @@ namespace FastPosFrontend.ViewModels
         {
             if (decimal.TryParse(ExpenseForm.ExpenseAmount, out decimal amount))
             {
-                Expenses.Add(new Expense() {Description = ExpenseForm.ExpenseDescription, Amount = amount});
+                if (Expenses.Any(e=>e.Description == ExpenseForm.ExpenseDescription))
+                {
+                    ToastNotification.Notify("The added Item already exists!");
+                    return;
+                }
+                Expenses.Add(new Expense() { Description = ExpenseForm.ExpenseDescription, Amount = amount });
             }
         }
 
@@ -171,16 +177,33 @@ namespace FastPosFrontend.ViewModels
 
         public void Save()
         {
+            string url = "";
+            var api = new RestApis();
             ReportInputData.CashRegisterActualAmount = decimal.Parse(CashRegisterActualAmount);
             ReportInputData.CashRegisterInitialAmount = decimal.Parse(CashRegisterInitialAmount);
             ReportInputData.Expenses = Expenses.ToDictionary(expense => expense.Description, expense => expense.Amount);
-            var api = new RestApis();
-            var result =
-                GenericRest.PostThing<DailyExpenseReport>(api.Action("dailyExpenseReport", EndPoint.Save), ReportInputData);
-            if (result.status == 201)
+            if (_reportId!= null)
+            {
+                url = api.Action("dailyExpenseReport", EndPoint.Put, arg: _reportId);
+            }
+            else
+            {
+                url = api.Action("dailyExpenseReport", EndPoint.Save);
+            }
+            int status = -1; DailyExpenseReport result = null ;
+            if (_reportId == null)
+            {
+                 (status,result) =GenericRest.PostThing<DailyExpenseReport>(api.Action("dailyExpenseReport", EndPoint.Save), ReportInputData);
+            }
+            else
+            {
+                (status, result) = GenericRest.UpdateThing<DailyExpenseReport>(url, ReportInputData);
+            }
+          
+            if (status == 201|| status ==200)
             {
                 
-                _reportGenerated?.Invoke(result.Item2);
+                _reportGenerated?.Invoke(result);
             }
 
             

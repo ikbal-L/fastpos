@@ -10,6 +10,7 @@ namespace ServiceInterface.Model
     [DataContract]
     public class DailyExpenseReport : PropertyChangedBase, IState<long>
     {
+        [DataMember]
         public long? Id { get; set; }
 
         [DataMember]
