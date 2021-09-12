@@ -4,7 +4,7 @@
     {
         //static string hostname1 = "http://192.168.1.114:5000/";
         // static string hostname1 = "http://127.0.0.1:5001/";
-        static string hostname1 = "http://localhost:8080/";
+        public static string hostname1 = "http://localhost:8080/";
         public static class ProductUrl 
         {
             private static string ProductApiUrl = "api/product";

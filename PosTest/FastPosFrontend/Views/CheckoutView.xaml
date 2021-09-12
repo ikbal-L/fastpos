@@ -93,6 +93,7 @@
                  ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                  HorizontalContentAlignment="Stretch"
                  AlternationCount="2"
+                
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListBox.Style>
@@ -149,15 +150,25 @@
                             </DockPanel>
                             <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
                                 BorderBrush="CornflowerBlue">
-                                <TextBox Foreground="#26ff26"
+                                <!--<TextBox Foreground="#26ff26"
                                        Text="{Binding NumericZone, StringFormat='{}{0:0,0.00}'}"
                                        FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
                                        HorizontalAlignment="Stretch"
                                      TextAlignment="Right"
-                                     IsReadOnly="False"
-                                         MaxLines="1">
+                                     IsReadOnly="true"
+                                         IsEnabled="False"
+                                         MaxLines="1">-->
 
-                                </TextBox>
+                                <TextBlock Foreground="#26ff26"
+                                       Text="{Binding NumericZone, StringFormat='{}{0:0,0.00}'}"
+                                       FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
+                                       HorizontalAlignment="Stretch"
+                                     TextAlignment="Right"
+                                           
+                                         IsEnabled="False"
+                                         >
+
+                                </TextBlock>
                             </Border>
 
 

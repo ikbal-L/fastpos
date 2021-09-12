@@ -16,6 +16,7 @@ namespace FastPosFrontend.ViewModels.SubViewModel
             Parent = checkoutViewModel;
             TakeawayOrders = new BindableCollection<Order>();
             OrderViewSource = new CollectionViewSource {Source = Parent.Orders};
+     
             OrderViewSource.Filter += OrderTypeFilter;
             Orders = OrderViewSource.View;// CollectionViewSource.GetDefaultView(Parent.Orders);
                                           // Orders.Filter = o => (o as Order).Type == OrderType.Takeaway;

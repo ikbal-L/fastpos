@@ -140,7 +140,7 @@ namespace FastPosFrontend.ViewModels
             string mobile = Regex.Replace(FilterString, @"\w+\s", "");
            
             
-            Customer customer = new Customer { Name = name, Mobile = mobile };
+            Customer customer = new Customer { Name = name, Mobile = mobile, PhoneNumbers = new BindableCollection<string>() { mobile } };
             var errors =EntityValidationHelper.Validate(customer);
             if (errors.Any())
             {

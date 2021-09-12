@@ -38,7 +38,9 @@
                                         FontWeight="Bold"
                                         FontSize="16"
                                         Padding="3 0 0 5"
-                                        Margin="3 0 0 0">
+                                        Margin="3 0 0 0"
+                                        BorderBrush="#2f2f2f"
+                            materialDesign:ButtonAssist.CornerRadius="8">
                             <Button.MinWidth>
                                 <Binding RelativeSource="{RelativeSource AncestorType=Window}"
                                                      Path="ActualWidth"
@@ -46,7 +48,7 @@
                                                      ConverterParameter="417,60,60" />
                             </Button.MinWidth>
                             <Button.Style >
-                                <Style TargetType="Button" >
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}" >
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsDark}" Value="True">
                                             <Setter Property="Foreground" Value="White" />
@@ -64,19 +66,19 @@
 
 
             <Button DockPanel.Dock="Right" Height="60"  VerticalAlignment="Center"
-                                x:Name="PreviousPqge" Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                                x:Name="PreviousPqge" Style="{StaticResource MaterialDesignFlatButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
-                                Content="{materialDesign:PackIcon ChevronDoubleLeft,22}"
+                                Content="{materialDesign:PackIcon ChevronLeft,22}"
                                 Padding="4"
-                                materialDesign:ButtonAssist.CornerRadius="0"
+                                materialDesign:ButtonAssist.CornerRadius="10 0 0 10"
                                 Margin="2"/>
 
             <Button DockPanel.Dock="Right" Height="60"  x:Name="NextPage"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('NEXT')]"
-                                Content="{materialDesign:PackIcon ChevronDoubleRight,22}" 
+                                Content="{materialDesign:PackIcon ChevronRight,22}" 
                                 Padding="4"
-                                materialDesign:ButtonAssist.CornerRadius="0"
+                                materialDesign:ButtonAssist.CornerRadius="0 10 10 0"
                                 Margin="2"/>
         </UniformGrid>
     </Grid>

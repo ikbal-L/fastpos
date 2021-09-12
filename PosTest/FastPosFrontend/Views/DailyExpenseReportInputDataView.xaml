@@ -27,7 +27,7 @@
                   materialDesign:ColorZoneAssist.Mode="PrimaryDark" FontSize="16">
 
 
-            <Grid Margin="10" TextElement.FontSize="16">
+            <Grid Margin="10" TextElement.FontSize="16" MinWidth="500">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -120,7 +120,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Border VerticalAlignment="Stretch" Margin="0 5">
+                    <!--<Border VerticalAlignment="Stretch" Margin="0 5">
                         <StackPanel Orientation="Horizontal">
 
                             <TextBlock Text="Expenses" VerticalAlignment="Bottom"
@@ -132,8 +132,8 @@
                                                      Margin="5 5" Opacity="0.68" />
 
                         </StackPanel>
-                    </Border>
-                    <ListView Grid.Row="1" ItemsSource="{Binding Expenses}"
+                    </Border>-->
+                    <!--<ListView Grid.Row="1" ItemsSource="{Binding Expenses}"
                               SelectedItem="{Binding SelectedExpense}"
                               ScrollViewer.VerticalScrollBarVisibility="Auto"
                               materialDesign:ScrollViewerAssist.CornerRectangleVisibility="Collapsed"
@@ -290,7 +290,7 @@
                                 </GridView.Columns>
                             </GridView>
                         </ListView.View>
-                    </ListView>
+                    </ListView>-->
                 </Grid>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="20 30 20 20">
                     <Button Content="Submit" Margin="5"

@@ -72,6 +72,12 @@ namespace FastPosFrontend.Helpers
             //}
         }
 
+        public static void UpdateOrderFrom(this Order order,Order updateSource)
+        {
+            order?.OrderItems?.Clear();
+            order?.OrderItems?.AddRange(updateSource.OrderItems);
+        }
+
         public static void MappingBeforeSending(this Order order)
         {
             foreach (var orderItem in order.OrderItems)

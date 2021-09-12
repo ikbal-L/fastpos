@@ -171,6 +171,14 @@ namespace FastPosFrontend.ViewModels
             }
             var template = Application.Current.FindResource(resKey);
             NavigationDrawer = new Drawer() { Content = content, Template = template ,Position = position};
+            if (NavigationDrawer.Position == DrawerPosition.Left)
+            {
+                Left = NavigationDrawer;
+            }
+            else
+            {
+                Right = NavigationDrawer;
+            }
         }
 
         public bool Open(DrawerPosition position, object owner, object tag = null)
@@ -255,12 +263,12 @@ namespace FastPosFrontend.ViewModels
             {
                 if (NavigationDrawer.Position == DrawerPosition.Left)
                 {
-                    Left = null;
+                    //Left = null;
                     IsLeftDrawerOpen = false;
                 }
                 else
                 {
-                    Right = null;
+                    //Right = null;
                     IsRightDrawerOpen = false;
                 }
             }

@@ -151,18 +151,18 @@ namespace ServiceLib.Service
         public override int Save(Order state, out IEnumerable<string> errors)
         {
             var response = GenericRest.SaveThing(state, RestApi.Action<Order>(EndPoint.Save));
-            PatchOrder(state, response,out errors);
+            PatchOrderFromResponse(state, response,out errors);
             return (int)response.StatusCode;
         }
 
         public override int Update(Order state, out IEnumerable<string> errors)
         {
             var response = GenericRest.UpdateThing(state, RestApi.Action<Order>(EndPoint.Put,arg: state.Id));
-            PatchOrder(state, response, out errors);
+            PatchOrderFromResponse(state, response, out errors);
             return (int)response.StatusCode;
         }
 
-        private static void PatchOrder(Order state, RestSharp.IRestResponse response, out IEnumerable<string> errors)
+        public static void PatchOrderFromResponse(Order state, RestSharp.IRestResponse response, out IEnumerable<string> errors)
         {
             errors = null;
 
@@ -179,29 +179,39 @@ namespace ServiceLib.Service
                     state.Id = deserializedState.Id;
                 }
 
-                foreach (var newOrderItem in deserializedState.OrderItems.ToList())
-                {
-                    var oldOrderItem = state.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
-                    oldOrderItem.Id = newOrderItem.Id;
-                    oldOrderItem.OrderItemAdditives = newOrderItem.OrderItemAdditives;
-                    //if (oldOrderItem?.Additives != null)
-                    //{
-                    //    foreach (var additive in oldOrderItem.Additives)
-                    //    {
-                    //        additive.ParentOrderItem = newOrderItem;
-                    //    } 
-                    //}
-                    //newOrderItem.Additives = oldOrderItem?.Additives;
-                    //newOrderItem.Order = oldOrderItem?.Order;
-                    //newOrderItem.Product = oldOrderItem?.Product;
+                PatchOrder(state, deserializedState);
 
-
-                }
-                //state.OrderItems = deserializedState.OrderItems;
                 deserializedState = null;
             }
 
 
+        }
+
+        public static void PatchOrder(Order state, Order deserializedState)
+        {
+            foreach (var newOrderItem in deserializedState.OrderItems.ToList())
+            {
+                OrderItem? oldOrderItem = state.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
+                if (oldOrderItem!= null)
+                {
+                    oldOrderItem.Id = newOrderItem.Id;
+                    oldOrderItem.OrderItemAdditives = newOrderItem.OrderItemAdditives; 
+                }
+
+            }
+        }
+
+        public static void PatchOrderFromEvent(Order state, Order deserializedState)
+        {
+            
+            PatchOrder(state, deserializedState);
+            foreach (var item in state.OrderItems)
+            {
+                if (!deserializedState.OrderItems.Any(i => i.Id == item.Id))
+                {
+                    _ = state.OrderItems.Remove(item);
+                }
+            }
         }
 
         public List<Order> GetOrderByStates(string[] states, long deliverymanId)

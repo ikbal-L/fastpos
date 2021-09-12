@@ -6,77 +6,141 @@
              xmlns:local="clr-namespace:FastPosFrontend.Views.Components" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" >
-    <UniformGrid Columns="4" Rows="3" >
-     
-          
-      
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid   >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <!--NumKeyBoard-->
+        <Grid Grid.Column="1" Margin="2">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="20" />
+            </Grid.Effect>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="55" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" Content="1" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('1')]" />
+            <Button Grid.Row="0" Grid.Column="1" Content="2" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('2')]" />
+            <Button Grid.Row="0" Grid.Column="2" Content="3" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('3')]" />
+            <Button Grid.Row="0" Grid.Column="3"
+                                Content="{materialdesign:PackIcon  Kind=ShoppingCartAdd, Size=30}"
+                                Style="{StaticResource ButtonStyle18}"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('QTY')]" />
+
+            <Button Grid.Row="1" Grid.Column="0" Content="4" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('4')]" />
+            <Button Grid.Row="1" Grid.Column="1" Content="5" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('5')]" />
+            <Button Grid.Row="1" Grid.Column="2" Content="6" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]" />
             <!--IsEnabled="{Binding CurrentOrder.OrderItems,Converter={StaticResource NotCollectionItemAnyGreaterThanZeroValueConverter}}"-->
-
-        <Button  Style="{StaticResource ButtonStyle18}"
-                                Content="{materialdesign:PackIcon CashRegister, 50 }"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]" />
-
-        <Button 
-                                Content="{materialdesign:PackIcon  Kind=TagMinus, Size=50}"
+            <Button Grid.Row="1" Grid.Column="3"
+                                Content="{materialdesign:PackIcon  Kind=TagMinus, Size=30}"
                                 Style="{StaticResource ButtonStyle18}"
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]" />
 
-            <Button
+
+            <Button Grid.Row="2" Grid.Column="0" Content="7" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('7')]" />
+            <Button Grid.Row="2" Grid.Column="1" Content="8" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('8')]" />
+            <Button Grid.Row="2" Grid.Column="2" Content="9" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('9')]" />
+            <Button Grid.Row="2" Grid.Column="3"
                                 Content="{materialdesign:PackIcon  Kind=Dollar, Size=40}"
                                 Style="{StaticResource ButtonStyle18}"
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]" />
 
+            <Button Grid.Row="3" Grid.Column="0" Content="%" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('%')]" />
+            <Button Grid.Row="3" Grid.Column="1" Content="0" Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('0')]" />
+            <Button Grid.Row="3" Grid.Column="2" Content="." Style="{StaticResource ButtonStyle22}"
+                                cal:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]" />
+            <Button Grid.Row="3" Grid.Column="3" Style="{StaticResource ButtonStyle18}"
+                                Content="{materialdesign:PackIcon  Kind=BackspaceOutline, Size=30}"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DEL')]" />
 
-            
-             <Button  Content="{materialdesign:PackIcon TableFurniture,50}"
-                                Style="{StaticResource ButtonStyle18}"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]" />
+        </Grid>
 
-        <Button  Style="{StaticResource ButtonStyle18}"
-                                Content="{materialdesign:PackIcon ViewSplitHorizontal, 50}"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]" />
+        <!--OrderCommands-->
+        <Grid Grid.Column="0" Margin="4 2 2 2">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="20" />
+            </Grid.Effect>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
 
-        <Button  Content="{materialdesign:PackIcon DeleteOutline,50}"
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ButtonStyle18}"
+                                Content="{materialdesign:PackIcon CashRegister, 30 }"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]" />
+
+
+            <Button Grid.Row="1" Grid.Column="0" Content="{materialdesign:PackIcon DeleteOutline,30}"
                                 Style="{StaticResource ButtonStyle18}"
                                 cal:Message.Attach="[Event Click] = [Action CancelOrder()]" />
 
 
-            <Button  Content="{materialdesign:PackIcon Printer, 50}"
+            <Button Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon Printer, 30}"
                                 Style="{StaticResource ButtonStyle18}"
                                 cal:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" />
 
+            <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource ButtonStyle18}"
+                                Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]" />
 
-        
-        <Button  Content="{materialdesign:PackIcon BasketOutline,50}"
-                                Style="{StaticResource ButtonStyle18}"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TAKEAWAY')]" />
-
-
-        <Button  Style="{StaticResource ButtonStyle18}"
-                                Content="{materialdesign:PackIcon TruckDeliveryOutline, 50}"
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ButtonStyle18}"
+                                Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVERED')]" />
 
-          
 
-          
 
-            <Button  Style="{StaticResource ButtonStyle18}"
-                                Content="{materialdesign:PackIcon ChefHat, 50 }"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('CMD')]" />
-
-        <Button Content="{materialdesign:PackIcon FastFood, 50}" Grid.Row="2" Grid.Column="1"
-                                Style="{StaticResource ButtonStyle18}"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SERVED')]" />   
-        
-        
-        <Button  Content="{materialdesign:PackIcon Moped, 50 }"
+            <Button Grid.Row="3" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }"
                                 Style="{StaticResource ButtonStyle18}"
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVEREY')]" />
 
+            <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource ButtonStyle18}"
+                                Content="{materialdesign:PackIcon ChefHat, 30 }"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('CMD')]" />
 
-        
-     
-    </UniformGrid>
+            <Button Grid.Row="2" Grid.Column="2" Content="{materialdesign:PackIcon BasketOutline,30}"
+                                Style="{StaticResource ButtonStyle18}"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TAKEAWAY')]" />
+
+            <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}"
+                                Style="{StaticResource ButtonStyle18}"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]" />
+            <Button Content="{materialdesign:PackIcon FastFood, 30}" Grid.Row="2" Grid.Column="1"
+                                Style="{StaticResource ButtonStyle18}"
+                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SERVED')]" />
+
+        </Grid>
+    </Grid>
 </UserControl>

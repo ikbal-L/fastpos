@@ -6,8 +6,10 @@
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:converters="clr-namespace:FastPosFrontend.Converters"
-                    xmlns:local="clr-namespace:FastPosFrontend.ViewModels">
-
+                    xmlns:local="clr-namespace:FastPosFrontend.ViewModels"
+                    xmlns:views="clr-namespace:FastPosFrontend.Views"
+                    >
+    
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     <converters:CollectionContainsValueConverter x:Key="CollectionContainsValueConverter" />
     <converters:EqualToSelectedAndNotEmptyMultiValueConverter x:Key="EqualToSelectedAndNotEmptyMultiValueConverter" />
@@ -47,7 +49,7 @@
                                  ConverterParameter="313,85,10" />
                     </DockPanel.Height>-->
                     <Border DockPanel.Dock="Top" Height="40">
-                        <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center"
+                        <TextBlock Text="{Binding Path=Name}" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -61,7 +63,7 @@
                         </TextBlock>
                     </Border>
                     <Border DockPanel.Dock="Bottom">
-                        <TextBlock Text="{Binding Path=Price, StringFormat=' {0}'}" FontSize="12"
+                        <TextBlock Text="{Binding Path=Price, StringFormat=' {0}'}" FontSize="18" FontWeight="Bold"
                                    TextAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -220,17 +222,19 @@
     </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
-        <Border BorderBrush="DarkGray" BorderThickness="1" >
+        <Border BorderBrush="DarkGray" BorderThickness="1"  Background="Green"
+                cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=views:CheckoutSettingsView},Path=DataContext}"
+                caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProduct($this)]">
             <Grid   Background="{Binding Background,FallbackValue=WhiteSmoke}"
-                       cal:Action.TargetWithoutContext="{Binding  RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
-                       caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProduct($this)]" >
+                       
+                        >
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                  
                 </Grid.RowDefinitions>
-                <StackPanel VerticalAlignment="Center">
+                <StackPanel VerticalAlignment="Center" IsEnabled="False">
                     <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">

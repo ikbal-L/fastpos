@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Printing;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -19,9 +21,13 @@ using FastPosFrontend.Enums;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using FastPosFrontend.sse;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
+using LaunchDarkly.EventSource;
+using Newtonsoft.Json;
+using ServiceInterface.Authorisation;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
@@ -73,7 +79,6 @@ namespace FastPosFrontend.ViewModels
         private int itemsPerCategoryPage;
         private int _categoryPageCount;
         private int _currentCategoryPageIndex;
-        private Dictionary<int, OrderItem> _diff;
         private Order _printOrder;
         private Category _currentCategory;
         private bool _isInWaitingViewActive = true;
@@ -83,6 +88,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isReady;
         private ProductLayoutConfiguration _productLayout;
         private bool _isOrderInfoShown;
+        private readonly int mainthread;
         private readonly DispatcherTimer _orderInfoCloseTimer;
         private string _lastModifiedOrderPropertyName;
         private Table _selectedOrderTable;
@@ -121,6 +127,8 @@ namespace FastPosFrontend.ViewModels
         public CheckoutViewModel(
         ) : base()
         {
+
+            mainthread = Thread.CurrentThread.ManagedThreadId;
             _orderInfoCloseTimer = new DispatcherTimer(){Interval = new TimeSpan(0, 0, 3)};
             _orderInfoCloseTimer.Tick += (sender, args) =>
             {
@@ -143,22 +151,88 @@ namespace FastPosFrontend.ViewModels
 
             var pageSize = _productLayout.NumberOfProducts;
 
-            _diff = new Dictionary<int, OrderItem>();
+            
             MaxProductPageSize = pageSize;
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
+
             var configuration = AppConfigurationManager.Configuration<GeneralSettings>();
+
 
             if (configuration != null)
             {
                 itemsPerCategoryPage = configuration.NumberOfCategories;
             }
-
+            
             Setup();
             OnReady();
         }
 
-        
+        private void _eventSource_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Message);
+            Order updatedOrder = null;
+            Order order = null;
+            if (e.EventName == SSEventType.CREATE_ORDER|| e.EventName == SSEventType.UPDATE_ORDER)
+            {
+                updatedOrder = JsonConvert.DeserializeObject<Order>(e.Message.Data);
+                order = Orders.FirstOrDefault(o => o.Id == updatedOrder.Id);
+               
+            }
+
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+
+                if (e.EventName == SSEventType.CREATE_ORDER)
+                {
+                    Orders.Add(updatedOrder);
+                    WaitingViewModel?.Orders.Refresh();
+                    WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                    return;
+
+                }
+
+                if (e.EventName == SSEventType.UPDATE_ORDER)
+                {
+
+                    order?.UpdateOrderFrom(updatedOrder);
+
+                    return;
+                }
+
+                if (e.EventName == SSEventType.PAY_ORDER)
+                {
+                    var id = long.Parse(e.Message.Data);
+                    var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
+                    Orders.Remove(orderToRemove);
+                    if (CurrentOrder == orderToRemove)
+                    {
+                        CurrentOrder = null;
+                    }
+                    WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                    return;
+                }
+
+                if (e.EventName == SSEventType.CANCEL_ORDER)
+                {
+                    var id = long.Parse(e.Message.Data);
+                    var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
+                    Orders.Remove(orderToRemove);
+
+                    if (CurrentOrder == orderToRemove)
+                    {
+                        CurrentOrder = null;
+                    }
+                    WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                    return;
+                }
+
+            });
+
+            
+        }
+
         protected override void Setup()
         {
             var categories = StateManager.GetAsync<Category>();
@@ -180,9 +254,10 @@ namespace FastPosFrontend.ViewModels
             
         }
 
-        public override void Initialize()
+        public async override void Initialize()
         {
 
+          
 
             var deliveryMen = StateManager.Get<Deliveryman>();
             var waiter = StateManager.Get<Waiter>();
@@ -251,6 +326,19 @@ namespace FastPosFrontend.ViewModels
             AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
             AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
             AppDrawerConductor.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
+
+            
+            var config = Configuration.Builder(new Uri("http://localhost:8080/events/subscribe")).ResponseStartTimeout(TimeSpan.FromSeconds(60 * 60 * 24)).Method(HttpMethod.Get).RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken).Build();
+            _eventSource = new EventSource(config);
+
+            _eventSource.MessageReceived += _eventSource_MessageReceived;
+            _eventSource.Error += (s, args) =>
+            {
+                Console.WriteLine(args.Exception);
+            };
+
+            await _eventSource.StartAsync();
+
         }
 
         public CollectionMutationObserver<Order> OrdersCollectionObserver { get; set; }
@@ -288,6 +376,8 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        EventSource _eventSource;
+
         public ProductLayoutConfiguration ProductLayout
         {
             get => _productLayout;
@@ -307,6 +397,8 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        OrderNotificationListener orderNotificationListener;
+        
         public List<Category> AllCategories { get; set; }
 
         #endregion
@@ -1057,7 +1149,10 @@ namespace FastPosFrontend.ViewModels
                     CurrentOrder.State = OrderState.Ordered;
                     SaveCurrentOrder();
 
-                    PrintDocument(PrintSource.Kitchen);
+                    if (ChangesMade)
+                    {
+                        PrintDocument(PrintSource.Kitchen); 
+                    }
                     break;
 
                 case ActionButton.Table:
@@ -1825,7 +1920,7 @@ namespace FastPosFrontend.ViewModels
 
 
             contentOfPage.Content = _printOrder;
-            _diff.Clear();
+         
             var conv = new LengthConverter();
 
             double width = (double) conv?.ConvertFromString("8cm");
