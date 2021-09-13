@@ -197,7 +197,7 @@
                 </md:TransitioningContent>-->
 
                 <TextBox  Background="WhiteSmoke" Width="150" MaxWidth="150" Opacity="0.7" x:Name="SearchBox" 
-                              md:TextFieldAssist.TextFieldCornerRadius="0"
+                              md:TextFieldAssist.TextFieldCornerRadius="7"
                               Text="{Binding UserSearchQuery,UpdateSourceTrigger=PropertyChanged}"
                               md:HintAssist.Hint="Search by Date"
                               md:TextFieldAssist.DecorationVisibility="Hidden"

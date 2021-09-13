@@ -51,6 +51,11 @@
                     cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(0)]"
                     Content="{md:PackIcon TagFaces,Size=30}" />
 
+            <Button Grid.Row="5" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
+                    IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
+                    cal:Message.Attach="[Event Click] = [Action LockOrder()]"
+                    Content="{md:PackIcon Lock,Size=30}" />
+
 
         </ToolBar>
     </ToolBarTray>

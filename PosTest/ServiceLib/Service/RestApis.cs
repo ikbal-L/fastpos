@@ -58,18 +58,17 @@ namespace ServiceLib.Service
             set => _prefix = value;
         }
 
-        public  string Action<T>(EndPoint endPoint, object arg = null, string subPath = "",string resource = null)
+        public  string Resource<T>(string endPoint, object arg = null, string subPath = "",string resource = null)
         {
             _resource = resource?.ToLowerInvariant() ?? typeof(T).Name.ToLowerInvariant();
-            return Action(_resource, endPoint, arg, subPath);
+            return Resource(_resource, endPoint, arg, subPath);
         }
 
-        public string Action(string resource, EndPoint endPoint, object arg = null, string subPath = "")
+        public string Resource(string resource, string endPoint, object arg = null, string subPath = "")
         {
             _resource = resource;
             _endpoint = endPoint.ToString();
 
-            //var path = $"{_prefix}/{_resource}/{_endpoint.ToLowerInvariant()}/{pathVariable}";
 
             IPathBuilder builder = Path.Create(_prefix).SubPath(_resource).SubPath(_endpoint);
             if (arg != null)
@@ -111,8 +110,19 @@ namespace ServiceLib.Service
         }
     }
 
-    public enum EndPoint
+    public class EndPoint
     {
-        GetAll,Get,GetMany,Save,SaveMany,Put,PutMany,Delete,DeleteMany,Login
+        public static readonly string GET = "Get";
+        public static readonly string PUT = "Put";
+        public static readonly string DELETE = "Delete";
+        public static readonly string GET_ALL = "GetAll";
+        public static readonly string GET_MANY = "GetMany";
+        public static readonly string SAVE = "Save";
+        public static readonly string SAVE_MANY = "SaveMany";
+        public static readonly string PUT_MANY = "PutMany";
+        public static readonly string DELETE_MANY = "DeleteMany";
+        public static readonly string LOGIN = "Login";
+        public static readonly string LOCK = "Lock";
     }
+    
 }

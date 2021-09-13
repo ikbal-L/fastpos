@@ -284,9 +284,7 @@ namespace ServiceLib.Service
             T t = default;
             if (resp.StatusCode == HttpStatusCode.OK|| resp.StatusCode == HttpStatusCode.Created)
             {
-                //string s = t.ToString();
-                //                if (t.ToString() is Waiter)
-                //                  Console.WriteLine(s);
+       
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
             return ((int)resp.StatusCode, t);// ;products

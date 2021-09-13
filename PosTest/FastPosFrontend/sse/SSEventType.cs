@@ -7,6 +7,7 @@
         public const string DELETE_ORDER = "Delete.Order";
         public const string PAY_ORDER = "Pay.Order";
         public const string CANCEL_ORDER = "Cancel.Order";
+        public const string LOCK_ORDER = "Lock.Order";
 
     }
 }

@@ -184,16 +184,16 @@ namespace FastPosFrontend.ViewModels
             ReportInputData.Expenses = Expenses.ToDictionary(expense => expense.Description, expense => expense.Amount);
             if (_reportId!= null)
             {
-                url = api.Action("dailyExpenseReport", EndPoint.Put, arg: _reportId);
+                url = api.Resource("dailyExpenseReport", EndPoint.PUT, arg: _reportId);
             }
             else
             {
-                url = api.Action("dailyExpenseReport", EndPoint.Save);
+                url = api.Resource("dailyExpenseReport", EndPoint.SAVE);
             }
             int status = -1; DailyExpenseReport result = null ;
             if (_reportId == null)
             {
-                 (status,result) =GenericRest.PostThing<DailyExpenseReport>(api.Action("dailyExpenseReport", EndPoint.Save), ReportInputData);
+                 (status,result) =GenericRest.PostThing<DailyExpenseReport>(api.Resource("dailyExpenseReport", EndPoint.SAVE), ReportInputData);
             }
             else
             {

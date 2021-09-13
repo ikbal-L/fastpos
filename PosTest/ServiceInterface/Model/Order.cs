@@ -11,7 +11,7 @@ using Utilities.Attributes;
 
 namespace ServiceInterface.Model
 {
-    public class Order : PropertyChangedBase,IValidatableObject, IState<long>
+    public class Order : SyncModel,IValidatableObject, IState<long>
     {
         private decimal _total;
         private OrderItem _selectedOrderItem;
@@ -472,5 +472,51 @@ namespace ServiceInterface.Model
         OnTable,
         TakeAway,
         InWaiting
+    }
+
+    [DataContract]
+    public class SyncModel : PropertyChangedBase
+    {
+        private bool _isLocked;
+
+        [DataMember]
+        public bool IsLocked
+        {
+            get { return _isLocked; }
+            set { Set(ref _isLocked, value); }
+        }
+
+        private string _lockedBy;
+
+        public string LockedBy
+        {
+            get { return _lockedBy; }
+            set { _lockedBy = value; }
+        }
+
+
+    }
+
+    public interface ISyncData
+    {
+        public string Type { get;}
+
+        public long Id { get;}
+
+        public bool IsLocked { get;}
+
+        public string LockedBy { get; }
+    }
+
+    public class SyncData : ISyncData
+    {
+        [DataMember]
+        public string Type { get; set; }
+        [DataMember]
+        public long Id { get; set; }
+        [DataMember]
+        public bool IsLocked { get; set; }
+        [DataMember]
+        public string LockedBy { get; set; }
     }
 }

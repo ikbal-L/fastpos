@@ -128,7 +128,7 @@ namespace FastPosFrontend.ViewModels
         ) : base()
         {
 
-            mainthread = Thread.CurrentThread.ManagedThreadId;
+            LockOrderCommand = new DelegateCommandBase(LockOrder);
             _orderInfoCloseTimer = new DispatcherTimer(){Interval = new TimeSpan(0, 0, 3)};
             _orderInfoCloseTimer.Tick += (sender, args) =>
             {
@@ -225,6 +225,16 @@ namespace FastPosFrontend.ViewModels
                         CurrentOrder = null;
                     }
                     WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                    return;
+                }
+
+                if (e.EventName == SSEventType.LOCK_ORDER)
+                {
+                    var data = JsonConvert.DeserializeObject<SyncData>(e.Message.Data);
+                    var orderToLock = Orders.FirstOrDefault(o => o.Id == data.Id);
+
+                    orderToLock.IsLocked = data.IsLocked;
+                    orderToLock.LockedBy = data.LockedBy;
                     return;
                 }
 
@@ -704,6 +714,8 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        public ICommand LockOrderCommand { get; set; }
+
 
         #region Order Commands
 
@@ -824,6 +836,25 @@ namespace FastPosFrontend.ViewModels
             SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
+        }
+
+
+        public void LockOrder()
+        {
+            if (CurrentOrder== null)
+            {
+                return;
+            }
+
+            SyncManager.Lock(CurrentOrder);
+        }
+
+        public void LockOrder(object obj)
+        {
+            if (obj is Order order)
+            {
+                order.IsLocked = !order.IsLocked;
+            }
         }
 
         //FilterEventHandler TableOrdersFilter;

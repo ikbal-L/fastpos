@@ -309,6 +309,7 @@
     <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\OrderNotificationListener.cs" />
+    <Compile Include="Helpers\SyncManager.cs" />
     <Compile Include="Navigation\NavigationDrawerView.xaml.cs">
       <DependentUpon>NavigationDrawerView.xaml</DependentUpon>
     </Compile>

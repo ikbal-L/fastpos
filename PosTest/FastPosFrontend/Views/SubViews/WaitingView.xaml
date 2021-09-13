@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:subvm="clr-namespace:FastPosFrontend.ViewModels.SubViewModel"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
+             xmlns:sview="clr-namespace:FastPosFrontend.Views.SubViews"
+             xmlns:view="clr-namespace:FastPosFrontend.Views"
              xmlns:convert="clr-namespace:FastPosFrontend.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
@@ -23,55 +25,68 @@
                  >
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:Order}">
-                        <Border  caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="42"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                    <Grid caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]">
 
-                                <Border Margin="0 0 3 0" Background="#895737">
-                                    <DockPanel LastChildFill="True" >
-                                        <materialDesign:PackIcon DockPanel.Dock="Left" Foreground="White" Kind="Schedule"/>
-                                        <Label DockPanel.Dock="Right" Grid.Column="1" Padding="0" Margin="0 -1 3 0"
+                        <Grid.ContextMenu>
+                            <ContextMenu Padding="0">
+                                <MenuItem 
+                                    Header="Lock"  Margin="0"
+                                    DataContext="{Binding RelativeSource={RelativeSource AncestorType=view:CheckoutView},Path=DataContext}"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=view:CheckoutView},Path=DataContext.OrderLockCommand}"
+                                    CommandParameter="{x:Null}"/>
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+                        
+                        <Border  >
+                            <Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="42"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Margin="0 0 3 0" Background="#895737">
+                                        <DockPanel LastChildFill="True" >
+                                            <materialDesign:PackIcon DockPanel.Dock="Left" Foreground="White" Kind="Schedule"/>
+                                            <Label DockPanel.Dock="Right" Grid.Column="1" Padding="0" Margin="0 -1 3 0"
                                        Content="{Binding ElapsedTime.Minutes}" 
                                        HorizontalAlignment="Right"
                                        VerticalAlignment="Top"
                                        Foreground="White"
                                        FontSize="16" FontWeight="Bold"/>
-                                    </DockPanel>
-                                </Border>
+                                        </DockPanel>
+                                    </Border>
 
-                                <Border Margin="0 " Grid.Column="1"  Background="#895737">
-                                    <DockPanel LastChildFill="True" >
-                                        <materialDesign:PackIcon Grid.Column="2" Foreground="White" 
+                                    <Border Margin="0 " Grid.Column="1"  Background="#895737">
+                                        <DockPanel LastChildFill="True" >
+                                            <materialDesign:PackIcon Grid.Column="2" Foreground="White" 
                                                              
                                                              Kind="ReorderHorizontal"/>
-                                        <Label Grid.Column="3"  Padding="0" Margin="0 0 0 0"
+                                            <Label Grid.Column="3"  Padding="0" Margin="0 0 0 0"
                                            Content="{Binding OrderItems.Count}" 
                                            Foreground="White"
                                            HorizontalAlignment="Right"
                                            FontSize="16" FontWeight="Bold"/>
-                                    </DockPanel>
-                                </Border>
+                                        </DockPanel>
+                                    </Border>
 
-                                <Border Margin="0 3" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Background="#895737">
-                                    <DockPanel LastChildFill="True" >
-                                        <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="Dollar"/>
-                                        <Label Grid.Column="3" Grid.Row="1"  Padding="0" Margin="0 -1 0 0"
+                                    <Border Margin="0 3" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Background="#895737">
+                                        <DockPanel LastChildFill="True" >
+                                            <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="Dollar"/>
+                                            <Label Grid.Column="3" Grid.Row="1"  Padding="0" Margin="0 -1 0 0"
                                            Content="{Binding NewTotal}" 
                                            Foreground="White"
                                            HorizontalAlignment="Right"
                                            FontSize="16" FontWeight="Bold"/>
-                                    </DockPanel>
-                                </Border>
+                                        </DockPanel>
+                                    </Border>
 
-                                <!--<Border Grid.Column="0" Grid.Row="2" Height="35" Width="40" Background="{StaticResource DefaultBackgroundBrush}"
+                                    <!--<Border Grid.Column="0" Grid.Row="2" Height="35" Width="40" Background="{StaticResource DefaultBackgroundBrush}"
                                     BorderBrush="WhiteSmoke" BorderThickness="0"
                                     caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ActionKeyboard('SERVED')]">
                                 <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="FastFood"
@@ -82,6 +97,7 @@
                                 <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Foreground="White" Kind="Eye"
                                                          Height="30" Width="30" HorizontalAlignment="Center"/>
                             </Border>-->
+                                </Grid>
                             </Grid>
                             <Border.Style>
                                 <Style TargetType="Border">
@@ -103,11 +119,66 @@
                                             <Setter Property="BorderThickness" Value="3"></Setter>
                                             <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}"/>
                                         </DataTrigger>
+                                      
+
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true" />
+                                                <Condition Binding="{Binding IsLocked}" Value="true"></Condition>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}"/>
+                                        </MultiDataTrigger>
+
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="false" />
+                                                <Condition Binding="{Binding IsLocked}" Value="true"></Condition>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="BorderBrush" Value="LightGray"/>
+                                        </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
                         </Border>
-                    </DataTemplate>
+
+                        <!--<TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=view:CheckoutView},Path=DataContext}"/>-->
+
+                        <Border Background="#7F000000" HorizontalAlignment="Stretch" CornerRadius="10" Margin="3">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLocked}" Value="false">
+                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                        </DataTrigger>
+
+                                        
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                           
+                            <Label Content="{materialDesign:PackIcon Kind=Lock,Size=45}" HorizontalAlignment="Center" >
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Setter Property="Foreground" Value="LightGray" ></Setter>
+                                        <Style.Triggers>
+
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+                                                <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                        </Border>
+
+                        <!--<materialDesign:PopupBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 -10 -10 0">
+                            <StackPanel>
+                                <Button>Lock</Button>
+                            </StackPanel>
+                        </materialDesign:PopupBox>-->
+                    </Grid>
+                </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
