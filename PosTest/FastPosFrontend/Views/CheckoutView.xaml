@@ -186,11 +186,34 @@
             </Grid>
         </Grid>
 
+        <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" BorderThickness="0 0 0 0" BorderBrush="DarkGray" >
+            <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Style="{StaticResource MaterialDesignTabControl}">
 
+                <TabItem Header="{md:PackIcon Kind=FastFood,Size=25}" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" />
 
-        <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" />
-     
-        <Grid Grid.Column="2" Grid.Row="1" Margin="2" >
+                        <comp:CategoryPaginationControl Grid.Row="1" />
+
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{md:PackIcon Kind=Eye,Size=25}" >
+                    <comp:OrderTabinationView  Grid.Row="1" />
+                </TabItem>
+                <TabItem Header="{md:PackIcon Kind=TruckFast,Size=25}"/>
+
+                <TabItem Header="{md:PackIcon Kind=CashRefund,Size=25}">
+                    <views:OrderRefundView DataContext="{Binding OrderRefundViewModel}"></views:OrderRefundView>
+                </TabItem>
+            </TabControl>
+        </Border>
+
+        <!--<Grid Grid.Column="2" Grid.Row="1" Margin="2" >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -198,11 +221,10 @@
 
             </Grid.RowDefinitions>
 
-            <comp:CategoryPaginationControl Grid.Row="0" />
           
-            <comp:OrderTabinationView  Grid.Row="1" />
+           
 
-        </Grid>
+        </Grid>-->
 
     </Grid>
 

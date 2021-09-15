@@ -44,7 +44,7 @@ namespace XUnitTesting.ServiceLibTests
             
             var api = new RestApis();
             var result =
-                GenericRest.PostThing<DailyExpenseReport>(api.Action("dailyExpenseReport", EndPoint.Save), d);
+                GenericRest.PostThing<DailyExpenseReport>(api.Action("dailyExpenseReport", EndPoint.SAVE), d);
             Assert.Equal(201, result.status);
             Assert.NotNull(result.Item2);
             Assert.Equal(d.CashRegisterActualAmount,result.Item2.CashRegisterExpectedAmount);

@@ -327,6 +327,7 @@ namespace FastPosFrontend.ViewModels
             TakeAwayViewModel = new TakeawayViewModel(this);
             DeliveryViewModel = new DeliveryViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
+            OrderRefundViewModel = new OrderRefundViewModel(this);
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
@@ -636,6 +637,15 @@ namespace FastPosFrontend.ViewModels
             get => _splitViewModel;
             set => Set(ref _splitViewModel, value);
         }
+
+        private OrderRefundViewModel _orderRefundViewModel;
+
+        public OrderRefundViewModel OrderRefundViewModel
+        {   
+            get { return _orderRefundViewModel; }
+            set { Set(ref _orderRefundViewModel, value); }
+        }
+
 
         public Table SelectedTable
         {
@@ -955,6 +965,10 @@ namespace FastPosFrontend.ViewModels
             }
 
             Orders.Remove(CurrentOrder);
+            if (CurrentOrder.State == OrderState.Payed)
+            {
+                OrderRefundViewModel.AddPaidOrder(CurrentOrder);
+            }
             var result = OrdersCollectionObserver?.UnObserve(CurrentOrder);
 
             CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;

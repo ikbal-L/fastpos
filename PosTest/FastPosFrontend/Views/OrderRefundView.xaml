@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.OrderRefundView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:OrderRefundViewModel}">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone
+        Mode="Standard"
+        Padding="8 4"
+        CornerRadius="2"
+        Panel.ZIndex="1"
+        Margin="10"
+        materialDesign:ShadowAssist.ShadowDepth="Depth1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+              Width="Auto" />
+                    <ColumnDefinition
+              Width="*" />
+                    <ColumnDefinition
+              Width="Auto" />
+                    <ColumnDefinition
+              Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button  Style="{DynamicResource MaterialDesignToolButton}" 
+                         Command="{Binding FilterCommand}"
+                          >
+                    <materialDesign:PackIcon Kind="Magnify" Opacity=".56" />
+                </Button>
+                <TextBox
+            Grid.Column="1"
+            Margin="8 0 0 0"
+            materialDesign:HintAssist.Hint="{Binding SelectedCriteria,StringFormat='Search By {0:#}',UpdateSourceTrigger=PropertyChanged}"
+            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+            BorderThickness="0"
+            MinWidth="200"
+            VerticalAlignment="Center"
+                    Text="{Binding FilterText}"/>
+                <Button
+            Grid.Column="3">
+
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
+
+                          
+                        </Style>
+                    </Button.Style>
+                    <materialDesign:PackIcon
+              Kind="CloseBold"
+              Opacity=".56"
+              Margin="8 0 0 0" />
+                </Button>
+
+                <ComboBox
+                     Grid.Column="2"
+        SelectedIndex="0"
+        Margin="8 0 0 0"
+        BorderThickness="0"
+        materialDesign:ColorZoneAssist.Mode="Standard"
+        materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
+        BorderBrush="{DynamicResource MaterialDesignPaper}"
+                    ItemsSource="{x:Static vm:RefundFilterCriteria.CRITERIAS}"
+                    TextBlock.FontWeight="Bold"
+                    SelectedItem="{Binding SelectedCriteria}">
+                    
+                </ComboBox>
+            </Grid>
+        </materialDesign:ColorZone>
+       
+        <TextBox Text="{Binding RelativeSource={RelativeSource AncestorType=local:OrderRefundView,Mode=FindAncestor},Path=DataContext}" Grid.Row="1" ></TextBox>
+
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding PaidOrdersOfTheDay.View}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow"
+                  SelectedItem="{Binding SelectedPaidOrder}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Time" Binding="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
+
+                <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}"/>
+
+                <DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}"/>
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+        
+    </Grid>
+</UserControl>

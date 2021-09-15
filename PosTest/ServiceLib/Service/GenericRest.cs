@@ -16,9 +16,7 @@ namespace ServiceLib.Service
             T t = default;
             if (resp.StatusCode == HttpStatusCode.OK)
             {
-                //string s = t.ToString();
-//                if (t.ToString() is Waiter)
-  //                  Console.WriteLine(s);
+
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
             return ((int)resp.StatusCode,t);// ;products
@@ -40,7 +38,7 @@ namespace ServiceLib.Service
 
         }
 
-        public static IRestResponse RestGet(string path)
+        public static IRestResponse RestGet(string path,string? payload = null)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;
             var client = new RestClient(path);
@@ -48,6 +46,10 @@ namespace ServiceLib.Service
             request.AddHeader("authorization", token);
             request.AddHeader("accept", "application/json");
             request.AddHeader("Annex-Id", $"{AuthProvider.Instance?.AnnexId}");
+            if (!string.IsNullOrEmpty(payload))
+            {
+                request.AddParameter("application/json", payload, ParameterType.RequestBody);
+            }
             IRestResponse response = client.Execute(request);
             return response;
         }

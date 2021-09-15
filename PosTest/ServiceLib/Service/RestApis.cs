@@ -116,6 +116,7 @@ namespace ServiceLib.Service
         public static readonly string PUT = "Put";
         public static readonly string DELETE = "Delete";
         public static readonly string GET_ALL = "GetAll";
+        public static readonly string GET_ALL_BY_CRITERIAS = "getallByCriterias";
         public static readonly string GET_MANY = "GetMany";
         public static readonly string SAVE = "Save";
         public static readonly string SAVE_MANY = "SaveMany";

@@ -201,17 +201,15 @@ namespace ServiceLib.Service
             }
         }
 
-        public static void PatchOrderFromEvent(Order state, Order deserializedState)
+        public List<Order> GetByCriterias(object criterias)
         {
-            
-            PatchOrder(state, deserializedState);
-            foreach (var item in state.OrderItems)
+            var payload = JsonConvert.SerializeObject(criterias);
+            var result = GenericRest.RestGet(RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS), payload);
+            if (result.IsSuccessful)
             {
-                if (!deserializedState.OrderItems.Any(i => i.Id == item.Id))
-                {
-                    _ = state.OrderItems.Remove(item);
-                }
-            }
+                return JsonConvert.DeserializeObject<List<Order>>(result.Content);
+            };
+            return new List<Order>();
         }
 
         public List<Order> GetOrderByStates(string[] states, long deliverymanId)

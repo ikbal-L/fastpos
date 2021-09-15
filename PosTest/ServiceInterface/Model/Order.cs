@@ -457,13 +457,15 @@ namespace ServiceInterface.Model
         Ready,
         Delivered,
         Payed,
+        Refunded,
         Splitted,
         Canceled,
         Removed,
         Served,
         Changed,
         DeliveredPaid,
-        DeliveredReturned
+        DeliveredReturned,
+        Unprocessed
     }
 
     public enum OrderType

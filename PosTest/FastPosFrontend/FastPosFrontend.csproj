@@ -309,6 +309,7 @@
     <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\OrderNotificationListener.cs" />
+    <Compile Include="Helpers\Parser.cs" />
     <Compile Include="Helpers\SyncManager.cs" />
     <Compile Include="Navigation\NavigationDrawerView.xaml.cs">
       <DependentUpon>NavigationDrawerView.xaml</DependentUpon>
@@ -378,6 +379,8 @@
     <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\PaymentHistoryViewModel.cs" />
     <Compile Include="ViewModels\ExpenseForm.cs" />
+    <Compile Include="ViewModels\OrderRefundViewModel.cs" />
+    <Compile Include="ViewModels\RefundFilterCriteria.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelInitialized.cs" />
@@ -486,6 +489,9 @@
     </Compile>
     <Compile Include="Views\OpenTableView.xaml.cs">
       <DependentUpon>OpenTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrderRefundView.xaml.cs">
+      <DependentUpon>OrderRefundView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PinCodeView.xaml.cs">
       <DependentUpon>PinCodeView.xaml</DependentUpon>
@@ -847,6 +853,10 @@
     <Page Include="Views\OpenTableView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OrderRefundView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PinCodeView.xaml">
       <Generator>MSBuild:Compile</Generator>

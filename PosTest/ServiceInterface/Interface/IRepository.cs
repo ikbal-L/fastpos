@@ -48,6 +48,8 @@ namespace ServiceInterface.Interface
         List<Order>  GetOrderByStates(string[] states, long deliverymanId);
         PageList<Order> getAllByDeliveryManAndStatePage( int pageNumber, int pageSize, long deliverymanId,string[] states);
 
+        List<Order> GetByCriterias(object criterias);
+
     }
 
     public interface IOrderItemRepository : IRepository<OrderItem, long>
