@@ -32,6 +32,7 @@ namespace FastPosFrontend.ViewModels
             PaidOrdersOfTheDay.Filter += PaidOrdersOfTheDay_Filter;
             Parent = parent;
             FilterCommand = new DelegateCommandBase(ApplySearchFilter);
+            RefundOrderCommand = new DelegateCommandBase(RefundOrder,CanRefundOrder);
         }
 
         private void PaidOrdersOfTheDay_Filter(object sender, FilterEventArgs e)
@@ -47,12 +48,8 @@ namespace FastPosFrontend.ViewModels
             get { return _selectedPaidOrder; }
             set 
             {
-                if (value!= _selectedPaidOrder)
-                {
-                    ShowPaidOrder(value);
-                }
-                Set(ref _selectedPaidOrder, value); 
-                
+                Set(ref _selectedPaidOrder, value);
+                (RefundOrderCommand as DelegateCommandBase).RaiseCanExecuteChanged();
             }
         }
 
@@ -80,7 +77,7 @@ namespace FastPosFrontend.ViewModels
 
         public ICommand FilterCommand { get; set; }
 
-
+        public ICommand RefundOrderCommand { get; set; }
 
         private CheckoutViewModel _parent;
 
@@ -101,6 +98,15 @@ namespace FastPosFrontend.ViewModels
         {
             Parent!.CurrentOrder = order;
         }
+        public void RefundOrder(object o)
+        {
+            SelectedPaidOrder.State = OrderState.Refunded;
+            StateManager.Save(SelectedPaidOrder);
+            _paidOrdersOfTheDay.Remove(SelectedPaidOrder);
+            SelectedPaidOrder = null;
+        }
+
+        public bool CanRefundOrder(object o) => SelectedPaidOrder != null;
 
         public void ApplySearchFilter( object o)
         {
