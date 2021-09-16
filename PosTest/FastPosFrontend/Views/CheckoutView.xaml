@@ -180,7 +180,16 @@
                 </Border>
 
 
-                <comp:OrderCommandsControl Grid.Column="1"  Grid.Row="1"  />
+
+                <md:TransitioningContent
+                        OpeningEffect="{md:TransitionEffect SlideInFromBottom}"
+                        
+                    Grid.Column="1"  Grid.Row="1" >
+
+                    <comp:OrderCommandsControl Grid.Column="1"  Grid.Row="1"  />
+
+
+                </md:TransitioningContent>
 
 
             </Grid>
@@ -188,6 +197,12 @@
 
         <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" BorderThickness="0 0 0 0" BorderBrush="DarkGray" >
             <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Style="{StaticResource MaterialDesignTabControl}">
+
+                <!--<TabControl.Resources>
+                    <Style TargetType="TabItem" BasedOn="{StaticResource MaterialDesignNavigationRailTabItem}">
+                        
+                    </Style>
+                </TabControl.Resources>-->
 
                 <TabItem Header="{md:PackIcon Kind=FastFood,Size=25}" >
                     <Grid>

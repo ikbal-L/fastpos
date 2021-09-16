@@ -203,8 +203,8 @@ namespace ServiceLib.Service
 
         public List<Order> GetByCriterias(object criterias)
         {
-            var payload = JsonConvert.SerializeObject(criterias);
-            var result = GenericRest.RestGet(RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS), payload);
+            //var payload = JsonConvert.SerializeObject(criterias);
+            var result = GenericRest.RestPost(criterias, RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS));
             if (result.IsSuccessful)
             {
                 return JsonConvert.DeserializeObject<List<Order>>(result.Content);

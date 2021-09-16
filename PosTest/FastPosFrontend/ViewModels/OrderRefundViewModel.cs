@@ -6,6 +6,7 @@ using ServiceLib.Service.StateManager;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -20,12 +21,13 @@ namespace FastPosFrontend.ViewModels
         {
             _parser = Parser.Instance;
             var repo = StateManager.GetService<Order, IOrderRepository>();
-            Dictionary<String, string> criterias = new Dictionary<string, string>();
-
-            criterias.Add(nameof(Order.OrderTime), DateTime.Today.ToString("d"));
+            Dictionary<string, string> criterias = new Dictionary<string, string>();
+           
+            criterias.Add(nameof(Order.OrderTime), DateTime.Today.ToString("yyyy-MM-dd'T'HH:mm:ss"));
             criterias.Add(nameof(Order.State), OrderState.Payed.ToString());
-            repo.GetByCriterias(criterias);
-            _paidOrdersOfTheDay = new ObservableCollection<Order>();
+
+            var paid = repo.GetByCriterias(criterias);
+            _paidOrdersOfTheDay = new ObservableCollection<Order>(paid);
             PaidOrdersOfTheDay = new CollectionViewSource() { Source = _paidOrdersOfTheDay};
             PaidOrdersOfTheDay.Filter += PaidOrdersOfTheDay_Filter;
             Parent = parent;
