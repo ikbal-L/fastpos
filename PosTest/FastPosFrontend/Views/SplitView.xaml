@@ -112,7 +112,7 @@
                     cal:Message.Attach="[Event Click] = [Action BackFromSplitCommand]" 
                     Style="{StaticResource MaterialDesignOutlinedButton}">
                 <StackPanel Orientation="Horizontal">
-                    <materialdesign:PackIcon Kind="ChevronDoubleLeft" />
+                    <materialdesign:PackIcon Kind="ArrowBack" />
                     <TextBlock Margin="5 -3">Back</TextBlock>
                 </StackPanel>
             </Button>

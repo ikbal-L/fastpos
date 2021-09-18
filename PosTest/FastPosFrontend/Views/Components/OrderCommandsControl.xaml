@@ -13,19 +13,20 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <!--NumKeyBoard-->
-        <UniformGrid Grid.Column="1" Margin="2" Columns="4" Rows="4">
-            <!--<Grid.Effect>
-                <DropShadowEffect BlurRadius="20" />
-            </Grid.Effect>-->
+        <UniformGrid Grid.Column="1" Margin="2" Columns="4" Rows="4" VerticalAlignment="Top">
+           
 
             <Panel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                     <Setter Property="Width" Value="45"/>
                     <Setter Property="Height" Value="45"/>
-                    <Setter Property="Margin" Value="2"/>
+                    <Setter Property="Margin" Value="2.5"/>
                     <Setter Property="Padding" Value="0"/>
                     <Setter Property="FontSize" Value="18"/>
                     <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                    <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
+                    <Setter Property="materialdesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
                 </Style>
             </Panel.Resources>
 
@@ -101,6 +102,9 @@
                     <Setter Property="Padding" Value="0"/>
                     <Setter Property="FontSize" Value="18"/>
                     <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                    <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
+                    <Setter Property="materialdesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
                 </Style>
             </Panel.Resources>
 
@@ -117,7 +121,10 @@
                         <Setter Property="FontSize" Value="18"/>
                         <Setter Property="FontWeight" Value="Bold"/>
                         <Setter Property="materialdesign:RippleAssist.Feedback" Value="Green"/>
-                        
+
+                        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                        <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
+
 
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -145,7 +152,9 @@
                         <Setter Property="FontSize" Value="18"/>
                         <Setter Property="FontWeight" Value="Bold"/>
                         <Setter Property="materialdesign:RippleAssist.Feedback" Value="Red"/>
-
+                        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                        <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
+                        
 
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">

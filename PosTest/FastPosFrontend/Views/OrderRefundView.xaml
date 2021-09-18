@@ -42,10 +42,10 @@
                 >
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" MaxWidth="55"/>
+                    <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="auto"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding ProductName}" Width="*"/>
-                    <DataGridTextColumn Header="U/P" Binding="{Binding UnitPrice}" MaxWidth="80"/>
-                    <DataGridTextColumn Header="Total" Binding="{Binding Total}" MaxWidth="80"/>
+                    <DataGridTextColumn Header="U/P" Binding="{Binding UnitPrice}" Width="auto"/>
+                    <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="auto"/>
 
 
                 </DataGrid.Columns>
@@ -72,7 +72,7 @@
             </UniformGrid>
         </Grid>
 
-        <Grid Margin="5" Grid.Column="1">
+        <Grid  Grid.Column="1" Margin="10 5"> 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -82,7 +82,7 @@
         Padding="8 4"
         CornerRadius="2"
         Panel.ZIndex="1"
-        Margin="10"
+        Margin="0 10"
         materialDesign:ShadowAssist.ShadowDepth="Depth1">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -97,8 +97,8 @@
                     </Grid.ColumnDefinitions>
                     <Button  Style="{DynamicResource MaterialDesignToolButton}" 
                          Command="{Binding FilterCommand}"
-                          >
-                        <materialDesign:PackIcon Kind="Magnify" Opacity=".56" />
+                          Padding="0">
+                        <materialDesign:PackIcon Kind="Magnify" Opacity=".56" Width="30" Height="30"/>
                     </Button>
                     <TextBox
             Grid.Column="1"
@@ -110,19 +110,20 @@
             VerticalAlignment="Center"
                     Text="{Binding FilterText}"
                         />
-                    <Button
-            Grid.Column="3">
+                    <Button Grid.Column="3" Padding="0">
 
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
 
-
+                                
                             </Style>
                         </Button.Style>
                         <materialDesign:PackIcon
-              Kind="CloseBold"
+              Kind="Close"
               Opacity=".56"
-              Margin="8 0 0 0" />
+              
+                            Width="30" Height="30"
+                            Padding="0"/>
                     </Button>
 
                     <ComboBox
@@ -133,7 +134,7 @@
         materialDesign:ColorZoneAssist.Mode="Standard"
         materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
         BorderBrush="{DynamicResource MaterialDesignPaper}"
-                    ItemsSource="{x:Static vm:RefundFilterCriteria.CRITERIAS}"
+                    ItemsSource="{x:Static vm:OrderFilterCriteria.CRITERIAS}"
                     TextBlock.FontWeight="Bold"
                     SelectedItem="{Binding SelectedCriteria}">
 
@@ -141,11 +142,12 @@
                 </Grid>
             </materialDesign:ColorZone>
 
-            <TextBox Text="{Binding RelativeSource={RelativeSource AncestorType=local:OrderRefundView,Mode=FindAncestor},Path=DataContext}" Grid.Row="1" ></TextBox>
+            <!--<TextBox Text="{Binding RelativeSource={RelativeSource AncestorType=local:OrderRefundView,Mode=FindAncestor},Path=DataContext}" Grid.Row="1" ></TextBox>-->
 
 
             <DataGrid Grid.Row="1" ItemsSource="{Binding PaidOrdersOfTheDay.View}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow"
-                  SelectedItem="{Binding SelectedPaidOrder}">
+                  SelectedItem="{Binding SelectedPaidOrder}"
+                      >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}"/>
                     <DataGridTextColumn Header="Time" Binding="{Binding OrderTime,StringFormat='H:mm:ss'}"/>

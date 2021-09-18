@@ -96,7 +96,7 @@ namespace ServiceLib.Service.StateManager
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
                 var status = -1;
-                var action = state.Id == null ? StateManagementAction.Save : StateManagementAction.Update;
+                var action = state.Id == null ? StateManagementQuery.Save : StateManagementQuery.Update;
                 status = state.Id == null ? service.Save(state, out var errors) : service.Update(state, out errors);
                 
                 _responseHandler.Handle(status,errors,action,obj:state);
@@ -199,7 +199,7 @@ namespace ServiceLib.Service.StateManager
             }
 
             var (status,errors) = service.Delete((TIdentifier)state.Id);
-            _responseHandler.Handle<TState>(status,errors,StateManagementAction.Delete,obj:state);
+            _responseHandler.Handle(status,errors,StateManagementQuery.Delete,obj:state);
 
             if ((HttpStatusCode) status != HttpStatusCode.OK) return false;
             if ((State[key] is ICollection<TState> tState)) 

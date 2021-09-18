@@ -69,7 +69,7 @@
             <Button DockPanel.Dock="Right" Height="60"  VerticalAlignment="Center"
                                 x:Name="PreviousPqge" Style="{StaticResource MaterialDesignFlatButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
-                                Content="{materialDesign:PackIcon ChevronLeft,22}"
+                                Content="{materialDesign:PackIcon ChevronLeft,30}"
                                 Padding="4"
                                 materialDesign:ButtonAssist.CornerRadius="10 0 0 10"
                                 Margin="2"/>
@@ -77,7 +77,7 @@
             <Button DockPanel.Dock="Right" Height="60"  x:Name="NextPage"
                                 Style="{StaticResource MaterialDesignFlatButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('NEXT')]"
-                                Content="{materialDesign:PackIcon ChevronRight,22}" 
+                                Content="{materialDesign:PackIcon ChevronRight,30}" 
                                 Padding="4"
                                 materialDesign:ButtonAssist.CornerRadius="0 10 10 0"
                                 Margin="2"/>

@@ -15,7 +15,7 @@ namespace FastPosFrontend.Helpers
 
         public static IResponseHandler Handler { get; }
 
-        public void Handle<T>(int status, IEnumerable<string> errors, StateManagementAction action, string source = "",
+        public void Handle<T>(int status, IEnumerable<string> errors, StateManagementQuery action, string source = "",
             bool overrideDefaultBehaviour = false, T obj = null) where T : class
         {
             var type = typeof(T);

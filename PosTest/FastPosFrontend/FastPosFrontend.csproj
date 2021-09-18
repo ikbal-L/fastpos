@@ -348,6 +348,8 @@
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportsViewModel.cs" />
     <Compile Include="ViewModels\DefaultDialog.cs" />
+    <Compile Include="ViewModels\DeliveryCheckoutViewModel.cs" />
+    <Compile Include="ViewModels\DeliverymanFilterCriteria.cs" />
     <Compile Include="ViewModels\DialogContent.cs" />
     <Compile Include="ViewModels\EmbeddedCommandBarViewModel.cs" />
     <Compile Include="Helpers\LazyScreen.cs" />
@@ -380,7 +382,7 @@
     <Compile Include="ViewModels\DeliveryAccounting\PaymentHistoryViewModel.cs" />
     <Compile Include="ViewModels\ExpenseForm.cs" />
     <Compile Include="ViewModels\OrderRefundViewModel.cs" />
-    <Compile Include="ViewModels\RefundFilterCriteria.cs" />
+    <Compile Include="ViewModels\OrderFilterCriteria.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelInitialized.cs" />
@@ -459,6 +461,9 @@
     </Compile>
     <Compile Include="Views\DailyExpenseReportsView.xaml.cs">
       <DependentUpon>DailyExpenseReportsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeliveryCheckoutView.xaml.cs">
+      <DependentUpon>DeliveryCheckoutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GenericDialogContentView.xaml.cs">
       <DependentUpon>GenericDialogContentView.xaml</DependentUpon>
@@ -811,6 +816,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DailyExpenseReportsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeliveryCheckoutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -151,7 +151,8 @@ namespace ServiceLib.Service
                            Newtonsoft.Json.Formatting.None,
                            new JsonSerializerSettings
                            {
-                               NullValueHandling = NullValueHandling.Ignore
+                               NullValueHandling = NullValueHandling.Include,
+                               DateFormatString = "yyyy-MM-dd'T'HH:mm:ss"
                            });
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);

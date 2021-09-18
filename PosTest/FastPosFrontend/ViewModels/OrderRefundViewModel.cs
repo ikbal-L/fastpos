@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
@@ -7,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -23,10 +26,11 @@ namespace FastPosFrontend.ViewModels
             var repo = StateManager.GetService<Order, IOrderRepository>();
             Dictionary<string, string> criterias = new Dictionary<string, string>();
            
-            criterias.Add(nameof(Order.OrderTime), DateTime.Today.ToString("yyyy-MM-dd'T'HH:mm:ss"));
-            criterias.Add(nameof(Order.State), OrderState.Payed.ToString());
+            //criterias.Add(nameof(Order.OrderTime), DateTime.Today.ToString("yyyy-MM-dd'T'HH:mm:ss"));
+            //criterias.Add(nameof(Order.State), OrderState.Payed.ToString());
 
-            var paid = repo.GetByCriterias(criterias);
+            var criteria = new OrderFilter() { OrderTime = DateTime.Today, State = OrderState.Payed };
+            var paid = repo.GetByCriterias(criteria);
             _paidOrdersOfTheDay = new ObservableCollection<Order>(paid);
             PaidOrdersOfTheDay = new CollectionViewSource() { Source = _paidOrdersOfTheDay};
             PaidOrdersOfTheDay.Filter += PaidOrdersOfTheDay_Filter;
@@ -59,7 +63,7 @@ namespace FastPosFrontend.ViewModels
         public CollectionViewSource PaidOrdersOfTheDay { get; set; }
 
 
-        private string _selectedCriteria = RefundFilterCriteria.PRICE;
+        private string _selectedCriteria = OrderFilterCriteria.PRICE;
 
         public string SelectedCriteria
         {
@@ -94,10 +98,6 @@ namespace FastPosFrontend.ViewModels
             PaidOrdersOfTheDay.View.Refresh();
         }
 
-        public void ShowPaidOrder(Order order)
-        {
-            Parent!.CurrentOrder = order;
-        }
         public void RefundOrder(object o)
         {
             SelectedPaidOrder.State = OrderState.Refunded;
@@ -119,7 +119,7 @@ namespace FastPosFrontend.ViewModels
             {
                 if (string.IsNullOrEmpty(FilterText) || string.IsNullOrWhiteSpace(FilterText)) return true;
 
-                if (SelectedCriteria == RefundFilterCriteria.PRICE)
+                if (SelectedCriteria == OrderFilterCriteria.PRICE)
                 {
                     
                    var  (min, max, equivalent) = _parser.ParseDecimalValues(FilterText);
@@ -127,7 +127,7 @@ namespace FastPosFrontend.ViewModels
                     return FilterByPrice(order.NewTotal,min:min,max:max, equivalent: equivalent);
                 }
 
-                if (SelectedCriteria == RefundFilterCriteria.ITEM_COUNT)
+                if (SelectedCriteria == OrderFilterCriteria.ITEM_COUNT)
                 {
 
                     var (min, max, equivalent) = _parser.ParseIntegerValues(FilterText);
@@ -135,7 +135,7 @@ namespace FastPosFrontend.ViewModels
                     return FilterByItemCount(order.OrderItems.Count, min: min, max: max, equivalent: equivalent);
                 }
 
-                if (SelectedCriteria == RefundFilterCriteria.TIME)
+                if (SelectedCriteria == OrderFilterCriteria.TIME)
                 {
                     var (min, max, equivalent) = _parser.ParseTimeSpanValues(FilterText);
                     var time = TimeSpan.Parse(order.OrderTime.TimeOfDay.ToString(@"hh\:mm"));
@@ -193,5 +193,21 @@ namespace FastPosFrontend.ViewModels
 
         }
 
+    }
+
+    public class OrderFilter
+    {
+        [DataMember]
+        public DateTime? OrderTime { get; set; }
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public OrderState? State { get; set; }
+        [DataMember]
+        [JsonProperty( ItemConverterType = typeof(StringEnumConverter))]
+        public IEnumerable<OrderState> States { get; set; }
+        [DataMember]
+        public long? DeliverymanId { get; set; }
+        [DataMember]
+        public IEnumerable<long>? DeliverymanIds { get; set; }
     }
 }

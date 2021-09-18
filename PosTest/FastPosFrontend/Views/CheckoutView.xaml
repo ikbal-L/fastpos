@@ -82,10 +82,11 @@
                     </Grid.ColumnDefinitions>
                     <comp:OrderItemToolbar Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" />
 
-                    <Grid Grid.Column="1">
+                    <Grid Grid.Column="1" >
+                        
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="55*" />
-                            <RowDefinition Height="45*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
 
                         <ListBox
@@ -114,7 +115,7 @@
                         <Grid Grid.Row="1" >
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
                                 <RowDefinition Height="2*" />
                             </Grid.RowDefinitions>
 
@@ -173,7 +174,7 @@
 
                                 </Border>
                             </Border>
-                            <comp:OrderCommandsControl   Grid.Row="1"  />
+                            <comp:OrderCommandsControl   Grid.Row="1" Margin="0 0 0 5"  />
 
 
                         </Grid>
@@ -186,7 +187,7 @@
                         </Grid.RowDefinitions>
                         <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" />
 
-                        <comp:CategoryPaginationControl Grid.Row="1" />
+                        <comp:CategoryPaginationControl Grid.Row="1" Margin=" 0 0 0 5"/>
 
                     </Grid>
                 </Grid>
@@ -195,7 +196,9 @@
             <TabItem Header="{md:PackIcon Kind=Eye,Size=25}" >
                 <comp:OrderTabinationView  Grid.Row="1" />
             </TabItem>
-            <TabItem Header="{md:PackIcon Kind=TruckFast,Size=25}"/>
+            <TabItem Header="{md:PackIcon Kind=TruckFast,Size=25}">
+                <views:DeliveryCheckoutView DataContext="{Binding DeliveryCheckoutViewModel }"/>
+            </TabItem>
 
             <TabItem Header="{md:PackIcon Kind=CashRefund,Size=25}">
                 <views:OrderRefundView DataContext="{Binding OrderRefundViewModel}"></views:OrderRefundView>

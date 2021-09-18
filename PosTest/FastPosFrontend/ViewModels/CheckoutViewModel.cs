@@ -328,6 +328,7 @@ namespace FastPosFrontend.ViewModels
             DeliveryViewModel = new DeliveryViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
             OrderRefundViewModel = new OrderRefundViewModel(this);
+            DeliveryCheckoutViewModel = new DeliveryCheckoutViewModel();
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
@@ -645,6 +646,15 @@ namespace FastPosFrontend.ViewModels
             get { return _orderRefundViewModel; }
             set { Set(ref _orderRefundViewModel, value); }
         }
+
+        private DeliveryCheckoutViewModel _deliveryCheckoutViewModel;
+
+        public DeliveryCheckoutViewModel DeliveryCheckoutViewModel
+        {
+            get { return _deliveryCheckoutViewModel; }
+            set { Set(ref _deliveryCheckoutViewModel , value); }
+        }
+
 
 
         public Table SelectedTable
@@ -969,6 +979,12 @@ namespace FastPosFrontend.ViewModels
             {
                 OrderRefundViewModel.AddPaidOrder(CurrentOrder);
             }
+
+            if (CurrentOrder.State == OrderState.Delivered)
+            {
+                DeliveryCheckoutViewModel.AddDeliveredOrder(CurrentOrder);
+            }
+
             var result = OrdersCollectionObserver?.UnObserve(CurrentOrder);
 
             CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
