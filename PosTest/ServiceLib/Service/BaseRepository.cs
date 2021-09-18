@@ -115,6 +115,28 @@ namespace ServiceLib.Service
         {
             return await GenericRest.GetThingAsync<IEnumerable<TState>>(RestApi.Resource<TState>(EndPoint.GET_ALL, subPath: subPath));
         }
+
+        public List<TState> GetByCriterias(object criterias)
+        {
+
+            var result = GenericRest.RestPost(criterias, RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS));
+            if (result.IsSuccessful)
+            {
+                return JsonConvert.DeserializeObject<List<TState>>(result.Content);
+            };
+            return new List<TState>();
+        }
+
+        public async Task<List<TState>> GetByCriteriasAsync(object criterias)
+        {
+
+            var result =await GenericRest.RestPostAsync(criterias, RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS));
+            if (result.IsSuccessful)
+            {
+                return JsonConvert.DeserializeObject<List<TState>>(result.Content);
+            };
+            return new List<TState>();
+        }
     }
 
 
@@ -199,17 +221,6 @@ namespace ServiceLib.Service
                 }
 
             }
-        }
-
-        public List<Order> GetByCriterias(object criterias)
-        {
-            //var payload = JsonConvert.SerializeObject(criterias);
-            var result = GenericRest.RestPost(criterias, RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS));
-            if (result.IsSuccessful)
-            {
-                return JsonConvert.DeserializeObject<List<Order>>(result.Content);
-            };
-            return new List<Order>();
         }
 
         public List<Order> GetOrderByStates(string[] states, long deliverymanId)

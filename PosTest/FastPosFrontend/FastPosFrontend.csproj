@@ -381,8 +381,10 @@
     <Compile Include="ViewModels\DeliveryAccounting\NotPaidOrdersViewModel.cs" />
     <Compile Include="ViewModels\DeliveryAccounting\PaymentHistoryViewModel.cs" />
     <Compile Include="ViewModels\ExpenseForm.cs" />
+    <Compile Include="ViewModels\OrderFilter.cs" />
     <Compile Include="ViewModels\OrderRefundViewModel.cs" />
     <Compile Include="ViewModels\OrderFilterCriteria.cs" />
+    <Compile Include="ViewModels\PaymentFilter.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelInitialized.cs" />

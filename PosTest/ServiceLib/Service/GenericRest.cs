@@ -38,6 +38,27 @@ namespace ServiceLib.Service
 
         }
 
+        public static async Task<IRestResponse> RestPostAsync(object objecToPost, string url)
+        {
+            string token = AuthProvider.Instance.AuthorizationToken;
+            var client = new RestClient(url);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", token);
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("Annex-Id", AuthProvider.Instance.AnnexId.ToString());
+            string json = JsonConvert.SerializeObject(objecToPost,
+                           Newtonsoft.Json.Formatting.None,
+                           new JsonSerializerSettings
+                           {
+                               NullValueHandling = NullValueHandling.Include,
+                               DateFormatString = "yyyy-MM-dd'T'HH:mm:ss"
+                           });
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+
+            IRestResponse response =  await client.ExecuteAsync(request);
+            return response;
+        }
+
         public static IRestResponse RestGet(string path,string? payload = null)
         {
             string token = AuthProvider.Instance?.AuthorizationToken;

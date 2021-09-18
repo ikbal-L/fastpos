@@ -136,6 +136,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
             if (NumericZone == null)
                 NumericZone = String.Empty;
 
+
             if (number.Equals("."))
             {
                 NumericZone = NumericZone.Contains(".") ? NumericZone : NumericZone + ".";
@@ -154,14 +155,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
                 var percent = Convert.ToDecimal(percentStr);
              if (percent < 0 || percent > 100)
                 {
-          /*          if (IsRunningFromXUnit)
-                    {
-                        throw new Exception("Invalid value for Percentagte");
-                    }
-                    else
-                    {*/
-                        ToastNotification.Notify("Invalid value for Percentagte", NotificationType.Warning);
-                  //  }
+                    ToastNotification.Notify("Invalid value for Percentagte", NotificationType.Warning);
                 }
                 else
                 {
@@ -198,11 +192,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
                         RelaodDeliveryMan();
                     }
                     break;
-                case ActionButton.BackOut:
-                    LoginViewModel loginvm = new LoginViewModel();
-                    loginvm.Parent = Parent;
-                    (Parent as Conductor<object>).ActivateItem(loginvm);
-                    break;
+                
 
              
             }

@@ -1,7 +1,5 @@
 ﻿using Caliburn.Micro;
 using FastPosFrontend.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
@@ -9,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -193,21 +190,5 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-    }
-
-    public class OrderFilter
-    {
-        [DataMember]
-        public DateTime? OrderTime { get; set; }
-        [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public OrderState? State { get; set; }
-        [DataMember]
-        [JsonProperty( ItemConverterType = typeof(StringEnumConverter))]
-        public IEnumerable<OrderState> States { get; set; }
-        [DataMember]
-        public long? DeliverymanId { get; set; }
-        [DataMember]
-        public IEnumerable<long>? DeliverymanIds { get; set; }
     }
 }

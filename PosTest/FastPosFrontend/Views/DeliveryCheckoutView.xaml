@@ -13,11 +13,12 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <Grid >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
+
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" >
+        <Grid Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
@@ -31,7 +32,7 @@
                  HorizontalContentAlignment="Stretch"
                     AlternationCount="2"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
+                
                 AutoGenerateColumns="False"
                 CanUserReorderColumns="False"
                 CanUserDeleteRows="False"
@@ -70,7 +71,9 @@
                 <Grid  Grid.Row="0"  Margin="15 5"  >
                     <Panel.Resources>
                         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-                            <Setter Property="Foreground" Value="LimeGreen" ></Setter>
+                            <Setter Property="Foreground" Value="Green" ></Setter>
+                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                            <Setter Property="FontSize" Value="18"></Setter>
                             
                         </Style>
                     </Panel.Resources>
@@ -160,7 +163,7 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Column="1" Margin=" 10 5" >
+        <Grid Grid.Column="0" Margin=" 10 5" >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"></RowDefinition>
@@ -298,8 +301,32 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TabControl Grid.Column="0">
+                <TabControl Grid.Column="1">
                     <TabItem Header="Orders" >
+                        <DataGrid Grid.Column="0" 
+                          ItemsSource="{Binding DeliveryOrders.View}" 
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False" 
+                          CanUserReorderColumns="False" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single" 
+                          SelectionUnit="FullRow" 
+                          SelectedItem="{Binding SelectedOrder}"
+                          CanUserResizeColumns="False"
+                          Padding="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}" Width="50"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding OrderTime,StringFormat='d'}" Width="*"/>
+
+                                <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}" Width="*"/>
+
+                                <DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}" Width="auto" />
+
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <TabItem Header="Paid Orders" >
                         <DataGrid Grid.Column="0" 
                           ItemsSource="{Binding DeliveryOrders.View}" 
                           AutoGenerateColumns="False" 
@@ -323,12 +350,30 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
+                    <TabItem Header="Payments">
+                        <DataGrid Grid.Column="0" 
+                          ItemsSource="{Binding DeliveryOrders.View}" 
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False" 
+                          CanUserReorderColumns="False" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single" 
+                          SelectionUnit="FullRow" 
+                          SelectedItem="{Binding SelectedOrder}"
+                          CanUserResizeColumns="False"
+                          Padding="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="50"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding OrderTime,StringFormat='d'}" Width="*"/>
 
-                    <TabItem Header="Payments"></TabItem>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
                 </TabControl>
 
 
-                <DataGrid Grid.Column="1" 
+                <DataGrid Grid.Column="0" 
                           ItemsSource="{Binding DeliverymanCollection.View}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 

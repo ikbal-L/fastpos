@@ -90,7 +90,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
                 }
                 var localpayment = SelectedPayment.Clone();
                 localpayment.Amount = payedAmount;
-                var res = StateManager.Save<Payment>(localpayment);
+                var res = StateManager.Save(localpayment);
                 if (res)
                 {
                     UpdateDatas();
@@ -101,7 +101,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
         public void DeletePayment()
         {
           
-            var res = StateManager.Delete<Payment>(SelectedPayment);
+            var res = StateManager.Delete(SelectedPayment);
             if (res)
             {
                 UpdateDatas();

@@ -473,11 +473,11 @@
                                         <materialdesign:PackIcon Kind="Delete" />
                                     </Button>
 
-                                    <!--<Button
+                                    <Button
 
                                     caliburn:Message.Attach="[Event Click] = [Action ConfigureProductDisplayLayout()]">
                                         <materialdesign:PackIcon Kind="Grid" />
-                                    </Button>-->
+                                    </Button>
                                 </ToolBar>
                             </ToolBarTray>
                         </Border>
