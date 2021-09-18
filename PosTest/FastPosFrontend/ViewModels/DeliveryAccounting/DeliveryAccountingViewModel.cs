@@ -221,7 +221,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
            if (ActiveTab == EnumActiveTab.NotPaidOrders)
             {
     
-               var res=   StateManager.Save<Payment>(new Payment() { Amount = payedAmount,Date=DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value });
+               var res=   StateManager.Save(new Payment() { Amount = payedAmount,Date=DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value });
                if (res)
                 {
                     NumericZone = "";
