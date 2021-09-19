@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
-
+using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
@@ -14,31 +15,16 @@ using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingVie
 
 namespace FastPosFrontend.ViewModels
 {
-    public class DeliveryCheckoutViewModel:PropertyChangedBase
+    [NavigationItem("Delivery Checkout", typeof(DeliveryCheckoutViewModel), isQuickNavigationEnabled:true)]
+    public class DeliveryCheckoutViewModel:LazyScreen
     {
         private ObservableCollection<Deliveryman> _deliverymanCollection;
         private ObservableCollection<Order> _ordersCollection;
         private ObservableCollection<Payment> _paymentsCollection;
         public DeliveryCheckoutViewModel()
         {
-            var data = StateManager.Get<Deliveryman>();
-            _deliverymanCollection = new ObservableCollection<Deliveryman>(data);
-            DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
-
-            var orderRepo = StateManager.GetService<Order, IOrderRepository>();
-            var paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
-
-            OrderState[] states = { OrderState.Delivered, OrderState.DeliveredPaid, OrderState.DeliveredReturned };
-
-            var deliverymanIds = data.Select(d => d.Id.Value);
-
-            var criterias = new OrderFilter() { States = states ,DeliverymanIds = deliverymanIds};
-            var orders = orderRepo.GetByCriterias(criterias);
-            var payments = paymentRepo.GetByCriterias(new PaymentFilter() { DeliverymanIds = deliverymanIds});
-
-            _ordersCollection = new ObservableCollection<Order>(orders);
-            DeliveryOrders = new CollectionViewSource() { Source = _ordersCollection };
-            DeliveryOrders.Filter += DeliveryOrders_Filter;
+            Setup();
+            OnReady();
         }
 
         private void DeliveryOrders_Filter(object sender, FilterEventArgs e)
@@ -186,6 +172,64 @@ namespace FastPosFrontend.ViewModels
             }
 
 
+        }
+
+        protected override void Setup()
+        {
+           
+
+           
+            var data = StateManager.Get<Deliveryman>();
+            _deliverymanCollection = new ObservableCollection<Deliveryman>(data);
+            DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
+
+            var orderRepo = StateManager.GetService<Order, IOrderRepository>();
+            var paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
+
+            OrderState[] states = { OrderState.Delivered, OrderState.DeliveredPaid, OrderState.DeliveredReturned };
+
+            var deliverymanIds = data.Select(d => d.Id.Value);
+
+            var criterias = new OrderFilter() { States = states, DeliverymanIds = deliverymanIds };
+            var orders = orderRepo.GetByCriteriasAsync(criterias);
+            var payments = paymentRepo.GetByCriteriasAsync(new PaymentFilter() { DeliverymanIds = deliverymanIds });
+
+            _data = new NotifyAllTasksCompletion(orders,
+               payments);
+
+
+            
+        }
+
+        public override void Initialize()
+        {
+            var orders = _data.GetResult<List<Order>>();
+            var payments = _data.GetResult<List<Payment>>();
+
+            _ordersCollection = new ObservableCollection<Order>(orders);
+            _paymentsCollection = new ObservableCollection<Payment>(payments);
+
+            DeliveryOrders = new CollectionViewSource() { Source = _ordersCollection };
+            DeliveryPayments = new CollectionViewSource() { Source = _paymentsCollection };
+
+            DeliveryOrders.Filter += DeliveryOrders_Filter;
+            DeliveryPayments.Filter += DeliveryPayments_Filter;
+        }
+
+        private void DeliveryPayments_Filter(object sender, FilterEventArgs e)
+        {
+            if (SelectedDeliveryman == null)
+            {
+                e.Accepted = false;
+                return;
+            }
+
+            if (e.Item is Payment payment && payment.DeliveryManId == SelectedDeliveryman.Id)
+            {
+                e.Accepted = true;
+                return;
+            }
+            e.Accepted = false;
         }
     }
 }

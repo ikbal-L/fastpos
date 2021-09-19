@@ -16,55 +16,58 @@
 
     <DataTemplate x:Key="CheckoutStatusBar" DataType="vm:CheckoutViewModel">
 
-        <StackPanel Orientation="Horizontal" >
-            <StackPanel.Resources>
-                <Style TargetType="md:Chip">
-                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                    <Setter Property="Foreground" Value="White"></Setter>
-                    <Setter Property="Margin" Value="0 0 5 0"></Setter>
-                    <Setter Property="IconBackground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
-                    <Setter Property="IconForeground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
-                    <Setter Property="IsDeletable" Value="True"></Setter>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Content}" Value="{x:Null}">
-                            <Setter Property="IconBackground" Value="DarkGray"/>
-                            <Setter Property="IconForeground" Value="LightGray"/>
-                            <Setter Property="IsDeletable" Value="False"/>
+   
+            <StackPanel Orientation="Horizontal" >
+                <StackPanel.Resources>
+                    <Style TargetType="md:Chip">
+                        <Setter Property="FontWeight" Value="Bold"></Setter>
+                        <Setter Property="Foreground" Value="White"></Setter>
+                        <Setter Property="Margin" Value="0 0 5 0"></Setter>
+                        <Setter Property="IconBackground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                        <Setter Property="IconForeground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
+                        <Setter Property="IsDeletable" Value="True"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Content}" Value="{x:Null}">
+                                <Setter Property="IconBackground" Value="DarkGray"/>
+                                <Setter Property="IconForeground" Value="LightGray"/>
+                                <Setter Property="IsDeletable" Value="False"/>
 
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Resources>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
 
 
-            <md:Chip
+                <md:Chip
                 Content="{Binding CurrentOrder.OrderNumber}"
                 ToolTip="رقم الطلب"
                 Icon="#"
                 IsDeletable="False"/>
-            <md:Chip
+                <md:Chip
                 Content="{Binding CurrentOrder.Customer.Name}"
                 ToolTip="اسم الزبون"
                 Icon="{md:PackIcon User}"
                 cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]">
 
-            </md:Chip>
-            <md:Chip
+                </md:Chip>
+                <md:Chip
                 Content="{Binding CurrentOrder.Table.Number}"
                 ToolTip="رقم الطاولة"
                 Icon="{md:PackIcon TableFurniture}"
                 cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Table')]"/>
-            <md:Chip
+                <md:Chip
                 Content="{Binding CurrentOrder.Waiter.Name}"
                 ToolTip="اسم النادل"
                 Icon="W"
                 cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Waiter')]"/>
-            <md:Chip
+                <md:Chip
                 Content="{Binding CurrentOrder.Deliveryman.Name}"
                 ToolTip="عامل التوصيل"
                 Icon="{md:PackIcon TruckFast}"
                 cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Deliveryman')]"/>
-        </StackPanel>
+            </StackPanel>
+          
+
     </DataTemplate>
 
     <DataTemplate x:Key="UserLoginBarDataTemplate" DataType="vm:LoginViewModel">

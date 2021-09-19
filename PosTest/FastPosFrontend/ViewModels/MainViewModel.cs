@@ -129,18 +129,7 @@ namespace FastPosFrontend.ViewModels
 
         protected override void OnActivate()
         {
-            //var splashScreen = new SplashScreenView();
-            //splashScreen.Show();
-            //System.Threading.Thread.Sleep(7000);
-            //Task.Factory.StartNew(() =>
-            //{
-            //    
-            //    this.Dispatcher.Invoke(() =>
-            //    {
-            //        DisplayRootViewFor<MainViewModel>();
-            //        splashScreen.Close();
-            //    });
-            //});
+
             MainDialog = new MainDialog();
             ActivateItem(MainDialog);
             LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};

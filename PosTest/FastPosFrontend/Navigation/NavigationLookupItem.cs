@@ -11,7 +11,7 @@ namespace FastPosFrontend.Navigation
         private int _index;
 
         public NavigationLookupItem(string title, Type target = null, bool keepAlive = false, bool isDefault = false,
-            bool isGroupingItem = false,string iconResKey="")
+            bool isGroupingItem = false,string iconResKey="",bool isQuickNavigationEnabled = false, string quickNavigationIconResKey = "")
         {
             _title = title;
             _target = target;
@@ -19,6 +19,8 @@ namespace FastPosFrontend.Navigation
             IsDefault = isDefault;
             IsGroupingItem = isGroupingItem;
             IconResKey = iconResKey;
+            IsQuickNavigationEnabled = isQuickNavigationEnabled;
+            QuickNavigationIconResKey = quickNavigationIconResKey;
         }
 
         public string Title
@@ -58,8 +60,15 @@ namespace FastPosFrontend.Navigation
 
         public string IconResKey { get; }
 
-        public static explicit operator NavigationLookupItem(NavigationItemAttribute configuration) =>
+        public bool IsQuickNavigationEnabled { get; }
+
+        public string QuickNavigationIconResKey  { get; }
+
+    public static explicit operator NavigationLookupItem(NavigationItemAttribute configuration) =>
             new NavigationLookupItem(configuration.Title, configuration.Target, configuration.KeepAlive,
-                isDefault: configuration.IsDefault,iconResKey:configuration.IconResKey);
+                isDefault: configuration.IsDefault,
+                iconResKey:configuration.IconResKey,
+                isQuickNavigationEnabled:configuration.IsQuickNavigationEnabled,
+                quickNavigationIconResKey:configuration.QuickNavigationIconResKey);
     }
 }

@@ -12,6 +12,10 @@ namespace FastPosFrontend.Navigation
         Type Target { get; }
         string Title { get; }
         string IconResKey { get; }
+
+        bool IsQuickNavigationEnabled { get; }
+
+        string QuickNavigationIconResKey { get; }
     }
 
     public enum NavigationItemLoadingStrategy

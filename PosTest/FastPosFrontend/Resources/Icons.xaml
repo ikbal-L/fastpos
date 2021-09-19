@@ -5161,15 +5161,40 @@
               Fill="White"
               Data="M5.5,24l0.8,1.5C6.4,25.8,6.8,26,7.2,26h17.7c0.4,0,0.7-0.2,0.9-0.5l0.8-1.5H5.5z" />
     </Canvas>
-
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="QNIF">
+        <GradientStop Color="#FFD14809" Offset="0"/>
+        <GradientStop Color="#FFF19F28" Offset="1"/>
+    </LinearGradientBrush>
     <md:PackIcon Kind="CashRegister" x:Key="CheckoutNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="CashRegister" x:Key="CheckoutQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"
+                >
+        
+    </md:PackIcon>
+
     <md:PackIcon Kind="Finance" x:Key="DeliveryAccountingNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="Finance" x:Key="DeliveryAccountingQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+    
+    <md:PackIcon Kind="Finance" x:Key="DeliveryCheckoutQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
     <md:PackIcon Kind="FileChart" x:Key="DailyExpenseReportsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="FileChart" x:Key="DailyExpenseReportsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
     <md:PackIcon Kind="FastFood" x:Key="CheckoutSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="FastFood" x:Key="CheckoutSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
+
     <md:PackIcon Kind="Shaker" x:Key="AdditivesSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="Shaker" x:Key="AdditivesSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
     <md:PackIcon Kind="ApplicationSettings" x:Key="GeneralSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="ApplicationSettings" x:Key="GeneralSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
     <md:PackIcon Kind="PrinterSettings" x:Key="PrintSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="PrinterSettings" x:Key="PrintSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
     <md:PackIcon Kind="AccountSettings" x:Key="UserSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+
+    
     <md:PackIcon Kind="BadgeAccount" x:Key="RoleSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
     <md:PackIcon Kind="BriefcaseAccount" x:Key="WaiterSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
     <md:PackIcon Kind="CardAccountDetails" x:Key="CustomerSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>

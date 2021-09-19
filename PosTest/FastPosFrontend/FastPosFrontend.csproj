@@ -314,6 +314,9 @@
     <Compile Include="Navigation\NavigationDrawerView.xaml.cs">
       <DependentUpon>NavigationDrawerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Navigation\NavigationGridView.xaml.cs">
+      <DependentUpon>NavigationGridView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Navigation\NavigationLookupItem.cs" />
     <Compile Include="Helpers\AppScreen.cs" />
     <Compile Include="Helpers\Associations.cs" />
@@ -600,6 +603,10 @@
       <DependentUpon>UserSettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="Navigation\NavigationDrawerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Navigation\NavigationGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

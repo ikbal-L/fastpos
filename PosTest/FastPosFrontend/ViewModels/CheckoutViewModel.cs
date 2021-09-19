@@ -41,7 +41,7 @@ namespace FastPosFrontend.ViewModels
     [NavigationItem(
         title: Constants.Navigation.Checkout, 
         target: typeof(CheckoutViewModel),"",
-        keepAlive: true, isDefault: true)]
+        keepAlive: true, isDefault: true,isQuickNavigationEnabled:true)]
     public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>,ISettingsListener
     {
         #region Private fields
@@ -243,6 +243,18 @@ namespace FastPosFrontend.ViewModels
             
         }
 
+        private void SetupEmbeddedCommandBar()
+        {
+            EmbeddedCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutLeftCommandBar");
+
+        }
+
+        private void SetupEmbeddedStatusBar()
+        {
+            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutStatusBar");
+
+        }
+
         protected override void Setup()
         {
             var categories = StateManager.GetAsync<Category>();
@@ -252,18 +264,7 @@ namespace FastPosFrontend.ViewModels
                 unprocessedOrders);
         }
 
-        private void SetupEmbeddedCommandBar()
-        {
-            EmbeddedCommandBar = new EmbeddedCommandBarViewModel(this,"CheckoutLeftCommandBar");
-            
-        }
-
-        private void SetupEmbeddedStatusBar()
-        {
-            EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutStatusBar");
-            
-        }
-
+       
         public async override void Initialize()
         {
 

@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class OrderFilter
+    public class OrderFilter : Filter
     {
         [DataMember]
         public DateTime? OrderTime { get; set; }
@@ -21,5 +21,20 @@ namespace FastPosFrontend.ViewModels
         public long? DeliverymanId { get; set; }
         [DataMember]
         public IEnumerable<long>? DeliverymanIds { get; set; }
+    }
+
+    public abstract class Filter
+    {
+        [DataMember]
+        public int? PageSize { get; set; }
+        [DataMember]
+        public int? PageIndex { get; set; }
+        [DataMember]
+        public string? OrderBy { get; set; }
+        [DataMember]
+        public bool? AscendingOrder { get; set; }
+        [DataMember]
+        public bool? DescendingOrder { get; set; }
+
     }
 }

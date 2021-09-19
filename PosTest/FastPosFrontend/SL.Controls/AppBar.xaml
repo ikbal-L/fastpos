@@ -9,7 +9,8 @@
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance vm:MainViewModel}">
+             d:DataContext="{d:DesignInstance vm:MainViewModel}"
+             xmlns:navigation="clr-namespace:FastPosFrontend.Navigation">
     <md:ColorZone
                                     Padding="10"
                                     DockPanel.Dock="Top">
@@ -64,100 +65,145 @@
                     </Style>
                 </ToggleButton.Style>
             </ToggleButton>
-            <md:PopupBox
+
+            <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
+
+                <md:PopupBox
+                                            
+                                            PlacementMode="BottomAndAlignCentres"
+                                            StaysOpen="False"
+                    >
+                    <md:PopupBox.Style>
+                        <Style TargetType="md:PopupBox">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </md:PopupBox.Style>
+
+                    <md:PopupBox.ToggleContent>
+                        <md:PackIcon Kind="Apps" Width="30" Height="30">
+
+                            <md:PackIcon.Style>
+                                <Style TargetType="md:PackIcon">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                            <Setter Property="Foreground" Value="WhiteSmoke" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </md:PackIcon.Style>
+
+                        </md:PackIcon>
+                    </md:PopupBox.ToggleContent>
+                    <StackPanel Margin="10 0">
+
+
+                        <navigation:NavigationGridView>
+                            
+                        </navigation:NavigationGridView>
+
+                    </StackPanel>
+                </md:PopupBox>
+
+                <md:PopupBox
                                             DockPanel.Dock="Right"
                                             PlacementMode="BottomAndAlignRightEdges"
                                             StaysOpen="False" Margin="0 0 20 0">
-                <md:PopupBox.Style>
-                    <Style TargetType="md:PopupBox">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
-                                <Setter Property="Foreground" Value="WhiteSmoke" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </md:PopupBox.Style>
-                <StackPanel Margin="10 0">
+                    <md:PopupBox.Style>
+                        <Style TargetType="md:PopupBox">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                    <Setter Property="Foreground" Value="WhiteSmoke" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </md:PopupBox.Style>
+                    <StackPanel Margin="10 0">
 
 
-                    <Button x:Name="CloseAppWindowButton"
+                        <Button x:Name="CloseAppWindowButton"
                                                         Command="{x:Static SystemCommands.CloseWindowCommand}"
                                                         Content="Close" FontSize="20" />
-                    <Button x:Name="MaximizeAppWindowButton"
+                        <Button x:Name="MaximizeAppWindowButton"
                                                         Command="{x:Static SystemCommands.MaximizeWindowCommand}"
                                                         Content="Maximize"
                                                         FontSize="20">
-                        <Button.Style>
-                            <Style TargetType="Button"
+                            <Button.Style>
+                                <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger
                                                                     Binding="{Binding ElementName=AppMainViewWindow,Path=WindowState}"
                                                                     Value="Maximized">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                    <Button x:Name="MinimizeAppWindowButton"
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="MinimizeAppWindowButton"
                                                         Command="{x:Static SystemCommands.MinimizeWindowCommand}"
                                                         Content="Minimize"
                                                         FontSize="20">
-                        <Button.Style>
-                            <Style TargetType="Button"
+                            <Button.Style>
+                                <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger
                                                                     Binding="{Binding ElementName=AppMainViewWindow,Path=WindowState}"
                                                                     Value="Minimized">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                    <Button x:Name="RestoreDownAppWindowButton"
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="RestoreDownAppWindowButton"
                                                         Command="{x:Static SystemCommands.RestoreWindowCommand}"
                                                         Content="Restore Down"
                                                         FontSize="20">
-                        <Button.Style>
-                            <Style TargetType="Button"
+                            <Button.Style>
+                                <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger
                                                                     Binding="{Binding ElementName=AppMainViewWindow,Path=WindowState}"
                                                                     Value="Normal">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                    <Separator
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Separator
                                                     Visibility="{Binding ElementName=LogoutAppWindowButton,Path=Visibility}" />
-                    <Button x:Name="LogoutAppWindowButton"
+                        <Button x:Name="LogoutAppWindowButton"
                                                         cal:Message.Attach="Logout"
                                                         Content="Logout" FontWeight="SemiBold"
                                                         FontSize="20">
-                        <Button.Style>
-                            <Style TargetType="Button"
+                            <Button.Style>
+                                <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsLoggedIn}"
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                              Value="false">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </StackPanel>
-            </md:PopupBox>
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </md:PopupBox>
+            </StackPanel>
 
             <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}">
                 <ContentControl.Style>

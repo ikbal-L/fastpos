@@ -22,7 +22,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("Checkout settings",target:typeof(CheckoutSettingsViewModel),"",groupName:"Settings")]
+    [NavigationItem("Checkout settings",target:typeof(CheckoutSettingsViewModel),groupName:"Settings",isQuickNavigationEnabled:true)]
     public class CheckoutSettingsViewModel : LazyScreen,ISettingsController
     {
         private bool _IsProductDetailsDrawerOpen;

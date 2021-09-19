@@ -12,6 +12,7 @@ namespace FastPosFrontend.ViewModels
     public class AppNavigationConductor<T> : Conductor<T>, IAppNavigationConductor where T : class
     {
         private BindableCollection<NavigationLookupItem> _appNavigationItems;
+        private BindableCollection<NavigationLookupItem> _quickNavigationItems;
         private NavigationLookupItem _selectedNavigationItem;
         private AppScreen _activeScreen;
 
@@ -36,6 +37,12 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _appNavigationItems, value);
         }
 
+        public BindableCollection<NavigationLookupItem> QuickNavigationItems
+        {
+            get => _quickNavigationItems;
+            set => Set(ref _quickNavigationItems, value);
+        }
+
         public AppScreen ActiveScreen
         {
             get => _activeScreen;
@@ -48,9 +55,12 @@ namespace FastPosFrontend.ViewModels
         {
             var items = LoadSingleItems();
             var groupItems = LoadGroupItems();
+            var quickNavitems = LoadQuickNavigationItems();
             items.AddRange(groupItems);
             var result = items.AssignIndexes();
+            var quickNavResult = quickNavitems.AssignIndexes();
             AppNavigationItems = new BindableCollection<NavigationLookupItem>(result);
+            QuickNavigationItems = new BindableCollection<NavigationLookupItem>(quickNavResult);
         }
 
         /// <summary>
@@ -86,6 +96,16 @@ namespace FastPosFrontend.ViewModels
                             grouping.Select(Selector))
                     }).ToList();
             return groupItems;
+        }
+
+        protected virtual List<NavigationLookupItem> LoadQuickNavigationItems()
+        {
+            var items = GetAppliedAttributes<NavigationItemAttribute>()
+                .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy 
+                                    
+                                    && attribute.IsQuickNavigationEnabled)
+                .Select(attribute => (NavigationLookupItem)attribute).ToList();
+            return items;
         }
 
         private NavigationLookupItem Selector(NavigationItemAttribute attribute)

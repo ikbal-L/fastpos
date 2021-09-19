@@ -12,7 +12,9 @@ namespace FastPosFrontend.Navigation
             NavigationItemLoadingStrategy loadingStrategy = NavigationItemLoadingStrategy.Lazy
             , Type parentNavigationItem = null, string groupName = "", 
             bool keepAlive = false, 
-            bool isDefault = false)
+            bool isDefault = false,
+            bool isQuickNavigationEnabled = false, 
+            string quickNavigationIconResKey = "")
         {
             Title = title;
             Target = target;
@@ -21,6 +23,7 @@ namespace FastPosFrontend.Navigation
             GroupName = groupName;
             KeepAlive = keepAlive;
             IsDefault = isDefault;
+            IsQuickNavigationEnabled = isQuickNavigationEnabled;
 
             var typeName = target.Name.Replace("ViewModel", "");
 
@@ -33,7 +36,16 @@ namespace FastPosFrontend.Navigation
                 IconResKey = iconResKey;
             }
 
-            
+            if (string.IsNullOrEmpty(quickNavigationIconResKey))
+            {
+                QuickNavigationIconResKey = $"{typeName}QuickNavigationItemIcon";
+            }
+            else
+            {
+                IconResKey = quickNavigationIconResKey;
+            }
+
+
 
             var formattedTitle = string.Join(" ", Regex.Split(typeName, "([A-Z][a-z]+)"));
             
@@ -54,6 +66,10 @@ namespace FastPosFrontend.Navigation
         public bool IsDefault { get; }
 
         public string IconResKey { get; }
+
+        public bool IsQuickNavigationEnabled { get; }
+
+        public string QuickNavigationIconResKey { get; }
     }
 
 }
