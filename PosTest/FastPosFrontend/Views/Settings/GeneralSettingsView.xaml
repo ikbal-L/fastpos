@@ -20,6 +20,7 @@
                       Text="{Binding Settings.RestaurantName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                       VerticalScrollBarVisibility="Auto"
                       md:TextFieldAssist.TextFieldCornerRadius="0"
+                      
             ></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">

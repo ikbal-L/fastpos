@@ -38,7 +38,7 @@ namespace ServiceLib.Service
 
         public virtual int Save(TState state, out IEnumerable<string> errors)
         {
-            return GenericRest.SaveThing<TState>(state, RestApi.Resource<TState>(EndPoint.SAVE),out errors).status;
+            return GenericRest.SaveThing(state, RestApi.Resource<TState>(EndPoint.SAVE),out errors).status;
         }
 
         public virtual (int status, IEnumerable<TState> state, IEnumerable<string> errors) Save(IEnumerable<TState> state)
@@ -119,7 +119,7 @@ namespace ServiceLib.Service
         public List<TState> GetByCriterias(object criterias)
         {
 
-            var result = GenericRest.RestPost(criterias, RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS));
+            var result = GenericRest.RestPost(criterias, RestApi.Resource<TState>(EndPoint.GET_ALL_BY_CRITERIAS));
             if (result.IsSuccessful)
             {
                 return JsonConvert.DeserializeObject<List<TState>>(result.Content);
@@ -130,7 +130,7 @@ namespace ServiceLib.Service
         public async Task<List<TState>> GetByCriteriasAsync(object criterias)
         {
 
-            var result =await GenericRest.RestPostAsync(criterias, RestApi.Resource<Order>(EndPoint.GET_ALL_BY_CRITERIAS));
+            var result =await GenericRest.RestPostAsync(criterias, RestApi.Resource<TState>(EndPoint.GET_ALL_BY_CRITERIAS));
             if (result.IsSuccessful)
             {
                 return JsonConvert.DeserializeObject<List<TState>>(result.Content);

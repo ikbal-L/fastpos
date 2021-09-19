@@ -18,7 +18,7 @@
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
         <converters:StaticResourceConverter x:Key="StaticResourceConverter" />
     </UserControl.Resources>
-    <ListBox ItemsSource="{Binding QuickNavigationItems}" SelectedItem="{Binding SelectedNavigationItem}">
+    <ListBox ItemsSource="{Binding QuickNavigationItems}" SelectedItem="{Binding SelectedNavigationItem}" >
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <UniformGrid Columns="3" Rows="3"></UniformGrid>
@@ -40,18 +40,10 @@
                         HorizontalContentAlignment="Center"
                         HorizontalAlignment="Center"
                         ToolTip="{Binding Title}"
-                        Foreground="#2f2f2f">
+                        Foreground="#2f2f2f"
+                        Opacity="0.85">
 
                     </ContentControl>
-                    <!--<TextBlock
-                                                                   Grid.Column="1"
-                                                                   HorizontalAlignment="Center"
-                                                                   TextAlignment="Center"
-                                                                   VerticalAlignment="Center"
-                                                                   Text="{Binding Title}"
-                                                                   Margin="5 0"
-                                                                   FontSize="16"
-                                                                   Style="{StaticResource MaterialDesignButtonTextBlock}" />-->
                 </StackPanel>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

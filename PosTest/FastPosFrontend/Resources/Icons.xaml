@@ -5173,8 +5173,10 @@
 
     <md:PackIcon Kind="Finance" x:Key="DeliveryAccountingNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
     <md:PackIcon Kind="Finance" x:Key="DeliveryAccountingQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
-    
-    <md:PackIcon Kind="Finance" x:Key="DeliveryCheckoutQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
+    <md:PackIcon Kind="TruckDelivery" x:Key="DeliveryCheckoutQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+
+    <md:PackIcon Kind="CashRefund" x:Key="OrderRefundQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
 
     <md:PackIcon Kind="FileChart" x:Key="DailyExpenseReportsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
     <md:PackIcon Kind="FileChart" x:Key="DailyExpenseReportsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>

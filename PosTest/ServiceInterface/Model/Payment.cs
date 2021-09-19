@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ServiceInterface.Model
@@ -23,10 +24,15 @@ namespace ServiceInterface.Model
        public DateTime Date { get; set; }
         [DataMember]
         public long? Id { get; set; }
+
         [DataMember]
         public long CashOperationId;
+
         [DataMember]
-        public long DeliveryManId;
+        public long DeliveryManId { get; set; }
+
+        [DataMember]
+        public List<long> OrderIds { get; set; }
 
     }
-}
+}   

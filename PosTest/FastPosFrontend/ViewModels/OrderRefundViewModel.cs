@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.Navigation;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
@@ -14,26 +15,17 @@ using Parser = FastPosFrontend.Helpers.Parser;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class OrderRefundViewModel:PropertyChangedBase
+    [NavigationItem("Order Refund", typeof(OrderRefundViewModel), isQuickNavigationEnabled: true)]
+    public class OrderRefundViewModel:LazyScreen
     {
         private readonly Parser _parser;
-        public OrderRefundViewModel(CheckoutViewModel parent)
+        public OrderRefundViewModel()
         {
             _parser = Parser.Instance;
-            var repo = StateManager.GetService<Order, IOrderRepository>();
-            Dictionary<string, string> criterias = new Dictionary<string, string>();
-           
-            //criterias.Add(nameof(Order.OrderTime), DateTime.Today.ToString("yyyy-MM-dd'T'HH:mm:ss"));
-            //criterias.Add(nameof(Order.State), OrderState.Payed.ToString());
-
-            var criteria = new OrderFilter() { OrderTime = DateTime.Today, State = OrderState.Payed };
-            var paid = repo.GetByCriterias(criteria);
-            _paidOrdersOfTheDay = new ObservableCollection<Order>(paid);
-            PaidOrdersOfTheDay = new CollectionViewSource() { Source = _paidOrdersOfTheDay};
-            PaidOrdersOfTheDay.Filter += PaidOrdersOfTheDay_Filter;
-            Parent = parent;
             FilterCommand = new DelegateCommandBase(ApplySearchFilter);
             RefundOrderCommand = new DelegateCommandBase(RefundOrder,CanRefundOrder);
+            Setup();
+            OnReady();
         }
 
         private void PaidOrdersOfTheDay_Filter(object sender, FilterEventArgs e)
@@ -79,15 +71,6 @@ namespace FastPosFrontend.ViewModels
         public ICommand FilterCommand { get; set; }
 
         public ICommand RefundOrderCommand { get; set; }
-
-        private CheckoutViewModel _parent;
-
-        public CheckoutViewModel Parent
-        {
-            get { return _parent; }
-            set { _parent = value; }
-        }
-
 
         public void AddPaidOrder(Order order)
         {
@@ -190,5 +173,23 @@ namespace FastPosFrontend.ViewModels
 
         }
 
+        protected override void Setup()
+        {
+            var repo = StateManager.GetService<Order, IOrderRepository>();
+            var criteria = new OrderFilter() { OrderTime = DateTime.Today, State = OrderState.Payed };
+            var paid = repo.GetByCriteriasAsync(criteria);
+
+            _data = new NotifyAllTasksCompletion(paid);
+
+            
+        }
+
+        public override void Initialize()
+        {
+            var paid = _data.GetResult<List<Order>>();
+            _paidOrdersOfTheDay = new ObservableCollection<Order>(paid);
+            PaidOrdersOfTheDay = new CollectionViewSource() { Source = _paidOrdersOfTheDay };
+            PaidOrdersOfTheDay.Filter += PaidOrdersOfTheDay_Filter;
+        }
     }
 }

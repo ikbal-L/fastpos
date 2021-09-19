@@ -78,8 +78,8 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
 
             if (_SelectedDeliveryman != null)
             {
-                   var res = StateManager.GetService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, _SelectedDeliveryman.Id.Value);
-                    Orders = res != null ? new ObservableCollection<Order>(res) : new ObservableCollection<Order>();
+                 var res = StateManager.GetService<Order, IOrderRepository>().GetOrderByStates(new string[] { OrderState.Delivered.ToString() }, _SelectedDeliveryman.Id.Value);
+                 Orders = res != null ? new ObservableCollection<Order>(res) : new ObservableCollection<Order>();
                  GetDeliveryManPayment();
                  NotifyOfAllPropertyChange();
 

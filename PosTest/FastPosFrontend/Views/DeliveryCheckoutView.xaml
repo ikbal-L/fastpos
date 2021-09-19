@@ -69,12 +69,16 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid  Grid.Row="0"  Margin="15 5"  >
+                <Grid  Grid.Row="0"  Margin="15 0"  Background="Black">
                     <Panel.Resources>
                         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-                            <Setter Property="Foreground" Value="Green" ></Setter>
+                            <Setter Property="Foreground" Value="#26ff26" ></Setter>
+                            <Setter Property="BorderBrush" Value="#26ff26" ></Setter>
+                          
                             <Setter Property="FontWeight" Value="Bold"></Setter>
                             <Setter Property="FontSize" Value="18"></Setter>
+                            <Setter Property="materialDesign:HintAssist.Background" Value="Black" ></Setter>
+                            
                             
                         </Style>
                     </Panel.Resources>
@@ -88,25 +92,40 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBox 
-                             materialDesign:HintAssist.Hint="Required amount" Margin="5"
+                    <Button Style="{StaticResource ContainerButtonStyle}" caliburn:Message.Attach="[Event Click] = [Action CopyTotalPaymentField()]" >
+                        <TextBox 
+                             materialDesign:HintAssist.Hint="Total" Margin="10 10 10 15"
                              materialDesign:HintAssist.IsFloating="True"
-                             Text="2500"
-                             IsReadOnly="True" Grid.Column="0"/>
-                    <TextBox 
-                             materialDesign:HintAssist.Hint="Payed amount"
-                             materialDesign:HintAssist.IsFloating="True"
-                             Margin="5"
-                             Text="360"
-                             IsReadOnly="True" Grid.Column="1"/>
+                             Text="{Binding Total,Mode=OneWay}"
+                             IsReadOnly="True" Grid.Column="0"
+                        materialDesign:HintAssist.Background="Black"
+                        materialDesign:HintAssist.Foreground="#26ff26"
+                        BorderBrush="#26ff26"
+                        FontFamily="{StaticResource DigitalFontFamily}"
+                        FontSize="28"
+                        Padding="10"
+                        Focusable="False"
+                        />
+                    </Button>
+
 
                     <TextBox 
                              materialDesign:HintAssist.Hint="Payment amount"
                              materialDesign:HintAssist.IsFloating="True"
-                             Margin="5"
-                             Text="360"
+                             Margin="10 0 10 10"
+                             Text="{Binding NumericZone}"
                              IsReadOnly="True"
+
                         Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                        materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                        materialDesign:TextFieldAssist.LeadingIcon="Dollar"
+                        materialDesign:TextFieldAssist.LeadingIconSize="30"
+                        materialDesign:HintAssist.Background="Black"
+                        materialDesign:HintAssist.Foreground="#26ff26"
+                        BorderBrush="#26ff26"
+                        FontFamily="{StaticResource DigitalFontFamily}"
+                        FontSize="32"
+                        Padding="10"
                         />
 
 
@@ -315,6 +334,18 @@
                           SelectedItem="{Binding SelectedOrder}"
                           CanUserResizeColumns="False"
                           Padding="0">
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
+                                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                            
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}" Width="50"/>
                                 <DataGridTextColumn Header="Date" Binding="{Binding OrderTime,StringFormat='d'}" Width="*"/>
@@ -329,7 +360,7 @@
                     </TabItem>
                     <TabItem Header="Paid Orders" >
                         <DataGrid Grid.Column="0" 
-                          ItemsSource="{Binding DeliveryOrders.View}" 
+                          ItemsSource="{Binding PaidDeliveryOrders.View}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 
@@ -360,12 +391,12 @@
                           IsReadOnly="True" 
                           SelectionMode="Single" 
                           SelectionUnit="FullRow" 
-                          SelectedItem="{Binding SelectedOrder}"
+                          
                           CanUserResizeColumns="False"
-                          Padding="0">
+                          Padding="0" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="50"/>
-                                <DataGridTextColumn Header="Date" Binding="{Binding OrderTime,StringFormat='d'}" Width="*"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding Date,StringFormat='d'}" Width="*"/>
 
                                 <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
                             </DataGrid.Columns>
@@ -384,7 +415,18 @@
                           SelectionMode="Single" 
                           SelectionUnit="FullRow"
                           SelectedItem="{Binding SelectedDeliveryman}"
-                          Margin="5 52 0 0">
+                          Margin="5 48 0 0">
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
+                                    <Setter Property="FontWeight" Value="Bold"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
                     <DataGrid.Columns>
 
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*"/>

@@ -328,8 +328,6 @@ namespace FastPosFrontend.ViewModels
             TakeAwayViewModel = new TakeawayViewModel(this);
             DeliveryViewModel = new DeliveryViewModel(this);
             WaitingViewModel = new WaitingViewModel(this);
-            OrderRefundViewModel = new OrderRefundViewModel(this);
-            DeliveryCheckoutViewModel = new DeliveryCheckoutViewModel();
             CustomerViewModel = new CustomerViewModel(this);
             TablesViewModel = new TablesViewModel(this);
             CurrentCategory = Categories[0];
@@ -981,10 +979,7 @@ namespace FastPosFrontend.ViewModels
                 OrderRefundViewModel.AddPaidOrder(CurrentOrder);
             }
 
-            if (CurrentOrder.State == OrderState.Delivered)
-            {
-                DeliveryCheckoutViewModel.AddDeliveredOrder(CurrentOrder);
-            }
+            
 
             var result = OrdersCollectionObserver?.UnObserve(CurrentOrder);
 
