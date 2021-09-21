@@ -99,7 +99,7 @@ namespace ConsoleApp
             var repo1 = new AdditiveBaseRepository();
             var repo2 = new ProductRepository();
             var repo3 = new CategoryBaseRepository();
-            var repo4 = new OrderBaseRepository();
+            var repo4 = new OrderRepository();
             //StateManager.Instance.Manage<Additive>(repo1).Manage<Product>(repo2);
 
             StateManager.Instance.Manage(repo1).Manage(repo2).Manage(repo3).Manage(repo4);

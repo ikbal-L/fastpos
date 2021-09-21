@@ -104,4 +104,14 @@ namespace ServiceInterface.Interface
     {
 
     }
+
+    public interface ICashRegisterExpenseRepository : IRepository<CashRegisterExpense, long>
+    {
+        List<string> GetEmployees();
+    }
+
+    public interface IExpenseDescriptionRepository: IRepository<ExpenseDescription, long>
+    {
+
+    }
 }

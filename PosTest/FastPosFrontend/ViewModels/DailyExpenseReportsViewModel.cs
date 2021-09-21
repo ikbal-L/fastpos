@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Linq;
@@ -44,16 +45,17 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            _reports = StateManager.Get<DailyExpenseReport>();
-
+            var data = StateManager.Get<DailyExpenseReport>();
+            _reports = new ObservableCollection<DailyExpenseReport>(data);
+            
             Reports = (CollectionView)CollectionViewSource.GetDefaultView(_reports);
             Reports.Filter += FilterReportsByIssuedDate;
-              
+
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateYear)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateMonth)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.CashPaymentsTotal)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.DeliveryPaymentsTotal)));
-
+            Reports.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(DailyExpenseReport.IssuedDate),System.ComponentModel.ListSortDirection.Descending));
             Report =  _reports?.FirstOrDefault(r => r.IssuedDate == DateTime.Today.Date);
             if (Report!= null)
             {
@@ -114,7 +116,7 @@ namespace FastPosFrontend.ViewModels
             set { Set(ref _selectedTabIndex ,value); }
         }
 
-        private ICollection<DailyExpenseReport> _reports;
+        private ObservableCollection<DailyExpenseReport> _reports;
 
         //public ObservableCollection<DailyExpenseReport> Reports { get; set; }
 
@@ -128,7 +130,7 @@ namespace FastPosFrontend.ViewModels
             get { return _userSearchQuery; }
             set { 
                 Set(ref _userSearchQuery, value);
-                Reports.Refresh();
+                Reports?.Refresh();
             }
         }
 
@@ -144,6 +146,9 @@ namespace FastPosFrontend.ViewModels
             {
                 Report = report;
                 IsReportGenerated = true;
+                _reports.Add(report);
+                Reports.Refresh();
+
             });
 
             parent?.OpenDialog(vm).OnClose(() =>

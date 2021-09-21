@@ -109,11 +109,13 @@
     <Compile Include="Model\Additive.cs" />
     <Compile Include="Model\Annex.cs" />
     <Compile Include="Model\CashOperation.cs" />
+    <Compile Include="Model\CashRegisterExpense.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\DailyExpenseReport.cs" />
     <Compile Include="Model\DebtPayement.cs" />
     <Compile Include="Model\Discard.cs" />
+    <Compile Include="Model\ExpenseDescription.cs" />
     <Compile Include="Model\Ingredient.cs" />
     <Compile Include="Model\IState.cs" />
     <Compile Include="Model\Order.cs" />

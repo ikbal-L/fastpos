@@ -1,0 +1,195 @@
+﻿<UserControl x:Class="FastPosFrontend.Views.CashOutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"    
+             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:CashOutViewModel}">
+    <Grid Width="800" Margin="10">
+     
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ComboBox Grid.Row="0" 
+                          IsEditable="True" 
+                          FontSize="18"
+                          ItemsSource="{Binding Employees}"
+                          SelectedItem="{Binding SelectedEmployee,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                          IsSynchronizedWithCurrentItem="True"
+                          Text="{Binding SelectedEmployee}"
+                          
+                          ></ComboBox>
+                <Grid Grid.Row="1" >
+
+
+                    <TextBox Grid.Column="0"  FontSize="18" Margin="0 20 0 0" Text="{Binding AddedExpenseDescription,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Button Grid.Column="1" 
+                            Style="{StaticResource MaterialDesignToolButton}" 
+                            Content="{materialDesign:PackIcon Kind=PlusBold,Size=25}"  
+                            HorizontalAlignment="Right"
+                            Command="{Binding AddExpenseDescriptionCommand}"></Button>
+                </Grid>
+                <ListBox Grid.Row="2" Margin="0 20 0 0" 
+                     ItemsSource="{Binding ExpenseDescriptions}" 
+                     SelectedItem="{Binding SelectedExpenditureDescription}" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel >
+                                <Button Content="Delete"  DockPanel.Dock="Right" Command="{Binding RelativeSource={RelativeSource AncestorType=local:CashOutView},Path=DataContext.RemoveExpenseDescriptionCommand}">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+                                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <TextBlock Text="{Binding Description}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontWeight" Value="DemiBold"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                    <!--<Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}"/>-->
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBox.Style>
+                        <Style TargetType="ListBox" BasedOn="{StaticResource MaterialDesignListBox}">
+                            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+
+                </ListBox>
+            </Grid>
+
+            <Grid  Grid.Column="1" Margin="10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid  Grid.Row="0"   Background="Black">
+                    <Panel.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                            <Setter Property="Foreground" Value="#26ff26" ></Setter>
+                            <Setter Property="BorderBrush" Value="#26ff26" ></Setter>
+
+                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                            <Setter Property="FontSize" Value="18"></Setter>
+                            <Setter Property="materialDesign:HintAssist.Background" Value="Black" ></Setter>
+
+
+                        </Style>
+                    </Panel.Resources>
+
+                    <TextBox 
+                             materialDesign:HintAssist.Hint="Payment amount"
+                             materialDesign:HintAssist.IsFloating="True"
+                             Margin="10 15"
+                             Text="{Binding ExpenditureAmount}"
+                             IsReadOnly="True"
+
+                        Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                        materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                        materialDesign:TextFieldAssist.LeadingIcon="Dollar"
+                        materialDesign:TextFieldAssist.LeadingIconSize="30"
+                        materialDesign:HintAssist.Background="Black"
+                        materialDesign:HintAssist.Foreground="#26ff26"
+                        BorderBrush="#26ff26"
+                        FontFamily="{StaticResource DigitalFontFamily}"
+                        FontSize="24"
+                        Padding="10"
+                        
+                        />
+                </Grid>
+                <UniformGrid Grid.Row="1" Columns="3" Rows="4"  VerticalAlignment="Top"  HorizontalAlignment="Center" Margin="0 20 0 0">
+
+                    <Panel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                            <!--<Setter Property="MaxWidth" Value="{x:Static sys:Double.MaxValue}"/>
+                        <Setter Property="MaxHeight" Value="{x:Static sys:Double.MaxValue}"/>-->
+                            <Setter Property="Width" Value="90"/>
+                            <Setter Property="Height" Value="60"/>
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="VerticalAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="materialDesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
+
+
+
+                        </Style>
+                    </Panel.Resources>
+
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_1}"   Margin="1" Content="1" Grid.Column="0" Grid.Row="0"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_2}"   Margin="2" Content="2" Grid.Column="1" Grid.Row="0"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_3}"   Margin="2" Content="3" Grid.Column="2" Grid.Row="0"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_4}"   Margin="2" Content="4" Grid.Column="0" Grid.Row="1"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_5}"   Margin="2" Content="5" Grid.Column="1" Grid.Row="1"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_6}"   Margin="2" Content="6" Grid.Column="2" Grid.Row="1"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_7}"   Margin="2" Content="7" Grid.Column="0" Grid.Row="2"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_8}"   Margin="2" Content="8" Grid.Column="1" Grid.Row="2"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_9}"   Margin="2" Content="9" Grid.Column="2" Grid.Row="2"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_DOT}"   Margin="2" Content="." Grid.Column="0" Grid.Row="3"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_0}"   Margin="2" Content="0" Grid.Column="1" Grid.Row="3"/>
+                    <Button  Command="{Binding NumericKeyboardCommand}" CommandParameter="{x:Static vm:NumericKeypad.NUM_PAD_BACKSPACE}"   Margin="2" Content="{materialDesign:PackIcon BackspaceOutline,30}" Grid.Column="2" Grid.Row="3"/>
+                </UniformGrid>
+            </Grid>
+        </Grid>
+
+        <UniformGrid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Rows="1"  Margin="10 0 10 10">
+            <Button Content="{materialDesign:PackIcon Kind=ContentSave,Size=30}" 
+                    Margin="5" FontSize="16" Width="100" Height="40"
+                    Command="{Binding SaveCommand}"/>
+            <Button Content="{materialDesign:PackIcon Kind=Cancel,Size=30}" 
+                    FontSize="16" 
+                    Style="{StaticResource MaterialDesignFlatButton}" 
+                    Margin="5" Width="100" Height="40"
+                    Command="{Binding CancelCommand }"/>
+        </UniformGrid>
+    </Grid>
+    
+</UserControl>

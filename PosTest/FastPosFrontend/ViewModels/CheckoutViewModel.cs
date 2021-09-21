@@ -638,12 +638,12 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _splitViewModel, value);
         }
 
-        private OrderRefundViewModel _orderRefundViewModel;
+        private CashOutViewModel _cashOutViewModel;
 
-        public OrderRefundViewModel OrderRefundViewModel
+        public CashOutViewModel CashOutViewModel
         {   
-            get { return _orderRefundViewModel; }
-            set { Set(ref _orderRefundViewModel, value); }
+            get { return _cashOutViewModel; }
+            set { Set(ref _cashOutViewModel, value); }
         }
 
         private DeliveryCheckoutViewModel _deliveryCheckoutViewModel;
@@ -974,12 +974,6 @@ namespace FastPosFrontend.ViewModels
             }
 
             Orders.Remove(CurrentOrder);
-            if (CurrentOrder.State == OrderState.Payed)
-            {
-                OrderRefundViewModel.AddPaidOrder(CurrentOrder);
-            }
-
-            
 
             var result = OrdersCollectionObserver?.UnObserve(CurrentOrder);
 
@@ -2297,6 +2291,26 @@ namespace FastPosFrontend.ViewModels
             
             SplitViewModel.SplittedOrder.OrderNumber = orderCount;
             orderCount++;
+        }
+
+        public void AddExpense()
+        {
+            CashOutViewModel = new CashOutViewModel();
+            var parent = this.Parent as MainViewModel;
+            parent?.OpenDialog(CashOutViewModel)
+                .OnClose(() =>
+                {
+                    if (CashOutViewModel != null)
+                    {
+
+                        CashOutViewModel = null;
+                    }
+                });
+        }
+
+        public void Close()
+        {
+
         }
     }
 

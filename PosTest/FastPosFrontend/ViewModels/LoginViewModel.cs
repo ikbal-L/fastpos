@@ -67,6 +67,10 @@ namespace FastPosFrontend.ViewModels
 
         [Import(typeof(IDailyExpenseReportRepository))]
         private IDailyExpenseReportRepository _dailyExpenseReportRepository;
+        [Import(typeof(ICashRegisterExpenseRepository))]
+        private ICashRegisterExpenseRepository _cashRegisterExpenseRepository;
+        [Import(typeof(IExpenseDescriptionRepository))]
+        private IExpenseDescriptionRepository _expenseDescriptionRepository;
 
 
         public LoginViewModel()
@@ -239,7 +243,8 @@ namespace FastPosFrontend.ViewModels
             
             
 
-            StateManager.Instance
+            StateManager
+                .Instance
                 .Manage(_productRepository,fetch:false,withAssociatedTypes:true)
                 .Manage(_categoryRepository,false,withAssociatedTypes:true)
                 .Manage(_additiveRepository,false)
@@ -252,7 +257,10 @@ namespace FastPosFrontend.ViewModels
                 .Manage(_userRepository,withAssociatedTypes:true)
                 .Manage(_roleRepository,withAssociatedTypes:true)
                 .Manage(_permissionRepository)
-                .Manage(_dailyExpenseReportRepository);
+                .Manage(_dailyExpenseReportRepository)
+                .Manage(_cashRegisterExpenseRepository)
+                .Manage(_expenseDescriptionRepository);
+                
 
             var user = Users.FirstOrDefault(u => u.Username.Equals(Username));
             var userBackground = resp.Headers.GetValues("user-meta-background").First();

@@ -347,6 +347,7 @@
     <Compile Include="ViewModels\AdditiveDetailViewModel.cs" />
     <Compile Include="ViewModels\AppDialogConductor.cs" />
     <Compile Include="ViewModels\AppDrawerConductor.cs" />
+    <Compile Include="ViewModels\CashOutViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputData.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportsViewModel.cs" />
@@ -433,6 +434,9 @@
     </Compile>
     <Compile Include="Views\AdditivesSettingsView.xaml.cs">
       <DependentUpon>AdditivesSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CashOutView.xaml.cs">
+      <DependentUpon>CashOutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CategoryTabView.xaml.cs">
       <DependentUpon>CategoryTabView.xaml</DependentUpon>
@@ -783,6 +787,10 @@
     <Page Include="Views\AdditivesSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CashOutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CategoryTabView.xaml">
       <Generator>MSBuild:Compile</Generator>

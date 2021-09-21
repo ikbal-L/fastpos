@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 
@@ -12,7 +13,7 @@ namespace FastPosFrontend.ViewModels
 
         public DialogContent()
         {
-
+            CancelCommand = new DelegateCommandBase(Close);
         }
 
         public DialogContent(object content)
@@ -27,6 +28,9 @@ namespace FastPosFrontend.ViewModels
         }
 
         public BindableCollection<GenericCommand> Commands { get; set; }
+
+        public ICommand SaveCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
 
         public object Content
         {
@@ -47,6 +51,18 @@ namespace FastPosFrontend.ViewModels
             {
                 Set(ref _host, value);
                 Parent = value;
+            }
+        }
+
+        protected virtual void Close(object obj = null)
+        {
+            if (obj is DialogContent dialogContent)
+            {
+                this.Host?.Close(dialogContent);
+            }
+            else
+            {
+                this.Host?.Close();
             }
         }
     }

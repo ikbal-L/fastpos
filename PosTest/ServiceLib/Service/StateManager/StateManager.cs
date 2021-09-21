@@ -77,7 +77,7 @@ namespace ServiceLib.Service.StateManager
             var key = typeof(TState);
             IsStateManaged<TState, TIdentifier>(key);
 
-            //if (State[key] == null) Fetch<TState, TIdentifier>(predicate);
+            if (State[key] == null) Fetch<TState, TIdentifier>(predicate);
 
 
             return State[key] as ICollection<TState>;
@@ -263,7 +263,7 @@ namespace ServiceLib.Service.StateManager
         private static void Fetch<TState, TIdentifier>(string predicate = null,bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
-            //Decide on  either withAssociatedTypes or FetchWithAssociatedTypes
+            //TODO Decide  whether to withAssociatedTypes or FetchWithAssociatedTypes
             if (FetchwithAssociatedTypes.Contains(key))
             {
                 var associations = associationManager.GetAssociationsOf<TState>();

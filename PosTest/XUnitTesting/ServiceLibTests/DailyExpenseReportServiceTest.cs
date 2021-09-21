@@ -16,7 +16,7 @@ namespace XUnitTesting.ServiceLibTests
         public DailyExpenseReportServiceTest()
         {
             var resp = _authService.Authenticate("admin", "admin", new Terminal {Id = 1}, new Annex {Id = 1});
-            var orderRepo = new OrderBaseRepository();
+            var orderRepo = new OrderRepository();
 
             _orders = orderRepo.Get().state.ToList();
         }

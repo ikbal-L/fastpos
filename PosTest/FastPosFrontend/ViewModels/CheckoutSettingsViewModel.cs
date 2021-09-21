@@ -1461,7 +1461,7 @@ namespace FastPosFrontend.ViewModels
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
             ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
-                var parent = (Parent as MainViewModel);
+                var parent = Parent as MainViewModel;
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {

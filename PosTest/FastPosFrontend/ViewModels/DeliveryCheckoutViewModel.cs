@@ -228,7 +228,10 @@ namespace FastPosFrontend.ViewModels
         private void PayementAction()
         {
 
-            var payedAmount = Convert.ToDecimal(NumericZone);
+
+            if (!decimal.TryParse(NumericZone, out var payedAmount)) return;
+            
+
             if (payedAmount <= 0)
             {
                 NumericZone = "";

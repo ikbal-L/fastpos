@@ -269,11 +269,7 @@ namespace FastPosFrontend.ViewModels
 
         public void Cancel()
         {
-            //this.Product = new Product();
-            //this.Name = null;
-            //this.Price = 0;
-            //this.Unit = null;
-            //Product = CloneFromSource();
+
             Host.Close(this);
 
 

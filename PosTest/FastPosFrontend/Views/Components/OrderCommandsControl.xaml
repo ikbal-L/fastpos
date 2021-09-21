@@ -197,9 +197,9 @@
             <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}"
                                 
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]" />
-            <Button Content="{materialdesign:PackIcon FastFood, 30}" Grid.Row="2" Grid.Column="1"
+            <Button Content="{materialdesign:PackIcon Kind=CashPlus, Size=30}" Grid.Row="2" Grid.Column="1"
                                 
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SERVED')]" />
+                                cal:Message.Attach="[Event Click] = [Action AddExpense()]" />
 
         </Grid>
     </Grid>

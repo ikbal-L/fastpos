@@ -14,7 +14,8 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:DailyExpenseReportsViewModel}"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity">
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             Background="{StaticResource MaterialDesignPaper}">
     <!--xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"-->
     <UserControl.Resources>
         <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignCaptionTextBlock}" x:Key="Caption">
@@ -26,10 +27,11 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <TabControl Style="{StaticResource MaterialDesignAppBarTabControl}" SelectedIndex="{Binding SelectedTabIndex,Mode=TwoWay}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <!--<TabControl Style="{StaticResource MaterialDesignAppBarTabControl}" SelectedIndex="{Binding SelectedTabIndex,Mode=TwoWay}">
             <TabControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Rows="1"></UniformGrid>
@@ -61,11 +63,11 @@
                             >
                                 <ContentControl.Style>
                                     <Style TargetType="ContentControl" >
-                                        <!--<Style.Triggers>
+                                        --><!--<Style.Triggers>
                                         <DataTrigger Binding="{Binding IsReportGenerated}" Value="false">
                                             <Setter Property="Visibility" Value="Collapsed"></Setter>
                                         </DataTrigger>
-                                    </Style.Triggers>-->
+                                    </Style.Triggers>--><!--
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
@@ -77,34 +79,7 @@
             </TabItem>
             <TabItem Header="Reports" TabIndex="1" controls:TabControlAssist.TabHeaderFontSize="18" IsSelected="True">
 
-                <DataGrid ItemsSource="{Binding Reports}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"
-                          SelectionMode="Single"
-                          SelectionUnit="FullRow"
-                          x:Name="ReportsDataGrid"
-                          Margin="10 0" 
-                          >
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <caliburn:ActionMessage MethodName="OpenReport">
-                                <caliburn:Parameter Value="{Binding ElementName=ReportsDataGrid, Path=SelectedItem}" />
-                            </caliburn:ActionMessage>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-
-                 
-
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header ="Issued Date" Binding="{Binding IssuedDate,ConverterCulture='fr-DZ'}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header ="Diposited Amount" Binding="{Binding CashRegisterDepositedAmount}" IsReadOnly="True" />
-                        <DataGridTextColumn Header ="Withdrawn Amount" Binding="{Binding CashRegisterWithDrawnAmount}" IsReadOnly="True" />
-                        <DataGridTextColumn Header ="Total earnings (Cash)" Binding="{Binding CashPaymentsTotal}" IsReadOnly="True" />
-                        <DataGridTextColumn Header ="Total earnings (Delivery)" Binding="{Binding DeliveryPaymentsTotal}" IsReadOnly="True" />
-                        <DataGridTextColumn Header ="Sales (Cash)" Binding="{Binding CashPayments.Keys.Count}" IsReadOnly="True" />
-                        <DataGridTextColumn Header ="Sales (Delivery)" Binding="{Binding DeliveryPayments.Keys.Count}" IsReadOnly="True" />
-                      
-                    </DataGrid.Columns>
-                   
-                </DataGrid>
+              
             </TabItem>
 
             <TabItem  Visibility="{Binding IsOpennedReportTabOpen,Converter={StaticResource boolToVisibilityConverter}}" 
@@ -147,11 +122,11 @@
                             Width="600">
                             <ContentControl.Style>
                                 <Style TargetType="ContentControl" >
-                                    <!--<Style.Triggers>
+                                    --><!--<Style.Triggers>
                                         <DataTrigger Binding="{Binding IsReportGenerated}" Value="false">
                                             <Setter Property="Visibility" Value="Collapsed"></Setter>
                                         </DataTrigger>
-                                    </Style.Triggers>-->
+                                    </Style.Triggers>--><!--
                                 </Style>
                             </ContentControl.Style>
                         </ContentControl>
@@ -160,7 +135,74 @@
                 </ScrollViewer>
             </TabItem>
           
-        </TabControl>
+        </TabControl>-->
+
+        <DataGrid ItemsSource="{Binding Reports}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          x:Name="ReportsDataGrid"
+                          SelectedItem="{Binding OpennedReport}"
+                          Margin="10 0">
+            <!--<i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <caliburn:ActionMessage MethodName="OpenReport">
+                        <caliburn:Parameter Value="{Binding ElementName=ReportsDataGrid, Path=SelectedItem}" />
+                    </caliburn:ActionMessage>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>-->
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
+                            <Setter Property="FontWeight" Value="Bold"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header ="Issued Date" Binding="{Binding IssuedDate,ConverterCulture='fr-DZ'}" IsReadOnly="True" Width="*"/>
+                <!--<DataGridTextColumn Header ="Diposited Amount" Binding="{Binding CashRegisterDepositedAmount}" IsReadOnly="True" />
+                <DataGridTextColumn Header ="Withdrawn Amount" Binding="{Binding CashRegisterWithDrawnAmount}" IsReadOnly="True" />
+                <DataGridTextColumn Header ="Total earnings (Cash)" Binding="{Binding CashPaymentsTotal}" IsReadOnly="True" />
+                <DataGridTextColumn Header ="Total earnings (Delivery)" Binding="{Binding DeliveryPaymentsTotal}" IsReadOnly="True" />
+                <DataGridTextColumn Header ="Sales (Cash)" Binding="{Binding CashPayments.Keys.Count}" IsReadOnly="True" />
+                <DataGridTextColumn Header ="Sales (Delivery)" Binding="{Binding DeliveryPayments.Keys.Count}" IsReadOnly="True" />-->
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+
+        <ScrollViewer HorizontalScrollBarVisibility="Visible"   Grid.Column="1" Background="{StaticResource MaterialDesignPaper}">
+            <Grid Margin="0 0 0 40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <ContentControl 
+                            ContentTemplate="{StaticResource {x:Type model:DailyExpenseReport}}" 
+                            Content="{Binding OpennedReport}"
+                            Width="600"
+                    Margin=" 0 10">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl" >
+                            
+                            <!--<Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsReportGenerated}" Value="false">
+                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>-->
+                          
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+
+                    </Grid>
+                </ScrollViewer>
+        
     </Grid>
     
 </UserControl>

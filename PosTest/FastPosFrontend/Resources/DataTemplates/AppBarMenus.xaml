@@ -223,7 +223,7 @@
                 <Button cal:Message.Attach="[Event Click] = [Action Generate]">
                     <Button.Style>
                         <Style BasedOn="{StaticResource AppBarButton}"  TargetType="Button">
-                            <Setter Property="IsEnabled" Value="False"/>
+                            <!--<Setter Property="IsEnabled" Value="False"/>-->
                             <Setter Property="Content" Value="{md:PackIcon Kind=Plus,Size=30}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsReportGenerated}" Value="true">
