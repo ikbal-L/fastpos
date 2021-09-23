@@ -20,13 +20,20 @@ namespace FastPosFrontend.ViewModels
         public string SelectedEmployee
         {
             get { return _selectedEmployee; }
-            set { Set(ref _selectedEmployee , value); }
+            set 
+            { 
+                Set(ref _selectedEmployee , value);
+                (SaveCommand as DelegateCommandBase).RaiseCanExecuteChanged();
+            }
         }
 
         public ExpenseDescription SelectedExpenditureDescription
         {
             get { return _selectedExpenditureDescription; }
-            set { Set(ref _selectedExpenditureDescription , value); }
+            set { Set(ref _selectedExpenditureDescription , value);
+
+                (SaveCommand as DelegateCommandBase).RaiseCanExecuteChanged();
+            }
         }
 
         private string _expenditureAmount;
@@ -34,7 +41,11 @@ namespace FastPosFrontend.ViewModels
         public string ExpenditureAmount
         {
             get { return _expenditureAmount; }
-            set { Set(ref _expenditureAmount , value); }
+            set 
+            { 
+                Set(ref _expenditureAmount , value);
+                (SaveCommand as DelegateCommandBase).RaiseCanExecuteChanged();
+            }
         }
 
         private string _addedExpenseDescription = null;
@@ -60,7 +71,7 @@ namespace FastPosFrontend.ViewModels
         public CashOutViewModel():base()
         {
             NumericKeyboardCommand = new DelegateCommandBase(NumericKeyboard);
-            SaveCommand = new DelegateCommandBase(AddExpense);
+            SaveCommand = new DelegateCommandBase(AddExpense, CanAddExpense);
             AddExpenseDescriptionCommand = new DelegateCommandBase(AddExpenseDescription,CanAddExpenseDescription);
             RemoveExpenseDescriptionCommand = new DelegateCommandBase(RemoveExpenseDescription);
             AddedExpenseDescription = string.Empty;
@@ -79,13 +90,27 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            var expense = new CashRegisterExpense() { Amount = amount, Employee = SelectedEmployee,Description = SelectedExpenditureDescription.Description};
+            var expense = new CashRegisterExpense() 
+            { 
+                Amount = amount, 
+                Employee = SelectedEmployee,
+                Description = SelectedExpenditureDescription.Description,
+                IssuedDate = DateTime.Now
+            };
 
             if (StateManager.Save(expense))
             {
                 ToastNotification.Notify("Saved",NotificationType.Success);
             }
             this.Close();
+        }
+
+        public bool CanAddExpense(object obj)
+        {
+            return !(
+                string.IsNullOrEmpty(SelectedEmployee) || 
+                string.IsNullOrEmpty(ExpenditureAmount)|| 
+                SelectedExpenditureDescription == null);
         }
 
         public void AddExpenseDescription(object obj)
@@ -122,7 +147,9 @@ namespace FastPosFrontend.ViewModels
             if (obj is string number)
             {
                 NumericKeypad.NumericKeyboard(number, ref _expenditureAmount);
-                NotifyOfPropertyChange(nameof(ExpenditureAmount)); 
+                //ExpenditureAmount = _expenditureAmount;
+                NotifyOfPropertyChange(nameof(ExpenditureAmount));
+                (SaveCommand as DelegateCommandBase).RaiseCanExecuteChanged();
             }
         }
 

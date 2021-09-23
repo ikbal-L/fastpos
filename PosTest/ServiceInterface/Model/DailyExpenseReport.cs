@@ -28,6 +28,16 @@ namespace ServiceInterface.Model
         public List<EarningsCategoryGrouping> EarningsByCategory { get; set; }
 
         [DataMember]
+        public List<OrderRefund> Refunds { get; set; }
+
+        public decimal RefundsSum => Refunds?.Sum(r => r.Amount)??0;
+
+        [DataMember]
+        public List<CashRegisterExpense> CashRegisterExpenses { get; set; }
+
+        public decimal CashRegisterExpensesSum => CashRegisterExpenses?.Sum(e=>e.Amount)??0;
+
+        [DataMember]
         public decimal CashRegisterInitialAmount { get; set; }
 
         [DataMember]
@@ -58,5 +68,14 @@ namespace ServiceInterface.Model
         public int QuantityOfItems { get; set; }
         public decimal Amount { get; set; }
   
+    }
+
+    public class OrderRefund
+    {
+        public int OrderNumber { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public string IssuedBy { get; set; }
     }
 }

@@ -220,7 +220,7 @@
 
                 <Button Content="{md:PackIcon Kind=Printer,Size=30}"
                         cal:Message.Attach="[Event Click] = [Action PrintReport]"/>
-                <Button cal:Message.Attach="[Event Click] = [Action Generate]">
+                <Button cal:Message.Attach="[Event Click] = [Action Generate]" IsEnabled="{Binding IsTodaysReportSelected}">
                     <Button.Style>
                         <Style BasedOn="{StaticResource AppBarButton}"  TargetType="Button">
                             <!--<Setter Property="IsEnabled" Value="False"/>-->

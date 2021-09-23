@@ -51,12 +51,14 @@ namespace FastPosFrontend.ViewModels
             Reports = (CollectionView)CollectionViewSource.GetDefaultView(_reports);
             Reports.Filter += FilterReportsByIssuedDate;
 
+            
+
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateYear)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateMonth)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.CashPaymentsTotal)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.DeliveryPaymentsTotal)));
             Reports.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(DailyExpenseReport.IssuedDate),System.ComponentModel.ListSortDirection.Descending));
-            Report =  _reports?.FirstOrDefault(r => r.IssuedDate == DateTime.Today.Date);
+            Report =  _reports?.FirstOrDefault(r => r.IssuedDate.ToString("d") == DateTime.Today.Date.ToString("d"));
             if (Report!= null)
             {
                 IsReportGenerated = true;
@@ -106,15 +108,16 @@ namespace FastPosFrontend.ViewModels
         public DailyExpenseReport OpennedReport
         {
             get { return _opennedReport; }
-            set { Set(ref _opennedReport, value); }
+            set 
+            { 
+                Set(ref _opennedReport, value);
+                NotifyOfPropertyChange(nameof(IsTodaysReportSelected));
+            }
         }
-        private int _selectedTabIndex =1;
 
-        public int SelectedTabIndex
-        {
-            get { return _selectedTabIndex; }
-            set { Set(ref _selectedTabIndex ,value); }
-        }
+        public bool IsTodaysReportSelected => OpennedReport?.IssuedDate.Date == DateTime.Today.Date ;
+
+       
 
         private ObservableCollection<DailyExpenseReport> _reports;
 
@@ -145,6 +148,11 @@ namespace FastPosFrontend.ViewModels
             vm.OnReportGenerated(report =>
             {
                 Report = report;
+                var oldReport = _reports.FirstOrDefault(r => r.IssuedDate.Date == DateTime.Today.Date);
+                if (oldReport!= null)
+                {
+                    _reports.Remove(oldReport);
+                }
                 IsReportGenerated = true;
                 _reports.Add(report);
                 Reports.Refresh();
@@ -190,29 +198,16 @@ namespace FastPosFrontend.ViewModels
 
         public void PrintReport()
         {
-            DailyExpenseReport report = null;
-            if (SelectedTabIndex == 1)
-            {
-                ToastNotification.Notify("Nothing to print");
-                return;
-            }
-
-            if (SelectedTabIndex ==0)
-            {
-                report = Report;
-            }
-            if (SelectedTabIndex == 2)
-            {
-                report = OpennedReport;
-            }
-            if (report == null)
+            
+            if (OpennedReport == null)
             {
                 ToastNotification.Notify("Select a report to print");
+                return;
             }
             
 
           
-                FixedDocument fixedDocument = GeneratePrintReport(report);
+                FixedDocument fixedDocument = GeneratePrintReport(OpennedReport);
                 var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
 
                 IList<PrinterItem> printerItems = null;

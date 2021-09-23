@@ -16,7 +16,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <controls:AppBar Grid.Row="0" />
+                <controls:AppBar Grid.Row="0" IsEnabled="{Binding  MainDialog.IsDialogOpen,Converter={StaticResource InvertBooleanConverter}}"/>
                 <md:DrawerHost Grid.Row="1"
                                                IsLeftDrawerOpen="{Binding Drawer.IsLeftDrawerOpen}"
                                                LeftDrawerContentTemplate="{Binding Drawer.Left.Template}"                

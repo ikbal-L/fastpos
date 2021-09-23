@@ -1,4 +1,5 @@
 ﻿using ServiceInterface.Model;
+using System;
 using System.Runtime.Serialization;
 
 namespace ServiceInterface.Model
@@ -13,6 +14,8 @@ namespace ServiceInterface.Model
         public string Description { get; set; }
         [DataMember]
         public string Employee { get; set; }
+        [DataMember]
+        public DateTime IssuedDate { get; set; }
     }
 }
     
