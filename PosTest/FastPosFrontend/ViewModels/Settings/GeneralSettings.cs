@@ -9,9 +9,9 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
-    public class GeneralSettings: PropertyChangedBase
+    public class GeneralSettings : PropertyChangedBase
     {
-        
+
         private int _tableNumber;
         private string _serverHost;
         private bool _initialized = false;
@@ -30,21 +30,21 @@ namespace FastPosFrontend.ViewModels.Settings
             set
             {
 
-                if (value>=0)
+                if (value >= 0)
                 {
                     var oldValue = _tableNumber;
                     var changesCommitted = false;
                     if (Initialized)
                     {
-                        var d = value- oldValue ;
-                        
+                        var d = value - oldValue;
+
                         if (d < 0)
                         {
                             changesCommitted = DeleteTables(Math.Abs(d));
                         }
-                        else if (d>0)
+                        else if (d > 0)
                         {
-                            changesCommitted =CreateTables(Math.Abs(d));
+                            changesCommitted = CreateTables(Math.Abs(d));
                         }
 
                         if (changesCommitted)
@@ -61,12 +61,12 @@ namespace FastPosFrontend.ViewModels.Settings
                 {
                     ToastNotification.Notify("Enter a valid number");
                 }
-                
+
 
 
             }
         }
-        
+
         [JsonProperty]
 
         public int NumberOfCategories
@@ -82,6 +82,9 @@ namespace FastPosFrontend.ViewModels.Settings
 
         private string _numberProducts;
         private string _restaurantName;
+        private bool _isRefundEnabled;
+        private bool isDeliveryEnabled;
+        private bool isMultiCashRegisterEnabled;
 
         [JsonProperty]
 
@@ -94,7 +97,7 @@ namespace FastPosFrontend.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(NumberProducts));
             }
         }
-        
+
 
         [JsonProperty]
 
@@ -116,27 +119,55 @@ namespace FastPosFrontend.ViewModels.Settings
             set => Set(ref _restaurantName, value);
         }
 
+        [JsonProperty]
+        public bool IsRefundEnabled
+        {
+            get => _isRefundEnabled;
+            set
+            {
+                Set(ref _isRefundEnabled, value);
+            }
+        }
+
+        [JsonProperty]
+        public bool IsDeliveryEnabled
+        {
+            get => isDeliveryEnabled;
+            set
+            {
+                Set(ref isDeliveryEnabled, value);
+            }
+        }
+        [JsonProperty]
+        public bool IsMultiCashRegisterEnabled 
+        { 
+            get => isMultiCashRegisterEnabled;
+            set { Set(ref isMultiCashRegisterEnabled , value); }
+        }
+
+
+
         public bool DeleteTables(int limit)
         {
-            var ids = StateManager.Get<Table>().Where(t=>t.Id != null).OrderByDescending(table => table.Number).Take(limit).Select((table, i) => table.Id.Value );
-            return StateManager.Delete<Table,long>(ids);
+            var ids = StateManager.Get<Table>().Where(t => t.Id != null).OrderByDescending(table => table.Number).Take(limit).Select((table, i) => table.Id.Value);
+            return StateManager.Delete<Table, long>(ids);
         }
 
         public bool CreateTables(int limit)
         {
             var tables = StateManager.Get<Table>();
-            var baseNumber = tables.Any()?tables.Max(table => table.Number):0;
+            var baseNumber = tables.Any() ? tables.Max(table => table.Number) : 0;
             IList<Table> newTables = new List<Table>(limit);
-            for (int i = 1 ; i <= limit; i++)
+            for (int i = 1; i <= limit; i++)
             {
 
-                newTables.Add( new Table(){Number = baseNumber+i});
+                newTables.Add(new Table() { Number = baseNumber + i });
             }
 
             var result = StateManager.Save(newTables);
             if (result)
             {
-                
+
             }
             return result;
         }

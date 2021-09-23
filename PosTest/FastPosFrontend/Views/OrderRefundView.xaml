@@ -59,7 +59,7 @@
 
             </DataGrid>
 
-            <UniformGrid Rows="1" Columns="2" Grid.Row="1" Margin="10">
+            <UniformGrid Rows="1" Columns="1" Grid.Row="1" Margin="10">
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Setter Property="Padding" Value="0"/>
@@ -70,7 +70,7 @@
                 </UniformGrid.Resources>
 
                 <Button Content="{materialDesign:PackIcon Kind=CreditCardRefundOutline,Size=40}" Command="{Binding RefundOrderCommand}"/>
-                <Button Content="{materialDesign:PackIcon Kind=CancelBold,Size=40}"/>
+                <!--<Button Content="{materialDesign:PackIcon Kind=CancelBold,Size=40}"/>-->
             </UniformGrid>
         </Grid>
 

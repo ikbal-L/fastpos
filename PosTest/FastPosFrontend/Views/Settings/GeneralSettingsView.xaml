@@ -65,15 +65,15 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" />
+            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsMultiCashRegisterEnabled}" />
             <TextBlock Text="Multi-Caise"  FontSize="14" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" />
+            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsRefundEnabled}" />
             <TextBlock Text="Refund"  FontSize="14" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" />
+        <StackPanel Orientation="Horizontal" Margin="40 10 0 0" >
+            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsDeliveryEnabled}" />
             <TextBlock Text="Delivery"  FontSize="14" VerticalAlignment="Center"/>
         </StackPanel>
 

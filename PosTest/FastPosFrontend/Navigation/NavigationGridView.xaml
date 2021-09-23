@@ -28,7 +28,7 @@
         <ListBox.ItemContainerStyle>
             <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                 <Setter Property="Margin" Value="2"></Setter>
-                
+                <!--<Setter Property="IsEnabled" Value="{Binding Source={ex:Config PropertyName=GeneralSettings.IsDeliveryEnabled}}"/>-->
             </Style>
         </ListBox.ItemContainerStyle>
         <ItemsControl.ItemTemplate>
