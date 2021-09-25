@@ -14,10 +14,9 @@ namespace FastPosFrontend.ViewModels
         private RoleDetailViewModel _roleDetailViewModel;
         private bool _isEditing;
 
-        public RoleSettingsViewModel()
+        public RoleSettingsViewModel() : base()
         {
-            Setup();
-            OnReady();
+
         }
 
         public BindableCollection<Role> Roles

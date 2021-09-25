@@ -16,19 +16,12 @@ namespace FastPosFrontend.ViewModels
         private bool _isEditing = false;
     
 
-        public UserSettingsViewModel()
+        public UserSettingsViewModel():base()
         {
-  
             var userRepository = new UserRepository();
             var roleRepository = new RoleRepository();
-            StateManager.Instance.Manage(userRepository,withAssociatedTypes:true).Manage(roleRepository);
-
-            
+            StateManager.Instance.Manage(userRepository,withAssociatedTypes:true).Manage(roleRepository);  
             IsEditing = false;
-            Setup();
-            OnReady();
-
-
         }
         public BindableCollection<User> Users { get; set; }
 

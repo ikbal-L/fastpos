@@ -50,7 +50,7 @@ namespace FastPosFrontend.ViewModels
 
         
 
-        public CheckoutSettingsViewModel()
+        public CheckoutSettingsViewModel() : base()
         {
             IsDialogOpen = false;
             ProductLayoutViewModel = new ProductLayoutViewModel();
@@ -67,11 +67,7 @@ namespace FastPosFrontend.ViewModels
             CategoryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
 
             //StateManager.Fetch();
-            
-            Setup();
-            OnReady();
-            
-            
+
         }
 
         protected sealed override void Setup()

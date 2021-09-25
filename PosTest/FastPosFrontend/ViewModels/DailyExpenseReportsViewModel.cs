@@ -27,12 +27,10 @@ namespace FastPosFrontend.ViewModels
         private bool _isReportGenerated;
         private DailyExpenseReport _report;
 
-        public DailyExpenseReportsViewModel()
+        public DailyExpenseReportsViewModel() : base()
         {
             SetupEmbeddedRightCommandBar();
-            Setup();
-            OnReady();
-            
+
         }
 
         protected override void Setup()

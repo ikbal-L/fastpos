@@ -48,11 +48,8 @@ namespace FastPosFrontend.ViewModels
         }
         private AddEditWaiterViewModel _AddEditWaiterViewModel;
         private AddEditWaiterView _addEditWaiterView;
-        public WaiterSettingsViewModel() {
-
-            Setup();
-            OnReady();
-           
+        public WaiterSettingsViewModel() : base()
+        {
         }
         public bool DeleteVisibility { get => SelectedWaiter != null; }
         public bool EditVisibility { get => SelectedWaiter != null; }

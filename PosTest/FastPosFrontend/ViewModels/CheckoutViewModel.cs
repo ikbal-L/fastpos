@@ -164,8 +164,6 @@ namespace FastPosFrontend.ViewModels
                 itemsPerCategoryPage = configuration.NumberOfCategories;
             }
             
-            Setup();
-            OnReady();
         }
 
         private void _eventSource_MessageReceived(object sender, MessageReceivedEventArgs e)
@@ -260,15 +258,12 @@ namespace FastPosFrontend.ViewModels
             var categories = StateManager.GetAsync<Category>();
             var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
 
-            _data = new NotifyAllTasksCompletion(categories,
-                unprocessedOrders);
+            _data = new NotifyAllTasksCompletion(categories, unprocessedOrders);
         }
 
        
         public async override void Initialize()
         {
-
-          
 
             var deliveryMen = StateManager.Get<Deliveryman>();
             var waiter = StateManager.Get<Waiter>();
@@ -333,10 +328,10 @@ namespace FastPosFrontend.ViewModels
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
 
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutWaiterDrawer", this, tag: ListKind.Waiter);
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
+            AppDrawerConductor.Instance.InitBottom(this, "CheckoutWaiterDrawer", this, tag: ListKind.Waiter);
+            AppDrawerConductor.Instance.InitBottom(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
+            AppDrawerConductor.Instance.InitBottom(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
+            AppDrawerConductor.Instance.InitBottom(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
 
             
             var config = Configuration.Builder(new Uri("http://localhost:8080/events/subscribe")).ResponseStartTimeout(TimeSpan.FromSeconds(60 * 60 * 24)).Method(HttpMethod.Get).RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken).Build();
@@ -383,6 +378,14 @@ namespace FastPosFrontend.ViewModels
                     }
 
                     ShowProductAdditives(CurrentOrder?.SelectedOrderItem?.Product);
+                }
+            }
+
+            if (e.PropertyName == nameof(Order.NewTotal))
+            {
+                if (CurrentOrder!= null)
+                {
+                    CurrentOrderTotal = CurrentOrder.NewTotal;
                 }
             }
         }
@@ -717,6 +720,15 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+        private decimal _currentOrderTotal;
+
+        public decimal CurrentOrderTotal
+        {
+            get { return _currentOrderTotal; }
+            set { Set(ref _currentOrderTotal , value); }
+        }
+
+
         public bool IsOrderInfoShown
         {
             get => _isOrderInfoShown;
@@ -793,6 +805,8 @@ namespace FastPosFrontend.ViewModels
         public void ShowOrder(Order order)
         {
             if (order == null) return;
+            NumericZone = string.Empty;
+            ReturnedAmount = null;
 
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
             if (CurrentOrder == order)
@@ -805,6 +819,7 @@ namespace FastPosFrontend.ViewModels
                 CurrentOrder = order;
                 CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
                 CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
+                CurrentOrderTotal = CurrentOrder.NewTotal;
             }
 
 
@@ -834,6 +849,7 @@ namespace FastPosFrontend.ViewModels
 
         public void NewOrder()
         {
+
             AdditivesVisibility = false;
             ProductsVisibility = true;
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
@@ -852,6 +868,7 @@ namespace FastPosFrontend.ViewModels
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
             ReturnedAmount = null;
+            NumericZone = string.Empty;
             SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
@@ -1335,13 +1352,13 @@ namespace FastPosFrontend.ViewModels
             CurrentOrder.GivenAmount = payedAmount;
             CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
             CurrentOrder.State = OrderState.Payed;
-            NumericZone = "";
-            GivenAmount = CurrentOrder.GivenAmount;
+            //NumericZone = "";
+            //GivenAmount = CurrentOrder.GivenAmount;
             ReturnedAmount = CurrentOrder.ReturnedAmount;
             _printOrder = _currentOrder;
             SaveCurrentOrder();
             GivenAmount = 0;
-            ReturnedAmount = null;
+            
             AdditivesVisibility = false;
             PrintDocument(PrintSource.Checkout);
 
@@ -1939,7 +1956,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void ShowDrawer(ListKind listKind) =>AppDrawerConductor.Instance.OpenTop(this, listKind);
+        public void ShowDrawer(ListKind listKind) =>AppDrawerConductor.Instance.OpenBottom(this, listKind);
      
 
         public void Handle(AssignOrderTypeEventArgs message)

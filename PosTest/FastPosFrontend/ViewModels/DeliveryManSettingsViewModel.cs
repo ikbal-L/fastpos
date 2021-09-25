@@ -47,12 +47,12 @@ namespace FastPosFrontend.ViewModels
         }
         private AddEditDeliveryManViewModel _AddEditDeliveryManViewModel;
         private AddEditDeliveryManView _addEditDeliveryManView;
-        public DeliveryManSettingsViewModel() {
+        public DeliveryManSettingsViewModel() : base()
+        {
 
             //this.Title = "Delivery Mans";
             //this.Content = new DeliveryManSettingsView() { DataContext = this };
-            Setup();
-            OnReady();
+
             
         }
         public bool DeleteVisibility { get => SelectedDeliveryMan != null; }

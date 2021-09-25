@@ -19,13 +19,12 @@ namespace FastPosFrontend.ViewModels
     public class OrderRefundViewModel:LazyScreen
     {
         private readonly Parser _parser;
-        public OrderRefundViewModel()
+        public OrderRefundViewModel() : base()
         {
             _parser = Parser.Instance;
             FilterCommand = new DelegateCommandBase(ApplySearchFilter);
             RefundOrderCommand = new DelegateCommandBase(RefundOrder,CanRefundOrder);
-            Setup();
-            OnReady();
+
         }
 
         private void PaidOrdersOfTheDay_Filter(object sender, FilterEventArgs e)

@@ -130,13 +130,18 @@
                                     <TextBlock Foreground="#26ff26" TextAlignment="Right"
                                                FontFamily="{StaticResource DigitalFontFamily}"
                                                FontSize="32" Padding="0 5 0 0"
-                                               Text="{Binding CurrentOrder.NewTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
+                                               Text="{Binding CurrentOrderTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
                                                caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]"
                                                x:Name="NewTotalTextBlock" />
                                 </DockPanel>
                             </Button>
 
-                            <TextBlock Text="{Binding ReturnedAmount}"  />
+                            <TextBlock Text="{Binding ReturnedAmount,StringFormat='{}{0:#,0.00}'}" 
+                                       Foreground="#26ff26" DockPanel.Dock="Right"
+                                           TextAlignment="Right"
+                                           FontFamily="{StaticResource DigitalFontFamily}"
+                                       FontSize="32" Padding="0 5 0 0"
+                                       />
                             <DockPanel Grid.Row="1" >
                                 <md:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
                                                          Height="30" Padding="0" Foreground="#26ff26" />

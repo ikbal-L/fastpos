@@ -23,7 +23,7 @@ namespace FastPosFrontend.ViewModels
         private Additive _selectedAdditive;
         private Additive _copySelectedAdditive;
         private List<Additive> _allAdditives;
-        private int _additivePageSize;
+        private int _additivePageSize = 30;
         private bool _isEditing;
         private Additive _clipBoardAdditive;
         private Additive _additiveToMove;
@@ -32,22 +32,21 @@ namespace FastPosFrontend.ViewModels
         private WarningViewModel _warningViewModel;
        
 
-        public AdditivesSettingsViewModel() : this(30)
+        public AdditivesSettingsViewModel() : base()
         {
-           
-        }
-
-        public AdditivesSettingsViewModel( /*IAdditiveService additiveService,*/ int additivePageSize)
-        {
-            IsDialogOpen = false;
-          
-            _additivePageSize = additivePageSize;
-
+           IsDialogOpen = false;
             _isEditing = false;
-            Setup();
-            OnReady();
-        
         }
+
+        //public AdditivesSettingsViewModel(int additivePageSize):base()
+        //{
+        //    IsDialogOpen = false;
+          
+        //    _additivePageSize = additivePageSize;
+
+        //    _isEditing = false;
+     
+        //}
 
         public BindableCollection<Additive> Additives
         {

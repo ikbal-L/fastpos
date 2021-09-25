@@ -23,8 +23,10 @@
                                                LeftDrawerContent="{Binding Drawer.Left}"
                                                TopDrawerContentTemplate="{Binding Drawer.Top.Template}"
                                                TopDrawerContent="{Binding Drawer.Top}"
+                                               BottomDrawerContentTemplate="{Binding Drawer.Bottom.Template}"
+                                               BottomDrawerContent="{Binding Drawer.Bottom}"
                                                IsTopDrawerOpen="{Binding Drawer.IsTopDrawerOpen}"
-                                               TopDrawerBackground="Transparent"
+                                               IsBottomDrawerOpen="{Binding Drawer.IsBottomDrawerOpen}"
                                                LeftDrawerCloseOnClickAway="True"
                                                RightDrawerCloseOnClickAway="True">
                     <ContentPresenter />

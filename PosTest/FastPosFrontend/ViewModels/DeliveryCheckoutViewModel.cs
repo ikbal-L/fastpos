@@ -23,10 +23,9 @@ namespace FastPosFrontend.ViewModels
         private ObservableCollection<Deliveryman> _deliverymanCollection;
         private ObservableCollection<Order> _ordersCollection;
         private ObservableCollection<Payment> _paymentsCollection;
-        public DeliveryCheckoutViewModel()
+        public DeliveryCheckoutViewModel():base()
         {
-            Setup();
-            OnReady();
+
         }
 
         private void DeliveryOrders_Filter(object sender, FilterEventArgs e)
