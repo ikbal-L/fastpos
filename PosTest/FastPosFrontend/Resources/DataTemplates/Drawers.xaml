@@ -111,7 +111,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="CheckoutCustomerDrawer" DataType="{x:Type vm:Drawer}">
-        <views:CustomerView x:Name="lcustomer" cal:View.Model="{Binding Content.CustomerViewModel}" Height="300"/>
+        <views:CustomerView x:Name="lcustomer" cal:View.Model="{Binding Content.CustomerViewModel}" Height="350"/>
     </DataTemplate>
 
     <DataTemplate x:Key="AppNavigationDrawer" DataType="{x:Type vm:Drawer}">

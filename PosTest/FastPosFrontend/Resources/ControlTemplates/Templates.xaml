@@ -21,8 +21,6 @@
                                                IsLeftDrawerOpen="{Binding Drawer.IsLeftDrawerOpen}"
                                                LeftDrawerContentTemplate="{Binding Drawer.Left.Template}"                
                                                LeftDrawerContent="{Binding Drawer.Left}"
-                                               TopDrawerContentTemplate="{Binding Drawer.Top.Template}"
-                                               TopDrawerContent="{Binding Drawer.Top}"
                                                BottomDrawerContentTemplate="{Binding Drawer.Bottom.Template}"
                                                BottomDrawerContent="{Binding Drawer.Bottom}"
                                                IsTopDrawerOpen="{Binding Drawer.IsTopDrawerOpen}"
@@ -30,6 +28,16 @@
                                                LeftDrawerCloseOnClickAway="True"
                                                RightDrawerCloseOnClickAway="True">
                     <ContentPresenter />
+
+                    <md:DrawerHost.TopDrawerContent>
+                        <StackPanel>
+                            <ContentControl Content="{Binding Drawer.Top,UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{Binding Drawer.Top.Template,UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Button Content="{md:PackIcon Kind=Close}" Style="{StaticResource MaterialDesignIconButton}" VerticalAlignment="Bottom" Command="{x:Static md:DrawerHost.CloseDrawerCommand}" Margin="0 0 0 10"/>
+                        </StackPanel>
+                    </md:DrawerHost.TopDrawerContent>
+                    
+                    
 
                 </md:DrawerHost>
             </Grid>

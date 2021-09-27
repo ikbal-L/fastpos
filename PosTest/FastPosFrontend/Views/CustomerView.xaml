@@ -21,19 +21,13 @@
 
    <Grid>
 
-        <views:CustomerDetailView caliburn:View.Model="{Binding CustomerDetailVm}">
-
-            <Style TargetType="UserControl"  >
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsEditing}" Value="false">
-                        <Setter Property="Visibility" Value="Collapsed"></Setter>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
+        <views:CustomerDetailView 
+            caliburn:View.Model="{Binding CustomerDetailVm}" 
+            Visibility="{Binding IsEditing,Converter={StaticResource boolToVisibilityConverter}}">
         </views:CustomerDetailView>
 
 
-            <Grid >
+            <Grid VerticalAlignment="Stretch">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
@@ -49,12 +43,12 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
             <materialdesign:ColorZone
-        Mode="Standard"
-        Padding="8 4"
-        CornerRadius="2"
-        Panel.ZIndex="1"
-        Margin="0 10"
-        materialdesign:ShadowAssist.ShadowDepth="Depth1">
+                    Mode="Standard"
+                    Padding="8 4"
+                    CornerRadius="2"
+                    Panel.ZIndex="1"
+                    Margin="0 10"
+                    materialdesign:ShadowAssist.ShadowDepth="Depth1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -62,9 +56,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Button  Style="{DynamicResource MaterialDesignToolButton}" 
-                         
-                          Padding="0">
+                    <Button  Style="{DynamicResource MaterialDesignToolButton}" Padding="0">
                         <materialdesign:PackIcon Kind="Magnify" Opacity=".56" Width="30" Height="30"/>
                     </Button>
                     <TextBox
@@ -75,10 +67,10 @@
             BorderThickness="0"
             MinWidth="200"
             VerticalAlignment="Center"
-                    Text="{Binding FilterText}"
+                    Text="{Binding FilterString,UpdateSourceTrigger=PropertyChanged}"
                         />
 
-                    <Button Grid.Column="2" Padding="0">
+                    <Button Grid.Column="2" Padding="0" caliburn:Message.Attach="[Event Click] = [Action CreateAndSave()]" >
 
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
@@ -95,7 +87,7 @@
                     </Button>
 
 
-                    <Button Grid.Column="3" Padding="0">
+                    <Button Grid.Column="3" Padding="0" caliburn:Message.Attach="[Event Click] = [Action CreateAndEdit()]" >
 
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
@@ -104,29 +96,20 @@
                             </Style>
                         </Button.Style>
                         <materialdesign:PackIcon
-              Kind="ContentSaveEdit"
-              Opacity=".56"
-              
+                            Kind="ContentSaveEdit"
+                            Opacity=".56"
                             Width="30" Height="30"
                             Padding="0"/>
                     </Button>
-
-                   
-
-
-
-       
-
 
                 </Grid>
             </materialdesign:ColorZone>
 
             <ListBox    
                 Grid.Row="1"  
-                
                 ItemsSource="{Binding CustomerCollectionViewSource.View}" 
                 Style="{StaticResource MaterialDesignCardsListBox}"
-                >
+                Margin="5">
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -138,8 +121,8 @@
                                 <Button 
                                 Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" 
                                 CommandParameter="{Binding}" HorizontalAlignment="Stretch"
-                                        Style="{StaticResource ContainerButtonStyle}" VerticalContentAlignment="Center">
-                                    <StackPanel       Orientation="Vertical"  >
+                                Style="{StaticResource ContainerButtonStyle}" VerticalContentAlignment="Center" Cursor="Hand">
+                                    <StackPanel       Orientation="Vertical"  VerticalAlignment="Center" TextBlock.FontWeight="Bold">
                                         <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                                         <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                                     </StackPanel>
@@ -148,8 +131,13 @@
                         </ListBox.ItemTemplate>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}">
-                        
+                            
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="materialdesign:ShadowAssist.ShadowDepth" Value="Depth4"/>
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
