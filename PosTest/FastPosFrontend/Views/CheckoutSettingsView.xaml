@@ -354,7 +354,7 @@
                                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0"
                                     Margin="0 0 10 -20"
-                                    caliburn:Message.Attach="[Event Click] = [Action DeleteCategory]">
+                                    Command="{Binding DeleteCategoryCommand}">
                                     <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                                 </Button>
                             </Grid>
@@ -397,7 +397,7 @@
                                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                     Grid.Row="0" Margin="0 0 10 -20"
-                                    caliburn:Message.Attach="[Event Click] = [Action DeleteProduct]">
+                                    Command="{Binding DeleteProductCommand}">
                                     <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                                 </Button>
                             </Grid>
@@ -443,39 +443,39 @@
                                 <ToolBar Style="{StaticResource MaterialDesignToolBar}">
                                     <Button
 
-                                    caliburn:Message.Attach="[Event Click] = [Action CreateProduct()]">
+                                        Command="{Binding CreateProductCommand}">
                                         <materialdesign:PackIcon Kind="Plus" />
                                     </Button>
 
                                     <Button
-                                    caliburn:Message.Attach="[Event Click] = [Action EditProduct()]">
+                                    
+                                        Command="{Binding EditProductCommand}">
                                         <materialdesign:PackIcon Kind="Edit" />
                                     </Button>
                                     <Button x:Name="MoveButton"
-
-                                        caliburn:Message.Attach="[Event Click] = [Action MoveProductTo()]"
-
+                                        Command="{Binding MoveProductCommand}"
                                         Tag="{Binding ProductToMove}">
                                         <materialdesign:PackIcon Kind="ArrowExpandAll" />
                                     </Button>
                                     <Button
-
-                                    caliburn:Message.Attach="[Event Click] = [Action PasteProduct()]">
+                                        Command="{Binding PasteProductCommand}"
+                                        >
                                         <materialdesign:PackIcon Kind="ContentPaste" />
                                     </Button>
                                     <Button
-
-                                    caliburn:Message.Attach="[Event Click] = [Action CopyProduct()]">
+                                    Command="{Binding CopyProductCommand}"
+                                    >
                                         <materialdesign:PackIcon Kind="ContentCopy" />
                                     </Button>
-                                    <Button Foreground="{DynamicResource PrimaryMidHueForegroundBrush}"
-                                    caliburn:Message.Attach="[Event Click] = [Action RemoveProductFromCategory()]">
+                                    <Button 
+                                    
+                                            Command="{Binding RemoveProductCommand}">
                                         <materialdesign:PackIcon Kind="Delete" />
                                     </Button>
 
                                     <Button
-
-                                    caliburn:Message.Attach="[Event Click] = [Action ConfigureProductDisplayLayout()]">
+                                     Command="{Binding ConfigureProductLayoutCommand}"
+                                    >
                                         <materialdesign:PackIcon Kind="Grid" />
                                     </Button>
                                 </ToolBar>
@@ -521,38 +521,39 @@
                             <ToolBarTray IsLocked="True">
                                 <ToolBar Style="{StaticResource MaterialDesignToolBar}">
                                     <Button
-                                    caliburn:Message.Attach="[Event Click] = [Action CreateCategory()]">
+                                    
+                                        Command="{Binding CreateCategoryCommand}">
                                         <materialdesign:PackIcon Kind="Plus" />
                                     </Button>
 
                                     <Button
-                                    caliburn:Message.Attach="[Event Click] = [Action EditCategory(false)]">
+                                    Command="{Binding EditCategoryCommand}">
                                         <materialdesign:PackIcon Kind="Edit" />
                                     </Button>
 
                                     <Button x:Name="CategoryMoveButton"
 
-                                        caliburn:Message.Attach="[Event Click] = [Action MoveCategoryTo()]">
+                                        Command="{Binding MoveCategoryCommand}">
                                         <materialdesign:PackIcon Kind="ArrowExpandAll" />
                                     </Button>
                                     <Button
-                                    caliburn:Message.Attach="[Event Click] = [Action PasteCategory()]"
+                                    Command="{Binding PasteCategoryCommand}"
                                     >
                                         <materialdesign:PackIcon Kind="ContentPaste"  />
                                     </Button>
                                     <Button
-                                    caliburn:Message.Attach="[Event Click] = [Action CopyCategory()]">
+                                    Command="{Binding CopyCategoryCommand}">
                                         <materialdesign:PackIcon Kind="ContentCopy" />
                                     </Button>
 
                                     <Button
 
-                                    caliburn:Message.Attach="[Event Click] = [Action RemoveCategoryFromList()]">
+                                    Command="{Binding RemoveCategoryCommand}">
                                         <materialdesign:PackIcon Kind="Delete" />
                                     </Button>
 
                                     <Button
-                                    caliburn:Message.Attach="[Event Click] = [Action AddCategoryRow()]">
+                                    Command="{Binding AddCategoryRowCommand}">
                                         <materialdesign:PackIcon Kind="TableRow" />
                                     </Button>
                                 </ToolBar>

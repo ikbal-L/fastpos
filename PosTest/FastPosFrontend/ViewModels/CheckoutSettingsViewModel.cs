@@ -52,6 +52,15 @@ namespace FastPosFrontend.ViewModels
 
         public CheckoutSettingsViewModel() : base()
         {
+        }
+
+        protected sealed override void Setup()
+        {
+            var categories = StateManager.GetAsync<Category>();
+            var products = StateManager.GetAsync<Product>();
+
+            _data = new NotifyAllTasksCompletion(categories,products);
+
             IsDialogOpen = false;
             ProductLayoutViewModel = new ProductLayoutViewModel();
             ProductLayoutViewModel.OnLayoutChanged(() =>
@@ -66,25 +75,24 @@ namespace FastPosFrontend.ViewModels
             ProductPageSize = pageSize;
             CategoryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
 
-            //StateManager.Fetch();
+            CreateProductCommand = new DelegateCommandBase(CreateProduct);
+            EditProductCommand = new DelegateCommandBase(EditProduct);
+            MoveProductCommand = new DelegateCommandBase(MoveProductTo);
+            CopyProductCommand = new DelegateCommandBase(CopyProduct);
+            PasteProductCommand = new DelegateCommandBase(PasteProduct);
+            RemoveProductCommand = new DelegateCommandBase(RemoveProductFromCategory);
+            DeleteProductCommand = new DelegateCommandBase(DeleteProduct);
 
-        }
+            CreateCategoryCommand = new DelegateCommandBase(CreateCategory);
+            EditCategoryCommand = new DelegateCommandBase(EditCategory);
+            MoveCategoryCommand = new DelegateCommandBase(MoveCategoryTo);
+            CopyCategoryCommand = new DelegateCommandBase(CopyCategory);
+            PasteCategoryCommand = new DelegateCommandBase(PasteCategory);
+            RemoveCategoryCommand = new DelegateCommandBase(RemoveCategoryFromList);
+            DeleteCategoryCommand = new DelegateCommandBase(DeleteCategory);
 
-        protected sealed override void Setup()
-        {
-            var categories = StateManager.GetAsync<Category>();
-            var products = StateManager.GetAsync<Product>();
-
-            _data = new NotifyAllTasksCompletion(categories,products);
-
-            //if (_data.IsCompleted)
-            //{
-            //    Initialize();
-            //    IsReady = true;
-
-            //}
-            ////_data.PropertyChanged += _data_PropertyChanged;
-            //_data.AllTasksCompleted += OnAllTasksCompleted;
+            ConfigureProductLayoutCommand = new DelegateCommandBase(ConfigureProductDisplayLayout);
+            AddCategoryRowCommand = new DelegateCommandBase(AddCategoryRow);
         }
 
         public override void Initialize()
@@ -521,7 +529,7 @@ namespace FastPosFrontend.ViewModels
             SelectedFreeProductIsChanged = true;
         }
 
-        public void RemoveProductFromCategory()
+        public void RemoveProductFromCategory(object obj)
         {
             if (SelectedProduct?.Id == null)
             {
@@ -535,7 +543,7 @@ namespace FastPosFrontend.ViewModels
             //SelectedFreeProduct = freep;
         }
 
-        public void RemoveCategoryFromList()
+        public void RemoveCategoryFromList(object obj)
         {
             bool result = true;
             if (SelectedCategory?.Id == null)
@@ -715,7 +723,7 @@ namespace FastPosFrontend.ViewModels
             FreeProducts.Remove(SelectedFreeProduct);
         }
 
-        public void CopyProduct()
+        public void CopyProduct(object obj)
         {
             if (SelectedProduct?.Category == null || SelectedProduct.Id == null)
             {
@@ -726,7 +734,7 @@ namespace FastPosFrontend.ViewModels
             ClipboardProduct = SelectedProduct;
         }
 
-        public void CopyCategory()
+        public void CopyCategory(object obj)
         {
             if (SelectedCategory?.Id == null)
             {
@@ -798,7 +806,7 @@ namespace FastPosFrontend.ViewModels
             StateManager.Save(incomingCategory);
         }
 
-        public void PasteProduct()
+        public void PasteProduct(object obj)
         {
             if (ClipboardProduct == null)
             {
@@ -855,7 +863,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void PasteCategory()
+        public void PasteCategory(object obj)
         {
             if (ClipboardCategory == null)
             {
@@ -913,7 +921,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void MoveProductTo()
+        public void MoveProductTo(object obj)
         {
             if (SelectedProduct?.Name == null || SelectedProduct.Category.Id == null)
             {
@@ -924,7 +932,7 @@ namespace FastPosFrontend.ViewModels
             ProductToMove = SelectedProduct;
         }
 
-        public void MoveCategoryTo()
+        public void MoveCategoryTo(object obj)
         {
             if (SelectedCategory?.Name == null )
             {
@@ -936,7 +944,7 @@ namespace FastPosFrontend.ViewModels
         }
 
 
-        public void DeleteCategory()
+        public void DeleteCategory(object obj)
         {
             if (SelectedCategory!=null && SelectedFreeCategory == null)
             {
@@ -967,7 +975,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void DeleteProduct()
+        public void DeleteProduct(object obj)
         {
             if (SelectedProduct != null && SelectedFreeProduct == null)
             {
@@ -1277,7 +1285,7 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 SelectedProduct = productSrc;
-                RemoveProductFromCategory();
+                RemoveProductFromCategory(null);
             }
         }
 
@@ -1441,11 +1449,11 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 SelectedCategory = categorySrc;
-                RemoveCategoryFromList();
+                RemoveCategoryFromList(null);
             }
         }
 
-        public void EditProduct()
+        public void EditProduct(object obj)
         {
             if (SelectedProduct?.Id == null)
             {
@@ -1471,16 +1479,17 @@ namespace FastPosFrontend.ViewModels
            
         }
 
-        public void CreateProduct()
+        public void CreateProduct(object obj)
         {
-            
 
-            if (SelectedProduct== null)
+            if (SelectedProduct== null|| SelectedProduct?.Id!= null)
             {
                 ToastNotification.Notify("Select an empty cell to create a new Product");
                 return;
             }
+
             if (SelectedCategory?.Id == null) return;
+            
             ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             var parent = (Parent as MainViewModel);
@@ -1493,6 +1502,11 @@ namespace FastPosFrontend.ViewModels
                         ProductDetailViewModel = null;
                     }
                 });
+        }
+
+        public void EditCategory(object obj)
+        {
+            EditCategory();
         }
 
         public void EditCategory(bool callFromCreate = false)
@@ -1515,6 +1529,12 @@ namespace FastPosFrontend.ViewModels
 
         }
 
+        public void CreateCategory(object obj) 
+        {
+            CreateCategory();
+        }
+
+
         public void CreateCategory()
         {
             if (SelectedCategory== null)
@@ -1530,7 +1550,7 @@ namespace FastPosFrontend.ViewModels
             EditCategory(true);
         }
 
-        public void AddCategoryRow()
+        public void AddCategoryRow(object obj)
         {
             var baseRank = CategoryPageSize * _numberOfCategoryRows + 1;
             _numberOfCategoryRows++;
@@ -1558,7 +1578,7 @@ namespace FastPosFrontend.ViewModels
         //    ToastNotification.Notify("hi.cos");
         //}
 
-        public void ConfigureProductDisplayLayout()
+        public void ConfigureProductDisplayLayout(object obj)
         {
             
             (Parent as MainViewModel)?.OpenDialog(ProductLayoutViewModel);
@@ -1593,6 +1613,25 @@ namespace FastPosFrontend.ViewModels
         {
             RaiseSettingsUpdated();
         }
+
+        public ICommand CreateProductCommand { get; set; }
+        public ICommand EditProductCommand { get; set; }
+        public ICommand MoveProductCommand { get; set; }
+        public ICommand PasteProductCommand { get; set; }
+        public ICommand CopyProductCommand { get; set; }
+        public ICommand RemoveProductCommand { get; set; }
+        public ICommand DeleteProductCommand { get; set; }
+
+        public ICommand CreateCategoryCommand { get; set; }
+        public ICommand EditCategoryCommand { get; set; }
+        public ICommand MoveCategoryCommand { get; set; }
+        public ICommand PasteCategoryCommand { get; set; }
+        public ICommand CopyCategoryCommand { get; set; }
+        public ICommand RemoveCategoryCommand { get; set; }
+        public ICommand DeleteCategoryCommand { get; set; }
+
+        public ICommand ConfigureProductLayoutCommand { get; set; }
+        public ICommand AddCategoryRowCommand { get; set; }
     }
 
     public class Comparer<T> : IComparer<T> where T : Ranked
