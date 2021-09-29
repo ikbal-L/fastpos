@@ -5,8 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FastPosFrontend.Views.Components" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:enums="clr-namespace:FastPosFrontend.Enums"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:CheckoutViewModel}">
     <Grid   >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -51,7 +54,7 @@
             <Button Grid.Row="1" Grid.Column="3"
                                 Content="{materialdesign:PackIcon  Kind=TagMinus, Size=30}"
                                 
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DISC')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Disc}" />
 
 
             <Button Grid.Row="2" Grid.Column="0" Content="7" 
@@ -63,7 +66,7 @@
             <Button Grid.Row="2" Grid.Column="3"
                                 Content="{materialdesign:PackIcon  Kind=Dollar, Size=40}"
                                 
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PRICE')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Price}" />
 
             <Button Grid.Row="3" Grid.Column="0" Content="%" 
                                 cal:Message.Attach="[Event Click] = [Action NumericKeyboard('%')]" />
@@ -73,7 +76,7 @@
                                 cal:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]" />
             <Button Grid.Row="3" Grid.Column="3" 
                                 Content="{materialdesign:PackIcon  Kind=BackspaceOutline, Size=30}"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DEL')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Del}"/>
 
         </UniformGrid>
 
@@ -110,7 +113,7 @@
 
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
                                 Content="{materialdesign:PackIcon CashRegister, 30 }"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('PAYMENT')]"
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Payment}"
                     >
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
@@ -174,29 +177,29 @@
 
             <Button Grid.Row="2" Grid.Column="0" 
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('SPLIT')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Split}"/>
 
             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
                                 Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVERED')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.DElIVERED}"/>
 
 
 
             <Button Grid.Row="3" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }"
                                 
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('DElIVEREY')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Deliverey}"/>
 
             <Button Grid.Row="1" Grid.Column="1"
                                 Content="{materialdesign:PackIcon ChefHat, 30 }"
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('CMD')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Cmd}"/>
 
             <Button Grid.Row="2" Grid.Column="2" Content="{materialdesign:PackIcon BasketOutline,30}"
                                 
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TAKEAWAY')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Takeaway}"/>
 
             <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}"
                                 
-                                cal:Message.Attach="[Event Click] = [Action ActionKeyboard('TABLE')]" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Table}"/>
             <Button Content="{materialdesign:PackIcon Kind=CashPlus, Size=30}" Grid.Row="2" Grid.Column="1"
                                 
                                 cal:Message.Attach="[Event Click] = [Action AddExpense()]" />

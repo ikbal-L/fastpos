@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using System.Windows;
 using Action = System.Action;
 
 namespace FastPosFrontend.ViewModels
@@ -89,6 +90,18 @@ namespace FastPosFrontend.ViewModels
 
         
 
+    }
+
+    public class TemplatedDialogContentViewModel : DialogContent
+    {
+        public TemplatedDialogContentViewModel(object content,DataTemplate template , string title, params GenericCommand[] commands) : base(
+            content, commands)
+        {
+            Title = title;
+            Template = template;
+        }
+
+        public DataTemplate Template { get; }
     }
 
     public class DefaultDialogBuilder

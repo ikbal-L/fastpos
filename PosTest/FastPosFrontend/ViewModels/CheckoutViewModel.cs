@@ -129,6 +129,7 @@ namespace FastPosFrontend.ViewModels
         {
 
             LockOrderCommand = new DelegateCommandBase(LockOrder);
+            ActionKeyboardCommand = new DelegateCommandBase(ActionKeyboard);
             _orderInfoCloseTimer = new DispatcherTimer(){Interval = new TimeSpan(0, 0, 3)};
             _orderInfoCloseTimer.Tick += (sender, args) =>
             {
@@ -411,7 +412,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        OrderNotificationListener orderNotificationListener;
         
         public List<Category> AllCategories { get; set; }
 
@@ -747,6 +747,9 @@ namespace FastPosFrontend.ViewModels
 
         public ICommand LockOrderCommand { get; set; }
 
+        public ICommand ActionKeyboardCommand { get; set; }
+
+
 
         #region Order Commands
 
@@ -903,6 +906,7 @@ namespace FastPosFrontend.ViewModels
                 if (orderType == OrderType.OnTable)
                 {
                     CurrentOrder.Table = table;
+                    SelectedTable = table;
                     SelectedDeliveryman = null;
                     IsTableViewActive = true;
                     IsTakeawayViewActive = false;
@@ -1104,7 +1108,13 @@ namespace FastPosFrontend.ViewModels
 
 
         #region Command Buttons' Actions
-
+        public void ActionKeyboard(object obj)
+        {
+            if (obj is ActionButton cmd)
+            {
+                ActionKeyboard(cmd);
+            }
+        }
         public void ActionKeyboard(ActionButton cmd)
         {
             if (cmd == ActionButton.CopyToNumericZone)
@@ -1112,6 +1122,7 @@ namespace FastPosFrontend.ViewModels
                 if (CurrentOrder != null) NumericZone = CurrentOrder.NewTotal + "";
                 return;
             }
+
             if (string.IsNullOrEmpty(NumericZone) &&
                 cmd != ActionButton.Split &&
                 cmd != ActionButton.Cmd &&
@@ -1315,7 +1326,8 @@ namespace FastPosFrontend.ViewModels
                     if (CurrentOrder.Deliveryman == null)
                     {
                         ToastNotification.Notify("Must assign a Deliveryman to Order", NotificationType.Warning);
-                        return;
+                        ModalDialogBox.Ok(this, "CheckoutDeliverymanDialogContent", "Deliveryman").Show();
+                        
                     }
 
                     CurrentOrder.State = OrderState.Delivered;
@@ -2005,21 +2017,7 @@ namespace FastPosFrontend.ViewModels
             return document;
         }
 
-        public object GenerateContent(Order order)
-        {
-            DateTime? recent = CurrentOrder.OrderItems.Max(oi => oi.TimeStamp);
-            if (!ChangesMade)
-            {
-                ToastNotification.Notify("You made no updates", NotificationType.Information);
-            }
-
-            var value = new Order(order.Orders)
-            {
-                OrderItems = new BindableCollection<OrderItem>(order.OrderItems.Where(oi => oi.TimeStamp == recent))
-            };
-            ;
-            return value;
-        }
+       
 
         public void PrintPreview(PrintSource source)
         {

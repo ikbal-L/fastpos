@@ -16,6 +16,8 @@ namespace FastPosFrontend.Navigation
         bool IsQuickNavigationEnabled { get; }
 
         string QuickNavigationIconResKey { get; }
+
+        public bool Isvisible { get;  }
     }
 
     public enum NavigationItemLoadingStrategy

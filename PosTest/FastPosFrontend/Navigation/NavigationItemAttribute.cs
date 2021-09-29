@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace FastPosFrontend.Navigation
@@ -14,7 +13,7 @@ namespace FastPosFrontend.Navigation
             bool keepAlive = false, 
             bool isDefault = false,
             bool isQuickNavigationEnabled = false, 
-            string quickNavigationIconResKey = "")
+            string quickNavigationIconResKey = "",bool isVisible = true)
         {
             Title = title;
             Target = target;
@@ -24,6 +23,7 @@ namespace FastPosFrontend.Navigation
             KeepAlive = keepAlive;
             IsDefault = isDefault;
             IsQuickNavigationEnabled = isQuickNavigationEnabled;
+            Isvisible = !isQuickNavigationEnabled;
 
             var typeName = target.Name.Replace("ViewModel", "");
 
@@ -44,14 +44,7 @@ namespace FastPosFrontend.Navigation
             {
                 IconResKey = quickNavigationIconResKey;
             }
-
-
-
             var formattedTitle = string.Join(" ", Regex.Split(typeName, "([A-Z][a-z]+)"));
-            
-
-
-
         }
 
         public string Title { get; }
@@ -70,6 +63,8 @@ namespace FastPosFrontend.Navigation
         public bool IsQuickNavigationEnabled { get; }
 
         public string QuickNavigationIconResKey { get; }
+
+        public bool Isvisible { get; }
     }
 
 }

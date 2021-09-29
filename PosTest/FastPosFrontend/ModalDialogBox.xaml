@@ -16,69 +16,120 @@
         SizeToContent="WidthAndHeight"
         AllowsTransparency="False"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
-    <!--<Window.Resources>
-        <Style TargetType="views:MainView">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Window">
-                        <md:Card UniformCornerRadius="0">
-                            <ContentPresenter />
-                        </md:Card>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>-->
-    <!--<WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="0"
-                      CornerRadius="0" />
-    </WindowChrome.WindowChrome>-->
-    <GroupBox >
-        <GroupBox.Header>
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+        ResizeMode="NoResize" >
+    <Window.Resources>
+        <GroupBox x:Key="DefaultContent" >
+            <GroupBox.Header>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-                <md:PackIcon 
+                    <md:PackIcon 
                     Grid.Column="0" 
                     Kind="InfoOutline" 
                     Margin="5" 
                     VerticalAlignment="Center" 
                     Width="25" Height="25"
                     Foreground="WhiteSmoke"></md:PackIcon>
-                <TextBlock 
+                    <TextBlock 
                     Grid.Column="1" 
                     Text="{Binding Title}"
                     Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                     VerticalAlignment="Center"
                     Foreground="WhiteSmoke"></TextBlock>
-            </Grid>
-        </GroupBox.Header>
-        <StackPanel Margin="20">
+                </Grid>
+            </GroupBox.Header>
+            <StackPanel Margin="20">
 
-            <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" Margin="20"
-                   Style="{StaticResource MaterialDesignButtonTextBlock}"></TextBlock>
-            <HeaderedItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Stretch">
+                <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" Margin="20"
+                   Style="{StaticResource MaterialDesignButtonTextBlock}" />
+                <HeaderedItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Stretch">
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="helpers:GenericCommand">
-                        <Button Command="{Binding Command}"
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="helpers:GenericCommand">
+                            <Button Command="{Binding Command}"
                             Content="{Binding Content}"
                             Margin="5"
                             Style="{Binding Style,TargetNullValue={StaticResource MaterialDesignFlatButton}}"
                             Width="100"
                             IsDefault="{Binding IsDefault}"></Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="1" VerticalAlignment="Center"></UniformGrid>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </HeaderedItemsControl>
-        </StackPanel>
-    </GroupBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" VerticalAlignment="Center"></UniformGrid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </HeaderedItemsControl>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox x:Key="TemplatedContent" >
+            <GroupBox.Header>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <md:PackIcon 
+                    Grid.Column="0" 
+                    Kind="InfoOutline" 
+                    Margin="5" 
+                    VerticalAlignment="Center" 
+                    Width="25" Height="25"
+                    Foreground="WhiteSmoke"></md:PackIcon>
+                    <TextBlock 
+                    Grid.Column="1" 
+                    Text="{Binding Title}"
+                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                    VerticalAlignment="Center"
+                    Foreground="WhiteSmoke"></TextBlock>
+                </Grid>
+            </GroupBox.Header>
+            <StackPanel Margin="20">
+
+                <ContentControl Content="{Binding Content}" ContentTemplate="{Binding Template}" HorizontalAlignment="Center" Margin="20"
+                    />
+                <HeaderedItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Stretch">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="helpers:GenericCommand">
+                            <Button Command="{Binding Command}"
+                            Content="{Binding Content}"
+                            Margin="5"
+                            Style="{Binding Style,TargetNullValue={StaticResource MaterialDesignFlatButton}}"
+                            Width="100"
+                            IsDefault="{Binding IsDefault}"></Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" VerticalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </HeaderedItemsControl>
+            </StackPanel>
+        </GroupBox>
+    </Window.Resources>
+    <Window.Style>
+        <Style TargetType="local:ModalDialogBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self},Path=IsTemplated}" Value="false">
+                    <Setter Property="Content" Value="{StaticResource DefaultContent}"> </Setter>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self},Path=IsTemplated}" Value="true">
+                    <Setter Property="Content" Value="{StaticResource TemplatedContent}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+    <!--<WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0"
+                      CornerRadius="0" />
+    </WindowChrome.WindowChrome>-->
+    
 </Window>

@@ -9,12 +9,15 @@ namespace FastPosFrontend
     /// </summary>
     public partial class ModalDialogBox : Window
     {
-        private ModalDialogBox()
+        private ModalDialogBox(bool isTemplated = false)
         {
+            IsTemplated = isTemplated;
             InitializeComponent();
         }
 
         private static ModalDialogBox Instance;
+
+        public bool IsTemplated { get; set; }
 
         public bool Show()
         {
@@ -39,5 +42,17 @@ namespace FastPosFrontend
             Instance = new ModalDialogBox() { DataContext = vm };
             return Instance;
         }
+
+        public static ModalDialogBox Ok(object content,string template, string title)
+        {
+            var dt = Application.Current.FindResource(template) as DataTemplate;
+            var vm = new TemplatedDialogContentViewModel(content, dt, title,
+                new GenericCommand("Ok", o => { Instance.DialogResult = null; Instance.Close(); }));
+            Instance = new ModalDialogBox(isTemplated:true) { DataContext = vm };
+            return Instance;
+        }
+
+
+
     }
 }

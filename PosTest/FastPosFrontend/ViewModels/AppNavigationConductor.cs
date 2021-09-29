@@ -73,7 +73,7 @@ namespace FastPosFrontend.ViewModels
                     type => ! IsParentItem(type))
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
                                     string.IsNullOrEmpty(attribute.GroupName)
-                                    && attribute.ParentNavigationItem == null)
+                                    && attribute.ParentNavigationItem == null&& attribute.Isvisible)
                 .Select(attribute => (NavigationLookupItem) attribute).ToList();
             return items;
         }
@@ -88,7 +88,7 @@ namespace FastPosFrontend.ViewModels
                 GetAppliedAttributes<NavigationItemAttribute>( )
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
                                     !string.IsNullOrEmpty(attribute.GroupName
-                                    ))
+                                    )&& attribute.Isvisible)
                 .GroupBy(attribute => attribute.GroupName).Select((grouping) =>
                     new NavigationLookupItem(grouping.Key, isGroupingItem: true)
                     {

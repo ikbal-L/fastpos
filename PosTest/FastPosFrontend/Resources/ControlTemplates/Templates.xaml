@@ -33,7 +33,7 @@
                         <StackPanel>
                             <ContentControl Content="{Binding Drawer.Top,UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{Binding Drawer.Top.Template,UpdateSourceTrigger=PropertyChanged}" />
 
-                            <Button Content="{md:PackIcon Kind=Close}" Style="{StaticResource MaterialDesignIconButton}" VerticalAlignment="Bottom" Command="{x:Static md:DrawerHost.CloseDrawerCommand}" Margin="0 0 0 10"/>
+                            <Button Content="{md:PackIcon Kind=Close}" Style="{StaticResource MaterialDesignIconButton}" VerticalAlignment="Bottom" Command="{x:Static md:DrawerHost.CloseDrawerCommand}" Margin="0 5"/>
                         </StackPanel>
                     </md:DrawerHost.TopDrawerContent>
                     
