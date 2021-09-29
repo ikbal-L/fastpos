@@ -36,7 +36,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (e.Item is Order order && order.DeliverymanId == SelectedDeliveryman.Id && order.State == OrderState.Delivered)
+            if (e.Item is Order order && order.DeliverymanId == SelectedDeliveryman.Id && (order.State == OrderState.Delivered|| order.State  == OrderState.DeliveredPartiallyPaid))
             {
                 e.Accepted = true;
                 return;
@@ -46,10 +46,10 @@ namespace FastPosFrontend.ViewModels
 
         private decimal CalculateTotal()
         {
-            if (SelectedDeliveryman == null) return 0;
-
-            return _ordersCollection.Where(o => o.State == OrderState.Delivered&& o.DeliverymanId == SelectedDeliveryman.Id).Sum(o => o.NewTotal);
+            return SelectedDeliveryman?.Balance??0;
         }
+
+        
 
         public CollectionViewSource DeliverymanCollection { get; set; }
 
@@ -236,11 +236,11 @@ namespace FastPosFrontend.ViewModels
                 NumericZone = "";
                 return;
             }
-            if (payedAmount< Total)
-            {
-                ToastNotification.Notify("الرجاء إدخال المبلغ المطلوب");
-                return;
-            }
+            //if (payedAmount< Total)
+            //{
+            //    ToastNotification.Notify("الرجاء إدخال المبلغ المطلوب");
+            //    return;
+            //}
             var api = new RestApis();
             var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value };
             var result = GenericRest.PostThing<Payment>(api.Resource<Payment>(EndPoint.SAVE),payment);
@@ -258,6 +258,12 @@ namespace FastPosFrontend.ViewModels
                         order.State = OrderState.DeliveredPaid;
                     }
                 }
+                var url = api.Resource<Deliveryman>("getwithbalance", SelectedDeliveryman.Id);
+                var result2 = GenericRest.GetThing<Deliveryman>(url);
+                if (result2.status == 200)
+                {
+                    SelectedDeliveryman.Balance = result2.Item2.Balance;
+                }
                 DeliveryOrders?.View?.Refresh();
                 PaidDeliveryOrders?.View.Refresh();
                 DeliveryPayments?.View?.Refresh();
@@ -267,19 +273,26 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-        protected override void Setup()
+        protected  override void Setup()
         {
-           
 
-           
-            var data = StateManager.Get<Deliveryman>();
+
+            var api = new RestApis();
+            var url = api.Resource<Deliveryman>("getallwithbalance");
+            var result =  GenericRest.GetThing<List<Deliveryman>>(url);
+            List<Deliveryman> data = new List<Deliveryman>();
+            if (result.status == 200)
+            {
+                data.AddRange(result.Item2);
+            }
+            
             _deliverymanCollection = new ObservableCollection<Deliveryman>(data);
             DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
 
             var orderRepo = StateManager.GetService<Order, IOrderRepository>();
             var paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
 
-            OrderState[] states = { OrderState.Delivered, OrderState.DeliveredPaid };
+            OrderState[] states = { OrderState.Delivered,OrderState.DeliveredPartiallyPaid, OrderState.DeliveredPaid };
 
             var deliverymanIds = data.Select(d => d.Id.Value);
 

@@ -215,20 +215,23 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void CreateAdditive(Additive additive)
+        public void CreateAdditive(object obj)
         {
-            if (SelectedAdditive == null)
+            if (obj is Additive additive)
             {
-                SelectedAdditive = additive;
+                if (SelectedAdditive == null)
+                {
+                    SelectedAdditive = additive;
+                }
+
+                var mVm = Parent as MainViewModel;
+
+                AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive, this);
+                mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
+                {
+                    AdditiveDetailViewMode = null;
+                }); 
             }
-            //CopySelectedAdditive = additive.Clone();
-            //IsEditing = true;
-            var mVm = (Parent as MainViewModel);
-            AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive, this);
-            mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
-            {
-                AdditiveDetailViewMode = null;
-            });
         }
 
         
@@ -238,7 +241,7 @@ namespace FastPosFrontend.ViewModels
             (Parent as MainViewModel)?.CloseDialog(AdditiveDetailViewMode);
         }
 
-        public void EditAdditive()
+        public void EditAdditive(object obj)
         {
             if (SelectedAdditive?.Id == null)
             {
@@ -257,7 +260,7 @@ namespace FastPosFrontend.ViewModels
             });
         }
 
-        public void CopyAdditive()
+        public void CopyAdditive(object obj)
         {
             if (SelectedAdditive?.Id == null)
             {
@@ -268,7 +271,7 @@ namespace FastPosFrontend.ViewModels
             ClipBoardAdditive = SelectedAdditive;
         }
 
-        public void PasteAdditive()
+        public void PasteAdditive(object obj)
         {
             if (ClipBoardAdditive == null)
             {
@@ -302,7 +305,7 @@ namespace FastPosFrontend.ViewModels
             ClipBoardAdditive = null;
         }
 
-        public void MoveAdditive()
+        public void MoveAdditive(object obj)
         {
             if (AdditiveToMove == null)
             {
@@ -319,18 +322,12 @@ namespace FastPosFrontend.ViewModels
             }
         }
         //TODO must add delete set null to additive entity
-        public void DeleteAdditive()
+        public void DeleteAdditive(object obj)
         {
             if (SelectedAdditive == null)
             {
                 return;
             }
-
-            //WarningViewModel = new WarningViewModel("Are you sure to delete this Additive?", "Check", "Ok", "Close",
-            //    "No",
-            //    (o) => DeleteAdditiveAction(o), this, () => IsDialogOpen = false);
-            //DialogViewModel = WarningViewModel;
-            //IsDialogOpen = true;
             var mVm = (Parent as MainViewModel);
             mVm?.OpenDialog(
                 DefaultDialog
@@ -338,7 +335,7 @@ namespace FastPosFrontend.ViewModels
                     .Title("Delete additive")
                     .Ok(o =>
                     {
-                        DeleteAdditiveAction(o);
+                        DeleteAdditiveAction();
                         mVm.CloseDialog();
                     })
                     .Cancel(o =>
@@ -347,7 +344,7 @@ namespace FastPosFrontend.ViewModels
                     } ));
         }
 
-        public void DeleteAdditiveAction(object param)
+        public void DeleteAdditiveAction()
         {
             if (SelectedAdditive?.Id == null)
             {
@@ -404,8 +401,14 @@ namespace FastPosFrontend.ViewModels
         protected override void Setup()
         {
             var additivesTask= StateManager.GetAsync<Additive>();
-           _data = new NotifyAllTasksCompletion(additivesTask);
+            _data = new NotifyAllTasksCompletion(additivesTask);
 
+            CreateAdditiveCommand = new DelegateCommandBase(CreateAdditive);
+            EditAdditiveCommand = new DelegateCommandBase(EditAdditive);
+            MoveAdditiveCommand = new DelegateCommandBase(MoveAdditive);
+            CopyAdditiveCommand = new DelegateCommandBase(CopyAdditive);
+            PasteAdditiveCommand = new DelegateCommandBase(PasteAdditive);
+            DeleteAdditiveCommand = new DelegateCommandBase(DeleteAdditive);
         }
 
         public override void Initialize()
@@ -414,5 +417,12 @@ namespace FastPosFrontend.ViewModels
             _allAdditives = StateManager.Get<Additive>().ToList();
             PopulateAdditivesPage();
         }
+
+        public ICommand CreateAdditiveCommand { get; set; }
+        public ICommand EditAdditiveCommand { get; set; }
+        public ICommand CopyAdditiveCommand { get; set; }
+        public ICommand PasteAdditiveCommand { get; set; }
+        public ICommand MoveAdditiveCommand { get; set; }
+        public ICommand DeleteAdditiveCommand { get; set; }
     }
 }

@@ -311,11 +311,6 @@ namespace ServiceInterface.Model
         //[DataMember]
         public List<long> OrderItemIds { get; set; }
 
-        public Session Session { get; set; }
-
-        // [DataMember]
-        public long SessionId { get; set; }
-
         public Customer Customer
         {
             get => _customer;
@@ -431,6 +426,9 @@ namespace ServiceInterface.Model
             }
         }
 
+
+        public decimal Remaining => NewTotal - GivenAmount;
+
         public override string ToString()
         {
             return $"Order #{OrderNumber}";
@@ -465,7 +463,8 @@ namespace ServiceInterface.Model
         Changed,
         DeliveredPaid,
         DeliveredReturned,
-        Unprocessed
+        Unprocessed,
+        DeliveredPartiallyPaid
     }
 
     public enum OrderType
