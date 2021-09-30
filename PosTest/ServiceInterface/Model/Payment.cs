@@ -32,7 +32,7 @@ namespace ServiceInterface.Model
         public long DeliveryManId { get; set; }
 
         [DataMember]
-        public List<long> OrderIds { get; set; }
+        public List<Order> Orders { get; set; }
 
     }
 }   

@@ -250,15 +250,9 @@ namespace FastPosFrontend.ViewModels
                 NumericZone = "";
                 var savedPayment = result.Item2;
                 _paymentsCollection.Add(savedPayment);
-                foreach (var orderId in savedPayment.OrderIds)
-                {
-                    var order = _ordersCollection.FirstOrDefault(o => o.Id == orderId);
-                    if (order!= null)
-                    {
-                        order.State = OrderState.DeliveredPaid;
-                    }
-                }
+                UpdateOrdersFromPayment(savedPayment);
                 var url = api.Resource<Deliveryman>("getwithbalance", SelectedDeliveryman.Id);
+
                 var result2 = GenericRest.GetThing<Deliveryman>(url);
                 if (result2.status == 200)
                 {
@@ -271,6 +265,19 @@ namespace FastPosFrontend.ViewModels
             }
 
 
+        }
+
+        private void UpdateOrdersFromPayment(Payment savedPayment)
+        {
+            foreach (var paymentOrder in savedPayment.Orders)
+            {
+                var order = _ordersCollection.FirstOrDefault(o => o.Id == paymentOrder.Id);
+                if (order != null)
+                {
+                    order.State = paymentOrder.State;
+                    order.GivenAmount = paymentOrder.GivenAmount;
+                }
+            }
         }
 
         protected  override void Setup()
