@@ -129,16 +129,16 @@
                     </Button>
 
                     <ComboBox
-                     Grid.Column="2"
-        SelectedIndex="0"
-        Margin="8 0 0 0"
-        BorderThickness="0"
-        materialDesign:ColorZoneAssist.Mode="Standard"
-        materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
-        BorderBrush="{DynamicResource MaterialDesignPaper}"
-                    ItemsSource="{x:Static vm:OrderFilterCriteria.CRITERIAS}"
-                    TextBlock.FontWeight="Bold"
-                    SelectedItem="{Binding SelectedCriteria}">
+                        Grid.Column="2"
+                        SelectedIndex="0"
+                        Margin="8 0 0 0"
+                        BorderThickness="0"
+                        materialDesign:ColorZoneAssist.Mode="Standard"
+                        materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
+                        BorderBrush="{DynamicResource MaterialDesignPaper}"
+                        ItemsSource="{x:Static vm:OrderFilterCriteria.CRITERIAS}"
+                        TextBlock.FontWeight="Bold"
+                        SelectedItem="{Binding SelectedCriteria}">
 
                     </ComboBox>
                 </Grid>

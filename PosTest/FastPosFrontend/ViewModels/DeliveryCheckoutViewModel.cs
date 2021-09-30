@@ -17,13 +17,13 @@ using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingVie
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("Delivery Checkout", typeof(DeliveryCheckoutViewModel), isQuickNavigationEnabled:true)]
-    public class DeliveryCheckoutViewModel:LazyScreen
+    [NavigationItem("Delivery Checkout", typeof(DeliveryCheckoutViewModel), isQuickNavigationEnabled: true)]
+    public class DeliveryCheckoutViewModel : LazyScreen
     {
         private ObservableCollection<Deliveryman> _deliverymanCollection;
         private ObservableCollection<Order> _ordersCollection;
         private ObservableCollection<Payment> _paymentsCollection;
-        public DeliveryCheckoutViewModel():base()
+        public DeliveryCheckoutViewModel() : base()
         {
 
         }
@@ -36,7 +36,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (e.Item is Order order && order.DeliverymanId == SelectedDeliveryman.Id && (order.State == OrderState.Delivered|| order.State  == OrderState.DeliveredPartiallyPaid))
+            if (e.Item is Order order && order.DeliverymanId == SelectedDeliveryman.Id && (order.State == OrderState.Delivered || order.State == OrderState.DeliveredPartiallyPaid))
             {
                 e.Accepted = true;
                 return;
@@ -46,31 +46,31 @@ namespace FastPosFrontend.ViewModels
 
         private decimal CalculateTotal()
         {
-            return SelectedDeliveryman?.Balance??0;
+            return SelectedDeliveryman?.Balance ?? 0;
         }
 
-        
+
 
         public CollectionViewSource DeliverymanCollection { get; set; }
 
-        private Deliveryman? _selectedDeliveryman;
+        private IOrderRepository _orderRepo;
+        private IPaymentRepository _paymentRepo;
+        private Deliveryman _selectedDeliveryman;
 
-        public Deliveryman? SelectedDeliveryman
+        public Deliveryman SelectedDeliveryman
         {
             get { return _selectedDeliveryman; }
-            set 
-            { 
-                Set( ref _selectedDeliveryman , value);
+            set
+            {
+                Set(ref _selectedDeliveryman, value);
+                NotifyOfPropertyChange(nameof(SelectedDeliveryman));
                 DeliveryOrders.View.Refresh();
-                PaidDeliveryOrders.View.Refresh();
-                DeliveryPayments.View.Refresh();
-                NotifyOfPropertyChange(() => Total);
             }
         }
 
         public CollectionViewSource DeliveryOrders { get; set; }
-        public CollectionViewSource PaidDeliveryOrders { get; set; }
-        public CollectionViewSource DeliveryPayments { get; set; }
+        public Paginator<Order> PaidDeliveryOrders { get; set; }
+        public Paginator<Payment> DeliveryPayments { get; set; }
 
 
         private Order _selectedOrder;
@@ -78,7 +78,7 @@ namespace FastPosFrontend.ViewModels
         public Order SelectedOrder
         {
             get { return _selectedOrder; }
-            set { Set(ref _selectedOrder , value); }
+            set { Set(ref _selectedOrder, value); }
         }
 
         private string _selectedFilterOption = DeliveryCheckoutFilter.DELIVERY_MAN;
@@ -86,8 +86,8 @@ namespace FastPosFrontend.ViewModels
         public string SelectedFilterOption
         {
             get { return _selectedFilterOption; }
-            set 
-            { 
+            set
+            {
                 Set(ref _selectedFilterOption, value);
                 if (_selectedFilterOption == DeliveryCheckoutFilter.DELIVERY_MAN)
                 {
@@ -126,12 +126,34 @@ namespace FastPosFrontend.ViewModels
             set { Set(ref _filterText, value); }
         }
 
-        private string _numericZone ;
+        private string _numericZone;
+        private int _selectedTab;
 
         public string NumericZone
         {
             get { return _numericZone; }
-            set {  Set(ref _numericZone , value); }
+            set { Set(ref _numericZone, value); }
+        }
+
+        public int SelectedTab 
+        { 
+            get => _selectedTab; 
+            set 
+            {
+                Set(ref _selectedTab, value);
+                if (SelectedDeliveryman!= null)
+                {
+                    if (SelectedTab == DeliveryCheckoutTabs.PAID_ORDERS_TAB)
+                    {
+                        PaidDeliveryOrders.Reload();
+                    }
+
+                    if (SelectedTab == DeliveryCheckoutTabs.PAYMENT_HISTORY_TAB)
+                    {
+                        DeliveryPayments.Reload();
+                    } 
+                }
+            }
         }
 
         public decimal Total => CalculateTotal();
@@ -161,7 +183,7 @@ namespace FastPosFrontend.ViewModels
 
                 case ActionButton.Enter:
 
-                    if (SelectedDeliveryman!= null)
+                    if (SelectedDeliveryman != null)
                     {
                         PayementAction();
                     }
@@ -170,7 +192,7 @@ namespace FastPosFrontend.ViewModels
                         ToastNotification.Notify("قم باختيار مندوب التوصيل من أجل الدفع");
                     }
                     //RelaodDeliveryMan();
-                    
+
                     break;
 
                     //EditPayment();
@@ -229,22 +251,18 @@ namespace FastPosFrontend.ViewModels
 
 
             if (!decimal.TryParse(NumericZone, out var payedAmount)) return;
-            
+
 
             if (payedAmount <= 0)
             {
                 NumericZone = "";
                 return;
             }
-            //if (payedAmount< Total)
-            //{
-            //    ToastNotification.Notify("الرجاء إدخال المبلغ المطلوب");
-            //    return;
-            //}
+
             var api = new RestApis();
             var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value };
-            var result = GenericRest.PostThing<Payment>(api.Resource<Payment>(EndPoint.SAVE),payment);
-            
+            var result = GenericRest.PostThing<Payment>(api.Resource<Payment>(EndPoint.SAVE), payment);
+
             if (result.status == 201)
             {
                 NumericZone = "";
@@ -259,8 +277,6 @@ namespace FastPosFrontend.ViewModels
                     SelectedDeliveryman.Balance = result2.Item2.Balance;
                 }
                 DeliveryOrders?.View?.Refresh();
-                PaidDeliveryOrders?.View.Refresh();
-                DeliveryPayments?.View?.Refresh();
                 NotifyOfPropertyChange(nameof(Total));
             }
 
@@ -280,55 +296,73 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        protected  override void Setup()
+        protected override void Setup()
         {
-
-
             var api = new RestApis();
             var url = api.Resource<Deliveryman>("getallwithbalance");
-            var result =  GenericRest.GetThing<List<Deliveryman>>(url);
+            var result = GenericRest.GetThing<List<Deliveryman>>(url);
             List<Deliveryman> data = new List<Deliveryman>();
             if (result.status == 200)
             {
                 data.AddRange(result.Item2);
             }
-            
+
             _deliverymanCollection = new ObservableCollection<Deliveryman>(data);
             DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
 
-            var orderRepo = StateManager.GetService<Order, IOrderRepository>();
-            var paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
+            _orderRepo = StateManager.GetService<Order, IOrderRepository>();
+            _paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
 
-            OrderState[] states = { OrderState.Delivered,OrderState.DeliveredPartiallyPaid, OrderState.DeliveredPaid };
+            OrderState[] states = { OrderState.Delivered, OrderState.DeliveredPartiallyPaid };
 
             var deliverymanIds = data.Select(d => d.Id.Value);
 
             var criterias = new OrderFilter() { States = states, DeliverymanIds = deliverymanIds };
-            var orders = orderRepo.GetByCriteriasAsync(criterias);
-            var payments = paymentRepo.GetByCriteriasAsync(new PaymentFilter() { DeliverymanIds = deliverymanIds });
-
-            _data = new NotifyAllTasksCompletion(orders,
-               payments);
+            var orders = _orderRepo.GetByCriteriasAsync(criterias);
 
 
-            
+            _data = new NotifyAllTasksCompletion(orders);
         }
 
         public override void Initialize()
         {
             var orders = _data.GetResult<List<Order>>();
-            var payments = _data.GetResult<List<Payment>>();
+
 
             _ordersCollection = new ObservableCollection<Order>(orders);
-            _paymentsCollection = new ObservableCollection<Payment>(payments);
+
 
             DeliveryOrders = new CollectionViewSource() { Source = _ordersCollection };
-            PaidDeliveryOrders = new CollectionViewSource() { Source = _ordersCollection };
-            DeliveryPayments = new CollectionViewSource() { Source = _paymentsCollection };
+
+            var orderPageRetreiver = new PageRetriever<Order>(RetriveOrderPage);
+            PaidDeliveryOrders = new Paginator<Order>(orderPageRetreiver);
+
+            var paymentPageRetreiver = new PageRetriever<Payment>(RetrivePaymentPage);
+            DeliveryPayments = new Paginator<Payment>(paymentPageRetreiver);
 
             DeliveryOrders.Filter += DeliveryOrders_Filter;
-            PaidDeliveryOrders.Filter += PaidDeliveryOrders_Filter;
-            DeliveryPayments.Filter += DeliveryPayments_Filter;
+        }
+
+        public IEnumerable<Order> RetriveOrderPage((int pageIndex, int pageSize) p)
+        {
+            var orderFilter = new OrderFilter() 
+            { 
+                PageIndex = p.pageIndex, 
+                PageSize = p.pageSize, 
+                DeliverymanId = SelectedDeliveryman.Id,
+                DescendingOrder = true ,
+                OrderBy = "orderTime",
+                State = OrderState.DeliveredPaid
+            };
+            var result = _orderRepo.GetByCriterias(orderFilter);
+            return result;
+        }
+
+        public IEnumerable<Payment> RetrivePaymentPage((int pageIndex, int pageSize) p)
+        {
+            var orderFilter = new PaymentFilter() { PageIndex = p.pageIndex, PageSize = p.pageSize, DeliverymanId = SelectedDeliveryman.Id };
+            var result = _paymentRepo.GetByCriterias(orderFilter);
+            return result;
         }
 
         private void PaidDeliveryOrders_Filter(object sender, FilterEventArgs e)
@@ -362,5 +396,13 @@ namespace FastPosFrontend.ViewModels
             }
             e.Accepted = false;
         }
+    }
+
+    public static class DeliveryCheckoutTabs
+    {
+        public static readonly int UNPAID_ORDERS_TAB = 0;
+        public static readonly int PAID_ORDERS_TAB = 1;
+        public static readonly int PAYMENT_HISTORY_TAB = 2;
+
     }
 }

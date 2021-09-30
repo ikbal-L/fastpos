@@ -96,7 +96,7 @@
                         <TextBox 
                              materialDesign:HintAssist.Hint="Total" Margin="10 10 10 15"
                              materialDesign:HintAssist.IsFloating="True"
-                             Text="{Binding Total,Mode=OneWay}"
+                             Text="{Binding SelectedDeliveryman.Balance,UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="True" Grid.Column="0"
                         materialDesign:HintAssist.Background="Black"
                         materialDesign:HintAssist.Foreground="#26ff26"
@@ -321,8 +321,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TabControl Grid.Column="1" Style="{StaticResource MaterialDesignTabControl}">
-                    <TabItem Header="Orders" >
+                <TabControl 
+                    Grid.Column="1" 
+                    Style="{StaticResource MaterialDesignTabControl}"
+                    SelectedIndex="{Binding SelectedTab}">
+                    <TabItem Header="Orders" TabIndex="{x:Static vm:DeliveryCheckoutTabs.UNPAID_ORDERS_TAB}" >
                         <DataGrid Grid.Column="0" 
                           ItemsSource="{Binding DeliveryOrders.View}" 
                           AutoGenerateColumns="False" 
@@ -360,9 +363,14 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
-                    <TabItem Header="Paid Orders" >
-                        <DataGrid Grid.Column="0" 
-                          ItemsSource="{Binding PaidDeliveryOrders.View}" 
+                    <TabItem Header="Paid Orders" TabIndex="{x:Static vm:DeliveryCheckoutTabs.PAID_ORDERS_TAB}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <DataGrid Grid.Column="0" 
+                          ItemsSource="{Binding PaidDeliveryOrders.PaginationView}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 
@@ -372,21 +380,40 @@
                           SelectedItem="{Binding SelectedOrder}"
                           CanUserResizeColumns="False"
                           Padding="0">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}" Width="50"/>
-                                <DataGridTextColumn Header="Time" Binding="{Binding OrderTime,StringFormat='H:mm:ss'}" Width="*"/>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}" Width="50"/>
+                                    <DataGridTextColumn Header="Time" Binding="{Binding OrderTime,StringFormat='H:mm:ss'}" Width="*"/>
 
-                                <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}" Width="*"/>
+                                    <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}" Width="*"/>
 
-                                <DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}" Width="auto" />
+                                    <DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}" Width="auto" />
 
 
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Grid Grid.Row="1" HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Panel.Resources>
+                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}"></Style>
+                                </Panel.Resources>
+                                <Button Content="{materialDesign:PackIcon Kind=ChevronLeft}" Grid.Column="0"></Button>
+                                <TextBox Grid.Column="1" 
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Padding="10 5"
+                                         Margin="10 0">1/10</TextBox>
+                                <Button Content="{materialDesign:PackIcon Kind=ChevronRight}" Grid.Column="2"></Button>
+                            </Grid>
+                        </Grid>
                     </TabItem>
-                    <TabItem Header="Payments">
+                    <TabItem Header="Payments" TabIndex="{x:Static vm:DeliveryCheckoutTabs.PAYMENT_HISTORY_TAB}">
                         <DataGrid Grid.Column="0" 
-                          ItemsSource="{Binding DeliveryPayments.View}" 
+                          ItemsSource="{Binding DeliveryPayments.PaginationView}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 

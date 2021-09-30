@@ -1317,15 +1317,21 @@ namespace FastPosFrontend.ViewModels
                         return;
                     }
 
-                    if (CurrentOrder.Type != OrderType.Delivery)
+                    if (CurrentOrder.Type != OrderType.Delivery&& CurrentOrder.Type!=OrderType.InWaiting)
                     {
                         ToastNotification.Notify("Order type must be Delivery", NotificationType.Warning);
                         return;
                     }
 
+                    if (CurrentOrder.Type == OrderType.InWaiting)
+                    {
+                        SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
+                    }
+                            
+
                     if (CurrentOrder.Deliveryman == null)
                     {
-                        ToastNotification.Notify("Must assign a Deliveryman to Order", NotificationType.Warning);
+                      
                         ModalDialogBox.Ok(this, "CheckoutDeliverymanDialogContent", "Deliveryman").Show();
                         
                     }

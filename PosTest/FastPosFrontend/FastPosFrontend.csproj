@@ -311,8 +311,10 @@
     <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\GenericCommand.cs" />
+    <Compile Include="Helpers\ObservableCollectionEx.cs" />
     <Compile Include="Helpers\OrderNotificationListener.cs" />
     <Compile Include="Helpers\NumerationMask.cs" />
+    <Compile Include="Helpers\Paginator.cs" />
     <Compile Include="Helpers\Parser.cs" />
     <Compile Include="Helpers\SyncManager.cs" />
     <Compile Include="Navigation\NavigationDrawerView.xaml.cs">

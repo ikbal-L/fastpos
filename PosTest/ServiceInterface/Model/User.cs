@@ -172,7 +172,7 @@ namespace ServiceInterface.Model
         {
             get { return _balance; }
             set {
-                _balance = value;
+                Set(ref _balance , value);
                 NotifyOfPropertyChange(nameof(Balance));
             }
         }
