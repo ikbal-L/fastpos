@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using FastPosFrontend.Helpers;
+﻿using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -22,7 +21,7 @@ namespace FastPosFrontend.ViewModels
     {
         private ObservableCollection<Deliveryman> _deliverymanCollection;
         private ObservableCollection<Order> _ordersCollection;
-        private ObservableCollection<Payment> _paymentsCollection;
+       
         public DeliveryCheckoutViewModel() : base()
         {
 
@@ -44,9 +43,21 @@ namespace FastPosFrontend.ViewModels
             e.Accepted = false;
         }
 
-        private decimal CalculateTotal()
+        private decimal CalculateDiscount()
         {
-            return SelectedDeliveryman?.Balance ?? 0;
+            if (SelectedDeliveryman == null) return 0;
+
+            if (!decimal.TryParse(NumericZone.Replace("%", ""), out var value)) return 0;
+
+            if (NumericZone.Contains("%"))
+            {
+                
+                return SelectedDeliveryman.Balance * (100 - value) / 100;
+            }
+
+            return SelectedDeliveryman.Balance - value;
+
+
         }
 
 
@@ -71,7 +82,6 @@ namespace FastPosFrontend.ViewModels
         public CollectionViewSource DeliveryOrders { get; set; }
         public Paginator<Order> PaidDeliveryOrders { get; set; }
         public Paginator<Payment> DeliveryPayments { get; set; }
-
 
         private Order _selectedOrder;
 
@@ -132,7 +142,7 @@ namespace FastPosFrontend.ViewModels
         public string NumericZone
         {
             get { return _numericZone; }
-            set { Set(ref _numericZone, value); }
+            set { Set(ref _numericZone, value); NotifyOfPropertyChange(nameof(Discount)); }
         }
 
         public int SelectedTab 
@@ -156,7 +166,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public decimal Total => CalculateTotal();
+        public decimal Discount => CalculateDiscount();
 
         public void AddDeliveredOrder(Order order)
         {
@@ -166,7 +176,7 @@ namespace FastPosFrontend.ViewModels
 
         public void CopyTotalPaymentField()
         {
-            NumericZone = $"{Total}";
+            NumericZone = $"{SelectedDeliveryman?.Balance}";
         }
 
         public void ActionKeyboard(ActionButton cmd)
@@ -267,7 +277,7 @@ namespace FastPosFrontend.ViewModels
             {
                 NumericZone = "";
                 var savedPayment = result.Item2;
-                _paymentsCollection.Add(savedPayment);
+              
                 UpdateOrdersFromPayment(savedPayment);
                 var url = api.Resource<Deliveryman>("getwithbalance", SelectedDeliveryman.Id);
 
@@ -277,7 +287,7 @@ namespace FastPosFrontend.ViewModels
                     SelectedDeliveryman.Balance = result2.Item2.Balance;
                 }
                 DeliveryOrders?.View?.Refresh();
-                NotifyOfPropertyChange(nameof(Total));
+                NotifyOfPropertyChange(nameof(Discount));
             }
 
 
@@ -360,7 +370,13 @@ namespace FastPosFrontend.ViewModels
 
         public IEnumerable<Payment> RetrivePaymentPage((int pageIndex, int pageSize) p)
         {
-            var orderFilter = new PaymentFilter() { PageIndex = p.pageIndex, PageSize = p.pageSize, DeliverymanId = SelectedDeliveryman.Id };
+            var orderFilter = new PaymentFilter() 
+            { 
+                PageIndex = p.pageIndex, 
+                PageSize = p.pageSize, 
+                DeliverymanId = SelectedDeliveryman.Id,
+                OrderBy ="date",
+                DescendingOrder=true };
             var result = _paymentRepo.GetByCriterias(orderFilter);
             return result;
         }
