@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 
@@ -11,6 +12,7 @@ namespace FastPosFrontend.Helpers
         int PageSize { get;  }
         CollectionViewSource PaginationCollectionViewSource { get; }
         ICollectionView PaginationView { get; }
+        public event EventHandler<PageChangedEventArgs> PageChanged;
         public bool CanGoToNextPage();
         public bool CanGoToPreviousPage();
         void NextPage();

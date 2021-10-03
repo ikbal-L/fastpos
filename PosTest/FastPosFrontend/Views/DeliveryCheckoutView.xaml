@@ -31,6 +31,8 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <materialDesign:BrushOpacityConverter x:Key="BrushOpacityConverter" />
     </UserControl.Resources>
     <Grid >
         <Grid.ColumnDefinitions>
@@ -109,7 +111,7 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
@@ -129,11 +131,14 @@
                         FontSize="28"
                         Padding="10"
                         Focusable="False"
-                            TextAlignment="Right"
+                        TextAlignment="Right"
+                        materialDesign:TextFieldAssist.LeadingIcon="Sigma"
+                        materialDesign:TextFieldAssist.HasLeadingIcon="True"
+
                         />
                     </Button>
                     <TextBox 
-                             materialDesign:HintAssist.Hint="Discount" Margin="10 10 10 15"
+                             materialDesign:HintAssist.Hint="Discount" Margin="5 10 10 15"
                              materialDesign:HintAssist.IsFloating="True"
                              Text="{Binding Discount,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                              IsReadOnly="True" Grid.Column="1"
@@ -146,8 +151,34 @@
                         materialDesign:TextFieldAssist.LeadingIcon="TagMinus"
                         materialDesign:TextFieldAssist.HasLeadingIcon="True"
                         TextAlignment="Right"
+                        Visibility="{Binding IsDiscountEnabled,Converter={StaticResource boolToVisibilityConverter}}"
                         />
 
+
+                    <!--<StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        
+                        <ToggleButton  Margin="10 0 10 10" 
+                                       VerticalAlignment="Stretch" 
+                                       Width="50"
+                                       Height="50"
+                                       Background="DarkGreen" 
+
+                                       SnapsToDevicePixels="True"
+                                       Content="{materialDesign:PackIcon Kind=TagMinus,Size=25}"
+                                       IsChecked="True">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignFlatPrimaryToggleButton}">
+                                    <Setter Property="Foreground" Value="#15aa15"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Foreground" Value="#26ff26"/>
+                                        </Trigger>
+                                    </Style.Triggers> 
+                                </Style>
+                            </ToggleButton.Style>
+
+                        </ToggleButton>
+                    </StackPanel>-->
 
                     <TextBox 
                              materialDesign:HintAssist.Hint="Payment amount"
@@ -155,8 +186,8 @@
                              Margin="10 0 10 10"
                              Text="{Binding NumericZone}"
                              IsReadOnly="True"
-
-                        Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                             Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                        
                         materialDesign:TextFieldAssist.HasLeadingIcon="True"
                         materialDesign:TextFieldAssist.LeadingIcon="Dollar"
                         materialDesign:TextFieldAssist.LeadingIconSize="30"
@@ -168,7 +199,6 @@
                         Padding="10"
                         TextAlignment="Right"
                         />
-
 
                 </Grid>
                     <UniformGrid Grid.Row="1" VerticalAlignment="Top" Margin="15 5 15 15" Columns="2" Rows="1">
@@ -193,6 +223,33 @@
 
 
                         </Style>
+
+                        <Style TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                            <Setter Property="MaxWidth" Value="{x:Static sys:Double.MaxValue}"/>
+                            <Setter Property="MaxHeight" Value="{x:Static sys:Double.MaxValue}"/>
+                            <Setter Property="Width" Value="50"/>
+                            <Setter Property="Height" Value="50"/>
+                            <Setter Property="Margin" Value="2"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="VerticalAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
+                            <Setter Property="materialDesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Foreground" Value="DarkGreen"/>
+                                    <Setter Property="Background"  Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=Foreground,
+                                                                                        Converter={StaticResource BrushOpacityConverter},
+                                                                                        ConverterParameter=0.25}" />
+                                </Trigger>
+                            </Style.Triggers>
+
+                        </Style>
                     </Panel.Resources>
 
                     <UniformGrid Grid.Column="0" Columns="3" Rows="4"  VerticalAlignment="Top">
@@ -212,12 +269,14 @@
                     </UniformGrid>
                     <Grid Grid.Column="1"  VerticalAlignment="Top">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
                             <RowDefinition Height="3*"/>
                             <RowDefinition Height="*"/>
 
                         </Grid.RowDefinitions>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Enter')]"  Grid.Row="0" Content="{materialDesign:PackIcon Cash,40}" HorizontalAlignment="Stretch" Height="160" Width="150" />
-                        <Button caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Backspase')]"   Grid.Row="1"  Content="{materialDesign:PackIcon BackspaceOutline,30}" HorizontalAlignment="Stretch" Height="50" Width="150"/>
+                        <Button  caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Enter')]"  Grid.Row="1" Content="{materialDesign:PackIcon Kind=CashRegister,Size=40}" HorizontalAlignment="Stretch" Height="104" Width="150" />
+                        <ToggleButton IsChecked="{Binding IsDiscountEnabled}"  Grid.Row="0"  Content="{materialDesign:PackIcon Kind=TagMinus,Size=30}" HorizontalAlignment="Stretch" Height="50" Width="150"/>
+                        <Button caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Backspase')]"   Grid.Row="2"  Content="{materialDesign:PackIcon BackspaceOutline,30}" HorizontalAlignment="Stretch" Height="50" Width="150"/>
 
                     </Grid>
                 </UniformGrid>

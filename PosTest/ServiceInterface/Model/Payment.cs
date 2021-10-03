@@ -20,6 +20,19 @@ namespace ServiceInterface.Model
 
             }
         }
+        private decimal? _discountAmount;
+        [DataMember]
+        public decimal? DiscountAmount
+        {
+            get { return _discountAmount; }
+            set
+            {
+                _discountAmount = value;
+                NotifyOfPropertyChange(nameof(DiscountAmount));
+
+            }
+        }
+
         [DataMember]
        public DateTime Date { get; set; }
         [DataMember]

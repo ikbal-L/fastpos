@@ -2,8 +2,9 @@
 {
     public enum PrintSource
     {
-        Checkout,
+        CheckoutPrint,
         Kitchen,
-        CheckoutSplit
+        CheckoutSplit,
+        CheckoutPay,
     }
 }

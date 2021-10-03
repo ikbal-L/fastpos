@@ -109,20 +109,25 @@ namespace FastPosFrontend.ViewModels
             set 
             { 
                 Set(ref _opennedReport, value);
-                NotifyOfPropertyChange(nameof(IsTodaysReportSelected));
+                NotifyOfPropertyChange(nameof(CanAddOrRefreshReportProperty));
             }
         }
 
-        public bool IsTodaysReportSelected => OpennedReport?.IssuedDate.Date == DateTime.Today.Date ;
+        public bool CanAddOrRefreshReportProperty => CanAddOrRefreshReport();
 
-       
+        public bool CanAddOrRefreshReport()
+        {
+            if (IsReportGenerated)
+            {
+                return OpennedReport?.IssuedDate.Date == DateTime.Today.Date;
+            }
+            return true;
+        }
 
         private ObservableCollection<DailyExpenseReport> _reports;
 
-        //public ObservableCollection<DailyExpenseReport> Reports { get; set; }
 
         public CollectionView Reports { get; private set; }
-
 
         private string _userSearchQuery;
 
@@ -134,9 +139,6 @@ namespace FastPosFrontend.ViewModels
                 Reports?.Refresh();
             }
         }
-
-       
-
 
         public void Generate()
         {
@@ -202,9 +204,7 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("Select a report to print");
                 return;
             }
-            
 
-          
                 FixedDocument fixedDocument = GeneratePrintReport(OpennedReport);
                 var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
 

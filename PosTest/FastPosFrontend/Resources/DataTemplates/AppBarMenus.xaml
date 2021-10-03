@@ -220,18 +220,16 @@
 
                 <Button Content="{md:PackIcon Kind=Printer,Size=30}"
                         cal:Message.Attach="[Event Click] = [Action PrintReport]"/>
-                <Button cal:Message.Attach="[Event Click] = [Action Generate]" IsEnabled="{Binding IsTodaysReportSelected}">
+                <Button cal:Message.Attach="[Event Click] = [Action Generate]" IsEnabled="{Binding CanAddOrRefreshReportProperty}">
                     <Button.Style>
                         <Style BasedOn="{StaticResource AppBarButton}"  TargetType="Button">
                             <!--<Setter Property="IsEnabled" Value="False"/>-->
                             <Setter Property="Content" Value="{md:PackIcon Kind=Plus,Size=30}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsReportGenerated}" Value="true">
-                                    <Setter Property="Content" Value="{md:PackIcon Kind=Edit,Size=30}"/>
+                                    <Setter Property="Content" Value="{md:PackIcon Kind=Reload,Size=30}"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding SelectedTabIndex}" Value="0">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                </DataTrigger>
+                              
                             </Style.Triggers>
                         </Style>
                     </Button.Style>

@@ -16,6 +16,12 @@ namespace FastPosFrontend.ViewModels
             CurrentPage = _paginator.CurrentPage;
             NextPageCommand = new DelegateCommandBase(NextPage, CanGoToNextPage);
             PreviousPageCommand = new DelegateCommandBase(PreviousPage, CanGoToPreviousPage);
+            _paginator.PageChanged += OnPageChanged;
+        }
+
+        private void OnPageChanged(object sender, PageChangedEventArgs e)
+        {
+            CurrentPage = e.PageIndex;
         }
 
         public ICommand NextPageCommand { get; private set; }
@@ -37,14 +43,11 @@ namespace FastPosFrontend.ViewModels
         protected virtual void NextPage(object obj)
         {
             _paginator?.NextPage();
-            CurrentPage = _paginator.CurrentPage; 
         }
 
         protected virtual void PreviousPage(object obj)
         {
             _paginator?.PreviousPage();
-            CurrentPage = _paginator.CurrentPage;
-
         }
 
         private bool CanGoToNextPage(object obj) => _paginator.CanGoToNextPage();

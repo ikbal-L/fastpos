@@ -15,16 +15,27 @@ namespace FastPosFrontend.Helpers
         private int _currentPage = 0;
         private readonly PageRetriever<T> _pageRetriever;
         Predicate<T> _filterPredicate;
+
         public int? PageCount { get; set; }
         public int PageSize { get; set; } = 10;
 
-        public int CurrentPage { get => _currentPage; set => Set(ref _currentPage, value); }
-
-        public ObservableCollection<T> ObservableSourceCollection { get; private set; }
+        public int CurrentPage
+        {
+            get => _currentPage; 
+            set
+            {
+                Set(ref _currentPage, value);
+                RaisePageChanged();
+            }
+        }
 
         public CollectionViewSource PaginationCollectionViewSource { get; private set; }
 
         public ICollectionView PaginationView => PaginationCollectionViewSource.View;
+
+        public event EventHandler<PageChangedEventArgs> PageChanged;
+
+        public ObservableCollection<T> ObservableSourceCollection { get; private set; }
 
         public Paginator(PageRetriever<T> pageRetriever, IEnumerable<T> data = null, Predicate<T> filterPredicate = null)
         {
@@ -101,6 +112,11 @@ namespace FastPosFrontend.Helpers
             }
         }
 
+        public void RaisePageChanged()
+        {
+            PageChanged?.Invoke(this, new PageChangedEventArgs(_currentPage));
+        }
+
         public void Reload()
         {
             CurrentPage = 0;
@@ -113,10 +129,10 @@ namespace FastPosFrontend.Helpers
         public bool CanGoToNextPage()
         {
             if (!PageCount.HasValue) return true;
-            return CurrentPage < PageCount;
+            return _currentPage < PageCount;
         }
 
-        public bool CanGoToPreviousPage() => CurrentPage > 0;
+        public bool CanGoToPreviousPage() => _currentPage > 0;
 
     }
 
@@ -131,6 +147,15 @@ namespace FastPosFrontend.Helpers
         public IEnumerable<T> Retrieve(int pageIndex, int pageSize)
         {
             return _action?.Invoke(( pageIndex,  pageSize));
+        }
+    }
+
+    public class PageChangedEventArgs:EventArgs
+    {
+        public int PageIndex { get; private set; }
+        public PageChangedEventArgs(int pageIndex)
+        {
+            PageIndex = pageIndex;
         }
     }
 }

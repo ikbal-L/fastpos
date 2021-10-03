@@ -858,8 +858,8 @@ namespace FastPosFrontend.ViewModels
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
             CurrentOrder = new Order(Orders) { OrderNumber = orderCount};
-            orderCount++;
-
+            
+            UpdateOrderCount();
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
             //OrderItemsCollectionViewSource.View.Refresh();
             CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
@@ -870,6 +870,7 @@ namespace FastPosFrontend.ViewModels
 
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting);
             GivenAmount = 0;
+            CurrentOrderTotal = CurrentOrder.NewTotal;
             ReturnedAmount = null;
             NumericZone = string.Empty;
             SelectedDeliveryman = null;
@@ -1110,9 +1111,18 @@ namespace FastPosFrontend.ViewModels
         #region Command Buttons' Actions
         public void ActionKeyboard(object obj)
         {
-            if (obj is ActionButton cmd)
+            ActionButton? cmd = null;
+            if (obj is ActionButton a)
             {
-                ActionKeyboard(cmd);
+                cmd = a;
+            }
+            if ( obj is string enumString&& Enum.TryParse(enumString,true, out ActionButton e))
+            {
+                cmd = e;   
+            }
+            if (cmd.HasValue)
+            {
+                ActionKeyboard(cmd.Value); 
             }
         }
         public void ActionKeyboard(ActionButton cmd)
@@ -1378,7 +1388,7 @@ namespace FastPosFrontend.ViewModels
             GivenAmount = 0;
             
             AdditivesVisibility = false;
-            PrintDocument(PrintSource.Checkout);
+            PrintDocument(PrintSource.CheckoutPay);
 
 
         }
@@ -1990,8 +2000,9 @@ namespace FastPosFrontend.ViewModels
             DataTemplate dt = null;
             switch (source)
             {
-                case PrintSource.Checkout:
+                case PrintSource.CheckoutPrint:
                 case PrintSource.CheckoutSplit:
+                case PrintSource.CheckoutPay:
                     dt = Application.Current.FindResource("CustomerTicketDataTemplate") as DataTemplate;
                     break;
                 case PrintSource.Kitchen:
@@ -2045,7 +2056,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if(_printOrder == null && source == PrintSource.Checkout)
+            if(CurrentOrder == null && source == PrintSource.CheckoutPrint)
             {
                 ToastNotification.Notify("Select an order First");
                 return;
@@ -2058,7 +2069,7 @@ namespace FastPosFrontend.ViewModels
 
             _printOrder = source switch
             {
-                PrintSource.Checkout => _printOrder,
+                PrintSource.CheckoutPrint => CurrentOrder,
                 PrintSource.CheckoutSplit => SplitViewModel?.SplittedOrder,
                 _ => _printOrder
             };
@@ -2080,25 +2091,32 @@ namespace FastPosFrontend.ViewModels
                 printerItems = printerItemSetting.Where(item => item.SelectedKitchen).ToList();
             }
 
-            if (source == PrintSource.Checkout|| source == PrintSource.CheckoutSplit)
+            if (source == PrintSource.CheckoutPrint|| source == PrintSource.CheckoutSplit|| source == PrintSource.CheckoutPay)
             {
                 printerItems = printerItemSetting.Where(item => item.SelectedReceipt).ToList();
             }
 
-            foreach (var e in printerItems)
+            if (printerItems!= null)
             {
-                if (printers.Contains(e.Name))
+                foreach (var e in printerItems)
                 {
-                    PrintDialog dialog = new PrintDialog {PrintQueue = new PrintQueue(new PrintServer(), e.Name)};
-                    try
+                    if (printers.Contains(e.Name))
                     {
-                        dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
-                    }
-                    catch (Exception)
-                    {
+                        PrintDialog dialog = new PrintDialog { PrintQueue = new PrintQueue(new PrintServer(), e.Name) };
+                        try
+                        {
+                            dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
+                        }
+                        catch (Exception)
+                        {
 
+                        }
                     }
                 }
+            }
+            else
+            {
+                ToastNotification.Notify("Configure Printers");
             }
 
         }
@@ -2189,9 +2207,15 @@ namespace FastPosFrontend.ViewModels
 
         protected override void OnDeactivate(bool close)
         {
+           
+            base.OnDeactivate(close);
+        }
+
+        private void UpdateOrderCount()
+        {
+            orderCount++;
             AppConfigurationManager.Save("OrderCountModifiedDate", DateTime.Today.ToString("yyyy-MM-dd"));
             AppConfigurationManager.Save("OrderCount", orderCount);
-            base.OnDeactivate(close);
         }
 
         public Type [] SettingsControllers => new []
