@@ -49,7 +49,7 @@ namespace ServiceLib.Service
         {
             string json = JsonConvert.SerializeObject(
                             new AuthUser {Username=user, Password=password, TerminalId=terminal.Id },
-                            Newtonsoft.Json.Formatting.None,
+                            Formatting.None,
                             new JsonSerializerSettings
                             {
                                 NullValueHandling = NullValueHandling.Ignore
@@ -57,7 +57,7 @@ namespace ServiceLib.Service
            
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var url = UrlConfig.AuthUrl.Authenticate;
-            //var url = "http://127.0.0.1:5000/auth/login";
+
             var client = new HttpClient();
             HttpResponseMessage response;
             response = client.PostAsync(url, data).Result;
@@ -82,7 +82,6 @@ namespace ServiceLib.Service
                     return -400;
                 }
 
-                //return true;
             }
 
             return (int)response.StatusCode;
@@ -102,9 +101,8 @@ namespace ServiceLib.Service
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var api = new RestApis();
             
-            //var url = UrlConfig.AuthUrl.Authenticate;
             var url = api.Action("login");
-            //var url = "http://127.0.0.1:5000/auth/login";
+
             var client = new HttpClient();
             HttpResponseMessage response;
             response = client.PostAsync(url, data).Result;
@@ -129,7 +127,6 @@ namespace ServiceLib.Service
                     return response;
                 }
 
-                //return true;
             }
 
             return response;
@@ -138,7 +135,7 @@ namespace ServiceLib.Service
         {
             string json = JsonConvert.SerializeObject(
                 new AuthUser { Username = user.Username, Password = user.Password, TerminalId = 1,Agent = user.Agent},
-                Newtonsoft.Json.Formatting.None,
+                Formatting.None,
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore
@@ -146,7 +143,6 @@ namespace ServiceLib.Service
 
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var url = UrlConfig.AuthUrl.Authenticate;
-            //var url = "http://127.0.0.1:5000/auth/login";
             var client = new HttpClient();
             HttpResponseMessage response;
             response = client.PostAsync(url, data).Result;
@@ -155,12 +151,9 @@ namespace ServiceLib.Service
             {
                 response.Headers.TryGetValues("Authorization", out IEnumerable<string> values);
                 var token = values.First();
-                // var jsonContent = response.Content.ReadAsStringAsync().Result;
-                // var jsonContentDict = JObject.Parse(jsonContent);
-                // string token = jsonContentDict["auth_token"].ToString();
-                // long sessionId = jsonContentDict.Value<long>("SessionId");
+             
                 AuthProvider.Initialize<DefaultAuthProvider>(new object[] { new User { }, token, 1 });
-                //return true;
+
             }
 
             return (int)response.StatusCode;
@@ -173,7 +166,7 @@ namespace ServiceLib.Service
         public string Username { get; set; }
         
         public string Password { get; set; }
-        // public long AnnexId { get; set; }
+
         [JsonProperty]
         public long TerminalId { get; set; }
         [JsonProperty]

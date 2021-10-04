@@ -19,7 +19,7 @@ namespace ServiceInterface.Model
         public Dictionary<int, decimal> CashPayments { get; set; }
 
         [DataMember]
-        public Dictionary<int, decimal> DeliveryPayments { get; set; }
+        public List<Payment> DeliveryPayments { get; set; }
 
         [DataMember]
         public Dictionary<string, decimal> Expenses { get; set; }
@@ -53,7 +53,8 @@ namespace ServiceInterface.Model
         public int NumberOfPayments => (CashPayments?.Count ?? 0) + (DeliveryPayments?.Count ?? 0);
 
         public decimal CashPaymentsTotal => CashPayments.Values.Sum();
-        public decimal DeliveryPaymentsTotal => DeliveryPayments.Values.Sum();
+        public decimal DeliveryPaymentsTotal => DeliveryPayments.Sum(p => p.Amount);
+        public decimal DeliveryPaymentsTotalDiscount => DeliveryPayments.Sum(p => p.DiscountAmount ?? 0);
 
         public int IssuedDateYear => IssuedDate.Year;
         [DisplayName(displayName: "Issued Month")]

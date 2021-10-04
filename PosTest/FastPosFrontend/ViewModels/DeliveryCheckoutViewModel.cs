@@ -8,10 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using Utilities.Extensions;
 using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingViewModel;
 
 namespace FastPosFrontend.ViewModels
