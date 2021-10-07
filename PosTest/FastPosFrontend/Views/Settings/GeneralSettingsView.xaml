@@ -77,5 +77,10 @@
             <TextBlock Text="Delivery"  FontSize="14" VerticalAlignment="Center"/>
         </StackPanel>
 
+        <StackPanel Orientation="Horizontal" Margin="40 10 0 0" >
+            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsBarcodeEnabled}" />
+            <TextBlock Text="Barcode"  FontSize="14" VerticalAlignment="Center"/>
+        </StackPanel>
+
     </UniformGrid>
 </UserControl>

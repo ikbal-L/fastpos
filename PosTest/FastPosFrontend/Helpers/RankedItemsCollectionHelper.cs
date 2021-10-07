@@ -82,6 +82,7 @@ namespace FastPosFrontend.Helpers
             {
                 throw new NullReferenceException("Target Rank must not be Null");
             }
+
             int indexOfTarget = list.IndexOf(targetArg);
             int indexOfIncomingArg = list.IndexOf(incomingArg);
             
@@ -103,6 +104,7 @@ namespace FastPosFrontend.Helpers
                             incomingCategory.Products.Remove(incomingProduct);
                             targetCategory.ProductIds.Add(incomingProduct.Id.Value);
                             targetCategory.Products.Add(incomingProduct);
+                            incomingProduct.Category = targetCategory;
                         }
                         if (targetProduct.Id != null)
                         {
@@ -110,6 +112,7 @@ namespace FastPosFrontend.Helpers
                             targetCategory.Products.Remove(targetProduct);
                             incomingCategory.ProductIds.Add(targetProduct.Id.Value);
                             incomingCategory.Products.Add(targetProduct);
+                            targetProduct.Category = incomingCategory;
                         }
                     }
                 }

@@ -128,8 +128,9 @@
                 <DataTemplate >
                     <StackPanel Orientation="Horizontal">
                         <!--<TextBlock Text="{Binding Name}" Width="80" VerticalAlignment="Center" />-->
-                        <materialDesign:PopupBox PlacementMode="BottomAndAlignCentres" 
-                                                HorizontalAlignment="Center" >
+                        <materialDesign:PopupBox 
+                            PlacementMode="BottomAndAlignCentres" 
+                            HorizontalAlignment="Center" >
                             <materialDesign:PopupBox.ToggleContent>
                                 <Border ToolTip="{Binding Name}" CornerRadius="50" Width="50" Height="50" Background="{Binding Hues[5],Converter={StaticResource ColorToBrushConverter}}"
                                             />

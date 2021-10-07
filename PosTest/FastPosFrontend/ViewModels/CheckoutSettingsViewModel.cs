@@ -493,7 +493,7 @@ namespace FastPosFrontend.ViewModels
                     return;
                 }
 
-                //PutProductInCellOf(SelectedProduct, ProductToMove);
+
                 var incomingProduct = ProductToMove;
                 var targetProduct = SelectedProduct;
                 IList<Product> products = CurrentProducts;
@@ -506,6 +506,7 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 StateManager.Save(incomingProduct);
+                StateManager.Save(_currentCategory);
                 //CurrentProducts[index] = prod;
                 SelectedProduct = null;
                 ProductToMove = null;

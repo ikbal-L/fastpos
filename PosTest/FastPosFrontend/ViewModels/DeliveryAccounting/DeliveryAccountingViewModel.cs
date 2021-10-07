@@ -13,7 +13,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
 {
 
 
-    [NavigationItem("Delivery Accounting", typeof(DeliveryAccountingViewModel),"")]
+    //[NavigationItem("Delivery Accounting", typeof(DeliveryAccountingViewModel),"")]
     public class DeliveryAccountingViewModel: AppScreen
     {
         private ObservableCollection<Deliveryman> _Deliverymans;

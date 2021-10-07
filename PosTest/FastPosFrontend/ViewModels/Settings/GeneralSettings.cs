@@ -85,6 +85,7 @@ namespace FastPosFrontend.ViewModels.Settings
         private bool _isRefundEnabled;
         private bool isDeliveryEnabled;
         private bool isMultiCashRegisterEnabled;
+        private bool _isBarcodeEnabled;
 
         [JsonProperty]
 
@@ -139,10 +140,17 @@ namespace FastPosFrontend.ViewModels.Settings
             }
         }
         [JsonProperty]
-        public bool IsMultiCashRegisterEnabled 
-        { 
+        public bool IsMultiCashRegisterEnabled
+        {
             get => isMultiCashRegisterEnabled;
-            set { Set(ref isMultiCashRegisterEnabled , value); }
+            set { Set(ref isMultiCashRegisterEnabled, value); }
+        }
+
+        [JsonProperty]
+        public bool IsBarcodeEnabled 
+        { 
+          get => _isBarcodeEnabled; 
+          set => Set(ref _isBarcodeEnabled ,value);
         }
 
 
@@ -171,6 +179,12 @@ namespace FastPosFrontend.ViewModels.Settings
             }
             return result;
         }
+
+    }
+
+
+    public class ReceiptSettings:PropertyChangedBase
+    {
 
     }
 }
