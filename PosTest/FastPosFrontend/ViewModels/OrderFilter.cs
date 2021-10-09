@@ -21,6 +21,10 @@ namespace FastPosFrontend.ViewModels
         public long? DeliverymanId { get; set; }
         [DataMember]
         public IEnumerable<long>? DeliverymanIds { get; set; }
+        [DataMember]
+        public long? CustomerId { get; set; }
+        [DataMember]
+        public IEnumerable<long>? CustomerIds { get; set; }
     }
 
     public abstract class Filter

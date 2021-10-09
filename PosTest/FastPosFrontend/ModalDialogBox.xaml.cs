@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.ViewModels;
 
@@ -43,11 +44,15 @@ namespace FastPosFrontend
             return Instance;
         }
 
-        public static ModalDialogBox Ok(object content,string template, string title)
+        public static ModalDialogBox Ok(object content,string template, string title,Predicate<object> predicate = null)
         {
             var dt = Application.Current.FindResource(template) as DataTemplate;
             var vm = new TemplatedDialogContentViewModel(content, dt, title,
-                new GenericCommand("Ok", o => { Instance.DialogResult = null; Instance.Close(); }));
+                new GenericCommand("Ok", o => {
+                    if (predicate != null && !predicate.Invoke(null)) return;
+                    
+                    Instance.DialogResult = null; Instance.Close();
+                }));
             Instance = new ModalDialogBox(isTemplated:true) { DataContext = vm };
             return Instance;
         }

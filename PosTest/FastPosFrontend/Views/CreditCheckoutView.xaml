@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FastPosFrontend.Views.DeliveryCheckoutView"
+﻿<UserControl x:Class="FastPosFrontend.Views.CreditCheckoutView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,7 +11,7 @@
              xmlns:h="clr-namespace:FastPosFrontend.Helpers" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance vm:DeliveryCheckoutViewModel}"
+             d:DataContext="{d:DesignInstance vm:CreditCheckoutViewModel}"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              Background="{StaticResource MaterialDesignPaper}">
 
@@ -122,7 +122,7 @@
                         <TextBox 
                              materialDesign:HintAssist.Hint="Total" Margin="10 10 10 15"
                              materialDesign:HintAssist.IsFloating="True"
-                             Text="{Binding SelectedDeliveryman.Balance,UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding SelectedCustomer.Balance,UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="True" Grid.Column="0"
                         materialDesign:HintAssist.Background="Black"
                         materialDesign:HintAssist.Foreground="#26ff26"
@@ -290,7 +290,7 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             
-            <materialDesign:ColorZone
+            <!--<materialDesign:ColorZone
         Mode="Standard"
         Padding="8 4"
         CornerRadius="2"
@@ -412,7 +412,7 @@
 
                     </ComboBox>
                 </Grid>
-            </materialDesign:ColorZone>
+            </materialDesign:ColorZone>-->
            
             <Grid  Grid.Row="1">
 
@@ -427,7 +427,7 @@
                     SelectedIndex="{Binding SelectedTab}">
                     <TabItem Header="Orders" TabIndex="{x:Static vm:CreditViewTabs.UNPAID_ORDERS_TAB}" >
                         <DataGrid Grid.Column="0" 
-                          ItemsSource="{Binding DeliveryOrders.View}" 
+                          ItemsSource="{Binding UnpaidOrders.View}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 
@@ -466,7 +466,7 @@
                     <TabItem Header="Paid Orders" TabIndex="{x:Static vm:CreditViewTabs.PAID_ORDERS_TAB}">
                         <controls:PaginatedContent Paginator="{Binding PaidDeliveryOrders}">
                             <DataGrid Grid.Column="0" 
-                          ItemsSource="{Binding PaidDeliveryOrders.PaginationView}" 
+                          ItemsSource="{Binding PaidOrders.PaginationView}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 
@@ -487,9 +487,9 @@
                         </controls:PaginatedContent>
                     </TabItem>
                     <TabItem Header="Payments" TabIndex="{x:Static vm:CreditViewTabs.PAYMENT_HISTORY_TAB}">
-                        <controls:PaginatedContent Paginator="{Binding DeliveryPayments}">
+                        <controls:PaginatedContent Paginator="{Binding Payments}">
                             <DataGrid 
-                          ItemsSource="{Binding DeliveryPayments.PaginationView}" 
+                          ItemsSource="{Binding Payments.PaginationView}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 
@@ -512,7 +512,7 @@
 
 
                 <DataGrid Grid.Column="0" 
-                          ItemsSource="{Binding DeliverymanCollection.View}" 
+                          ItemsSource="{Binding CustomerCollection.View}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 
@@ -520,8 +520,8 @@
                           IsReadOnly="True" 
                           SelectionMode="Single" 
                           SelectionUnit="FullRow"
-                          SelectedItem="{Binding SelectedDeliveryman}"
-                          Margin="5 48 0 0">
+                          SelectedItem="{Binding SelectedCustomer}"
+                          Margin="5 48 10 0">
                     <DataGrid.Resources>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <!--<Setter Property="VerticalAlignment" Value="Center"/>-->

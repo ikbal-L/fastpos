@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -42,10 +44,21 @@ namespace ServiceInterface.Model
         public long CashOperationId;
 
         [DataMember]
-        public long DeliveryManId { get; set; }
+        public long? DeliveryManId { get; set; }
+
+        [DataMember]
+        public long? CustomerId { get; set; }
 
         [DataMember]
         public List<Order> Orders { get; set; }
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PaymentSource PaymentSource { get; set; }
 
+    }
+
+    public enum PaymentSource
+    {
+        Regular, Delivery, Customer
     }
 }   

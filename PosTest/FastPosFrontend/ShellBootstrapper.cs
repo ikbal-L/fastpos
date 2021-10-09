@@ -30,10 +30,10 @@ namespace FastPosFrontend
         {
             NavigationIndexer.ImplicitIndex()
                 .Add<CheckoutViewModel>()
-                .Add<OrderRefundViewModel>()
-                .Add<DeliveryCheckoutViewModel>()
-                .Add<DeliveryAccountingViewModel>()
+                .Add<DeliveryCheckoutViewModel>()    
+                .Add<CreditCheckoutViewModel>()
                 .Add<DailyExpenseReportsViewModel>()
+                .Add<OrderRefundViewModel>()
                 .Add(Constants.Navigation.GroupNames.Settings)
                 .Add<CheckoutSettingsViewModel>()
                 .Add<GeneralSettingsViewModel>()

@@ -13,26 +13,26 @@ using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingVie
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("Delivery Checkout", typeof(DeliveryCheckoutViewModel), isQuickNavigationEnabled: true)]
-    public class DeliveryCheckoutViewModel : LazyScreen
+    [NavigationItem("Credit Checkout", typeof(CreditCheckoutViewModel), isQuickNavigationEnabled: true)]
+    public class CreditCheckoutViewModel : LazyScreen
     {
-        private ObservableCollection<Deliveryman> _deliverymanCollection;
+        private ObservableCollection<Customer> _customerCollection;
         private ObservableCollection<Order> _ordersCollection;
 
-        public DeliveryCheckoutViewModel() : base()
+        public CreditCheckoutViewModel() : base()
         {
 
         }
 
-        private void DeliveryOrders_Filter(object sender, FilterEventArgs e)
+        private void CreditOrders_Filter(object sender, FilterEventArgs e)
         {
-            if (SelectedDeliveryman == null)
+            if (SelectedCustomer == null)
             {
                 e.Accepted = false;
                 return;
             }
 
-            if (e.Item is Order order && order.DeliverymanId == SelectedDeliveryman.Id && (order.State == OrderState.Delivered || order.State == OrderState.DeliveredPartiallyPaid))
+            if (e.Item is Order order && order.CustomerId == SelectedCustomer.Id && (order.State == OrderState.Credit || order.State == OrderState.CreditPartiallyRePaid))
             {
                 e.Accepted = true;
                 return;
@@ -45,44 +45,44 @@ namespace FastPosFrontend.ViewModels
             if (!IsDiscountEnabled) return 0;
             if (string.IsNullOrEmpty(NumericZone)) return 0;
 
-            if (SelectedDeliveryman == null) return 0;
+            if (SelectedCustomer == null) return 0;
 
             if (!decimal.TryParse(NumericZone.Replace("%", ""), out var value)) return 0;
 
             if (NumericZone.Contains("%"))
             {
 
-                return SelectedDeliveryman.Balance * (100 - value) / 100;
+                return SelectedCustomer.Balance * (100 - value) / 100;
             }
 
-            return SelectedDeliveryman.Balance - value;
+            return SelectedCustomer.Balance - value;
 
 
         }
 
 
 
-        public CollectionViewSource DeliverymanCollection { get; set; }
+        public CollectionViewSource CustomerCollection { get; set; }
 
         private IOrderRepository _orderRepo;
         private IPaymentRepository _paymentRepo;
-        private Deliveryman _selectedDeliveryman;
+        private Customer _selectedCustomer;
 
-        public Deliveryman SelectedDeliveryman
+        public Customer SelectedCustomer
         {
-            get { return _selectedDeliveryman; }
+            get { return _selectedCustomer; }
             set
             {
-                Set(ref _selectedDeliveryman, value);
-                NotifyOfPropertyChange(nameof(SelectedDeliveryman));
+                Set(ref _selectedCustomer, value);
+                NotifyOfPropertyChange(nameof(SelectedCustomer));
                 UpdateHistory();
-                DeliveryOrders.View.Refresh();
+                UnpaidOrders.View.Refresh();
             }
         }
 
-        public CollectionViewSource DeliveryOrders { get; set; }
-        public Paginator<Order> PaidDeliveryOrders { get; set; }
-        public Paginator<Payment> DeliveryPayments { get; set; }
+        public CollectionViewSource UnpaidOrders { get; set; }
+        public Paginator<Order> PaidOrders { get; set; }
+        public Paginator<Payment> Payments { get; set; }
 
         private Order _selectedOrder;
 
@@ -159,16 +159,16 @@ namespace FastPosFrontend.ViewModels
 
         private void UpdateHistory()
         {
-            if (SelectedDeliveryman != null)
+            if (SelectedCustomer != null)
             {
                 if (SelectedTab == CreditViewTabs.PAID_ORDERS_TAB)
                 {
-                    PaidDeliveryOrders.Reload();
+                    PaidOrders.Reload();
                 }
 
                 if (SelectedTab == CreditViewTabs.PAYMENT_HISTORY_TAB)
                 {
-                    DeliveryPayments.Reload();
+                    Payments.Reload();
                 }
             }
         }
@@ -185,15 +185,11 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void AddDeliveredOrder(Order order)
-        {
-            _ordersCollection.Add(order);
-            DeliveryOrders.View.Refresh();
-        }
+       
 
         public void CopyTotalPaymentField()
         {
-            NumericZone = $"{SelectedDeliveryman?.Balance}";
+            NumericZone = $"{SelectedCustomer?.Balance}";
         }
 
         public void ActionKeyboard(ActionButton cmd)
@@ -210,20 +206,19 @@ namespace FastPosFrontend.ViewModels
 
                 case ActionButton.Enter:
 
-                    if (SelectedDeliveryman != null)
+                    if (SelectedCustomer != null)
                     {
                         PayementAction();
                     }
                     else
                     {
-                        ToastNotification.Notify("قم باختيار مندوب التوصيل من أجل الدفع");
+                        ToastNotification.Notify("قم باختيار زبون من أجل الدفع");
                     }
-                    //RelaodDeliveryMan();
+    
 
                     break;
 
-                    //EditPayment();
-                    //RelaodDeliveryMan();
+
 
 
             }
@@ -287,7 +282,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             var api = new RestApis();
-            var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value,PaymentSource =PaymentSource.Delivery };
+            var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, CustomerId = SelectedCustomer.Id.Value ,PaymentSource =PaymentSource.Customer };
             if (IsDiscountEnabled)
             {
                 payment.DiscountAmount = Discount;
@@ -301,14 +296,14 @@ namespace FastPosFrontend.ViewModels
                 var savedPayment = result.Item2;
 
                 UpdateOrdersFromPayment(savedPayment);
-                var url = api.Resource<Deliveryman>("getwithbalance", SelectedDeliveryman.Id);
+                var url = api.Resource<Customer>("getwithbalance", SelectedCustomer.Id);
 
-                var result2 = GenericRest.GetThing<Deliveryman>(url);
+                var result2 = GenericRest.GetThing<Customer>(url);
                 if (result2.status == 200)
                 {
-                    SelectedDeliveryman.Balance = result2.Item2.Balance;
+                    SelectedCustomer.Balance = result2.Item2.Balance;
                 }
-                DeliveryOrders?.View?.Refresh();
+                UnpaidOrders?.View?.Refresh();
                 NotifyOfPropertyChange(nameof(Discount));
             }
 
@@ -331,25 +326,25 @@ namespace FastPosFrontend.ViewModels
         protected override void Setup()
         {
             var api = new RestApis();
-            var url = api.Resource<Deliveryman>("getallwithbalance");
-            var result = GenericRest.GetThing<List<Deliveryman>>(url);
-            List<Deliveryman> data = new List<Deliveryman>();
+            var url = api.Resource<Customer>("getallwithbalance");
+            var result = GenericRest.GetThing<List<Customer>>(url);
+            List<Customer> data = new List<Customer>();
             if (result.status == 200)
             {
                 data.AddRange(result.Item2);
             }
 
-            _deliverymanCollection = new ObservableCollection<Deliveryman>(data);
-            DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
+            _customerCollection = new ObservableCollection<Customer>(data);
+            CustomerCollection = new CollectionViewSource() { Source = _customerCollection };
 
             _orderRepo = StateManager.GetService<Order, IOrderRepository>();
             _paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
 
-            OrderState[] states = { OrderState.Delivered, OrderState.DeliveredPartiallyPaid };
+            OrderState[] states = { OrderState.Credit, OrderState.CreditPartiallyRePaid };
 
-            var deliverymanIds = data.Select(d => d.Id.Value);
+            var customerIds = data.Select(d => d.Id.Value);
 
-            var criterias = new OrderFilter() { States = states, DeliverymanIds = deliverymanIds };
+            var criterias = new OrderFilter() { States = states, CustomerIds = customerIds };
             var orders = _orderRepo.GetByCriteriasAsync(criterias);
 
 
@@ -364,15 +359,15 @@ namespace FastPosFrontend.ViewModels
             _ordersCollection = new ObservableCollection<Order>(orders);
 
 
-            DeliveryOrders = new CollectionViewSource() { Source = _ordersCollection };
+            UnpaidOrders = new CollectionViewSource() { Source = _ordersCollection };
 
             var orderPageRetreiver = new PageRetriever<Order>(RetriveOrderPage);
-            PaidDeliveryOrders = new Paginator<Order>(orderPageRetreiver);
+            PaidOrders = new Paginator<Order>(orderPageRetreiver);
 
             var paymentPageRetreiver = new PageRetriever<Payment>(RetrivePaymentPage);
-            DeliveryPayments = new Paginator<Payment>(paymentPageRetreiver);
+            Payments = new Paginator<Payment>(paymentPageRetreiver);
 
-            DeliveryOrders.Filter += DeliveryOrders_Filter;
+            UnpaidOrders.Filter += CreditOrders_Filter;
         }
 
         public IEnumerable<Order> RetriveOrderPage((int pageIndex, int pageSize) p)
@@ -381,10 +376,10 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
-                DeliverymanId = SelectedDeliveryman.Id,
+                CustomerId = SelectedCustomer.Id,
                 DescendingOrder = true,
                 OrderBy = "orderTime",
-                State = OrderState.DeliveredPaid
+                State = OrderState.CreditRePaid
             };
             var result = _orderRepo.GetByCriterias(orderFilter);
             return result;
@@ -396,7 +391,7 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
-                DeliverymanId = SelectedDeliveryman.Id,
+                CustomerId = SelectedCustomer.Id,
                 OrderBy = "date",
                 DescendingOrder = true
             };
@@ -404,15 +399,15 @@ namespace FastPosFrontend.ViewModels
             return result;
         }
 
-        private void PaidDeliveryOrders_Filter(object sender, FilterEventArgs e)
+        private void PaidCreditOrders_Filter(object sender, FilterEventArgs e)
         {
-            if (SelectedDeliveryman == null)
+            if (SelectedCustomer == null)
             {
                 e.Accepted = false;
                 return;
             }
 
-            if (e.Item is Order order && order.DeliverymanId == SelectedDeliveryman.Id && order.State == OrderState.DeliveredPaid)
+            if (e.Item is Order order && order.CustomerId == SelectedCustomer.Id && order.State == OrderState.CreditRePaid)
             {
                 e.Accepted = true;
                 return;
@@ -420,15 +415,15 @@ namespace FastPosFrontend.ViewModels
             e.Accepted = false;
         }
 
-        private void DeliveryPayments_Filter(object sender, FilterEventArgs e)
+        private void CreditRePayments_Filter(object sender, FilterEventArgs e)
         {
-            if (SelectedDeliveryman == null)
+            if (SelectedCustomer == null)
             {
                 e.Accepted = false;
                 return;
             }
 
-            if (e.Item is Payment payment && payment.DeliveryManId == SelectedDeliveryman.Id)
+            if (e.Item is Payment payment && payment.CustomerId == SelectedCustomer.Id)
             {
                 e.Accepted = true;
                 return;
@@ -437,10 +432,5 @@ namespace FastPosFrontend.ViewModels
         }
     }
 
-    public static class CreditViewTabs
-    {
-        public static readonly int UNPAID_ORDERS_TAB = 0;
-        public static readonly int PAID_ORDERS_TAB = 1;
-        public static readonly int PAYMENT_HISTORY_TAB = 2;
-    }
+   
 }

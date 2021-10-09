@@ -8,7 +8,8 @@
                     xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:views="clr-namespace:FastPosFrontend.Views"
-                    xmlns:navigation="clr-namespace:FastPosFrontend.Navigation">
+                    xmlns:navigation="clr-namespace:FastPosFrontend.Navigation"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
     <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
     <converters:SumValuesConverter x:Key="SumValuesConverter" />
@@ -154,5 +155,38 @@
         </ListBox>
     </DataTemplate>
 
-
+    <DataTemplate x:Key="CheckoutCustomerDialogContent" DataType="{x:Type vm:CheckoutViewModel}">
+        <ListBox  x:Name="ldelivery"
+                                 ItemsSource="{Binding Customers}"
+                                 SelectedItem="{Binding CustomerViewModel.SelectedCustomer, Mode=TwoWay}"
+                  Height="300" Width="600">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:Customer}">
+                    <Grid Background="#3f3f3f"  Width="120" Height="70" Margin="10" >
+                        <StackPanel  Margin="0 10 0 0">
+                            <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
+                                                       TextWrapping="WrapWithOverflow" FontWeight="DemiBold" Foreground="White" HorizontalAlignment="Center" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <materialDesign:PackIcon DockPanel.Dock="Left" Kind="Phone" Width="20"
+                                                                     Height="20" VerticalAlignment="Center"
+                                                     Foreground="White"/>
+                                <TextBlock DockPanel.Dock="Bottom" Text="{Binding PhoneNumbers[0]}" Foreground="White" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </G>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="2" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+    </DataTemplate>
 </ResourceDictionary>

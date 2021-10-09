@@ -464,7 +464,10 @@ namespace ServiceInterface.Model
         DeliveredPaid,
         DeliveredReturned,
         Unprocessed,
-        DeliveredPartiallyPaid
+        DeliveredPartiallyPaid,
+        Credit,
+        CreditRePaid,
+        CreditPartiallyRePaid
     }
 
     public enum OrderType

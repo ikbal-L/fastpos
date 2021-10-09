@@ -32,7 +32,7 @@ namespace FastPosFrontend.ViewModels
             CustomerCollectionViewSource.Filter += CustomerCollectionViewSource_Filter;
             
             //_CustomerView.Filter = CustomerFilter;
-            SelectCustomerCommand = new DelegateCommandBase(SelectCustomer,CanSelectCustomer);
+            SelectCustomerCommand = new DelegateCommandBase(SelectCustomer);
             IsEditing = false;
 
         }

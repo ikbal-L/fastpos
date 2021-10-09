@@ -5175,6 +5175,7 @@
     <md:PackIcon Kind="Finance" x:Key="DeliveryAccountingQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
 
     <md:PackIcon Kind="TruckDelivery" x:Key="DeliveryCheckoutQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
+    <md:PackIcon Kind="AccountCash" x:Key="CreditCheckoutQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
 
     <md:PackIcon Kind="CashRefund" x:Key="OrderRefundQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="60" Height="60"/>
 

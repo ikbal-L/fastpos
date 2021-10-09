@@ -179,10 +179,12 @@
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Split}"/>
 
-            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" 
                                 Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.DElIVERED}"/>
-
+            <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" 
+                                Content="{materialdesign:PackIcon Kind=AccountCash, Size=30}"
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Credit}"/>
 
 
             <Button Grid.Row="3" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }"

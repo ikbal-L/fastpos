@@ -10,7 +10,14 @@ namespace FastPosFrontend.ViewModels
         public DateTime? Date { get; set; }
         [DataMember]
         public long? DeliverymanId { get; set; }
+
+        [DataMember]
+        public long? CustomerId { get; set; }
+
         [DataMember]
         public IEnumerable<long>? DeliverymanIds { get; set; }
+
+        [DataMember]
+        public IEnumerable<long>? CustomerIds { get; set; }
     }
 }

@@ -64,6 +64,19 @@ namespace ServiceInterface.Model
                 Set(ref _mobile, value);
             }
         }
+
+        private decimal _balance;
+        [DataMember]
+
+        public decimal Balance
+        {
+            get { return _balance; }
+            set
+            {
+                Set(ref _balance, value);
+                NotifyOfPropertyChange(nameof(Balance));
+            }
+        }
         public override string ToString()
         {
             return $"{Name}";

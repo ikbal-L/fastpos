@@ -179,6 +179,7 @@
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportsViewModel.cs" />
     <Compile Include="ViewModels\DefaultDialog.cs" />
+    <Compile Include="ViewModels\CreditCheckoutViewModel.cs" />
     <Compile Include="ViewModels\DeliveryCheckoutViewModel.cs" />
     <Compile Include="ViewModels\DeliverymanFilterCriteria.cs" />
     <Compile Include="ViewModels\DialogContent.cs" />
@@ -298,6 +299,9 @@
     </Compile>
     <Compile Include="Views\DailyExpenseReportsView.xaml.cs">
       <DependentUpon>DailyExpenseReportsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreditCheckoutView.xaml.cs">
+      <DependentUpon>CreditCheckoutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeliveryCheckoutView.xaml.cs">
       <DependentUpon>DeliveryCheckoutView.xaml</DependentUpon>
@@ -663,6 +667,10 @@
     <Page Include="Views\DailyExpenseReportsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreditCheckoutView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DeliveryCheckoutView.xaml">
       <SubType>Designer</SubType>

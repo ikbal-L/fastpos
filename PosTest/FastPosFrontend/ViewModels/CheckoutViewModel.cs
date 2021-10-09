@@ -784,7 +784,9 @@ namespace FastPosFrontend.ViewModels
                 case true:
                     if (CurrentOrder.State == OrderState.Payed ||
                         CurrentOrder.State == OrderState.Canceled ||
-                        CurrentOrder.State == OrderState.Removed || CurrentOrder.State == OrderState.Delivered)
+                        CurrentOrder.State == OrderState.Removed || 
+                        CurrentOrder.State == OrderState.Delivered||
+                        CurrentOrder.State == OrderState.Credit)
                     {
                         RemoveCurrentOrderForOrdersList();
                     }
@@ -1140,7 +1142,9 @@ namespace FastPosFrontend.ViewModels
                 cmd != ActionButton.Takeaway &&
                 cmd != ActionButton.Table &&
                 cmd != ActionButton.Served &&
-                cmd != ActionButton.Del && cmd != ActionButton.DElIVERED)
+                cmd != ActionButton.Del && 
+                cmd != ActionButton.DElIVERED&&
+                cmd != ActionButton.Credit)
             {
                 ToastNotification.Notify("Enter the required value before ..", NotificationType.Warning);
                 return;
@@ -1347,6 +1351,32 @@ namespace FastPosFrontend.ViewModels
                     }
 
                     CurrentOrder.State = OrderState.Delivered;
+                    SaveCurrentOrder();
+                    break;
+
+
+                case ActionButton.Credit:
+                    if (CurrentOrder == null)
+                    {
+                        return;
+                    }
+
+    
+
+
+                    if (CurrentOrder.Customer == null)
+                    {
+
+                        ModalDialogBox.Ok(this, "CheckoutCustomerDialogContent", "Customer",
+                            (o)=> {
+                                return CurrentOrder.Customer != null;
+
+
+                            }).Show();
+
+                    }
+
+                    CurrentOrder.State = OrderState.Credit;
                     SaveCurrentOrder();
                     break;
             }

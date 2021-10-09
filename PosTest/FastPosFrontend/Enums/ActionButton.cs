@@ -17,6 +17,7 @@
         Takeaway = 12,
         Served = 13,
         DElIVERED = 14,
-        CopyToNumericZone = 15
+        CopyToNumericZone = 15,
+        Credit
     }
 }
