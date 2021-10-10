@@ -171,40 +171,47 @@
             </Button>
 
 
-            <Button Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon Printer, 30}"
+            <!--<Button Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon Printer, 30}"
                                 
-                                cal:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" />
+                                cal:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" />-->
 
-            <Button Grid.Row="2" Grid.Column="0" 
-                                Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Split}"/>
-
-            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" 
-                                Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.DElIVERED}"/>
-            <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" 
+            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
                                 Content="{materialdesign:PackIcon Kind=AccountCash, Size=30}"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Credit}"/>
 
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
+                                Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.DElIVERED}"/>
+            
 
-            <Button Grid.Row="3" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }"
-                                
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Deliverey}"/>
+
+         
 
             <Button Grid.Row="1" Grid.Column="1"
                                 Content="{materialdesign:PackIcon ChefHat, 30 }"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Cmd}"/>
 
+            
+
+            <Button Grid.Row="0" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}"
+                                
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Table}"/>
+
+            <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon Moped, 30 }"
+                                
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Deliverey}"/>
+
+
             <Button Grid.Row="2" Grid.Column="2" Content="{materialdesign:PackIcon BasketOutline,30}"
                                 
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Takeaway}"/>
 
-            <Button Grid.Row="1" Grid.Column="2" Content="{materialdesign:PackIcon TableFurniture,30}"
-                                
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Table}"/>
-            <Button Content="{materialdesign:PackIcon Kind=CashPlus, Size=30}" Grid.Row="2" Grid.Column="1"
-                                
-                                cal:Message.Attach="[Event Click] = [Action AddExpense()]" />
+            <Button Grid.Row="3" Grid.Column="2" 
+                                Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Split}"/>
+
+
+
 
         </Grid>
     </Grid>

@@ -139,6 +139,7 @@
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\OrderItem.cs" />
     <Compile Include="Model\OrderItemAdditiveState.cs" />
+    <Compile Include="Model\OrderReportInfo.cs" />
     <Compile Include="Model\PageList.cs" />
     <Compile Include="Model\Payment.cs" />
     <Compile Include="Model\PaymentSaved.cs" />

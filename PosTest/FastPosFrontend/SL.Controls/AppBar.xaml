@@ -28,9 +28,19 @@
 
             </Style>
         </md:ColorZone.Style>
-        <DockPanel>
+        <Grid>
 
-            <ToggleButton
+            <TextBlock
+
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="22"
+                                            Foreground="White"
+                                            FontWeight="DemiBold"
+                                            Text="{Binding SelectedNavigationItem.Title}" />
+            <DockPanel>
+
+                <ToggleButton
                                             x:Name="AppMenuToggleButton"
                                             AutomationProperties.Name="HamburgerToggleButton"
                                             DockPanel.Dock="Left"
@@ -38,273 +48,276 @@
                                             Margin="5 0 0 0"
                 IsChecked="{Binding Drawer.IsNavigationDrawerOpen,Mode=OneWay}"
                 Command="{Binding OpenNavigationDrawerCommand}">
-                <ToggleButton.Style>
-                    <Style TargetType="ToggleButton"
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton"
                                                        BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoggedIn}"
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                      Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
 
-                            <DataTrigger Binding="{Binding ActiveScreen.IsReady}"
+                                <DataTrigger Binding="{Binding ActiveScreen.IsReady}"
                                                                      Value="false">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
 
-                            <DataTrigger Binding="{Binding IsLoggedIn}"
+                                <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                      Value="False">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding MainDialog.IsDialogOpen}"
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MainDialog.IsDialogOpen}"
                                                                      Value="true">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
 
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
 
-            <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
+                <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
 
-                <md:PopupBox
+                    <md:PopupBox
                                             
                                             PlacementMode="BottomAndAlignRightEdges"
                                             StaysOpen="False"
+                        
                     >
-                    <md:PopupBox.Style>
-                        <Style TargetType="md:PopupBox">
-                            <Setter Property="Visibility" Value="Collapsed"></Setter>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </md:PopupBox.Style>
+                        <md:PopupBox.Style>
+                            <Style TargetType="md:PopupBox">
+                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:PopupBox.Style>
 
-                    <md:PopupBox.ToggleContent>
-                        <md:PackIcon Kind="Apps" Width="30" Height="30">
+                        <md:PopupBox.ToggleContent>
+                            <md:PackIcon Kind="Apps" Width="30" Height="30">
 
-                            <md:PackIcon.Style>
-                                <Style TargetType="md:PackIcon">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
-                                            <Setter Property="Foreground" Value="WhiteSmoke" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </md:PackIcon.Style>
+                                <md:PackIcon.Style>
+                                    <Style TargetType="md:PackIcon">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                                <Setter Property="Foreground" Value="WhiteSmoke" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </md:PackIcon.Style>
 
-                        </md:PackIcon>
-                    </md:PopupBox.ToggleContent>
-                    <StackPanel Margin="10 0">
+                            </md:PackIcon>
+                        </md:PopupBox.ToggleContent>
+                        <StackPanel Margin="10 0" >
 
 
-                        <navigation:NavigationGridView>
-                            
-                        </navigation:NavigationGridView>
+                            <navigation:NavigationGridView>
 
-                    </StackPanel>
-                </md:PopupBox>
+                            </navigation:NavigationGridView>
 
-                <md:PopupBox
+                        </StackPanel>
+                    </md:PopupBox>
+
+                    <md:PopupBox
                                             DockPanel.Dock="Right"
                                             PlacementMode="BottomAndAlignRightEdges"
                                             StaysOpen="False" Margin="0 0 20 0">
-                    <md:PopupBox.Style>
-                        <Style TargetType="md:PopupBox">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
-                                    <Setter Property="Foreground" Value="WhiteSmoke" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </md:PopupBox.Style>
-                    <StackPanel Margin="10 0">
+                        <md:PopupBox.Style>
+                            <Style TargetType="md:PopupBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                        <Setter Property="Foreground" Value="WhiteSmoke" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:PopupBox.Style>
+                        <StackPanel Margin="10 0">
 
 
-                        <Button x:Name="CloseAppWindowButton"
+                            <Button x:Name="CloseAppWindowButton"
                                                         Command="{x:Static SystemCommands.CloseWindowCommand}"
                                                         Content="Close" FontSize="20" />
-                        <Button x:Name="MaximizeAppWindowButton"
+                            <Button x:Name="MaximizeAppWindowButton"
                                                         Command="{x:Static SystemCommands.MaximizeWindowCommand}"
                                                         Content="Maximize"
                                                         FontSize="20">
-                            <Button.Style>
-                                <Style TargetType="Button"
+                                <Button.Style>
+                                    <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                    <Style.Triggers>
-                                        <DataTrigger
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger
                                                                     Binding="{Binding ElementName=AppMainViewWindow,Path=WindowState}"
                                                                     Value="Maximized">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button x:Name="MinimizeAppWindowButton"
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button x:Name="MinimizeAppWindowButton"
                                                         Command="{x:Static SystemCommands.MinimizeWindowCommand}"
                                                         Content="Minimize"
                                                         FontSize="20">
-                            <Button.Style>
-                                <Style TargetType="Button"
+                                <Button.Style>
+                                    <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                    <Style.Triggers>
-                                        <DataTrigger
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger
                                                                     Binding="{Binding ElementName=AppMainViewWindow,Path=WindowState}"
                                                                     Value="Minimized">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button x:Name="RestoreDownAppWindowButton"
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button x:Name="RestoreDownAppWindowButton"
                                                         Command="{x:Static SystemCommands.RestoreWindowCommand}"
                                                         Content="Restore Down"
                                                         FontSize="20">
-                            <Button.Style>
-                                <Style TargetType="Button"
+                                <Button.Style>
+                                    <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                    <Style.Triggers>
-                                        <DataTrigger
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger
                                                                     Binding="{Binding ElementName=AppMainViewWindow,Path=WindowState}"
                                                                     Value="Normal">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Separator
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Separator
                                                     Visibility="{Binding ElementName=LogoutAppWindowButton,Path=Visibility}" />
-                        <Button x:Name="LogoutAppWindowButton"
+                            <Button x:Name="LogoutAppWindowButton"
                                                         cal:Message.Attach="Logout"
                                                         Content="Logout" FontWeight="SemiBold"
                                                         FontSize="20">
-                            <Button.Style>
-                                <Style TargetType="Button"
+                                <Button.Style>
+                                    <Style TargetType="Button"
                                                                BasedOn="{StaticResource MaterialDesignPopupBoxButton}">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsLoggedIn}"
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                              Value="false">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </StackPanel>
-                </md:PopupBox>
-            </StackPanel>
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                    </md:PopupBox>
+                </StackPanel>
 
-            <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}">
-                <ContentControl.Style>
-                    <Style TargetType="ContentControl">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ActiveItem.EmbeddedCommandBar}"
+                <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveItem.EmbeddedCommandBar}"
                                                                      Value="null">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
 
-            <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedRightCommandBar}"
+                <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedRightCommandBar}"
                                                         DockPanel.Dock="Right">
-                <ContentControl.Style>
-                    <Style TargetType="ContentControl">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ActiveItem.EmbeddedRightCommandBar}" Value="null">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveItem.EmbeddedRightCommandBar}" Value="null">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
 
-            
 
-            <!--Processes Status-->
-            <StackPanel Orientation="Horizontal">
-                <StackPanel.Style>
-                    <Style TargetType="StackPanel">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoggedIn}"
+
+                <!--Processes Status-->
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoggedIn}"
                                                                      Value="true">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
-                <md:Chip
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <md:Chip
                                                 Content="Server"
                                                 cal:Action.TargetWithoutContext="{Binding ActiveItem}"
                                                 cal:Message.Attach="[Event Click] = [Action StartBackendServer(false)]"
                                                 IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                                 Margin="5 0">
-                    <md:Chip.Style>
-                        <Style TargetType="md:Chip">
+                        <md:Chip.Style>
+                            <Style TargetType="md:Chip">
 
-                            <Setter Property="IconBackground"
+                                <Setter Property="IconBackground"
                                                                 Value="{StaticResource ErrorColorBrush}" />
-                            <Setter Property="Icon" Value="{md:PackIcon ServerOff}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsBackendServerOn}"
+                                <Setter Property="Icon" Value="{md:PackIcon ServerOff}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsBackendServerOn}"
                                                                          Value="True">
-                                    <Setter Property="IconBackground"
+                                        <Setter Property="IconBackground"
                                                                         Value="{StaticResource SuccessColorBrush}" />
-                                    <Setter Property="Icon" Value="{md:PackIcon Server}" />
-                                </DataTrigger>
+                                        <Setter Property="Icon" Value="{md:PackIcon Server}" />
+                                    </DataTrigger>
 
-                                <DataTrigger
+                                    <DataTrigger
                                                                 Binding="{Binding IsAttemptingToStartBackendServer}"
                                                                 Value="true">
-                                    <Setter Property="Cursor" Value="Wait" />
-                                    <Setter Property="IconBackground"
+                                        <Setter Property="Cursor" Value="Wait" />
+                                        <Setter Property="IconBackground"
                                                                         Value="{StaticResource WarningColorBrush}" />
-                                    <Setter Property="Icon" Value="{md:PackIcon Server}" />
-                                </DataTrigger>
+                                        <Setter Property="Icon" Value="{md:PackIcon Server}" />
+                                    </DataTrigger>
 
-                            </Style.Triggers>
-                        </Style>
-                    </md:Chip.Style>
+                                </Style.Triggers>
+                            </Style>
+                        </md:Chip.Style>
 
-                </md:Chip>
-                <md:Chip
+                    </md:Chip>
+                    <md:Chip
                                                 Content="Database"
                                                 IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                                 Margin="5 0">
-                    <md:Chip.Style>
-                        <Style TargetType="md:Chip">
-                            <Setter Property="IconBackground"
+                        <md:Chip.Style>
+                            <Style TargetType="md:Chip">
+                                <Setter Property="IconBackground"
                                                                 Value="{StaticResource WarningColorBrush}" />
-                            <Setter Property="Icon" Value="{md:PackIcon Database}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDbServerOn}" Value="True">
-                                    <Setter Property="IconBackground"
+                                <Setter Property="Icon" Value="{md:PackIcon Database}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDbServerOn}" Value="True">
+                                        <Setter Property="IconBackground"
                                                                         Value="{StaticResource SuccessColorBrush}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDbServerOn}" Value="False">
-                                    <Setter Property="IconBackground"
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDbServerOn}" Value="False">
+                                        <Setter Property="IconBackground"
                                                                         Value="{StaticResource ErrorColorBrush}" />
-                                    <Setter Property="Icon"
+                                        <Setter Property="Icon"
                                                                         Value="{md:PackIcon DatabaseRemove}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </md:Chip.Style>
-                </md:Chip>
-            </StackPanel>
-           
-        </DockPanel>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:Chip.Style>
+                    </md:Chip>
+                </StackPanel>
+
+
+            </DockPanel>
+        </Grid>
     </md:ColorZone>
 </UserControl>

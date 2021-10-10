@@ -164,8 +164,13 @@
                 <DataTemplate DataType="{x:Type models:Customer}">
                     <Grid Background="#3f3f3f"  Width="120" Height="70" Margin="10" >
                         <StackPanel  Margin="0 10 0 0">
-                            <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
-                                                       TextWrapping="WrapWithOverflow" FontWeight="DemiBold" Foreground="White" HorizontalAlignment="Center" />
+                            <TextBlock DockPanel.Dock="Top" 
+                                       Text="{Binding Name}" 
+                                       TextWrapping="WrapWithOverflow" 
+                                       FontWeight="DemiBold" 
+                                       Foreground="White" 
+                                       HorizontalAlignment="Center"
+                                       FontSize="16"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <materialDesign:PackIcon DockPanel.Dock="Left" Kind="Phone" Width="20"
                                                                      Height="20" VerticalAlignment="Center"
@@ -173,7 +178,7 @@
                                 <TextBlock DockPanel.Dock="Bottom" Text="{Binding PhoneNumbers[0]}" Foreground="White" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
-                    </G>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>

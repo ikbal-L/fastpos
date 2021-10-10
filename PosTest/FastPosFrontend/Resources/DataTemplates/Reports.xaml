@@ -539,6 +539,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
 
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
@@ -551,8 +552,8 @@
                                         <MultiBinding StringFormat="Espèces&#x09;X {0:D2}&#x09;{1:C2}"
                                                        ConverterCulture="fr-DZ">
                                             <Binding Path="CashPayments.Count" />
-                                            <Binding Path="CashPayments.Values"
-                                                     Converter="{StaticResource SumValuesConverter}" />
+                                            <Binding Path="CashPaymentsTotal"
+                                                     />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -564,8 +565,8 @@
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
                                                                    ConverterCulture="fr-DZ">
-                                                        <Binding Path="Key" />
-                                                        <Binding Path="Value"  />
+                                                        <Binding Path="OrderNumber" />
+                                                        <Binding Path="Total"  />
                                                         </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
@@ -608,7 +609,54 @@
                                             <TextBlock Grid.Column="0" Margin="0 0 5 0" Padding="0" Height="15">
 
                                                 <TextBlock.Text>
-                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2} &#x09; -{2:C2}"
+                                                    <MultiBinding StringFormat="  PM-{0:D6} &#x09;{1:C2} &#x09; -{2:C2}"
+                                                                  xml:space="preserve">
+                                                        <Binding Path="Id" />
+                                                        <Binding Path="Amount" />
+                                                        <Binding Path="DiscountAmount" />
+                                                        </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListViewItem">
+                                                        <Border   Padding="0">
+                                                            <ContentPresenter></ContentPresenter>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Padding" Value="0"></Setter>
+                                            <Setter Property="Margin" Value="0"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="DemiBold" >
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Remboursements de crédit&#x09;X {0:D2}&#x09;&#x09;{1:C2} &#x09;{2:C2} ">
+                                            <Binding Path="CreditRePayments.Count"/>
+                                            <Binding Path="CreditRePaymentsTotal"/>
+                                            <Binding Path="CreditRePaymentsTotalDiscount"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ListView Grid.Row="1" ItemsSource="{Binding CreditRePayments}" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type model:Payment}">
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" Padding="0" Height="15">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  PM-{0:D6} &#x09;{1:C2} &#x09; -{2:C2}"
                                                                   xml:space="preserve">
                                                         <Binding Path="Id" />
                                                         <Binding Path="Amount" />

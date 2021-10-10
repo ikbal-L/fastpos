@@ -1346,7 +1346,9 @@ namespace FastPosFrontend.ViewModels
                     if (CurrentOrder.Deliveryman == null)
                     {
                       
-                        ModalDialogBox.Ok(this, "CheckoutDeliverymanDialogContent", "Deliveryman").Show();
+                        ModalDialogBox.Ok(this, "CheckoutDeliverymanDialogContent", "Deliveryman", (o) => {
+                            return CurrentOrder.Deliveryman != null;
+                        }).Show();
                         
                     }
 
@@ -1370,8 +1372,6 @@ namespace FastPosFrontend.ViewModels
                         ModalDialogBox.Ok(this, "CheckoutCustomerDialogContent", "Customer",
                             (o)=> {
                                 return CurrentOrder.Customer != null;
-
-
                             }).Show();
 
                     }

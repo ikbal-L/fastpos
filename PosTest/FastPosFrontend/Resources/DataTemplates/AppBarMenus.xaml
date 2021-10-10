@@ -186,12 +186,7 @@
                          ex:EventFocusAttachment.ElementToFocus="{Binding ElementName=SearchBox}">
                     <Button.Style>
                         <Style BasedOn="{StaticResource AppBarButton}" TargetType="Button">
-                            <Setter Property="IsEnabled" Value="False"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedTabIndex}" Value="1">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                </DataTrigger>
-                            </Style.Triggers>
+                         
                         </Style>
                     </Button.Style>
                 </Button>

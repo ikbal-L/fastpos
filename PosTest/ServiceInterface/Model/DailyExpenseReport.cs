@@ -16,10 +16,13 @@ namespace ServiceInterface.Model
         [DataMember]
         public DateTime IssuedDate { get; set; }
         [DataMember]
-        public Dictionary<int, decimal> CashPayments { get; set; }
+        public List<OrderReportInfo> CashPayments { get; set; }
 
         [DataMember]
         public List<Payment> DeliveryPayments { get; set; }
+
+        [DataMember]
+        public List<Payment> CreditRePayments { get; set; }
 
         [DataMember]
         public Dictionary<string, decimal> Expenses { get; set; }
@@ -52,9 +55,12 @@ namespace ServiceInterface.Model
 
         public int NumberOfPayments => (CashPayments?.Count ?? 0) + (DeliveryPayments?.Count ?? 0);
 
-        public decimal CashPaymentsTotal => CashPayments.Values.Sum();
+        public decimal CashPaymentsTotal => CashPayments.Sum(o=> o.Total);
         public decimal DeliveryPaymentsTotal => DeliveryPayments.Sum(p => p.Amount);
         public decimal DeliveryPaymentsTotalDiscount => DeliveryPayments.Sum(p => p.DiscountAmount ?? 0);
+
+        public decimal CreditRePaymentsTotal => CreditRePayments.Sum(p => p.Amount);
+        public decimal CreditRePaymentsTotalDiscount => CreditRePayments.Sum(p => p.DiscountAmount ?? 0);
 
         public int IssuedDateYear => IssuedDate.Year;
         [DisplayName(displayName: "Issued Month")]
