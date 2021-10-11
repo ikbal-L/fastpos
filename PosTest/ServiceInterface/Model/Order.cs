@@ -523,4 +523,20 @@ namespace ServiceInterface.Model
         [DataMember]
         public string LockedBy { get; set; }
     }
+
+    [DataContract]
+    public class OrderData
+    {
+        [DataMember]
+        public long Id { get; set; }
+        [DataMember]
+        public decimal Total { get; set; }
+        [DataMember]
+        public decimal NewTotal { get; set; }
+        [DataMember]
+        public int OrderNumber { get; set; }
+        [DataMember]
+        public DateTime OrerTime { get; set; }
+
+    }
 }

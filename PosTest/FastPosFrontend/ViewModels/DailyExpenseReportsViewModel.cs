@@ -25,7 +25,7 @@ namespace FastPosFrontend.ViewModels
     {
         
         private bool _isReportGenerated;
-        private DailyExpenseReport _report;
+
 
         public DailyExpenseReportsViewModel() : base()
         {
@@ -56,8 +56,8 @@ namespace FastPosFrontend.ViewModels
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.CashPaymentsTotal)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.DeliveryPaymentsTotal)));
             Reports.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(DailyExpenseReport.IssuedDate),System.ComponentModel.ListSortDirection.Descending));
-            Report =  _reports?.FirstOrDefault(r => r.IssuedDate.ToString("d") == DateTime.Today.Date.ToString("d"));
-            if (Report!= null)
+            OpennedReport =  _reports?.FirstOrDefault(r => r.IssuedDate.ToString("d") == DateTime.Today.Date.ToString("d"));
+            if (OpennedReport != null)
             {
                 IsReportGenerated = true;
             }
@@ -96,11 +96,7 @@ namespace FastPosFrontend.ViewModels
         }
 
 
-        public DailyExpenseReport Report
-        {
-            get => _report;
-            set => Set(ref _report, value);
-        }
+       
         private DailyExpenseReport _opennedReport;
 
         public DailyExpenseReport OpennedReport
@@ -144,10 +140,11 @@ namespace FastPosFrontend.ViewModels
         {
             var parent = Parent as MainViewModel;
 
-            var vm = new DailyExpenseReportInputDataViewModel(this,Report);
+            var vm = new DailyExpenseReportInputDataViewModel(this,OpennedReport);
+
             vm.OnReportGenerated(report =>
             {
-                Report = report;
+                OpennedReport = report;
                 var oldReport = _reports.FirstOrDefault(r => r.IssuedDate.Date == DateTime.Today.Date);
                 if (oldReport!= null)
                 {

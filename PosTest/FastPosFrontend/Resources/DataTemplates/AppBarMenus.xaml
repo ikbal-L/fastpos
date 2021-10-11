@@ -215,7 +215,8 @@
 
                 <Button Content="{md:PackIcon Kind=Printer,Size=30}"
                         cal:Message.Attach="[Event Click] = [Action PrintReport]"/>
-                <Button cal:Message.Attach="[Event Click] = [Action Generate]" IsEnabled="{Binding CanAddOrRefreshReportProperty}">
+                <!--IsEnabled="{Binding CanAddOrRefreshReportProperty}"-->
+                <Button cal:Message.Attach="[Event Click] = [Action Generate]" >
                     <Button.Style>
                         <Style BasedOn="{StaticResource AppBarButton}"  TargetType="Button">
                             <!--<Setter Property="IsEnabled" Value="False"/>-->

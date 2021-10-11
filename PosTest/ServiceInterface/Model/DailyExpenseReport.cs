@@ -16,7 +16,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public DateTime IssuedDate { get; set; }
         [DataMember]
-        public List<OrderReportInfo> CashPayments { get; set; }
+        public List<OrderData> CashPayments { get; set; }
 
         [DataMember]
         public List<Payment> DeliveryPayments { get; set; }

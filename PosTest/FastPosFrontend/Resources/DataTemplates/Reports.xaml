@@ -566,7 +566,7 @@
                                                     <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
                                                                    ConverterCulture="fr-DZ">
                                                         <Binding Path="OrderNumber" />
-                                                        <Binding Path="Total"  />
+                                                        <Binding Path="NewTotal"  />
                                                         </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
@@ -926,8 +926,8 @@
                                         <MultiBinding StringFormat="Espèces X {0:D2}  {1:C2}"
                                                        ConverterCulture="fr-DZ">
                                             <Binding Path="CashPayments.Count" />
-                                            <Binding Path="CashPayments.Values"
-                                                     Converter="{StaticResource SumValuesConverter}" />
+                                            <Binding Path="CashPaymentsTotal"
+                                                     />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -939,8 +939,8 @@
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="  TK-{0:D6} {1:C2}"
                                                                    ConverterCulture="fr-DZ">
-                                                        <Binding Path="Key" />
-                                                        <Binding Path="Value"  />
+                                                        <Binding Path="OrderNumber" />
+                                                        <Binding Path="NewTotal"  />
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
