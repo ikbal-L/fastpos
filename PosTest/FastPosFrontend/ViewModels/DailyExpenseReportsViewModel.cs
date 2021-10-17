@@ -136,11 +136,11 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void Generate()
+        public void GenerateReport()
         {
             var parent = Parent as MainViewModel;
 
-            var vm = new DailyExpenseReportInputDataViewModel(this,OpennedReport);
+            var vm = new DailyExpenseReportInputDataViewModel(this);
 
             vm.OnReportGenerated(report =>
             {
@@ -152,6 +152,35 @@ namespace FastPosFrontend.ViewModels
                 }
                 IsReportGenerated = true;
                 _reports.Add(report);
+                OpennedReport = report;
+                Reports.Refresh();
+
+            });
+
+            parent?.OpenDialog(vm).OnClose(() =>
+            {
+                vm.Dispose();
+            });
+        }
+
+
+        public void ReloadReport()
+        {
+            var parent = Parent as MainViewModel;
+
+            var vm = new DailyExpenseReportInputDataViewModel(this, OpennedReport);
+
+            vm.OnReportGenerated(report =>
+            {
+                OpennedReport = report;
+                var oldReport = _reports.FirstOrDefault(r => r.IssuedDate.Date == DateTime.Today.Date);
+                if (oldReport != null)
+                {
+                    _reports.Remove(oldReport);
+                }
+                IsReportGenerated = true;
+                _reports.Add(report);
+                OpennedReport = report;
                 Reports.Refresh();
 
             });
@@ -235,6 +264,11 @@ namespace FastPosFrontend.ViewModels
         {
             OpennedReport = null;
             IsOpennedReportTabOpen = false;
+        }
+
+        public override void BeforeNavigateAway()
+        {
+            StateManager.Flush<DailyExpenseReport>();
         }
     }
 
