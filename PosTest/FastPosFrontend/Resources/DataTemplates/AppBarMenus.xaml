@@ -4,7 +4,7 @@
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
                     xmlns:cal="http://www.caliburnproject.org"
-                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions">
+                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions" xmlns:converters="clr-namespace:FastPosFrontend.Converters">
 
     <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}" x:Key="AppBarButton">
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -13,7 +13,7 @@
         <Setter Property="Width" Value="40"/>
         <Setter Property="Height" Value="40"/>
     </Style>
-
+    <converters:OrderNumerationMaskConverter x:Key="OrderNumerationMaskConverter"/>
     <DataTemplate x:Key="CheckoutStatusBar" DataType="vm:CheckoutViewModel">
 
    
@@ -38,12 +38,24 @@
                 </StackPanel.Resources>
 
 
-                <md:Chip
-                Content="{Binding CurrentOrder.OrderNumber}"
+            <md:Chip
+               
                 ToolTip="رقم الطلب"
                 Icon="#"
-                IsDeletable="False"/>
-                <md:Chip
+                IsDeletable="False">
+                <md:Chip.Content>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{} {0:#} ( {1:#} )" >
+                                <Binding Path="CurrentOrder.OrderNumber" />
+                                <Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <!--<Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>-->
+                </md:Chip.Content>
+            </md:Chip>
+            <md:Chip
                 Content="{Binding CurrentOrder.Customer.Name}"
                 ToolTip="اسم الزبون"
                 Icon="{md:PackIcon User}"
@@ -216,17 +228,27 @@
                 <Button Content="{md:PackIcon Kind=Printer,Size=30}"
                         cal:Message.Attach="[Event Click] = [Action PrintReport]"/>
                 <!--IsEnabled="{Binding CanAddOrRefreshReportProperty}"-->
-                <Button cal:Message.Attach="[Event Click] = [Action Generate]" >
+                <Button cal:Message.Attach="[Event Click] = [Action GenerateReport]" >
                     <Button.Style>
                         <Style BasedOn="{StaticResource AppBarButton}"  TargetType="Button">
-                            <!--<Setter Property="IsEnabled" Value="False"/>-->
+                      
                             <Setter Property="Content" Value="{md:PackIcon Kind=Plus,Size=30}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsReportGenerated}" Value="true">
-                                    <Setter Property="Content" Value="{md:PackIcon Kind=Reload,Size=30}"/>
+                                    <Setter Property="IsEnabled" Value="False" />
                                 </DataTrigger>
                               
                             </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button cal:Message.Attach="[Event Click] = [Action ReloadReport]" >
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource AppBarButton}"  TargetType="Button">
+
+                            <Setter Property="Content" Value="{md:PackIcon Kind=Refresh,Size=30}"/>
+                           
                         </Style>
                     </Button.Style>
                 </Button>
