@@ -151,12 +151,12 @@
                   SelectedItem="{Binding SelectedPaidOrder}"
                       >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}"/>
-                    <DataGridTextColumn Header="Time" Binding="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
+                    <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Time" Binding="{Binding OrderTime,StringFormat='H:mm:ss'}" Width="*"/>
 
-                    <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}" Width="*"/>
 
-                    <DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}"/>
+                    <DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}" Width="*"/>
 
 
                 </DataGrid.Columns>
