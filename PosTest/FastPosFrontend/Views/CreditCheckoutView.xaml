@@ -464,7 +464,7 @@
                         </DataGrid>
                     </TabItem>
                     <TabItem Header="Paid Orders" TabIndex="{x:Static vm:CreditViewTabs.PAID_ORDERS_TAB}">
-                        <controls:PaginatedContent Paginator="{Binding PaidDeliveryOrders}">
+                        <controls:PaginatedContent Paginator="{Binding PaidOrders}">
                             <DataGrid Grid.Column="0" 
                           ItemsSource="{Binding PaidOrders.PaginationView}" 
                           AutoGenerateColumns="False" 
