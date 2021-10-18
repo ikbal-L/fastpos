@@ -10,8 +10,8 @@
                 <ResourceDictionary>
                     <local:ShellBootstrapper x:Key="bootstrapper"></local:ShellBootstrapper>
                 </ResourceDictionary>
-                <!--Mateirla design-->
-                
+
+
                 <materialDesign:BundledTheme  BaseTheme="Light" PrimaryColor="DeepOrange" SecondaryColor="Amber" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
          
@@ -48,6 +48,8 @@
                 <ResourceDictionary Source="/Resources/DataTemplates/Reports.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/AppBarMenus.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Drawers.xaml"/>
+                <ResourceDictionary Source="/Resources/DataTemplates/Reports.xaml"/>
+               
 
                 <!--ToastNotifications-->
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
@@ -62,6 +64,10 @@
             <FontFamily x:Key="DigitalFontFamily">/FastPosFrontend;Component/Fonts/#digital-7</FontFamily>
             <FontFamily x:Key="DSDIGIFontFamily">/FastPosFrontend;Component/Fonts/#DS-DIGI</FontFamily>
             <FontFamily x:Key="CairoRegular" >/FastPosFrontend;Component/Fonts/#Cairo-Regular.tff</FontFamily>
+
+            
         </ResourceDictionary>
+
+
     </Application.Resources>
 </Application>

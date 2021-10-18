@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -369,7 +370,8 @@ namespace ServiceLib.Service.StateManager
             IsStateManaged<TState>(key);
             if (State.ContainsKey(key))
             {
-                (State[key] as ICollection<TState>)?.Clear();
+                //(State[key] as ICollection<TState>)?.Clear();
+                State[key]  = null;
             }
         }
 
