@@ -49,7 +49,8 @@
                 <ResourceDictionary Source="/Resources/DataTemplates/AppBarMenus.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Drawers.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Reports.xaml"/>
-               
+
+
 
                 <!--ToastNotifications-->
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />

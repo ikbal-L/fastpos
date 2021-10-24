@@ -2118,12 +2118,12 @@ namespace FastPosFrontend.ViewModels
             var printerItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
             if (source == PrintSource.Kitchen)
             {
-                printerItems = printerItemSetting.Where(item => item.SelectedKitchen).ToList();
+                printerItems = printerItemSetting?.Where(item => item.SelectedKitchen).ToList();
             }
 
             if (source == PrintSource.CheckoutPrint|| source == PrintSource.CheckoutSplit|| source == PrintSource.CheckoutPay)
             {
-                printerItems = printerItemSetting.Where(item => item.SelectedReceipt).ToList();
+                printerItems = printerItemSetting?.Where(item => item.SelectedReceipt).ToList();
             }
 
             if (printerItems!= null)

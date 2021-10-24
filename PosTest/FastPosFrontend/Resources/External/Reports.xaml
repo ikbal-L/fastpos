@@ -7,7 +7,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:ex="clr-namespace:FastPosFrontend.Extensions;assembly=FastPosFrontend"
                     xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
-                    xmlns:svgc="clr-namespace:SharpVectors.Net;assembly=SharpVectors.Core"
+                    xmlns:svgc="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
                     >
             <!--
             When loading an external  resource file, assembly name must be specified !
@@ -135,7 +135,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="1" BorderBrush="Black"
+                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="0" BorderBrush="Black"
                         CornerRadius="4" Padding="4 1">
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
@@ -145,13 +145,19 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <StackPanel>
-                                <TextBlock  
+                                <StackPanel Orientation="Horizontal">
+                                   
+                                    <svgc:SvgViewbox Source="./logo.svg" Width="60" Height="60"/>
+
+                                    <TextBlock  
                                        FontSize="14"
                                        FontWeight="Bold"
                                         HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
                                        Text="{Binding Source={ex:Config PropertyName=GeneralSettings.RestaurantName}, StringFormat='Restaurant {0:#}'}" />
+                                </StackPanel>
+                                <!--<Image Source=""/>-->
 
-                                <Image Source="{svgc:SvgImage Source=logo.svg}" Width="30" Height="30"></Image>
                             </StackPanel>
 
                         </Grid>

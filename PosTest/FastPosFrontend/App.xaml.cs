@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using SharpVectors.Converters;
+using System.Windows;
 using System.Windows.Markup;
 using System.Xml;
 
@@ -21,9 +22,9 @@ namespace FastPosFrontend
             {
                 XmlReader XmlRead = XmlReader.Create(FilePath);
                 var rd = (ResourceDictionary)XamlReader.Load(XmlRead);
-             
+              
                 Application.Current.Resources.MergedDictionaries.Add(rd);
-
+                
                 XmlRead.Close();
             }
             catch (System.Exception e)

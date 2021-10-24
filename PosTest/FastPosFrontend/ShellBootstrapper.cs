@@ -68,19 +68,34 @@ namespace FastPosFrontend
 
         public static bool StartBackendServer()
         {
+            var jre = @".\jre\model-win-x";
+            var jrex86 = @$"{jre}86\bin\";
+            var jrex64 = @$"{jre}64\bin\";
 
-            
             _backendServerProcess ??= new Process()
             {
                 StartInfo = new ProcessStartInfo()
                 {
                     FileName = "java",
+
                     Arguments = "-jar model-0.0.1-SNAPSHOT.jar",
                     ErrorDialog = true,
                     CreateNoWindow = true,
-                    UseShellExecute = false
-                }
+                    UseShellExecute = true
+                },
+
             };
+
+            //if (Environment.Is64BitOperatingSystem)
+            //{
+            //    _backendServerProcess.StartInfo.WorkingDirectory = jrex64;
+            //}
+            //else
+            //{
+            //    _backendServerProcess.StartInfo.WorkingDirectory = jrex86;
+
+            //}
+
 
             if (!ConnectionHelper.PingHost())
             {
@@ -106,5 +121,14 @@ namespace FastPosFrontend
             return stopWatch.IsRunning;
         }
 
+        private static void _backendServerProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            
+        }
+
+        private static void _backendServerProcess_Exited(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
