@@ -3,18 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:FastPosFrontend.Views"
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
-             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:viewmodels="clr-namespace:FastPosFrontend.ViewModels"
-             xmlns:caliburn="http://www.caliburnproject.org"         
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
-             xmlns:controls="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:DailyExpenseReportsViewModel}"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              Background="{StaticResource MaterialDesignPaper}">
     <!--xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"-->
     <UserControl.Resources>
