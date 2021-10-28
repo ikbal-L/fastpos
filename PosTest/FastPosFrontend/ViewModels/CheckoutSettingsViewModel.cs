@@ -683,7 +683,7 @@ namespace FastPosFrontend.ViewModels
                 }
             });
 
-            if (!StateManager.Save<Product>(selectedCategory.Products)) return false;
+            if (!StateManager.Save(selectedCategory.Products)) return false;
             selectedCategory.Products= null;
             selectedCategory.ProductIds = null;
             return true;

@@ -47,7 +47,8 @@
                                             Foreground="WhiteSmoke"
                                             Margin="5 0 0 0"
                 IsChecked="{Binding Drawer.IsNavigationDrawerOpen,Mode=OneWay}"
-                Command="{Binding OpenNavigationDrawerCommand}">
+                Command="{Binding OpenNavigationDrawerCommand}"
+                    Visibility="Hidden">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton"
                                                        BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">

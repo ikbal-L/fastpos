@@ -1,0 +1,21 @@
+﻿<Product
+  xmlns="http://schemas.microsoft.com/developer/2004/01/bootstrapper"
+  ProductCode="Microsoft.Sample.EULA">
+	<!-- Defines the list of files to be copied on build. -->
+	<PackageFiles CopyAllPackageFiles="false">
+		<PackageFile Name="ConsentDialog.exe"/>
+	</PackageFiles>
+
+	<!-- Defines how to run the Setup package.-->
+	<Commands >
+		<Command PackageFile = "ConsentDialog.exe" Arguments=''>
+			<ExitCodes>
+				<ExitCode Value="0" Result="Success" />
+				<ExitCode Value="-1" Result="Fail" String="Mysql_Install_Failed" />
+				<DefaultExitCode Result="Fail"
+				  FormatMessageFromSystem="true" String="GeneralFailure" />
+			</ExitCodes>
+		</Command>
+	</Commands>
+
+</Product>

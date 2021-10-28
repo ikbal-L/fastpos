@@ -50,7 +50,7 @@
                     </DockPanel.Height>-->
                     <Border DockPanel.Dock="Top" Height="40">
                         <TextBlock Text="{Binding Path=Name}" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"
-                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold" FontFamily="{DynamicResource CairoBoldFontFamily}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>

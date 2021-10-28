@@ -309,7 +309,7 @@
 
                 <Border BorderBrush="DimGray" BorderThickness="0.5 0 0 0">
                     <TabControl Grid.Column="0"
-                            Style="{StaticResource MaterialDesignTabControl}"
+                           
                             SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
                             caliburn:Message.Attach="[Event DragEnter] = [Action SetActiveTab($source, $eventArgs)]"
                             Width="320"

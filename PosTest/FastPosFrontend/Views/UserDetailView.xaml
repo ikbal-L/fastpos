@@ -115,9 +115,12 @@
                      Text="{Binding Email,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}"/>
 
 
-                <TabControl Grid.Row="6" Style="{StaticResource MaterialDesignTabControl}">
+                <TabControl Grid.Row="6"  Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                            >
 
-
+                    <TabControl.Resources>
+                        <Style TargetType="TabItem" BasedOn="{StaticResource MaterialDesignNavigationRailTabItem}"></Style>
+                    </TabControl.Resources>
 
                     <TabItem>
                         <TabItem.Header>

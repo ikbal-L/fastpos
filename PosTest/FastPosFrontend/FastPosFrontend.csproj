@@ -587,6 +587,7 @@
       <SubType>Designer</SubType>
     </Page>
     <None Include="Properties\app.manifest" />
+    <Resource Include="product.xml" />
     <Content Include="Resources\External\Reports.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

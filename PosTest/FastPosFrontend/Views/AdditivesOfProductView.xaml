@@ -25,7 +25,7 @@
                 
                 <ListBox Grid.Row="1" x:Name="AdditiveSettingsList"  
                          AllowDrop="True"
-                         Visibility="{Binding IsPlatter ,Converter={StaticResource boolToVisibilityConverter}}"
+                         Visibility="{Binding IsPlatter ,Converter={StaticResource BooleanToVisibilityConverter}}"
                          ItemsSource="{Binding Additives}"
                          ItemTemplate="{StaticResource AdditivesOfProductStyle}"
                          ScrollViewer.VerticalScrollBarVisibility="Auto">
