@@ -8,7 +8,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("User Settings", typeof(UserSettingsViewModel),"", groupName: "Settings")]
+    [NavigationItem("User Settings", typeof(UserSettingsViewModel),"", groupName: "Settings", isQuickNavigationEnabled: true)]
     public class UserSettingsViewModel : LazyScreen
     {
         private User _selectedUser = null;

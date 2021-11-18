@@ -13,7 +13,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
 
-    [NavigationItem("Waiter Settings", typeof(WaiterSettingsViewModel),"", groupName: "Settings")]
+    [NavigationItem("Waiter Settings", typeof(WaiterSettingsViewModel),"", groupName: "Settings",isQuickNavigationEnabled:true)]
     public class WaiterSettingsViewModel: LazyScreen,ISettingsController
     {
         private ObservableCollection<Waiter> _Waiters;
