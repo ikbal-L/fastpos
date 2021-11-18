@@ -1058,7 +1058,7 @@ namespace FastPosFrontend.ViewModels
             additives.Sort(comparer);
 
             RankedItemsCollectionHelper.LoadPagesNotFilled(source: additives, target: AdditivesPage,
-                size: MaxProductPageSize);
+                size: 30);
             AdditivesVisibility = true;
             ProductsVisibility = false;
         }
