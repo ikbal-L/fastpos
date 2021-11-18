@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace FastPosFrontend.ViewModels
 
         private static string scanValue;
         private BindableCollection<Additive> _additvesPage;
-        private BindableCollection<Table> _tables;
+       
         private BindableCollection<Product> _productsPage;
         private WarningViewModel _warningViewModel;
         private TablesViewModel _tablesViewModel;
@@ -245,27 +246,23 @@ namespace FastPosFrontend.ViewModels
         private void SetupEmbeddedCommandBar()
         {
             EmbeddedCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutLeftCommandBar");
-
         }
 
         private void SetupEmbeddedStatusBar()
         {
             EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this, "CheckoutStatusBar");
-
         }
 
         protected override void Setup()
         {
             var categories = StateManager.GetAsync<Category>();
             var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
-
             _data = new NotifyAllTasksCompletion(categories, unprocessedOrders);
         }
 
        
         public async override void Initialize()
         {
-
             var deliveryMen = StateManager.Get<Deliveryman>();
             var waiter = StateManager.Get<Waiter>();
             var tables = StateManager.Get<Table>();
@@ -273,8 +270,6 @@ namespace FastPosFrontend.ViewModels
             var unprocessedOrders = StateManager.Get<Order>();
             var categories = StateManager.Get<Category>();
             var products = StateManager.Get<Product>();
-
-
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
             OrdersCollectionObserver = new CollectionMutationObserver<Order>(Orders,true,true);
@@ -286,8 +281,6 @@ namespace FastPosFrontend.ViewModels
             Tables = new BindableCollection<Table>(tables);
             Customers = new BindableCollection<Customer>(customers);
             OrderItemsCollectionViewSource = new CollectionViewSource();
-
-
             OrderItemsCollectionViewSource.Filter += OrderItemsCollectionViewSourceOnFilter;
 
             Task.Run(CalculateOrderElapsedTime);
@@ -297,13 +290,10 @@ namespace FastPosFrontend.ViewModels
                 Orders.Add(CurrentOrder);
             }
 
-
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
 
-
             LoadCategoryPages();
-
 
             PaginatedCategories = new CollectionViewSource {Source = Categories};
 
@@ -311,11 +301,10 @@ namespace FastPosFrontend.ViewModels
 
             CalculateTotalPages(Categories.Count);
 
-
             foreach (var table in Tables)
             {
                 table.AllOrders = Orders;
-                table.AllTables = Tables;
+               
             }
 
             ProductsVisibility = true;
@@ -345,7 +334,6 @@ namespace FastPosFrontend.ViewModels
             };
 
             await _eventSource.StartAsync();
-
         }
 
         public CollectionMutationObserver<Order> OrdersCollectionObserver { get; set; }
@@ -521,7 +509,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _additvesPage, value);
         }
 
-
+        //TODO Selection display of Order Tabination
         private void SetSelectedInListedOrdersDisplayedOrder()
         {
             var table = Tables.Where(t => t.Orders.Contains(CurrentOrder)).FirstOrDefault();
@@ -657,8 +645,6 @@ namespace FastPosFrontend.ViewModels
             set { Set(ref _deliveryCheckoutViewModel , value); }
         }
 
-
-
         public Table SelectedTable
         {
             get => _selectedTable;
@@ -678,15 +664,8 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _selectedOrderTable, value);
         }
 
-        public BindableCollection<Table> Tables
-        {
-            get => _tables;
-            set
-            {
-                _tables = value;
-                NotifyOfPropertyChange();
-            }
-        }
+        public ObservableCollection<Table> Tables { get; set; }
+        
 
         public INotifyPropertyChanged DialogViewModel
         {
@@ -728,7 +707,6 @@ namespace FastPosFrontend.ViewModels
             set { Set(ref _currentOrderTotal , value); }
         }
 
-
         public bool IsOrderInfoShown
         {
             get => _isOrderInfoShown;
@@ -755,23 +733,7 @@ namespace FastPosFrontend.ViewModels
 
         public bool SaveOrder(ref Order order)
         {
-            if (IsRunningFromXUnit)
-            {
-                return false;
-            }
-
-            bool resp;
-            try
-            {
-                resp = StateManager.Save(order);
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Check your server connection");
-                return false;
-            }
-
-            return resp;
+            return StateManager.Save(order); 
         }
 
         private void SaveCurrentOrder()
@@ -880,7 +842,6 @@ namespace FastPosFrontend.ViewModels
             CustomerViewModel.SelectedCustomer = null;
         }
 
-
         public void LockOrder()
         {
             if (CurrentOrder== null)
@@ -899,8 +860,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        //FilterEventHandler TableOrdersFilter;
-
         private void SetCurrentOrderTypeAndRefreshOrdersLists(OrderType? orderType, Table table = null)
         {
             if (CurrentOrder != null)
@@ -909,7 +868,6 @@ namespace FastPosFrontend.ViewModels
                 if (orderType == OrderType.OnTable)
                 {
                     CurrentOrder.Table = table;
-                    SelectedTable = table;
                     SelectedDeliveryman = null;
                     IsTableViewActive = true;
                     IsTakeawayViewActive = false;
@@ -948,10 +906,10 @@ namespace FastPosFrontend.ViewModels
                 }
             }
 
-
             DeliveryViewModel.OrderViewSource.View.Refresh();
             WaitingViewModel.OrderViewSource.View.Refresh();
             TakeAwayViewModel.OrderViewSource.View.Refresh();
+            TablesViewModel.TablesViewSource.View.Refresh();
             DeliveryViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
             WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
             TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
@@ -961,9 +919,6 @@ namespace FastPosFrontend.ViewModels
                 t.OrderViewSource.View.Refresh();
             }
 
-            TablesViewModel.TablesViewSource.Filter -= TablesViewModel.TablesFilter;
-            TablesViewModel.TablesViewSource.Filter += TablesViewModel.TablesFilter;
-            // TablesViewModel.TablesView.Refresh();
             SetSelectedInListedOrdersDisplayedOrder();
             TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
@@ -983,7 +938,6 @@ namespace FastPosFrontend.ViewModels
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
             _currentOrder = null;
-            //DisplayedOrder = null;
             SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
@@ -1235,8 +1189,6 @@ namespace FastPosFrontend.ViewModels
                         currentOrderObserver.Push();
                     }
 
-                   
-
                     CurrentOrder.OrderItems.AddRange(removedItems);
                     orderitemsCollectionObserver.CommitAndPushAddedItems((i) => i.State != OrderItemState.Removed);
                     CurrentOrder.State = OrderState.Ordered;
@@ -1263,7 +1215,7 @@ namespace FastPosFrontend.ViewModels
                         }
 
                         DialogViewModel = TablesViewModel;
-                        //IsDialogOpen = true;
+
                         return;
                     }
 
@@ -1363,9 +1315,6 @@ namespace FastPosFrontend.ViewModels
                         return;
                     }
 
-    
-
-
                     if (CurrentOrder.Customer == null)
                     {
 
@@ -1410,8 +1359,7 @@ namespace FastPosFrontend.ViewModels
             CurrentOrder.GivenAmount = payedAmount;
             CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
             CurrentOrder.State = OrderState.Payed;
-            //NumericZone = "";
-            //GivenAmount = CurrentOrder.GivenAmount;
+
             ReturnedAmount = CurrentOrder.ReturnedAmount;
             _printOrder = _currentOrder;
             SaveCurrentOrder();
@@ -1497,23 +1445,7 @@ namespace FastPosFrontend.ViewModels
             SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable, table);
         }
 
-        private Table LookForTableInOrders(int tableNumber)
-        {
-            if (Tables == null)
-            {
-                return null;
-            }
-
-            foreach (var t in Tables)
-            {
-                if (t.Number == tableNumber)
-                {
-                    return t;
-                }
-            }
-
-            return null;
-        }
+   
 
         private void PriceAction(ref string priceStr, Order order)
         {
@@ -1618,10 +1550,9 @@ namespace FastPosFrontend.ViewModels
 
             if (discount > order.Total)
             {
-                //Use Local to select message according to UI language
                 discStr = "";
                 ToastNotification.Notify("Discount bigger than total", NotificationType.Warning);
-                //CurrentOrder.DiscountAmount = 0;
+
                 return;
             }
 
@@ -1639,7 +1570,7 @@ namespace FastPosFrontend.ViewModels
 
         public void NumericKeyboard(string number)
         {
-            if (String.IsNullOrEmpty(number))
+            if (string.IsNullOrEmpty(number))
                 return;
             if (number.Length > 1)
                 return;
@@ -2371,7 +2302,7 @@ namespace FastPosFrontend.ViewModels
         public void AddExpense()
         {
             CashOutViewModel = new CashOutViewModel();
-            var parent = this.Parent as MainViewModel;
+            var parent = Parent as MainViewModel;
             parent?.OpenDialog(CashOutViewModel)
                 .OnClose(() =>
                 {
