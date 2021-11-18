@@ -343,7 +343,7 @@ namespace ServiceInterface.Model
                 if (value != null)
                 {
                     var orders = (_table?.OrderViewSource?.Source as ICollection<Order>);
-                    if (orders != null && !orders.Contains(this))
+                    if (orders != null && !orders.Any(o=>o.OrderNumber == this.OrderNumber))
                     {
                         orders.Add(this);
                     }
