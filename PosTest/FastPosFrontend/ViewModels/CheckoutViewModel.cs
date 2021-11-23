@@ -151,10 +151,8 @@ namespace FastPosFrontend.ViewModels
 
             _productLayout = AppConfigurationManager.Configuration<ProductLayoutConfiguration>() ?? new ProductLayoutConfiguration() { Columns = 6, Rows = 5 };
 
-            var pageSize = _productLayout.NumberOfProducts;
+          
 
-            
-            MaxProductPageSize = pageSize;
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
 
@@ -475,7 +473,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _currentCategory, value);
         }
 
-        public int MaxProductPageSize { get; set; }
+        public int MaxProductPageSize => _productLayout.NumberOfProducts;
 
         public bool AdditivesVisibility
         {
@@ -2222,6 +2220,8 @@ namespace FastPosFrontend.ViewModels
         {
             var products = e.Settings.FirstOrDefault(o => o is IEnumerable<Product>) as IEnumerable<Product>;
             var categories = e.Settings.FirstOrDefault(o => o is IEnumerable<Category>) as IEnumerable<Category>;
+            var configuration = e.Settings.FirstOrDefault(o => o is ProductLayoutConfiguration) as ProductLayoutConfiguration;
+            ProductLayout = configuration;
 
             AllProducts = products.ToList();
             AllCategories = categories.ToList();

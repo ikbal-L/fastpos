@@ -1607,7 +1607,7 @@ namespace FastPosFrontend.ViewModels
         public void RaiseSettingsUpdated()
         {
             
-            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(_allProducts,_allCategories));
+            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(_allProducts,_allCategories,ProductLayoutViewModel?.Configuration));
         }
 
         public override void BeforeNavigateAway()
