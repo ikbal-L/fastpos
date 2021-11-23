@@ -16,8 +16,8 @@ namespace XUnitTesting.ServiceLibTests
             var productRepository = new Mock<IProductRepository>();
             var categoryRepository = new Mock<ICategoryRepository>();
             
-            productRepository.Setup(pr => pr.Get()).Returns((200, MockingHelpers.GetAllProducts()));
-            categoryRepository.Setup(cr => cr.Get()).Returns((200, MockingHelpers.GetAllCategories()));
+            productRepository.Setup(pr => pr.GetAll()).Returns((200, MockingHelpers.GetAllProducts()));
+            categoryRepository.Setup(cr => cr.GetAll()).Returns((200, MockingHelpers.GetAllCategories()));
             
             StateManager.Instance
                 .Manage(productRepository.Object)

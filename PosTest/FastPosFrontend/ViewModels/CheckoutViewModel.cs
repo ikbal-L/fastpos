@@ -650,11 +650,13 @@ namespace FastPosFrontend.ViewModels
             get => _selectedTable;
             set
             {
+                Set(ref _selectedTable, value);
+
                 if (value!= CurrentOrder?.Table)
                 {
                     TableAction(value);
                 }
-                Set(ref _selectedTable, value);
+                
             }
         }
 
@@ -902,7 +904,7 @@ namespace FastPosFrontend.ViewModels
                     }
 
                     CurrentOrder.Table = null;
-                    SelectedTable = null;
+                    _selectedTable = null;
                 }
             }
 
@@ -1160,6 +1162,8 @@ namespace FastPosFrontend.ViewModels
                 }
                 case ActionButton.Payment:
 
+                    
+                    
                     PayementAction();
                     break;
 
@@ -1379,48 +1383,22 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            var status = 200;
+           
             Table table;
             if ((table = Tables.FirstOrDefault(t => t.Number == tableNumber)) == null)
 
 
-                table = StateManager.Get<Table>(tableNumber);
+           
             if (table == null)
             {
                 ToastNotification.Notify("Table not found", NotificationType.Warning);
-                return;
+                    NumericZone = "";
+                    return;
             }
 
-            switch (status)
-            {
-                case 200:
-                    if (CurrentOrder == null)
-                    {
-                        NewOrder();
-                    }
+            SelectedTable = table;
 
-                    SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.OnTable, table);
-                    break;
-                case 400:
-                    if (ActionConfig.AllowUsingVirtualTable)
-                    {
-                        if (StateManager.Save<Table>(new Table {IsVirtual = true, Number = tableNumber}))
-                        {
-                            ToastNotification.Notify("Creation of virtual table", NotificationType.Information);
-                            NewOrder();
-                        }
-                        else
-                        {
-
-                        }
-                    }
-
-                    ToastNotification.ErrorNotification(status);
-                    break;
-                default:
-                    ToastNotification.ErrorNotification(status);
-                    break;
-            }
+            
 
             NumericZone = "";
         }
@@ -1429,6 +1407,8 @@ namespace FastPosFrontend.ViewModels
         {
             if (table == null)
             {
+                CurrentOrder.Table = null;
+                SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.InWaiting, table);
                 return;
             }
 
@@ -1932,6 +1912,18 @@ namespace FastPosFrontend.ViewModels
             else
             {
                 SelectedWaiter = null;
+            }
+        }
+
+        public void SelectTable(Table table)
+        {
+            if (SelectedTable != table)
+            {
+                SelectedTable = table;
+            }
+            else
+            {
+                SelectedTable = null;
             }
         }
 

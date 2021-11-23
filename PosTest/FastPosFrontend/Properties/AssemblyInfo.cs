@@ -5,11 +5,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FastPosFrontend")]
+[assembly: AssemblyTitle("FrutaPOS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FastPosFrontend")]
+[assembly: AssemblyCompany("Soft-Lines")]
+[assembly: AssemblyProduct("FrutaPOS")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

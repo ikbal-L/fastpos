@@ -2,6 +2,7 @@
 using System.Linq;
 using ServiceInterface.Model;
 using ServiceLib.helpers;
+using Utilities.Extensions.Collections;
 
 namespace FastPosFrontend.Helpers
 {
@@ -107,7 +108,7 @@ namespace FastPosFrontend.Helpers
                 user.RoleIds.ForEach(roleId =>
                 {
                     var role = roles.FirstOrDefault(r => r.Id == roleId);
-                    user.Roles.Add(role);
+                    user.Roles.AddIfNotNull(role);
                 });
             }
         }

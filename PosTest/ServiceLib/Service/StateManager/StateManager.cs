@@ -173,7 +173,7 @@ namespace ServiceLib.Service.StateManager
                     return true;
 
                 }
-                var result = service.Save(tState);
+                var result = service.SaveAll(tState);
                 var status = result.status;
 
                 if ((HttpStatusCode) status == HttpStatusCode.OK || (HttpStatusCode) status == HttpStatusCode.Created)
@@ -199,7 +199,7 @@ namespace ServiceLib.Service.StateManager
                 throw new InvalidOperationException("State must have an Id");
             }
 
-            var (status,errors) = service.Delete((TIdentifier)state.Id);
+            var (status,errors) = service.DeleteById((TIdentifier)state.Id);
             _responseHandler.Handle(status,errors,StateManagementQuery.Delete,obj:state);
 
             if ((HttpStatusCode) status != HttpStatusCode.OK) return false;
@@ -277,7 +277,7 @@ namespace ServiceLib.Service.StateManager
             if (State[key] != null && !_refreshRequested) return;
             if (Service[key] is IRepository<TState, TIdentifier> service)
             {
-                var (status, data) = string.IsNullOrEmpty(predicate) ? service.Get() : service.Get(predicate);
+                var (status, data) = string.IsNullOrEmpty(predicate) ? service.GetAll() : service.Get(predicate);
                 //ServiceHelper.HandleStatusCodeErrors();
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
                 if ((HttpStatusCode)status == HttpStatusCode.NoContent)

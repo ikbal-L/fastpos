@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -51,7 +52,7 @@ namespace Utilities.Extensions.Collections
 {
     public static class CollectionEx
     {
-        public static bool Add<T>(this ICollection<T> collection, T item, bool predicate)
+        public static bool AddIf<T>(this ICollection<T> collection, T item, bool predicate)
         {
             if (!predicate) return false;
             collection.Add(item);
@@ -59,12 +60,62 @@ namespace Utilities.Extensions.Collections
 
         }
 
-        public static bool Add<T>(this ICollection<T> collection, T item, Predicate<T> predicate)
+        public static bool AddIf<T>(this ICollection<T> collection, T item, Predicate<T> predicate)
         {
             if (!predicate.Invoke(item)) return false;
             collection.Add(item);
             return true;
 
+        }
+
+        public static bool AddIfNotNull<T>(this ICollection<T> collection, T item)
+        {
+            if (item is null) return false;
+            collection.Add(item);
+            return true;
+
+        }
+
+        public static bool RemoveIf<T>(this ICollection<T> collection, Func<T,bool> predicate)
+        {
+            var item = collection.FirstOrDefault(predicate);
+            if (item is null) return false;
+            return collection.Remove(item);
+
+        }
+
+        public static bool ReplaceIf<T>(this IList<T> list,T item, Func<T, bool> predicate)
+        {
+            var itemToReplace = list.FirstOrDefault(predicate);
+            if (itemToReplace is null) return false;
+
+            var index = list.IndexOf(itemToReplace);
+            list[index] = item;
+            return index!=-1;
+
+        }
+
+        public static bool AddOrReplaceIf<T>(this IList<T> list, T item, Func<T, bool> predicate)
+        {
+            var itemToReplace = list.FirstOrDefault(predicate);
+            if (itemToReplace is null)
+            {
+                list.Add(item);
+
+            }
+            else
+            {
+                var index = list.IndexOf(itemToReplace);
+                list[index] = item;
+            }
+
+            return true;
+
+        }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
+        {
+            return new ObservableCollection<T>(source);
         }
     }
 

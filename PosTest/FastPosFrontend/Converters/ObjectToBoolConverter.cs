@@ -27,7 +27,7 @@ namespace FastPosFrontend.Converters
             throw new NotImplementedException();
         }
     } 
-    class ObjectToBoolConverter : IValueConverter
+    public class ObjectToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

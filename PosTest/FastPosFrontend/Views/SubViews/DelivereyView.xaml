@@ -16,7 +16,7 @@
     <Grid>
         <ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}" 
                  SelectedItem="{Binding SelectedOrder}"
-                 Background="#a5a5a5"   
+                 Background="#FFDDDDDD"   
                  HorizontalContentAlignment="Left"
                  VerticalContentAlignment="Center">
             <ListBox.ItemTemplate>

@@ -25,111 +25,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <!--<TabControl Style="{StaticResource MaterialDesignAppBarTabControl}" SelectedIndex="{Binding SelectedTabIndex,Mode=TwoWay}">
-            <TabControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="1"></UniformGrid>
-                </ItemsPanelTemplate>
-            </TabControl.ItemsPanel>
-            <TabItem Header="Today's Report" TabIndex="0" controls:TabControlAssist.TabHeaderFontSize="18">
-                <Grid>
-                    <TextBlock Text="No report is created yet. Click the '+' to create today's report." 
-                                   VerticalAlignment="Center" 
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap"
-                               TextAlignment="Center"
-                                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                           Visibility="{Binding IsReportGenerated,Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    
-                    
-                    
-                    <ScrollViewer HorizontalScrollBarVisibility="Visible" Margin=" 0 10" 
-                              Visibility="{Binding IsReportGenerated,Converter={StaticResource boolToVisibilityConverter}}">
-                        <Grid Margin="0 0 0 40">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"></RowDefinition>
-                            </Grid.RowDefinitions>
-
-                            <ContentControl 
-                            ContentTemplate="{StaticResource {x:Type model:DailyExpenseReport}}" 
-                            Content="{Binding Report}"
-                            Width="600"
-                            >
-                                <ContentControl.Style>
-                                    <Style TargetType="ContentControl" >
-                                        --><!--<Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsReportGenerated}" Value="false">
-                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>--><!--
-                                    </Style>
-                                </ContentControl.Style>
-                            </ContentControl>
-
-
-                        </Grid>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Reports" TabIndex="1" controls:TabControlAssist.TabHeaderFontSize="18" IsSelected="True">
-
-              
-            </TabItem>
-
-            <TabItem  Visibility="{Binding IsOpennedReportTabOpen,Converter={StaticResource boolToVisibilityConverter}}" 
-                     TabIndex="2"
-                      controls:TabControlAssist.TabHeaderFontSize="18">
-               
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <DockPanel  LastChildFill="False" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=DataContext.OpennedReport.IssuedDate,StringFormat=' {0:d}',ConverterCulture='fr-DZ'}" VerticalAlignment="Center"  Width="100"/>
-                            <Button Content="{md:PackIcon Kind=Close,Size=25}"  
-                                    DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                    caliburn:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=DataContext}"
-                                    caliburn:Message.Attach="[Event Click] = [Action CloseReport]" 
-                                    Margin="0 0 0 5">
-                                <Button.Style>
-                                    <Style BasedOn="{StaticResource MaterialDesignToolButton}" TargetType="Button">
-                                        <Setter Property="Foreground" Value="Black"></Setter>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Foreground" Value="White"></Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </DockPanel>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <ScrollViewer HorizontalScrollBarVisibility="Visible" Margin=" 0 10" >
-                    <Grid Margin="0 0 0 40">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-
-                        <ContentControl 
-                            ContentTemplate="{StaticResource {x:Type model:DailyExpenseReport}}" 
-                            Content="{Binding OpennedReport}"
-                            Width="600">
-                            <ContentControl.Style>
-                                <Style TargetType="ContentControl" >
-                                    --><!--<Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsReportGenerated}" Value="false">
-                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>--><!--
-                                </Style>
-                            </ContentControl.Style>
-                        </ContentControl>
-
-                    </Grid>
-                </ScrollViewer>
-            </TabItem>
-          
-        </TabControl>-->
+    
 
         <DataGrid ItemsSource="{Binding Reports}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"
                           SelectionMode="Single"
@@ -157,7 +53,7 @@
             </DataGrid.RowStyle>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header ="Issued Date" Binding="{Binding IssuedDate,ConverterCulture='fr-DZ'}" IsReadOnly="True" Width="*"/>
+                <DataGridTextColumn Header ="Issued Date" Binding="{Binding IssuedDate,ConverterCulture='fr-DZ'}" IsReadOnly="True" Width="*" />
                 <!--<DataGridTextColumn Header ="Diposited Amount" Binding="{Binding CashRegisterDepositedAmount}" IsReadOnly="True" />
                 <DataGridTextColumn Header ="Withdrawn Amount" Binding="{Binding CashRegisterWithDrawnAmount}" IsReadOnly="True" />
                 <DataGridTextColumn Header ="Total earnings (Cash)" Binding="{Binding CashPaymentsTotal}" IsReadOnly="True" />
@@ -177,7 +73,7 @@
                 </Grid.RowDefinitions>
 
                 <ContentControl 
-                            ContentTemplate="{StaticResource {x:Type model:DailyExpenseReport}}" 
+                            ContentTemplate="{StaticResource {x:Type model:DailyEarningsReport}}" 
                             Content="{Binding OpennedReport}"
                             Width="600"
                     Margin=" 0 10">

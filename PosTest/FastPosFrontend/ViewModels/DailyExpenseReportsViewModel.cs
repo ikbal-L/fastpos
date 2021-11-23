@@ -14,18 +14,20 @@ using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.Settings;
+using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Utilities.Extensions.Collections;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem(title: "Daily Expense Reports", target: typeof(DailyExpenseReportsViewModel),"",isQuickNavigationEnabled:true)]
+    [NavigationItem(title: "Daily Earnings Reports", target: typeof(DailyExpenseReportsViewModel),"",isQuickNavigationEnabled:true)]
     public class DailyExpenseReportsViewModel : LazyScreen
     {
         
-        private bool _isReportGenerated;
-
+       
+ 
 
         public DailyExpenseReportsViewModel() : base()
         {
@@ -35,7 +37,7 @@ namespace FastPosFrontend.ViewModels
 
         protected override void Setup()
         {
-            var reports = StateManager.GetAsync<DailyExpenseReport>();
+            var reports = StateManager.GetAsync<DailyEarningsReport>();
             _data = new NotifyAllTasksCompletion(reports);
             
         }
@@ -43,30 +45,35 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            var data = StateManager.Get<DailyExpenseReport>();
-            _reports = new ObservableCollection<DailyExpenseReport>(data);
-            
+            var data = StateManager.Get<DailyEarningsReport>().ToList();
+
+            var api = new RestApis();
+            var (status, result) = GenericRest.GetThing<DailyEarningsReport>(api.Resource("daily-earnings-report", "get/date/today"));
+            if (status is 200 || status is 201)
+            {
+                ReportOfTheDay = result;
+                OpennedReport = ReportOfTheDay;
+                _ = (data?.AddOrReplaceIf(ReportOfTheDay, r => r.IssuedDate.ToString("d") == DateTime.Today.Date.ToString("d")));
+            }
+
+            _reports = data.OrderByDescending(r => r.IssuedDate).ToObservableCollection();
+
+
             Reports = (CollectionView)CollectionViewSource.GetDefaultView(_reports);
             Reports.Filter += FilterReportsByIssuedDate;
-
-            
 
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateYear)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.IssuedDateMonth)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.CashPaymentsTotal)));
             //Reports.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DailyExpenseReport.DeliveryPaymentsTotal)));
-            Reports.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(DailyExpenseReport.IssuedDate),System.ComponentModel.ListSortDirection.Descending));
-            OpennedReport =  _reports?.FirstOrDefault(r => r.IssuedDate.ToString("d") == DateTime.Today.Date.ToString("d"));
-            if (OpennedReport != null)
-            {
-                IsReportGenerated = true;
-            }
-           
+
+            Reports.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(DailyEarningsReport.IssuedDate),System.ComponentModel.ListSortDirection.Descending));
+ 
         }
 
         private bool FilterReportsByIssuedDate(object o)
         {
-            if (o is DailyExpenseReport r)
+            if (o is DailyEarningsReport r)
             {
                 if (string.IsNullOrEmpty(UserSearchQuery)) return true;
 
@@ -81,11 +88,6 @@ namespace FastPosFrontend.ViewModels
             EmbeddedRightCommandBar = new EmbeddedCommandBarViewModel(this,"DailyExpenseReportRightCommandBar");
         }
 
-        public bool IsReportGenerated
-        {
-            get => _isReportGenerated;
-            set => Set(ref _isReportGenerated, value);
-        }
 
         private bool _isOpennedReportTabOpen;
 
@@ -97,30 +99,33 @@ namespace FastPosFrontend.ViewModels
 
 
        
-        private DailyExpenseReport _opennedReport;
+        private DailyEarningsReport _opennedReport;
 
-        public DailyExpenseReport OpennedReport
+        public DailyEarningsReport OpennedReport
         {
             get { return _opennedReport; }
             set 
             { 
                 Set(ref _opennedReport, value);
-                NotifyOfPropertyChange(nameof(CanAddOrRefreshReportProperty));
+             
             }
         }
 
-        public bool CanAddOrRefreshReportProperty => CanAddOrRefreshReport();
+        private DailyEarningsReport _reportOfTheDay;
 
-        public bool CanAddOrRefreshReport()
+        public DailyEarningsReport ReportOfTheDay
         {
-            if (IsReportGenerated)
+            get { return _reportOfTheDay; }
+            set
             {
-                return OpennedReport?.IssuedDate.Date == DateTime.Today.Date;
+                Set(ref _reportOfTheDay, value);
+               
             }
-            return true;
         }
 
-        private ObservableCollection<DailyExpenseReport> _reports;
+      
+
+        private ObservableCollection<DailyEarningsReport> _reports;
 
 
         public CollectionView Reports { get; private set; }
@@ -150,7 +155,7 @@ namespace FastPosFrontend.ViewModels
                 {
                     _reports.Remove(oldReport);
                 }
-                IsReportGenerated = true;
+      
                 _reports.Add(report);
                 OpennedReport = report;
                 Reports.Refresh();
@@ -162,36 +167,47 @@ namespace FastPosFrontend.ViewModels
                 vm.Dispose();
             });
         }
+
+
+        //public void ReloadReport()
+        //{
+        //    var parent = Parent as MainViewModel;
+
+        //    var vm = new DailyExpenseReportInputDataViewModel(this, OpennedReport);
+
+        //    vm.OnReportGenerated(report =>
+        //    {
+        //        OpennedReport = report;
+        //        var oldReport = _reports.FirstOrDefault(r => r.IssuedDate.Date == DateTime.Today.Date);
+        //        if (oldReport != null)
+        //        {
+        //            _reports.Remove(oldReport);
+        //        }
+
+        //        _reports.Add(report);
+        //        OpennedReport = report;
+        //        Reports.Refresh();
+
+        //    });
+
+        //    parent?.OpenDialog(vm).OnClose(() =>
+        //    {
+        //        vm.Dispose();
+        //    });
+        //}
 
 
         public void ReloadReport()
         {
-            var parent = Parent as MainViewModel;
-
-            var vm = new DailyExpenseReportInputDataViewModel(this, OpennedReport);
-
-            vm.OnReportGenerated(report =>
+            var (status,result) = DailyExpenseReportInputDataViewModel.SaveReport(OpennedReport?.Id);
+            if (status is 200)
             {
-                OpennedReport = report;
-                var oldReport = _reports.FirstOrDefault(r => r.IssuedDate.Date == DateTime.Today.Date);
-                if (oldReport != null)
-                {
-                    _reports.Remove(oldReport);
-                }
-                IsReportGenerated = true;
-                _reports.Add(report);
-                OpennedReport = report;
-                Reports.Refresh();
-
-            });
-
-            parent?.OpenDialog(vm).OnClose(() =>
-            {
-                vm.Dispose();
-            });
+                _ = _reports.ReplaceIf(result, i => i?.Id == result?.Id);
+                OpennedReport = result;
+            }
         }
 
-        private FixedDocument GeneratePrintReport(DailyExpenseReport report)
+        private FixedDocument GeneratePrintReport(DailyEarningsReport report)
         {
             FixedDocument document = new FixedDocument();
             FixedPage fixedPage = new FixedPage();
@@ -252,7 +268,7 @@ namespace FastPosFrontend.ViewModels
             
         }
 
-        public void OpenReport(DailyExpenseReport selected)
+        public void OpenReport(DailyEarningsReport selected)
         {
             OpennedReport = selected;
             
@@ -268,7 +284,7 @@ namespace FastPosFrontend.ViewModels
 
         public override void BeforeNavigateAway()
         {
-            StateManager.Flush<DailyExpenseReport>();
+            StateManager.Flush<DailyEarningsReport>();
         }
     }
 

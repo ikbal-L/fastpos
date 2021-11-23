@@ -4,7 +4,7 @@ using ServiceInterface.Interface;
 
 namespace ServiceLib.Service
 {
-    public  class RestApis
+    public class RestApis
     {
         private static readonly string _scheme = "http";
         private static readonly string Host = "localhost";
@@ -60,6 +60,7 @@ namespace ServiceLib.Service
 
         public  string Resource<T>(string endPoint, object arg = null, string subPath = "",string resource = null)
         {
+            
             _resource = resource?.ToLowerInvariant() ?? typeof(T).Name.ToLowerInvariant();
             return Resource(_resource, endPoint, arg, subPath);
         }

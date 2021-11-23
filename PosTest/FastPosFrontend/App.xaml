@@ -22,8 +22,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.listbox.xaml" />
+
                 
-    
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.badged.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.listview.xaml" />
@@ -61,10 +61,12 @@
             </ResourceDictionary.MergedDictionaries>
 
 
-            <FontFamily x:Key="DigitalFontFamily">/FastPosFrontend;Component/Fonts/#digital-7</FontFamily>
+            <FontFamily x:Key="DigitalFontFamily">/FastPosFrontend;Component/Fonts/#Digital-7 Mono</FontFamily>
+            <!--<FontFamily x:Key="DigitalFontFamily">/FastPosFrontend;Component/Fonts/#Digital Dismay</FontFamily>-->
             <FontFamily x:Key="DSDIGIFontFamily">/FastPosFrontend;Component/Fonts/#DS-DIGI</FontFamily>
             <FontFamily x:Key="CairoRegular" >/FastPosFrontend;Component/Fonts/#Cairo-Regular</FontFamily>
             <FontFamily x:Key="CairoBoldFontFamily" >/FastPosFrontend;Component/Fonts/#Cairo-Bold</FontFamily>
+            <FontFamily x:Key="DigitalDismayFontFamily" >/FastPosFrontend;Component/Fonts/#Digital Dismay</FontFamily>
 
             
         </ResourceDictionary>

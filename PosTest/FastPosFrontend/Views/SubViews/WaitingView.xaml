@@ -19,7 +19,7 @@
         
             <ListBox x:Name="OrdersList" ItemsSource="{Binding Orders}" 
                  SelectedItem="{Binding SelectedOrder}"
-                 Background="#a5a5a5"   
+                 Background="#FFDDDDDD"   
                  HorizontalContentAlignment="Left"
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                  >
@@ -66,7 +66,7 @@
                                         <DockPanel LastChildFill="True" >
                                             <materialDesign:PackIcon Grid.Column="2" Foreground="White" 
                                                              
-                                                             Kind="ReorderHorizontal"/>
+                                                             Kind="Cart"/>
                                             <Label Grid.Column="3"  Padding="0" Margin="0 0 0 0"
                                            Content="{Binding OrderItems.Count}" 
                                            Foreground="White"

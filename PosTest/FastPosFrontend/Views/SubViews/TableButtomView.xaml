@@ -68,7 +68,7 @@
 
         <ListBox Name="tablesList" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}"
                   VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
-                 Background="#a5a5a5" >
+                 Background="#FFDDDDDD" >
 
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Table}">
@@ -81,9 +81,9 @@
                                            VerticalAlignment="Center" />
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                     
-                                        <Setter Property="BorderBrush" Value="#523906" />
-                                        <Setter Property="Background" Value="#523906" />
+
+                                        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
                                         <Style.Triggers>
                                             <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}">
                                                 <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}" />
@@ -198,7 +198,7 @@
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Width" Value="100" />
-                                <Setter Property="BorderBrush" Value="#523906" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
                                 <Setter Property="BorderThickness" Value="3" />
                                 <Style.Triggers>
                                     <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}">

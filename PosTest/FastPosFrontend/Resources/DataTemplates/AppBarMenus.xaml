@@ -17,7 +17,7 @@
     <DataTemplate x:Key="CheckoutStatusBar" DataType="vm:CheckoutViewModel">
 
    
-            <StackPanel Orientation="Horizontal" >
+            <!--<StackPanel Orientation="Horizontal" >
                 <StackPanel.Resources>
                     <Style TargetType="md:Chip">
                         <Setter Property="FontWeight" Value="Bold"></Setter>
@@ -25,7 +25,7 @@
                         <Setter Property="Margin" Value="0 0 5 0"></Setter>
                         <Setter Property="IconBackground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
                         <Setter Property="IconForeground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
-                        <Setter Property="IsDeletable" Value="True"></Setter>
+                        
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Content}" Value="{x:Null}">
                                 <Setter Property="IconBackground" Value="DarkGray"/>
@@ -42,7 +42,7 @@
                
                 ToolTip="رقم الطلب"
                 Icon="#"
-                IsDeletable="False">
+               >
                 <md:Chip.Content>
                     <TextBlock>
                         <TextBlock.Text>
@@ -52,32 +52,41 @@
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
-                    <!--<Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>-->
+                    --><!--<Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>--><!--
                 </md:Chip.Content>
             </md:Chip>
             <md:Chip
                 Content="{Binding CurrentOrder.Customer.Name}"
                 ToolTip="اسم الزبون"
                 Icon="{md:PackIcon User}"
-                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]">
-
+                
+                cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Customer')]">
+                --><!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]"--><!--
                 </md:Chip>
                 <md:Chip
                 Content="{Binding CurrentOrder.Table.Number}"
                 ToolTip="رقم الطاولة"
                 Icon="{md:PackIcon TableFurniture}"
-                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Table')]"/>
-                <md:Chip
+                
+                    cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]"/>
+            --><!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Table')]"--><!--
+            <md:Chip
                 Content="{Binding CurrentOrder.Waiter.Name}"
                 ToolTip="اسم النادل"
                 Icon="W"
-                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Waiter')]"/>
-                <md:Chip
+                
+                cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Waiter')]"/>
+
+            --><!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Waiter')]"--><!--
+
+            <md:Chip
                 Content="{Binding CurrentOrder.Deliveryman.Name}"
                 ToolTip="عامل التوصيل"
                 Icon="{md:PackIcon TruckFast}"
-                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Deliveryman')]"/>
-            </StackPanel>
+                
+                    cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Delivery')]"/>
+            --><!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Deliveryman')]"--><!--
+        </StackPanel>-->
           
 
     </DataTemplate>
@@ -127,7 +136,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="CheckoutLeftCommandBar" >
-        <StackPanel>
+        <StackPanel Orientation="Horizontal">
             <UniformGrid Rows="1">
                 <Panel.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource AppBarButton}">
@@ -135,11 +144,82 @@
                     </Style>
                 </Panel.Resources>
                 <Button Content="{md:PackIcon Kind=NewBox,Size=30}" cal:Message.Attach="[Event Click] = [ Action NewOrder()]" />
-                <Button Content="{md:PackIcon Kind=TableFurniture,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]" />
+                <!--<Button Content="{md:PackIcon Kind=TableFurniture,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]" />
                 <Button Content="{StaticResource WaiterIcon }" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Waiter')]" />
                 <Button Content="{md:PackIcon Kind=TruckFast,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Delivery')]" />
-                <Button Content="{md:PackIcon Kind=Account,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Customer')]" />
+                <Button Content="{md:PackIcon Kind=Account,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Customer')]" />-->
             </UniformGrid>
+
+            <StackPanel Orientation="Horizontal" >
+                <StackPanel.Resources>
+                    <Style TargetType="md:Chip">
+                        <Setter Property="FontWeight" Value="Bold"></Setter>
+                        <Setter Property="Foreground" Value="White"></Setter>
+                        <Setter Property="Margin" Value="0 0 5 0"></Setter>
+                        <Setter Property="IconBackground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                        <Setter Property="IconForeground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Content}" Value="{x:Null}">
+                                <Setter Property="IconBackground" Value="DarkGray"/>
+                                <Setter Property="IconForeground" Value="LightGray"/>
+                                <Setter Property="IsDeletable" Value="False"/>
+
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+
+
+                <md:Chip
+               
+                ToolTip="رقم الطلب"
+                Icon="#"
+               >
+                    <md:Chip.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{} {0:#} ( {1:#} )" >
+                                    <Binding Path="CurrentOrder.OrderNumber" />
+                                    <Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <!--<Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>-->
+                    </md:Chip.Content>
+                </md:Chip>
+                <md:Chip
+                Content="{Binding CurrentOrder.Customer.Name}"
+                ToolTip="الزبون"
+                Icon="{md:PackIcon User}"
+                
+                cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Customer')]">
+                    <!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]"-->
+                </md:Chip>
+                <md:Chip
+                Content="{Binding CurrentOrder.Table.Number}"
+                ToolTip="الطاولة"
+                Icon="{md:PackIcon TableFurniture}"
+                
+                    cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]"/>
+                <!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Table')]"-->
+                <md:Chip
+                Content="{Binding CurrentOrder.Waiter.Name}"
+                ToolTip="النادل"
+                Icon="W"
+                
+                cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Waiter')]"/>
+
+                <!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Waiter')]"-->
+
+                <md:Chip
+                Content="{Binding CurrentOrder.Deliveryman.Name}"
+                ToolTip="مندوب التوصيل"
+                Icon="{md:PackIcon TruckFast}"
+                
+                    cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Delivery')]"/>
+                <!--cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Deliveryman')]"-->
+            </StackPanel>
         </StackPanel>
     </DataTemplate>
 
@@ -228,7 +308,7 @@
                 <Button Content="{md:PackIcon Kind=Printer,Size=30}"
                         cal:Message.Attach="[Event Click] = [Action PrintReport]"/>
                 <!--IsEnabled="{Binding CanAddOrRefreshReportProperty}"-->
-                <Button cal:Message.Attach="[Event Click] = [Action GenerateReport]" >
+                <!--<Button cal:Message.Attach="[Event Click] = [Action GenerateReport]" >
                     <Button.Style>
                         <Style BasedOn="{StaticResource AppBarButton}"  TargetType="Button">
                       
@@ -241,7 +321,7 @@
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
-                </Button>
+                </Button>-->
 
                 <Button cal:Message.Attach="[Event Click] = [Action ReloadReport]" >
                     <Button.Style>

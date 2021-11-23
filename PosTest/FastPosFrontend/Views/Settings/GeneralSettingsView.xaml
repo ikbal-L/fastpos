@@ -24,7 +24,7 @@
             ></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Table Number" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
+            <TextBlock Text="Table Count" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
             <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                     VerticalAlignment="Center"
@@ -36,7 +36,7 @@
                   ></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Number Of Categories Per Page" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"
+            <TextBlock Text="Category Page Size" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
             <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                     VerticalAlignment="Center"
@@ -50,7 +50,7 @@
                   />
         </StackPanel>
         
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
+        <!--<StackPanel Orientation="Horizontal" Margin="40 10 0 0">
             <TextBlock Text="Server Host" FontSize="16" Padding="15 10 0 15"  Width="400"  Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
             <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
@@ -62,7 +62,7 @@
                     VerticalScrollBarVisibility="Auto"
                     md:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
-        </StackPanel>
+        </StackPanel>-->
 
         <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
             <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsMultiCashRegisterEnabled}" />

@@ -12,7 +12,7 @@
              d:DataContext="{d:DesignInstance vm:MainViewModel}"
              xmlns:navigation="clr-namespace:FastPosFrontend.Navigation">
     <md:ColorZone
-                                    Padding="10"
+                                    Padding="5"
                                     DockPanel.Dock="Top">
         <md:ColorZone.Style>
             <Style TargetType="md:ColorZone">
@@ -40,7 +40,7 @@
                                             Text="{Binding SelectedNavigationItem.Title}" />
             <DockPanel>
 
-                <ToggleButton
+                <!--<ToggleButton
                                             x:Name="AppMenuToggleButton"
                                             AutomationProperties.Name="HamburgerToggleButton"
                                             DockPanel.Dock="Left"
@@ -48,7 +48,7 @@
                                             Margin="5 0 0 0"
                 IsChecked="{Binding Drawer.IsNavigationDrawerOpen,Mode=OneWay}"
                 Command="{Binding OpenNavigationDrawerCommand}"
-                    Visibility="Hidden">
+                   >
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton"
                                                        BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}">
@@ -75,7 +75,7 @@
 
                         </Style>
                     </ToggleButton.Style>
-                </ToggleButton>
+                </ToggleButton>-->
 
                 <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
 
@@ -97,7 +97,7 @@
                         </md:PopupBox.Style>
 
                         <md:PopupBox.ToggleContent>
-                            <md:PackIcon Kind="Apps" Width="30" Height="30">
+                            <md:PackIcon Kind="Apps" Width="50" Height="50">
 
                                 <md:PackIcon.Style>
                                     <Style TargetType="md:PackIcon">
@@ -124,7 +124,7 @@
                     <md:PopupBox
                                             DockPanel.Dock="Right"
                                             PlacementMode="BottomAndAlignRightEdges"
-                                            StaysOpen="False" Margin="0 0 20 0">
+                                            StaysOpen="False" Margin="0 0 20 0" >
                         <md:PopupBox.Style>
                             <Style TargetType="md:PopupBox">
                                 <Style.Triggers>
@@ -134,6 +134,23 @@
                                 </Style.Triggers>
                             </Style>
                         </md:PopupBox.Style>
+
+                        <md:PopupBox.ToggleContent>
+                            <md:PackIcon Kind="DotsVertical" Width="50" Height="50">
+
+                                <md:PackIcon.Style>
+                                    <Style TargetType="md:PackIcon">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
+                                                <Setter Property="Foreground" Value="WhiteSmoke" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </md:PackIcon.Style>
+
+                            </md:PackIcon>
+                        </md:PopupBox.ToggleContent>
+
                         <StackPanel Margin="10 0">
 
 

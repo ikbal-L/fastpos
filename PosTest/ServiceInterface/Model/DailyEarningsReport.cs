@@ -8,7 +8,7 @@ using Caliburn.Micro;
 namespace ServiceInterface.Model
 {
     [DataContract]
-    public class DailyExpenseReport : PropertyChangedBase, IState<long>
+    public class DailyEarningsReport : PropertyChangedBase, IState<long>
     {
         [DataMember]
         public long? Id { get; set; }

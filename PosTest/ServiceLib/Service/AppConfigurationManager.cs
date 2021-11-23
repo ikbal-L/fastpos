@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -7,7 +8,7 @@ namespace ServiceLib.Service
 {
     public static class AppConfigurationManager
     {
-        private static readonly string FileName = "FastPos.config";
+        private static readonly string FileName = "pos.appconfig";
         private static Dictionary<string, object> Configurations { get; set; }
 
 
@@ -17,8 +18,17 @@ namespace ServiceLib.Service
             
             if (File.Exists(filePath))
             {
-                var configurationString = File.ReadAllText(filePath);
-                Configurations = JsonConvert.DeserializeObject<Dictionary<string, object>>(configurationString);
+                try
+                {
+                    var configurationString = File.ReadAllText(filePath);
+                    Configurations = JsonConvert.DeserializeObject<Dictionary<string, object>>(configurationString);
+
+                }
+                catch (System.Exception e)
+                {
+
+                    MessageBox.Show(e.Message);
+                }
             }
             else
             {

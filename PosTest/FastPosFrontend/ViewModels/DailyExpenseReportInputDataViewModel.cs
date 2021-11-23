@@ -31,7 +31,7 @@ namespace FastPosFrontend.ViewModels
         private string _cashRegisterInitialAmount;
         private ExpenseForm _expenseForm;
         private long? _reportId;
-        public DailyExpenseReportInputDataViewModel(Screen owner,DailyExpenseReport report = null)
+        public DailyExpenseReportInputDataViewModel(Screen owner,DailyEarningsReport report = null)
         {
             _owner = owner;
            
@@ -43,6 +43,7 @@ namespace FastPosFrontend.ViewModels
                 CashRegisterActualAmount = report.CashRegisterActualAmount.ToString();
                 Expenses = new ObservableCollection<Expense>(report.Expenses.Select((kvp)=>new Expense() {Description=kvp.Key,Amount=kvp.Value }));
             }
+
            ValidateModelProperty(this,CashRegisterInitialAmount,nameof(CashRegisterInitialAmount));
            ValidateModelProperty(this,CashRegisterActualAmount,nameof(CashRegisterActualAmount));
            ExpenseForm = new ExpenseForm();
@@ -127,12 +128,12 @@ namespace FastPosFrontend.ViewModels
             expenses?.Cast<Expense>()?.ToList().ForEach(expense => { Expenses.Remove(expense); });
         }
 
-        public void OnReportGenerated(Action<DailyExpenseReport> handler)
+        public void OnReportGenerated(Action<DailyEarningsReport> handler)
         {
             _reportGenerated = handler;
         }
 
-        private Action<DailyExpenseReport> _reportGenerated;
+        private Action<DailyEarningsReport> _reportGenerated;
 
         protected void ValidateModelProperty(object instance, object value, [CallerMemberName] string propertyName = "")
         {
@@ -177,37 +178,45 @@ namespace FastPosFrontend.ViewModels
 
         public void Save()
         {
-            string url = "";
-            var api = new RestApis();
+
             ReportInputData.CashRegisterActualAmount = decimal.Parse(CashRegisterActualAmount);
             ReportInputData.CashRegisterInitialAmount = decimal.Parse(CashRegisterInitialAmount);
             ReportInputData.Expenses = Expenses.ToDictionary(expense => expense.Description, expense => expense.Amount);
-            if (_reportId!= null)
+            int status = -1; DailyEarningsReport result = null;
+
+            (status,result) = SaveReport(_reportId);
+
+            if (status == 201 || status == 200)
             {
-                url = api.Resource("dailyExpenseReport", EndPoint.PUT, arg: _reportId);
-            }
-            else
-            {
-                url = api.Resource("dailyExpenseReport", EndPoint.SAVE);
-            }
-            int status = -1; DailyExpenseReport result = null ;
-            if (_reportId == null)
-            {
-                 (status,result) =GenericRest.PostThing<DailyExpenseReport>(api.Resource("dailyExpenseReport", EndPoint.SAVE), ReportInputData);
-            }
-            else
-            {
-                (status, result) = GenericRest.UpdateThing<DailyExpenseReport>(url, ReportInputData);
-            }
-          
-            if (status == 201|| status ==200)
-            {
-                
+
                 _reportGenerated?.Invoke(result);
             }
 
-            
+
             Host.Close(this);
+        }
+
+        public static (int status, DailyEarningsReport result) SaveReport(long? id)
+        {
+            string url = "";
+            var api = new RestApis();
+
+            if (id != null)
+            {
+                url = api.Resource("daily-earnings-report", EndPoint.PUT, arg: id);
+            }
+            else
+            {
+                url = api.Resource("daily-earnings-report", EndPoint.SAVE);
+            }
+            if (id == null)
+            {
+                return GenericRest.PostThing<DailyEarningsReport>(api.Resource("daily-earnings-report", EndPoint.SAVE), new { });
+            }
+            else
+            {
+                return GenericRest.UpdateThing<DailyEarningsReport>(url, new { });
+            }
         }
 
         public void Cancel()

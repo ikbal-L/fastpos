@@ -252,7 +252,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
         }
 
         public void RelaodDeliveryMan() {
-           var res= StateManager.GetService<Deliveryman, IDeliverymanRepository>().Get(SelectedDeliveryman.Id.Value);
+           var res= StateManager.GetService<Deliveryman, IDeliverymanRepository>().GetById(SelectedDeliveryman.Id.Value);
             if(res.status==(int)HttpStatusCode.OK)
             {
                var index= Deliverymans.IndexOf(Deliverymans?.FirstOrDefault(x => x.Id == SelectedDeliveryman.Id));

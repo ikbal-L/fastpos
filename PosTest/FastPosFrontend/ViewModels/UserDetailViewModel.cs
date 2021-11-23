@@ -57,7 +57,7 @@ namespace FastPosFrontend.ViewModels
 
         
 
-
+        //TODO 
         private void CopyFromModel()
         {
             Username = _model.Username;
@@ -212,11 +212,11 @@ namespace FastPosFrontend.ViewModels
         public void GeneratePassword()
         {
             var pwd = new Password()
-                .IncludeLowercase()
-                .IncludeUppercase()
+                //.IncludeLowercase()
+                //.IncludeUppercase()
                 .IncludeNumeric()
-                .IncludeSpecial()
-                .LengthRequired(60);
+                //.IncludeSpecial()
+                .LengthRequired(6);
             Password = pwd.Next();
         }
 

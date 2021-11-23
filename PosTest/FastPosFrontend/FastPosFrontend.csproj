@@ -81,7 +81,7 @@
     <ApplicationIcon>POS.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>8EBF0E4FC3BCDAEF19331629C5CAEADAA7767741</ManifestCertificateThumbprint>
@@ -90,12 +90,10 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -254,6 +252,7 @@
     <Compile Include="ViewModels\OrderFilter.cs" />
     <Compile Include="ViewModels\OrderRefundViewModel.cs" />
     <Compile Include="ViewModels\OrderFilterCriteria.cs" />
+    <Compile Include="ViewModels\OrderTabinationViewModel.cs" />
     <Compile Include="ViewModels\PaginationController.cs" />
     <Compile Include="ViewModels\PaymentFilter.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
@@ -279,6 +278,7 @@
     <Compile Include="ViewModels\Settings\SettingItemBase.cs" />
     <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModels\AddEditWaiterViewModel.cs" />
+    <Compile Include="ViewModels\TableViewModel.cs" />
     <Compile Include="ViewModels\WaiterSettingsViewModel.cs" />
     <Compile Include="ViewModels\SplitViewModel.cs" />
     <Compile Include="ViewModels\CustomerDetailViewModel.cs" />
@@ -586,6 +586,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Resource Include="Fonts\Digital Dismay.otf" />
+    <Resource Include="Fonts\digital-7.ttf" />
+    <None Include="Fonts\Digital-Dismay.otf" />
     <None Include="Properties\app.manifest" />
     <Resource Include="product.xml" />
     <Content Include="Resources\External\Reports.xaml">
@@ -923,11 +926,11 @@
     <Resource Include="Fonts\Cairo-Light.ttf" />
     <Resource Include="Fonts\Cairo-Regular.ttf" />
     <Resource Include="Fonts\Cairo-SemiBold.ttf" />
-    <Resource Include="Fonts\digital-7.ttf" />
+    <Resource Include="Fonts\digital-7.old.ttf" />
     <Resource Include="Fonts\DS-DIGI.ttf" />
-    <Content Include="FastPos.config">
+    <None Include="pos.appconfig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

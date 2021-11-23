@@ -151,7 +151,7 @@
                         materialDesign:TextFieldAssist.LeadingIcon="TagMinus"
                         materialDesign:TextFieldAssist.HasLeadingIcon="True"
                         TextAlignment="Right"
-                        Visibility="{Binding IsDiscountEnabled,Converter={StaticResource boolToVisibilityConverter}}"
+                        Visibility="{Binding IsDiscountEnabled,Converter={StaticResource BooleanToVisibilityConverter}}"
                         />
 
 

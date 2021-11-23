@@ -22,6 +22,7 @@
         <Grid  x:Name="ProductTemplate" 
                     VerticalAlignment="Stretch"
                HorizontalAlignment="Stretch">
+           
             <Button x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" 
                     HorizontalAlignment="Stretch" 
                     HorizontalContentAlignment="Stretch" 
@@ -35,10 +36,12 @@
                         </cal:ActionMessage>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                <!--Background="{Binding Background}"-->
                 <DockPanel
-                    Background="{Binding Background}" 
+                    
                     HorizontalAlignment="Stretch" 
-                    VerticalAlignment="Stretch">
+                    VerticalAlignment="Stretch"
+                    Background="{Binding Background}">
                     <!--<DockPanel.Width>
                         <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
                                  Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="417,10" />
@@ -78,6 +81,7 @@
                     </Border>
                 </DockPanel>
             </Button>
+            <!--<Border Width="25" Height="25" Background="{Binding Background}"  CornerRadius="50" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5 5 0 0"/>-->
         </Grid>
     </DataTemplate>
 

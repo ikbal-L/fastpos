@@ -18,7 +18,7 @@ namespace XUnitTesting.ServiceLibTests
             var resp = _authService.Authenticate("admin", "admin", new Terminal {Id = 1}, new Annex {Id = 1});
             var orderRepo = new OrderRepository();
 
-            _orders = orderRepo.Get().state.ToList();
+            _orders = orderRepo.GetAll().state.ToList();
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace XUnitTesting.ServiceLibTests
             
             var api = new RestApis();
             var result =
-                GenericRest.PostThing<DailyExpenseReport>(api.Action("dailyExpenseReport", EndPoint.SAVE), d);
+                GenericRest.PostThing<DailyEarningsReport>(api.Action("dailyExpenseReport", EndPoint.SAVE), d);
             Assert.Equal(201, result.status);
             Assert.NotNull(result.Item2);
             Assert.Equal(d.CashRegisterActualAmount,result.Item2.CashRegisterExpectedAmount);

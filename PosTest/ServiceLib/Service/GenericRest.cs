@@ -10,7 +10,7 @@ namespace ServiceLib.Service
 {
     public class GenericRest
     {
-        public static (int status,T) GetThing<T>(string path)
+        public static (int status,T result) GetThing<T>(string path)
         {
             var resp = RestGet(path);
             T t = default;
@@ -29,9 +29,7 @@ namespace ServiceLib.Service
             T t = default;
             if (resp.StatusCode == HttpStatusCode.OK)
             {
-                //string s = t.ToString();
-                //                if (t.ToString() is Waiter)
-                //                  Console.WriteLine(s);
+         
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
             return ((int)resp.StatusCode, t);// ;products
@@ -95,7 +93,7 @@ namespace ServiceLib.Service
                             new JsonSerializerSettings
                             {
                                 NullValueHandling = NullValueHandling.Ignore,
-                                
+                                DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
                             });
 
             var client = new RestClient(url);
@@ -173,7 +171,7 @@ namespace ServiceLib.Service
                            new JsonSerializerSettings
                            {
                                NullValueHandling = NullValueHandling.Include,
-                               DateFormatString = "yyyy-MM-dd'T'HH:mm:ss"
+                               DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
                            });
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);

@@ -151,8 +151,8 @@ namespace Utilities.Mutation.Observers
             var hasAddedItems = GetAddedItems(_mutatedCollection)?.Any() ?? false;
 
             List<CollectionMutationType> mutations = new List<CollectionMutationType>();
-            mutations.Add(CollectionMutationType.ItemsAdded, hasAddedItems);
-            mutations.Add(CollectionMutationType.ItemsRemoved, hasRemoveItems);
+            mutations.AddIf(CollectionMutationType.ItemsAdded, hasAddedItems);
+            mutations.AddIf(CollectionMutationType.ItemsRemoved, hasRemoveItems);
 
             if (!IsObservingItems)
             {
@@ -160,7 +160,7 @@ namespace Utilities.Mutation.Observers
             }
 
             var hasMutatedItems = _itemsMutationObservers.Any(observer => observer.IsMutated());
-            mutations.Add(CollectionMutationType.ItemsMutated, hasMutatedItems);
+            mutations.AddIf(CollectionMutationType.ItemsMutated, hasMutatedItems);
             return mutations.ToArray();
         }
 

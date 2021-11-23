@@ -63,7 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtentionMethods.cs" />
+    <Compile Include="Extentions.cs" />
     <Compile Include="MinAttribute.cs" />
     <Compile Include="MutationObservers\CollectionMutationObserver.cs" />
     <Compile Include="MutationObservers\IMutationObserver.cs" />

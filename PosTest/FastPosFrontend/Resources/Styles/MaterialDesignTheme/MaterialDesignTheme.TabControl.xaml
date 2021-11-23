@@ -86,6 +86,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+       
     </Style>
     <Style TargetType="{x:Type TabItem}" x:Key="MaterialDesignTabItem">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -198,7 +199,9 @@
     </Style>
 
 
-
+    <Style TargetType="{x:Type TabItem}"  BasedOn="{StaticResource MaterialDesignTabItemCompact}">
+        <Setter Property="Height" Value="48" />
+    </Style>
 
     <!--NAVIGATION RAIL-->
 

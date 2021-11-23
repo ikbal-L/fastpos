@@ -23,7 +23,7 @@
 
         <views:CustomerDetailView 
             caliburn:View.Model="{Binding CustomerDetailVm}" 
-            Visibility="{Binding IsEditing,Converter={StaticResource boolToVisibilityConverter}}">
+            Visibility="{Binding IsEditing,Converter={StaticResource BooleanToVisibilityConverter}}">
         </views:CustomerDetailView>
 
 

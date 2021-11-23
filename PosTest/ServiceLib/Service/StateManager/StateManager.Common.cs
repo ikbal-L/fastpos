@@ -22,20 +22,15 @@ namespace ServiceLib.Service.StateManager
             return Get<TState, long>(identifier);
         }
 
-     
-
         public static bool Save<TState>(IEnumerable<TState> state) where TState : IState<long>
         {
             return Save<TState, long>(state);
         }
 
-
         public static bool Save<TState>(TState state) where TState : class, IState<long>
         {
             return Save<TState, long>(state);
         }
-
-
 
         private static void IsStateManaged<TState>(Type key) where TState : IState<long>
         {
@@ -52,6 +47,5 @@ namespace ServiceLib.Service.StateManager
             return Delete<TState, long>(state);
         }
     }
-
-    
+ 
 }

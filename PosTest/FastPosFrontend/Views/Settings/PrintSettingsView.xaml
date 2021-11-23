@@ -28,7 +28,7 @@
                                     Cursor="Hand"
                                     Foreground="DarkCyan"
                                     Background="Transparent"
-                                    Visibility="{Binding SelectedReceipt ,Converter={StaticResource boolToVisibilityConverter}}"
+                                    Visibility="{Binding SelectedReceipt ,Converter={StaticResource BooleanToVisibilityConverter}}"
                                     />
                         </StackPanel>
                     </DataTemplate>
@@ -57,7 +57,7 @@
                                     Cursor="Hand"
                                     Foreground="DarkCyan"
                                     Background="Transparent"
-                                    Visibility="{Binding SelectedKitchen ,Converter={StaticResource boolToVisibilityConverter}}"
+                                    Visibility="{Binding SelectedKitchen ,Converter={StaticResource BooleanToVisibilityConverter}}"
                                     />
                         </StackPanel>
                 </DataTemplate>

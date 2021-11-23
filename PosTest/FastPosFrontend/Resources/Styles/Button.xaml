@@ -102,7 +102,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="RadioButton" x:Key="ButtonTopOrderTable" >
+    <Style TargetType="Button" x:Key="ButtonTopOrderTable" >
         <Setter Property="Width" Value="50"/>
         <Setter Property="Height" Value="50"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -146,10 +146,10 @@
         </Setter>
    
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="True">
                 <Setter Property="Background" Value="#ffd23f"/>
                 <Setter Property="Foreground" Value="#FF03A9F4"/>
-            </Trigger>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 

@@ -60,7 +60,7 @@
    
 
 
-    <DataTemplate x:Key="{x:Type models:DailyExpenseReport}" DataType="models:DailyExpenseReport">
+    <DataTemplate x:Key="{x:Type models:DailyEarningsReport}" DataType="models:DailyExpenseReport">
         <Border BorderBrush="Black" BorderThickness="1" >
             <Grid>
                 <Grid.RowDefinitions>

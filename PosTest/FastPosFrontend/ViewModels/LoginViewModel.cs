@@ -65,8 +65,8 @@ namespace FastPosFrontend.ViewModels
         [Import(typeof(IPermissionRepository))]
         private IPermissionRepository _permissionRepository;
 
-        [Import(typeof(IDailyExpenseReportRepository))]
-        private IDailyExpenseReportRepository _dailyExpenseReportRepository;
+        [Import(typeof(IDailyEarningsReportRepository))]
+        private IDailyEarningsReportRepository _dailyExpenseReportRepository;
         [Import(typeof(ICashRegisterExpenseRepository))]
         private ICashRegisterExpenseRepository _cashRegisterExpenseRepository;
         [Import(typeof(IExpenseDescriptionRepository))]

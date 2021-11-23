@@ -56,15 +56,22 @@
 
     <DataTemplate x:Key="CheckoutTableDrawer" DataType="{x:Type vm:Drawer}">
         <ListBox x:Name="ltabs"
-                         ItemsSource="{Binding Content.Tables}" SelectedItem="{Binding Content.SelectedTable,Mode=TwoWay}"
+                         ItemsSource="{Binding Content.Tables}" 
                          VerticalAlignment="Top"
+                 SelectedItem="{Binding Content.SelectedTable,Mode=TwoWay}"
                  Height="300">
+
+            <!--SelectedItem="{Binding Content.SelectedTable,Mode=TwoWay}"-->
+
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:Table}">
-                    <RadioButton Content="{Binding Number}" GroupName="groupName" FontSize="20"
+                    <Button Content="{Binding Number}"  FontSize="20"
                                          FontWeight="Bold"
-                                         IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
-                                         Style="{StaticResource ButtonTopOrderTable}" />
+                                      
+                                         Style="{StaticResource ButtonTopOrderTable}"
+                                         cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext.Content}"   
+                                 cal:Message.Attach="[Event Click] = [Action SelectTable($this)]"
+                                 />
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>

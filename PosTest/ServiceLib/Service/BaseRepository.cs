@@ -15,12 +15,12 @@ namespace ServiceLib.Service
     {
         protected RestApis api = new RestApis();
         protected string Resource = null;
-        public virtual (int status, TState) Get(TIdentifier id)
+        public virtual (int status, TState) GetById(TIdentifier id)
         {
             return GenericRest.GetThing<TState>(api.Resource<TState>(EndPoint.GET,arg:id));
         }
 
-        public virtual (int status, IEnumerable<TState> state) Get()
+        public virtual (int status, IEnumerable<TState> state) GetAll()
         {
             return GenericRest.GetAll<TState>(api.Resource<TState>(EndPoint.GET_ALL, resource:Resource));
         }
@@ -31,7 +31,7 @@ namespace ServiceLib.Service
         }
 
 
-        public virtual (int status, IEnumerable<TState>) Get(IEnumerable<TIdentifier> ids)
+        public virtual (int status, IEnumerable<TState>) GetByIds(IEnumerable<TIdentifier> ids)
         {
             return GenericRest.GetManyThings<TState>((IEnumerable<long>)ids, api.Resource<TState>(EndPoint.GET_MANY));
         }
@@ -41,7 +41,7 @@ namespace ServiceLib.Service
             return GenericRest.SaveThing(state, api.Resource<TState>(EndPoint.SAVE),out errors).status;
         }
 
-        public virtual (int status, IEnumerable<TState> state, IEnumerable<string> errors) Save(IEnumerable<TState> state)
+        public virtual (int status, IEnumerable<TState> state, IEnumerable<string> errors) SaveAll(IEnumerable<TState> state)
         {
             var result = GenericRest.SaveThing<IEnumerable<TState>>(state, api.Resource<TState>(EndPoint.SAVE_MANY));
             
@@ -55,7 +55,7 @@ namespace ServiceLib.Service
 
         }
 
-        public virtual (int status, IEnumerable<string> errors) Delete(TIdentifier id)
+        public virtual (int status, IEnumerable<string> errors) DeleteById(TIdentifier id)
         {
             return GenericRest.Delete<TState>(api.Resource<TState>(EndPoint.DELETE,id));
         }
@@ -140,8 +140,6 @@ namespace ServiceLib.Service
     }
 
 
-
-
     [Export(typeof(IAdditiveRepository))]
     public class AdditiveBaseRepository : BaseRepository<Additive, long>, IAdditiveRepository
     {
@@ -151,7 +149,7 @@ namespace ServiceLib.Service
     [Export(typeof(IProductRepository))]
     public class ProductRepository : BaseRepository<Product, long>, IProductRepository
     {
-        public override (int status, IEnumerable<Product> state) Get()
+        public override (int status, IEnumerable<Product> state) GetAll()
         {
             var result = GenericRest.GetAll<Product>(api.Resource<Product>(EndPoint.GET_ALL));
             var products = result.Item2.Cast<Product>().ToList();
@@ -186,11 +184,19 @@ namespace ServiceLib.Service
 
         public static void PatchOrderFromResponse(Order state, RestSharp.IRestResponse response, out IEnumerable<string> errors)
         {
-            errors = null;
+            errors = Array.Empty<string>();
 
             if (response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.OK)
             {
-                errors = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
+                try
+                {
+                    errors  = JsonConvert.DeserializeObject<IEnumerable<string>>(response.Content);
+                }
+                catch (Exception)
+                {
+
+                    
+                }
             }
 
             else
@@ -297,10 +303,13 @@ namespace ServiceLib.Service
         }
     }
 
-    [Export(typeof(IDailyExpenseReportRepository))]
-    public class DailyExpenseReportRepository : BaseRepository<DailyExpenseReport, long>, IDailyExpenseReportRepository
+    [Export(typeof(IDailyEarningsReportRepository))]
+    public class DailyExpenseReportRepository : BaseRepository<DailyEarningsReport, long>, IDailyEarningsReportRepository
     {
-
+        public DailyExpenseReportRepository()
+        {
+            Resource = "daily-earnings-report";
+        }
     }
 
     [Export(typeof(ICashRegisterExpenseRepository))]
