@@ -16,6 +16,8 @@
 
 
     <Style TargetType="{x:Type controls:VirtualNumpadKeyboard}">
+        
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VirtualNumpadKeyboard}">
@@ -54,6 +56,68 @@
                         <Button x:Name="Part_Numpad_Key_Backspace_Button" Content="{materialDesign:PackIcon BackspaceOutline,Size=30}" Tag="{ex:KeyboardKey Back}"></Button>
 
                     </UniformGrid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="TextBlock" x:Key="PlaceholderTextStyle">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="{x:Type controls:ItemsControlPlaceHolder}">
+
+        <!--<Setter Property="PlaceholderTextStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontSize" Value="18"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+            </Setter.Value>
+        </Setter>-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ItemsControlPlaceHolder}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentControl x:Name="PART_LAYOUT">
+                            <Grid>
+                                <ContentControl 
+                                    x:Name="PART_ITEMS_CONTROL"
+                                    Content="{TemplateBinding ItemsControl}">
+                                    <ContentControl.Style>
+                                        <Style TargetType="ContentControl" >
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=ItemsControl.HasItems}" Value="false" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
+                                <TextBlock x:Name="PART_PLACEHOLDER_TEXT"
+                            Text="{TemplateBinding PlaceholderText}"
+                                   
+                            >
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource PlaceholderTextStyle}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=ItemsControl.HasItems}" Value="true" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </ContentControl>
+
+                        
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -9,48 +9,53 @@
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:views="clr-namespace:FastPosFrontend.Views"
                     xmlns:navigation="clr-namespace:FastPosFrontend.Navigation"
-                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:ctrl="clr-namespace:FastPosFrontend.SL.Controls">
 
     <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
     <converters:SumValuesConverter x:Key="SumValuesConverter" />
 
 
     <DataTemplate x:Key="CheckoutWaiterDrawer" DataType="{x:Type vm:Drawer}">
-        <ListBox 
+        <ctrl:ItemsControlPlaceHolder PlaceholderText="No waiters available!" Height="300" >
+            <ctrl:ItemsControlPlaceHolder.ItemsControl>
+                <ListBox 
             Grid.Row="0" 
             x:Name="lwaiterT" 
             ItemsSource="{Binding Content.Waiters}" 
             SelectedItem="{Binding Content.SelectedWaiter, Mode=TwoWay}"
-            Height="300">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:Waiter}">
-                    <Button Width="120" Height="70"
+            >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:Waiter}">
+                            <Button Width="120" Height="70"
                                 cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext.Content}"            
                                 cal:Message.Attach="[Event Click] = [Action SelectWaiter($this)]"
                                             Style="{StaticResource ButtonTopOrderDelivereyman}"
                                             Background="{Binding Background}">
-                        <DockPanel>
-                            <!--<materialdesign:PackIcon DockPanel.Dock="Left" Kind="TruckFast" Width="20" Height="20"/>-->
-                            <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
+                                <DockPanel>
+                                    <!--<materialdesign:PackIcon DockPanel.Dock="Left" Kind="TruckFast" Width="20" Height="20"/>-->
+                                    <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
                                                        TextWrapping="WrapWithOverflow" FontWeight="DemiBold" />
-                            <materialDesign:PackIcon DockPanel.Dock="Left" Kind="Phone" />
-                            <TextBlock DockPanel.Dock="Left" Text="{Binding PhoneNumbers[0]}" />
-                        </DockPanel>
-                    </Button>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Margin" Value="0" />
-                    <Setter Property="Padding" Value="2" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
+                                    <materialDesign:PackIcon DockPanel.Dock="Left" Kind="Phone" />
+                                    <TextBlock DockPanel.Dock="Left" Text="{Binding PhoneNumbers[0]}" />
+                                </DockPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0" />
+                            <Setter Property="Padding" Value="2" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </ctrl:ItemsControlPlaceHolder.ItemsControl>
+        </ctrl:ItemsControlPlaceHolder>
     </DataTemplate>
 
 

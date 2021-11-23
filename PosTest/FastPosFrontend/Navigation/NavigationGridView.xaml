@@ -18,7 +18,7 @@
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
         <converters:StaticResourceConverter x:Key="StaticResourceConverter" />
     </UserControl.Resources>
-    <ListBox ItemsSource="{Binding QuickNavigationItems}" SelectedItem="{Binding SelectedNavigationItem}" >
+    <ListBox ItemsSource="{Binding QuickNavigationItems}" SelectedItem="{Binding SelectedNavigationItem}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <UniformGrid Columns="3" Rows="5"></UniformGrid>
@@ -29,6 +29,11 @@
             <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                 <Setter Property="Margin" Value="2"></Setter>
                 <!--<Setter Property="IsEnabled" Value="{Binding Source={ex:Config PropertyName=GeneralSettings.IsDeliveryEnabled}}"/>-->
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="ForceCursor" Value="{DynamicResource PrimaryHueLightBrush}"></Setter>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
         </ListBox.ItemContainerStyle>
         <ItemsControl.ItemTemplate>

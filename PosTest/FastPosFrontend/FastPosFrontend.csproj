@@ -45,7 +45,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8</LangVersion>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -196,6 +196,7 @@
     <Compile Include="SL.Controls\AppContainer.xaml.cs">
       <DependentUpon>AppContainer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SL.Controls\ItemsControlPlaceHolder.cs" />
     <Compile Include="SL.Controls\MDColorPalette\AnotherCommandImplementation.cs" />
     <Compile Include="SL.Controls\MDColorPalette\ButtonAssist.cs" />
     <Compile Include="SL.Controls\MDColorPalette\MDColorPaletteViewModel.cs" />
@@ -476,6 +477,7 @@
     <Compile Include="Views\UserSettingsView.xaml.cs">
       <DependentUpon>UserSettingsView.xaml</DependentUpon>
     </Compile>
+    <Resource Include="Resources\logo.png" />
     <Page Include="Navigation\NavigationDrawerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -956,9 +958,6 @@
       <Project>{6c71020b-93dd-48eb-9fc4-9e728825d046}</Project>
       <Name>Utilities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\logo.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Settings\DeliveryMan\" />

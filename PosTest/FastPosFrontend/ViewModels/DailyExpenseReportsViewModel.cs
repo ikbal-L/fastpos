@@ -271,9 +271,7 @@ namespace FastPosFrontend.ViewModels
         public void OpenReport(DailyEarningsReport selected)
         {
             OpennedReport = selected;
-            
             IsOpennedReportTabOpen = true;
-            
         }
 
         public void CloseReport()

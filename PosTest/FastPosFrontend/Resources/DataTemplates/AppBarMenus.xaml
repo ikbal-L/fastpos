@@ -10,8 +10,8 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Margin" Value="3"/>
-        <Setter Property="Width" Value="40"/>
-        <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="50"/>
+        <Setter Property="Height" Value="50"/>
     </Style>
     <converters:OrderNumerationMaskConverter x:Key="OrderNumerationMaskConverter"/>
     <DataTemplate x:Key="CheckoutStatusBar" DataType="vm:CheckoutViewModel">
@@ -143,7 +143,7 @@
                        
                     </Style>
                 </Panel.Resources>
-                <Button Content="{md:PackIcon Kind=NewBox,Size=30}" cal:Message.Attach="[Event Click] = [ Action NewOrder()]" />
+                <Button Content="{md:PackIcon Kind=NewBox,Size=40}" cal:Message.Attach="[Event Click] = [ Action NewOrder()]" />
                 <!--<Button Content="{md:PackIcon Kind=TableFurniture,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]" />
                 <Button Content="{StaticResource WaiterIcon }" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Waiter')]" />
                 <Button Content="{md:PackIcon Kind=TruckFast,Size=30}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Delivery')]" />
@@ -153,6 +153,7 @@
             <StackPanel Orientation="Horizontal" >
                 <StackPanel.Resources>
                     <Style TargetType="md:Chip">
+                        <Setter Property="Height" Value="50"></Setter>
                         <Setter Property="FontWeight" Value="Bold"></Setter>
                         <Setter Property="Foreground" Value="White"></Setter>
                         <Setter Property="Margin" Value="0 0 5 0"></Setter>

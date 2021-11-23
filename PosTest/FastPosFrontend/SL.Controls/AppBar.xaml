@@ -77,6 +77,13 @@
                     </ToggleButton.Style>
                 </ToggleButton>-->
 
+
+                <Image Height="50" Width="50" DockPanel.Dock="Left" Source="/Resources/logo.png"  RenderOptions.BitmapScalingMode="HighQuality"/>
+
+
+
+
+
                 <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
 
                     <md:PopupBox
