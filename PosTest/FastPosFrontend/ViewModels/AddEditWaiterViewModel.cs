@@ -27,7 +27,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public string PhoneNumber
+        public string NewPhoneNumber
         {
             get => _phoneNumber;
             set => Set(ref _phoneNumber, value);
@@ -44,7 +44,8 @@ namespace FastPosFrontend.ViewModels
         }
         public void ChangeWaiter(ServiceInterface.Model.Waiter waiter) {
             Waiter = waiter.Clone();
-            PhoneNumber = Waiter.PhoneNumbers?.FirstOrDefault();
+            Numbers = waiter?.PhoneNumbers ?? new BindableCollection<string>();
+
         }
         public void NewWaiter()
         {
@@ -52,9 +53,7 @@ namespace FastPosFrontend.ViewModels
         }
         public void Save() {
 
-            Waiter.PhoneNumbers ??= new BindableCollection<string>();
-            Waiter.PhoneNumbers.Clear();
-            Waiter.PhoneNumbers.Add(PhoneNumber);
+            Waiter.PhoneNumbers = Numbers;
             if (StateManager.Save(Waiter))
             {
                 int index=   Parent.Waiters.IndexOf(Parent.Waiters.FirstOrDefault(x => x.Id == Waiter.Id));
@@ -80,6 +79,28 @@ namespace FastPosFrontend.ViewModels
         {
             IsOpenDailog = false;
             Parent.SelectedWaiter = null;
+        }
+
+        private BindableCollection<string> _numbers;
+
+        public BindableCollection<string>  Numbers
+        {
+            get { return _numbers; }
+            set {Set(ref _numbers, value); }
+        }
+
+        public void AddPhoneNumber()
+        {
+            if (!string.IsNullOrEmpty(NewPhoneNumber))
+            {
+                Numbers?.Add(NewPhoneNumber);
+                NewPhoneNumber = "";
+            }
+            NotifyOfPropertyChange(() => Waiter.PhoneNumbers);
+        }
+        public void DeletePhoneNumber(string number)
+        {
+            Numbers?.Remove(number);
         }
     }
 }

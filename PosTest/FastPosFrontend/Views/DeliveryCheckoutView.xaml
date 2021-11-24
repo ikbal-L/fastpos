@@ -290,7 +290,7 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             
-            <materialDesign:ColorZone
+            <!--<materialDesign:ColorZone
         Mode="Standard"
         Padding="8 4"
         CornerRadius="2"
@@ -412,7 +412,7 @@
 
                     </ComboBox>
                 </Grid>
-            </materialDesign:ColorZone>
+            </materialDesign:ColorZone>-->
            
             <Grid  Grid.Row="1">
 
@@ -533,7 +533,9 @@
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*"/>
+                        <DataGridTextColumn Header="Deliveryman Name" Binding="{Binding Name}" Width="2*">
+                            
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn Header="Mobile" Binding="{Binding PhoneNumbers[0]}" Width="*" />
 

@@ -5205,8 +5205,8 @@
     <md:PackIcon Kind="BadgeAccount" x:Key="RoleSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
     <md:PackIcon Kind="BadgeAccount" x:Key="RoleSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="{StaticResource QNISize}" Height="{StaticResource QNISize}"/>
 
-    <md:PackIcon Kind="BriefcaseAccount" x:Key="WaiterSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
-    <md:PackIcon Kind="BriefcaseAccount" x:Key="WaiterSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="{StaticResource QNISize}" Height="{StaticResource QNISize}"/>
+    <md:PackIcon Kind="RoomService" x:Key="WaiterSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
+    <md:PackIcon Kind="RoomService" x:Key="WaiterSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="{StaticResource QNISize}" Height="{StaticResource QNISize}"/>
 
     <md:PackIcon Kind="CardAccountDetails" x:Key="CustomerSettingsNavigationItemIcon" VerticalContentAlignment="Center" Width="30" Height="30"/>
     <md:PackIcon Kind="CardAccountDetails" x:Key="CustomerSettingsQuickNavigationItemIcon" VerticalContentAlignment="Center" Width="{StaticResource QNISize}" Height="{StaticResource QNISize}"/>

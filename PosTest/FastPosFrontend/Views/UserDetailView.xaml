@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FastPosFrontend.Views"
              xmlns:sl="clr-namespace:FastPosFrontend.SL.Controls"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
@@ -72,7 +72,7 @@
                 </Grid.RowDefinitions>
                 <UniformGrid Columns="1" >
                     <TextBox Grid.Row="0" 
-                     materialDesign:HintAssist.Hint="Username"
+                     md:HintAssist.Hint="Username"
                      Text="{Binding Username,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}">
 
                     </TextBox>
@@ -82,7 +82,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBox 
-                         materialDesign:HintAssist.Hint="Password (Pincode)"
+                         md:HintAssist.Hint="Password (Pincode)"
                          Text="{Binding Password,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}" >
 
                         </TextBox>
@@ -99,15 +99,15 @@
                     <!--<TextBox Grid.Row="2" 
                      materialDesign:HintAssist.Hint="PinCode" Text="{Binding PinCode,UpdateSourceTrigger=PropertyChanged}" />-->
                     <TextBox Grid.Row="3"
-                     materialDesign:HintAssist.Hint="First Name"
+                     md:HintAssist.Hint="First Name"
                      Text="{Binding FirstName,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}" />
                     <TextBox Grid.Row="4" 
-                     materialDesign:HintAssist.Hint="Last Name" 
+                     md:HintAssist.Hint="Last Name" 
                      Text="{Binding LastName,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}"/>
 
 
                     <TextBox Grid.Row="5" 
-                     materialDesign:HintAssist.Hint="Email" 
+                     md:HintAssist.Hint="Email" 
                      Text="{Binding Email,UpdateSourceTrigger=PropertyChanged,ValidatesOnNotifyDataErrors=True}"/>
                 </UniformGrid>
 
@@ -121,7 +121,7 @@
 
                     <TabItem>
                         <TabItem.Header>
-                            <materialDesign:PackIcon
+                            <md:PackIcon
                             Kind="CellphoneCog"
                             Width="24"
                             Height="24" />
@@ -130,12 +130,12 @@
                               Header="Phone"
                               Style="{DynamicResource MaterialDesignGroupBox}"
                               Margin="5"
-                              materialDesign:ColorZoneAssist.Mode="Dark">
+                              md:ColorZoneAssist.Mode="Dark">
                             <GroupBox.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel
                                     Orientation="Horizontal" VerticalAlignment="Bottom">
-                                        <materialDesign:PackIcon
+                                        <md:PackIcon
                                         Kind="Cellphone"
                                         Height="32"
                                         Width="32"
@@ -149,22 +149,23 @@
                                 </DataTemplate>
                             </GroupBox.HeaderTemplate>
                             <Grid>
-                                <materialDesign:DialogHost IsOpen="{Binding IsEditingPhone}" DialogMargin="200">
-                                    <materialDesign:DialogHost.DialogContent>
+                                <md:DialogHost IsOpen="{Binding IsEditingPhone}" DialogMargin="200">
+                                    <md:DialogHost.DialogContent>
                                         <StackPanel Margin="15 15" VerticalAlignment="Center">
-                                            <TextBox materialDesign:HintAssist.Hint="Phone Number" MinWidth="250" Margin="10" Text="{Binding NewPhoneNumber}"></TextBox>
+                                            <TextBox md:HintAssist.Hint="Phone Number" MinWidth="250" Margin="10" Text="{Binding NewPhoneNumber}"></TextBox>
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 5">
                                                 <Button Style="{StaticResource MaterialDesignFlatButton}" caliburn:Message.Attach="[Event Click] = [Action AddPhone()]">Add</Button>
-                                                <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">Cancel</Button>
+                                                <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static md:DialogHost.CloseDialogCommand}">Cancel</Button>
                                             </StackPanel>
                                         </StackPanel>
-                                    </materialDesign:DialogHost.DialogContent>
+                                    </md:DialogHost.DialogContent>
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                                       Content="{materialDesign:PackIcon AddThick}"
+                                       Content="{md:PackIcon AddThick}"
                                        VerticalAlignment="top" HorizontalAlignment="Right"
                                        Margin="0 -30 10 0"
-                                       Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
-                                </materialDesign:DialogHost>
+                                       Command="{x:Static md:DialogHost.OpenDialogCommand}"
+                                            />
+                                </md:DialogHost>
                                 <ListBox ItemsSource="{Binding PhoneNumbers}"
                                      x:Name="UserFormPhoneList">
                                     <ListBox.ItemTemplate>
@@ -176,7 +177,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Text="{Binding}" FontWeight="DemiBold" />
                                                 <Button Grid.Column="1" Style="{StaticResource PhoneItemStyle}"
-                                                    Content="{materialDesign:PackIcon Delete}"
+                                                    Content="{md:PackIcon Delete}"
                                                     Width="30" Height="30" VerticalAlignment="Center"
                                                     HorizontalAlignment="Right"
                                                     caliburn:Message.Attach="[Event Click] = [Action RemovePhone($dataContext)]"
@@ -193,7 +194,7 @@
 
                     <TabItem>
                         <TabItem.Header>
-                            <materialDesign:PackIcon
+                            <md:PackIcon
                             Kind="Security"
                             Width="24"
                             Height="24" />
@@ -202,12 +203,12 @@
                               Header="UserRoles"
                               Style="{DynamicResource MaterialDesignGroupBox}"
                               Margin="5"
-                              materialDesign:ColorZoneAssist.Mode="Dark">
+                              md:ColorZoneAssist.Mode="Dark">
                             <GroupBox.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel
                                     Orientation="Horizontal" VerticalAlignment="Bottom">
-                                        <materialDesign:PackIcon
+                                        <md:PackIcon
                                         Kind="SecurityAccount"
                                         Height="32"
                                         Width="32"
@@ -221,25 +222,25 @@
                                 </DataTemplate>
                             </GroupBox.HeaderTemplate>
                             <Grid>
-                                <materialDesign:DialogHost IsOpen="{Binding IsEditingRole}">
-                                    <materialDesign:DialogHost.DialogContent>
+                                <md:DialogHost IsOpen="{Binding IsEditingRole}">
+                                    <md:DialogHost.DialogContent>
                                         <StackPanel Margin="15 15" VerticalAlignment="Center">
-                                            <ComboBox materialDesign:HintAssist.Hint="Role" MinWidth="250" Margin="10" ItemsSource="{Binding Roles}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedRoleToAdd}">
+                                            <ComboBox md:HintAssist.Hint="Role" MinWidth="250" Margin="10" ItemsSource="{Binding Roles}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedRoleToAdd}">
 
                                             </ComboBox>
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 5">
                                                 <Button Style="{StaticResource MaterialDesignFlatButton}"
                                                     caliburn:Message.Attach="[Event Click] = [Action AddRole()]">Add</Button>
-                                                <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">Cancel</Button>
+                                                <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static md:DialogHost.CloseDialogCommand}">Cancel</Button>
                                             </StackPanel>
                                         </StackPanel>
-                                    </materialDesign:DialogHost.DialogContent>
+                                    </md:DialogHost.DialogContent>
                                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                                        Content="{materialDesign:PackIcon AddThick}"
+                                        Content="{md:PackIcon AddThick}"
                                         VerticalAlignment="top" HorizontalAlignment="Right"
                                         Margin="0 -30 10 0"
-                                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
-                                </materialDesign:DialogHost>
+                                        Command="{x:Static md:DialogHost.OpenDialogCommand}"/>
+                                </md:DialogHost>
                                 <ListBox ItemsSource="{Binding UserRoles}"
                                      SelectedItem="{Binding SelectedUserRole}"
                                      x:Name="UserFormRoleList">
@@ -252,7 +253,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Text="{Binding Name}" FontWeight="DemiBold" />
                                                 <Button Grid.Column="1" Style="{StaticResource RoleItemStyle}"
-                                                    Content="{materialDesign:PackIcon Delete}"
+                                                    Content="{md:PackIcon Delete}"
                                                     Width="30" Height="30" VerticalAlignment="Center"
                                                     HorizontalAlignment="Right"
                                                     caliburn:Message.Attach="[Event Click] = [Action RemoveRole()]"
@@ -268,7 +269,7 @@
 
                     <TabItem>
                         <TabItem.Header>
-                            <materialDesign:PackIcon
+                            <md:PackIcon
                             Kind="AccountCog"
                             Width="24"
                             Height="24" />
@@ -294,25 +295,25 @@
                                            TextAlignment="Center"
                                            ></TextBlock>
                                     <!--materialDesign:UniformCornerRadius="10"-->
-<materialDesign:Card  Background="{Binding ElementName=ColorPicker,Path=Color,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ColorToBrushConverter}}"
+<md:Card  Background="{Binding ElementName=ColorPicker,Path=Color,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ColorToBrushConverter}}"
                                                       
-                                                      materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                                      md:ShadowAssist.ShadowDepth="Depth1"
                                          >
-                                        <materialDesign:PopupBox HorizontalAlignment="Right"  
+                                        <md:PopupBox HorizontalAlignment="Right"  
                                                              StaysOpen="True" 
                                                              PlacementMode="TopAndAlignRightEdges"
                                                              >
-                                            <materialDesign:PopupBox.ToggleContent>
-                                                <materialDesign:PackIcon Kind="Eyedropper"></materialDesign:PackIcon>
-                                            </materialDesign:PopupBox.ToggleContent>
-                                            <materialDesign:ColorPicker
+                                            <md:PopupBox.ToggleContent>
+                                                <md:PackIcon Kind="Eyedropper"></md:PackIcon>
+                                            </md:PopupBox.ToggleContent>
+                                            <md:ColorPicker
                                             x:Name="ColorPicker"
                                             Grid.Column="1"
                                             Height="200"
                                             Width="250"
                                             Color="{Binding Background, Converter={StaticResource SolidColorBrushToColorConverter}}"/>
-                                        </materialDesign:PopupBox>
-                                    </materialDesign:Card>
+                                        </md:PopupBox>
+                                    </md:Card>
 
                                 </UniformGrid>
 
@@ -331,23 +332,23 @@
         </ScrollViewer>
 
 
-        <materialDesign:ColorZone Margin="0"
+        <md:ColorZone Margin="0"
                                   Mode="PrimaryDark"
                                   Padding="16"
                                   Grid.Row="1"
-                                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                  md:ShadowAssist.ShadowDepth="Depth3"
                                   ClipToBounds="True">
             <StackPanel
                 Orientation="Horizontal">
                 <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
-                        Content="{materialDesign:PackIcon ContentSave}"
+                        Content="{md:PackIcon ContentSave}"
                         IsEnabled="{Binding IsSaveEnabled}"
                         caliburn:Message.Attach="[Event Click] = [Action SaveUser()]" />
                 <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
-                        Content="{materialDesign:PackIcon Cancel}"
-                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+                        Content="{md:PackIcon Cancel}"
+                        Command="{x:Static md:DialogHost.CloseDialogCommand}" />
             </StackPanel>
-        </materialDesign:ColorZone>
+        </md:ColorZone>
 
     </Grid>
 </UserControl>

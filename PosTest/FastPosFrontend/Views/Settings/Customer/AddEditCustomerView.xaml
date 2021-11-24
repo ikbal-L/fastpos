@@ -3,14 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:vmc="clr-namespace:FastPosFrontend.ViewModels.Settings.Customer"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
                           xmlns:caliburn="http://www.caliburnproject.org"
-
+    d:DataContext="{d:DesignInstance vmc:CustomerSettingsViewModel}"
       >
 
-    <materialdesign:DialogHost
+    <md:DialogHost
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
           IsOpen="{Binding IsOpenDailog}"
@@ -18,7 +19,7 @@
       
           OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
           DialogTheme="Inherit">
-        <materialdesign:DialogHost.DialogContent>
+        <md:DialogHost.DialogContent>
             <Border BorderBrush="Gray" BorderThickness="1">
                 <Grid  Width="500">
                 <Grid.RowDefinitions>
@@ -32,56 +33,44 @@
                 <StackPanel Grid.Row="1" Margin="0 20 0 50">
                     <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
                         <TextBlock Text="Name" Margin="0 5 0 5"/>
-                            <TextBox Width="250"  Text="{Binding Customer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                            <TextBox Width="300"  Text="{Binding Customer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
                     </StackPanel>
-                        <Grid Width="250" Margin="0 2 0 0">
 
-                            <ListBox
-                                    Height="150"
-                                    Width="250"
-                                    BorderThickness="1"
-                                BorderBrush="DimGray"
-                                    ItemsSource="{Binding Numbers, UpdateSourceTrigger=PropertyChanged}"
-                                >
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel/>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="180"/>
-                                                <ColumnDefinition Width="auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock  Grid.Column="0" Text="{Binding}" />
-                                            <Button
-                                                   Grid.Column="1"
-                                                   Width="20" Height="20"
-                                                   Margin="0 0 2 0"
-                                                   Visibility="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem},Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                   caliburn:Message.Attach="[Event Click] = [Action DeletePhoneNumber($datacontext)]"
-                                                   caliburn:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                                   Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"   >
-                                                <materialdesign:PackIcon  Kind="DeleteOutline" HorizontalAlignment="Right" Width="15" Height="15" />
-                                            </Button>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                        <GroupBox Grid.Row="6"
+                              Header="Phone"
+                              Style="{DynamicResource MaterialDesignGroupBox}"
+                              Margin="5"
+                              md:ColorZoneAssist.Mode="Dark" Width="300"
+                              Padding="10">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel
+                                    Orientation="Horizontal" VerticalAlignment="Bottom">
+                                        <md:PackIcon
+                                        Kind="Cellphone"
+                                        Height="32"
+                                        Width="32"
+                                        VerticalAlignment="Center" />
+                                        <TextBlock
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                        Text="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.HeaderTemplate>
 
-                            <materialdesign:DialogHost
+                            <md:DialogHost
                                       DialogTheme="Inherit"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center">
-                                <materialdesign:DialogHost.DialogContent>
+                                     
+                                      VerticalAlignment="Center"
+                                    x:Name="phoneDialog">
+                                <md:DialogHost.DialogContent>
                                     <StackPanel
                                   Margin="16">
-                                        <TextBlock>
-                                  Add a new Phone Number.
-                                        </TextBlock>
-                                        <TextBox Width="250" materialdesign:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock Text="Add a new Phone Number."/>
+
+                                        <TextBox Width="250" md:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
                                         <StackPanel
                                             Orientation="Horizontal"
@@ -91,7 +80,7 @@
                                               IsDefault="True"
                                               Margin="0 8 8 0"
                                                 caliburn:Message.Attach="[Event Click] = [Action AddPhoneNumber()]"
-                                                Command="materialdesign:DialogHost.CloseDialogCommand">
+                                                Command="md:DialogHost.CloseDialogCommand">
 
                                                 ACCEPT
                                             </Button>
@@ -99,7 +88,7 @@
                                               Style="{StaticResource MaterialDesignFlatButton}"
                                               IsCancel="True"
                                               Margin="0 8 8 0"
-                                              Command="materialdesign:DialogHost.CloseDialogCommand">
+                                              Command="md:DialogHost.CloseDialogCommand">
                                                 <Button.CommandParameter>
                                                     <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
                                                         False
@@ -109,51 +98,83 @@
                                             </Button>
                                         </StackPanel>
                                     </StackPanel>
-                                </materialdesign:DialogHost.DialogContent>
-                                <StackPanel     Height="150"
-                                                      Width="250"
-                                                    Margin="0 -30 -30 0"
-                                                    VerticalAlignment="Top">
+                                </md:DialogHost.DialogContent>
+
+                                <Grid  >
+
+                                    <ListBox
+                                    Height="150"
+                                    ItemsSource="{Binding Numbers, UpdateSourceTrigger=PropertyChanged}"
+                                >
+                                  
+
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock  Grid.Column="0" Text="{Binding}" />
+                                                    <Button Grid.Column="1"
+                                                  
+                                                   Visibility="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem},Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                   caliburn:Message.Attach="[Event Click] = [Action DeletePhoneNumber($datacontext)]"
+                                                   caliburn:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                   Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
+                                                        Content="{md:PackIcon DeleteOutline,Size=20}"/>
+
+
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
                                     <Button  Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
-                                    Width="30" Height="30"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Right"
-                                    Command="{x:Static materialdesign:DialogHost.OpenDialogCommand}"
-                                        >
+                                    
+                                    Command="{x:Static md:DialogHost.OpenDialogCommand }"
+                                      
+                                        Content="{md:PackIcon Kind=PlusThick}"
+                                         VerticalAlignment="Top"
+                                         HorizontalAlignment="Right"
+                                             Margin="0 -55 5 0"
+                                         />
 
-                                        <materialdesign:PackIcon  Kind="Plus" HorizontalAlignment="Right" />
-                                    </Button>
-                                </StackPanel>
-                            </materialdesign:DialogHost>
-                        </Grid>
-                        <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="Debit"  Margin="0 5 0 5"/>
 
-                            <TextBox Width="250" Text="{Binding Customer.Debit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                </Grid>
+
+
+                            </md:DialogHost>
+                          
+                        </GroupBox>
+
                     </StackPanel>
-                </StackPanel>
-                <materialdesign:ColorZone Mode="PrimaryMid" Padding="1" Grid.Row="2" Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                <md:ColorZone Mode="PrimaryMid" Padding="1" Grid.Row="2" Effect="{DynamicResource MaterialDesignShadowDepth5}">
                     <StackPanel  Orientation="Horizontal" >
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                                          Margin="4 1 0 1"   
                                            caliburn:Message.Attach="[Event Click] = [Action Save()]"
                                             IsEnabled="{Binding IsSaveEnabled}">
                            
-                                <materialdesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
+                                <md:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />
                          
                         </Button>
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                                  caliburn:Message.Attach="[Event Click] = [Action Close()]"
                                              Margin="4 1 0 1">
 
-                                <materialdesign:PackIcon Kind="CloseBox" HorizontalAlignment="Right" Width="25" Height="25" />
+                                <md:PackIcon Kind="CloseBox" HorizontalAlignment="Right" Width="25" Height="25" />
                             </Button>
                     </StackPanel>
-                </materialdesign:ColorZone>
+                </md:ColorZone>
             </Grid>
             </Border>
-        </materialdesign:DialogHost.DialogContent>
+        </md:DialogHost.DialogContent>
 
-        </materialdesign:DialogHost>
+        </md:DialogHost>
 
 </UserControl>

@@ -27,12 +27,12 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
                 NotifyOfPropertyChange(nameof(Customer));
             }
         }
-        private BindableCollection<String> numbres;
-        public BindableCollection<String> Numbers
+        private BindableCollection<string> numbres;
+        public BindableCollection<string> Numbers
         {
             get { return numbres; }
             set { numbres = value;
-
+                
                 NotifyOfPropertyChange(nameof(Numbers));
             }
         }
@@ -63,7 +63,7 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
         public void Save() {
            
             Customer.PhoneNumbers = Numbers;
-            if (StateManager.Save<ServiceInterface.Model.Customer>(Customer))
+            if (StateManager.Save(Customer))
             {
                 int index=   Parent.Customers.IndexOf(Parent.Customers.FirstOrDefault(x => x.Id == Customer.Id));
                 if (index==-1)
@@ -105,7 +105,7 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
         }
         public void DeletePhoneNumber(string number)
         {
-            Customer.PhoneNumbers.Remove(number);
+            Customer.PhoneNumbers?.Remove(number);
         }
     }
 }

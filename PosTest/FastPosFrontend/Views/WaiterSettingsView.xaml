@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:m="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              mc:Ignorable="d" 
                                        xmlns:caliburn="http://www.caliburnproject.org"
 
@@ -25,11 +25,11 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate DataType="{x:Type m:Waiter}">
                     <Border BorderBrush="Black" BorderThickness="1" Padding="10">
                         <StackPanel  Width="175">
                             <TextBlock  Margin="0 0 0 10" HorizontalAlignment="Center" Text="{Binding Name}" FontSize="18" FontWeight="Bold"/>
-                            <TextBlock  HorizontalAlignment="Center" Text="{Binding PhoneNumber}" FontSize="15" FontWeight="Medium"/>
+                            <TextBlock  HorizontalAlignment="Center" Text="{Binding PhoneNumbers[0]}" FontSize="15" FontWeight="Medium"/>
                         </StackPanel>
                      
                     </Border>
@@ -40,30 +40,30 @@
             Grid.Row="1"
             >
             
-        <materialdesign:ColorZone Mode="PrimaryMid"  Effect="{DynamicResource MaterialDesignShadowDepth5}">
+        <md:ColorZone Mode="PrimaryMid"  Effect="{DynamicResource MaterialDesignShadowDepth5}">
                 <Grid >
                     <TextBlock HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" Text="Waiter Management" Margin="12 12 0 12"/>
                 </Grid>
-            </materialdesign:ColorZone>
+            </md:ColorZone>
             <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" >
                 <Button
                     caliburn:Message.Attach="[Event Click] = [Action DeleteWiaterAction()]"
                     
                     Visibility="{Binding DeleteVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Margin="5 -44 5 0" >
-                    <materialdesign:PackIcon  Kind="DeleteOutline" HorizontalAlignment="Right" Width="25" Height="25" />
+                    <md:PackIcon  Kind="DeleteOutline" HorizontalAlignment="Right" Width="25" Height="25" />
                 </Button>
                 <Button
                     caliburn:Message.Attach="[Event Click] = [Action EditWiaterAction()]"
 
                      Visibility="{Binding EditVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"  >
-                    <materialdesign:PackIcon Kind="PencilOutline" HorizontalAlignment="Right" Width="25" Height="25" />
+                    <md:PackIcon Kind="PencilOutline" HorizontalAlignment="Right" Width="25" Height="25" />
                 </Button>
                 <Button 
                       caliburn:Message.Attach="[Event Click] = [Action AddWiaterAction()]"
                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"  >
-                    <materialdesign:PackIcon  Kind="Plus" HorizontalAlignment="Right" Width="25" Height="25" />
+                    <md:PackIcon  Kind="Plus" HorizontalAlignment="Right" Width="25" Height="25" />
                 </Button>
             </StackPanel>
 

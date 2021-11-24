@@ -78,7 +78,7 @@
                 </ToggleButton>-->
 
 
-                <Image Height="50" Width="50" DockPanel.Dock="Left" Source="/Resources/logo.png"  RenderOptions.BitmapScalingMode="HighQuality"/>
+                <Image Height="50" Width="50" DockPanel.Dock="Left" Source="/Resources/logo.png"  RenderOptions.BitmapScalingMode="HighQuality" />
 
 
 

@@ -29,9 +29,9 @@ namespace FastPosFrontend.ViewModels
                 NotifyOfPropertyChange(nameof(Deliveryman));
             }
         }
-        private BindableCollection<String> numbres;
+        private BindableCollection<string> numbres;
 
-        public BindableCollection<String> Numbers
+        public BindableCollection<string> Numbers
         {
             get => numbres;
             set { numbres = value;
@@ -65,7 +65,7 @@ namespace FastPosFrontend.ViewModels
         public void Save() {
 
             Deliveryman.PhoneNumbers = Numbers;
-            if (StateManager.Save<Deliveryman>(Deliveryman))
+            if (StateManager.Save(Deliveryman))
             {
                 int index=   Parent.Deliverymans.IndexOf(Parent.Deliverymans.FirstOrDefault(x => x.Id == Deliveryman.Id));
                 

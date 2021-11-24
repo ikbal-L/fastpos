@@ -2279,7 +2279,25 @@ namespace FastPosFrontend.ViewModels
         {
             if (CurrentOrder!= null)
             {
-                CurrentOrder.GetType().GetProperty(prop.ToString()).SetValue(CurrentOrder,null);
+                //CurrentOrder.GetType().GetProperty(prop.ToString()).SetValue(CurrentOrder,null);
+                switch (prop)
+                {
+                    case OrderProp.Customer:
+                        CurrentOrder!.Customer = null;
+                        break;
+                    case OrderProp.Deliveryman:
+                        SelectedDeliveryman = null;
+                        break;
+                    case OrderProp.Waiter:
+                        SelectedWaiter = null;
+                        break;
+                    case OrderProp.Table:
+                        SelectedTable = null;
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
