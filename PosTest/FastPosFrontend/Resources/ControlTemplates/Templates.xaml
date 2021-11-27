@@ -26,7 +26,8 @@
                                                IsTopDrawerOpen="{Binding Drawer.IsTopDrawerOpen}"
                                                IsBottomDrawerOpen="{Binding Drawer.IsBottomDrawerOpen}"
                                                LeftDrawerCloseOnClickAway="True"
-                                               RightDrawerCloseOnClickAway="True">
+                                               RightDrawerCloseOnClickAway="True"
+                               TopDrawerCloseOnClickAway="True">
                     <ContentPresenter />
 
                     <md:DrawerHost.TopDrawerContent>

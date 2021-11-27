@@ -1987,16 +1987,7 @@ namespace FastPosFrontend.ViewModels
 
        
 
-        public void PrintPreview(PrintSource source)
-        {
-            if (CurrentOrder == null) return;
-
-            var doc = GenerateOrderReceipt(source);
-            PrintViewModel pvm = new PrintViewModel {Document = doc, PreviousScreen = this, Parent = Parent};
-            (Parent as MainViewModel).ActivateItem(pvm);
-
-
-        }
+      
 
         public void PrintDocument(PrintSource source)
         {

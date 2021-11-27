@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class MainViewModel : AppNavigationConductor<object>
+    public class MainViewModel : Conductor<object>,IConductor<object> /*AppNavigationConductor<object>*/
     {
         private const string WindowTitleDefault = "FAST POS";
 
@@ -18,10 +19,12 @@ namespace FastPosFrontend.ViewModels
         private MainDialog _mainDialog;
         private bool _isAttemptingToStartBackendServer;
         private AppDrawerConductor _drawer = AppDrawerConductor.Instance;
-
+        public NavigationManager<object> Navigator{ get;  set ; }
 
         public MainViewModel()
         {
+            NavigationManager<object>.Init(this);
+            Navigator  = NavigationManager<object>.Instance;
 
             OpenNavigationDrawerCommand = new DelegateCommandBase((o)=> {
                 AppDrawerConductor.Instance.OpenNavigationDrawer();
@@ -48,8 +51,8 @@ namespace FastPosFrontend.ViewModels
                 Set(ref _isLoggedIn, value);
                 if (value)
                 {
-                    LoadNavigationItems();
-                    OnLogin();
+                    Navigator?.LoadNavigationItems();
+                    Navigator?.OnLogin();
                 }
             }
         }
@@ -133,8 +136,8 @@ namespace FastPosFrontend.ViewModels
             MainDialog = new MainDialog();
             ActivateItem(MainDialog);
             LoginViewModel toActivateViewModel = new LoginViewModel {Parent = this};
-            
-            NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel)));
+
+            Navigator?.NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel)));
 
             //splashScreen.Close();
         }
@@ -142,10 +145,11 @@ namespace FastPosFrontend.ViewModels
         public void Logout()
         {
             LoginViewModel toActivateViewModel = new LoginViewModel { Parent = this };
-            if (NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel))))
+            var result = Navigator?.NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel)));
+            if (result.HasValue && result.Value)
             {
                 StateManager.Flush();
-                KeepAliveScreens.Clear();
+                Navigator?.KeepAliveScreens.Clear();
                 IsLoggedIn = false;
             }
 

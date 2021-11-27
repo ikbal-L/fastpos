@@ -45,6 +45,8 @@ namespace Utilities.Extensions
         {
             return obj != null;
         }
+
+       
     }
 
 }

@@ -85,145 +85,7 @@
         </Grid>
     </DataTemplate>
 
-    <!--<DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
-        <Border x:Name="ProductSettingsClick"
-                cal:Action.TargetWithoutContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProdcut($this,$eventArgs)]"
-                Background="{Binding Background}"
-                BorderBrush="LightGray" BorderThickness="1">
-            <StackPanel>
-                <DockPanel>
-                    <DockPanel.Width>
-                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="Width"
-                                 Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="395" />
-                    </DockPanel.Width>
-                    <DockPanel.Height>
-                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="Height"
-                                 Converter="{StaticResource ProductTemplateHeightConverter}"
-                                 ConverterParameter="313,195,70" />
-                    </DockPanel.Height>
-
-                    <Border DockPanel.Dock="Top">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding Name,Converter={StaticResource IsStringNullOrEmptyValueConverter}}"
-                                        Value="true">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center"
-                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                            <Setter Property="Foreground" Value="White" />
-                                        </DataTrigger>
-                                        <Trigger Property="Text" Value="null">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-
-
-                    </Border>
-                    <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}" CornerRadius="30"
-                            Width="20" Height="20">
-                        <materialdesign:PackIcon Kind="Done" Height="20" Width="20" />
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Hidden" />
-                                <Style.Triggers>
-                                    <DataTrigger Value="true">
-                                        <DataTrigger.Binding>
-                                            <MultiBinding
-                                                Converter="{StaticResource MultiValueEqualityConverterWithTestOfEmptyProdcut}">
-                                                <Binding ElementName="ProductSettingsList" Path="SelectedItem" />
-                                                <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
-                                            </MultiBinding>
-                                        </DataTrigger.Binding>
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                    </Border>
-                    <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
-                        <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Value="True">
-                                        <DataTrigger.Binding>
-                                            <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
-                                                <Binding ElementName="ProductSettingsList" Path="Tag" />
-                                                <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
-                                            </MultiBinding>
-                                        </DataTrigger.Binding>
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                    </Border>
-                    <Border Width="20" Height="20" DockPanel.Dock="Right">
-                        <materialdesign:PackIcon Height="20" Width="20" Kind="ArrowExpandAll" Padding="0" />
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Value="True">
-                                        <DataTrigger.Binding>
-                                            <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
-                                                <Binding ElementName="MoveButton" Path="Tag" />
-                                                <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
-                                            </MultiBinding>
-                                        </DataTrigger.Binding>
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                    </Border>
-
-
-                </DockPanel>
-                <Button
-                    cal:Message.Attach="[Event Click] = [Action CreateProduct()]" VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-                    <materialdesign:PackIcon Kind="Plus" Height="20" Width="20" />
-                    <Button.Style>
-                        <Style TargetType="Button"
-                               BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
-                            <Setter Property="Visibility" Value="Hidden" />
-                            <Style.Triggers>
-                                <DataTrigger Value="True">
-                                    <DataTrigger.Binding>
-                                        --><!--<Binding RelativeSource="{RelativeSource Self}" Converter="{StaticResource EntityIdValueConverter}" ></Binding>--><!--
-                                        <MultiBinding
-                                            Converter="{StaticResource MultiValueEqualityConverterWithTestOfNotEmptyProdcut}">
-                                            <Binding ElementName="ProductSettingsList" Path="SelectedItem" />
-                                            <Binding RelativeSource="{RelativeSource self}" Path="DataContext" />
-                                        </MultiBinding>
-                                    </DataTrigger.Binding>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-
-            </StackPanel>
-        </Border>
-
-    </DataTemplate>-->
+   
 
     <DataTemplate DataType="{x:Type src:Product}" x:Key="SettingsProduct">
         <Border BorderBrush="DarkGray" BorderThickness="1"  Background="Green"
@@ -570,51 +432,71 @@
         </StackPanel>
     </DataTemplate>
 
-    <!--<DataTemplate x:Key="MyItemTemplate">
-        <Control x:Name="myControl" Template="{DynamicResource ProductGridTemplate}" />
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding ListViewSwitcher}" Value="True">
-                <Setter TargetName="myControl" Property="Template" Value="{StaticResource ProductKanbanTemplate}" />
-            </DataTrigger>
-        </DataTemplate.Triggers>
-    </DataTemplate>-->
+    <DataTemplate DataType="{x:Type src:Additive}" x:Key="CheckoutAdditive">
+        <Grid  x:Name="ProductTemplate" 
+                    VerticalAlignment="Stretch"
+               HorizontalAlignment="Stretch">
 
-    <!--<DataTemplate DataType="{x:Type local:CategoryItem}">
-        <ListBox Grid.Row="0" BorderThickness="0"
-                 Background="#4CFFFFFF"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ItemsSource="{Binding Products}"
-                 Margin="2"
-                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Padding" Value="0" />
-                    <Setter Property="Margin" Value="2" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
-    </DataTemplate>-->
-
-    <Style x:Key="ListBoxItemDynamicLayoutStyle" TargetType="ListBoxItem">
-        <Setter Property="Width">
-            <Setter.Value>
-                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
-                         Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="395" />
-            </Setter.Value>
-        </Setter>
-
-        <Setter Property="Height">
-            <Setter.Value>
-                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
-                         Converter="{StaticResource ProductTemplateHeightConverter}"
-                         ConverterParameter="313,195,70" />
-            </Setter.Value>
-        </Setter>
-    </Style>
+            <Button x:Name="ProductClick" Style="{StaticResource ButtonStyle1}" 
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch" 
+                    VerticalContentAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="AddOrderItem">
+                            <cal:Parameter Value="{Binding ElementName=ProductTemplate, Path=DataContext}" />
+                        </cal:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <!--Background="{Binding Background}"-->
+                <DockPanel
+                    
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    Background="{Binding Background}">
+                    <!--<DockPanel.Width>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
+                                 Converter="{StaticResource ProductTemplateWidthConverter}" ConverterParameter="417,10" />
+                    </DockPanel.Width>
+                    <DockPanel.Height>
+                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
+                                 Converter="{StaticResource ProductTemplateHeightConverter}"
+                                 ConverterParameter="313,85,10" />
+                    </DockPanel.Height>-->
+                    <Border DockPanel.Dock="Top" Height="40">
+                        <TextBlock Text="{Binding Path=Description}" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold" FontFamily="{DynamicResource CairoBoldFontFamily}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+                    <Border DockPanel.Dock="Bottom">
+                        <TextBlock Text="{Binding Path=Price, StringFormat=' {0}'}" FontSize="18" FontWeight="Bold"
+                                   TextAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                            <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+                </DockPanel>
+            </Button>
+            <!--<Border Width="25" Height="25" Background="{Binding Background}"  CornerRadius="50" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5 5 0 0"/>-->
+        </Grid>
+    </DataTemplate>
 
 </ResourceDictionary>

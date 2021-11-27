@@ -92,7 +92,7 @@
                                     <ContentControl.Style>
                                         <Style TargetType="ContentControl" >
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=ItemsControl.HasItems}" Value="false" >
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=ItemsControl.Items.Count}" Value="0" >
                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -105,14 +105,29 @@
                             >
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock" BasedOn="{StaticResource PlaceholderTextStyle}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=ItemsControl.HasItems}" Value="true" >
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=ItemsControl.Items.Count}" Value="0" >
+                                                    <Setter Property="Visibility" Value="Visible"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
+
+                                <ContentControl x:Name="PART_PLACEHOLDER_CONTENT" Content="{TemplateBinding PlaceholderContent}" >
+                                    <ContentControl.Style>
+                                        <Style TargetType="ContentControl" >
+
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=ItemsControl.Items.Count}" Value="0" >
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
                             </Grid>
                         </ContentControl>
 

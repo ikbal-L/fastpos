@@ -18,7 +18,7 @@
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
         <converters:StaticResourceConverter x:Key="StaticResourceConverter" />
     </UserControl.Resources>
-    <ListBox ItemsSource="{Binding QuickNavigationItems}" SelectedItem="{Binding SelectedNavigationItem}">
+    <ListBox ItemsSource="{Binding Navigator.QuickNavigationItems}" SelectedItem="{Binding Navigator.SelectedNavigationItem}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <UniformGrid Columns="3" Rows="5"></UniformGrid>
@@ -31,7 +31,7 @@
                 <!--<Setter Property="IsEnabled" Value="{Binding Source={ex:Config PropertyName=GeneralSettings.IsDeliveryEnabled}}"/>-->
                 <Style.Triggers>
                     <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="ForceCursor" Value="{DynamicResource PrimaryHueLightBrush}"></Setter>
+                        
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -45,9 +45,18 @@
                         HorizontalContentAlignment="Center"
                         HorizontalAlignment="Center"
                         ToolTip="{Binding Title}"
-                        Foreground="#2f2f2f"
+                        
                         Opacity="0.85">
-
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Setter Property="Foreground" Value="#2f2f2f"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
                     </ContentControl>
                 </StackPanel>
             </DataTemplate>

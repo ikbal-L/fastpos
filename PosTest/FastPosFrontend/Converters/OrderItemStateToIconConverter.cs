@@ -13,20 +13,20 @@ namespace FastPosFrontend.Converters
             var orderItemState = (OrderItemState) value;
             if (orderItemState == OrderItemState.Added)
             {
-                return PackIconKind.BasketPlusOutline;
+                return PackIconKind.BasketFill;
             }
             if (orderItemState == OrderItemState.Removed)
             {
-                return PackIconKind.BasketRemoveOutline;
+                return PackIconKind.BasketUnfill;
             }
             if (orderItemState == OrderItemState.IncreasedQuantity)
             {
-                return PackIconKind.Add;
+                return PackIconKind.BasketPlusOutline;
             }
 
             if (orderItemState == OrderItemState.DecreasedQuantity)
             {
-                return PackIconKind.Minus;
+                return PackIconKind.BasketMinusOutline;
             }
 
             return "";

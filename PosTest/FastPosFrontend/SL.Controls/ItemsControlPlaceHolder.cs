@@ -47,6 +47,7 @@ namespace FastPosFrontend.SL.Controls
     [TemplatePart(Name = "PART_LAYOUT",Type =typeof(ContentControl))]
     [TemplatePart(Name = "PART_ITEMS_CONTROL", Type =typeof(ContentControl))]
     [TemplatePart(Name = "PART_PLACEHOLDER_TEXT", Type =typeof(TextBlock))]
+    [TemplatePart(Name = "PART_PLACEHOLDER_CONTENT", Type =typeof(UIElement))]
     public class ItemsControlPlaceHolder : Control
     {
         private ContentControl part_items_control;
@@ -74,6 +75,20 @@ namespace FastPosFrontend.SL.Controls
             get { return (ItemsControl)GetValue(ItemsControlProperty); }
             set { SetValue(ItemsControlProperty, value); }
         }
+
+
+
+        public UIElement PlaceholderContent
+        {
+            get { return (UIElement)GetValue(PlaceholderContentProperty); }
+            set { SetValue(PlaceholderContentProperty, value); }
+        }
+
+
+        public static readonly DependencyProperty PlaceholderContentProperty =
+            DependencyProperty.Register(nameof(PlaceholderContent), typeof(UIElement), typeof(ItemsControlPlaceHolder), new PropertyMetadata(default(UIElement)));
+
+
 
         public static readonly DependencyProperty PlaceholderTextProperty =
             DependencyProperty.Register(nameof(PlaceholderText), typeof(string), typeof(ItemsControlPlaceHolder), new PropertyMetadata(""));

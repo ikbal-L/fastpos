@@ -13,20 +13,18 @@
     </system:String>
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditiveDataTemplate">
-        <StackPanel  Orientation="Vertical"  x:Name="AddivieTemplate">
+        <Grid   x:Name="AddivieTemplate" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                 Background="{Binding Background,FallbackValue=#FFDDDDDD}">
             <Button x:Name="ProductClick"
-                    Background="{Binding Background}"
-                    Style="{StaticResource MaterialDesignOutlinedButton}" Padding="0">
-                <Button.Width>
-                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualWidth"
-                             Converter="{StaticResource LengthPropertyConverter}"
-                             ConverterParameter="{StaticResource additiveWithParamString}"/>
-                </Button.Width>
-                <Button.Height>
-                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="ActualHeight"
-                             Converter="{StaticResource LengthPropertyConverter}"
-                             ConverterParameter="{StaticResource additiveHeightParamString}" />
-                </Button.Height>
+                   
+                    Style="{StaticResource ContainerButtonStyle}" 
+                    Padding="0"
+                    
+                    VerticalAlignment="Stretch" 
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch">
+                    
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cal:ActionMessage MethodName="AddAditive">
@@ -48,13 +46,8 @@
                     </TextBlock.Style></TextBlock>
 
             </Button>
-        </StackPanel>
+        </Grid>
     </DataTemplate>
 
-    <DataTemplate x:Key="AdditiveSettingDataTemplate" DataType="{x:Type src:Additive}">
-        <Border>
-            <TextBlock Text="{Binding Path=Description}"/>
-        </Border>
-    </DataTemplate>
 
 </ResourceDictionary>

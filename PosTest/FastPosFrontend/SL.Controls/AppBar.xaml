@@ -37,7 +37,7 @@
                                             FontSize="22"
                                             Foreground="White"
                                             FontWeight="DemiBold"
-                                            Text="{Binding SelectedNavigationItem.Title}" />
+                                            Text="{Binding Navigator.SelectedNavigationItem.Title}" />
             <DockPanel>
 
                 <!--<ToggleButton

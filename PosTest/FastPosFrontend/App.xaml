@@ -48,6 +48,7 @@
                 <ResourceDictionary Source="/Resources/DataTemplates/AppBarMenus.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Drawers.xaml"/>
                 <ResourceDictionary Source="/Resources/DataTemplates/Reports.xaml"/>
+                <!--<ResourceDictionary Source="/Themes/Generic.xaml"/>-->
 
 
 

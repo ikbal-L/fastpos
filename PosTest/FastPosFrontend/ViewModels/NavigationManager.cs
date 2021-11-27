@@ -9,16 +9,27 @@ using FastPosFrontend.Navigation;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class AppNavigationConductor<T> : Conductor<T>, IAppNavigationConductor where T : class
+    public class NavigationManager<T> : PropertyChangedBase  ,IAppNavigationConductor where T : class
     {
         private BindableCollection<NavigationLookupItem> _appNavigationItems;
         private BindableCollection<NavigationLookupItem> _quickNavigationItems;
         private NavigationLookupItem _selectedNavigationItem;
         private AppScreen _activeScreen;
-
-        public AppNavigationConductor()
+        private IConductor<T> _conductor;
+        private NavigationManager(IConductor<T> conductor)
         {
             KeepAliveScreens = new Dictionary<Type, T>();
+            _conductor = conductor;
+        }
+
+        private static NavigationManager<T> _instance;
+
+        public static NavigationManager<T> Instance => _instance?? throw new ArgumentNullException($"{nameof(NavigationManager<T>)} must be initialized by passing conductor object of type {typeof(IConductor)}");
+
+
+        public static void Init(IConductor<T> conductor)
+        {
+            _instance = new NavigationManager<T>(conductor);
         }
 
         public NavigationLookupItem SelectedNavigationItem
@@ -194,18 +205,19 @@ namespace FastPosFrontend.ViewModels
         {
             if (screenInstance is AppScreen screen)
             {
-                screen.Parent = this;
+                screen.Parent = _conductor;
                 if (ActiveScreen != null && !ActiveScreen.CanNavigate(screen.GetType())) return false;
                 
                 ActiveScreen?.BeforeNavigateAway();
                 ActiveScreen = screen;
+
                 if (screenInstance is LazyScreen lazyScreen)
                 {
                     lazyScreen.ActivateLoadingScreen();
                 }
                 else
                 {
-                    ActivateItem(screenInstance);
+                    _conductor?.ActivateItem(screenInstance);
                 }
 
                 return true;
@@ -236,5 +248,10 @@ namespace FastPosFrontend.ViewModels
         }
 
         
+    }
+
+    public interface IConductor<T> where T : class
+    {
+        void ActivateItem(T screenInstance);
     }
 }

@@ -10,14 +10,29 @@
                     xmlns:views="clr-namespace:FastPosFrontend.Views"
                     xmlns:navigation="clr-namespace:FastPosFrontend.Navigation"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:ctrl="clr-namespace:FastPosFrontend.SL.Controls">
+                    xmlns:ctrl="clr-namespace:FastPosFrontend.SL.Controls"
+                    xmlns:nav="clr-namespace:FastPosFrontend.Navigation"
+                    >
 
     <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
     <converters:SumValuesConverter x:Key="SumValuesConverter" />
 
+    <Style TargetType="TextBlock" x:Key="PlaceholderTextStyle">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
 
     <DataTemplate x:Key="CheckoutWaiterDrawer" DataType="{x:Type vm:Drawer}">
-        <ctrl:ItemsControlPlaceHolder PlaceholderText="No waiters available!" Height="300" >
+        <ctrl:ItemsControlPlaceHolder Height="300" >
+            <ctrl:ItemsControlPlaceHolder.PlaceholderContent>
+                <TextBlock Style="{StaticResource PlaceholderTextStyle}" >
+                    No waiters available! Go to 
+                    <Hyperlink nav:NavigationEx.NavigationTarget="{x:Type vm:WaiterSettingsViewModel}">WaitterSettings</Hyperlink>
+                </TextBlock>
+            </ctrl:ItemsControlPlaceHolder.PlaceholderContent>
             <ctrl:ItemsControlPlaceHolder.ItemsControl>
                 <ListBox 
             Grid.Row="0" 

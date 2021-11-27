@@ -189,7 +189,8 @@ namespace ServiceLib.Service
                            Newtonsoft.Json.Formatting.None,
                            new JsonSerializerSettings
                            {
-                               NullValueHandling = NullValueHandling.Ignore
+                               NullValueHandling = NullValueHandling.Include,
+                               DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
                            });
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
@@ -205,7 +206,8 @@ namespace ServiceLib.Service
                             Formatting.None,
                             new JsonSerializerSettings
                             {
-                                NullValueHandling = NullValueHandling.Ignore
+                                NullValueHandling = NullValueHandling.Include,
+                                DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
                             });
 
             var client = new RestClient(url);
@@ -236,7 +238,8 @@ namespace ServiceLib.Service
                             Formatting.None,
                             new JsonSerializerSettings
                             {
-                                NullValueHandling = NullValueHandling.Ignore
+                                NullValueHandling = NullValueHandling.Include,
+                                DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
                             });
 
             var client = new RestClient(url);
@@ -260,7 +263,8 @@ namespace ServiceLib.Service
                        Newtonsoft.Json.Formatting.None,
                        new JsonSerializerSettings
                        {
-                           NullValueHandling = NullValueHandling.Ignore
+                           NullValueHandling = NullValueHandling.Include,
+                           DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
                        });
                 request.AddParameter("application/json", json, ParameterType.RequestBody); 
             }
