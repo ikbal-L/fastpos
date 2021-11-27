@@ -14,7 +14,7 @@ namespace ServiceLib.Service
         {
             var resp = RestGet(path);
             T t = default;
-            if (resp.StatusCode == HttpStatusCode.OK)
+            if (resp.IsSuccessful)
             {
 
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
