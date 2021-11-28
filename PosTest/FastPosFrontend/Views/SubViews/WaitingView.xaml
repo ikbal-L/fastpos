@@ -52,7 +52,7 @@
 
                                     <Border Margin="0 0 3 0" Background="#895737">
                                         <DockPanel LastChildFill="True" >
-                                            <materialDesign:PackIcon DockPanel.Dock="Left" Foreground="White" Kind="TicketConfirmation"/>
+                                            <materialDesign:PackIcon DockPanel.Dock="Left" Foreground="White" Kind="HashtagBoxOutline"/>
                                             <Label DockPanel.Dock="Right" Grid.Column="1" Padding="0" Margin="0 -1 3 0"
                                        Content="{Binding OrderNumber}" 
                                        HorizontalAlignment="Right"

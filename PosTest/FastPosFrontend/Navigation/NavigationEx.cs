@@ -25,7 +25,7 @@ namespace FastPosFrontend.Navigation
             obj.SetValue(NavigationTargetProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for NavigationTargetProperty.  This enables animation, styling, binding, etc...
+        
         public static readonly DependencyProperty NavigationTargetProperty =
             DependencyProperty.RegisterAttached("NavigationTargetProperty", typeof(Type), typeof(NavigationEx), new PropertyMetadata(default(Type), NavigationTargetChangedCallBack));
 
@@ -62,7 +62,10 @@ namespace FastPosFrontend.Navigation
             if (navigator != null)
             {
                 navigator.SelectedNavigationItem = navItem;
+                DrawerManager.Instance?.CloseAll();
             }
+
+            
         }
 
         private static void Button_Click(object sender, RoutedEventArgs e)

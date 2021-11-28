@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using Caliburn.Micro;
-using static FastPosFrontend.ViewModels.AppDrawerConductor;
+using static FastPosFrontend.ViewModels.DrawerManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class AppDrawerConductor : PropertyChangedBase
+    public class DrawerManager : PropertyChangedBase
     {
         private bool _isTopDrawerOpen;
         private bool _isBottomDrawerOpen;
@@ -25,7 +25,7 @@ namespace FastPosFrontend.ViewModels
         private Drawer _bottom;
         private Drawer _navigationDrawer;
 
-        private AppDrawerConductor()
+        private DrawerManager()
         {
             _drawerContents =
                 new Dictionary<(object owner, DrawerPosition position, object tag), (object template, object content)>();
@@ -49,7 +49,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public static AppDrawerConductor Instance { get; } = new AppDrawerConductor();
+        public static DrawerManager Instance { get; } = new DrawerManager();
 
         public bool IsTopDrawerOpen
         {
@@ -272,6 +272,14 @@ namespace FastPosFrontend.ViewModels
                     IsRightDrawerOpen = false;
                 }
             }
+        }
+
+        public void CloseAll()
+        {
+            IsBottomDrawerOpen = false;
+            IsTopDrawerOpen = false;
+            IsRightDrawerOpen = false;
+            IsLeftDrawerOpen = false;
         }
     }
 

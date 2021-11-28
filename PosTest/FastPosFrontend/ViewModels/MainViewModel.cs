@@ -18,7 +18,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isBackendServerOn;
         private MainDialog _mainDialog;
         private bool _isAttemptingToStartBackendServer;
-        private AppDrawerConductor _drawer = AppDrawerConductor.Instance;
+        private DrawerManager _drawer = DrawerManager.Instance;
         public NavigationManager<object> Navigator{ get;  set ; }
 
         public MainViewModel()
@@ -27,9 +27,9 @@ namespace FastPosFrontend.ViewModels
             Navigator  = NavigationManager<object>.Instance;
 
             OpenNavigationDrawerCommand = new DelegateCommandBase((o)=> {
-                AppDrawerConductor.Instance.OpenNavigationDrawer();
+                DrawerManager.Instance.OpenNavigationDrawer();
             });
-            AppDrawerConductor.Instance.InitNavigationDrawer(this, "AppNavigationDrawer", this);
+            DrawerManager.Instance.InitNavigationDrawer(this, "AppNavigationDrawer", this);
             
             IsBackendServerOn = ConnectionHelper.PingHost();
             IsDbServerOn = ConnectionHelper.PingHost(portNumber: 3306);
@@ -103,7 +103,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _mainDialog, value);
         }
 
-        public AppDrawerConductor Drawer
+        public DrawerManager Drawer
         {
             get => _drawer;
             set => Set(ref _drawer, value);
@@ -144,7 +144,8 @@ namespace FastPosFrontend.ViewModels
 
         public void Logout()
         {
-            LoginViewModel toActivateViewModel = new LoginViewModel { Parent = this };
+            DrawerManager.Instance?.CloseAll();
+
             var result = Navigator?.NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel)));
             if (result.HasValue && result.Value)
             {

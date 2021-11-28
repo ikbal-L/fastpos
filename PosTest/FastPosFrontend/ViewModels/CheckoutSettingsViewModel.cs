@@ -100,10 +100,7 @@ namespace FastPosFrontend.ViewModels
 
        
             _allProducts = StateManager.Get<Product>().ToList();
-            //_activeProducts = _allProducts
-            //    .Where(p => p.CategoryId != null && p.Category != null)
-            //    .OrderBy(p=>p.CategoryId)
-            //    .ThenBy(p=>p.Rank).ToList();
+  
            
             _allCategories = StateManager.Get<Category>().ToList();
             _allCategories.Where(c=>c.Rank!= null&& c.Products!= null).ToList().ForEach(c=>c.Products = c.Products.OrderBy(p => p.Rank).ToList());
@@ -123,7 +120,7 @@ namespace FastPosFrontend.ViewModels
          
             IsFlipped = false;
             IsCategory = false;
-            //SelectedCategory = CurrentCategories.FirstOrDefault();
+
         }
 
         private void EditProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
@@ -468,7 +465,6 @@ namespace FastPosFrontend.ViewModels
 
             CurrentProducts?.Clear();
 
-            //var filteredProducts = _activeProducts.Where(p => p.Category == category && p.Rank != null).ToList();
             var filteredProducts = category.Products;
 
             var comparer = new Comparer<Product>();
@@ -638,8 +634,9 @@ namespace FastPosFrontend.ViewModels
 
             if (ManageCategoryProductsForDeletion(selectedCategory))
             {
-                CurrentProducts.Clear();
+                CurrentProducts?.Clear();
                 SelectedCategory = null;
+
                 if (StateManager.Save(selectedCategory))
                 {
                     //ToastNotification.Notify("Category was Save successfully ", NotificationType.Success);
@@ -670,6 +667,7 @@ namespace FastPosFrontend.ViewModels
 
         private bool ManageCategoryProductsForDeletion(Category selectedCategory) 
         {
+            //TODO SELECTED CATEGORY NULL
             if (selectedCategory.Products == null || !selectedCategory.Products.Any()) return true;
             selectedCategory.Products.ForEach(product =>
             {
@@ -766,12 +764,12 @@ namespace FastPosFrontend.ViewModels
                 targetProduct.Rank = null;
                 targetProduct.Category = null;
 
-                StateManager.Save<Product>(targetProduct);
+                StateManager.Save(targetProduct);
             }
 
             CurrentProducts[index] = sourceProduct;
 
-            StateManager.Save<Product>(sourceProduct);
+            StateManager.Save(sourceProduct);
 
             SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
             
@@ -779,7 +777,7 @@ namespace FastPosFrontend.ViewModels
             //SelectedCategory.Products.Insert(insertIndex,sourceProduct);
             SelectedCategory.Products.Add(sourceProduct);
 
-            StateManager.Save<Category>(SelectedCategory);
+            StateManager.Save(SelectedCategory);
 
         }
 
@@ -1207,11 +1205,7 @@ namespace FastPosFrontend.ViewModels
 
                 // Find the data behind the ListViewItem
                 Product targetProduct = (Product)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-                //if (targetProduct == null)
-                //{
-                //    var index = listView.ItemContainerGenerator.IndexFromContainer(listBoxItem)+1;
-                //    targetProduct = new Product(){Rank = index,Category = SelectedCategory};
-                //}
+           
                 Product receivedProduct;
 
                 if (e.Data.GetDataPresent("FreeProduct"))
@@ -1450,7 +1444,7 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 SelectedCategory = categorySrc;
-                RemoveCategoryFromList(null);
+                RemoveCategoryFromList(SelectedCategory);
             }
         }
 

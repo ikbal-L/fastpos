@@ -211,7 +211,7 @@
     <Compile Include="sse\SSEventType.cs" />
     <Compile Include="ViewModels\AdditiveDetailViewModel.cs" />
     <Compile Include="ViewModels\AppDialogConductor.cs" />
-    <Compile Include="ViewModels\AppDrawerConductor.cs" />
+    <Compile Include="ViewModels\DrawerManager.cs" />
     <Compile Include="ViewModels\CashOutViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputData.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />

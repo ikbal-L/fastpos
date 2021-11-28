@@ -230,7 +230,7 @@ namespace FastPosFrontend.ViewModels
         {
             var defaultItem = LoadDefaultItem();
             SelectedNavigationItem = defaultItem;
-            NavigateToItem(defaultItem);
+            //NavigateToItem(defaultItem);
         }
 
         public void  SetSettingsListener(object obj)

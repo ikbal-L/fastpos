@@ -59,6 +59,7 @@
 
     <converters:OrderItemStateToIconConverter x:Key="OrderItemStateToIconConverter" />
     <converters:OrderItemAdditiveStateToIconValueConverter x:Key="OrderItemAdditiveStateToIconValueConverter" />
+    <converters:OrderItemStateToCharConverter x:Key="OrderItemStateToCharConverter" />
 
     <DataTemplate DataType="{x:Type models:OrderItem}" x:Key="OrderItemKitchenReceiptDataTemplate">
         <Grid>
@@ -75,11 +76,16 @@
 
             <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}" FontSize="10" Margin="2 5 "
                        VerticalAlignment="Center" />
-            <materialDesign:PackIcon Grid.Column="1"
+            <!--<materialDesign:PackIcon Grid.Column="1"
                                      Kind="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}"
-                                     HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center" />
+                                     HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center" />-->
+            <Label Grid.Column="1"
+                                     Content="{Binding State,Converter={StaticResource OrderItemStateToCharConverter}}"
+                                     HorizontalAlignment="Left" FontSize="16" VerticalAlignment="Center" FontWeight="Bold" />
+            
+            
             <TextBlock Grid.Column="2" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left"
-                       FontSize="12" />
+                       FontSize="16" VerticalAlignment="Center" FontWeight="Bold" />
 
 
             <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"

@@ -117,20 +117,20 @@
                                                     <RowDefinition Height="Auto" />
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
-                                                <materialDesign:PackIcon Kind="Schedule" Width="20" Height="20"
+                                                <materialDesign:PackIcon Kind="HashtagBoxOutline" Width="20" Height="20"
                                                                          Padding="2 0 0 0" />
                                                 <TextBlock Grid.Column="1" Padding="0 0 2 0" Margin="0 0 0 0"
-                                                           Text="{Binding ElapsedTime.Minutes}"
+                                                           Text="{Binding OrderNumber}"
                                                            TextAlignment="Right"
                                                            FontSize="16" FontWeight="Bold" />
                                                 <materialDesign:PackIcon Grid.Column="0" Grid.Row="1" Padding="2 0 0 2"
                                                                          Margin="0 0 0 0"
                                                                          Style="{StaticResource tableOrderVisibility}"
-                                                                         Kind="ReorderHorizontal" Width="20"
+                                                                         Kind="Schedule" Width="20"
                                                                          Height="21" />
                                                 <TextBlock Grid.Column="1" Grid.Row="1" Padding="0 0 2 5"
                                                            Margin="0 -1 0 0"
-                                                           Text="{Binding OrderItems.Count}"
+                                                           Text="{Binding ElapsedTime.Minutes}"
                                                            Style="{StaticResource tableOrderVisibility}"
                                                            HorizontalAlignment="Right"
                                                            FontSize="16" FontWeight="Bold" />

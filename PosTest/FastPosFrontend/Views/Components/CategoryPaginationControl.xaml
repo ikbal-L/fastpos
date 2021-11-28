@@ -54,6 +54,10 @@
                                         <DataTrigger Binding="{Binding IsDark}" Value="True">
                                             <Setter Property="Foreground" Value="White" />
                                         </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="True">
+                                            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>

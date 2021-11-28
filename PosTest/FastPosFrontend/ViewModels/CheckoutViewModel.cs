@@ -16,6 +16,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Caliburn.Micro;
 using FastPosFrontend.Enums;
@@ -316,10 +317,10 @@ namespace FastPosFrontend.ViewModels
             CurrentCategory = Categories[0];
             ShowCategoryProducts(CurrentCategory);
 
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutWaiterDrawer", this, tag: ListKind.Waiter);
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
-            AppDrawerConductor.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
+            DrawerManager.Instance.InitTop(this, "CheckoutWaiterDrawer", this, tag: ListKind.Waiter);
+            DrawerManager.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
+            DrawerManager.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
+            DrawerManager.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
 
             
             var config = Configuration.Builder(new Uri("http://localhost:8080/events/subscribe")).ResponseStartTimeout(TimeSpan.FromSeconds(60 * 60 * 24)).Method(HttpMethod.Get).RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken).Build();
@@ -1935,7 +1936,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void ShowDrawer(ListKind listKind) =>AppDrawerConductor.Instance.OpenTop(this, listKind);
+        public void ShowDrawer(ListKind listKind) =>DrawerManager.Instance.OpenTop(this, listKind);
      
 
         public void Handle(AssignOrderTypeEventArgs message)
@@ -1965,7 +1966,7 @@ namespace FastPosFrontend.ViewModels
 
             var contentOfPage = new UserControl();
             contentOfPage.ContentTemplate = dt;
-
+           
 
             contentOfPage.Content = _printOrder;
          
@@ -2024,34 +2025,40 @@ namespace FastPosFrontend.ViewModels
             FixedDocument fixedDocument = GenerateOrderReceipt(source);
             var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
 
-            
+
             IList<PrinterItem> printerItems = null;
-           
+
             var printerItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
             if (source == PrintSource.Kitchen)
             {
                 printerItems = printerItemSetting?.Where(item => item.SelectedKitchen).ToList();
             }
 
-            if (source == PrintSource.CheckoutPrint|| source == PrintSource.CheckoutSplit|| source == PrintSource.CheckoutPay)
+            if (source == PrintSource.CheckoutPrint || source == PrintSource.CheckoutSplit || source == PrintSource.CheckoutPay)
             {
                 printerItems = printerItemSetting?.Where(item => item.SelectedReceipt).ToList();
             }
 
-            if (printerItems!= null)
+            NewMethod(fixedDocument, printers, printerItems);
+
+        }
+
+        private static void NewMethod(FixedDocument fixedDocument, List<string> printers, IList<PrinterItem> printerItems)
+        {
+            if (printerItems != null)
             {
-                foreach (var e in printerItems)
+                foreach (var pi in printerItems)
                 {
-                    if (printers.Contains(e.Name))
+                    if (printers.Contains(pi.Name))
                     {
-                        PrintDialog dialog = new PrintDialog { PrintQueue = new PrintQueue(new PrintServer(), e.Name) };
+                        PrintDialog dialog = new PrintDialog { PrintQueue = new PrintQueue(new PrintServer(), pi.Name) };
                         try
                         {
                             dialog.PrintDocument(fixedDocument.DocumentPaginator, "Print");
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-
+                            MessageBox.Show(ex.Message, $"Error {ex.HResult}", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                 }
@@ -2060,9 +2067,7 @@ namespace FastPosFrontend.ViewModels
             {
                 ToastNotification.Notify("Configure Printers");
             }
-
         }
-
 
         public void PaginateCategories(NextOrPrevious nextOrPrevious)
         {

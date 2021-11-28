@@ -50,6 +50,7 @@ namespace FastPosFrontend.ViewModels
         public void NewWaiter()
         {
             Waiter =new  ServiceInterface.Model.Waiter();
+            Numbers = new BindableCollection<string>();
         }
         public void Save() {
 
