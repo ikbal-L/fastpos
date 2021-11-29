@@ -77,6 +77,7 @@ namespace FastPosFrontend.ViewModels
                 NotifyOfPropertyChange(nameof(SelectedDeliveryman));
                 UpdateHistory();
                 DeliveryOrders.View.Refresh();
+                NumericZone = string.Empty;
             }
         }
 
@@ -277,6 +278,7 @@ namespace FastPosFrontend.ViewModels
         {
 
 
+            decimal? retunedAmount = null;
             if (!decimal.TryParse(NumericZone, out var payedAmount)) return;
 
 
@@ -284,6 +286,12 @@ namespace FastPosFrontend.ViewModels
             {
                 NumericZone = "";
                 return;
+            }
+
+            if(payedAmount> SelectedDeliveryman?.Balance)
+            {
+                retunedAmount = SelectedDeliveryman.Balance - payedAmount;
+                payedAmount = SelectedDeliveryman.Balance;
             }
 
             var api = new RestApis();
@@ -296,7 +304,16 @@ namespace FastPosFrontend.ViewModels
 
             if (result.status == 201)
             {
-                NumericZone = "";
+                
+                
+                if (retunedAmount.HasValue)
+                {
+                    NumericZone = $"{retunedAmount}";
+                }
+                else
+                {
+                    NumericZone = "";
+                }
                 IsDiscountEnabled = false;
                 var savedPayment = result.Item2;
 

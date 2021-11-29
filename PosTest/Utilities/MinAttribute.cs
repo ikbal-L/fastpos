@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace Attributes
@@ -67,5 +68,41 @@ namespace Attributes
 
             return new ValidationResult(GetErrorMessage(value, validationContext.DisplayName));
         }
+    }
+
+
+    public class Collection
+    {
+        [AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property)]
+        public class NonEmptyAttribute:ValidationAttribute
+        {
+        
+            
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                if (value is IEnumerable enumerable)
+                {
+                    if (!enumerable.GetEnumerator().MoveNext())
+                    {
+                        return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
+                    }
+                    return ValidationResult.Success;
+                }
+
+                var message = $"Property {validationContext.DisplayName} on Type {validationContext.ObjectType.FullName} must be of type that implements ${nameof(IEnumerable)}";
+#if DEBUG
+                throw new InvalidOperationException(message); 
+#endif
+                return new ValidationResult(message);
+            }
+
+            public override string FormatErrorMessage(string name)
+            {
+                return $"Collection {name} must not be empty";
+            }
+        }
+
+
+        
     }
 }

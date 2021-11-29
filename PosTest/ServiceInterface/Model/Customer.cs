@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
+using Attributes;
 using Caliburn.Micro;
 
 namespace ServiceInterface.Model
@@ -30,6 +31,8 @@ namespace ServiceInterface.Model
 
 
         [DataMember]
+        
+        [Collection.NonEmpty]
         public BindableCollection<string> PhoneNumbers
         {
             get => _phoneNumbers;
@@ -39,7 +42,7 @@ namespace ServiceInterface.Model
         public string FirstNumber => PhoneNumbers?.FirstOrDefault();
         private decimal _debit;
         private string _mobile = "";
-        private BindableCollection<string> _phoneNumbers;
+        private BindableCollection<string> _phoneNumbers = new BindableCollection<string>();
 
         [DataMember]
         public decimal Debit

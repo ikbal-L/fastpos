@@ -26,14 +26,11 @@ namespace FastPosFrontend.ViewModels
 
         public CustomerDetailViewModel(Customer customer)
         {
-            Customer = new Customer(){Id = customer.Id,Name = customer.Name, Mobile = customer.Mobile,PhoneNumbers = new BindableCollection<string>() };
-            //ValidateModelProperty(Customer,Customer.Name,nameof(Customer.Name));
+            Customer = new Customer(){Id = customer.Id,Name = customer.Name,PhoneNumbers = customer.PhoneNumbers };
+         
             Name = Customer.Name;
-            Mobile = Customer.Mobile;
             ValidateModelProperty(Customer, Name, nameof(Name));
-
-            ValidateModelProperty(Customer, Mobile, nameof(Mobile));
-            //Customer.PropertyChanged += Customer_PropertyChanged;
+            ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
         }
 
         private void Customer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -71,7 +68,19 @@ namespace FastPosFrontend.ViewModels
             set
             {
                 Set(ref _mobile, value);
-                ValidateModelProperty(Customer, Mobile, nameof(Mobile));
+                if (!string.IsNullOrEmpty(Mobile))
+                {
+                    ValidateModelProperty(Customer, Mobile, nameof(Mobile));
+                    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
+                }
+                else
+                {
+                    if (_validationErrors.ContainsKey(nameof(Mobile)))
+                    {
+                        _validationErrors[nameof(Mobile)]?.Clear(); 
+                    }
+                    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
+                }
             }
         }
 
@@ -143,17 +152,22 @@ namespace FastPosFrontend.ViewModels
         {
             if (!_validationErrors.ContainsKey(nameof(Mobile)))
             {
-                if (!Customer.PhoneNumbers.Contains(Mobile))
-                {
-                    Customer.PhoneNumbers.Add(Mobile); 
-                }
-                else
-                {
-                    ToastNotification.Notify("Phone number is already added",NotificationType.Warning);
-                }
+                AddPhoneToCustomerPhoneList(Mobile);
                 return;
             }
             ToastNotification.Notify("Phone Number has validation errors ");
+        }
+
+        private void AddPhoneToCustomerPhoneList(string mobile)
+        {
+            if (!Customer.PhoneNumbers.Contains(mobile))
+            {
+                Customer.PhoneNumbers.Add(mobile);
+            }
+            else
+            {
+                ToastNotification.Notify("Phone number is already added", NotificationType.Warning);
+            }
         }
 
         public void RemovePhone()
