@@ -88,7 +88,7 @@ namespace FastPosFrontend.ViewModels
             MoveCategoryCommand = new DelegateCommandBase(MoveCategoryTo);
             CopyCategoryCommand = new DelegateCommandBase(CopyCategory);
             PasteCategoryCommand = new DelegateCommandBase(PasteCategory);
-            RemoveCategoryCommand = new DelegateCommandBase(RemoveCategoryFromList);
+            RemoveCategoryCommand = new DelegateCommandBase(RemoveSelectedCategoryFromList);
             DeleteCategoryCommand = new DelegateCommandBase(DeleteCategory);
 
             ConfigureProductLayoutCommand = new DelegateCommandBase(ConfigureProductDisplayLayout);
@@ -540,7 +540,7 @@ namespace FastPosFrontend.ViewModels
             //SelectedFreeProduct = freep;
         }
 
-        public void RemoveCategoryFromList(object obj)
+        public void RemoveSelectedCategoryFromList(object obj)
         {
             bool result = true;
             if (SelectedCategory?.Id == null)
@@ -1444,7 +1444,8 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 SelectedCategory = categorySrc;
-                RemoveCategoryFromList(SelectedCategory);
+                //RemoveCategoryFromList(SelectedCategory);
+                RemoveSelectedCategoryFromList(SelectedCategory);
             }
         }
 
