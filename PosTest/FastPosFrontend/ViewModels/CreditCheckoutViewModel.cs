@@ -14,6 +14,7 @@ using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingVie
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Credit Checkout", typeof(CreditCheckoutViewModel), isQuickNavigationEnabled: true)]
+    [PreAuthorize("Create_Payment_Client","Read_Payment_Client", "Update_Payment_Client")]
     public class CreditCheckoutViewModel : LazyScreen
     {
         private ObservableCollection<Customer> _customerCollection;

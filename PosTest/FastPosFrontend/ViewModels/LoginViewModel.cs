@@ -193,11 +193,7 @@ namespace FastPosFrontend.ViewModels
             Compose();
            
 
-            List<string> auths = new List<string>();
-            auths.Add("Read_Product");
-            auths.Add("Can_login");
-            var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), auths.ToArray());
-            Thread.CurrentPrincipal = principal;
+           
            LoadLoginHistory();
 
 

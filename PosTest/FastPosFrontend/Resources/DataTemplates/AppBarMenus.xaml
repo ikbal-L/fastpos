@@ -14,6 +14,7 @@
         <Setter Property="Height" Value="50"/>
     </Style>
     <converters:OrderNumerationMaskConverter x:Key="OrderNumerationMaskConverter"/>
+    <converters:NegateBooleanValueConverter x:Key="NegateBooleanValueConverter"></converters:NegateBooleanValueConverter>
     <DataTemplate x:Key="CheckoutStatusBar" DataType="vm:CheckoutViewModel">
 
 
@@ -143,13 +144,14 @@
 
     <DataTemplate x:Key="CheckoutLeftCommandBar" >
         <StackPanel Orientation="Horizontal">
-            <UniformGrid Rows="1">
+            <Button Content="{md:PackIcon Kind=NewBox,Size=40}" cal:Message.Attach="[Event Click] = [ Action NewOrder()]" Style="{StaticResource AppBarButton}"/>
+
+            <UniformGrid Rows="1" IsEnabled="{Binding CurrentOrder.IsLocked,Converter={StaticResource NegateBooleanValueConverter}}">
                 <Panel.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource AppBarButton}">
                        
                     </Style>
                 </Panel.Resources>
-                <Button Content="{md:PackIcon Kind=NewBox,Size=40}" cal:Message.Attach="[Event Click] = [ Action NewOrder()]" />
                 <Button Content="{md:PackIcon Kind=TableFurniture,Size=40}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]" />
                 <Button Content="{md:PackIcon Kind=RoomService,Size=40}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Waiter')]" />
                 <Button Content="{md:PackIcon Kind=TruckFast,Size=40}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Delivery')]" />

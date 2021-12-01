@@ -20,7 +20,7 @@
     </UserControl.Resources>
 
 
-    <Border BorderBrush="Black" BorderThickness="1" Margin="10">
+    <Border BorderBrush="Black" BorderThickness="0" Margin="10">
         <Grid>
 
 

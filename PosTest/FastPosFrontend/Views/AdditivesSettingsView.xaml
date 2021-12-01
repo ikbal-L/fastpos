@@ -11,6 +11,7 @@
              xmlns:subviewmodels="clr-namespace:FastPosFrontend.ViewModels.SubViewModel"
              xmlns:subViews1="clr-namespace:FastPosFrontend.Views.SubViews"
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
              mc:Ignorable="d"
              d:DesignHeight="610" d:DesignWidth="640"
              d:DataContext="{d:DesignInstance vm:AdditivesSettingsViewModel}">
@@ -42,7 +43,8 @@
                                      [Event MouseMove] = [Action AdditivesList_MouseMove($source, $eventArgs)];
                                      [Event Drop] = [Action AdditivesList_Drop($source, $eventArgs)];
                                      [Event TouchDown] = [Action  AdditivesList_TouchDown($source, $eventArgs)];"
-                                     VerticalAlignment="Stretch">
+                                     VerticalAlignment="Stretch"
+                     ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Disable">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Padding" Value="0" />
@@ -69,7 +71,8 @@
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     Command="{Binding EditAdditiveCommand}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1"
-                                    Margin="0 0 10 25">
+                                    Margin="0 0 10 25"
+                        ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
                 </Button>
 
@@ -82,7 +85,7 @@
                                      Margin="0 0 60 25"
                                     Command="{Binding MoveAdditiveCommand}"
                                     Tag="{Binding AdditiveToMove}"
-                                    >
+                                    ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Hide">
 
                     <materialdesign:PackIcon Kind="ArrowExpandAll" Height="22" Width="22" />
                 </Button>
@@ -91,7 +94,8 @@
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                     Margin="0 0 110 25"
-                                    Command="{Binding PasteAdditiveCommand}">
+                                    Command="{Binding PasteAdditiveCommand}"
+                        ex:AbilityEx.Autority="Create_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
                 </Button>
 
@@ -99,7 +103,8 @@
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                     Margin="0 0 160 25"
-                                    Command="{Binding CopyAdditiveCommand}">
+                                    Command="{Binding CopyAdditiveCommand}"
+                        ex:AbilityEx.Autority="Create_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
                 </Button>
 
@@ -107,7 +112,8 @@
                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                                     Margin="0 0 210 25"
-                                    Command="{Binding DeleteAdditiveCommand}">
+                                    Command="{Binding DeleteAdditiveCommand}"
+                        ex:AbilityEx.Autority="Delete_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                 </Button>
             </Grid>

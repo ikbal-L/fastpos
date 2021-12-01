@@ -161,7 +161,7 @@
                         Margin="10 0 10 10"
                         Text="{Binding NumericZone}"
                         IsReadOnly="True"
-                        Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="1"
+                        Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                         materialDesign:TextFieldAssist.HasLeadingIcon="True"
                         materialDesign:TextFieldAssist.LeadingIcon="Dollar"
                         materialDesign:TextFieldAssist.LeadingIconSize="30"

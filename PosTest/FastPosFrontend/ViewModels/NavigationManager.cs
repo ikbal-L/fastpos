@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
@@ -140,7 +141,17 @@ namespace FastPosFrontend.ViewModels
             {
                 types = types.Where(filter).ToArray();
             }
-
+            var principal =Thread.CurrentPrincipal;
+           types =  types.Where(t =>
+            {
+                var attr = t.GetCustomAttribute(typeof(PreAuthorizeAttribute));
+                if (attr is PreAuthorizeAttribute preAuth)
+                {
+                    var result = preAuth.Privileges.All(p => principal.IsInRole(p));
+                    return result;
+                }
+                return true;
+            }).ToList();
             return types
                 .Select(type =>
                     (TAttribute) type.GetCustomAttribute(

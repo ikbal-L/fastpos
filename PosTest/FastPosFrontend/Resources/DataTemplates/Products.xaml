@@ -8,6 +8,7 @@
                     xmlns:converters="clr-namespace:FastPosFrontend.Converters"
                     xmlns:local="clr-namespace:FastPosFrontend.ViewModels"
                     xmlns:views="clr-namespace:FastPosFrontend.Views"
+                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
                     >
     
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -18,6 +19,7 @@
     <converters:ProductTemplateWidthConverter x:Key="ProductTemplateWidthConverter" />
     <converters:LengthPropertyConverter x:Key="LengthPropertyConverter" />
     <converters:IsStringNullOrEmptyValueConverter x:Key="IsStringNullOrEmptyValueConverter" />
+    <converters:BrushOpacityConverter x:Key="BrushOpacityConverter"/>
     <DataTemplate DataType="{x:Type src:Product}" x:Key="CheckoutProduct">
         <Grid  x:Name="ProductTemplate" 
                     VerticalAlignment="Stretch"
@@ -340,7 +342,8 @@
                     cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
                     caliburn:Message.Attach="[Event Click] = [Action CreateAdditive($this)]"
                     VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="35 20"
-                    Content="{materialdesign:PackIcon Kind=Plus ,Size=30}">
+                    Content="{materialdesign:PackIcon Kind=Plus ,Size=30}"
+                        ex:AbilityEx.Autority="Create_Additive" ex:AbilityEx.AppliedBy="Collapse">
                     
                     <Button.Style>
 
@@ -373,7 +376,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:Additive}" x:Key="AdditivesOfProductStyle">
-        <StackPanel Orientation="Vertical" x:Name="AdditiveTemplate" Background="{Binding Background}">
+        <StackPanel Orientation="Vertical" x:Name="AdditiveTemplate" Background="{Binding Background,Converter={StaticResource BrushOpacityConverter},ConverterParameter=0.91}">
             <Border 
                 x:Name="AdditiveSettingsClick" 
                 BorderBrush="LightGray" 
@@ -404,7 +407,8 @@
                                       x:Name="ToggleButton"
                                       Command="{Binding ElementName=AdditivesOfProductViewUserControl,Path=DataContext.CheckAdditiveCommand}"
                                       CommandParameter="{Binding RelativeSource={RelativeSource Self} }"
-                                      Visibility="{Binding Converter={StaticResource ObjectToVisibility}}">
+                                      Visibility="{Binding Converter={StaticResource ObjectToVisibility}}"
+                                      Background="{Binding Background}" >
                             <ToggleButton.IsChecked>
                                 <MultiBinding Converter="{StaticResource CollectionContainsValueConverter}"
                                               Mode="OneWay">

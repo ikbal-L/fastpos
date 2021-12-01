@@ -41,7 +41,7 @@ using Table = ServiceInterface.Model.Table;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem(
-        title: Constants.Navigation.Checkout, 
+        title: /*Constants.Navigation.Checkout*/"", 
         target: typeof(CheckoutViewModel),"",
         keepAlive: true, isDefault: true,isQuickNavigationEnabled:true)]
     public class CheckoutViewModel : LazyScreen, IHandle<AssignOrderTypeEventArgs>,ISettingsListener
@@ -232,8 +232,11 @@ namespace FastPosFrontend.ViewModels
                     var data = JsonConvert.DeserializeObject<SyncData>(e.Message.Data);
                     var orderToLock = Orders.FirstOrDefault(o => o.Id == data.Id);
 
-                    orderToLock.IsLocked = data.IsLocked;
-                    orderToLock.LockedBy = data.LockedBy;
+                    if (orderToLock != null)
+                    {
+                        orderToLock.IsLocked = data.IsLocked;
+                        orderToLock.LockedBy = data.LockedBy; 
+                    }
                     return;
                 }
 

@@ -2,6 +2,7 @@
 
 namespace ServiceLib
 {
+    
     public class GeneralSettings 
     {
         [JsonProperty] public int TableNumber { get; set; }

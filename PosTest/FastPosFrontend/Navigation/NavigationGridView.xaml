@@ -21,7 +21,7 @@
     <ListBox ItemsSource="{Binding Navigator.QuickNavigationItems}" SelectedItem="{Binding Navigator.SelectedNavigationItem}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="3" Rows="5"></UniformGrid>
+                <UniformGrid Columns="3"></UniformGrid>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
 

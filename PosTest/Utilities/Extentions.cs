@@ -46,7 +46,16 @@ namespace Utilities.Extensions
             return obj != null;
         }
 
-       
+        public static bool IfTrue(this bool result,Action action)
+        {
+           if (result) action?.Invoke();
+            return result;
+        }
+
+        public static void OrElse(this bool result, Action action)
+        {
+            if (!result) action?.Invoke();
+        }
     }
 
 }

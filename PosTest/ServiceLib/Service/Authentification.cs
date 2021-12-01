@@ -118,7 +118,7 @@ namespace ServiceLib.Service
                     if (!string.IsNullOrEmpty(jsonContent))
                     {
                         var permissions = JsonConvert.DeserializeObject<List<String>>(jsonContent);
-                        var principal = new GenericPrincipal(new GenericIdentity("UserTest", ""), permissions.ToArray());
+                        var principal = new GenericPrincipal(new GenericIdentity(user, ""), permissions.ToArray());
                         Thread.CurrentPrincipal = principal;
                     }
                 }

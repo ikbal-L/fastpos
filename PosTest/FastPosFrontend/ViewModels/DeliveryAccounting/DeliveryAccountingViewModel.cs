@@ -202,7 +202,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
         {
             
             var payedAmount = Convert.ToDecimal(NumericZone);
-            if (payedAmount < 0)
+            if (payedAmount <= 0|| SelectedDeliveryman?.Balance<=0)
             {
                 NumericZone = "";
                 return;

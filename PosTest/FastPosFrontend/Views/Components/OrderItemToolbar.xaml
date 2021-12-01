@@ -19,10 +19,17 @@
                  Background="{StaticResource MaterialDesignPaper}">
         <ToolBar Grid.Column="0"
                 Background="{StaticResource MaterialDesignPaper}"
-                 IsEnabled="{Binding CurrentOrder, Converter={StaticResource ObjectToBoolConverter}}"
+                 
                  x:Name="OrderItemCommandsGrid" Style="{StaticResource MaterialDesignToolBar}">
 
+            <!--IsEnabled="{Binding CurrentOrder, Converter={StaticResource ObjectToBoolConverter}}"-->
 
+            <ToolBar.IsEnabled>
+                <MultiBinding Converter="{StaticResource BooleanAllConverter}">
+                    <Binding Path="CurrentOrder" Converter="{StaticResource ObjectToBoolConverter}"/>
+                    <Binding Path="CurrentOrder.IsLocked" Converter="{StaticResource NegateBooleanValueConverter}"/>
+                </MultiBinding>
+            </ToolBar.IsEnabled>
             <Button Grid.Row="0" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action RemoveOrerItem()]"

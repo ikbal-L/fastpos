@@ -9,7 +9,8 @@
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              xmlns:viewModels="clr-namespace:FastPosFrontend.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:ex="clr-namespace:FastPosFrontend.Extensions">
     <Grid>
 
         <materialDesign:DialogHost IsOpen="{Binding IsEditing}">
@@ -36,15 +37,16 @@
                         <DataTemplate DataType="model:Role">
                             <materialDesign:Card materialDesign:UniformCornerRadius="10" 
                                                  materialDesign:ShadowAssist.ShadowDepth="Depth3" Width="220px" Margin="10" >
-                                <StackPanel Orientation="Vertical" Margin="30"  >
+                                <StackPanel Orientation="Vertical" Margin="30" MaxHeight="150" >
                                     <Border CornerRadius="50" Background="DarkOrange" Width="100" Height="100">
                                         <materialDesign:PackIcon 
                                             HorizontalAlignment="Center" Kind="SecurityAccount"   materialDesign:ButtonAssist.CornerRadius="50" VerticalAlignment="Center" Width="60" Height="60" Foreground="WhiteSmoke"/>
                                     </Border>
                                     <TextBlock FontWeight="Bold" Margin="0 5 0 20" Text="{Binding Name}"
                                                FontSize="20"
-                                               
-                                               HorizontalAlignment="Center" />
+                                               TextWrapping="Wrap"
+                                               HorizontalAlignment="Center"
+                                               TextAlignment="Center"/>
 
 
                                 </StackPanel>
@@ -65,6 +67,7 @@
                             HorizontalAlignment="Right"
                             Margin="0 0 10 0"
                             cal:Message.Attach="[Event Click] = [Action CreateRole()]"
+                            ex:AbilityEx.Autority="Create_Role" ex:AbilityEx.AppliedBy="Hide"
                     />
 
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
@@ -72,12 +75,14 @@
                             HorizontalAlignment="Right"
                             Margin="0 0 60 0" 
                             cal:Message.Attach="[Event Click] = [Action EditRole()]"
+                            ex:AbilityEx.Autority="Update_Role" ex:AbilityEx.AppliedBy="Hide"
                             />
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                             Content="{materialDesign:PackIcon Delete}"
                             HorizontalAlignment="Right"
                             Margin="0 0 110 0"
                             cal:Message.Attach="[Event Click] = [Action DeleteRole()]"
+                            ex:AbilityEx.Autority="Delete_Role" ex:AbilityEx.AppliedBy="Hide"
                             />
                 </Grid>
                 <!--#endregion-->

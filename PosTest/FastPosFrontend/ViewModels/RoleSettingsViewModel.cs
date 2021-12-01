@@ -3,10 +3,12 @@ using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
+using Utilities.Extensions;
 
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Role Settings", typeof(RoleSettingsViewModel),"",parentNavigationItem:typeof(UserSettingsViewModel), isQuickNavigationEnabled: true)]
+    [PreAuthorize("Create_User","Create_Role")]
     public class RoleSettingsViewModel:LazyScreen
     {
         private BindableCollection<Role> _roles;
@@ -76,8 +78,12 @@ namespace FastPosFrontend.ViewModels
         }
 
         public void DeleteRole()
-        {   
-
+        {
+            if (SelectedRole == null)
+            {
+                ToastNotification.Notify("Select a Role to Delete First!");
+            }
+            StateManager.Delete(SelectedRole).IfTrue(() => Roles.Remove(SelectedRole));
         }
     }
 }

@@ -11,6 +11,7 @@ namespace FastPosFrontend.ViewModels.Settings
 {
   
     [NavigationItem(title:"General Settings",typeof(GeneralSettingsViewModel),"",groupName:"Settings",isQuickNavigationEnabled:true)]
+    [PreAuthorize("Modify_Local_Settings")]
     public  class GeneralSettingsViewModel : AppScreen,ISettingsController
     {
         private GeneralSettings _generalSettings;

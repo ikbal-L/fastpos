@@ -10,6 +10,7 @@
              xmlns:subviews="clr-namespace:FastPosFrontend.Views.SubViews"
              xmlns:convert="clr-namespace:FastPosFrontend.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" x:Name="UserSettings"
              d:DataContext="{d:DesignInstance vm:UserSettingsViewModel }">
@@ -118,6 +119,7 @@
                             HorizontalAlignment="Right"
                             Margin="0 0 10 0"
                             caliburn:Message.Attach="[Event Click] = [Action CreateUser()]"
+                            ex:AbilityEx.Autority="Create_User" ex:AbilityEx.AppliedBy="Hide"
                     />
                    
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
@@ -125,13 +127,13 @@
                             HorizontalAlignment="Right"
                             Margin="0 0 60 0" 
                             caliburn:Message.Attach="[Event Click] = [Action EditUser()]"
-                            />
+                            ex:AbilityEx.Autority="Update_User" ex:AbilityEx.AppliedBy="Hide" />
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                             Content="{materialDesign:PackIcon Delete}"
                             HorizontalAlignment="Right"
                             Margin="0 0 110 0"
                             caliburn:Message.Attach="[Event Click] = [Action DeleteUser()]"
-                            />
+                            ex:AbilityEx.Autority="Delete_User" ex:AbilityEx.AppliedBy="Hide" />
 
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                             Content="{materialDesign:PackIcon SecurityAccount}"

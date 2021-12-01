@@ -6,7 +6,8 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:m="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              mc:Ignorable="d" 
-                                       xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
+             xmlns:caliburn="http://www.caliburnproject.org"
 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -48,21 +49,21 @@
             <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" >
                 <Button
                     caliburn:Message.Attach="[Event Click] = [Action DeleteWiaterAction()]"
-                    
-                    Visibility="{Binding DeleteVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Margin="5 -44 5 0" >
+                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Margin="5 -44 5 0"
+                    ex:AbilityEx.Autority="Delete_Waiter" ex:AbilityEx.AppliedBy="Hide"
+                    >
                     <md:PackIcon  Kind="DeleteOutline" HorizontalAlignment="Right" Width="25" Height="25" />
                 </Button>
                 <Button
                     caliburn:Message.Attach="[Event Click] = [Action EditWiaterAction()]"
-
-                     Visibility="{Binding EditVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"  >
+                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"
+                    ex:AbilityEx.Autority="Update_Waiter" ex:AbilityEx.AppliedBy="Hide">
                     <md:PackIcon Kind="PencilOutline" HorizontalAlignment="Right" Width="25" Height="25" />
                 </Button>
                 <Button 
                       caliburn:Message.Attach="[Event Click] = [Action AddWiaterAction()]"
-                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"  >
+                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"
+                    ex:AbilityEx.Autority="Create_Waiter" ex:AbilityEx.AppliedBy="Hide">
                     <md:PackIcon  Kind="Plus" HorizontalAlignment="Right" Width="25" Height="25" />
                 </Button>
             </StackPanel>

@@ -16,6 +16,7 @@ using Parser = FastPosFrontend.Helpers.Parser;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Order Refund", typeof(OrderRefundViewModel), isQuickNavigationEnabled: true)]
+    [PreAuthorize("Refund_Order")]
     public class OrderRefundViewModel:LazyScreen
     {
         private readonly Parser _parser;

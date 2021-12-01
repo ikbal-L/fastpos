@@ -14,6 +14,7 @@ namespace FastPosFrontend.ViewModels
 {
 
     [NavigationItem("Waiter Settings", typeof(WaiterSettingsViewModel),"", groupName: "Settings",isQuickNavigationEnabled:true)]
+    [PreAuthorize("Create_Waiter")]
     public class WaiterSettingsViewModel: LazyScreen,ISettingsController
     {
         private ObservableCollection<Waiter> _Waiters;

@@ -20,7 +20,19 @@
 
     <DataTemplate x:Key="PlatterAdditives">
         <StackPanel Orientation="Horizontal">
-            <TextBlock x:Name="text" Text="{Binding Description}"></TextBlock>
+            <TextBlock x:Name="text" Text="{Binding Description}" >
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="Black"></Setter>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="LightGray"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <Button   Padding="0"
                      BorderBrush="{Binding ElementName=text, Path=Background}"
                      Background="{Binding ElementName=text, Path=Background}"

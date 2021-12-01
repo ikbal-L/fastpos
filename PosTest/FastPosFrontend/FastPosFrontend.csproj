@@ -135,6 +135,7 @@
     </ApplicationDefinition>
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Converters\BorderClipConverter.cs" />
+    <Compile Include="Converters\BrushOpacityConverter.cs" />
     <Compile Include="Converters\BrushToHexConverter.cs" />
     <Compile Include="Converters\CollectionContainsItemConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="ModalDialogBox.xaml.cs">
       <DependentUpon>ModalDialogBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Navigation\Authorize.cs" />
     <Compile Include="SL.Controls\AppBar.xaml.cs">
       <DependentUpon>AppBar.xaml</DependentUpon>
     </Compile>
@@ -551,7 +553,6 @@
     <Compile Include="Extensions\AbiltyStringException.cs" />
     <Compile Include="Extensions\CondExprEx.cs" />
     <Compile Include="Extensions\ListBoxMultiSelectionEx.cs" />
-    <Compile Include="Extensions\ListGridContainerEx.cs" />
     <Compile Include="Extensions\ListPaginationEx.cs" />
     <Compile Include="Helpers\DelegateCommandBase.cs" />
     <Compile Include="Helpers\EntityValidationHelper.cs" />

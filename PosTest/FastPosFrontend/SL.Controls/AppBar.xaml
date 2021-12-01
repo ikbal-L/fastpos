@@ -143,13 +143,15 @@
                         </md:PopupBox.Style>
 
                         <md:PopupBox.ToggleContent>
-                            <md:PackIcon Kind="DotsVertical" Width="50" Height="50">
+                            <md:PackIcon Kind="DotsVertical" Width="50" Height="50" >
 
                                 <md:PackIcon.Style>
                                     <Style TargetType="md:PackIcon">
+                                        <Setter Property="Opacity" Value="0.7" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsLoggedIn}" Value="true">
                                                 <Setter Property="Foreground" Value="WhiteSmoke" />
+                                                <Setter Property="Opacity" Value="1" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
