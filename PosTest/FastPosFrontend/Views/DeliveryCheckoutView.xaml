@@ -132,7 +132,8 @@
                         Padding="10"
                         Focusable="False"
                         TextAlignment="Right"
-                        materialDesign:TextFieldAssist.LeadingIcon="Sigma"
+                        materialDesign:TextFieldAssist.LeadingIcon="Dollar"
+                            materialDesign:TextFieldAssist.LeadingIconSize="30"
                         materialDesign:TextFieldAssist.HasLeadingIcon="True"
 
                         />
@@ -162,8 +163,8 @@
                         Text="{Binding NumericZone}"
                         IsReadOnly="True"
                         Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
-                        materialDesign:TextFieldAssist.HasLeadingIcon="True"
-                        materialDesign:TextFieldAssist.LeadingIcon="Dollar"
+                        
+                        
                         materialDesign:TextFieldAssist.LeadingIconSize="30"
                         materialDesign:HintAssist.Background="Black"
                         materialDesign:HintAssist.Foreground="#26ff26"
