@@ -141,17 +141,19 @@ namespace FastPosFrontend.ViewModels
             {
                 types = types.Where(filter).ToArray();
             }
-            var principal =Thread.CurrentPrincipal;
+            //var principal =Thread.CurrentPrincipal;
            types =  types.Where(t =>
             {
                 var attr = t.GetCustomAttribute(typeof(PreAuthorizeAttribute));
                 if (attr is PreAuthorizeAttribute preAuth)
                 {
-                    var result = preAuth.Privileges.All(p => principal.IsInRole(p));
+                    //var result = preAuth.Privileges.All(p => principal.IsInRole(p));
+                    var result = Authorize.IsAuthorized(preAuth.PrivilegSets);
                     return result;
                 }
                 return true;
             }).ToList();
+
             return types
                 .Select(type =>
                     (TAttribute) type.GetCustomAttribute(
@@ -265,4 +267,5 @@ namespace FastPosFrontend.ViewModels
     {
         void ActivateItem(T screenInstance);
     }
+
 }

@@ -12,7 +12,7 @@ using FastPosFrontend.Navigation;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Deliveryman Settings", typeof(DeliveryManSettingsViewModel), "", groupName: "Settings", isQuickNavigationEnabled: true)]
-    [PreAuthorize("Create_Deliveryman")]
+    [PreAuthorize("Create_Deliveryman|Update_Deliveryman|DeleteDeliveryman")]
     public class DeliveryManSettingsViewModel : LazyScreen,ISettingsController
     {
         private ObservableCollection<Deliveryman> _Deliverymans;

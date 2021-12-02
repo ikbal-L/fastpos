@@ -146,7 +146,7 @@
         <StackPanel Orientation="Horizontal">
             <Button Content="{md:PackIcon Kind=NewBox,Size=40}" cal:Message.Attach="[Event Click] = [ Action NewOrder()]" Style="{StaticResource AppBarButton}"/>
 
-            <UniformGrid Rows="1" IsEnabled="{Binding CurrentOrder.IsLocked,Converter={StaticResource NegateBooleanValueConverter}}">
+            <UniformGrid Rows="1" IsEnabled="{Binding CurrentOrder.IsModifiable}">
                 <Panel.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource AppBarButton}">
                        

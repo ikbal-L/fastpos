@@ -9,15 +9,16 @@ using System.Threading.Tasks;
 
 namespace FastPosFrontend.Navigation
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class,AllowMultiple =false)]
     public class PreAuthorizeAttribute:Attribute
     {
         public string[] Privileges { get; set; }
-
+        public IPrivilegeSet[] PrivilegSets { get; set; }
         public PreAuthorizeAttribute(params string[] privileges)
         {
-            //var any = privileges.Where(p => Regex.IsMatch(p,@"(\w*\|\w*)+")).Select(p=>p.Split('|'));
-            //var all = privileges.Where(p => Regex.IsMatch(p, @"(\w+,?)+")).Select(p => p.Split(','));
+            var any = privileges.Where(p => Regex.IsMatch(p, @"(\w*\|\w*)+")).Select(p => new Authorize.PrevilegeRequireAny(p.Split('|')));
+            var all = privileges.Where(p => Regex.IsMatch(p, @"^(\w+,?)+$")).Select(p => new Authorize.PrevilegeRequireAll(p.Split(',')));
+            PrivilegSets = any.Cast<IPrivilegeSet>().Concat(all.Cast<IPrivilegeSet>()).ToArray();
             Privileges = privileges;
         }
 
@@ -29,6 +30,7 @@ namespace FastPosFrontend.Navigation
         public string[] Privileges { get;}
 
         public bool IsAuthorized(IPrincipal principal);
+
     }
     public interface IPrevilegeRequireAll:IPrivilegeSet
     {

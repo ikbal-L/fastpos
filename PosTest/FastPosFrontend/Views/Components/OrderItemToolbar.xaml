@@ -27,7 +27,7 @@
             <ToolBar.IsEnabled>
                 <MultiBinding Converter="{StaticResource BooleanAllConverter}">
                     <Binding Path="CurrentOrder" Converter="{StaticResource ObjectToBoolConverter}"/>
-                    <Binding Path="CurrentOrder.IsLocked" Converter="{StaticResource NegateBooleanValueConverter}"/>
+                    <Binding Path="CurrentOrder.IsModifiable" />
                 </MultiBinding>
             </ToolBar.IsEnabled>
             <Button Grid.Row="0" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
@@ -64,9 +64,21 @@
         </ToolBar>
         <ToolBar>
             <Button Grid.Row="5" Foreground="{StaticResource Button.Static.Border}" Background="WhiteSmoke"
-                    IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
+                    
                     cal:Message.Attach="[Event Click] = [Action LockOrder()]"
-                    Content="{md:PackIcon Lock,Size=30}" />
+                    Content="{md:PackIcon Lock,Size=30}">
+
+                <!--IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"-->
+
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource BooleanAllConverter}">
+                        <Binding Path="CurrentOrder.IsModifiable" />
+                        <Binding Path="SelectedItem" ElementName="OrderItemsList" Converter="{StaticResource ObjectToBooleanConverter}"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+                
+                
+            </Button>
             <Button Grid.Row="5" Foreground="{StaticResource Button.Static.Border}" Background="WhiteSmoke"
                     
                      cal:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" 

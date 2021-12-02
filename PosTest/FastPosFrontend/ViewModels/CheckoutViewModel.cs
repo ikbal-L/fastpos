@@ -30,6 +30,7 @@ using FastPosFrontend.ViewModels.SubViewModel;
 using LaunchDarkly.EventSource;
 using Newtonsoft.Json;
 using ServiceInterface.Authorisation;
+using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
@@ -174,9 +175,22 @@ namespace FastPosFrontend.ViewModels
             Order order = null;
             if (e.EventName == SSEventType.CREATE_ORDER|| e.EventName == SSEventType.UPDATE_ORDER)
             {
-                updatedOrder = JsonConvert.DeserializeObject<Order>(e.Message.Data);
-                order = Orders.FirstOrDefault(o => o.Id == updatedOrder.Id);
-               
+                //updatedOrder = JsonConvert.DeserializeObject<Order>(e.Message.Data);
+                var result = long.TryParse(e.Message.Data,out var id);
+
+                var service = StateManager.GetService<Order, IRepository<Order, long>>();
+
+                if (result)
+                {
+
+                    var (status, o) = service.GetById(id);
+                    if (status == 200)
+                    {
+                        updatedOrder = o;
+                    }
+
+                }
+                
             }
 
 
@@ -235,7 +249,7 @@ namespace FastPosFrontend.ViewModels
                     if (orderToLock != null)
                     {
                         orderToLock.IsLocked = data.IsLocked;
-                        orderToLock.LockedBy = data.LockedBy; 
+                        //orderToLock.LockedBy = data.LockedBy; 
                     }
                     return;
                 }

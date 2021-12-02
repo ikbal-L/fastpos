@@ -23,7 +23,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Checkout settings",target:typeof(CheckoutSettingsViewModel),groupName:"Settings",isQuickNavigationEnabled:true)]
-    [PreAuthorize("Create_Product","Create_Category")]
+    [PreAuthorize("Create_Product|Update_Product", "Create_Category|Update_Category")]
     public class CheckoutSettingsViewModel : LazyScreen,ISettingsController
     {
         private bool _IsProductDetailsDrawerOpen;

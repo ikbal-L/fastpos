@@ -8,10 +8,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using ServiceInterface.jsonConverters;
 using Utilities.Attributes;
+using System.Threading;
 
 namespace ServiceInterface.Model
 {
-    public class Order : SyncModel,IValidatableObject, IState<long>
+    public class Order : SyncModel, IValidatableObject, IState<long>
     {
         private decimal _total;
         private OrderItem _selectedOrderItem;
@@ -58,7 +59,7 @@ namespace ServiceInterface.Model
 
         public BindableCollection<Order> Orders { get; set; }
 
-        [DataMember(IsRequired = true)] 
+        [DataMember(IsRequired = true)]
         public long? Id { get; set; }
 
         [DataMember]
@@ -108,7 +109,7 @@ namespace ServiceInterface.Model
             set
             {
                 _elapsedTime = value;
-                
+
                 NotifyOfPropertyChange();
             }
         }
@@ -154,7 +155,8 @@ namespace ServiceInterface.Model
         }
 
         //TODO Check the necessity of managing order state history   
-        /*[DataMember]*/ public IList<OrderStateElement> OrderStates { get; set; }
+        /*[DataMember]*/
+        public IList<OrderStateElement> OrderStates { get; set; }
 
         //get from state
         public string Color { get; set; }
@@ -212,7 +214,7 @@ namespace ServiceInterface.Model
             get
             {
                 var sumItemDiscounts = 0m;
-                if ((DiscountAmount==0 && DiscountPercentage==0) && OrderItems != null)
+                if ((DiscountAmount == 0 && DiscountPercentage == 0) && OrderItems != null)
                 {
                     OrderItems.Where(i => i.State != OrderItemState.Removed).ToList()
                         .ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
@@ -233,9 +235,9 @@ namespace ServiceInterface.Model
             set
             {
                 _discountAmount = value;
-                if (Total>0)
+                if (Total > 0)
                 {
-                    _discountPercentage = value * 100 / Total; 
+                    _discountPercentage = value * 100 / Total;
                 }
                 NotifyOfPropertyChange(() => DiscountAmount);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
@@ -250,9 +252,9 @@ namespace ServiceInterface.Model
             set
             {
                 _discountPercentage = value;
-                if (Total>0)
+                if (Total > 0)
                 {
-                    _discountAmount = (Total * value) / 100; 
+                    _discountAmount = (Total * value) / 100;
                 }
                 NotifyOfPropertyChange(() => DiscountPercentage);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
@@ -337,17 +339,17 @@ namespace ServiceInterface.Model
                 //    (_table?.OrderViewSource?.Source as ICollection<Order>)?.Remove(this);
                 //    _table?.OrderViewSource?.View?.Refresh();
                 //}
-               
+
                 _table = value;
                 TableId = _table?.Id;
                 if (value != null)
                 {
                     var orders = (_table?.OrderViewSource?.Source as ICollection<Order>);
-                    if (orders != null && !orders.Any(o=>o.OrderNumber == this.OrderNumber))
+                    if (orders != null && !orders.Any(o => o.OrderNumber == this.OrderNumber))
                     {
                         orders.Add(this);
                     }
-                    
+
                     _table?.OrderViewSource?.View?.Refresh();
                 }
 
@@ -372,7 +374,18 @@ namespace ServiceInterface.Model
 
         public bool AdditivesVisibility { get; set; }
 
-       
+
+        public override bool IsLocked 
+        { 
+            get => base.IsLocked; 
+            set  {
+                base.IsLocked = value;
+                NotifyOfPropertyChange(nameof(IsModifiable));
+            } 
+        }
+        public bool IsModifiable => !IsLocked && (string.IsNullOrEmpty(LockedBy) ||LockedBy == Thread.CurrentPrincipal.Identity.Name);
+        
+            
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -481,10 +494,10 @@ namespace ServiceInterface.Model
     [DataContract]
     public class SyncModel : PropertyChangedBase
     {
-        private bool _isLocked;
+        protected bool _isLocked;
 
         [DataMember]
-        public bool IsLocked
+        public virtual bool IsLocked
         {
             get { return _isLocked; }
             set { Set(ref _isLocked, value); }

@@ -8,7 +8,7 @@ using Utilities.Extensions;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Role Settings", typeof(RoleSettingsViewModel),"",parentNavigationItem:typeof(UserSettingsViewModel), isQuickNavigationEnabled: true)]
-    [PreAuthorize("Create_User","Create_Role")]
+    [PreAuthorize("Create_User|Create_Role|Delete_Role")]
     public class RoleSettingsViewModel:LazyScreen
     {
         private BindableCollection<Role> _roles;

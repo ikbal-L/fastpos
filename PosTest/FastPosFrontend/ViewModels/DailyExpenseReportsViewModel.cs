@@ -23,10 +23,10 @@ using Utilities.Extensions.Collections;
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem(title: "Daily Earnings Reports", target: typeof(DailyExpenseReportsViewModel),"",isQuickNavigationEnabled:true)]
-    [PreAuthorize(
-        "Create_DailyEarningsReport",
-        "Read_DailyEarningsReport",
-        "Update_DailyEarningsReport",
+    [PreAuthorize("" +
+        "Create_DailyEarningsReport," +
+        "Read_DailyEarningsReport," +
+        "Update_DailyEarningsReport," +
         "Delete_DailyEarningsReport")]
     public class DailyExpenseReportsViewModel : LazyScreen
     {

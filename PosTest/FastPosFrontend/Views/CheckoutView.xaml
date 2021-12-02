@@ -78,7 +78,7 @@
         <comp:OrderItemToolbar Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" Grid.RowSpan="2"
                               />
 
-        <Grid Grid.Column="1" Grid.RowSpan="2" IsEnabled="{Binding CurrentOrder.IsLocked,Converter={StaticResource InvertBooleanConverter}}">
+        <Grid Grid.Column="1" Grid.RowSpan="2" IsEnabled="{Binding CurrentOrder.IsModifiable}">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -184,7 +184,7 @@
         </Grid>
 
 
-        <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" IsEnabled="{Binding CurrentOrder.IsLocked,Converter={StaticResource InvertBooleanConverter}}" />
+        <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" IsEnabled="{Binding CurrentOrder.IsModifiable}" />
 
         <Grid Grid.Column="2" Grid.Row="1">
             <Grid.RowDefinitions>

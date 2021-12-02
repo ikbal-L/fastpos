@@ -113,12 +113,19 @@ namespace ServiceLib.Service
                 var token = values.First();
                 AuthProvider.Initialize<DefaultAuthProvider>(new object[] { new User { }, token, annex.Id });
                 var jsonContent = response.Content.ReadAsStringAsync().Result;
+                var hasSessionId = response.Headers.TryGetValues("user-meta-session-id", out var sessionId);
                 try
                 {
                     if (!string.IsNullOrEmpty(jsonContent))
                     {
-                        var permissions = JsonConvert.DeserializeObject<List<String>>(jsonContent);
-                        var principal = new GenericPrincipal(new GenericIdentity(user, ""), permissions.ToArray());
+                        var permissions = JsonConvert.DeserializeObject<List<string>>(jsonContent);
+                        var name = "";
+                        if (hasSessionId)
+                        {
+                            name = sessionId.First();
+                        }
+                        var principal = new GenericPrincipal(new GenericIdentity(name), permissions.ToArray());
+                        
                         Thread.CurrentPrincipal = principal;
                     }
                 }

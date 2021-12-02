@@ -163,7 +163,6 @@ namespace FastPosFrontend.ViewModels
 
 
         public void SetPinCodeAndLogin(object sender)
-        
         {
             
 
@@ -183,26 +182,15 @@ namespace FastPosFrontend.ViewModels
             Login();
         }
 
-
-
-
         protected override void OnActivate()
         {
             (Parent as MainViewModel).IsLoggedIn = false;
             base.OnActivate();
             Compose();
-           
 
-           
            LoadLoginHistory();
-
-
         }
-        public bool CanLogin()
-        {
-            //logger.Info("User: " + username + "  Pass: " + password);
-            return true;// !String.IsNullOrEmpty(username)/* && !String.IsNullOrEmpty(password)*/;
-        }
+       
         
         public void Login()
         {
@@ -225,8 +213,6 @@ namespace FastPosFrontend.ViewModels
 
                 }
 
-
-
             }
             catch (AggregateException)
             {
@@ -236,8 +222,6 @@ namespace FastPosFrontend.ViewModels
             }
 
             IsDialogOpen = true;
-            
-            
 
             StateManager
                 .Instance
@@ -259,14 +243,17 @@ namespace FastPosFrontend.ViewModels
                 
 
             var user = Users.FirstOrDefault(u => u.Username.Equals(Username));
-            var userBackground = resp.Headers.GetValues("user-meta-background").First();
+            var hasUserBackground = resp.Headers.TryGetValues("user-meta-background",out var userBackground);
 
             if (user == null)
             {
                 user = new User() { Username = Username };
                 Users.Add(user);
             }
-            user.BackgroundString = userBackground;
+            if (hasUserBackground)
+            {
+                user.BackgroundString = userBackground.First(); 
+            }
 
             _loginHistory = new LoginHistory() {Users = Users.Select(u=> new User(){Id = u.Id,Username = u.Username,BackgroundString = u.BackgroundString}).ToList()};
             _loginHistory.LastLoggedUserByUsername = user.Username;
@@ -279,15 +266,6 @@ namespace FastPosFrontend.ViewModels
             AppConfigurationManager.Save(_loginHistory);
 
             (Parent as MainViewModel).IsLoggedIn = true;
-                //(this.Parent as MainViewModel).IsLoggedIn = true;
-
-
-            //Checkout();
-            //CheckoutSettings();
-        
-
-
-
 
         }
         public void NumericKeyboard(PasswordBox passwordBox,string key)
@@ -298,29 +276,7 @@ namespace FastPosFrontend.ViewModels
                 passwordBox.Password = passwordBox.Password.Substring(0, passwordBox.Password.Length==0?passwordBox.Password.Length: passwordBox.Password.Length - 1);
         }
 
-        public void Checkout()
-        {
-            IsDialogOpen = false;
-           
-
-            CheckoutViewModel checkoutViewModel =
-                new CheckoutViewModel(){Parent = Parent};
-            checkoutViewModel.ActivateLoadingScreen();
-            checkoutViewModel.ViewModelInitialized+=ViewModelInitialized;
-
-        }
-
-        public void CheckoutSettings()
-        {
-            IsDialogOpen = false;
-
-
-            var checkoutSettingsViewModel =
-                new CheckoutSettingsViewModel() { Parent = Parent };
-            checkoutSettingsViewModel.ActivateLoadingScreen();
-            checkoutSettingsViewModel.ViewModelInitialized += ViewModelInitialized;
-
-        }
+        
 
         private void ViewModelInitialized(object sender, ViewModelInitializedEventArgs e)
         {
@@ -329,42 +285,6 @@ namespace FastPosFrontend.ViewModels
             {
                 (Parent as Conductor<object>).ActivateItem(checkoutViewModel);
             }
-        }
-
-
-
-
-        public void LoginWithPin()
-        {
-            IsDialogOpen = false;
-            PinLoginViewModel pinLoginViewModel =
-                new PinLoginViewModel(
-                    //_productService,
-                    //_categorieService,
-                    //_orderRepository,
-                    //_waiterService,
-                    //_deliverymanRepository,
-                    //_customerService
-                );
-            
-            pinLoginViewModel.Parent = Parent;
-            (Parent as Conductor<object>).ActivateItem(pinLoginViewModel);
-        }
-
-        
-        public void CustomersSettings()
-        {
-            CustomerViewModel customerViewModel = new CustomerViewModel(null/*,_customerService*/);
-            customerViewModel.Parent = Parent;
-            (Parent as Conductor<object>).ActivateItem(customerViewModel);
-        }  
-        
-
-        public void AdditivesOfProduct()
-        {
-            AdditivesOfProductViewModel AdditivesOfProduct = new AdditivesOfProductViewModel ();
-            AdditivesOfProduct.Parent = Parent;
-            (Parent as Conductor<object>).ActivateItem(AdditivesOfProduct);
         }
 
         //This method load th DLL file containing the implemetation of IProductService 
@@ -377,23 +297,7 @@ namespace FastPosFrontend.ViewModels
             container.SatisfyImportsOnce(this);
         }
 
-        public void   Settingsbtn() {
-            int resp;
-            try
-            {
-                //resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
-                resp = _authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Check your server connection");
-                return;
-            }
-            //     SettingsViewModel settingsViewModel = new SettingsViewModel();
-            DeliveryAccountingViewModel viewModel = new DeliveryAccountingViewModel();
-             viewModel.Parent = Parent;
-            (Parent as Conductor<object>).ActivateItem(viewModel);
-        }
+     
 
         private void LoadLoginHistory()
         {

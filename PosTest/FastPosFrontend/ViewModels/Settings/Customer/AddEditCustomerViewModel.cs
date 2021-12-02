@@ -105,7 +105,7 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
         }
         public void DeletePhoneNumber(string number)
         {
-            Customer.PhoneNumbers?.Remove(number);
+            Numbers?.Remove(number);
         }
     }
 }

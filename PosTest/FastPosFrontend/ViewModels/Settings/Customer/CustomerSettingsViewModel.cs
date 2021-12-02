@@ -12,6 +12,7 @@ using ServiceLib.Service.StateManager;
 namespace FastPosFrontend.ViewModels.Settings.Customer
 {
     [NavigationItem("Customer Settings",target:typeof(CustomerSettingsViewModel),"", groupName: "Settings",isQuickNavigationEnabled:true)]
+    [PreAuthorize("Create_customer|Read_Customer|Update_Customer|Delete_Customer")]
     public class CustomerSettingsViewModel : AppScreen,ISettingsController
     {
         private ObservableCollection<ServiceInterface.Model.Customer> _Customers;

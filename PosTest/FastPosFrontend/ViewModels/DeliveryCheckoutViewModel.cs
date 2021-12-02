@@ -14,7 +14,7 @@ using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingVie
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Delivery Checkout", typeof(DeliveryCheckoutViewModel), isQuickNavigationEnabled: true)]
-    [PreAuthorize("Create_Payment_Deliveryman", "Read_Payment_Deliveryman", "Update_Payment_Deliveryman")]
+    [PreAuthorize("Create_Payment_Deliveryman,Read_Payment_Deliveryman,Update_Payment_Deliveryman")]
     public class DeliveryCheckoutViewModel : LazyScreen
     {
         private ObservableCollection<Deliveryman> _deliverymanCollection;
@@ -283,7 +283,7 @@ namespace FastPosFrontend.ViewModels
             if (!decimal.TryParse(NumericZone, out var payedAmount)) return;
 
 
-            if (payedAmount <= 0)
+            if (payedAmount <= 0 ||SelectedDeliveryman?.Balance==0)
             {
                 NumericZone = "";
                 return;
@@ -399,7 +399,7 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
-                DeliverymanId = SelectedDeliveryman.Id,
+                DeliverymanId = SelectedDeliveryman?.Id,
                 DescendingOrder = true,
                 OrderBy = "orderTime",
                 State = OrderState.DeliveredPaid

@@ -14,7 +14,7 @@ using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingVie
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Credit Checkout", typeof(CreditCheckoutViewModel), isQuickNavigationEnabled: true)]
-    [PreAuthorize("Create_Payment_Client","Read_Payment_Client", "Update_Payment_Client")]
+    [PreAuthorize("Create_Payment_Client,Read_Payment_Client,Update_Payment_Client")]
     public class CreditCheckoutViewModel : LazyScreen
     {
         private ObservableCollection<Customer> _customerCollection;
@@ -277,7 +277,7 @@ namespace FastPosFrontend.ViewModels
             if (!decimal.TryParse(NumericZone, out var payedAmount)) return;
 
 
-            if (payedAmount <= 0)
+            if (payedAmount <= 0 || SelectedCustomer?.Balance ==0)
             {
                 NumericZone = "";
                 return;
@@ -391,7 +391,7 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
-                CustomerId = SelectedCustomer.Id,
+                CustomerId = SelectedCustomer?.Id,
                 DescendingOrder = true,
                 OrderBy = "orderTime",
                 State = OrderState.CreditRePaid
@@ -406,6 +406,7 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
+                //TODO NPE
                 CustomerId = SelectedCustomer.Id,
                 OrderBy = "date",
                 DescendingOrder = true

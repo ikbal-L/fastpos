@@ -74,14 +74,14 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}" FontSize="10" Margin="2 5 "
-                       VerticalAlignment="Center" />
-            <!--<materialDesign:PackIcon Grid.Column="1"
+            <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}" FontSize="14" Margin="2 5 "
+                       VerticalAlignment="Center" TextWrapping="Wrap" />
+            <materialDesign:PackIcon Grid.Column="1"
                                      Kind="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}"
-                                     HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center" />-->
-            <Label Grid.Column="1"
-                                     Content="{Binding State,Converter={StaticResource OrderItemStateToCharConverter}}"
-                                     HorizontalAlignment="Left" FontSize="16" VerticalAlignment="Center" FontWeight="Bold" />
+                                     HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center" />
+            <!--<Label Grid.Column="1"
+                                     Content="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}"
+                                     HorizontalAlignment="Left" FontSize="16" VerticalAlignment="Center" FontWeight="Bold" />-->
             
             
             <TextBlock Grid.Column="2" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left"
@@ -378,11 +378,8 @@
                     <Border Grid.Row="1" Grid.ColumnSpan="4" BorderThickness="0.3" BorderBrush="Black" />
                 </Grid>
 
-                <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Disabled">
-                    <ItemsControl ItemsSource="{Binding OrderItems}"
-                                  ItemTemplate="{StaticResource OrderItemKitchenReceiptDataTemplate}" />
-                </ScrollViewer>
+                <ItemsControl ItemsSource="{Binding OrderItems}"
+                                  ItemTemplate="{StaticResource OrderItemKitchenReceiptDataTemplate}" Grid.Row="2" />
                 <Border Grid.Row="3" BorderThickness="0.3" BorderBrush="Black" Background="Black" />
 
             </Grid>
