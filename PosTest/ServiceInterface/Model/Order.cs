@@ -144,44 +144,19 @@ namespace ServiceInterface.Model
                     OrderStates = new BindableCollection<OrderStateElement>();
                 }
 
-                //OrderStates.Add(new OrderStateElement
-                //{
-                //    State = (OrderState)_state,
-                //    StateTime = DateTime.Now,
-                //    // SessionId = AuthProvider.Instance.SessionId
-                //});
                 NotifyOfPropertyChange();
             }
         }
 
-        //TODO Check the necessity of managing order state history   
-        /*[DataMember]*/
+
         public IList<OrderStateElement> OrderStates { get; set; }
 
-        //get from state
+
         public string Color { get; set; }
 
         [DataMember]
-        public decimal Total
-        {
-            get
-            {
-                var sumItemTotals = 0m;
-                if (OrderItems != null)
-                {
-                    OrderItems.Where(i => i.State != OrderItemState.Removed).ToList()
-                        .ForEach(item => sumItemTotals += item.Total);
-                }
+        public decimal Total => OrderItems.Where(i => i.State != OrderItemState.Removed).Sum(i => i.Total);
 
-                return sumItemTotals;
-            }
-            /*set
-            {
-                _total = value;
-                NotifyOfPropertyChange(() => NewTotal);
-                NotifyOfPropertyChange(() => Total);
-            }*/
-        }
 
         public Order SplittedFrom
         {
@@ -201,9 +176,7 @@ namespace ServiceInterface.Model
         {
             get
             {
-                /*var sumItemDiscounts = 0m;
-                OrderItems.ToList().ForEach(item => sumItemDiscounts += item.DiscountAmount);
-                var allDiscounts = _discountAmount + sumItemDiscounts;*/
+
                 return Total - TotalDiscountAmount;
             }
         }
@@ -214,16 +187,14 @@ namespace ServiceInterface.Model
             get
             {
                 var sumItemDiscounts = 0m;
-                if ((DiscountAmount == 0 && DiscountPercentage == 0) && OrderItems != null)
+                if (DiscountAmount == 0 && DiscountPercentage == 0 && OrderItems != null)
                 {
                     OrderItems.Where(i => i.State != OrderItemState.Removed).ToList()
                         .ForEach(item => sumItemDiscounts += item.CalcTotalDiscount());
                 }
 
-                //either _discountAmount==0 or _discountPercentage==0
-                //var allDiscounts = _discountAmount + sumItemDiscounts + Total * _discountPercentage / 100;
                 var allDiscounts = _discountAmount + sumItemDiscounts;
-                //NewTotal = Total - allDiscounts;
+
                 return allDiscounts;
             }
         }
@@ -551,5 +522,7 @@ namespace ServiceInterface.Model
         [DataMember]
         public DateTime OrerTime { get; set; }
 
+        [DataMember]
+        public string ModifiedBy { get; set; } 
     }
 }

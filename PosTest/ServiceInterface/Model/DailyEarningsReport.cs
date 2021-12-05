@@ -15,8 +15,15 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public DateTime IssuedDate { get; set; }
+
         [DataMember]
         public List<OrderData> CashPayments { get; set; }
+
+        [DataMember]
+        public List<OrderData> CanceledOrders { get; set; }
+
+        public decimal CanceledOrdersSum => CanceledOrders?.Sum(o => o.NewTotal) ?? 0;
+
 
         [DataMember]
         public List<Payment> DeliveryPayments { get; set; }

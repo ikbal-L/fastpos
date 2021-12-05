@@ -109,6 +109,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold"
                                Text="{Binding NumberOfPayments,StringFormat=Number de ventes {0}}"
@@ -338,8 +339,69 @@
                     </Grid>
 
 
+                    <Grid Grid.Row="3" x:Name="CanceledOrdersSection">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Canceled Orders" TextDecorations="Underline" FontWeight="DemiBold" />
 
-                    <Grid Grid.Row="3" x:Name="CashRegisterExpensesSection">
+                        <Grid  Grid.Row="1" Margin="30 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" FontWeight="DemiBold">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="Remboursement &#x09;X {0:D2}&#x09;{1:C2}"
+                                                       ConverterCulture="fr-DZ">
+                                        <Binding Path="CanceledOrders.Count" />
+                                        <Binding Path="CanceledOrdersSum"
+                                                      />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <ListView Grid.Row="1" ItemsSource="{Binding CanceledOrders}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type model:OrderData}">
+                                        <StackPanel>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" Padding="0" Height="15">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
+                                                                   ConverterCulture="fr-DZ">
+                                                        <Binding Path="OrderNumber" />
+                                                        <Binding Path="NewTotal"  />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding ModifiedBy,StringFormat=' Annuler par {0}'}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListViewItem">
+                                                    <Border   Padding="0">
+                                                        <ContentPresenter></ContentPresenter>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Padding" Value="0"></Setter>
+                                        <Setter Property="Margin" Value="0"></Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
+
+                    </Grid>
+
+
+
+                    <Grid Grid.Row="4" x:Name="CashRegisterExpensesSection">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition />
@@ -405,7 +467,7 @@
 
 
 
-                    <Grid Grid.Row="4" x:Name="CashRegisterInfoSection">
+                    <Grid Grid.Row="5" x:Name="CashRegisterInfoSection">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition />
@@ -414,7 +476,7 @@
                                    FontWeight="DemiBold" />
                         <StackPanel Grid.Row="1" />
                     </Grid>
-                    <Grid Grid.Row="5" x:Name="EarningsByCategorySection">
+                    <Grid Grid.Row="6" x:Name="EarningsByCategorySection">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition />

@@ -110,10 +110,8 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [Range(0, double.MaxValue)]
-        public decimal Total
-        {
-            get => (decimal) Quantity * UnitPrice;
-        }
+        public decimal Total => (decimal)Quantity * UnitPrice;
+       
 
         [DataMember]
         public decimal TotalDiscountAmount

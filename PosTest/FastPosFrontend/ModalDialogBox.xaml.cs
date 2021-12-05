@@ -24,7 +24,6 @@ namespace FastPosFrontend
         {
             var  result = Instance.ShowDialog();
             return result != null && result.Value;
-            
         }
 
         public static ModalDialogBox YesNo(string message, string title)
@@ -56,8 +55,5 @@ namespace FastPosFrontend
             Instance = new ModalDialogBox(isTemplated:true) { DataContext = vm };
             return Instance;
         }
-
-
-
     }
 }
