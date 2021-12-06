@@ -14,7 +14,8 @@
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              xmlns:controls="clr-namespace:FastPosFrontend.SL.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="500" d:DesignWidth="800" Background="White">
+             d:DesignHeight="500" d:DesignWidth="800" Background="White"
+             IsVisibleChanged="UserControl_IsVisibleChanged">
     <UserControl.Resources>
         <converters:IsStringNullOrEmptyValueConverter x:Key="StringNullOrEmptyValueConverter" />
     </UserControl.Resources>
@@ -202,7 +203,7 @@
                                 </Style.Triggers>
                             </Style>
                         </materialdesign:TransitioningContent.Style>
-                        <StackPanel>
+                        <StackPanel FocusManager.FocusedElement="{Binding ElementName=UserPincode}">
                             
                             <PasswordBox x:Name="UserPincode"
                                          Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
