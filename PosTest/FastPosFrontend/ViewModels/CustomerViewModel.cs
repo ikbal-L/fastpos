@@ -180,7 +180,7 @@ namespace FastPosFrontend.ViewModels
         public void CreateAndEdit()
         {
             string name = Regex.Match(FilterString, @"([^\d\W][1-9]*\s*)+").Value.Trim();
-            string mobile = Regex.Match(FilterString, @"\s[0-9]+").Value.Trim();
+            string mobile = Regex.Match(FilterString, @"\s?[0-9]+").Value.Trim();
 
             Customer customer = new Customer { Name = name };
             if (!string.IsNullOrWhiteSpace(mobile))
