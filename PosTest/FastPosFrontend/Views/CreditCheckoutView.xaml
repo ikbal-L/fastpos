@@ -132,8 +132,9 @@
                         Padding="10"
                         Focusable="False"
                         TextAlignment="Right"
-                        materialDesign:TextFieldAssist.LeadingIcon="Sigma"
+                        materialDesign:TextFieldAssist.LeadingIcon="Dollar"
                         materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                            materialDesign:TextFieldAssist.LeadingIconSize="30"
 
                         />
                     </Button>
@@ -181,8 +182,7 @@
                     </StackPanel>-->
 
                     <TextBox 
-                             materialDesign:HintAssist.Hint="Payment amount"
-                             materialDesign:HintAssist.IsFloating="True"
+  
                              Margin="10 0 10 10"
                              Text="{Binding NumericZone}"
                              IsReadOnly="True"
