@@ -22,12 +22,13 @@
             </materialDesign:DialogHost.DialogContent>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <!--#region User list -->
                 <ListBox ItemsSource="{Binding Roles}" FontSize="16" Margin="20"
-                         SelectedItem="{Binding SelectedRole}">
+                         SelectedItem="{Binding SelectedRole}" Grid.Row="1">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel></WrapPanel>
@@ -57,34 +58,29 @@
                 </ListBox>
                 <!--#endregion-->
                 <!--#region User management commands-->
-                <Grid Grid.Row="1">
-                    <materialDesign:ColorZone Mode="PrimaryDark"
+                <ToolBarTray Grid.Row="0" IsLocked="True">
+                    <ToolBar  Style="{StaticResource MaterialDesignToolBar}">
+                        <!--<materialDesign:ColorZone Mode="PrimaryDark"
                                               Padding="20">
                         <TextBlock FontSize="20" FontWeight="DemiBold">Role Management</TextBlock>
-                    </materialDesign:ColorZone>
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            Content="{materialDesign:PackIcon Add}"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 10 0"
+                    </materialDesign:ColorZone>-->
+                        <Button 
+                            Content="{materialDesign:PackIcon AddThick}"
                             cal:Message.Attach="[Event Click] = [Action CreateRole()]"
                             ex:AbilityEx.Autority="Create_Role" ex:AbilityEx.AppliedBy="Hide"
                     />
 
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        <Button
                             Content="{materialDesign:PackIcon Edit}"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 60 0" 
                             cal:Message.Attach="[Event Click] = [Action EditRole()]"
                             ex:AbilityEx.Autority="Update_Role" ex:AbilityEx.AppliedBy="Hide"
                             />
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            Content="{materialDesign:PackIcon Delete}"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 110 0"
+                        <Button Content="{materialDesign:PackIcon Delete}"
                             cal:Message.Attach="[Event Click] = [Action DeleteRole()]"
                             ex:AbilityEx.Autority="Delete_Role" ex:AbilityEx.AppliedBy="Hide"
                             />
-                </Grid>
+                    </ToolBar>
+                </ToolBarTray>
                 <!--#endregion-->
             </Grid>
         </materialDesign:DialogHost>

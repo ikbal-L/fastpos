@@ -61,12 +61,34 @@
             </materialDesign:DialogHost.DialogContent>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+
+                <!--#region User management commands-->
+                <ToolBarTray Grid.Row="0" IsLocked="True">
+                    <ToolBar Style="{StaticResource MaterialDesignToolBar}">
+                        <Button 
+                            Content="{materialDesign:PackIcon AddThick}"
+                            caliburn:Message.Attach="[Event Click] = [Action CreateUser()]"
+                            ex:AbilityEx.Autority="Create_User" ex:AbilityEx.AppliedBy="Hide"
+                    />
+
+                        <Button  Content="{materialDesign:PackIcon Edit}"
+
+                            caliburn:Message.Attach="[Event Click] = [Action EditUser()]"
+                            ex:AbilityEx.Autority="Update_User" ex:AbilityEx.AppliedBy="Hide" />
+                        <Button Content="{materialDesign:PackIcon Delete}"
+                            caliburn:Message.Attach="[Event Click] = [Action DeleteUser()]"
+                            ex:AbilityEx.Autority="Delete_User" ex:AbilityEx.AppliedBy="Hide" />
+                    </ToolBar>
+                </ToolBarTray>
+                <!--#endregion-->
+
                 <!--#region User list -->
                 <ListBox ItemsSource="{Binding Users}" FontSize="16" Margin="20"
-                         SelectedItem="{Binding SelectedUser}" x:Name="Users">
+                         SelectedItem="{Binding SelectedUser}" x:Name="Users" Grid.Row="1">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel></WrapPanel>
@@ -108,40 +130,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <!--#endregion-->
-                <!--#region User management commands-->
-                <Grid Grid.Row="1">
-                    <materialDesign:ColorZone Mode="PrimaryDark"
-                                              Padding="20">
-                        <TextBlock FontSize="20" FontWeight="DemiBold">User Management</TextBlock>
-                    </materialDesign:ColorZone>
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            Content="{materialDesign:PackIcon Add}"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 10 0"
-                            caliburn:Message.Attach="[Event Click] = [Action CreateUser()]"
-                            ex:AbilityEx.Autority="Create_User" ex:AbilityEx.AppliedBy="Hide"
-                    />
-                   
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            Content="{materialDesign:PackIcon Edit}"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 60 0" 
-                            caliburn:Message.Attach="[Event Click] = [Action EditUser()]"
-                            ex:AbilityEx.Autority="Update_User" ex:AbilityEx.AppliedBy="Hide" />
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            Content="{materialDesign:PackIcon Delete}"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 110 0"
-                            caliburn:Message.Attach="[Event Click] = [Action DeleteUser()]"
-                            ex:AbilityEx.Autority="Delete_User" ex:AbilityEx.AppliedBy="Hide" />
-
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                            Content="{materialDesign:PackIcon SecurityAccount}"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 160 0"
-                            />
-                </Grid>
-                <!--#endregion-->
+               
             </Grid>
         </materialDesign:DialogHost>
 

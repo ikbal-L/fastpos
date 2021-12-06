@@ -22,16 +22,15 @@
         </DataTemplate>
         <converters:SolidColorBrushToColorConverter x:Key="SolidColorBrushToColorConverter" />
     </UserControl.Resources>
-    <Border BorderThickness="1"  BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                            Margin="5" >
-        <Grid >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
 
-            <ListBox Padding="2" x:Name="AdditiveSettingsList"
+        <ListBox Grid.Row="1" Padding="2" x:Name="AdditiveSettingsList"
                                              
                                      AllowDrop="True"
                                      ItemsSource="{Binding Additives}"
@@ -45,33 +44,29 @@
                                      [Event TouchDown] = [Action  AdditivesList_TouchDown($source, $eventArgs)];"
                                      VerticalAlignment="Stretch"
                      ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Disable">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Margin" Value="5" />
-                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="5" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
 
 
-            <Grid Grid.Row="1">
-                <materialdesign:ColorZone Height="45" Mode="PrimaryMid" 
-                                                          Effect="{DynamicResource MaterialDesignShadowDepth5}"
-                                                          VerticalAlignment="Bottom">
+        <ToolBarTray IsLocked="True" Grid.Row="0">
+            <ToolBar Style="{StaticResource MaterialDesignToolBar}" >
 
-
-                </materialdesign:ColorZone>
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                <Button 
                                     Command="{Binding EditAdditiveCommand}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1"
-                                    Margin="0 0 10 25"
+
+
                         ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="Edit" Height="22" Width="22" />
                 </Button>
@@ -80,9 +75,7 @@
 
 
                 <Button x:Name="MoveButton"
-                                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                     Margin="0 0 60 25"
+
                                     Command="{Binding MoveAdditiveCommand}"
                                     Tag="{Binding AdditiveToMove}"
                                     ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Hide">
@@ -91,38 +84,29 @@
                 </Button>
 
 
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    Margin="0 0 110 25"
-                                    Command="{Binding PasteAdditiveCommand}"
+                <Button Command="{Binding PasteAdditiveCommand}"
                         ex:AbilityEx.Autority="Create_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="ContentPaste" Height="22" Width="22" />
                 </Button>
 
 
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    Margin="0 0 160 25"
-                                    Command="{Binding CopyAdditiveCommand}"
+                <Button Command="{Binding CopyAdditiveCommand}"
                         ex:AbilityEx.Autority="Create_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="ContentCopy" Height="22" Width="22" />
                 </Button>
 
 
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                                    Margin="0 0 210 25"
-                                    Command="{Binding DeleteAdditiveCommand}"
+                <Button Command="{Binding DeleteAdditiveCommand}"
                         ex:AbilityEx.Autority="Delete_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                 </Button>
-            </Grid>
+            </ToolBar>
+        </ToolBarTray>
 
 
 
 
 
 
-        </Grid>
-    </Border>
+    </Grid>
 </UserControl>

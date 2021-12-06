@@ -10,11 +10,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ListBox
-            Grid.Row="0"
+            Grid.Row="1"
             ItemsSource="{Binding Deliverymans}"
             SelectedItem="{Binding SelectedDeliveryMan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             >
@@ -35,39 +35,35 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid Grid.Row="1">
+        <ToolBarTray Grid.Row="0" IsLocked="True">
             
-        <md:ColorZone Mode="PrimaryMid"  Effect="{DynamicResource MaterialDesignShadowDepth5}">
-                <Grid >
-                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" Text="Waiter Management" Margin="12 12 0 12"/>
-                </Grid>
-            </md:ColorZone>
-            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" >
-                <Button
-                    caliburn:Message.Attach="[Event Click] = [Action DeleteWiaterAction()]"
-                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Margin="5 -44 5 0"
-                    ex:AbilityEx.Autority="Delete_Deliveryman"
-                    ex:AbilityEx.AppliedBy="Hide" >
-                    <md:PackIcon  Kind="DeleteOutline" HorizontalAlignment="Right" Width="25" Height="25" />
-                </Button>
-                <Button
-                     caliburn:Message.Attach="[Event Click] = [Action EditWiaterAction()]"
-                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"
-                     ex:AbilityEx.Autority="Update_Deliveryman" ex:AbilityEx.AppliedBy="Hide">
-                    <md:PackIcon Kind="PencilOutline" HorizontalAlignment="Right" Width="25" Height="25"
-                                 />
-                </Button>
+   
+            <ToolBar Style="{StaticResource MaterialDesignToolBar}">
                 <Button 
                       caliburn:Message.Attach="[Event Click] = [Action AddWiaterAction()]"
-                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="5 -44 5 0"  
                     ex:AbilityEx.Autority="Create_Deliveryman" ex:AbilityEx.AppliedBy="Hide">
-                    <md:PackIcon  Kind="Plus" HorizontalAlignment="Right" Width="25" Height="25" 
+                    <md:PackIcon  Kind="PlusThick" HorizontalAlignment="Right" Width="25" Height="25" 
 />
                 </Button>
-            </StackPanel>
+
+                <Button
+                     caliburn:Message.Attach="[Event Click] = [Action EditWiaterAction()]"
+                     ex:AbilityEx.Autority="Update_Deliveryman" ex:AbilityEx.AppliedBy="Hide">
+                    <md:PackIcon Kind="Pencil" HorizontalAlignment="Right" Width="25" Height="25"
+                                 />
+                </Button>
+
+                <Button
+                    caliburn:Message.Attach="[Event Click] = [Action DeleteWiaterAction()]"
+                    ex:AbilityEx.Autority="Delete_Deliveryman"
+                    ex:AbilityEx.AppliedBy="Hide" >
+                    <md:PackIcon  Kind="Delete" HorizontalAlignment="Right" Width="25" Height="25" />
+                </Button>
+
+            </ToolBar>
 
 
-        </Grid>
+        </ToolBarTray>
 
         <ContentControl Content="{Binding DailogContent }"/>
     </Grid>

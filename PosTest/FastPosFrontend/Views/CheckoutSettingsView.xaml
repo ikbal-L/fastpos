@@ -280,15 +280,16 @@
         <Grid>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <materialdesign:Snackbar Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"
                                      HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-            <Expander Grid.Column="0" ExpandDirection="Right" Style="{StaticResource MaterialDesignExpander}"
+            <Expander Grid.Column="1" ExpandDirection="Right" Style="{StaticResource MaterialDesignExpander}"
                       VerticalContentAlignment="Stretch"
-                      BorderThickness="0 0 1 0" BorderBrush="DimGray"
+                      BorderThickness="1 0 0 0" BorderBrush="DimGray"
                       caliburn:Message.Attach="[Event DragEnter] = [Action ExpandFreeItemsTabs($source, $eventArgs)]" 
                       AllowDrop="True">
 
@@ -307,7 +308,7 @@
                     </TextBlock>
                 </Expander.Header>
 
-                <Border BorderBrush="DimGray" BorderThickness="0.5 0 0 0">
+                <Border BorderBrush="DimGray" BorderThickness="0 0 0.5 0">
                     <TabControl Grid.Column="0"
                            
                             SelectedIndex="{Binding ActiveTab,Mode=TwoWay,Converter={StaticResource TypeToIntegerIndexValueConverter}}"
@@ -409,7 +410,7 @@
 
             </Expander>
 
-            <Grid Grid.Column="1" Margin="0.3 0 0 0">
+            <Grid Grid.Column="0" Margin="0.3 0 0 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*" />
                     <RowDefinition Height="*" />
@@ -444,7 +445,7 @@
                                     <Button
 
                                         Command="{Binding CreateProductCommand}">
-                                        <materialdesign:PackIcon Kind="Plus" />
+                                        <materialdesign:PackIcon Kind="PlusThick" />
                                     </Button>
 
                                     <Button
@@ -523,7 +524,7 @@
                                     <Button
                                     
                                         Command="{Binding CreateCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="Plus" />
+                                        <materialdesign:PackIcon Kind="PlusThick" />
                                     </Button>
 
                                     <Button

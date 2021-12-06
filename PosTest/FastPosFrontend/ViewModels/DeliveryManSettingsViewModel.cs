@@ -65,6 +65,10 @@ namespace FastPosFrontend.ViewModels
         public void EditWiaterAction()
         {
 
+            if (SelectedDeliveryMan == null)
+            {
+                return;
+            }
             _AddEditDeliveryManViewModel.ChangeDeliveryMan(SelectedDeliveryMan);
             _AddEditDeliveryManViewModel.ChangeDailogSatate(true);
         }
