@@ -400,7 +400,7 @@ namespace FastPosFrontend.ViewModels
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
                 DeliverymanId = SelectedDeliveryman?.Id,
-                DescendingOrder = true,
+                //DescendingOrder = true,
                 OrderBy = "orderTime",
                 State = OrderState.DeliveredPaid
             };

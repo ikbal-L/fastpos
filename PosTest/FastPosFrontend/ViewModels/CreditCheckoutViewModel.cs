@@ -392,7 +392,7 @@ namespace FastPosFrontend.ViewModels
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
                 CustomerId = SelectedCustomer?.Id,
-                DescendingOrder = true,
+                //DescendingOrder = true,
                 OrderBy = "orderTime",
                 State = OrderState.CreditRePaid
             };
