@@ -320,29 +320,13 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
+                <TextBlock 
+                        DockPanel.Dock="Right" 
+                        Text="{Binding OrderNumber,StringFormat='Commande # : {0:D3}'}"
+                        Grid.Row="0"  Grid.RowSpan="2" Width="200"
+                    FontWeight="Bold" FontSize="17" Margin="0 0 0 10 "/>
+                <TextBlock />
 
-                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="1" BorderBrush="Black"
-                        CornerRadius="4" Padding="4 1" Grid.ColumnSpan="2">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <DockPanel Grid.Row="0">
-                            <TextBlock DockPanel.Dock="Left" Text="Kitchen Order Receipt" />
-                            <TextBlock DockPanel.Dock="Right" Text="{Binding OrderNumber,StringFormat='N: {0:D3}'}" />
-                            <TextBlock />
-                        </DockPanel>
-
-                        <!--<Rectangle Grid.Row="1" Width="50" Height="50" Stretch="Fill"   >
-                            <Rectangle.Fill>
-                                <ImageBrush ImageSource="../logo.jpg"/>
-                            </Rectangle.Fill>
-
-                        </Rectangle>-->
-                    </Grid>
-                </Border>
                 <UniformGrid Grid.Row="2" Columns="2">
                     <TextBlock Text="Cash Register N:1" />
                     <TextBlock Text="{Binding Customer.Name,StringFormat='Customer: {0:#}',FallbackValue='Customer: /'}" />
