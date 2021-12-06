@@ -523,6 +523,6 @@ namespace ServiceInterface.Model
         public DateTime OrerTime { get; set; }
 
         [DataMember]
-        public string ModifiedBy { get; set; } 
+        public string CanceledBy { get; set; } 
     }
 }

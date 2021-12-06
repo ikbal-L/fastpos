@@ -248,9 +248,9 @@
                        caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectAdditive($this)]" >
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
               
                 <Border  Height="48">
@@ -338,35 +338,37 @@
                         </Border.Style>
                     </Border>
                 </DockPanel>
-                <Button Grid.Row="1" 
+                <Grid Grid.Row="1" ex:AbilityEx.Autority="Create_Additive" ex:AbilityEx.AppliedBy="Collapse">
+                    <Button Grid.Row="1" 
                     cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext}"
                     caliburn:Message.Attach="[Event Click] = [Action CreateAdditive($this)]"
                     VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="35 20"
                     Content="{materialdesign:PackIcon Kind=Plus ,Size=30}"
-                        ex:AbilityEx.Autority="Create_Additive" ex:AbilityEx.AppliedBy="Collapse">
-                    
-                    <Button.Style>
+                        >
 
-                        <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        <Button.Style>
+
+                            <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                TargetType="Button">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Value="True">
-                                    <DataTrigger.Binding>
-                                        <MultiBinding
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding
                                             Converter="{StaticResource EqualToSelectedAndEmptyMultiValueConverter }">
-                                            <Binding ElementName="AdditiveSettingsList"
+                                                <Binding ElementName="AdditiveSettingsList"
                                                      Path="SelectedItem.Rank" />
-                                            <Binding Path="Rank" />
-                                            <Binding Path="Description" />
-                                        </MultiBinding>
-                                    </DataTrigger.Binding>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                                                <Binding Path="Rank" />
+                                                <Binding Path="Description" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
 
 
             </Grid>

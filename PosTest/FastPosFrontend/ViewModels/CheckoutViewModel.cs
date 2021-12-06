@@ -1318,9 +1318,14 @@ namespace FastPosFrontend.ViewModels
                     if (CurrentOrder.Deliveryman == null)
                     {
                       
-                        ModalDialogBox.Ok(this, "CheckoutDeliverymanDialogContent", "Deliveryman", (o) => {
+                        var result = ModalDialogBox.OkCancel(this, "CheckoutDeliverymanDialogContent", "Deliveryman", (o) => {
                             return CurrentOrder.Deliveryman != null;
                         }).Show();
+
+                        if (!result)
+                        {
+                            return;
+                        }
                         
                     }
 
@@ -1338,10 +1343,13 @@ namespace FastPosFrontend.ViewModels
                     if (CurrentOrder.Customer == null)
                     {
 
-                        ModalDialogBox.Ok(this, "CheckoutCustomerDialogContent", "Customer",
+                        var result = ModalDialogBox.OkCancel(this, "CheckoutCustomerDialogContent", "Customer",
                             (o)=> {
                                 return CurrentOrder.Customer != null;
                             }).Show();
+
+                        if (!result) return;
+                        
 
                     }
 

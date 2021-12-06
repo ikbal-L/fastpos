@@ -228,7 +228,7 @@ namespace FastPosFrontend.ViewModels
            
             var conv = new LengthConverter();
 
-            double width = (double)conv?.ConvertFromString("7cm");
+            double width = (double)conv?.ConvertFromString("8cm");
 
             double height = document.DocumentPaginator.PageSize.Height;
             contentOfPage.Width = width;

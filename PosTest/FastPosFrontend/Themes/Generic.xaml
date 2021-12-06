@@ -41,7 +41,7 @@
                         <Button x:Name="Part_Numpad_Key_7_Button" Content="7" Tag="{ex:KeyboardKey NumPad7}"/>
                         <Button x:Name="Part_Numpad_Key_8_Button" Content="8" Tag="{ex:KeyboardKey NumPad8}"/>
                         <Button x:Name="Part_Numpad_Key_9_Button" Content="9" Tag="{ex:KeyboardKey NumPad9}"/>
-                        <Button x:Name="Part_Numpad_Key_Enter_Button"  Content="{materialDesign:PackIcon LoginVariant ,Size=30}" Tag="{ex:KeyboardKey Enter}" >
+                        <Button x:Name="Part_Numpad_Key_Enter_Button"  Content="{materialDesign:PackIcon LoginVariant ,Size=30}" Tag="{ex:KeyboardKey Enter}" IsDefault="True" >
                             <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}" >
                                 <Setter Property="Width" Value="70"></Setter>
