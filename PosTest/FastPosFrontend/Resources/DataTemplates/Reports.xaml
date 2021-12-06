@@ -283,23 +283,22 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Remboursements" TextDecorations="Underline" FontWeight="DemiBold" />
+
+
+                        <TextBlock Grid.Row="0" TextDecorations="Underline" FontWeight="DemiBold">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Remboursements &#x09;X {0:D2}&#x09;{1:C2}"
+                                                       ConverterCulture="fr-DZ">
+                                    <Binding Path="Refunds.Count" />
+                                    <Binding Path="RefundsSum"
+                                                      />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
 
                         <Grid  Grid.Row="1" Margin="30 5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontWeight="DemiBold">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="Remboursement &#x09;X {0:D2}&#x09;{1:C2}"
-                                                       ConverterCulture="fr-DZ">
-                                        <Binding Path="Refunds.Count" />
-                                        <Binding Path="RefundsSum"
-                                                      />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            
+                            
                             <ListView Grid.Row="1" ItemsSource="{Binding Refunds}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type model:OrderRefund}">
@@ -344,23 +343,21 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Canceled Orders" TextDecorations="Underline" FontWeight="DemiBold" />
+                       
+
+                        <TextBlock Grid.Row="0"  TextDecorations="Underline" FontWeight="DemiBold">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Commandes annulées &#x09;X {0:D2}&#x09;{1:C2}"
+                                                       ConverterCulture="fr-DZ">
+                                    <Binding Path="CanceledOrders.Count" />
+                                    <Binding Path="CanceledOrdersSum"
+                                                      />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
 
                         <Grid  Grid.Row="1" Margin="30 5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontWeight="DemiBold">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="Remboursement &#x09;X {0:D2}&#x09;{1:C2}"
-                                                       ConverterCulture="fr-DZ">
-                                        <Binding Path="CanceledOrders.Count" />
-                                        <Binding Path="CanceledOrdersSum"
-                                                      />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                          
                             <ListView Grid.Row="1" ItemsSource="{Binding CanceledOrders}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type model:OrderData}">
@@ -375,7 +372,7 @@
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
-                                            <TextBlock Text="{Binding ModifiedBy,StringFormat=' Annuler par {0}'}"/>
+                                            <TextBlock Text="{Binding CanceledBy,FallbackValue='???',StringFormat=' Annuler par {0}'}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -487,7 +484,7 @@
                                 <GridView>
                                     <GridView.Columns>
                                         <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" />
-                                        <GridViewColumn Header="Quantity"
+                                        <GridViewColumn Header="Quantity" 
                                                         DisplayMemberBinding="{Binding QuantityOfItems}" />
                                         <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" />
                                     </GridView.Columns>
@@ -511,20 +508,22 @@
                     <RowDefinition />
 
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Margin="10">
+                <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Margin="10" Padding="10">
                     <TextBlock Text="Cloture de cais" HorizontalAlignment="Center"
                                FontSize="16" FontWeight="DemiBold" />
                 </Border>
-                <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
-                    <TextBlock Text="Fast Food: Arabi" HorizontalAlignment="Center"
+                <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10" Padding="10">
+                    <TextBlock Text="{Binding Source={ex:Config PropertyName=GeneralSettings.RestaurantName}, StringFormat='Fast Food: {0:#}'}" HorizontalAlignment="Center"
                                FontSize="16" FontWeight="DemiBold" />
+
+
+
                 </Border>
                 <Grid Grid.Row="2" x:Name="Info" Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
@@ -546,6 +545,9 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold"
                                Text="{Binding NumberOfPayments,StringFormat=Number de ventes {0}}"
@@ -560,6 +562,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
 
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
@@ -567,9 +570,9 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" FontWeight="DemiBold" xml:space="preserve">
+                                <TextBlock Grid.Row="0" FontWeight="DemiBold">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="Espèces X {0:D2}  {1:C2}"
+                                        <MultiBinding StringFormat="Espèces&#x09;X {0:D2}&#x09;{1:C2}"
                                                        ConverterCulture="fr-DZ">
                                             <Binding Path="CashPayments.Count" />
                                             <Binding Path="CashPaymentsTotal"
@@ -583,7 +586,7 @@
                                             <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" Padding="0" Height="15">
 
                                                 <TextBlock.Text>
-                                                    <MultiBinding StringFormat="  TK-{0:D6} {1:C2}"
+                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
                                                                    ConverterCulture="fr-DZ">
                                                         <Binding Path="OrderNumber" />
                                                         <Binding Path="NewTotal"  />
@@ -616,23 +619,71 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" FontWeight="DemiBold">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="Livraison&#x09;X {0:D2}&#x09;&#x09;{1:C2}"
-                                                      >
-                                            <Binding Path="DeliveryPayments.Count" />
-                                            <Binding Path="DeliveryPaymentsTotal" />
+                                        <MultiBinding StringFormat="Livraison&#x09;X {0:D2}&#x09;&#x09;{1:C2} &#x09;{2:C2} ">
+                                            <Binding Path="DeliveryPayments.Count"/>
+                                            <Binding Path="DeliveryPaymentsTotal"/>
+                                            <Binding Path="DeliveryPaymentsTotalDiscount"/>
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
                                 <ListView Grid.Row="1" ItemsSource="{Binding DeliveryPayments}" >
                                     <ListView.ItemTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate DataType="{x:Type model:Payment}">
                                             <TextBlock Grid.Column="0" Margin="0 0 5 0" Padding="0" Height="15">
 
                                                 <TextBlock.Text>
-                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
+                                                    <MultiBinding StringFormat="  PM-{0:D6} &#x09;{1:C2} &#x09; -{2:C2}"
                                                                   xml:space="preserve">
-                                                        <Binding Path="Key" />
-                                                        <Binding Path="Value" />
+                                                        <Binding Path="Id" />
+                                                        <Binding Path="Amount" />
+                                                        <Binding Path="DiscountAmount" />
+                                                        </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListViewItem">
+                                                        <Border   Padding="0">
+                                                            <ContentPresenter></ContentPresenter>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Padding" Value="0"></Setter>
+                                            <Setter Property="Margin" Value="0"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="DemiBold" >
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Remboursements de crédit&#x09;X {0:D2}&#x09;&#x09;{1:C2} &#x09;{2:C2} ">
+                                            <Binding Path="CreditRePayments.Count"/>
+                                            <Binding Path="CreditRePaymentsTotal"/>
+                                            <Binding Path="CreditRePaymentsTotalDiscount"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ListView Grid.Row="1" ItemsSource="{Binding CreditRePayments}" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type model:Payment}">
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" Padding="0" Height="15">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  PM-{0:D6} &#x09;{1:C2} &#x09; -{2:C2}"
+                                                                  xml:space="preserve">
+                                                        <Binding Path="Id" />
+                                                        <Binding Path="Amount" />
+                                                        <Binding Path="DiscountAmount" />
                                                         </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
@@ -658,7 +709,200 @@
                         </Grid>
 
                     </Grid>
-                    <Grid Grid.Row="2" x:Name="CashRegisterInfoSection">
+
+
+
+
+
+
+
+                    <Grid Grid.Row="2" x:Name="RefundsSection">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <TextBlock Grid.Row="0" TextDecorations="Underline" FontWeight="DemiBold">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Remboursements &#x09;X {0:D2}&#x09;{1:C2}"
+                                                       ConverterCulture="fr-DZ">
+                                    <Binding Path="Refunds.Count" />
+                                    <Binding Path="RefundsSum"
+                                                      />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+
+                        <Grid  Grid.Row="1" Margin="30 5">
+
+
+                            <ListView Grid.Row="1" ItemsSource="{Binding Refunds}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type model:OrderRefund}">
+                                        <StackPanel>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" Padding="0" Height="15">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
+                                                                   ConverterCulture="fr-DZ">
+                                                        <Binding Path="OrderNumber" />
+                                                        <Binding Path="Amount"  />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding IssuedBy,StringFormat=' Délivré par {0}'}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListViewItem">
+                                                    <Border   Padding="0">
+                                                        <ContentPresenter></ContentPresenter>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Padding" Value="0"></Setter>
+                                        <Setter Property="Margin" Value="0"></Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
+
+                    </Grid>
+
+
+                    <Grid Grid.Row="3" x:Name="CanceledOrdersSection">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <TextBlock Grid.Row="0"  TextDecorations="Underline" FontWeight="DemiBold">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Commandes annulées &#x09;X {0:D2}&#x09;{1:C2}"
+                                                       ConverterCulture="fr-DZ">
+                                    <Binding Path="CanceledOrders.Count" />
+                                    <Binding Path="CanceledOrdersSum"
+                                                      />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+
+                        <Grid  Grid.Row="1" Margin="30 5">
+
+                            <ListView Grid.Row="1" ItemsSource="{Binding CanceledOrders}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type model:OrderData}">
+                                        <StackPanel>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" Padding="0" Height="15">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="  TK-{0:D6} &#x09;{1:C2}"
+                                                                   ConverterCulture="fr-DZ">
+                                                        <Binding Path="OrderNumber" />
+                                                        <Binding Path="NewTotal"  />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding CanceledBy,FallbackValue='???',StringFormat=' Annuler par {0}'}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListViewItem">
+                                                    <Border   Padding="0">
+                                                        <ContentPresenter></ContentPresenter>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Padding" Value="0"></Setter>
+                                        <Setter Property="Margin" Value="0"></Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
+
+                    </Grid>
+
+
+
+                    <Grid Grid.Row="4" x:Name="CashRegisterExpensesSection">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Sortie de Caisse" TextDecorations="Underline" FontWeight="DemiBold" />
+
+                        <Grid  Grid.Row="1" Margin="30 5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" FontWeight="DemiBold">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="Dépenses&#x09;X {0:D2}&#x09;{1:C2}"
+                                                       ConverterCulture="fr-DZ">
+                                        <Binding Path="CashRegisterExpenses.Count" />
+                                        <Binding Path="CashRegisterExpensesSum"
+                                                    />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <ListView Grid.Row="1" ItemsSource="{Binding CashRegisterExpenses}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type model:CashRegisterExpense}">
+                                        <StackPanel>
+                                            <TextBlock Grid.Column="0" Margin="0 0 5 0" xml:space="preserve" Padding="0" Height="15">
+
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="Dépense: {0} &#x09;{1:C2}"
+                                                                   ConverterCulture="fr-DZ">
+                                                        <Binding Path="Description" />
+                                                        <Binding Path="Amount"  />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding Employee,StringFormat='Le destinataire: {0}'}" Padding="0" Height="15" Margin="0 0 5 0" xml:space="preserve" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListViewItem">
+                                                    <Border   Padding="0">
+                                                        <ContentPresenter></ContentPresenter>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Padding" Value="0"></Setter>
+                                        <Setter Property="Margin" Value="0"></Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
+
+                    </Grid>
+
+
+
+
+
+
+
+                    <Grid Grid.Row="5" x:Name="CashRegisterInfoSection">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition />
@@ -667,7 +911,7 @@
                                    FontWeight="DemiBold" />
                         <StackPanel Grid.Row="1" />
                     </Grid>
-                    <Grid Grid.Row="3" x:Name="EarningsByCategorySection">
+                    <Grid Grid.Row="6" x:Name="EarningsByCategorySection">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition />
@@ -678,7 +922,7 @@
                                 <GridView>
                                     <GridView.Columns>
                                         <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" />
-                                        <GridViewColumn Header="Quantity"
+                                        <GridViewColumn Header="Quantity" 
                                                         DisplayMemberBinding="{Binding QuantityOfItems}" />
                                         <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" />
                                     </GridView.Columns>
@@ -691,5 +935,6 @@
             </Grid>
         </Border>
     </DataTemplate>
+
 
 </ResourceDictionary>
