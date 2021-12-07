@@ -27,5 +27,6 @@ namespace FastPosFrontend.Views
                 }, DispatcherPriority.Render);
             }
         }
+
     }
 }

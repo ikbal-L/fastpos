@@ -69,29 +69,45 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("Selected Waiter First" ,NotificationType.Warning);
             }
 
+            var main = this.Parent as MainViewModel;
+            main?.OpenDialog(
+                DefaultDialog
+                    .New("Are you sure you want perform this action?")
+                    .Title("Delete Waiter")
+                    .Ok(o =>
+                    {
+                        DeleteWaiter();
+                        main.CloseDialog();
+                    })
+                    .Cancel(o =>
+                    {
+                        main.CloseDialog();
+                    }));
 
-            DailogContent = new DialogView()
+
+
+            //var response = ModalDialogBox.YesNo("Are you sure you want to Delete this Waiter?", "Cancel Order").Show();
+            //if (response)
+            //{
+            //    DeleteWaiter();
+            //}
+
+        }
+
+        private void DeleteWaiter()
+        {
+            if (StateManager.Delete<ServiceInterface.Model.Waiter>(SelectedWaiter))
             {
-                DataContext = new DialogViewModel("Are you sure to delete this Waiter?", "Check", "Ok", "Close", "No",
-                (e) =>
-                {
-                    if (StateManager.Delete<ServiceInterface.Model.Waiter>(SelectedWaiter))
-                    {
 
-                        Waiters.Remove(SelectedWaiter);
-                        SelectedWaiter = null;
-                        DailogContent = _addEditWaiterView;
-                        ToastNotification.Notify("Delete  Success", NotificationType.Success);
-                    }
-                    else
-                    {
-                        ToastNotification.Notify("Delete  Fail");
-                    }
-                },null,()=> {
-                    DailogContent = _addEditWaiterView;
-                })
-            };
-            
+                Waiters.Remove(SelectedWaiter);
+                SelectedWaiter = null;
+                DailogContent = _addEditWaiterView;
+                ToastNotification.Notify("Delete  Success", NotificationType.Success);
+            }
+            else
+            {
+                ToastNotification.Notify("Delete  Fail");
+            }
         }
 
         protected override void Setup()

@@ -83,7 +83,29 @@ namespace FastPosFrontend.ViewModels
             {
                 ToastNotification.Notify("Select a Role to Delete First!");
             }
-            StateManager.Delete(SelectedRole).IfTrue(() => Roles.Remove(SelectedRole));
+
+            var main = this.Parent as MainViewModel;
+            main?.OpenDialog(
+                DefaultDialog
+                    .New("Are you sure you want perform this action?")
+                    .Title("Delete Role")
+                    .Ok(o =>
+                    {
+                        StateManager.Delete(SelectedRole).IfTrue(() => Roles.Remove(SelectedRole));
+                        main.CloseDialog();
+                    })
+                    .Cancel(o =>
+                    {
+                        main.CloseDialog();
+                    }));
+
+
+
+            //var response = ModalDialogBox.YesNo("Are you sure you want to Perform this Action?", "Delete Order").Show();
+            //if (response)
+            //{
+            //    StateManager.Delete(SelectedRole).IfTrue(() => Roles.Remove(SelectedRole));
+            //}
         }
     }
 }

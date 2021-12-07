@@ -329,7 +329,7 @@ namespace FastPosFrontend.ViewModels
             {
                 return;
             }
-            var mVm = (Parent as MainViewModel);
+            var mVm = Parent as MainViewModel;
             mVm?.OpenDialog(
                 DefaultDialog
                     .New("Are you sure to delete this Additive?")

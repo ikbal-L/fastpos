@@ -19,6 +19,7 @@ using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Utilities.Extensions;
 
 namespace FastPosFrontend.ViewModels
 {
@@ -189,7 +190,6 @@ namespace FastPosFrontend.ViewModels
 
 
         private List<Product> _allProducts;
-        private List<Product> _activeProducts;
         private List<Category> _allCategories;
         private int _numberOfCategoryRows;
         private Category _clipboardCategory;
@@ -652,12 +652,13 @@ namespace FastPosFrontend.ViewModels
             {
 
                 selectedProduct.Category.ProductIds.Remove((long)selectedProduct.Id);
-                StateManager.Save<Category>(selectedProduct.Category);
+                StateManager.Save(selectedProduct.Category);
 
                 selectedProduct.Category = null;
                 selectedProduct.CategoryId = null;
                 selectedProduct.Rank = null;
-                StateManager.Save<Product>(selectedProduct);
+                StateManager.Save(selectedProduct);
+                ClipboardProduct = null;
             }
             catch (AggregateException)
             {
@@ -731,7 +732,13 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
+            if (SelectedProduct == ClipboardProduct)
+            {
+                ClipboardProduct = null;
+                return;
+            }
             ClipboardProduct = SelectedProduct;
+
         }
 
         public void CopyCategory(object obj)
@@ -832,35 +839,29 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            //var product = new Product(ClipboardProduct);
             var product = ClipboardProduct.Clone();
             product.Category = SelectedCategory;
             product.Id = null;
             product.Rank = null;
+            SelectedCategory?.Products?.Add(product);
             
             var name = Regex.Replace(ClipboardProduct.Name, @"\([0-9]{1,2}\)", "");
-            var count = CurrentProducts.Where(a => a.Name != null).Count(a => a.Name.Contains(name));
+            var count = _allProducts?.Where(a => a.Name != null).Count(a => a.Name.Contains(name));
             product.Name = $"{name}({count})";
             var target = SelectedProduct;
-            //PutProductInCellOf(SelectedProduct, product);
+
 
             int targetRank = target.Rank.Value;
             product.Rank = targetRank;
             CurrentProducts[targetRank - 1] = product;
-            
 
-            try
+            StateManager.Save(product).IfTrue(()=> 
             {
-                StateManager.Save(product);
-                ClipboardProduct = null;
-                //StateManager.Save(target);
-
-
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Problem connecting to server");
-            }
+              ToastNotification.Notify("Saved", NotificationType.Success);
+                _allProducts.Add(product);
+               
+            });
+            ClipboardProduct = null;
         }
 
         public void PasteCategory(object obj)
@@ -907,18 +908,11 @@ namespace FastPosFrontend.ViewModels
             CurrentCategories[targetRank - 1] = category;
 
 
-            try
-            {
-                StateManager.Save(category);
-                ClipboardCategory = null;
-                //StateManager.Save(target);
-
-
-            }
-            catch (AggregateException)
-            {
-                ToastNotification.Notify("Problem connecting to server");
-            }
+            StateManager.Save(category).IfTrue(()=> {
+                ToastNotification.Notify("Saved",NotificationType.Success);
+                _allCategories.Add(category);
+            });
+            ClipboardCategory = null;
         }
 
         public void MoveProductTo(object obj)
@@ -984,12 +978,13 @@ namespace FastPosFrontend.ViewModels
 
             if (SelectedFreeProduct?.Id != null)
             {
-                StateManager.Delete(SelectedFreeProduct);
-
-
-                _allProducts.Remove(SelectedFreeProduct);
-                FreeProducts.Remove(SelectedFreeProduct);
-                SelectedFreeProduct = null;
+                if (StateManager.Delete(SelectedFreeProduct)
+)
+                {
+                    _allProducts.Remove(SelectedFreeProduct);
+                    FreeProducts.Remove(SelectedFreeProduct);
+                    SelectedFreeProduct = null;
+                }
             }
         }
 
@@ -1489,7 +1484,7 @@ namespace FastPosFrontend.ViewModels
             
             ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
-            var parent = (Parent as MainViewModel);
+            var parent = Parent as MainViewModel;
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {

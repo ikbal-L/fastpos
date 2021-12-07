@@ -84,7 +84,8 @@
                               IsEditable="True"
                               Text="{Binding Username,UpdateSourceTrigger=PropertyChanged}"
                               TextSearch.TextPath="Username"
-                              Margin="0 0 0 15">
+                              Margin="0 0 0 15"
+                              >
                         <ComboBox.Resources>
 
                         </ComboBox.Resources>

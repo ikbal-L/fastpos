@@ -76,31 +76,45 @@ namespace FastPosFrontend.ViewModels
             if (SelectedDeliveryMan == null)
             {
                 ToastNotification.Notify("Selected DeliveryMan First", NotificationType.Warning);
+                return;
             }
 
+            var main = Parent as MainViewModel;
+            main?.OpenDialog(
+                DefaultDialog
+                    .New("Are you sure you want perform this action?")
+                    .Title("Delete Deliveryman")
+                    .Ok(o =>
+                    {
+                        DeleteDeliveryman();
+                        main.CloseDialog();
+                    })
+                    .Cancel(o =>
+                    {
+                        main.CloseDialog();
+                    }));
 
-            DailogContent = new DialogView()
+            //var response = ModalDialogBox.YesNo("Are you sure you want to Delete this Deliveryman?", "Cancel Order").Show();
+            //if (response)
+            //{
+            //    DeleteDeliveryman();
+            //}
+        }
+
+        private void DeleteDeliveryman()
+        {
+            if (StateManager.Delete<Deliveryman>(SelectedDeliveryMan))
             {
-                DataContext = new DialogViewModel("Are you sure to delete this DeliveryMan?", "Check", "Ok", "Close", "No",
-                (e) =>
-                {
-                    if (StateManager.Delete<Deliveryman>(SelectedDeliveryMan))
-                    {
 
-                        Deliverymans.Remove(SelectedDeliveryMan);
-                        SelectedDeliveryMan = null;
-                        DailogContent = _addEditDeliveryManView;
-                        ToastNotification.Notify("Delete  Success", NotificationType.Success);
-                    }
-                    else
-                    {
-                        ToastNotification.Notify("Delete  Fail");
-                    }
-                },null,()=> {
-                    DailogContent = _addEditDeliveryManView;
-                })
-            };
-            
+                Deliverymans.Remove(SelectedDeliveryMan);
+                SelectedDeliveryMan = null;
+                DailogContent = _addEditDeliveryManView;
+                ToastNotification.Notify("Delete  Success", NotificationType.Success);
+            }
+            else
+            {
+                ToastNotification.Notify("Delete  Fail");
+            }
         }
 
         protected override void Setup()

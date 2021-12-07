@@ -453,32 +453,34 @@
                                         Command="{Binding EditProductCommand}">
                                         <materialdesign:PackIcon Kind="Edit" />
                                     </Button>
+
+                                    <Button 
+                                        Command="{Binding RemoveProductCommand}"
+                                        Content="{materialdesign:PackIcon Kind=Delete}"/>
+
+
                                     <Button x:Name="MoveButton"
                                         Command="{Binding MoveProductCommand}"
                                         Tag="{Binding ProductToMove}">
                                         <materialdesign:PackIcon Kind="ArrowExpandAll" />
                                     </Button>
-                                    <Button
-                                        Command="{Binding PasteProductCommand}"
-                                        >
-                                        <materialdesign:PackIcon Kind="ContentPaste" />
-                                    </Button>
+                                    
                                     <Button
                                     Command="{Binding CopyProductCommand}"
                                     >
                                         <materialdesign:PackIcon Kind="ContentCopy" />
                                     </Button>
-                                    <Button 
-                                    
-                                            Command="{Binding RemoveProductCommand}">
-                                        <materialdesign:PackIcon Kind="Delete" />
-                                    </Button>
 
                                     <Button
+                                        Command="{Binding PasteProductCommand}"
+                                        Content="{materialdesign:PackIcon ContentPaste}"
+                                        />
+                                    <Button
                                      Command="{Binding ConfigureProductLayoutCommand}"
-                                    >
-                                        <materialdesign:PackIcon Kind="Grid" />
-                                    </Button>
+                                        Content="{materialdesign:PackIcon Kind=Grid}"
+                                        />
+
+
                                 </ToolBar>
                             </ToolBarTray>
                         </Border>
@@ -532,26 +534,32 @@
                                         <materialdesign:PackIcon Kind="Edit" />
                                     </Button>
 
-                                    <Button x:Name="CategoryMoveButton"
-
-                                        Command="{Binding MoveCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="ArrowExpandAll" />
-                                    </Button>
-                                    <Button
-                                    Command="{Binding PasteCategoryCommand}"
-                                    >
-                                        <materialdesign:PackIcon Kind="ContentPaste"  />
-                                    </Button>
-                                    <Button
-                                    Command="{Binding CopyCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="ContentCopy" />
-                                    </Button>
-
                                     <Button
 
                                     Command="{Binding RemoveCategoryCommand}">
                                         <materialdesign:PackIcon Kind="Delete" />
                                     </Button>
+
+                                    <Button x:Name="CategoryMoveButton"
+
+                                        Command="{Binding MoveCategoryCommand}">
+                                        <materialdesign:PackIcon Kind="ArrowExpandAll" />
+                                    </Button>
+
+                                    <Button
+                                    Command="{Binding CopyCategoryCommand}">
+                                        <materialdesign:PackIcon Kind="ContentCopy" />
+                                    </Button>
+
+
+                                    <Button
+                                    Command="{Binding PasteCategoryCommand}"
+                                    >
+                                        <materialdesign:PackIcon Kind="ContentPaste"  />
+                                    </Button>
+                                    
+
+                                    
 
                                     <Button
                                     Command="{Binding AddCategoryRowCommand}">

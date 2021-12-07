@@ -14,7 +14,9 @@ namespace FastPosFrontend.Helpers
     {
         private int _currentPage = 0;
         private readonly PageRetriever<T> _pageRetriever;
-        Predicate<T> _filterPredicate;
+        Func<T,bool> _filterPredicate;
+        Func<bool> _canGoNext;
+        Func<bool> _canGoPrevious;
 
         public int? PageCount { get; set; }
         public int PageSize { get; set; } = 10;
@@ -37,7 +39,7 @@ namespace FastPosFrontend.Helpers
 
         public ObservableCollection<T> ObservableSourceCollection { get; private set; }
 
-        public Paginator(PageRetriever<T> pageRetriever, IEnumerable<T> data = null, Predicate<T> filterPredicate = null)
+        public Paginator(PageRetriever<T> pageRetriever, IEnumerable<T> data = null, Func<T, bool> filterPredicate = null, Func<bool> canGoNext = null, Func<bool> canGoPrevious = null)
         {
             _pageRetriever = pageRetriever;
             _filterPredicate = filterPredicate;
@@ -54,6 +56,8 @@ namespace FastPosFrontend.Helpers
             {
                 PaginationCollectionViewSource.Filter += PaginationCollectionViewSource_Filter;
             }
+            _canGoNext = canGoNext;
+            _canGoPrevious = canGoPrevious;
         }
 
         private void PaginationCollectionViewSource_Filter(object sender, FilterEventArgs e)
@@ -128,7 +132,8 @@ namespace FastPosFrontend.Helpers
 
         public bool CanGoToNextPage()
         {
-            if (!PageCount.HasValue) return true;
+            var predicate = _canGoNext?.Invoke()??true;
+            if (!PageCount.HasValue&& predicate) return true;
             return _currentPage < PageCount;
         }
 

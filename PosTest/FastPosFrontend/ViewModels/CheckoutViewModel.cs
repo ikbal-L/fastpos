@@ -996,12 +996,27 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-  
-            var response = ModalDialogBox.YesNo("Are you sure you want to Cancel this Order?", "Cancel Order").Show();
-            if (response)
-            {
-                CancelOrderAction(this);
-            }
+            var main = this.Parent as MainViewModel;
+            main?.OpenDialog(
+                DefaultDialog
+                    .New("Are you sure you want perform this action?")
+                    .Title("Cancel Order")
+                    .Ok(o =>
+                    {
+                        CancelOrderAction(this);
+                        main.CloseDialog();
+                    })
+                    .Cancel(o =>
+                    {
+                        main.CloseDialog();
+                    }));
+
+
+            //var response = ModalDialogBox.YesNo("Are you sure you want to Cancel this Order?", "Cancel Order").Show();
+            //if (response)
+            //{
+            //    CancelOrderAction(this);
+            //}
         }
 
 

@@ -385,16 +385,25 @@ namespace FastPosFrontend.ViewModels
             DeliveryOrders = new CollectionViewSource() { Source = _ordersCollection };
 
             var orderPageRetreiver = new PageRetriever<Order>(RetriveOrderPage);
-            PaidDeliveryOrders = new Paginator<Order>(orderPageRetreiver);
+            PaidDeliveryOrders = new Paginator<Order>(orderPageRetreiver, canGoNext:CanGoToNextPage);
 
             var paymentPageRetreiver = new PageRetriever<Payment>(RetrivePaymentPage);
-            DeliveryPayments = new Paginator<Payment>(paymentPageRetreiver);
+            DeliveryPayments = new Paginator<Payment>(paymentPageRetreiver, canGoNext: CanGoToNextPage);
 
             DeliveryOrders.Filter += DeliveryOrders_Filter;
         }
 
+        private bool CanGoToNextPage() => SelectedDeliveryman != null;
+
         public IEnumerable<Order> RetriveOrderPage((int pageIndex, int pageSize) p)
         {
+            if (SelectedDeliveryman == null)
+            {
+                ToastNotification.Notify("Select Deliveryman First");
+                return new List<Order>();
+            }
+
+
             var orderFilter = new OrderFilter()
             {
                 PageIndex = p.pageIndex,
@@ -410,11 +419,17 @@ namespace FastPosFrontend.ViewModels
 
         public IEnumerable<Payment> RetrivePaymentPage((int pageIndex, int pageSize) p)
         {
+            if (SelectedDeliveryman == null)
+            {
+                ToastNotification.Notify("Select Deliveryman First");
+                return new List<Payment>();
+            }
+
             var orderFilter = new PaymentFilter()
             {
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
-                DeliverymanId = SelectedDeliveryman.Id,
+                DeliverymanId = SelectedDeliveryman?.Id,
                 OrderBy = "date",
                 DescendingOrder = true
             };

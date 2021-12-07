@@ -377,16 +377,25 @@ namespace FastPosFrontend.ViewModels
             UnpaidOrders = new CollectionViewSource() { Source = _ordersCollection };
 
             var orderPageRetreiver = new PageRetriever<Order>(RetriveOrderPage);
-            PaidOrders = new Paginator<Order>(orderPageRetreiver);
+            PaidOrders = new Paginator<Order>(orderPageRetreiver, canGoNext:CanGoToNextPage);
 
             var paymentPageRetreiver = new PageRetriever<Payment>(RetrivePaymentPage);
-            Payments = new Paginator<Payment>(paymentPageRetreiver);
+            Payments = new Paginator<Payment>(paymentPageRetreiver, canGoNext: CanGoToNextPage);
 
             UnpaidOrders.Filter += CreditOrders_Filter;
         }
 
+        private bool CanGoToNextPage()=> SelectedCustomer != null;
+
         public IEnumerable<Order> RetriveOrderPage((int pageIndex, int pageSize) p)
         {
+            if (SelectedCustomer == null)
+            {
+                ToastNotification.Notify("Select Customer First");
+                return new List<Order>();
+            }
+
+
             var orderFilter = new OrderFilter()
             {
                 PageIndex = p.pageIndex,
@@ -402,12 +411,18 @@ namespace FastPosFrontend.ViewModels
 
         public IEnumerable<Payment> RetrivePaymentPage((int pageIndex, int pageSize) p)
         {
+            if (SelectedCustomer == null)
+            {
+                ToastNotification.Notify("Select Customer First");
+                return new List<Payment>();
+            }
+            
             var orderFilter = new PaymentFilter()
             {
                 PageIndex = p.pageIndex,
                 PageSize = p.pageSize,
                 //TODO NPE
-                CustomerId = SelectedCustomer.Id,
+                CustomerId = SelectedCustomer?.Id,
                 OrderBy = "date",
                 DescendingOrder = true
             };

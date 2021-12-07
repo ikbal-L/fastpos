@@ -11,109 +11,136 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Customer
 {
-    [NavigationItem("Customer Settings",target:typeof(CustomerSettingsViewModel),"", groupName: "Settings",isQuickNavigationEnabled:true)]
+    [NavigationItem("Customer Settings", target: typeof(CustomerSettingsViewModel), "", groupName: "Settings", isQuickNavigationEnabled: true)]
     [PreAuthorize("Create_customer|Read_Customer|Update_Customer|Delete_Customer")]
-    public class CustomerSettingsViewModel : AppScreen,ISettingsController
+    public class CustomerSettingsViewModel : AppScreen, ISettingsController
     {
-        private ObservableCollection<ServiceInterface.Model.Customer> _Customers;
+        public ObservableCollection<ServiceInterface.Model.Customer> Customers { get; set; }
 
-        public ObservableCollection<ServiceInterface.Model.Customer> Customers
-        {
-            get { return _Customers; }
-            set {
-                _Customers = value;
-                NotifyOfPropertyChange(nameof(Customers));
-            }
-        }
-   
         private UserControl _DailogContent;
 
         public UserControl DailogContent
         {
             get { return _DailogContent; }
-            set { _DailogContent = value;
+            set
+            {
+                _DailogContent = value;
                 NotifyOfPropertyChange(nameof(DailogContent));
             }
         }
+
+        public ServiceInterface.Model.Customer SelectedCustomer 
+        { 
+            get => _selectedCustomer; 
+            set => Set(ref _selectedCustomer , value); 
+        }
+
         private AddEditCustomerViewModel _AddEditCustomerViewModel;
         private AddEditCustomerView _AddEditCustomerView;
-        private string _searchString="";
+        private string _searchString = "";
+        private ServiceInterface.Model.Customer _selectedCustomer;
 
         public string SearchString
         {
             get { return _searchString; }
-            set { _searchString = value;
+            set
+            {
+                _searchString = value;
                 NotifyOfPropertyChange(nameof(SearchString));
                 NotifyOfPropertyChange(nameof(FilteredCustomers));
             }
         }
 
-        public ObservableCollection<ServiceInterface.Model.Customer> FilteredCustomers { get => new ObservableCollection<ServiceInterface.Model.Customer>(Customers.Where(x => (x.Name?.ToLower().Contains(SearchString?.ToLower())??false) || (x.PhoneNumbers?.Any(n => n.ToLower().Contains(SearchString?.ToLower()))??false) || (x.Debit.ToString()?.ToLower().Contains(SearchString?.ToLower()) ??false))); }
+        public ObservableCollection<ServiceInterface.Model.Customer> FilteredCustomers { get => new ObservableCollection<ServiceInterface.Model.Customer>(Customers.Where(x => (x.Name?.ToLower().Contains(SearchString?.ToLower()) ?? false) || (x.PhoneNumbers?.Any(n => n.ToLower().Contains(SearchString?.ToLower())) ?? false) || (x.Debit.ToString()?.ToLower().Contains(SearchString?.ToLower()) ?? false))); }
 
-        public CustomerSettingsViewModel() {
+        public CustomerSettingsViewModel()
+        {
 
-            //this.Title = "Customers";
-            //this.Content = new CustomerSettingsView() { DataContext = this };
             Customers = new ObservableCollection<ServiceInterface.Model.Customer>(StateManager.Get<ServiceInterface.Model.Customer>());
             _AddEditCustomerViewModel = new AddEditCustomerViewModel(this);
             _AddEditCustomerView = new AddEditCustomerView() { DataContext = _AddEditCustomerViewModel };
             DailogContent = _AddEditCustomerView;
         }
 
-        public void AddCustomerAction() {
+        public void AddCustomerAction()
+        {
             _AddEditCustomerViewModel.NewCustome();
             _AddEditCustomerViewModel.ChangeDailogSatate(true);
         }
-        public void EditCustomerAction(ServiceInterface.Model.Customer _SelectedCustomer)
+        public void EditCustomerAction()
         {
-            _AddEditCustomerViewModel.ChangeCustomer(_SelectedCustomer);
+            if (SelectedCustomer ==null)
+            {
+                return;
+            }
+            _AddEditCustomerViewModel.ChangeCustomer(SelectedCustomer);
             _AddEditCustomerViewModel.ChangeDailogSatate(true);
         }
-        public void DeleteCustomerAction(ServiceInterface.Model.Customer _SelectedCustomer) {
-            if (_SelectedCustomer == null)
+        public void DeleteCustomerAction()
+        {
+            if (SelectedCustomer == null)
             {
-                ToastNotification.Notify("Selected Customer First", NotificationType.Warning);
+                ToastNotification.Notify("Select Customer First", NotificationType.Warning);
+                return;
             }
 
-
-            DailogContent = new DialogView()
-            {
-                DataContext = new DialogViewModel("Are you sure to delete this Customer ?", "Check", "Ok", "Close", "No",
-                (e) =>
-                {
-                    if (StateManager.Delete<ServiceInterface.Model.Customer>(_SelectedCustomer))
+            var main = this.Parent as MainViewModel;
+            main?.OpenDialog(
+                DefaultDialog
+                    .New("Are you sure you want perform this action?")
+                    .Title("Delete Customer")
+                    .Ok(o =>
                     {
-
-                        Customers.Remove(_SelectedCustomer);
-                        NotifyOfPropertyChange(nameof(FilteredCustomers));
-                        DailogContent = _AddEditCustomerView;
-                        ToastNotification.Notify("Delete  Success", NotificationType.Success);
-                    }
-                    else
+                        DeleteCustomer();
+                        main.CloseDialog();
+                    })
+                    .Cancel(o =>
                     {
-                        ToastNotification.Notify("Delete  Fail");
-                    }
-                },null,()=> {
-                    DailogContent = _AddEditCustomerView;
-                })
-            };
-            
+                        main.CloseDialog();
+                    }));
+
+
+            //var response = ModalDialogBox.YesNo("Are you sure you want to Delete this Customer ?", "Delete Customer").Show();
+            //if (response)
+            //{
+            //    DeleteCustomer();
+            //}
+
+           
+
         }
-      public void NotifyCustomers() {
+
+        public void DeleteCustomer()
+        {
+            if (StateManager.Delete<ServiceInterface.Model.Customer>(SelectedCustomer))
+            {
+
+                Customers.Remove(SelectedCustomer);
+                NotifyOfPropertyChange(nameof(FilteredCustomers));
+                DailogContent = _AddEditCustomerView;
+                ToastNotification.Notify("Delete  Success", NotificationType.Success);
+            }
+            else
+            {
+                ToastNotification.Notify("Delete  Fail");
+            }
+        }
+        public void NotifyCustomers()
+        {
             NotifyOfPropertyChange(nameof(FilteredCustomers));
 
         }
 
-      public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+        public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
 
-      public void RaiseSettingsUpdated()
-      {
-            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(Customers));
-      }
+        public void RaiseSettingsUpdated()
+        {
+            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(Customers));
+        }
 
-      public override void BeforeNavigateAway()
-      {
-          RaiseSettingsUpdated();
-      }
+        public override void BeforeNavigateAway()
+        {
+            RaiseSettingsUpdated();
+        }
     }
 }

@@ -185,13 +185,5 @@
 
         </Grid>
     </DataTemplate>
-    
-    <!--<DataTemplate DataType="{x:Type src:Additive}" x:Key="PlatterAditives">
-        <StackPanel Orientation="Vertical" Background="Aqua">
-            <Label Content=" *****" />
-            <TextBlock Text="{Binding Description}"></TextBlock>
-        </StackPanel>
-    </DataTemplate>-->
-   
 
 </ResourceDictionary>

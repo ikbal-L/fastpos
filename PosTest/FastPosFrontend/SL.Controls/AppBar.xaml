@@ -93,6 +93,7 @@
                                             PlacementMode="BottomAndAlignRightEdges"
                                             StaysOpen="False"
                         
+                        
                     >
                         <md:PopupBox.Style>
                             <Style TargetType="md:PopupBox">

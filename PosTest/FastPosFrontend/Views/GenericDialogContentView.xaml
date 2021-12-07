@@ -33,7 +33,7 @@
         <StackPanel Margin="20">
 
             <TextBlock Text="{Binding Content}" HorizontalAlignment="Stretch" Margin="20"
-                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"></TextBlock>
+                   Style="{StaticResource MaterialDesignHeadline6TextBlock}"></TextBlock>
             <HeaderedItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Stretch">
 
                 <ItemsControl.ItemTemplate>

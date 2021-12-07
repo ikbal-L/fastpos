@@ -44,7 +44,8 @@
             <StackPanel Margin="20">
 
                 <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" Margin="20"
-                   Style="{StaticResource MaterialDesignButtonTextBlock}" />
+                   Style="{StaticResource MaterialDesignButtonTextBlock}"
+                            />
                 <HeaderedItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Stretch">
 
                     <ItemsControl.ItemTemplate>

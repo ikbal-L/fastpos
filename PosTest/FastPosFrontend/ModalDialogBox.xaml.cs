@@ -26,8 +26,12 @@ namespace FastPosFrontend
             return result != null && result.Value;
         }
 
-        public static ModalDialogBox YesNo(string message, string title)
+        public static ModalDialogBox YesNo(string message, string title,bool isYesDefault = false,bool isNoDefault = false)
         {
+            if (isYesDefault&&isNoDefault)
+            {
+                throw new ArgumentException($"Only one argument must be set to true {nameof(isYesDefault)} or {nameof(isNoDefault)}");
+            }
             var vm = new GenericDialogContentViewModel(message, title,
                 new GenericCommand("Yes", o => { Instance.DialogResult = true; Instance.Close(); }),
                 new GenericCommand("No", o => { Instance.DialogResult = false; Instance.Close(); }));

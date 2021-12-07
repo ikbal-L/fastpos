@@ -5,6 +5,7 @@ using FastPosFrontend.Navigation;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Utilities.Extensions;
 
 namespace FastPosFrontend.ViewModels
 {
@@ -84,13 +85,37 @@ namespace FastPosFrontend.ViewModels
 
         public void DeleteUser()
         {
-            if (SelectedUser?.Id!= null)
+            if (SelectedUser == null)
             {
-                //StateManager.Delete<User>(SelectedUser);
-                Users.Remove(SelectedUser);
+                ToastNotification.Notify("Select a user to delete");
+                
                 return;
             }
-            ToastNotification.Notify("Select a user to delete");
+
+            var main = this.Parent as MainViewModel;
+            main?.OpenDialog(
+                DefaultDialog
+                    .New("Are you sure you want perform this action?")
+                    .Title("Delete User")
+                    .Ok(o =>
+                    {
+                        StateManager.Delete(SelectedUser).IfTrue(() => Users.Remove(SelectedUser));
+                        main.CloseDialog();
+                    })
+                    .Cancel(o =>
+                    {
+                        main.CloseDialog();
+                    }));
+
+
+
+            //var result =ModalDialogBox.YesNo("Are you sure you want to perform this action?","Delete User").Show();
+
+            //if (result)
+            //{
+            //    StateManager.Delete(SelectedUser).IfTrue(()=> Users.Remove(SelectedUser));
+
+            //}
         }
 
 

@@ -20,7 +20,9 @@
        
             Grid.Row="1"
             Margin="2"
-          
+            
+            SelectionUnit="FullRow"
+            SelectedItem="{Binding SelectedCustomer}"
             ItemsSource="{Binding FilteredCustomers}"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
@@ -28,12 +30,13 @@
             IsReadOnly="True" 
             CanUserReorderColumns="False"
             EnableColumnVirtualization="False"
+            EnableRowVirtualization="True"
             Style="{StaticResource MaterialDesignDataGrid}"
             >
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Name" Binding = "{Binding Name}" Width="*" />
                 <DataGridTextColumn Header = "Phone" Binding = "{Binding FirstNumber}" Width="*" />
-                <DataGridTextColumn Header = "Dept" Binding = "{Binding Debit}" Width="*" />
+                <DataGridTextColumn Header = "Dept" Binding = "{Binding Balance}" Width="*" />
                
             </DataGrid.Columns>
         </DataGrid>
@@ -47,7 +50,7 @@
                 </Button>
 
                 <Button
-                                        caliburn:Message.Attach="[Event Click] = [Action EditCustomerAction($datacontext)]"
+                                        caliburn:Message.Attach="[Event Click] = [Action EditCustomerAction()]"
   
                                     ex:AbilityEx.Autority="Update_Customer" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="Pencil"  />
@@ -56,7 +59,7 @@
 
                 <Button
 
-                                       caliburn:Message.Attach="[Event Click] = [Action DeleteCustomerAction($datacontext)]"
+                                       caliburn:Message.Attach="[Event Click] = [Action DeleteCustomerAction()]"
 
                                     ex:AbilityEx.Autority="Delete_Customer" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon  Kind="Delete"   />
