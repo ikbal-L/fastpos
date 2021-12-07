@@ -137,6 +137,7 @@
     <Compile Include="Converters\BorderClipConverter.cs" />
     <Compile Include="Converters\BrushOpacityConverter.cs" />
     <Compile Include="Converters\BrushToHexConverter.cs" />
+    <Compile Include="Converters\CollectionContainsAnyEqualConverter.cs" />
     <Compile Include="Converters\CollectionContainsItemConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\DisplayNameConverter.cs" />

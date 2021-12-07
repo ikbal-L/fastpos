@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Media;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
@@ -121,8 +122,8 @@ namespace FastPosFrontend.ViewModels
                 {
                     Name = _source.Name,
                     Description = _source.Description,
-                    Background = _source.Background,
-                    BackgroundColor = _source.BackgroundColor
+                    Background = new SolidColorBrush((_source.Background as SolidColorBrush).Color),
+                
                 };
                 if (_source.Id == null)
                 {

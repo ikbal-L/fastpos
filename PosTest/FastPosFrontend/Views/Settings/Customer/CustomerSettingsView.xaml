@@ -36,7 +36,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Name" Binding = "{Binding Name}" Width="*" />
                 <DataGridTextColumn Header = "Phone" Binding = "{Binding FirstNumber}" Width="*" />
-                <DataGridTextColumn Header = "Dept" Binding = "{Binding Balance}" Width="*" />
+                <DataGridTextColumn Header = "Balance" Binding = "{Binding Balance}" Width="*" />
                
             </DataGrid.Columns>
         </DataGrid>
