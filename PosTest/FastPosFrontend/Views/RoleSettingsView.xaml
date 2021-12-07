@@ -28,7 +28,8 @@
                 </Grid.RowDefinitions>
                 <!--#region User list -->
                 <ListBox ItemsSource="{Binding Roles}" FontSize="16" Margin="20"
-                         SelectedItem="{Binding SelectedRole}" Grid.Row="1">
+                         SelectedItem="{Binding SelectedRole}" Grid.Row="1"
+                        >
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel></WrapPanel>

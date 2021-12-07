@@ -27,8 +27,10 @@
                 <Setter Property="Background" Value="#cae9ff"></Setter>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
+
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="FontWeight" Value="Bold"/>
+              
             </Trigger>
         </Style.Triggers>
     </Style>

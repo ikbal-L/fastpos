@@ -56,7 +56,8 @@
             <Border Grid.Row="0" Margin="2 5">
                 <TextBox materialDesign:HintAssist.Hint="Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      materialDesign:TextFieldAssist.TextBoxViewMargin="1 5 1 0" FontSize="18"
-                     Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
+                         FocusManager.FocusedElement=""/>
             </Border>
 
             <Border Grid.Row="1" Margin="2 5">

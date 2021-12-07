@@ -86,6 +86,8 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
 
+                
+                    
                     <md:PopupBox
                                             
                                             PlacementMode="BottomAndAlignRightEdges"
@@ -127,6 +129,68 @@
 
                         </StackPanel>
                     </md:PopupBox>
+
+                    <!--<md:PopupBox 
+                        md:ColorZoneAssist.Background="Transparent" 
+                        StaysOpen="True" 
+                        PlacementMode="BottomAndAlignRightEdges"
+                        x:Name="QuickLoginPopup" >
+                        <md:PopupBox.ToggleContent>
+                            <Border Width="45" Height="45" Background="Orange" CornerRadius="50" >
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="4"/>
+                                                <Setter Property="BorderBrush" Value="#9FFFFFFF"/>
+                                            
+                                            </Trigger>
+                                            <DataTrigger Binding="{Binding ElementName= QuickLoginPopup,Path=IsPopupOpen}" Value="true">
+                                                <Setter Property="BorderThickness" Value="4"/>
+                                                <Setter Property="BorderBrush" Value="#9FFFFFFF"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock FontSize="28" FontWeight="DemiBold" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="a"/>
+                            </Border>
+                        </md:PopupBox.ToggleContent>
+
+                        <Grid  Height="420" Width="230">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25*"/>
+                              
+                                <RowDefinition Height="75*"/>
+                            </Grid.RowDefinitions>
+                            <Grid    >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="7*"/>
+                                        <RowDefinition Height="3*"/>
+                                      
+                                    </Grid.RowDefinitions>
+                                    <Border Background="{StaticResource PrimaryHueDarkBrush}"/>
+                                </Grid>
+                                <Border Width="70" Height="70" Background="Orange" CornerRadius="50" BorderThickness="2.5" BorderBrush="White"  VerticalAlignment="Bottom" Margin="0 0 0 2">
+                                    <TextBlock FontSize="48" FontWeight="DemiBold" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="a"/> 
+                                </Border>
+
+                            </Grid>
+                            <StackPanel Grid.Row="1">
+                                <Panel.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                    </Style>
+                                </Panel.Resources>
+                                <TextBlock Text="Admin" FontWeight="DemiBold" />
+                                <TextBlock Text="admin@gmail.com"/>
+                            </StackPanel>
+                           
+
+                           
+                        </Grid>
+                    </md:PopupBox>-->
 
                     <md:PopupBox
                                             DockPanel.Dock="Right"
@@ -241,6 +305,8 @@
                             </Button>
                         </StackPanel>
                     </md:PopupBox>
+
+      
                 </StackPanel>
 
                 <ContentControl cal:View.Model="{Binding ActiveItem.EmbeddedCommandBar}">

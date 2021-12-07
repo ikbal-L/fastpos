@@ -20,7 +20,9 @@
             Grid.Row="1"
             ItemsSource="{Binding Waiters}"
             SelectedItem="{Binding SelectedWaiter,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-            Margin="10">
+            Margin="10"
+            
+            >
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate >
                     <WrapPanel />

@@ -45,7 +45,7 @@
                                      VerticalAlignment="Stretch"
                      ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Disable">
             <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                     <Setter Property="Padding" Value="0" />
                     <Setter Property="Margin" Value="5" />
                     <Setter Property="VerticalContentAlignment" Value="Stretch" />
