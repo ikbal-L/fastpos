@@ -67,6 +67,13 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedRole!= null)
             {
+                if (SelectedRole.IsPredefined)
+                {
+                    ToastNotification.Notify("Can not Edit Predifined Role");
+
+                    return;
+                }
+
                 RoleDetailViewModel = new RoleDetailViewModel(this);
                 RoleDetailViewModel.Edit(SelectedRole);
                 IsEditing = true;
@@ -82,6 +89,15 @@ namespace FastPosFrontend.ViewModels
             if (SelectedRole == null)
             {
                 ToastNotification.Notify("Select a Role to Delete First!");
+
+                return;
+            }
+
+            if (SelectedRole.IsPredefined)
+            {
+                ToastNotification.Notify("Can not Delete Predifined Role");
+
+                return;
             }
 
             var main = this.Parent as MainViewModel;

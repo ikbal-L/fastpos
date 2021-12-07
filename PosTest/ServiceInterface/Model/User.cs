@@ -202,6 +202,9 @@ namespace ServiceInterface.Model
         [JsonProperty("PrivilegeIds")]
         public List<long> PrivilegeIds { get; set; }
 
+        [DataMember]
+        public bool IsPredefined { get; set; }
+
         public override string ToString()
         {
             return $"{Name}";
