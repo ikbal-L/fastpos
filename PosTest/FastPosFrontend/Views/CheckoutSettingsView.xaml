@@ -490,14 +490,19 @@
                              AllowDrop="True"
                              ItemTemplate="{StaticResource SettingsProduct}"
 
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ScrollViewer.PanningMode="None"
                              caliburn:Message.Attach="[Event DragEnter] = [Action ProductsList_DragEnter($source, $eventArgs)];
                                                            [Event Drop] = [Action ProductsList_Drop($source, $eventArgs)];
-                                                           [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];
-                                                           [Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];"
+                                                           [Event MouseMove] = [Action ProductsList_MouseMove($source, $eventArgs)];"
                              Tag="{Binding ClipboardProduct}"
                              DockPanel.Dock="Bottom">
+
+                        <!--ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"-->
+
+                        <!--[Event TouchDown] = [Action ProductsList_TouchDown($source, $eventArgs)];-->
+
+
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Padding" Value="0" />
