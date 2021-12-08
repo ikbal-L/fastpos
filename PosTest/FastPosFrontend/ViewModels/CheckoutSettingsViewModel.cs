@@ -996,13 +996,7 @@ namespace FastPosFrontend.ViewModels
             //(this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
 
-        //private Point startPoint;
-        public void FreeProductsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // Store the mouse position
-            //startPoint = e.GetPosition(null);
-        }
-
+     
         public void FreeProductsList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "FreeProduct";
