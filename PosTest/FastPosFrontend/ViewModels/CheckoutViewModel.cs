@@ -63,7 +63,7 @@ namespace FastPosFrontend.ViewModels
         private TakeawayViewModel _takeAwayViewModel;
         private CustomerViewModel _customerViewModel;
         private Order _currentOrder;
-        private int orderCount = 1;
+
         private Table _selectedTable;
         private Deliveryman _selectedDeliveryman;
         private Waiter _selectedWaiter;
@@ -139,15 +139,7 @@ namespace FastPosFrontend.ViewModels
                 IsOrderInfoShown = false;
                 _orderInfoCloseTimer.Stop();
             };
-            if (AppConfigurationManager.ContainsKey("OrderCountModifiedDate"))
-            {
-                var dateString = AppConfigurationManager.Configuration<string>("OrderCountModifiedDate");
-                orderCount = DateTime.Today.ToString("yyyy-MM-dd")
-                    .Equals(dateString)
-                    ? Convert.ToInt32(AppConfigurationManager.Configuration("OrderCount"))
-                    : 1;
-            }
-
+           
             SetupEmbeddedCommandBar();
             SetupEmbeddedStatusBar();
 
@@ -758,31 +750,17 @@ namespace FastPosFrontend.ViewModels
         {
             var resp = SaveOrder(ref _currentOrder);
             CurrentOrder = _currentOrder;
-            NotifyOfPropertyChange(() => CurrentOrder);
-            switch (resp)
+            OrderState[] removalStates = { OrderState.Payed,OrderState.Canceled ,  OrderState.Removed , OrderState.Delivered, OrderState.Credit };
+
+            if (resp)
             {
-                case true:
-                    if (CurrentOrder.State == OrderState.Payed ||
-                        CurrentOrder.State == OrderState.Canceled ||
-                        CurrentOrder.State == OrderState.Removed || 
-                        CurrentOrder.State == OrderState.Delivered||
-                        CurrentOrder.State == OrderState.Credit)
-                    {
-                        RemoveCurrentOrderForOrdersList();
-                    }
-                    else
-                    {
-                        CurrentOrder = null;
-                    }
-
-                    break;
-
-                default:
-
-                    ToastNotification.Notify("Unable to save order");
-                    break;
+                if (removalStates.Any(s => s == CurrentOrder.State)) RemoveCurrentOrderForOrdersList();
             }
-
+            else
+            {
+                ToastNotification.Notify("Unable to save order");
+            }
+            CurrentOrder = null;
             AdditivesVisibility = false;
             ProductsVisibility = true;
         }
@@ -839,9 +817,9 @@ namespace FastPosFrontend.ViewModels
             ProductsVisibility = true;
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
 
-            CurrentOrder = new Order(Orders) { OrderNumber = orderCount};
+            CurrentOrder = new Order(Orders) ;
             
-            UpdateOrderCount();
+
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
             //OrderItemsCollectionViewSource.View.Refresh();
             CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
@@ -2198,12 +2176,6 @@ namespace FastPosFrontend.ViewModels
             base.OnDeactivate(close);
         }
 
-        private void UpdateOrderCount()
-        {
-            orderCount++;
-            AppConfigurationManager.Save("OrderCountModifiedDate", DateTime.Today.ToString("yyyy-MM-dd"));
-            AppConfigurationManager.Save("OrderCount", orderCount);
-        }
 
         public Type [] SettingsControllers => new []
         {
@@ -2339,10 +2311,10 @@ namespace FastPosFrontend.ViewModels
 
         public void SetSplitOrderNumber()
         {
-            if (SplitViewModel?.SplittedOrder == null) return;
+            //if (SplitViewModel?.SplittedOrder == null) return;
             
-            SplitViewModel.SplittedOrder.OrderNumber = orderCount;
-            orderCount++;
+            //SplitViewModel.SplittedOrder.OrderNumber = orderCount;
+            //orderCount++;
         }
 
         public void AddExpense()

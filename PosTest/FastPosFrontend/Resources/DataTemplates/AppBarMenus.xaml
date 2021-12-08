@@ -50,7 +50,7 @@
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{} {0:#} ( {1:#} )" >
                                 <Binding Path="CurrentOrder.OrderNumber" />
-                                <Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>
+                                <Binding Path="CurrentOrder.OrderCode"/>
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>

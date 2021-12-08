@@ -215,9 +215,11 @@ namespace ServiceLib.Service
 
         }
 
-        public static void PatchOrder(Order state, Order deserializedState)
+        public static void PatchOrder(Order state, Order result)
         {
-            foreach (var newOrderItem in deserializedState.OrderItems.ToList())
+            state.OrderNumber = result.OrderNumber;
+            state.OrderCode = result.OrderCode;
+            foreach (var newOrderItem in result.OrderItems.ToList())
             {
                 OrderItem? oldOrderItem = state.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);
                 if (oldOrderItem!= null)

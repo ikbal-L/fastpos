@@ -65,6 +65,9 @@ namespace ServiceInterface.Model
         [DataMember]
         public int OrderNumber { get; set; }
 
+        [DataMember]
+        public String OrderCode { get; set; }
+
         [DataMember] public string BuyerId { get; set; }
 
         [DataMember]
