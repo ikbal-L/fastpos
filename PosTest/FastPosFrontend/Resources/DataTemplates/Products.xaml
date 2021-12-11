@@ -411,6 +411,40 @@
                 </Grid>
 
 
+                <Button 
+                    
+                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext.PasteAdditiveCommand}"
+                    VerticalAlignment="Center" HorizontalAlignment="Center" 
+                    Content="{materialdesign:PackIcon Kind=ContentPaste ,Size=50}"
+                    x:Name="PasteProductBtn"
+                    Height="80">
+
+                    <Button.Style>
+
+                        <Style BasedOn="{StaticResource MaterialDesignToolForegroundButton}"
+                               TargetType="Button">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding
+                                            Converter="{StaticResource IsEmptyCellSelectedAndClipboardSet }">
+                                            <Binding ElementName="ProductSettingsList"
+                                                     Path="DataContext.SelectedProduct.Rank" />
+                                            <Binding ElementName="ProductSettingsList"
+                                                     Path="DataContext.ClipboardProduct" />
+                                            <Binding Path="Rank" />
+                                            <Binding Path="Name" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+
             </Grid>
 
 

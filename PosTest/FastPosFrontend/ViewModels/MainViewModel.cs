@@ -35,7 +35,6 @@ namespace FastPosFrontend.ViewModels
             DrawerManager.Instance.InitNavigationDrawer(this, "AppNavigationDrawer", this);
             
             IsBackendServerOn = ConnectionHelper.PingHost();
-            IsDbServerOn = ConnectionHelper.PingHost(portNumber: 3306);
             Associations.Setup();
             StateManager.Instance.HandleErrorsUsing(ResponseHandler.Handler);
         }

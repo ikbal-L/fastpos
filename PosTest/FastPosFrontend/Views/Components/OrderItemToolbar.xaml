@@ -65,8 +65,20 @@
         <ToolBar>
             <Button Grid.Row="5" Foreground="{StaticResource Button.Static.Border}" Background="WhiteSmoke"
                     
-                    cal:Message.Attach="[Event Click] = [Action LockOrder()]"
-                    Content="{md:PackIcon Lock,Size=30}">
+                    cal:Message.Attach="[Event Click] = [Action LockOrder()]">
+
+                <md:PackIcon Width="30" Height="30" >
+                    <md:PackIcon.Style>
+                        <Style TargetType="md:PackIcon">
+                            <Setter Property="Kind" Value="Lock"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentOrder.IsLocked}" Value="true">
+                                    <Setter Property="Kind" Value="LockOpen"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </md:PackIcon.Style>
+                </md:PackIcon>
 
                 <!--IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"-->
 

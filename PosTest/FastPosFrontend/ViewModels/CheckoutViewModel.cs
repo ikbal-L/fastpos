@@ -36,6 +36,7 @@ using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Utilities.Extensions;
 using Utilities.Mutation.Observers;
 using Icon = FastPosFrontend.Helpers.Icon;
 using Table = ServiceInterface.Model.Table;
@@ -79,7 +80,6 @@ namespace FastPosFrontend.ViewModels
         private INotifyPropertyChanged _dialogViewModel;
         private decimal givenAmount;
         private decimal? _returnedAmount;
-        private int _pageNumber;
         private int itemsPerCategoryPage;
         private int _categoryPageCount;
         private int _currentCategoryPageIndex;
@@ -102,31 +102,7 @@ namespace FastPosFrontend.ViewModels
 
         #region Constructors
 
-        void CalculateOrderElapsedTime()
-        {
-            while (true)
-            {
-                if (Orders != null)
-                {
-                    try
-                    {
-                        foreach (var o in Orders)
-                        {
-                            var lastStateTime = o.OrderStates?.LastOrDefault<OrderStateElement>();
-
-                            o.ElapsedTime = lastStateTime != null
-                                ? DateTime.Now - lastStateTime.StateTime
-                                : DateTime.Now - o.OrderTime;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-
-                Thread.Sleep(30000);
-            }
-        }
+     
 
         public CheckoutViewModel(
         ) : base()
@@ -149,8 +125,6 @@ namespace FastPosFrontend.ViewModels
           
 
             CurrentCategoryPageIndex = 0;
-            itemsPerCategoryPage = 5;
-
             var configuration = ConfigurationManager.Get<PosConfig>().General;
 
 
@@ -194,6 +168,7 @@ namespace FastPosFrontend.ViewModels
 
                 if (e.EventName == SSEventType.UPDATE_ORDER)
                 {
+                    order = Orders.FirstOrDefault(o => o.Id == receivedData.Id);
                     order?.UpdateOrderFrom(receivedData);
                     return;
                 }
@@ -322,17 +297,29 @@ namespace FastPosFrontend.ViewModels
             DrawerManager.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
             DrawerManager.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
 
-            
-            var config = LaunchDarkly.EventSource.Configuration.Builder(new Uri("http://localhost:8080/events/subscribe")).ResponseStartTimeout(TimeSpan.FromSeconds(60 * 60 * 24)).Method(HttpMethod.Get).RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken).Build();
+            var baseUrl = ConfigurationManager.Get<PosConfig>()?.Url;
+            var config = LaunchDarkly.EventSource.Configuration
+                .Builder(new Uri($"{baseUrl}/events/subscribe"))
+                .ResponseStartTimeout(TimeSpan.FromHours(9)).Method(HttpMethod.Get)
+                .ReadTimeout(TimeSpan.FromHours(9))
+                .RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken)
+                .Build();
             _eventSource = new EventSource(config);
 
             _eventSource.MessageReceived += _eventSource_MessageReceived;
+            _eventSource.Closed += _eventSource_Closed;
             _eventSource.Error += (s, args) =>
             {
-                Console.WriteLine(args.Exception);
+                MessageBox.Show($"{args.Exception}");
             };
 
             await _eventSource.StartAsync();
+        }
+
+        private void _eventSource_Closed(object sender, StateChangedEventArgs e)
+        
+        {
+           
         }
 
         public CollectionMutationObserver<Order> OrdersCollectionObserver { get; set; }
@@ -404,7 +391,7 @@ namespace FastPosFrontend.ViewModels
 
         #endregion
 
-        #region Properties
+
 
         public bool IsDialogOpen
         {
@@ -688,7 +675,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        #endregion
+    
 
         public decimal GivenAmount
         {
@@ -837,6 +824,13 @@ namespace FastPosFrontend.ViewModels
             }
 
             SyncManager.Lock(CurrentOrder);
+            
+            //.IfTrue(()=> 
+            //{ 
+            //    CurrentOrder.IsLocked = true;
+            //    CurrentOrder.LockedBy = Thread.CurrentPrincipal.Identity.Name;
+            //});
+
         }
 
         public void LockOrder(object obj)
@@ -1008,6 +1002,33 @@ namespace FastPosFrontend.ViewModels
         #endregion
 
         public bool ChangesMade { get; set; }
+
+        void CalculateOrderElapsedTime()
+        {
+            while (true)
+            {
+                if (Orders != null)
+                {
+                    try
+                    {
+                        foreach (var o in Orders)
+                        {
+                            var lastStateTime = o.OrderStates?.LastOrDefault<OrderStateElement>();
+
+                            o.ElapsedTime = lastStateTime != null
+                                ? DateTime.Now - lastStateTime.StateTime
+                                : DateTime.Now - o.OrderTime;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+                Thread.Sleep(30000);
+            }
+        }
+
 
         void LoadCategoryPages()
         {

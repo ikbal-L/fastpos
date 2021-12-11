@@ -31,6 +31,7 @@ namespace FastPosFrontend.Helpers
             Locks[obj] = payload;
             var url = api.Resource<Order>(EndPoint.LOCK, id);
             var result = GenericRest.RestPut(payload, url );
+
             return result.StatusCode == System.Net.HttpStatusCode.OK;
 
         }

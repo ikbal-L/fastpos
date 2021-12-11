@@ -1,23 +1,28 @@
-﻿using System;
+﻿using FastPosFrontend.Configurations;
+using RestSharp;
+using ServiceLib.Service;
+using System;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace FastPosFrontend.Helpers
 {
     public class ConnectionHelper
     {
-        public static bool PingHost(string hostUri="localhost", int portNumber=8080)
+        public static readonly IRestClient Client;
+
+        public static readonly IRestRequest Ping;
+
+        static ConnectionHelper()
         {
-            try
-            {
-                using var client = new TcpClient(hostUri, portNumber);
-                return true;
-            }
-            catch (SocketException ex)
-            {
-                //MessageBox.Show("Error pinging host:'" + hostUri + ":" + portNumber.ToString() + "'");
-                Console.WriteLine(ex);
-                return false;
-            }
+            var baseUrl = ConfigurationManager.Get<PosConfig>().Url;
+            Client = new RestClient(baseUrl);
+            Ping = new RestRequest("/", Method.GET);
+        }
+        public  static  bool PingHost(string hostUri="localhost", int portNumber=8080)
+        {
+            var res = Client.Execute(Ping);
+            return res.StatusCode != 0;
         }
     }
 }

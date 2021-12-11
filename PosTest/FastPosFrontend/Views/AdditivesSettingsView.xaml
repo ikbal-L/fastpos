@@ -40,9 +40,11 @@
                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                      caliburn:Message.Attach="
                                      [Event MouseMove] = [Action AdditivesList_MouseMove($source, $eventArgs)];
-                                     [Event Drop] = [Action AdditivesList_Drop($source, $eventArgs)];
-                                     [Event TouchDown] = [Action  AdditivesList_TouchDown($source, $eventArgs)];"
+                                     [Event Drop] = [Action AdditivesList_Drop($source, $eventArgs)];"
                                      VerticalAlignment="Stretch"
+                                     HorizontalAlignment="Stretch"
+                 ScrollViewer.PanningMode="None"
+                                     
                      ex:AbilityEx.Autority="Update_Additive" ex:AbilityEx.AppliedBy="Disable">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">

@@ -198,7 +198,8 @@ namespace FastPosFrontend.ViewModels
             try
             {
 
-                 resp = _authService.Authenticate(Username, Password, new Terminal { Id = 1 }, new Annex { Id = 1 });
+                _authService.BaseUrl = baseUrl; 
+                resp = _authService.Authenticate(Username, Password, new Terminal { Id = 1 }, new Annex { Id = 1 });
                 if ((int)resp.StatusCode == 401)
                 {
                     ToastNotification.Notify("Wrong username or password");

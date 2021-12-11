@@ -384,7 +384,7 @@
                         </md:Chip.Style>
 
                     </md:Chip>
-                    <md:Chip
+                    <!--<md:Chip
                                                 Content="Database"
                                                 IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                                 Margin="5 0">
@@ -407,7 +407,7 @@
                                 </Style.Triggers>
                             </Style>
                         </md:Chip.Style>
-                    </md:Chip>
+                    </md:Chip>-->
                 </StackPanel>
 
 
