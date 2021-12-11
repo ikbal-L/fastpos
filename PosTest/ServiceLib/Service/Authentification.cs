@@ -15,36 +15,17 @@ using System.Threading;
 
 namespace ServiceLib.Service
 {
+
     [Export(typeof(IAuthentification))]
-    public class Authentification : IAuthentification
-    {
-        private readonly RestAuthentification _restAuthentification = RestAuthentification.Instance;
-        public int Authenticate(string user, string password, Annex annex, Terminal terminal)
-        {
-            int response;
-            response = _restAuthentification.Authenticate(user, password, annex, terminal);
-            return (int)response;
-
-        }
-
-        public HttpResponseMessage Authenticate(string user, string password, Terminal terminal, Annex annex)
-        {
-            
-            var response = _restAuthentification.Authenticate(user, password, terminal, annex );
-            return response;
-        }
-
-        public int Authenticate(User user)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class RestAuthentification : IAuthentification
     {
         private static RestAuthentification _instance;
 
         internal static RestAuthentification Instance => _instance ?? (_instance = new RestAuthentification());
+
+        private readonly IRestApi _api = new RestApi();
+        public string BaseUrl { get=>_api.BaseUrl; set => _api.BaseUrl = value; }
+
         public int Authenticate(string user, string password, Annex annex, Terminal terminal)  
         {
             string json = JsonConvert.SerializeObject(
@@ -99,9 +80,10 @@ namespace ServiceLib.Service
                 });
 
             var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var api = new RestApis();
+
+
             
-            var url = api.Action("login");
+            var url = _api.Action("login");
 
             var client = new HttpClient();
             HttpResponseMessage response;

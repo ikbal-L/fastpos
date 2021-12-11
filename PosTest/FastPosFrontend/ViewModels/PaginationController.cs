@@ -1,5 +1,5 @@
-﻿using Caliburn.Micro;
-using FastPosFrontend.Helpers;
+﻿using FastPosFrontend.Helpers;
+using Caliburn.Micro;
 using System;
 using System.Windows.Input;
 

@@ -1,4 +1,4 @@
-﻿using Caliburn.Micro;
+﻿using FastPosFrontend.Configurations;
 using Newtonsoft.Json;
 using ServiceLib.Service;
 using Action = System.Action;
@@ -15,7 +15,7 @@ namespace FastPosFrontend.ViewModels
 
         public ProductLayoutViewModel()
         {
-            _configuration = AppConfigurationManager.Configuration<ProductLayoutConfiguration>() ?? new ProductLayoutConfiguration(){Columns = 6,Rows = 5};
+            _configuration = ConfigurationManager.Get<PosConfig>().ProductLayout;
 
             Columns = _configuration.Columns;
             Rows = _configuration.Rows;
@@ -41,7 +41,7 @@ namespace FastPosFrontend.ViewModels
         {
             _configuration.Rows = Rows;
             _configuration.Columns = Columns;
-            AppConfigurationManager.Save(_configuration);
+            _configuration.RequestSave();
             _layoutChangedHandler?.Invoke();
             Host.Close(this);
         }
@@ -57,35 +57,5 @@ namespace FastPosFrontend.ViewModels
         }
 
         
-    }
-
-    public class ProductLayoutConfiguration : PropertyChangedBase
-    {
-        private int _columns;
-        private int _rows;
-
-        [JsonProperty]
-        public int Columns
-        {
-            get => _columns;
-            set
-            {
-                Set(ref _columns, value);
-                NotifyOfPropertyChange(nameof(NumberOfProducts));
-            }
-        }
-
-        [JsonProperty]
-        public int Rows
-        {
-            get => _rows;
-            set
-            {
-                Set(ref _rows, value);
-                NotifyOfPropertyChange(nameof(NumberOfProducts));
-            }
-        }
-
-        public int NumberOfProducts => Rows * Columns;
     }
 }

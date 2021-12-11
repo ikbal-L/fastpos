@@ -79,14 +79,11 @@
     <Compile Include="Authorisation\VisibilityOrBool.cs" />
     <Compile Include="ExtentionsMethod\ObjectExtentions.cs" />
     <Compile Include="Interface\IAuthentification.cs" />
-    <Compile Include="Interface\IDelivereyService.cs" />
-    <Compile Include="Interface\IOrderService.cs" />
-    <Compile Include="Interface\IOrdreItemService.cs" />
-    <Compile Include="Interface\ICustomerService.cs" />
     <Compile Include="Interface\IPath.cs" />
     <Compile Include="Interface\IProductService.cs" />
     <Compile Include="Interface\IRepository.cs" />
     <Compile Include="Interface\IResponseHandler.cs" />
+    <Compile Include="Interface\IRestApi.cs" />
     <Compile Include="jsonConverters\TimespanConverter.cs" />
     <Compile Include="Model\Additive.cs" />
     <Compile Include="Model\Annex.cs" />
@@ -118,7 +115,6 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="StaticValues\ActionConfig.cs" />
     <Compile Include="StaticValues\DefaultColors.cs" />
     <Compile Include="StaticValues\UrlConfig.cs" />
@@ -130,10 +126,6 @@
     <Folder Include="Validation\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Attributes\Attributes.csproj">
-      <Project>{0aae43f2-d42a-4ea4-8edc-cca3f626a5e5}</Project>
-      <Name>Attributes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{6c71020b-93dd-48eb-9fc4-9e728825d046}</Project>
       <Name>Utilities</Name>

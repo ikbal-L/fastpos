@@ -19,6 +19,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Enums;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
@@ -143,46 +144,40 @@ namespace FastPosFrontend.ViewModels
             SetupEmbeddedCommandBar();
             SetupEmbeddedStatusBar();
 
-            _productLayout = AppConfigurationManager.Configuration<ProductLayoutConfiguration>() ?? new ProductLayoutConfiguration() { Columns = 6, Rows = 5 };
+            _productLayout = ConfigurationManager.Get<PosConfig>().ProductLayout;
 
           
 
             CurrentCategoryPageIndex = 0;
             itemsPerCategoryPage = 5;
 
-            var configuration = AppConfigurationManager.Configuration<GeneralSettings>();
+            var configuration = ConfigurationManager.Get<PosConfig>().General;
 
 
             if (configuration != null)
             {
-                itemsPerCategoryPage = configuration.NumberOfCategories;
+                itemsPerCategoryPage = configuration.CategoryPageSize;
             }
             
         }
 
         private void _eventSource_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            Console.WriteLine(e.Message);
-            Order updatedOrder = null;
+            Order receivedData = null;
             Order order = null;
             if (e.EventName == SSEventType.CREATE_ORDER|| e.EventName == SSEventType.UPDATE_ORDER)
             {
-                //updatedOrder = JsonConvert.DeserializeObject<Order>(e.Message.Data);
                 var result = long.TryParse(e.Message.Data,out var id);
-
                 var service = StateManager.GetService<Order, IRepository<Order, long>>();
 
                 if (result)
                 {
-
-                    var (status, o) = service.GetById(id);
+                    var (status, data) = service.GetById(id);
                     if (status == 200)
                     {
-                        updatedOrder = o;
+                        receivedData = data;
                     }
-
                 }
-                
             }
 
 
@@ -191,18 +186,15 @@ namespace FastPosFrontend.ViewModels
 
                 if (e.EventName == SSEventType.CREATE_ORDER)
                 {
-                    Orders.Add(updatedOrder);
+                    Orders.Add(receivedData);
                     WaitingViewModel?.Orders.Refresh();
                     WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
                     return;
-
                 }
 
                 if (e.EventName == SSEventType.UPDATE_ORDER)
                 {
-
-                    order?.UpdateOrderFrom(updatedOrder);
-
+                    order?.UpdateOrderFrom(receivedData);
                     return;
                 }
 
@@ -312,7 +304,6 @@ namespace FastPosFrontend.ViewModels
             foreach (var table in Tables)
             {
                 table.AllOrders = Orders;
-               
             }
 
             ProductsVisibility = true;
@@ -332,7 +323,7 @@ namespace FastPosFrontend.ViewModels
             DrawerManager.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
 
             
-            var config = Configuration.Builder(new Uri("http://localhost:8080/events/subscribe")).ResponseStartTimeout(TimeSpan.FromSeconds(60 * 60 * 24)).Method(HttpMethod.Get).RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken).Build();
+            var config = LaunchDarkly.EventSource.Configuration.Builder(new Uri("http://localhost:8080/events/subscribe")).ResponseStartTimeout(TimeSpan.FromSeconds(60 * 60 * 24)).Method(HttpMethod.Get).RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken).Build();
             _eventSource = new EventSource(config);
 
             _eventSource.MessageReceived += _eventSource_MessageReceived;
@@ -1026,7 +1017,7 @@ namespace FastPosFrontend.ViewModels
             categories.Sort(comparer);
             Categories = new BindableCollection<Category>();
             var maxRank =  categories.Max(c => c.Rank)??0;
-            int _categpryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
+            int _categpryPageSize = ConfigurationManager.Get<PosConfig>().General.CategoryPageSize;
             int nbpage = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
             CategoryPageCount = nbpage;
@@ -2046,7 +2037,7 @@ namespace FastPosFrontend.ViewModels
 
             IList<PrinterItem> printerItems = null;
 
-            var printerItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
+            var printerItemSetting = ConfigurationManager.Get<PosConfig>().Printing.Printers;
             if (source == PrintSource.Kitchen)
             {
                 printerItems = printerItemSetting?.Where(item => item.SelectedKitchen).ToList();

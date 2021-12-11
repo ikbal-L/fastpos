@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Data;
 using Caliburn.Micro;
+using Caliburn.Micro;
 using ServiceInterface.Model;
 
 namespace FastPosFrontend.ViewModels.SubViewModel

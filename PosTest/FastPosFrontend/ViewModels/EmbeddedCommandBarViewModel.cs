@@ -1,6 +1,6 @@
 ﻿using System.Windows;
-using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using Caliburn.Micro;
 
 namespace FastPosFrontend.ViewModels
 {

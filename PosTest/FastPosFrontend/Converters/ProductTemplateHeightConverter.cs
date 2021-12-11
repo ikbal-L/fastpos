@@ -3,8 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using FastPosFrontend.ViewModels;
-using FastPosFrontend.ViewModels.Settings;
+using FastPosFrontend.Configurations;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.Converters
@@ -23,13 +22,9 @@ namespace FastPosFrontend.Converters
                     if (length != null) return (double)length;
                     return default;
                 });
-            var configuration = AppConfigurationManager.Configuration<ProductLayoutConfiguration>();
-            int rows = 5;
-            if (configuration!= null)
-            {
-                rows = configuration.Rows;
-            }
-
+            var configuration = ConfigurationManager.Get<PosConfig>().ProductLayout;
+            int rows = configuration.Rows;
+         
             var windowHeight = (double)value;
             var newHeight = (windowHeight - values.Sum())/rows;
             return newHeight;
@@ -48,12 +43,8 @@ namespace FastPosFrontend.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             
-            var configuration = AppConfigurationManager.Configuration<ProductLayoutConfiguration>();
-            var cols = 6;
-            if (configuration != null)
-            {
-                cols = configuration.Columns;
-            }
+            var configuration = ConfigurationManager.Get<PosConfig>().ProductLayout;
+            var cols = configuration.Columns;
 
             _lengthConverter = new LengthConverter();
             var values = (parameter as string)?.Split(',')
@@ -83,12 +74,8 @@ namespace FastPosFrontend.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
            
-            var configuration = AppConfigurationManager.Configuration<GeneralSettings>();
-            int cols = 6;
-            if (configuration != null)
-            {                                                               
-                cols = configuration.NumberOfCategories;
-            }
+            var configuration = ConfigurationManager.Get<PosConfig>().General;
+            int cols = cols = configuration.CategoryPageSize;
 
             var conv = new LengthConverter();
             var orderItemListWidth = (double)conv.ConvertFromString("417px");

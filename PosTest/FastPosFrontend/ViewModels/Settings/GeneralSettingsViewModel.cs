@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
@@ -9,39 +10,31 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
-  
+
     [NavigationItem(title:"General Settings",typeof(GeneralSettingsViewModel),"",groupName:"Settings",isQuickNavigationEnabled:true)]
     [PreAuthorize("Modify_Local_Settings")]
     public  class GeneralSettingsViewModel : AppScreen,ISettingsController
     {
-        private GeneralSettings _generalSettings;
-
-        public GeneralSettings Settings
-        {
-            get => _generalSettings;
-            set { _generalSettings = value;
-
-                NotifyOfPropertyChange(nameof(Settings));
-            }
-        }
+        public GeneralSettings Settings { get; set; }
+     
 
         public GeneralSettingsViewModel() {
             //this.Index = 1;
             Title = "General";
-            var setting = AppConfigurationManager.Configuration<GeneralSettings>();
-            Settings = setting ?? new GeneralSettings();
+
+            Settings = ConfigurationManager.Get<PosConfig>().General;
             Settings.PropertyChanged += Settings_PropertyChanged;
            
             var tables = StateManager.Get<Table>();
             if (!tables.Any())
             {
-                Settings.TableNumber = 0;
+                Settings.TableCount = 0;
             }
             else
             {
-                if (tables.Count!= setting.TableNumber)
+                if (tables.Count!= Settings.TableCount)
                 {
-                    setting.TableNumber = tables.Count;
+                    Settings.TableCount = tables.Count;
                 }
             }
 
@@ -54,13 +47,13 @@ namespace FastPosFrontend.ViewModels.Settings
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             
-            AppConfigurationManager.Save(Settings);
+            Settings.RequestSave();
         }
 
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
         public override void BeforeNavigateAway()
         {
-            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(Settings.NumberOfCategories));
+            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(Settings.CategoryPageSize));
             ProductLayout.Instance.OnSettingsUpdated(this,new SettingsUpdatedEventArgs());
         }
     }

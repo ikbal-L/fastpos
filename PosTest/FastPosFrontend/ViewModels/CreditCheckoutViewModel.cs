@@ -289,7 +289,7 @@ namespace FastPosFrontend.ViewModels
                 payedAmount = SelectedCustomer.Balance;
             }
 
-            var api = new RestApis();
+            var api = new RestApi();
             var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, CustomerId = SelectedCustomer.Id.Value ,PaymentSource =PaymentSource.Customer };
             if (IsDiscountEnabled)
             {
@@ -340,7 +340,7 @@ namespace FastPosFrontend.ViewModels
 
         protected override void Setup()
         {
-            var api = new RestApis();
+            var api = new RestApi();
             var url = api.Resource<Customer>("getallwithbalance");
             var result = GenericRest.GetThing<List<Customer>>(url);
             List<Customer> data = new List<Customer>();

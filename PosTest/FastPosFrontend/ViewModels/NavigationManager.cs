@@ -7,6 +7,7 @@ using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using Caliburn.Micro;
 
 namespace FastPosFrontend.ViewModels
 {

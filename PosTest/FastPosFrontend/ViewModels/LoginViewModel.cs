@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.Serialization;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Caliburn.Micro;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
@@ -140,7 +139,6 @@ namespace FastPosFrontend.ViewModels
        
         private string _userName;
         private string _password;
-        private SettingsManager<LoginHistory> _loginHistoryManager;
         private LoginHistory _loginHistory;
         private string _pincode;
 
@@ -194,13 +192,13 @@ namespace FastPosFrontend.ViewModels
         
         public void Login()
         {
+            var baseUrl = ConfigurationManager.Get<PosConfig>()?.Url;
+
             HttpResponseMessage resp;
             try
             {
-                // resp = authService.Authenticate("mbeggas", "mmmm1111", new Annex { Id = 1 }, new Terminal { Id = 1 });
+
                  resp = _authService.Authenticate(Username, Password, new Terminal { Id = 1 }, new Annex { Id = 1 });
-               
-                // resp = authService.Authenticate(new User(){Username = "admin",Password = "admin",Agent = Agent.Desktop});
                 if ((int)resp.StatusCode == 401)
                 {
                     ToastNotification.Notify("Wrong username or password");
@@ -216,7 +214,6 @@ namespace FastPosFrontend.ViewModels
             }
             catch (AggregateException)
             {
-                //ToastNotification.Notify("Check your server connection");
                 ToastNotification.Notify(NotificationHelper.CHECK_SERVER_CONNECTION);
                 return;
             }
@@ -225,6 +222,7 @@ namespace FastPosFrontend.ViewModels
 
             StateManager
                 .Instance
+                .BaseUrl(baseUrl)
                 .Manage(_productRepository,fetch:false,withAssociatedTypes:true)
                 .Manage(_categoryRepository,false,withAssociatedTypes:true)
                 .Manage(_additiveRepository,false)
@@ -249,21 +247,22 @@ namespace FastPosFrontend.ViewModels
             {
                 user = new User() { Username = Username };
                 Users.Add(user);
+                _loginHistory.Users.Add(user);
             }
             if (hasUserBackground)
             {
                 user.BackgroundString = userBackground.First(); 
             }
 
-            _loginHistory = new LoginHistory() {Users = Users.Select(u=> new User(){Id = u.Id,Username = u.Username,BackgroundString = u.BackgroundString}).ToList()};
+
             _loginHistory.LastLoggedUserByUsername = user.Username;
             
             if (user?.Id!= null)
             {
                 _loginHistory.LastLoggedUserId = (long)user.Id;
             }
-            var sm = new SettingsManager<LoginHistory>("login.history.json");
-            AppConfigurationManager.Save(_loginHistory);
+
+            _loginHistory.RequestSave();
 
             (Parent as MainViewModel).IsLoggedIn = true;
 
@@ -301,17 +300,12 @@ namespace FastPosFrontend.ViewModels
 
         private void LoadLoginHistory()
         {
-            var history = AppConfigurationManager.Configuration<LoginHistory>();
-            Users = history?.Users == null ? 
-                new ObservableCollection<User>() : 
-                new ObservableCollection<User>(history.Users);
-            //if (history?.LastLoggedUserId!= null)
-            //{
-            //    SelectedUser = Users?.FirstOrDefault(u => u.Id == history.LastLoggedUserId);
-            //}
-            if (history?.LastLoggedUserByUsername != null)
+            _loginHistory = ConfigurationManager.Get<PosConfig>().LoginHistory;
+          
+            Users = new ObservableCollection<User>(_loginHistory.Users);
+            if (_loginHistory?.LastLoggedUserByUsername != null)
             {
-                SelectedUser = Users?.FirstOrDefault(u => u.Username == history.LastLoggedUserByUsername);
+                SelectedUser = Users?.FirstOrDefault(u => u.Username == _loginHistory.LastLoggedUserByUsername);
             }
         }
 
@@ -321,17 +315,7 @@ namespace FastPosFrontend.ViewModels
             {
                 Users.Remove(user);
             }
-            AppConfigurationManager.Save(_loginHistory);
+            _loginHistory.RequestSave();
         }
-    }
-
-    class LoginHistory
-    {
-        [DataMember]
-        public IList<User> Users { get; set; }
-
-        [DataMember]
-        public long LastLoggedUserId { get; set; }
-        public string LastLoggedUserByUsername { get; set; }
     }
 }

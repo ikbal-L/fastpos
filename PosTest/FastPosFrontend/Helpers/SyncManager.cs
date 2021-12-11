@@ -12,7 +12,7 @@ namespace FastPosFrontend.Helpers
     {
         private static readonly Dictionary<object, bool> Locks;
 
-        private static readonly RestApis api = new RestApis();
+        private static readonly RestApi api = new RestApi();
 
         static SyncManager()
         {

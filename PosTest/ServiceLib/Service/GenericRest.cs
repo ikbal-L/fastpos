@@ -16,10 +16,9 @@ namespace ServiceLib.Service
             T t = default;
             if (resp.IsSuccessful)
             {
-
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
-            return ((int)resp.StatusCode,t);// ;products
+            return ((int)resp.StatusCode,t);
 
         }
 
@@ -32,7 +31,7 @@ namespace ServiceLib.Service
          
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
-            return ((int)resp.StatusCode, t);// ;products
+            return ((int)resp.StatusCode, t);
 
         }
 

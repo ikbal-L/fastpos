@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
-using Caliburn.Micro;
 using static FastPosFrontend.ViewModels.DrawerManager;
 
 namespace FastPosFrontend.ViewModels

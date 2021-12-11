@@ -5,8 +5,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using Caliburn.Micro;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 

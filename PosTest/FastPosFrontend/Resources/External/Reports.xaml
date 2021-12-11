@@ -160,7 +160,7 @@
                                        FontWeight="Bold"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                       Text="{Binding Source={ex:Config PropertyName=GeneralSettings.RestaurantName}, StringFormat='Restaurant {0:#}'}" />
+                                       Text="{Binding Source={ex:Config PropertyName=General.RestaurantName}, StringFormat='Restaurant {0:#}'}" />
                                 </StackPanel>
                                 <!--<Image Source=""/>-->
 

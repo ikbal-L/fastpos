@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
@@ -23,6 +25,7 @@ namespace FastPosFrontend.ViewModels
 
         public MainViewModel()
         {
+            ConfigurationManager.Init<PosConfig>(PosConfig.FILE_NAME);
             NavigationManager<object>.Init(this);
             Navigator  = NavigationManager<object>.Instance;
 

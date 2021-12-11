@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 
+
 namespace FastPosFrontend.Helpers
 {
     public class NotifyAllTasksCompletion: PropertyChangedBase

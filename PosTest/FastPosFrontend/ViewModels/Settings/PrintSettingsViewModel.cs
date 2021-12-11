@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using Caliburn.Micro;
 using Newtonsoft.Json;
 using ServiceLib.Service;
+using FastPosFrontend.Configurations;
 
 namespace FastPosFrontend.ViewModels.Settings
 {
@@ -27,16 +28,12 @@ namespace FastPosFrontend.ViewModels.Settings
         
         public PrintSettingsViewModel()
         {
-            //this.Title = "Printers";
-            //this.Content = new PrintSettingsView() { DataContext = this };
+       
             Printers = new ObservableCollection<PrinterItem>();
-            if (!AppConfigurationManager.ContainsKey("PrintSettings"))
-            {
-                AppConfigurationManager.Save("PrintSettings", new List<PrinterItem>());
-            }
+
             
             
-            var listSettings = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
+            var listSettings = ConfigurationManager.Get<PosConfig>().Printing.Printers;
             foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
             {
                 var printerSetting = listSettings?.FirstOrDefault(x => x.Name.Equals(printer));
@@ -51,8 +48,9 @@ namespace FastPosFrontend.ViewModels.Settings
         {
             if (e.PropertyName.Equals(nameof(PrinterItem.SelectedKitchen))|| e.PropertyName.Equals(nameof(PrinterItem.SelectedReceipt)))
             {
-                //Settings.SaveSettings(Printers.ToList());
-                AppConfigurationManager.Save("PrintSettings", Printers.ToList());
+                var printsettings = ConfigurationManager.Get<PosConfig>().Printing;
+                printsettings.Printers = Printers.ToList();
+                printsettings.RequestSave();
             }
         }
     }

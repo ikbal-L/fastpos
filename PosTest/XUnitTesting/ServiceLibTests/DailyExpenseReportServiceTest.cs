@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FastPosFrontend.ViewModels;
+using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using Xunit;
@@ -11,7 +12,7 @@ namespace XUnitTesting.ServiceLibTests
     public class DailyExpenseReportServiceTest
     {
         private readonly ICollection<Order> _orders;
-        private readonly Authentification _authService = new Authentification();
+        private readonly IAuthentification _authService = new RestAuthentification();
 
         public DailyExpenseReportServiceTest()
         {
@@ -42,7 +43,7 @@ namespace XUnitTesting.ServiceLibTests
                 }
             };
             
-            var api = new RestApis();
+            var api = new RestApi();
             var result =
                 GenericRest.PostThing<DailyEarningsReport>(api.Action("dailyExpenseReport", EndPoint.SAVE), d);
             Assert.Equal(201, result.status);

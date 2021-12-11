@@ -1,5 +1,5 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
+using System;
 
 namespace FastPosFrontend.ViewModels.SubViewModel
 {

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using Caliburn.Micro;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 

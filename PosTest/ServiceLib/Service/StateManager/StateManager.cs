@@ -26,6 +26,8 @@ namespace ServiceLib.Service.StateManager
         private static readonly HashSet<Type> FetchLock;
         private static IResponseHandler _responseHandler;
 
+        private string _baseUrl;
+
         static StateManager()
         {
             Service = new Dictionary<Type, object>();
@@ -41,6 +43,12 @@ namespace ServiceLib.Service.StateManager
         {
             _responseHandler = responseHandler;
         }
+
+        public StateManager BaseUrl(string url)
+        {
+            _baseUrl = url;
+            return this;
+        }
         public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = false, string predicate = "", bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);
@@ -55,6 +63,7 @@ namespace ServiceLib.Service.StateManager
 
             if (!Service.ContainsKey(key))
             {
+                repository.BaseUrl = _baseUrl;
                 Service.Add(key, repository);
             }
 

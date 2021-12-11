@@ -39,7 +39,7 @@ namespace ServiceLib.Service.StateManager
                 FetchLock.Remove(key);
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
                 
-                if ((HttpStatusCode)status == HttpStatusCode.NoContent)
+                if ((HttpStatusCode)status != HttpStatusCode.OK)
                 {
                     State[key] = new List<TState>();
                 }

@@ -1,13 +1,12 @@
 ﻿using System;
 using Caliburn.Micro;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Events;
-using FastPosFrontend.ViewModels;
-using FastPosFrontend.ViewModels.Settings;
 using ServiceLib.Service;
 
 namespace FastPosFrontend.Helpers
 {
-    public class ProductLayout : PropertyChangedBase,ISettingsListener
+    public class ProductLayout : PropertyChangedBase, ISettingsListener
     {
         public static int Columns = 6;
         public static int Rows = 5;
@@ -19,17 +18,13 @@ namespace FastPosFrontend.Helpers
 
         private ProductLayout()
         {
-            var setting = AppConfigurationManager.Configuration<ProductLayoutConfiguration>();
-            if (setting == null)
-            {
-                setting = new ProductLayoutConfiguration() { Rows = 5, Columns = 6 };
-                AppConfigurationManager.Save(nameof(ProductLayoutConfiguration),setting);
-            }
+            var setting = ConfigurationManager.Get<PosConfig>().ProductLayout; 
+          
 
             Rows = setting.Rows;
             Columns = setting.Columns;
             Cols = Columns;
-            _categoryCols = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
+            _categoryCols = ConfigurationManager.Get<PosConfig>().General.CategoryPageSize;
         }
 
         public static ProductLayout Instance => _instance;
@@ -41,7 +36,7 @@ namespace FastPosFrontend.Helpers
         public Type[] SettingsControllers { get; }
         public void OnSettingsUpdated(object sender, SettingsUpdatedEventArgs e)
         {
-            _categoryCols = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
+            _categoryCols = ConfigurationManager.Get<PosConfig>().General.CategoryPageSize;
             NotifyOfPropertyChange(nameof(CategoryCols));
            
         }

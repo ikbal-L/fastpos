@@ -4,9 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Helpers;
-using FastPosFrontend.ViewModels;
-using FastPosFrontend.ViewModels.Settings;
 using ServiceInterface.Model;
 
 namespace FastPosFrontend.Converters
@@ -51,7 +50,7 @@ namespace FastPosFrontend.Converters
                 var configuration = Manager.LoadSettings();
                 if (configuration != null)
                 {
-                    divisor = configuration.NumberOfCategories;
+                    divisor = configuration.CategoryPageSize;
                 }
             }
             else

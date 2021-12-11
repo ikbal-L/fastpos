@@ -8,7 +8,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels.Settings.Customer
 {
-   public class AddEditCustomerViewModel : PropertyChangedBase
+    public class AddEditCustomerViewModel : PropertyChangedBase
     {
         private bool _IsOpenDailog ;
         public bool IsOpenDailog

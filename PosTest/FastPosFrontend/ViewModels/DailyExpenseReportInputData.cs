@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Caliburn.Micro;
 
 namespace FastPosFrontend.ViewModels
 {

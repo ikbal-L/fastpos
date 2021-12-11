@@ -199,7 +199,7 @@ namespace FastPosFrontend.ViewModels
         public static (int status, DailyEarningsReport result) SaveReport(long? id)
         {
             string url = "";
-            var api = new RestApis();
+            var api = new RestApi();
 
             if (id != null)
             {

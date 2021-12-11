@@ -295,7 +295,7 @@ namespace FastPosFrontend.ViewModels
                 payedAmount = SelectedDeliveryman.Balance;
             }
 
-            var api = new RestApis();
+            var api = new RestApi();
             var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value,PaymentSource =PaymentSource.Delivery };
             if (IsDiscountEnabled)
             {
@@ -348,7 +348,7 @@ namespace FastPosFrontend.ViewModels
 
         protected override void Setup()
         {
-            var api = new RestApis();
+            var api = new RestApi();
             var url = api.Resource<Deliveryman>("getallwithbalance");
             var result = GenericRest.GetThing<List<Deliveryman>>(url);
             List<Deliveryman> data = new List<Deliveryman>();

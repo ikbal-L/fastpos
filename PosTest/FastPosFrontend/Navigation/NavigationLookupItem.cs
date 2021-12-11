@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Caliburn.Micro;
 
 namespace FastPosFrontend.Navigation
@@ -7,7 +8,7 @@ namespace FastPosFrontend.Navigation
     {
         private string _title;
         private Type _target;
-        private IObservableCollection<NavigationLookupItem> _subItems;
+        private ObservableCollection<NavigationLookupItem> _subItems;
         private int _index;
 
         public NavigationLookupItem(string title, Type target = null, bool keepAlive = false, bool isDefault = false,
@@ -41,7 +42,7 @@ namespace FastPosFrontend.Navigation
 
         public bool IsGroupingItem { get; set; }
 
-        public IObservableCollection<NavigationLookupItem> SubItems
+        public ObservableCollection<NavigationLookupItem> SubItems
         {
             get => _subItems;
             set => Set(ref _subItems, value);

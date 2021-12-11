@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Caliburn.Micro;
+using Caliburn.Micro;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 

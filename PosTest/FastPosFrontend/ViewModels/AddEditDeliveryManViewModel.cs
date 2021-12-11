@@ -2,13 +2,14 @@
 using System.Linq;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using Caliburn.Micro;
 using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-   public class AddEditDeliveryManViewModel : PropertyChangedBase
+    public class AddEditDeliveryManViewModel : PropertyChangedBase
     {
         private bool _IsOpenDailog ;
 

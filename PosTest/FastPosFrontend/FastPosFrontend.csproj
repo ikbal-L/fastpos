@@ -133,6 +133,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Configurations\PosConfig.cs" />
+    <Compile Include="Configurations\Printing.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Converters\BorderClipConverter.cs" />
     <Compile Include="Converters\BrushOpacityConverter.cs" />
@@ -244,8 +246,8 @@
     <Compile Include="SL.Controls\VirtualizingWrapPanel.cs" />
     <Compile Include="ViewModels\AdditivesOfProductViewModel.cs" />
     <Compile Include="ViewModels\AdditivesSettingsViewModel.cs" />
+    <Compile Include="Configurations\LoginHistory.cs" />
     <Compile Include="ViewModels\NavigationManager.cs" />
-    <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
@@ -260,6 +262,7 @@
     <Compile Include="ViewModels\OrderTabinationViewModel.cs" />
     <Compile Include="ViewModels\PaginationController.cs" />
     <Compile Include="ViewModels\PaymentFilter.cs" />
+    <Compile Include="Configurations\ProductLayoutConfiguration.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelInitialized.cs" />
@@ -267,7 +270,6 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OpenTableViewModel.cs" />
-    <Compile Include="ViewModels\PaginationTestViewModel.cs" />
     <Compile Include="ViewModels\PinLoginViewModel.cs" />
     <Compile Include="ViewModels\PrintViewModel.cs" />
     <Compile Include="ViewModels\ProductEditViewModel.cs" />
@@ -278,10 +280,8 @@
     <Compile Include="ViewModels\AddEditDeliveryManViewModel.cs" />
     <Compile Include="ViewModels\DeliveryManSettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\DialogViewModel.cs" />
-    <Compile Include="ViewModels\Settings\GeneralSettings.cs" />
+    <Compile Include="Configurations\GeneralSettings.cs" />
     <Compile Include="ViewModels\Settings\PrintSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Settings\SettingItemBase.cs" />
-    <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModels\AddEditWaiterViewModel.cs" />
     <Compile Include="ViewModels\TableViewModel.cs" />
     <Compile Include="ViewModels\WaiterSettingsViewModel.cs" />
@@ -945,10 +945,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Attributes\Attributes.csproj">
-      <Project>{0aae43f2-d42a-4ea4-8edc-cca3f626a5e5}</Project>
-      <Name>Attributes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ServiceInterface\ServiceInterface.csproj">
       <Project>{07d0d89c-3a6c-4068-bbc0-14a3cb7ffad4}</Project>
       <Name>ServiceInterface</Name>
@@ -963,6 +959,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="reactivity\" />
     <Folder Include="ViewModels\Settings\DeliveryMan\" />
     <Folder Include="ViewModels\Settings\Waiter\" />
     <Folder Include="Views\Settings\DeliveryMan\" />

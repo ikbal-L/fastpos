@@ -10,10 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
-using FastPosFrontend.ViewModels.Settings;
 using MaterialDesignThemes.Wpf;
 using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
@@ -72,10 +72,9 @@ namespace FastPosFrontend.ViewModels
                 SelectedCategory = null;
                 ShowCategoryProducts(category);
             });
-            var pageSize = ProductLayoutViewModel.Configuration.NumberOfProducts;
 
-            ProductPageSize = pageSize;
-            CategoryPageSize = AppConfigurationManager.Configuration<GeneralSettings>().NumberOfCategories;
+            ProductPageSize = ProductLayoutViewModel.Configuration.NumberOfProducts; 
+            CategoryPageSize = ConfigurationManager.Get<PosConfig>().General.CategoryPageSize;
 
             CreateProductCommand = new DelegateCommandBase(CreateProduct);
             EditProductCommand = new DelegateCommandBase(EditProduct);

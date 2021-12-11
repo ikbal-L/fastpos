@@ -73,18 +73,17 @@
   <ItemGroup>
     <Compile Include="Exceptions\StateNotManagedException.cs" />
     <Compile Include="FakeServices.cs" />
-    <Compile Include="GeneralSettings.cs" />
     <Compile Include="helpers\AssociationHelpers.cs" />
     <Compile Include="helpers\AssociationManager.cs" />
     <Compile Include="OrderEx.cs" />
     <Compile Include="OrderItemEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\AppConfigurationManager.cs" />
+    <Compile Include="Service\ConfigurationManager.cs" />
     <Compile Include="Service\Authentification.cs" />
     <Compile Include="Service\GenericRest.cs" />
     <Compile Include="Service\ProductMappingException.cs" />
     <Compile Include="Service\BaseRepository.cs" />
-    <Compile Include="Service\RestApis.cs" />
+    <Compile Include="Service\RestApi.cs" />
     <Compile Include="Service\StateManager\StateManager.cs" />
     <Compile Include="Service\StateManager\StateManager.Async.cs" />
     <Compile Include="Service\StateManager\StateManager.Common.cs" />

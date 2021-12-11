@@ -10,9 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Markup;
-using Caliburn.Micro;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using Caliburn.Micro;
 using FastPosFrontend.ViewModels.Settings;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -52,7 +53,7 @@ namespace FastPosFrontend.ViewModels
         {
             var data = StateManager.Get<DailyEarningsReport>().ToList();
 
-            var api = new RestApis();
+            var api = new RestApi();
             var (status, result) = GenericRest.GetThing<DailyEarningsReport>(api.Resource("daily-earnings-report", "get/date/today"));
             if (status is 200 || status is 201)
             {
@@ -256,7 +257,7 @@ namespace FastPosFrontend.ViewModels
                 var printers = PrinterSettings.InstalledPrinters.Cast<string>().ToList();
 
                 IList<PrinterItem> printerItems = null;
-                var PrinterItemSetting = AppConfigurationManager.Configuration<List<PrinterItem>>("PrintSettings");
+                var PrinterItemSetting = ConfigurationManager.Get<PosConfig>().Printing.Printers;
 
 
             printerItems = PrinterItemSetting.Where(item => item.SelectedReceipt).ToList();

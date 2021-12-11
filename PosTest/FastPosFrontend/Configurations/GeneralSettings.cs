@@ -1,21 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using Caliburn.Micro;
 using Newtonsoft.Json;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
+using ServiceLib.Service;
 
-namespace FastPosFrontend.ViewModels.Settings
+namespace FastPosFrontend.Configurations
 {
-    public class GeneralSettings : PropertyChangedBase
+    public class GeneralSettings : PropertyChangedBase,IConfigurationProperty
     {
 
         private int _tableNumber;
         private string _serverHost;
         private bool _initialized = false;
-        private int _numberOfCategories;
+        private int _categoryPageSize = 4;
+        private string _restaurantName;
+        private bool _isRefundEnabled;
+        private bool isDeliveryEnabled;
+        private bool isMultiCashRegisterEnabled;
+        private bool _isBarcodeEnabled;
+
+        public event EventHandler<SaveRequestedEventArgs> SaveRequested;
 
         public bool Initialized
         {
@@ -24,7 +32,7 @@ namespace FastPosFrontend.ViewModels.Settings
         }
 
         [JsonProperty]
-        public int TableNumber
+        public int TableCount
         {
             get => _tableNumber;
             set
@@ -69,37 +77,16 @@ namespace FastPosFrontend.ViewModels.Settings
 
         [JsonProperty]
 
-        public int NumberOfCategories
+        public int CategoryPageSize
         {
-            get { return _numberOfCategories; }
+            get { return _categoryPageSize; }
             set
             {
-                _numberOfCategories = value;
-                NotifyOfPropertyChange(nameof(NumberOfCategories));
+                _categoryPageSize = value;
+                NotifyOfPropertyChange(nameof(CategoryPageSize));
             }
 
         }
-
-        private string _numberProducts;
-        private string _restaurantName;
-        private bool _isRefundEnabled;
-        private bool isDeliveryEnabled;
-        private bool isMultiCashRegisterEnabled;
-        private bool _isBarcodeEnabled;
-
-        [JsonProperty]
-
-        public string NumberProducts
-        {
-            get { return _numberProducts; }
-            set
-            {
-                _numberProducts = value;
-                NotifyOfPropertyChange(nameof(NumberProducts));
-            }
-        }
-
-
         [JsonProperty]
 
         public string ServerHost
@@ -111,7 +98,6 @@ namespace FastPosFrontend.ViewModels.Settings
                 NotifyOfPropertyChange(nameof(ServerHost));
             }
         }
-
 
         [JsonProperty]
         public string RestaurantName
@@ -139,6 +125,7 @@ namespace FastPosFrontend.ViewModels.Settings
                 Set(ref isDeliveryEnabled, value);
             }
         }
+
         [JsonProperty]
         public bool IsMultiCashRegisterEnabled
         {
@@ -147,10 +134,10 @@ namespace FastPosFrontend.ViewModels.Settings
         }
 
         [JsonProperty]
-        public bool IsBarcodeEnabled 
-        { 
-          get => _isBarcodeEnabled; 
-          set => Set(ref _isBarcodeEnabled ,value);
+        public bool IsBarcodeEnabled
+        {
+            get => _isBarcodeEnabled;
+            set => Set(ref _isBarcodeEnabled, value);
         }
 
 
@@ -173,18 +160,15 @@ namespace FastPosFrontend.ViewModels.Settings
             }
 
             var result = StateManager.Save(newTables);
-            if (result)
-            {
-
-            }
             return result;
         }
 
+        public void RequestSave()
+        {
+            SaveRequested?.Invoke(this,new SaveRequestedEventArgs());
+        }
+
+
     }
 
-
-    public class ReceiptSettings:PropertyChangedBase
-    {
-
-    }
 }
