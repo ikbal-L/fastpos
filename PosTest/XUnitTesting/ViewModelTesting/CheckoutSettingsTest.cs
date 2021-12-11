@@ -10,36 +10,11 @@ namespace XUnitTesting.ViewModelTesting
     public class CheckoutSettingsTest
     {
         private CheckoutSettingsViewModel _checkoutSettingsViewModel;
-        private Mock<IProductService> _productService;
-        private Mock<ICategoryService> _categoryService;
+
 
         public CheckoutSettingsTest()
         {
-            //_productService.Setup((ps => ps.GetAllProducts(ref productServiceStatusCode))).Returns(GetAllProducts().ToList);
-            _productService = new Mock<IProductService>();
-            _categoryService = new Mock<ICategoryService>();
-
-            //
-            //_categoryService
-            //    .Setup((cs =>
-            //        cs.GetAllCategoriesAndProducts(ref categoryServiceStatusCode, ref productServiceStatusCode)))
-            //    .Returns((GetAllCategories(), GetAllProducts()));
-
-            _categoryService
-                .Setup((cs =>
-                    cs.GetAllCategoriesAndProducts()))
-               .Returns(((200,200),(MockingHelpers.GetAllCategories(), MockingHelpers.GetAllProducts())));
-
-
-            //_productService.Setup(
-            //    ps => ps.UpdateProduct(new Product(),null)
-            //).Returns(200);
-            //_categoryService.Setup((cs => cs.UpdateCategory(new Category()))).Returns(200);
-            int productPageSize = 30, categoryPageSize = 10;
-            //_checkoutSettingsViewModel = new CheckoutSettingsViewModel(productPageSize, categoryPageSize
-            //    //,
-            //    //_productService.Object, _categoryService.Object
-            //    );
+            _checkoutSettingsViewModel = new CheckoutSettingsViewModel();
         }
 
         public delegate void GetGetAllProductsCallback(ref int categStatusCode,

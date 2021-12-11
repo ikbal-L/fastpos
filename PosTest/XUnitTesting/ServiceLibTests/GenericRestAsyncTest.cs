@@ -10,7 +10,7 @@ namespace XUnitTesting.ServiceLibTests
     {
         public GenericRestAsyncTest()
         {
-            var authService = new Authentification();
+            var authService = new RestAuthentification();
             var resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
         }
 

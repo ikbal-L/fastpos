@@ -17,7 +17,7 @@ namespace XUnitTesting.ServiceLibTests
             StateManager.Instance
                 .Manage(prodRepo,false)
                 .Manage(catRepo,false);
-            var authService = new Authentification();
+            var authService = new RestAuthentification();
             var resp = authService.Authenticate("admin", "admin", new Annex { Id = 1 }, new Terminal { Id = 1 });
         }
         [Fact]
