@@ -235,12 +235,6 @@ namespace ServiceInterface.Model
         [ObserveMutations(MutationObserverFlags.Object)]
         public Product Product { get; set; }
 
-
-
-        
-
-
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (UnitPrice < 0)

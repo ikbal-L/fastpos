@@ -159,7 +159,10 @@ namespace FastPosFrontend.ViewModels
 
                 if (e.EventName == SSEventType.CREATE_ORDER)
                 {
+                    
+                    
                     Orders.Add(receivedData);
+                    OrdersCollectionObserver.CommitAndPushAddedItems();
                     WaitingViewModel?.Orders.Refresh();
                     WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
                     return;
@@ -169,6 +172,12 @@ namespace FastPosFrontend.ViewModels
                 {
                     order = Orders.FirstOrDefault(o => o.Id == receivedData.Id);
                     order?.UpdateOrderFrom(receivedData);
+                    if (order!= null)
+                    {
+                        var updatedOrderObserver = OrdersCollectionObserver[order] as ObjectGraphMutationObserver<Order>;
+                        updatedOrderObserver?.Commit();
+                        updatedOrderObserver?.Push(); 
+                    }
                     return;
                 }
 
@@ -728,8 +737,7 @@ namespace FastPosFrontend.ViewModels
             if (resp)
             {
                 if (removalStates.Any(s => s == CurrentOrder.State)) RemoveCurrentOrderForOrdersList();
-            }
-            else
+            }else
             {
                 ToastNotification.Notify("Unable to save order");
             }
