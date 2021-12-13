@@ -301,6 +301,23 @@ namespace ServiceInterface.Model
                     new[] {nameof(DiscountPercentage)});
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is OrderItem item &&
+                   Id == item.Id &&
+                   ProductId == item.ProductId &&
+                   State == item.State;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = -594354785;
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
+            hashCode = hashCode * -1521134295 + ProductId.GetHashCode();
+            hashCode = hashCode * -1521134295 + State.GetHashCode();
+            return hashCode;
+        }
     }
 
     public enum OrderItemState
@@ -312,7 +329,7 @@ namespace ServiceInterface.Model
     }
 
 
-
+    
 }
 
 

@@ -10,4 +10,13 @@
         public const string LOCK_ORDER = "Lock.Order";
 
     }
+
+    public class SseEvent
+    {
+        public string Source { get; set; }
+
+        public string Type { get; set; }
+
+        public string Body { get; set; }
+    }
 }

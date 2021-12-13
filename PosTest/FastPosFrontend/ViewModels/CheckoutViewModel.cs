@@ -89,10 +89,8 @@ namespace FastPosFrontend.ViewModels
         private bool _isTableViewActive;
         private bool _isTakeawayViewActive;
         private bool _isDeliveryViewActive;
-        private bool _isReady;
         private ProductLayoutConfiguration _productLayout;
         private bool _isOrderInfoShown;
-        private readonly int mainthread;
         private readonly DispatcherTimer _orderInfoCloseTimer;
         private string _lastModifiedOrderPropertyName;
         private Table _selectedOrderTable;
@@ -135,7 +133,7 @@ namespace FastPosFrontend.ViewModels
             
         }
 
-        private void _eventSource_MessageReceived(object sender, MessageReceivedEventArgs e)
+        private void OnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
             Order receivedData = null;
             Order order = null;
@@ -153,6 +151,7 @@ namespace FastPosFrontend.ViewModels
                     }
                 }
             }
+
 
 
             Application.Current.Dispatcher.Invoke(() =>
@@ -305,8 +304,7 @@ namespace FastPosFrontend.ViewModels
                 .RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken)
                 .Build();
             _eventSource = new EventSource(config);
-
-            _eventSource.MessageReceived += _eventSource_MessageReceived;
+            _eventSource.MessageReceived += OnMessageReceived;
             _eventSource.Closed += _eventSource_Closed;
             _eventSource.Error += (s, args) =>
             {
@@ -390,9 +388,6 @@ namespace FastPosFrontend.ViewModels
         public List<Category> AllCategories { get; set; }
 
         #endregion
-
-
-
         public bool IsDialogOpen
         {
             get => _IsDialogOpen;
@@ -982,7 +977,6 @@ namespace FastPosFrontend.ViewModels
             //}
         }
 
-
         public void CancelOrderAction(object param)
         {
             var checkoutViewModel = param as CheckoutViewModel;
@@ -1005,6 +999,7 @@ namespace FastPosFrontend.ViewModels
 
         void CalculateOrderElapsedTime()
         {
+
             while (true)
             {
                 if (Orders != null)
@@ -1013,7 +1008,7 @@ namespace FastPosFrontend.ViewModels
                     {
                         foreach (var o in Orders)
                         {
-                            var lastStateTime = o.OrderStates?.LastOrDefault<OrderStateElement>();
+                            var lastStateTime = o.OrderStates?.LastOrDefault();
 
                             o.ElapsedTime = lastStateTime != null
                                 ? DateTime.Now - lastStateTime.StateTime

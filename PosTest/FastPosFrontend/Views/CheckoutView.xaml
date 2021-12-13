@@ -93,7 +93,7 @@
                  ItemContainerStyle="{StaticResource OrderItems_ItemStyle}"
                  HorizontalContentAlignment="Stretch"
                  AlternationCount="2"
-                
+                SelectionMode="Single"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListBox.Style>
