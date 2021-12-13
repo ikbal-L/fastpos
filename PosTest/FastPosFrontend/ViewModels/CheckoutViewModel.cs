@@ -753,6 +753,7 @@ namespace FastPosFrontend.ViewModels
             else
             {
                 CurrentOrder = order;
+               
                 CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
                 CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
                 CurrentOrderTotal = CurrentOrder.NewTotal;
@@ -781,6 +782,11 @@ namespace FastPosFrontend.ViewModels
 
             ProductsVisibility = CurrentOrder.ProductsVisibility;
             AdditivesVisibility = CurrentOrder.AdditivesVisibility;
+
+            if (CurrentOrder!= null)
+            {
+                CurrentOrder.SelectedOrderItem = null; 
+            }
         }
 
         public void NewOrder()

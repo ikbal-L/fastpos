@@ -24,7 +24,7 @@ namespace ServiceInterface.Model
         private bool _canAddAdditives;
         private decimal _discountAmount;
         private decimal _discountPercentage;
-        private bool _isSelected;
+
 
         public OrderItem()
         {
@@ -231,15 +231,6 @@ namespace ServiceInterface.Model
         }
 
 
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                NotifyOfPropertyChange(nameof(IsSelected));
-            }
-        }
 
         [ObserveMutations(MutationObserverFlags.Object)]
         public Product Product { get; set; }
@@ -302,22 +293,7 @@ namespace ServiceInterface.Model
             }
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is OrderItem item &&
-                   Id == item.Id &&
-                   ProductId == item.ProductId &&
-                   State == item.State;
-        }
-
-        public override int GetHashCode()
-        {
-            int hashCode = -594354785;
-            hashCode = hashCode * -1521134295 + Id.GetHashCode();
-            hashCode = hashCode * -1521134295 + ProductId.GetHashCode();
-            hashCode = hashCode * -1521134295 + State.GetHashCode();
-            return hashCode;
-        }
+       
     }
 
     public enum OrderItemState

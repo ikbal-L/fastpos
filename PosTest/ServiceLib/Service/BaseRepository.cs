@@ -232,6 +232,8 @@ namespace ServiceLib.Service
         {
             state.OrderNumber = result.OrderNumber;
             state.OrderCode = result.OrderCode;
+            state.NotifyOfPropertyChange(nameof(Order.OrderNumber));
+            state.NotifyOfPropertyChange(nameof(Order.OrderCode));
             foreach (var newOrderItem in result.OrderItems.ToList())
             {
                 OrderItem? oldOrderItem = state.OrderItems.FirstOrDefault(oi => oi.ProductId == newOrderItem.ProductId);

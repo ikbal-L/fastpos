@@ -189,7 +189,7 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 PutAdditiveInCellOf(targetAdditive, receivedAdditive);
-                SelectedAdditive = targetAdditive;
+                SelectedAdditive = receivedAdditive;
             }
         }
 
