@@ -162,7 +162,8 @@ namespace FastPosFrontend.ViewModels
                     
                     
                     Orders.Add(receivedData);
-                    OrdersCollectionObserver.CommitAndPushAddedItems();
+                    OrdersCollectionObserver.ObserveItem(receivedData);
+
                     WaitingViewModel?.Orders.Refresh();
                     WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
                     return;
