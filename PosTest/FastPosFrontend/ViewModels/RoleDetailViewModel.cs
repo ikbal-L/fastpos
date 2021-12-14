@@ -15,7 +15,7 @@ namespace FastPosFrontend.ViewModels
         public RoleDetailViewModel(RoleSettingsViewModel parent)
         {
             _parent = parent;
-            Privileges = new BindableCollection<Privilege>(StateManager.Get<Privilege>());
+            Privileges = new BindableCollection<Privilege>(StateManager.GetAll<Privilege>());
         }
         public string Name
         {

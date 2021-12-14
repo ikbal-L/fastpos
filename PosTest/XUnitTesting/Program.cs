@@ -114,7 +114,7 @@ namespace ConsoleApp
             //StateManager.Get<Category>(); throws exception because type category is not managed 
 
 
-            var additives = StateManager.Get<Additive>();
+            var additives = StateManager.GetAll<Additive>();
 
             // //var cats = categorieService.GetAllCategories(ref getCategoriesStatusCode);
             // //var adds = additiveService.GetAllAdditives(ref code);

@@ -114,7 +114,7 @@ namespace FastPosFrontend.ViewModels.DeliveryAccounting
 
         public  DeliveryAccountingViewModel() {
             StateManager.Fetch();
-            Deliverymans =  new ObservableCollection<Deliveryman>(StateManager.Get<Deliveryman>());
+            Deliverymans =  new ObservableCollection<Deliveryman>(StateManager.GetAll<Deliveryman>());
             initialize();
         }
         public  void initialize(){

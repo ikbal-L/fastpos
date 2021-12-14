@@ -96,6 +96,8 @@ namespace FastPosFrontend.ViewModels
         private Table _selectedOrderTable;
         private SplitViewModel _splitViewModel;
 
+
+
         #endregion
 
         #region Constructors
@@ -137,94 +139,137 @@ namespace FastPosFrontend.ViewModels
         {
             Order receivedData = null;
             Order order = null;
+            var isIdParsed = long.TryParse(e.Message.Data, out var id);
+            var service = StateManager.GetService<Order, IRepository<Order, long>>();
+
+
+            
             if (e.EventName == SSEventType.CREATE_ORDER|| e.EventName == SSEventType.UPDATE_ORDER)
             {
-                var result = long.TryParse(e.Message.Data,out var id);
-                var service = StateManager.GetService<Order, IRepository<Order, long>>();
+               
+                
 
-                if (result)
+                if (isIdParsed)
                 {
-                    var (status, data) = service.GetById(id);
-                    if (status == 200)
+                    //var (status, data) =  service.GetById(id);
+
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    CurrentTask.WatchTaskAsync(service.GetByIdAsync(id),(t)=> 
                     {
-                        receivedData = data;
-                    }
+                        var (status, data) = t.Result;
+                        if (status == 200)
+                        {
+                            receivedData = data;
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+
+                            if (e.EventName == SSEventType.CREATE_ORDER)
+                            {
+                                OrderCreationHandler(receivedData);
+                                return;
+                            }
+
+                            if (e.EventName == SSEventType.UPDATE_ORDER)
+                            {
+                                OrderUpdateHandler(receivedData);
+                                return;
+                            }
+
+
+
+                        });
+                    });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+
                 }
             }
 
-
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-
-                if (e.EventName == SSEventType.CREATE_ORDER)
-                {
-                    
-                    
-                    Orders.Add(receivedData);
-                    OrdersCollectionObserver.ObserveItem(receivedData);
-
-                    WaitingViewModel?.Orders.Refresh();
-                    WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-                    return;
-                }
-
-                if (e.EventName == SSEventType.UPDATE_ORDER)
-                {
-                    order = Orders.FirstOrDefault(o => o.Id == receivedData.Id);
-                    order?.UpdateOrderFrom(receivedData);
-                    if (order!= null)
-                    {
-                        var updatedOrderObserver = OrdersCollectionObserver[order] as ObjectGraphMutationObserver<Order>;
-                        updatedOrderObserver?.Commit();
-                        updatedOrderObserver?.Push(); 
-                    }
-                    return;
-                }
+            Application.Current.Dispatcher.Invoke(() => {
 
                 if (e.EventName == SSEventType.PAY_ORDER)
                 {
-                    var id = long.Parse(e.Message.Data);
-                    var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
-                    Orders.Remove(orderToRemove);
-                    if (CurrentOrder == orderToRemove)
-                    {
-                        CurrentOrder = null;
-                    }
-                    WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                    OrderPaymentHandler(e);
                     return;
                 }
 
                 if (e.EventName == SSEventType.CANCEL_ORDER)
                 {
-                    var id = long.Parse(e.Message.Data);
-                    var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
-                    Orders.Remove(orderToRemove);
-
-                    if (CurrentOrder == orderToRemove)
-                    {
-                        CurrentOrder = null;
-                    }
-                    WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                    OrderCancelationHandler(e);
                     return;
                 }
 
                 if (e.EventName == SSEventType.LOCK_ORDER)
                 {
-                    var data = JsonConvert.DeserializeObject<SyncData>(e.Message.Data);
-                    var orderToLock = Orders.FirstOrDefault(o => o.Id == data.Id);
-
-                    if (orderToLock != null)
-                    {
-                        orderToLock.IsLocked = data.IsLocked;
-                        //orderToLock.LockedBy = data.LockedBy; 
-                    }
+                    OrderLockHandler(e);
                     return;
                 }
 
             });
 
-            
+        }
+
+        private void OrderUpdateHandler(Order receivedData)
+        {
+            var order = Orders.FirstOrDefault(o => o.Id == receivedData.Id);
+            order?.UpdateOrderFrom(receivedData);
+            if (order != null)
+            {
+                var updatedOrderObserver = OrdersCollectionObserver[order] as ObjectGraphMutationObserver<Order>;
+                updatedOrderObserver?.Commit();
+                updatedOrderObserver?.Push();
+            }
+        }
+
+        private void OrderCreationHandler(Order receivedData)
+        {
+            Orders.Add(receivedData);
+            OrdersCollectionObserver.ObserveItem(receivedData);
+
+            WaitingViewModel?.Orders.Refresh();
+            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            return;
+        }
+
+        private void OrderLockHandler(MessageReceivedEventArgs e)
+        {
+            var data = JsonConvert.DeserializeObject<SyncData>(e.Message.Data);
+            var orderToLock = Orders.FirstOrDefault(o => o.Id == data.Id);
+
+            if (orderToLock != null)
+            {
+                orderToLock.IsLocked = data.IsLocked;
+                //orderToLock.LockedBy = data.LockedBy; 
+            }
+        }
+
+        private void OrderCancelationHandler(MessageReceivedEventArgs e)
+        {
+            var id = long.Parse(e.Message.Data);
+            var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
+            Orders.Remove(orderToRemove);
+
+            if (CurrentOrder == orderToRemove)
+            {
+                CurrentOrder = null;
+            }
+            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+        }
+
+        private void OrderPaymentHandler(MessageReceivedEventArgs e)
+        {
+            var id = long.Parse(e.Message.Data);
+            var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
+            Orders.Remove(orderToRemove);
+            if (CurrentOrder == orderToRemove)
+            {
+                CurrentOrder = null;
+            }
+            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            return;
         }
 
         private void SetupEmbeddedCommandBar()
@@ -247,13 +292,13 @@ namespace FastPosFrontend.ViewModels
        
         public async override void Initialize()
         {
-            var deliveryMen = StateManager.Get<Deliveryman>();
-            var waiter = StateManager.Get<Waiter>();
-            var tables = StateManager.Get<Table>();
-            var customers = StateManager.Get<Customer>();
-            var unprocessedOrders = StateManager.Get<Order>();
-            var categories = StateManager.Get<Category>();
-            var products = StateManager.Get<Product>();
+            var deliveryMen = StateManager.GetAll<Deliveryman>();
+            var waiter = StateManager.GetAll<Waiter>();
+            var tables = StateManager.GetAll<Table>();
+            var customers = StateManager.GetAll<Customer>();
+            var unprocessedOrders = StateManager.GetAll<Order>();
+            var categories = StateManager.GetAll<Category>();
+            var products = StateManager.GetAll<Product>();
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
             OrdersCollectionObserver = new CollectionMutationObserver<Order>(Orders,true,true);
@@ -315,6 +360,8 @@ namespace FastPosFrontend.ViewModels
                 .Build();
             _eventSource = new EventSource(config);
             _eventSource.MessageReceived += OnMessageReceived;
+
+
             _eventSource.Closed += _eventSource_Closed;
             _eventSource.Error += (s, args) =>
             {
@@ -374,7 +421,7 @@ namespace FastPosFrontend.ViewModels
         }
 
         EventSource _eventSource;
-
+        TaskEventHandler CurrentTask = new TaskEventHandler();
         public ProductLayoutConfiguration ProductLayout
         {
             get => _productLayout;
@@ -2296,7 +2343,7 @@ namespace FastPosFrontend.ViewModels
                 }
             }
             
-            var tables = StateManager.Get<Table>().ToList();
+            var tables = StateManager.GetAll<Table>().ToList();
             if (Tables.Count != tables.Count)
             {
                 Tables = new BindableCollection<Table>(tables);

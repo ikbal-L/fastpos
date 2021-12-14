@@ -19,7 +19,6 @@ namespace ServiceLib.Service
                 t = JsonConvert.DeserializeObject<T>(resp.Content);
             }
             return ((int)resp.StatusCode,t);
-
         }
 
         public static async Task<(int status, T)> GetThingAsync<T>(string path)

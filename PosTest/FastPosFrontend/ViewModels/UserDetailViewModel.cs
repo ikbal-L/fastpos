@@ -42,7 +42,7 @@ namespace FastPosFrontend.ViewModels
         {
             _parent = parent;
 
-            var data = StateManager.Get<Role>();
+            var data = StateManager.GetAll<Role>();
             Roles = new BindableCollection<Role>(data);
 
             InitializeModel(model);

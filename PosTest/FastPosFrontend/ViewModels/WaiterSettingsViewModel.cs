@@ -117,7 +117,7 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            Waiters = new ObservableCollection<ServiceInterface.Model.Waiter>(StateManager.Get<ServiceInterface.Model.Waiter>());
+            Waiters = new ObservableCollection<ServiceInterface.Model.Waiter>(StateManager.GetAll<ServiceInterface.Model.Waiter>());
             _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
             _addEditWaiterView = new AddEditWaiterView() { DataContext = _AddEditWaiterViewModel };
             DailogContent = _addEditWaiterView;

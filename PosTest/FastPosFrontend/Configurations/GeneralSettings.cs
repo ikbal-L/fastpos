@@ -144,13 +144,13 @@ namespace FastPosFrontend.Configurations
 
         public bool DeleteTables(int limit)
         {
-            var ids = StateManager.Get<Table>().Where(t => t.Id != null).OrderByDescending(table => table.Number).Take(limit).Select((table, i) => table.Id.Value);
+            var ids = StateManager.GetAll<Table>().Where(t => t.Id != null).OrderByDescending(table => table.Number).Take(limit).Select((table, i) => table.Id.Value);
             return StateManager.Delete<Table, long>(ids);
         }
 
         public bool CreateTables(int limit)
         {
-            var tables = StateManager.Get<Table>();
+            var tables = StateManager.GetAll<Table>();
             var baseNumber = tables.Any() ? tables.Max(table => table.Number) : 0;
             IList<Table> newTables = new List<Table>(limit);
             for (int i = 1; i <= limit; i++)
@@ -159,7 +159,7 @@ namespace FastPosFrontend.Configurations
                 newTables.Add(new Table() { Number = baseNumber + i });
             }
 
-            var result = StateManager.Save(newTables);
+            var result = StateManager.SaveAll(newTables);
             return result;
         }
 

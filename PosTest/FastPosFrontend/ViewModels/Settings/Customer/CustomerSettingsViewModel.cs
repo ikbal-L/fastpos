@@ -56,7 +56,7 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
         public CustomerSettingsViewModel()
         {
 
-            Customers = new ObservableCollection<ServiceInterface.Model.Customer>(StateManager.Get<ServiceInterface.Model.Customer>());
+            Customers = new ObservableCollection<ServiceInterface.Model.Customer>(StateManager.GetAll<ServiceInterface.Model.Customer>());
             _AddEditCustomerViewModel = new AddEditCustomerViewModel(this);
             _AddEditCustomerView = new AddEditCustomerView() { DataContext = _AddEditCustomerViewModel };
             DailogContent = _AddEditCustomerView;

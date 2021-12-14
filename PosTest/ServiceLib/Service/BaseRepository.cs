@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLib.Service
 {
-    public class BaseRepository <TState, TIdentifier> : IRepository<TState, TIdentifier> where TState : IState<TIdentifier> where TIdentifier : struct
+    public class BaseRepository <T, Id> : IRepository<T, Id> where T : IState<Id> where Id : struct
     {
         
         protected string Resource = null;
@@ -28,39 +28,40 @@ namespace ServiceLib.Service
             set => Api.BaseUrl = value; 
         }
 
-        public virtual (int status, TState) GetById(TIdentifier id)
+        public virtual (int status, T) GetById(Id id)
         {
-            return GenericRest.GetThing<TState>(Api.Resource<TState>(EndPoint.GET,arg:id));
+            return GenericRest.GetThing<T>(Api.Resource<T>(EndPoint.GET,arg:id));
         }
 
-        public virtual (int status, IEnumerable<TState> state) GetAll()
+        public virtual (int status, IEnumerable<T> state) GetAll()
         {
-            return GenericRest.GetAll<TState>(Api.Resource<TState>(EndPoint.GET_ALL, resource:Resource));
+            return GenericRest.GetAll<T>(Api.Resource<T>(EndPoint.GET_ALL, resource:Resource));
         }
 
-        public (int status, IEnumerable<TState>) Get(string subPath)
+        public (int status, IEnumerable<T>) Get(string subPath)
         {
-            return GenericRest.GetAll<TState>(Api.Resource<TState>(EndPoint.GET_ALL,subPath:subPath));
+            return GenericRest.GetAll<T>(Api.Resource<T>(EndPoint.GET_ALL,subPath:subPath));
         }
 
 
-        public virtual (int status, IEnumerable<TState>) GetByIds(IEnumerable<TIdentifier> ids)
+        public virtual (int status, IEnumerable<T>) GetByIds(IEnumerable<Id> ids)
         {
-            return GenericRest.GetManyThings<TState>((IEnumerable<long>)ids, Api.Resource<TState>(EndPoint.GET_MANY));
+            return GenericRest.GetManyThings<T>((IEnumerable<long>)ids, Api.Resource<T>(EndPoint.GET_MANY));
         }
 
-        public virtual int Save(TState state, out IEnumerable<string> errors)
+        public virtual (int status, IEnumerable<string> errors) Save(T state)
         {
-            return GenericRest.SaveThing(state, Api.Resource<TState>(EndPoint.SAVE),out errors).status;
+             var res = GenericRest.SaveThing(state, Api.Resource<T>(EndPoint.SAVE), out var errors);
+            return (res.status, errors);
         }
 
-        public virtual (int status, IEnumerable<TState> state, IEnumerable<string> errors) SaveAll(IEnumerable<TState> state)
+        public virtual (int status, IEnumerable<T> state, IEnumerable<string> errors) SaveAll(IEnumerable<T> state)
         {
-            var result = GenericRest.SaveThing<IEnumerable<TState>>(state, Api.Resource<TState>(EndPoint.SAVE_MANY));
+            var result = GenericRest.SaveThing(state, Api.Resource<T>(EndPoint.SAVE_MANY));
             
             if (result.StatusCode == HttpStatusCode.OK|| result.StatusCode == HttpStatusCode.Created)
             {
-                var content = JsonConvert.DeserializeObject<IEnumerable<TState>>(result.Content);
+                var content = JsonConvert.DeserializeObject<IEnumerable<T>>(result.Content);
                 return ((int) result.StatusCode, content,null);
             }
             var errors = JsonConvert.DeserializeObject<IEnumerable<string>>(result.Content);
@@ -68,28 +69,28 @@ namespace ServiceLib.Service
 
         }
 
-        public virtual (int status, IEnumerable<string> errors) DeleteById(TIdentifier id)
+        public virtual (int status, IEnumerable<string> errors) DeleteById(Id id)
         {
-            return GenericRest.Delete<TState>(Api.Resource<TState>(EndPoint.DELETE,id));
+            return GenericRest.Delete<T>(Api.Resource<T>(EndPoint.DELETE,id));
         }
 
 
-        public virtual int Update(TState state, out IEnumerable<string> errors) 
+        public virtual (int status, IEnumerable<string> errors) Update(T state) 
         {
-            
-            return GenericRest.UpdateThing<TState>(state, Api.Resource<TState>(EndPoint.PUT, arg: state.Id), out errors).status;
+            var res =  GenericRest.UpdateThing<T>(state, Api.Resource<T>(EndPoint.PUT, arg: state.Id), out var errors);
+            return (res.status, errors);
         }
 
         
 
-        public virtual (int status, IEnumerable<TState>) Get(object param)
+        public virtual (int status, IEnumerable<T>) Get(object param)
         {
             throw new NotImplementedException();
         }
 
-        public (int status, IEnumerable<string> errors) Update(IEnumerable<TState> state)
+        public (int status, IEnumerable<string> errors) Update(IEnumerable<T> state)
         {
-            var result = GenericRest.UpdateThing(state, Api.Resource<TState>(EndPoint.PUT_MANY));
+            var result = GenericRest.UpdateThing(state, Api.Resource<T>(EndPoint.PUT_MANY));
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 return ((int)result.StatusCode, Array.Empty<string>());
@@ -99,56 +100,58 @@ namespace ServiceLib.Service
             return ((int)result.StatusCode, errors);
         }
 
-        public (bool, TReturn) Save<TReturn>(TState state)
+        public (bool, TReturn) Save<TReturn>(T state)
         {
-            return GenericRest.SaveThing<TState, TReturn>(state, Api.Resource<TState>(EndPoint.SAVE));
+            return GenericRest.SaveThing<T, TReturn>(state, Api.Resource<T>(EndPoint.SAVE));
         }
 
-        public (bool,TReturn) Update<TReturn>(TState state)
+        public (bool,TReturn) Update<TReturn>(T state)
         {
-            return GenericRest.UpdateThing<TState, TReturn>(state, Api.Resource<TState>(EndPoint.PUT,(TIdentifier)state.Id));
+            return GenericRest.UpdateThing<T, TReturn>(state, Api.Resource<T>(EndPoint.PUT,(Id)state.Id));
         }
 
-        public (bool, TReturn) Delete<TReturn>(TIdentifier id)
+
+
+        public int Delete(IEnumerable<Id> ids)
         {
-            return GenericRest.DeleteThing<TReturn>(Api.Resource<TState>(EndPoint.DELETE,id));
+            return GenericRest.DeleteThing(Api.Resource<T>(EndPoint.DELETE_MANY),ids);
         }
 
-        public int Delete(IEnumerable<TIdentifier> ids)
+        public async Task<(int, IEnumerable<T>)> GetAsync()
         {
-            return GenericRest.DeleteThing(Api.Resource<TState>(EndPoint.DELETE_MANY),ids);
+             return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(EndPoint.GET_ALL,resource:Resource));
         }
 
-        public async Task<(int, IEnumerable<TState>)> GetAsync()
+        public async Task<(int status, IEnumerable<T>)> GetAsync(string subPath)
         {
-             return await GenericRest.GetThingAsync<IEnumerable<TState>>(Api.Resource<TState>(EndPoint.GET_ALL,resource:Resource));
+            return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(EndPoint.GET_ALL, subPath: subPath));
         }
 
-        public async Task<(int status, IEnumerable<TState>)> GetAsync(string subPath)
-        {
-            return await GenericRest.GetThingAsync<IEnumerable<TState>>(Api.Resource<TState>(EndPoint.GET_ALL, subPath: subPath));
-        }
-
-        public List<TState> GetByCriterias(object criterias)
+        public List<T> GetByCriterias(object criterias)
         {
 
-            var result = GenericRest.RestPost(criterias, Api.Resource<TState>(EndPoint.GET_ALL_BY_CRITERIAS));
+            var result = GenericRest.RestPost(criterias, Api.Resource<T>(EndPoint.GET_ALL_BY_CRITERIAS));
             if (result.IsSuccessful)
             {
-                return JsonConvert.DeserializeObject<List<TState>>(result.Content);
+                return JsonConvert.DeserializeObject<List<T>>(result.Content);
             };
-            return new List<TState>();
+            return new List<T>();
         }
 
-        public async Task<List<TState>> GetByCriteriasAsync(object criterias)
+        public async Task<List<T>> GetByCriteriasAsync(object criterias)
         {
 
-            var result =await GenericRest.RestPostAsync(criterias, Api.Resource<TState>(EndPoint.GET_ALL_BY_CRITERIAS));
+            var result =await GenericRest.RestPostAsync(criterias, Api.Resource<T>(EndPoint.GET_ALL_BY_CRITERIAS));
             if (result.IsSuccessful)
             {
-                return JsonConvert.DeserializeObject<List<TState>>(result.Content);
+                return JsonConvert.DeserializeObject<List<T>>(result.Content);
             };
-            return new List<TState>();
+            return new List<T>();
+        }
+
+        public async Task<(int status, T resource)> GetByIdAsync(Id id)
+        {
+            return await RestService.Instance.GetResourceAsync<T>(Api.Resource<T>(EndPoint.GET, arg: id));
         }
     }
 
@@ -181,18 +184,18 @@ namespace ServiceLib.Service
     {
         
 
-        public override int Save(Order state, out IEnumerable<string> errors)
+        public override (int status, IEnumerable<string> errors) Save(Order state)
         {
             var response = GenericRest.SaveThing(state, Api.Resource<Order>(EndPoint.SAVE));
-            PatchOrderFromResponse(state, response,out errors);
-            return (int)response.StatusCode;
+            PatchOrderFromResponse(state, response,out var errors);
+            return ((int)response.StatusCode, errors);
         }
 
-        public override int Update(Order state, out IEnumerable<string> errors)
+        public override (int status, IEnumerable<string> errors) Update(Order state)
         {
             var response = GenericRest.UpdateThing(state, Api.Resource<Order>(EndPoint.PUT,arg: state.Id));
-            PatchOrderFromResponse(state, response, out errors);
-            return (int)response.StatusCode;
+            PatchOrderFromResponse(state, response, out var errors);
+            return ((int)response.StatusCode, errors);
         }
 
         public static void PatchOrderFromResponse(Order state, RestSharp.IRestResponse response, out IEnumerable<string> errors)
@@ -221,8 +224,6 @@ namespace ServiceLib.Service
                 }
 
                 PatchOrder(state, deserializedState);
-
-                deserializedState = null;
             }
 
 

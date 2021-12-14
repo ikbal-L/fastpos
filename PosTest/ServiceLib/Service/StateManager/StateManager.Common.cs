@@ -7,44 +7,49 @@ namespace ServiceLib.Service.StateManager
 {
     public partial class StateManager
     {
-        public StateManager Manage<TState>(IRepository<TState, long> repository) where TState : IState<long>
+        public StateManager Manage<T>(IRepository<T, long> repository) where T : IState<long>
         {
-            return Manage<TState, long>(repository);
+            return Manage<T, long>(repository);
         }
 
-        public static ICollection<TState> Get<TState>(string predicate = "") where TState : IState<long>
+        public static ICollection<T> GetAll<T>() where T : IState<long>
         {
-            return Get<TState, long>(predicate);
+            return Get<T, long>();
         }
 
-        public static TState Get<TState>(long identifier) where TState : IState<long>
+        public static T GetById<T>(long id) where T : IState<long>
         {
-            return Get<TState, long>(identifier);
+            return GetById<T, long>(id);
         }
 
-        public static bool Save<TState>(IEnumerable<TState> state) where TState : IState<long>
+        public static bool SaveAll<T>(IEnumerable<T> state) where T : IState<long>
         {
-            return Save<TState, long>(state);
+            return Save<T, long>(state);
         }
 
-        public static bool Save<TState>(TState state) where TState : class, IState<long>
+        public static bool Save<T>(T state) where T : class, IState<long>
         {
-            return Save<TState, long>(state);
+            return Save<T, long>(state);
         }
 
-        private static void IsStateManaged<TState>(Type key) where TState : IState<long>
+        private static void IsStateManaged<T>(Type key) where T : IState<long>
         {
-            IsStateManaged<TState, long>(key);
+            IsStateManaged<T, long>(key);
         }
 
-        public static void Refresh<TState>() where TState : IState<long>
+        public static void Refresh<T>() where T : IState<long>
         {
-            Refresh<TState, long>();
+            Refresh<T, long>();
         }
 
-        public static bool Delete<TState>(TState state) where TState : class, IState<long>
+        public static bool Delete<T>(T state) where T : class, IState<long>
         {
-            return Delete<TState, long>(state);
+            return Delete<T, long>(state);
+        }
+
+        public IRepository<T,long> GetRepository<T>() where T : IState<long>
+        {
+            return GetRepository<T, long>();
         }
     }
  

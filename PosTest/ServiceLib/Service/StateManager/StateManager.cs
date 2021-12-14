@@ -49,9 +49,9 @@ namespace ServiceLib.Service.StateManager
             _baseUrl = url;
             return this;
         }
-        public StateManager Manage<TState, TIdentifier>(IRepository<TState, TIdentifier> repository, bool fetch = false, string predicate = "", bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
+        public StateManager Manage<T, Id>(IRepository<T, Id> repository, bool fetch = false, string predicate = "", bool withAssociatedTypes = false) where T : IState<Id> where Id : struct
         {
-            var key = typeof(TState);
+            var key = typeof(T);
             if (withAssociatedTypes)
             {
                 FetchwithAssociatedTypes.Add(key);
@@ -69,10 +69,10 @@ namespace ServiceLib.Service.StateManager
 
             if (fetch)
             {
-                _onFetchRequested += Fetch<TState, TIdentifier>;
+                _onFetchRequested += Fetch<T, Id>;
                 if (string.IsNullOrEmpty(predicate))
                 {
-                    Fetch<TState, TIdentifier>(null,withAssociatedTypes);
+                    Fetch<T, Id>(null,withAssociatedTypes);
                 }
 
             }
@@ -82,37 +82,37 @@ namespace ServiceLib.Service.StateManager
 
         public static StateManager Instance => _instance ??= new StateManager();
 
-        public static ICollection<TState> Get<TState, TIdentifier>(string predicate = "") where TState : IState<TIdentifier> where TIdentifier : struct 
+        public static ICollection<T> Get<T, Id>() where T : IState<Id> where Id : struct 
         {
-            var key = typeof(TState);
-            IsStateManaged<TState, TIdentifier>(key);
+            var key = typeof(T);
+            IsStateManaged<T, Id>(key);
 
-            if (State[key] == null) Fetch<TState, TIdentifier>(predicate);
+            if (State[key] == null) Fetch<T, Id>("");
 
 
-            return State[key] as ICollection<TState>;
+            return State[key] as ICollection<T>;
         }
 
-        public static TState Get<TState, TIdentifier>(TIdentifier identifier) where TState : IState<TIdentifier> where TIdentifier : struct
+        public static TState GetById<TState, Id>(Id id) where TState : IState<Id> where Id : struct
         {
-            return Get<TState, TIdentifier>().FirstOrDefault(state=> state.Id.Equals(identifier));
+            return Get<TState, Id>().FirstOrDefault(state=> state.Id.Equals(id));
         }
 
-        public static bool Save<TState, TIdentifier>(TState state) where TState : class, IState<TIdentifier> where TIdentifier : struct
+        public static bool Save<T, Id>(T state) where T : class, IState<Id> where Id : struct
         {
-            var key = typeof(TState);
-            IsStateManaged<TState, TIdentifier>(key);
+            var key = typeof(T);
+            IsStateManaged<T, Id>(key);
 
-            if (Service[key] is IRepository<TState, TIdentifier> service)
+            if (Service[key] is IRepository<T, Id> service)
             {
-                var status = -1;
+
                 var action = state.Id == null ? StateManagementQuery.Save : StateManagementQuery.Update;
-                status = state.Id == null ? service.Save(state, out var errors) : service.Update(state, out errors);
+                var (status,errors) = state.Id == null ? service.Save(state) : service.Update(state);
                 
                 _responseHandler.Handle(status,errors,action,obj:state);
                 if ((HttpStatusCode)status == HttpStatusCode.OK || (HttpStatusCode)status == HttpStatusCode.Created)
                 {
-                    if (State[key] is ICollection<TState> tState)
+                    if (State[key] is ICollection<T> tState)
                     {
                         if (!tState.Contains(state)) tState.Add(state);
                     }
@@ -135,39 +135,13 @@ namespace ServiceLib.Service.StateManager
 
             return false;
         }
-        public static (bool, TReturn) Save<TReturn,TState, TIdentifier>(TState state) where TState : IState<TIdentifier> where TIdentifier : struct
+
+
+        public static bool Save<T, Id>(IEnumerable<T> state) where T : IState<Id> where Id : struct
         {
-            var key = typeof(TState);
-            IsStateManaged<TState, TIdentifier>(key);
+            var key = typeof(T);
 
-            IEnumerable<string> errors = null;
-
-            if (Service[key] is IRepository<TState, TIdentifier> service)
-            {
-                return state.Id == null? service.Save<TReturn>(state): service.Update<TReturn>(state); ;
-
-            }
-
-            return(false, default(TReturn));
-        }
-
-        
-        public static (bool,TReturn) SaveAndReturn<TState,TReturn>(TState state) where TState : IState<long>
-        {
-            return Save<TReturn,TState, long>(state);
-        }
-
-        public static bool Save<TState, TIdentifier>(IEnumerable<TState> state) where TState : IState<TIdentifier> where TIdentifier : struct
-        {
-            var key = typeof(TState);
-            IEnumerable<string> errors = null;
-
-            //if (state.Any(tState => tState.Id!= null ))
-            //{
-            //    throw new ArgumentException("State must be unmanaged");
-            //}
-
-            if (Service[key] is IRepository<TState, TIdentifier> service)
+            if (Service[key] is IRepository<T, Id> service)
             {
                 var tState = state.ToList();
                 if (tState.All(ts=>ts.Id!= null))
@@ -195,53 +169,36 @@ namespace ServiceLib.Service.StateManager
             return false;
         }
 
-        public static bool Delete<TState, TIdentifier>(TState state) where TState : class, IState<TIdentifier> where TIdentifier : struct
+        public static bool Delete<T, Id>(T state) where T : class, IState<Id> where Id : struct
         {
             
-            var key = typeof(TState);
+            var key = typeof(T);
             
 
-            if (!(Service[key] is IRepository<TState, TIdentifier> service)) return false;
+            if (!(Service[key] is IRepository<T, Id> service)) return false;
             
             if (state.Id == null)
             {
                 throw new InvalidOperationException("State must have an Id");
             }
 
-            var (status,errors) = service.DeleteById((TIdentifier)state.Id);
+            var (status,errors) = service.DeleteById((Id)state.Id);
             _responseHandler.Handle(status,errors,StateManagementQuery.Delete,obj:state);
 
             if ((HttpStatusCode) status != HttpStatusCode.OK) return false;
-            if ((State[key] is ICollection<TState> tState)) 
+            if ((State[key] is ICollection<T> tState)) 
                    if (tState.Contains(state))
                             tState.Remove(state);
             return true;
 
         }
-        public static (bool,TReturn) DeleteAndRetrun<TState, TReturn>(TState state) where TState : IState<long>
+
+        public static bool Delete<T, Id>(IEnumerable<Id> ids) where T : IState<Id> where Id : struct
         {
-            var key = typeof(TState);
-            if (Service[key] is IRepository<TState, long> service)
-            {
-                var status = -1;
-                if (state.Id == null)
-                {
-                    throw new InvalidOperationException("State must have an Id");
-                }
-
-                return service.Delete<TReturn>((long)state.Id);
-
-            }
-
-            return (false, default(TReturn));
-        }
-
-        public static bool Delete<TState, TIdentifier>(IEnumerable<TIdentifier> ids) where TState : IState<TIdentifier> where TIdentifier : struct
-        {
-            var key = typeof(TState);
+            var key = typeof(T);
             IEnumerable<string> errors = null;
 
-            if (!(Service[key] is IRepository<TState, TIdentifier> service)) return false;
+            if (!(Service[key] is IRepository<T, Id> service)) return false;
             var status = -1;
             if (!ids.Any())
             {
@@ -251,9 +208,9 @@ namespace ServiceLib.Service.StateManager
             status = service.Delete(ids);
             if (status!= 200) return false;
 
-            if ((State[key] is ICollection<TState> tState))
+            if ((State[key] is ICollection<T> tState))
             {
-                IEnumerable<TState> stateToRemove;
+                IEnumerable<T> stateToRemove;
                 foreach (var state in tState.ToList())
                 {
                     if (state.Id != null && ids.Contains(state.Id.Value))
@@ -266,17 +223,13 @@ namespace ServiceLib.Service.StateManager
             return true;
         }
 
-        
-
-
-       
-        private static void Fetch<TState, TIdentifier>(string predicate = null,bool withAssociatedTypes = false) where TState : IState<TIdentifier> where TIdentifier : struct
+        private static void Fetch<T, Id>(string predicate = null,bool withAssociatedTypes = false) where T : IState<Id> where Id : struct
         {
-            var key = typeof(TState);
+            var key = typeof(T);
             //TODO Decide  whether to withAssociatedTypes or FetchWithAssociatedTypes
             if (FetchwithAssociatedTypes.Contains(key))
             {
-                var associations = associationManager.GetAssociationsOf<TState>();
+                var associations = associationManager.GetAssociationsOf<T>();
                 foreach (var association in associations)
                 {
                     CallMethodUsingReflection(nameof(Fetch), new object[] {null, false}, association, typeof(long));
@@ -284,14 +237,14 @@ namespace ServiceLib.Service.StateManager
                 
             }
             if (State[key] != null && !_refreshRequested) return;
-            if (Service[key] is IRepository<TState, TIdentifier> service)
+            if (Service[key] is IRepository<T, Id> service)
             {
                 var (status, data) = string.IsNullOrEmpty(predicate) ? service.GetAll() : service.Get(predicate);
                 //ServiceHelper.HandleStatusCodeErrors();
                 if ((HttpStatusCode)status != HttpStatusCode.OK && (HttpStatusCode)status != HttpStatusCode.NoContent) return;
                 if ((HttpStatusCode)status == HttpStatusCode.NoContent)
                 {
-                    State[key] = new List<TState>();
+                    State[key] = new List<T>();
                 }
                 else
                 {
@@ -304,66 +257,17 @@ namespace ServiceLib.Service.StateManager
         }
 
         [Conditional("DEBUG")]
-        private static void IsStateManaged<TState, TIdentifier>(Type key) where TState : IState<TIdentifier> where TIdentifier : struct
+        private static void IsStateManaged<T, Id>(Type key) where T : IState<Id> where Id : struct
         {
             if (!State.ContainsKey(key))
             {
-                throw new StateNotManagedException<TState>();
+                throw new StateNotManagedException<T>();
             }
         }
 
         public static void Fetch()
         {
             _onFetchRequested?.Invoke(null,false);
-        }
-
-        public static void Associate<TMany, TOne>()
-        {
-            var keyOfTMany = typeof(TMany);
-            var keyOfTOne = typeof(TOne);
-            if (!State.ContainsKey(keyOfTMany) && !State.ContainsKey(keyOfTOne)) return;
-            Action act = GetAssociation<TMany, TOne>();
-            if (!Association.ContainsKey(keyOfTOne))
-            {
-                Association.Add(keyOfTOne, act);
-            }
-            else
-            {
-                if (!Association[keyOfTOne].GetInvocationList().Contains(act))
-                {
-                    Association[keyOfTOne] += act; 
-                }
-            }
-
-            if (!Association.ContainsKey(keyOfTMany))
-            {
-                Association.Add(keyOfTMany, act);
-            }
-            else
-            {
-                if (!Association[keyOfTMany].GetInvocationList().Contains(act))
-                {
-                    Association[keyOfTMany] += act; 
-                }
-            }
-
-            Association[keyOfTOne]();
-        }
-
-        private static Action GetAssociation<TMany, TOne>()
-        {
-            return () =>
-            {
-                var keyOfTMany = typeof(TMany);
-                var keyOfTOne = typeof(TOne);
-
-                var collectionOfTMany = State[keyOfTMany] as ICollection<TMany>;
-                var collectionOfTOne = State[keyOfTOne] as ICollection<TOne>;
-
-                if (collectionOfTMany == null || collectionOfTOne == null) return;
-                var association = AssociationHelpers.GetAssociation<TMany, TOne>();
-                association(collectionOfTMany, collectionOfTOne);
-            };
         }
 
         public static void Flush()
@@ -373,10 +277,10 @@ namespace ServiceLib.Service.StateManager
 
         }
 
-        public static void Flush<TState>() where TState:IState<long>
+        public static void Flush<T>() where T:IState<long>
         {
-            var key = typeof(TState);
-            IsStateManaged<TState>(key);
+            var key = typeof(T);
+            IsStateManaged<T>(key);
             if (State.ContainsKey(key))
             {
                 //(State[key] as ICollection<TState>)?.Clear();
@@ -391,19 +295,25 @@ namespace ServiceLib.Service.StateManager
             _refreshRequested = false;
         }
 
-        public static void Refresh<TState, TIdentifier>() where TState : IState<TIdentifier> where TIdentifier : struct
+        public static void Refresh<T, Id>() where T : IState<Id> where Id : struct
         {
             _refreshRequested = true;
-            Fetch<TState,TIdentifier>();
+            Fetch<T,Id>();
             _refreshRequested = false;
 
-            var key = typeof(TState);
+            var key = typeof(T);
             Association[key]();
         }
 
         
         public static TService GetService<TState, TService>() {
             return (TService) Service[typeof(TState)];
+        }
+
+        public static IRepository<T,Id> GetRepository<T,Id>() where T:IState<Id> where Id:struct
+        {
+            if (Service[typeof(T)] is IRepository<T, Id> repository) return repository;
+            return default(IRepository<T, Id>);
         }
 
         public static async Task CallMethodUsingReflection(string methodName, object[] methodArgs,params Type [] methodTypeArgs)

@@ -176,7 +176,7 @@ namespace FastPosFrontend.ViewModels
             var comparer = new Comparer<Additive>();
             int StatusCode = 0;
             // var allAdditives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
-            var allAdditives = StateManager.Get<Additive>().ToList();
+            var allAdditives = StateManager.GetAll<Additive>().ToList();
             
             var filteredAdditives = new List<Additive>(allAdditives.Where(a => a.Rank != null));
             filteredAdditives.Sort(comparer);

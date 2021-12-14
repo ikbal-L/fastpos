@@ -124,7 +124,7 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            Deliverymans = new ObservableCollection<Deliveryman>(StateManager.Get<Deliveryman>());
+            Deliverymans = new ObservableCollection<Deliveryman>(StateManager.GetAll<Deliveryman>());
             _AddEditDeliveryManViewModel = new AddEditDeliveryManViewModel(this);
             _addEditDeliveryManView = new AddEditDeliveryManView() { DataContext = _AddEditDeliveryManViewModel };
             DailogContent = _addEditDeliveryManView;

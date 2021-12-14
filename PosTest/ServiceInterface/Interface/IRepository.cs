@@ -5,33 +5,33 @@ using ServiceInterface.Model;
 
 namespace ServiceInterface.Interface
 {
-    public interface IRepository<TState, in TIdentifier> where TState : IState<TIdentifier> where TIdentifier : struct
+    public  interface IRepository<T, in Id> :IRepositoryAsync<T,Id> where T : IState<Id> where Id : struct
     {
         public string BaseUrl { get; set; }
-        (int status, TState) GetById(TIdentifier id);
-        (int status, IEnumerable<TState> state) GetAll();
-        (int status, IEnumerable<TState>) Get(string subPath);
-        (int status, IEnumerable<TState>) GetByIds(IEnumerable<TIdentifier> ids);
-        int Save(TState state, out IEnumerable<string> errors);
-        (int status, IEnumerable<TState> state,IEnumerable<string> errors) SaveAll(IEnumerable<TState> state);
-        (int status,IEnumerable<string> errors) DeleteById(TIdentifier id);
-        int Update(TState state, out IEnumerable<string> errors);
-        (bool, TReturn) Update<TReturn>(TState state);
-        (int status, IEnumerable<string> errors) Update(IEnumerable<TState> state);
+        (int status, T) GetById(Id id);
+        (int status, IEnumerable<T> state) GetAll();
+        (int status, IEnumerable<T>) Get(string subPath);
+        (int status, IEnumerable<T>) GetByIds(IEnumerable<Id> ids);
+        (int status, IEnumerable<string> errors) Save(T state);
+        (int status, IEnumerable<T> state,IEnumerable<string> errors) SaveAll(IEnumerable<T> state);
+        (int status,IEnumerable<string> errors) DeleteById(Id id);
+        (int status, IEnumerable<string> errors) Update(T state);
+        (bool, TReturn) Update<TReturn>(T state);
+        (int status, IEnumerable<string> errors) Update(IEnumerable<T> state);
         
-        (bool ,TReturn) Save<TReturn>(TState state);
-        (bool, TReturn) Delete<TReturn>(TIdentifier id);
-        int Delete(IEnumerable<TIdentifier> ids);
+        (bool ,TReturn) Save<TReturn>(T state);
+        int Delete(IEnumerable<Id> ids);
 
-        Task<(int,IEnumerable<TState>)> GetAsync();
+        Task<(int,IEnumerable<T>)> GetAsync();
 
-        Task<(int status, IEnumerable<TState>)> GetAsync(string subPath);
+        Task<(int status, IEnumerable<T>)> GetAsync(string subPath);
 
-        List<TState> GetByCriterias(object criterias);
+        List<T> GetByCriterias(object criterias);
 
-        Task<List<TState>> GetByCriteriasAsync(object criterias);
+        Task<List<T>> GetByCriteriasAsync(object criterias);
 
     }
+
 
     public interface IAdditiveRepository : IRepository<Additive, long>
     {

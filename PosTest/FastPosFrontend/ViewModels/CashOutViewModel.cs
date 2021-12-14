@@ -75,7 +75,7 @@ namespace FastPosFrontend.ViewModels
             AddExpenseDescriptionCommand = new DelegateCommandBase(AddExpenseDescription,CanAddExpenseDescription);
             RemoveExpenseDescriptionCommand = new DelegateCommandBase(RemoveExpenseDescription);
             AddedExpenseDescription = string.Empty;
-            var descriptions = StateManager.Get<ExpenseDescription>();
+            var descriptions = StateManager.GetAll<ExpenseDescription>();
             ExpenseDescriptions = new ObservableCollection<ExpenseDescription>(descriptions);
             var employees = StateManager.GetService<CashRegisterExpense, ICashRegisterExpenseRepository>().GetEmployees();
             Employees = new ObservableCollection<string>(employees);

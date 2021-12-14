@@ -25,7 +25,7 @@ namespace FastPosFrontend.ViewModels.Settings
             Settings = ConfigurationManager.Get<PosConfig>().General;
             Settings.PropertyChanged += Settings_PropertyChanged;
            
-            var tables = StateManager.Get<Table>();
+            var tables = StateManager.GetAll<Table>();
             if (!tables.Any())
             {
                 Settings.TableCount = 0;

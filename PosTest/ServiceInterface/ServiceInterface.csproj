@@ -82,6 +82,7 @@
     <Compile Include="Interface\IPath.cs" />
     <Compile Include="Interface\IProductService.cs" />
     <Compile Include="Interface\IRepository.cs" />
+    <Compile Include="Interface\IRepositoryAsync.cs" />
     <Compile Include="Interface\IResponseHandler.cs" />
     <Compile Include="Interface\IRestApi.cs" />
     <Compile Include="jsonConverters\TimespanConverter.cs" />

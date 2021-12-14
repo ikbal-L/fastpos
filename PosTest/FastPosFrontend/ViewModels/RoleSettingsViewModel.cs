@@ -53,7 +53,7 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            Roles = new BindableCollection<Role>(StateManager.Get<Role>());
+            Roles = new BindableCollection<Role>(StateManager.GetAll<Role>());
         }
 
         public void CreateRole()

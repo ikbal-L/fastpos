@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8</LangVersion>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -84,6 +84,7 @@
     <Compile Include="Service\ProductMappingException.cs" />
     <Compile Include="Service\BaseRepository.cs" />
     <Compile Include="Service\RestApi.cs" />
+    <Compile Include="Service\RestService.cs" />
     <Compile Include="Service\StateManager\StateManager.cs" />
     <Compile Include="Service\StateManager\StateManager.Async.cs" />
     <Compile Include="Service\StateManager\StateManager.Common.cs" />

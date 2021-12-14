@@ -1,7 +1,7 @@
 ﻿namespace ServiceInterface.Model
 {
-    public interface IState<TIdentifier> where TIdentifier:struct
+    public interface IState<ID> where ID:struct
     {
-        public TIdentifier? Id { get; set; }
+        public ID? Id { get; set; }
     }
 }

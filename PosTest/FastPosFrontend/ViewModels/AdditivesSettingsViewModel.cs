@@ -415,7 +415,7 @@ namespace FastPosFrontend.ViewModels
         public override void Initialize()
         {
 
-            _allAdditives = StateManager.Get<Additive>().ToList();
+            _allAdditives = StateManager.GetAll<Additive>().ToList();
             PopulateAdditivesPage();
         }
 

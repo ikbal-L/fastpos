@@ -100,10 +100,10 @@ namespace FastPosFrontend.ViewModels
         {
 
        
-            _allProducts = StateManager.Get<Product>().ToList();
+            _allProducts = StateManager.GetAll<Product>().ToList();
   
            
-            _allCategories = StateManager.Get<Category>().ToList();
+            _allCategories = StateManager.GetAll<Category>().ToList();
             _allCategories.Where(c=>c.Rank!= null&& c.Products!= null).ToList().ForEach(c=>c.Products = c.Products.OrderBy(p => p.Rank).ToList());
            
 
@@ -502,7 +502,7 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 StateManager.Save(incomingProduct);
-                StateManager.Save(_currentCategory);
+                StateManager.SaveAll(_currentCategory);
                 //CurrentProducts[index] = prod;
                 SelectedProduct = null;
                 ProductToMove = null;
@@ -682,7 +682,7 @@ namespace FastPosFrontend.ViewModels
                 }
             });
 
-            if (!StateManager.Save(selectedCategory.Products)) return false;
+            if (!StateManager.SaveAll(selectedCategory.Products)) return false;
             selectedCategory.Products= null;
             selectedCategory.ProductIds = null;
             return true;

@@ -51,7 +51,7 @@ namespace FastPosFrontend.ViewModels
 
         public override void Initialize()
         {
-            var data = StateManager.Get<DailyEarningsReport>().ToList();
+            var data = StateManager.GetAll<DailyEarningsReport>().ToList();
 
             var api = new RestApi();
             var (status, result) = GenericRest.GetThing<DailyEarningsReport>(api.Resource("daily-earnings-report", "get/date/today"));

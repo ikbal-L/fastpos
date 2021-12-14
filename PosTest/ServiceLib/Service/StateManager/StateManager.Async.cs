@@ -10,16 +10,15 @@ namespace ServiceLib.Service.StateManager
 {
     public partial class StateManager
     {
-        public static async Task FetchAsync<TState, TIdentifier>(string predicate) where TState : IState<TIdentifier> where TIdentifier : struct
+        public static async Task FetchAsync<T, Id>(string predicate) where T : IState<Id> where Id : struct
         {
-            var key = typeof(TState);
+            var key = typeof(T);
             if (FetchLock.Contains(key)) return;
             FetchLock.Add(key);
-            //Decide on  either withAssociatedTypes or FetchWithAssociatedTypes
-            //Bug if multiple tasks of GetAsync are executing data could be fetched multiple times
+
             if (FetchwithAssociatedTypes.Contains(key))
             {
-                var associations = associationManager.GetAssociationsOf<TState>();
+                var associations = associationManager.GetAssociationsOf<T>();
                 if (associations!= null)
                 {
                     foreach (var association in associations)
@@ -31,7 +30,7 @@ namespace ServiceLib.Service.StateManager
             }
             
             if (State[key] != null && !_refreshRequested) return;
-            if (Service[key] is IRepository<TState, TIdentifier> service)
+            if (Service[key] is IRepository<T, Id> service)
             {
                 var (status, data) = string.IsNullOrEmpty(predicate) ?await service.GetAsync() :await service.GetAsync(predicate);
                 //var (status, data) = await service.GetAsync();
@@ -41,13 +40,13 @@ namespace ServiceLib.Service.StateManager
                 
                 if ((HttpStatusCode)status != HttpStatusCode.OK)
                 {
-                    State[key] = new List<TState>();
+                    State[key] = new List<T>();
                 }
                 else
                 {
                     State[key] = data;
                 }
-                associationManager.Map<TState>(State);
+                associationManager.Map<T>(State);
 
             }
         }
@@ -59,10 +58,8 @@ namespace ServiceLib.Service.StateManager
 
             if (State[key] == null) await FetchAsync<TState, TIdentifier>(predicate);
 
-            Console.WriteLine($"Thread {Thread.CurrentThread.GetHashCode()} Time {DateTime.Now.TimeOfDay}");
             return State[key] as ICollection<TState>;
         }
 
-        
     }
 }
