@@ -1,4 +1,5 @@
-﻿using ServiceInterface.Model;
+﻿using Newtonsoft.Json;
+using ServiceInterface.Model;
 using ServiceLib.Service;
 using System;
 using System.Collections.Generic;
@@ -10,30 +11,34 @@ namespace FastPosFrontend.Helpers
 {
     class SyncManager
     {
-        private static readonly Dictionary<object, bool> Locks;
-
         private static readonly RestApi api = new RestApi();
 
         static SyncManager()
         {
-            Locks = new Dictionary<object, bool>();
+
+        }
+        public static bool Lock<T>(T obj) where T : ILockableState<long> => Lock<T, long>(obj);
+
+        public static bool Lock<T,Id>(T obj) where T: ILockableState<Id> where Id : struct
+        {
+            var payload = !obj.IsLocked;
+            var url = api.Resource<Order>(EndPoint.LOCK, obj.Id);
+            return SetLock<T, Id>(obj, payload, url);
         }
 
-        public static bool Lock<TIdentifier>(IState<TIdentifier> obj) where TIdentifier : struct
+        private static bool SetLock<T, Id>(T obj, bool payload, string url)
+            where T : ILockableState<Id>
+            where Id : struct
         {
-            if (!Locks.ContainsKey(obj))
+            var res = GenericRest.RestPut(payload, url);
+            if (res.IsSuccessful)
             {
-                Locks.Add(obj, false);
+                var result = JsonConvert.DeserializeObject<T>(res.Content);
+                obj.IsLocked = result.IsLocked;
+                obj.LockedBy = result.LockedBy;
             }
 
-            var id = obj.Id;
-            var payload = !Locks[obj];
-            Locks[obj] = payload;
-            var url = api.Resource<Order>(EndPoint.LOCK, id);
-            var result = GenericRest.RestPut(payload, url );
-
-            return result.StatusCode == System.Net.HttpStatusCode.OK;
-
+            return res.IsSuccessful;
         }
     }
 }

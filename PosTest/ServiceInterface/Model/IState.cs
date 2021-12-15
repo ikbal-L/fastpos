@@ -4,4 +4,9 @@
     {
         public ID? Id { get; set; }
     }
+
+    public interface ILockableState<ID>:  ILockable, IState<ID> where ID : struct
+    {
+
+    }
 }

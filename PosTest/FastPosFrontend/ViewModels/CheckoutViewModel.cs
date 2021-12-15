@@ -104,10 +104,8 @@ namespace FastPosFrontend.ViewModels
 
      
 
-        public CheckoutViewModel(
-        ) : base()
+        public CheckoutViewModel() : base()
         {
-
             LockOrderCommand = new DelegateCommandBase(LockOrder);
             ActionKeyboardCommand = new DelegateCommandBase(ActionKeyboard);
             _orderInfoCloseTimer = new DispatcherTimer(){Interval = new TimeSpan(0, 0, 3)};
@@ -122,8 +120,6 @@ namespace FastPosFrontend.ViewModels
 
             _productLayout = ConfigurationManager.Get<PosConfig>().ProductLayout;
 
-          
-
             CurrentCategoryPageIndex = 0;
             var configuration = ConfigurationManager.Get<PosConfig>().General;
 
@@ -132,10 +128,10 @@ namespace FastPosFrontend.ViewModels
             {
                 itemsPerCategoryPage = configuration.CategoryPageSize;
             }
-            
+
         }
 
-        private void OnMessageReceived(object sender, MessageReceivedEventArgs e)
+        private async void OnMessageReceived(object sender, MessageReceivedEventArgs e)
         {
             Order receivedData = null;
             Order order = null;
@@ -143,52 +139,34 @@ namespace FastPosFrontend.ViewModels
             var service = StateManager.GetService<Order, IRepository<Order, long>>();
 
 
-            
-            if (e.EventName == SSEventType.CREATE_ORDER|| e.EventName == SSEventType.UPDATE_ORDER)
-            {
-               
-                
 
+            if (e.EventName == SSEventType.CREATE_ORDER || e.EventName == SSEventType.UPDATE_ORDER)
+            {
                 if (isIdParsed)
                 {
-                    //var (status, data) =  service.GetById(id);
+                   await Application.Current.Dispatcher.InvokeAsync(async ()=> {
 
+                       var (status, data) = await service.GetByIdAsync(id);
+                       if (status == 200) receivedData = data;
+     
+                       if (e.EventName == SSEventType.CREATE_ORDER)
+                       {
+                           OrderCreationHandler(receivedData);
+                           return;
+                       }
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    CurrentTask.WatchTaskAsync(service.GetByIdAsync(id),(t)=> 
-                    {
-                        var (status, data) = t.Result;
-                        if (status == 200)
-                        {
-                            receivedData = data;
-                        }
-
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-
-                            if (e.EventName == SSEventType.CREATE_ORDER)
-                            {
-                                OrderCreationHandler(receivedData);
-                                return;
-                            }
-
-                            if (e.EventName == SSEventType.UPDATE_ORDER)
-                            {
-                                OrderUpdateHandler(receivedData);
-                                return;
-                            }
-
-
-
-                        });
-                    });
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-
+                       if (e.EventName == SSEventType.UPDATE_ORDER)
+                       {
+                           OrderUpdateHandler(receivedData);
+                           return;
+                       }
+                   });
                 }
+                return;
             }
 
-            Application.Current.Dispatcher.Invoke(() => {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
 
                 if (e.EventName == SSEventType.PAY_ORDER)
                 {
@@ -209,7 +187,6 @@ namespace FastPosFrontend.ViewModels
                 }
 
             });
-
         }
 
         private void OrderUpdateHandler(Order receivedData)
@@ -242,7 +219,7 @@ namespace FastPosFrontend.ViewModels
             if (orderToLock != null)
             {
                 orderToLock.IsLocked = data.IsLocked;
-                //orderToLock.LockedBy = data.LockedBy; 
+                orderToLock.LockedBy = data.LockedBy; 
             }
         }
 
@@ -875,27 +852,13 @@ namespace FastPosFrontend.ViewModels
 
         public void LockOrder()
         {
-            if (CurrentOrder== null)
-            {
-                return;
-            }
-
+            if (CurrentOrder== null) return;
             SyncManager.Lock(CurrentOrder);
-            
-            //.IfTrue(()=> 
-            //{ 
-            //    CurrentOrder.IsLocked = true;
-            //    CurrentOrder.LockedBy = Thread.CurrentPrincipal.Identity.Name;
-            //});
-
         }
 
         public void LockOrder(object obj)
         {
-            if (obj is Order order)
-            {
-                order.IsLocked = !order.IsLocked;
-            }
+            LockOrder();
         }
 
         private void SetCurrentOrderTypeAndRefreshOrdersLists(OrderType? orderType, Table table = null)

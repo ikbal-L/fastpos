@@ -12,9 +12,9 @@ using System.Threading;
 
 namespace ServiceInterface.Model
 {
-    public class Order : SyncModel, IValidatableObject, IState<long>
+    public class Order : SyncModel, IValidatableObject, ILockableState<long>
     {
-        private decimal _total;
+
         private OrderItem _selectedOrderItem;
         private decimal _discountAmount = 0;
         private decimal _givenAmount;
@@ -348,19 +348,6 @@ namespace ServiceInterface.Model
 
         public bool AdditivesVisibility { get; set; }
 
-
-        public override bool IsLocked 
-        { 
-            get => base.IsLocked; 
-            set  {
-                base.IsLocked = value;
-                NotifyOfPropertyChange(nameof(IsModifiable));
-            } 
-        }
-        public bool IsModifiable => !IsLocked && (string.IsNullOrEmpty(LockedBy) ||LockedBy == Thread.CurrentPrincipal.Identity.Name);
-        
-            
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Type == OrderType.Delivery && Deliveryman == null)
@@ -465,8 +452,16 @@ namespace ServiceInterface.Model
         InWaiting
     }
 
+
+    public interface ILockable
+    {
+        bool IsLocked { get; set; }
+        bool IsModifiable { get; }
+        string LockedBy { get; set; }
+    }
+
     [DataContract]
-    public class SyncModel : PropertyChangedBase
+    public class SyncModel : PropertyChangedBase, ILockable
     {
         protected bool _isLocked;
 
@@ -474,16 +469,29 @@ namespace ServiceInterface.Model
         public virtual bool IsLocked
         {
             get { return _isLocked; }
-            set { Set(ref _isLocked, value); }
+            set
+            {
+                Set(ref _isLocked, value);
+                NotifyOfPropertyChange(nameof(IsModifiable));
+            }
         }
 
         private string _lockedBy;
 
+
+        [DataMember]
         public string LockedBy
         {
             get { return _lockedBy; }
-            set { _lockedBy = value; }
+            set 
+            { 
+                Set(ref _lockedBy, value);
+                NotifyOfPropertyChange(nameof(IsModifiable));
+            }
         }
+
+        public bool IsModifiable => !IsLocked  || (IsLocked && LockedBy == Thread.CurrentPrincipal.Identity.Name);
+
 
 
     }

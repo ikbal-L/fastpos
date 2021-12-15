@@ -72,9 +72,14 @@
                         <Style TargetType="md:PackIcon">
                             <Setter Property="Kind" Value="Lock"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentOrder.IsLocked}" Value="true">
-                                    <Setter Property="Kind" Value="LockOpen"/>
-                                </DataTrigger>
+                                
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CurrentOrder.IsLocked}" Value="true"/>
+                                        <Condition Binding="{Binding CurrentOrder.IsModifiable}" Value="true"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Kind" Value="LockOpenVariant"/>
+                                </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </md:PackIcon.Style>
