@@ -12,7 +12,7 @@
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:ctrl="clr-namespace:FastPosFrontend.SL.Controls"
                     xmlns:nav="clr-namespace:FastPosFrontend.Navigation"
-                    >
+                    xmlns:h="clr-namespace:FastPosFrontend.Helpers">
 
     <converters:ObjectToBarcodeValueConverter x:Key="ObjectToBarcodeValueConverter" />
     <converters:SumValuesConverter x:Key="SumValuesConverter" />
@@ -220,5 +220,13 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="LicenseManagerCredentialsDialogContent" DataType="{x:Type h:LicensingCredentials }">
+        <UniformGrid Columns="1" Rows="2" Width="300">
+            <TextBox Text="{Binding Email}" Margin="10" materialDesign:HintAssist.Hint="Email"/>
+            <TextBox Text="{Binding Password}" Margin="10" materialDesign:HintAssist.Hint="Password"/>
+        </UniformGrid>
     </DataTemplate>
 </ResourceDictionary>

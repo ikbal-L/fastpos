@@ -76,5 +76,20 @@ namespace FastPosFrontend
             Instance = new ModalDialogBox(isTemplated: true) { DataContext = vm };
             return Instance;
         }
+
+        public static ModalDialogBox Submit(object content, string template, string title, Predicate<object> predicate = null, Func<bool> onSubmit = null)
+        {
+            var dt = Application.Current.FindResource(template) as DataTemplate;
+            var vm = new TemplatedDialogContentViewModel(content, dt, title,
+                new GenericCommand("Submit", o => {
+                    if (predicate != null && !predicate.Invoke(null)) return;
+
+                    Instance.DialogResult = onSubmit?.Invoke()??false; Instance.Close();
+                })
+                );
+
+            Instance = new ModalDialogBox(isTemplated: true) { DataContext = vm };
+            return Instance;
+        }
     }
 }

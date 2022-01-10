@@ -452,7 +452,6 @@ namespace ServiceInterface.Model
         InWaiting
     }
 
-
     public interface ILockable
     {
         bool IsLocked { get; set; }

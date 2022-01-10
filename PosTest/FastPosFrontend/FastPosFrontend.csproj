@@ -110,6 +110,7 @@
     <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -165,6 +166,7 @@
     <Compile Include="Extensions\ModifierCollection.cs" />
     <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
+    <Compile Include="Helpers\LicenseManager.cs" />
     <Compile Include="Helpers\TaskEventHandler.cs" />
     <Compile Include="Helpers\DeviceUtilities.cs" />
     <Compile Include="Helpers\GenericCommand.cs" />
@@ -522,7 +524,6 @@
     <Compile Include="Converters\BooleanToBinaryEnumValueConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\CollectionContainsValueConverter.cs" />
-    <Compile Include="Converters\DynamicLayout.cs" />
     <Compile Include="Converters\EntityIdValueConverter.cs" />
     <Compile Include="Converters\EnumToIntegerIndexValueConverter.cs" />
     <Compile Include="Converters\EnumToVisibilityConverter.cs" />
@@ -562,7 +563,6 @@
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\NotificationType.cs" />
     <Compile Include="Helpers\RankedItemsCollectionHelper.cs" />
-    <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Helpers\TableViewTemplateSelector.cs" />
     <Compile Include="Helpers\ToastNotification.cs" />
     <Page Include="ModalDialogBox.xaml">

@@ -18,7 +18,7 @@
     <converters:IsEmptyCellSelectedAndClipboardSet x:Key="IsEmptyCellSelectedAndClipboardSet" />
     <converters:ProductTemplateHeightConverter x:Key="ProductTemplateHeightConverter" />
     <converters:ProductTemplateWidthConverter x:Key="ProductTemplateWidthConverter" />
-    <converters:LengthPropertyConverter x:Key="LengthPropertyConverter" />
+    <!--<converters:LengthPropertyConverter x:Key="LengthPropertyConverter" />-->
     <converters:IsStringNullOrEmptyValueConverter x:Key="IsStringNullOrEmptyValueConverter" />
     <converters:BrushOpacityConverter x:Key="BrushOpacityConverter"/>
     <DataTemplate DataType="{x:Type src:Product}" x:Key="CheckoutProduct">

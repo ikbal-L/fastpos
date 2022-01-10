@@ -37,6 +37,9 @@ namespace FastPosFrontend.ViewModels
             IsBackendServerOn = ConnectionHelper.PingHost();
             Associations.Setup();
             StateManager.Instance.HandleErrorsUsing(ResponseHandler.Handler);
+
+            var lm = new LicenseManager();
+            lm.Check();
         }
 
         public void SetSettingsListeners()
@@ -141,7 +144,7 @@ namespace FastPosFrontend.ViewModels
 
             Navigator?.NavigateToItem(new NavigationLookupItem("Login", target: typeof(LoginViewModel)));
 
-            //splashScreen.Close();
+
         }
 
         public void Logout()
@@ -172,8 +175,15 @@ namespace FastPosFrontend.ViewModels
                     return;
                 }
                 IsAttemptingToStartBackendServer = true;
-                var result = await Task.Run(ShellBootstrapper.StartBackendServer);
-                IsBackendServerOn = result;
+                if (ConnectionHelper.PingHost())
+                {
+                    IsBackendServerOn = true;
+                }
+                else
+                {
+                    IsBackendServerOn = await Task.Run(ShellBootstrapper.StartBackendServer);
+                }
+
                 IsAttemptingToStartBackendServer = false;
 
             }
