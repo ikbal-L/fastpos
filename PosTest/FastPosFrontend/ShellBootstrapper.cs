@@ -10,6 +10,8 @@ using FastPosFrontend.ViewModels.DeliveryAccounting;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
 using System.ServiceProcess;
+using FastPosFrontend.Configurations;
+using ServiceLib.Service;
 
 namespace FastPosFrontend
 {
@@ -29,6 +31,7 @@ namespace FastPosFrontend
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            // setting up the order of views in navigation menu 
             NavigationIndexer.ImplicitIndex()
                 .Add<CheckoutViewModel>()
                 .Add<DeliveryCheckoutViewModel>()    
@@ -44,9 +47,13 @@ namespace FastPosFrontend
                 .Add<DeliveryManSettingsViewModel>()
                 .Add<WaiterSettingsViewModel>()
                 .Add<CustomerSettingsViewModel>();
-
-
+            // loading app config from file 
+            ConfigurationManager.Init<PosConfig>(PosConfig.FILE_NAME);
             
+            var baseUrl = ConfigurationManager.Get<PosConfig>().Url;
+            var lm = new LicenseManager(baseUrl);
+            lm.Check();
+
             DisplayRootViewFor<MainViewModel>();
         }
 

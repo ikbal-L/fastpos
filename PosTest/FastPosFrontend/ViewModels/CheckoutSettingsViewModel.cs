@@ -1460,7 +1460,7 @@ namespace FastPosFrontend.ViewModels
                         ProductDetailViewModel = null; 
                     }
                 });
-            NotifyOfPropertyChange((() => IsCategory));
+            NotifyOfPropertyChange(nameof(IsCategory));
            
         }
 

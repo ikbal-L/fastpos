@@ -25,21 +25,21 @@ namespace FastPosFrontend.ViewModels
 
         public MainViewModel()
         {
-            ConfigurationManager.Init<PosConfig>(PosConfig.FILE_NAME);
-            NavigationManager<object>.Init(this);
-            Navigator  = NavigationManager<object>.Instance;
+           
+            // initializing navigation manager 
+            Navigator = NavigationManager<object>.Init(this);
 
-            OpenNavigationDrawerCommand = new DelegateCommandBase((o)=> {
-                DrawerManager.Instance.OpenNavigationDrawer();
-            });
+
+            OpenNavigationDrawerCommand = DelegateCommandBase.Of(DrawerManager.Instance.OpenNavigationDrawer);
             DrawerManager.Instance.InitNavigationDrawer(this, "AppNavigationDrawer", this);
-            
+            // check if the backend sever is up and running 
             IsBackendServerOn = ConnectionHelper.PingHost();
+            // setting up mapping of different entities 
             Associations.Setup();
+            // setting up response handler for state manager 
             StateManager.Instance.HandleErrorsUsing(ResponseHandler.Handler);
 
-            var lm = new LicenseManager();
-            lm.Check();
+            
         }
 
         public void SetSettingsListeners()
@@ -81,27 +81,8 @@ namespace FastPosFrontend.ViewModels
         }
 
 
-        public String ButtonStr
-        {
-            get => _buttonStr;
-            set
-            {
-                _buttonStr = value;
-                NotifyOfPropertyChange(() => ButtonStr);
-            }
-        }
 
-
-        public string WindowTitle
-        {
-            get { return _windowTitle; }
-            set
-            {
-                _windowTitle = value;
-                NotifyOfPropertyChange(() => WindowTitle);
-            }
-        }
-
+      
         public MainDialog MainDialog
         {
             get => _mainDialog;

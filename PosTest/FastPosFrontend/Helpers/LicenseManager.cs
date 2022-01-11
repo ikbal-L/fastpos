@@ -4,81 +4,107 @@ using Newtonsoft.Json;
 using RestSharp;
 using ServiceLib.Service;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 
 namespace FastPosFrontend.Helpers
 {
     public class LicenseManager
     {
-        public static readonly IRestClient Client;
+        public  readonly IRestClient Client;
 
-        public static readonly IRestRequest _licenseStatusCheck;
-        public static readonly IRestRequest _submitLicensingCredentials;
+        public  readonly IRestRequest _getLicenseState;
+        public  readonly IRestRequest _doServerActivation;
 
-        static LicenseManager()
+        public LicenseManager(string url)
         {
-            var baseUrl = ConfigurationManager.Get<PosConfig>().Url;
-            Client = new RestClient(baseUrl);
-            _licenseStatusCheck = new RestRequest("/", Method.GET);
-            _submitLicensingCredentials = new RestRequest("/", Method.POST);
+            
+            Client = new RestClient(url) { FollowRedirects = true};
+            
+            _getLicenseState = new RestRequest("/licensing/get-state", Method.GET);
+            _doServerActivation = new RestRequest("/licensing/server-activation", Method.POST);
         }
        
 
         public void Check()
         {
-            var res = Client.Execute(_licenseStatusCheck);
-            if ((int)res.StatusCode == 445)
+            var res = Client.Execute(_getLicenseState);
+            if ((int)res.StatusCode != 200)
             {
-                var errors = JsonConvert.DeserializeObject<List<string>>(res.Content);
-    
-                if (errors.Contains(LicensingErrors.CREDENTIALS_MISSING))
+                List<string> errors = ParseErrorsFromResponse(res);
+
+                if (errors.Contains(LicensingErrors.SERVER_ACTIVATION_REQUIRED))
                 {
-                    var result =  PromptUserForCredentials();
+                    var result = PromptUserForCredentials();
                 }
+
+                if (errors.Contains(LicensingErrors.SERIAL_KEY_INVALID))
+                {
+                    NotifyUserOfErrorsAndShutdown(errors);
+                }
+
+
             }
-           
+
+        }
+
+        private static List<string> ParseErrorsFromResponse(IRestResponse res)
+        {
+            return JsonConvert.DeserializeObject<List<string>>(res.Content);
         }
 
         private bool PromptUserForCredentials()
         {
-            //var credentials = new LicensingCredentials()
-            //{
-            //    Email = "example1@mail.com",
-            //    Password = "sfghkbfj,mwerjsd"
-            //};
-
             var credentials = new LicensingCredentials()
             {
-                Email = "example@mail.com",
-                Password = ""
+                Email = "example1@mail.com",
+                Password = "sfghkbfj,mwerjsd"
             };
 
-            var result  = ModalDialogBox.Submit(credentials, "LicenseManagerCredentialsDialogContent","License Manager", o =>
+            //var credentials = new LicensingCredentials()
+            //{
+            //    Email = "example@mail.com",
+            //    Password = ""
+            //};
+            List<string> errors = new List<string>();
+            var result = ModalDialogBox.Submit(credentials, "LicenseManagerCredentialsDialogContent", "License Manager", o =>
             {
                 return!string.IsNullOrWhiteSpace(credentials.Email) && !string.IsNullOrWhiteSpace(credentials.Password);
-            },onSubmit:()=> 
-            {
+            }, onSubmit: () =>
+              {
                 var content = JsonConvert.SerializeObject(credentials);
-                _submitLicensingCredentials.AddHeader("Licensing-Credentials", content);
-                var res = Client.Execute(_submitLicensingCredentials);
+                  //_doServerActivation.AddHeader("Licensing-Credentials", content);
+                  _doServerActivation.AddJsonBody(content);
+                var res = Client.Execute(_doServerActivation);
 
-                return (int)res.StatusCode != 445;
+                  bool hasErrors = (int)res.StatusCode != 200;
+                  if (hasErrors)
+                  {
+                      errors = ParseErrorsFromResponse(res);
+                  }
+                return !hasErrors ;
             }).Show();
 
 
             if (!result)
             {
-                ModalDialogBox.Ok("licensing Failed ", "License Manager").Show();
-                App.Current.Shutdown();
+                NotifyUserOfErrorsAndShutdown(errors);
             }
 
             return result;
             
         }
 
+        private static void NotifyUserOfErrorsAndShutdown(List<string> errors)
+        {
+            var formattedErrorsMessage = string.Join("\n", errors.Select(error => $"* {error}"));
+            ModalDialogBox.Ok(formattedErrorsMessage, "License Manager").Show();
+            Application.Current.Shutdown();
+        }
 
 
 
-       
+
 
     }
 
@@ -117,5 +143,6 @@ namespace FastPosFrontend.Helpers
         public const string LICENSE_ACTIVATION_HWD_ID_MISMATCH = "com.softlines.errors.licensing.activation.HardwareIdMismatch";
         public const string LICENSE_ACTIVATION_EXPIRED = "com.softlines.errors.licensing.activation.ExpiredLicense";
         public const string LICENSE_ACTIVATION_MAX_ACTIVATIONS = "com.softlines.errors.licensing.activation.MaxActivationsReached";
+        public const string SERVER_ACTIVATION_REQUIRED = "com.softlines.errors.licensing.ServerActivationRequired";
     }
 }

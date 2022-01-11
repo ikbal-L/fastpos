@@ -33,6 +33,11 @@ namespace FastPosFrontend.Helpers
             canExecuteMethod = null;
         }
 
+        public static DelegateCommandBase Of(Action executeMethod)
+        {
+            return new DelegateCommandBase(o => { executeMethod?.Invoke(); });
+        }
+
         /// <summary>
         /// Raises <see cref="ICommand.CanExecuteChanged"/> on the UI thread so every 
         /// command invoker can requery <see cref="ICommand.CanExecute"/> to check if the

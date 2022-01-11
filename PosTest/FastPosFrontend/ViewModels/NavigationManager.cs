@@ -29,9 +29,11 @@ namespace FastPosFrontend.ViewModels
         public static NavigationManager<T> Instance => _instance?? throw new ArgumentNullException($"{nameof(NavigationManager<T>)} must be initialized by passing conductor object of type {typeof(IConductor)}");
 
 
-        public static void Init(IConductor<T> conductor)
+        public static NavigationManager<T> Init(IConductor<T> conductor)
         {
+            if (_instance != null) throw new InvalidOperationException("Navigation manager is already initialized");
             _instance = new NavigationManager<T>(conductor);
+            return _instance;
         }
 
         public NavigationLookupItem SelectedNavigationItem
@@ -92,9 +94,9 @@ namespace FastPosFrontend.ViewModels
         }
 
         /// <summary>
-        /// Load Group <see cref="NavigationLookupItem"/> Instances from Classes decorated by <see cref="NavigationItemAttribute"/>, By Grouping them using <see cref="NavigationItemAttribute.GroupName"/>
+        /// Instanciate a Collection of <see cref="NavigationLookupItem"/> Instances from ViewModels decorated by <see cref="NavigationItemAttribute"/>, By Grouping them using <see cref="NavigationItemAttribute.GroupName"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns><see cref="List{NavigationLookupItem}"/> </returns>
         private protected virtual List<NavigationLookupItem> LoadGroupItems()
         {
             var groupItems = 
