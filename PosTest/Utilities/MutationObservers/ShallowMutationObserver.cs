@@ -11,7 +11,7 @@ using Utilities.Mutation.Observers.Extentions;
 
 namespace Utilities.Mutation.Observers
 {
-    public class ObjectMutationObserver<T> : IObjectMutationObserver<T>
+    public class ShallowMutationObserver<T> : IObjectMutationObserver<T>
     {
         private readonly Dictionary<string, PropertyMutation> _mutations;
         
@@ -27,7 +27,7 @@ namespace Utilities.Mutation.Observers
 
 
 
-        public ObjectMutationObserver(T source, params string[] properties)
+        public ShallowMutationObserver(T source, params string[] properties)
         {
             _mutations = new Dictionary<string, PropertyMutation>();
             if (source!= null)
@@ -116,7 +116,7 @@ namespace Utilities.Mutation.Observers
 
     public class DiffGenerator<T> where T : new()
     {
-        public static T Generate(ObjectMutationObserver<T> mutationObserver, params (string property, IPropertyDiff propertyDiff)[] generator)
+        public static T Generate(ShallowMutationObserver<T> mutationObserver, params (string property, IPropertyDiff propertyDiff)[] generator)
         {
             var t = new T();
             generator.ToList().ForEach(p => {

@@ -9,7 +9,7 @@ using Utilities.Extensions;
 
 namespace Utilities.Mutation.Observers
 {
-    public class ObjectGraphMutationObserver<T>:IObjectMutationObserver<T>
+    public class DeepMutationObserver<T>:IObjectMutationObserver<T>
     {
         public T Source { get; private set ; }
 
@@ -17,9 +17,9 @@ namespace Utilities.Mutation.Observers
 
         public bool HasCommitedChanges { get; private set; }
 
-        public ObjectMutationObserver<T> _rootMutationObserver;
+        public ShallowMutationObserver<T> _rootMutationObserver;
         private Dictionary<string,IMutationObserver> _observerNodes;
-        public ObjectGraphMutationObserver(T root , params PropertyInfo[] properties)
+        public DeepMutationObserver(T root , params PropertyInfo[] properties)
         {
             if (!CanCreateMutationObserverGraph(typeof(T)))
             {
@@ -27,7 +27,7 @@ namespace Utilities.Mutation.Observers
             }
             Source = root;
             IsInitialized = root != null;
-            _rootMutationObserver = new ObjectMutationObserver<T>(root);
+            _rootMutationObserver = new ShallowMutationObserver<T>(root);
             _observerNodes = new Dictionary<string, IMutationObserver>();
             properties = GetPropertiesIfEmpty(properties);
 
@@ -92,7 +92,7 @@ namespace Utilities.Mutation.Observers
         }
         private IMutationObserver CreateObjectMutationObserver(T source, PropertyInfo property)
         {
-            var observerType = typeof(ObjectMutationObserver<>);
+            var observerType = typeof(ShallowMutationObserver<>);
             Type[] args = { property.PropertyType };
             var propertyObserverType = observerType.MakeGenericType(args);
             var instance = Activator.CreateInstance(propertyObserverType,property.GetValue(source));
@@ -101,7 +101,7 @@ namespace Utilities.Mutation.Observers
 
         private IMutationObserver CreateObjectGraphMutationObserver(object source, PropertyInfo property)
         {
-            var observerType = typeof(ObjectGraphMutationObserver<>);
+            var observerType = typeof(DeepMutationObserver<>);
             Type[] args = { property.PropertyType };
             var propertyObserverType = observerType.MakeGenericType(args);
             var instance = Activator.CreateInstance(propertyObserverType, property.GetValue(source));
@@ -110,7 +110,7 @@ namespace Utilities.Mutation.Observers
 
         private IMutationObserver CreateMutationObserver(T root, PropertyInfo p)
         {
-            if (ObjectGraphMutationObserver<object>.CanCreateMutationObserverGraph(p.PropertyType))
+            if (DeepMutationObserver<object>.CanCreateMutationObserverGraph(p.PropertyType))
             {
                 return CreateObjectGraphMutationObserver(root, p);
             }
@@ -171,12 +171,12 @@ namespace Utilities.Mutation.Observers
             value = _rootMutationObserver?.Source?.GetPropertyValue<TProperty>(property);
             if (value == null) return false;
 
-            if (_observerNodes[property] is ObjectMutationObserver<TProperty> observer)
+            if (_observerNodes[property] is ShallowMutationObserver<TProperty> observer)
             {
                 observer.LateInit(value);
                 return true;
             }
-            if (_observerNodes[property] is ObjectGraphMutationObserver<TProperty> graphObserver)
+            if (_observerNodes[property] is DeepMutationObserver<TProperty> graphObserver)
             {
                 graphObserver.Source = value;
                 return true;

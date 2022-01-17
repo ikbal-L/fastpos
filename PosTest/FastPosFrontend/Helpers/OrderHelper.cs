@@ -11,7 +11,7 @@ namespace FastPosFrontend.Helpers
     {
         public static Order GetOrderChanges(IMutationObserver o)
         {
-            if (o is ObjectGraphMutationObserver<Order> og)
+            if (o is DeepMutationObserver<Order> og)
             {
                 var orderItemCO = og[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
                 var added = orderItemCO.GetAddedItems().ToList();

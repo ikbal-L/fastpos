@@ -131,7 +131,7 @@ namespace FastPosFrontend.ViewModels
 
         public void BackCommand()
         {
-            Parent.IsDialogOpen = false;
+            Parent.CanSplitOrder = false;
             Parent.DialogViewModel = null;
         }
 

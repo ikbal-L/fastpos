@@ -69,8 +69,8 @@
     <Compile Include="MutationObservers\IMutationObserver.cs" />
     <Compile Include="MutationObservers\IPropertyMutation.cs" />
     <Compile Include="MutationObservers\MutationObserverEx.cs" />
-    <Compile Include="MutationObservers\ObjectGraphMutationObserver.cs" />
-    <Compile Include="MutationObservers\ObjectMutationObserver.cs" />
+    <Compile Include="MutationObservers\DeepMutationObserver.cs" />
+    <Compile Include="MutationObservers\ShallowMutationObserver.cs" />
     <Compile Include="MutationObservers\PropertyMutation.cs" />
     <Compile Include="ObservePropertyMutationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

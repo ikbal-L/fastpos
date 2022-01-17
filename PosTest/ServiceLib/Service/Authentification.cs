@@ -21,10 +21,12 @@ namespace ServiceLib.Service
     {
         private static RestAuthentification _instance;
 
-        internal static RestAuthentification Instance => _instance ?? (_instance = new RestAuthentification());
+        public static RestAuthentification Instance => _instance ?? (_instance = new RestAuthentification());
 
         private readonly IRestApi _api = new RestApi();
         public string BaseUrl { get=>_api.BaseUrl; set => _api.BaseUrl = value; }
+
+        public static string SessionId;
 
         public int Authenticate(string user, string password, Annex annex, Terminal terminal)  
         {
@@ -105,6 +107,7 @@ namespace ServiceLib.Service
                         if (hasSessionId)
                         {
                             name = sessionId.First();
+                            SessionId = name;
                         }
                         var principal = new GenericPrincipal(new GenericIdentity(name), permissions.ToArray());
                         

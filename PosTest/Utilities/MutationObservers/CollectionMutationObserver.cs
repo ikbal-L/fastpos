@@ -68,7 +68,7 @@ namespace Utilities.Mutation.Observers
             if (IsObservingItems)
             {
 
-                var canCreate = ObjectGraphMutationObserver<T>.CanCreateMutationObserverGraph(typeof(T));
+                var canCreate = DeepMutationObserver<T>.CanCreateMutationObserverGraph(typeof(T));
                 if (!(_isGraphConstructionEnabled && canCreate))
                 {
                     Source.ToList().ForEach(AddObjectMutationObserver);
@@ -82,12 +82,12 @@ namespace Utilities.Mutation.Observers
 
         private void AddObjectGraphMutationObserver(T item)
         {
-            _itemsMutationObservers.Add(new ObjectGraphMutationObserver<T>(item, _objectGraphObservedProperties));
+            _itemsMutationObservers.Add(new DeepMutationObserver<T>(item, _objectGraphObservedProperties));
         }
 
         private void AddObjectMutationObserver(T item)
         {
-            _itemsMutationObservers.Add(new ObjectMutationObserver<T>(item, _objectObservedProperties));
+            _itemsMutationObservers.Add(new ShallowMutationObserver<T>(item, _objectObservedProperties));
         }
 
 
@@ -225,7 +225,7 @@ namespace Utilities.Mutation.Observers
             {
                 throw new InvalidOperationException("Tyring to observe an item of a collection that is not observing individual item mutations.");
             }
-            var canCreate = ObjectGraphMutationObserver<T>.CanCreateMutationObserverGraph(typeof(T));
+            var canCreate = DeepMutationObserver<T>.CanCreateMutationObserverGraph(typeof(T));
             if (_isGraphConstructionEnabled&& canCreate)
             {
                 AddObjectGraphMutationObserver(item);
@@ -259,7 +259,7 @@ namespace Utilities.Mutation.Observers
         {
             var addedItems = GetAddedItems(_mutatedCollection);
             if (addedItems == null) return;
-            var addedItemsObservers = addedItems.Where(_exclude).Select(item => new ObjectMutationObserver<T>(item, _objectObservedProperties.ToArray()));
+            var addedItemsObservers = addedItems.Where(_exclude).Select(item => new ShallowMutationObserver<T>(item, _objectObservedProperties.ToArray()));
             _itemsMutationObservers.AddRange(addedItemsObservers);
         }
 

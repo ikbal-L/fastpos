@@ -13,6 +13,7 @@ using System.ServiceProcess;
 using FastPosFrontend.Configurations;
 using ServiceLib.Service;
 
+
 namespace FastPosFrontend
 {
     public class ShellBootstrapper : BootstrapperBase
@@ -51,8 +52,13 @@ namespace FastPosFrontend
             ConfigurationManager.Init<PosConfig>(PosConfig.FILE_NAME);
             
             var baseUrl = ConfigurationManager.Get<PosConfig>().Url;
-            var lm = new LicenseManager(baseUrl);
-            lm.Check();
+
+
+            //var licenseManager = new LicenseManager(baseUrl);
+            //licenseManager.CheckLicenseState();
+
+            
+
 
             DisplayRootViewFor<MainViewModel>();
         }

@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Printing;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,11 +15,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
 using System.Windows.Threading;
 using Caliburn.Micro;
 using FastPosFrontend.Configurations;
 using FastPosFrontend.Enums;
+using FastPosFrontend.EventManagement;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
@@ -29,16 +28,11 @@ using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
 using LaunchDarkly.EventSource;
-using Newtonsoft.Json;
-using ServiceInterface.Authorisation;
-using ServiceInterface.Interface;
+using Netina.Stomp.Client;
 using ServiceInterface.Model;
-using ServiceInterface.StaticValues;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
-using Utilities.Extensions;
 using Utilities.Mutation.Observers;
-using Icon = FastPosFrontend.Helpers.Icon;
 using Table = ServiceInterface.Model.Table;
 
 namespace FastPosFrontend.ViewModels
@@ -128,126 +122,8 @@ namespace FastPosFrontend.ViewModels
             {
                 itemsPerCategoryPage = configuration.CategoryPageSize;
             }
-
         }
 
-        private async void OnMessageReceived(object sender, MessageReceivedEventArgs e)
-        {
-            Order receivedData = null;
-            Order order = null;
-            var isIdParsed = long.TryParse(e.Message.Data, out var id);
-            var service = StateManager.GetService<Order, IRepository<Order, long>>();
-
-
-
-            if (e.EventName == SSEventType.CREATE_ORDER || e.EventName == SSEventType.UPDATE_ORDER)
-            {
-                if (isIdParsed)
-                {
-                   await Application.Current.Dispatcher.InvokeAsync(async ()=> {
-
-                       var (status, data) = await service.GetByIdAsync(id);
-                       if (status == 200) receivedData = data;
-     
-                       if (e.EventName == SSEventType.CREATE_ORDER)
-                       {
-                           OrderCreationHandler(receivedData);
-                           return;
-                       }
-
-                       if (e.EventName == SSEventType.UPDATE_ORDER)
-                       {
-                           OrderUpdateHandler(receivedData);
-                           return;
-                       }
-                   });
-                }
-                return;
-            }
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-
-                if (e.EventName == SSEventType.PAY_ORDER)
-                {
-                    OrderPaymentHandler(e);
-                    return;
-                }
-
-                if (e.EventName == SSEventType.CANCEL_ORDER)
-                {
-                    OrderCancelationHandler(e);
-                    return;
-                }
-
-                if (e.EventName == SSEventType.LOCK_ORDER)
-                {
-                    OrderLockHandler(e);
-                    return;
-                }
-
-            });
-        }
-
-        private void OrderUpdateHandler(Order receivedData)
-        {
-            var order = Orders.FirstOrDefault(o => o.Id == receivedData.Id);
-            order?.UpdateOrderFrom(receivedData);
-            if (order != null)
-            {
-                var updatedOrderObserver = OrdersCollectionObserver[order] as ObjectGraphMutationObserver<Order>;
-                updatedOrderObserver?.Commit();
-                updatedOrderObserver?.Push();
-            }
-        }
-
-        private void OrderCreationHandler(Order receivedData)
-        {
-            Orders.Add(receivedData);
-            OrdersCollectionObserver.ObserveItem(receivedData);
-
-            WaitingViewModel?.Orders.Refresh();
-            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-            return;
-        }
-
-        private void OrderLockHandler(MessageReceivedEventArgs e)
-        {
-            var data = JsonConvert.DeserializeObject<SyncData>(e.Message.Data);
-            var orderToLock = Orders.FirstOrDefault(o => o.Id == data.Id);
-
-            if (orderToLock != null)
-            {
-                orderToLock.IsLocked = data.IsLocked;
-                orderToLock.LockedBy = data.LockedBy; 
-            }
-        }
-
-        private void OrderCancelationHandler(MessageReceivedEventArgs e)
-        {
-            var id = long.Parse(e.Message.Data);
-            var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
-            Orders.Remove(orderToRemove);
-
-            if (CurrentOrder == orderToRemove)
-            {
-                CurrentOrder = null;
-            }
-            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-        }
-
-        private void OrderPaymentHandler(MessageReceivedEventArgs e)
-        {
-            var id = long.Parse(e.Message.Data);
-            var orderToRemove = Orders.FirstOrDefault(o => o.Id == id);
-            Orders.Remove(orderToRemove);
-            if (CurrentOrder == orderToRemove)
-            {
-                CurrentOrder = null;
-            }
-            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-            return;
-        }
 
         private void SetupEmbeddedCommandBar()
         {
@@ -329,30 +205,89 @@ namespace FastPosFrontend.ViewModels
             DrawerManager.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
 
             var baseUrl = ConfigurationManager.Get<PosConfig>()?.Url;
-            var config = LaunchDarkly.EventSource.Configuration
-                .Builder(new Uri($"{baseUrl}/events/subscribe"))
-                .ResponseStartTimeout(TimeSpan.FromHours(9)).Method(HttpMethod.Get)
-                .ReadTimeout(TimeSpan.FromHours(9))
-                .RequestHeader("Authorization", AuthProvider.Instance?.AuthorizationToken)
-                .Build();
-            _eventSource = new EventSource(config);
-            _eventSource.MessageReceived += OnMessageReceived;
+            eventManager = new EventManagement.EventManager();
+            eventManager.OnEvent<Order>(EventType.CREATE_ORDER,OnOrderCreated);
+            eventManager.OnEvent<Order>(EventType.UPDATE_ORDER,OnOrderUpdated);
+            eventManager.OnEvent<Order>(EventType.CANCEL_ORDER,OnOrderCanceled);
+            eventManager.OnEvent<Order>(EventType.PAY_ORDER,OnOrderPayed);
+            eventManager.OnEvent<Order>(EventType.LOCK_ORDER,OnOrderLocked);
+            //eventManager.OnEvent<Order, List<long>>(EventType.LOCK_ORDER, OnOrdersUnlocked);
 
+            await eventManager.ConnectAsync();
+            await eventManager.ListenAsync<OrderEvent,Order>("/topic/messages");
+            //await eventManager.ListenAsync<UnlockMessage>("/topic/unlock");
 
-            _eventSource.Closed += _eventSource_Closed;
-            _eventSource.Error += (s, args) =>
-            {
-                MessageBox.Show($"{args.Exception}");
-            };
-
-            await _eventSource.StartAsync();
         }
 
-        private void _eventSource_Closed(object sender, StateChangedEventArgs e)
-        
+        private void OnOrdersUnlocked(List<long> ids)
         {
-           
+            foreach (var id in ids)
+            {
+                var orderToUnlock = Orders.FirstOrDefault(o => o.Id == id);
+                orderToUnlock.IsLocked = false;
+                orderToUnlock.LockedBy = null;
+            }
         }
+
+        private void OnOrderLocked(Order incoming)
+        {
+            var orderToLock = Orders.FirstOrDefault(o => o.Id == incoming.Id);
+
+            if (orderToLock != null)
+            {
+                orderToLock.IsLocked = incoming.IsLocked;
+                orderToLock.LockedBy = incoming.LockedBy;
+            }
+        }
+
+        private void OnOrderPayed(Order incoming)
+        {
+
+            var orderToRemove = Orders.FirstOrDefault(o => o.Id == incoming?.Id);
+            Orders.Remove(orderToRemove);
+            if (CurrentOrder == orderToRemove)
+            {
+                CurrentOrder = null;
+            }
+            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+        }
+
+        private void OnOrderCanceled(Order incoming)
+        {
+
+            var orderToRemove = Orders.FirstOrDefault(o => o.Id == incoming?.Id);
+            Orders.Remove(orderToRemove);
+
+            if (CurrentOrder == orderToRemove)
+            {
+                CurrentOrder = null;
+            }
+            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+        }
+
+        private void OnOrderUpdated(Order incoming)
+        {
+            var updatedOrder = Orders.FirstOrDefault(o => o.Id == incoming.Id);
+            updatedOrder?.UpdateOrderFrom(incoming);
+            if (updatedOrder != null)
+            {
+                var updatedOrderObserver = OrdersCollectionObserver[updatedOrder] as DeepMutationObserver<Order>;
+                updatedOrderObserver?.Commit();
+                updatedOrderObserver?.Push();
+            }
+        }
+
+        private void OnOrderCreated(Order incoming)
+        {
+            Orders.Add(incoming);
+            OrdersCollectionObserver.ObserveItem(incoming);
+
+            WaitingViewModel?.Orders.Refresh();
+            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            return;
+        }
+
+       
 
         public CollectionMutationObserver<Order> OrdersCollectionObserver { get; set; }
 
@@ -397,7 +332,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        EventSource _eventSource;
         TaskEventHandler CurrentTask = new TaskEventHandler();
         public ProductLayoutConfiguration ProductLayout
         {
@@ -422,7 +356,7 @@ namespace FastPosFrontend.ViewModels
         public List<Category> AllCategories { get; set; }
 
         #endregion
-        public bool IsDialogOpen
+        public bool CanSplitOrder
         {
             get => _IsDialogOpen;
             set => Set(ref _IsDialogOpen, value);
@@ -579,7 +513,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-
         public CollectionViewSource OrderItemsCollectionViewSource { get; set; }
 
         public string NumericZone
@@ -683,7 +616,6 @@ namespace FastPosFrontend.ViewModels
 
         public ObservableCollection<Table> Tables { get; set; }
         
-
         public INotifyPropertyChanged DialogViewModel
         {
             get => _dialogViewModel;
@@ -704,8 +636,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-    
-
         public decimal GivenAmount
         {
             get => givenAmount;
@@ -717,6 +647,8 @@ namespace FastPosFrontend.ViewModels
         }
 
         private decimal _currentOrderTotal;
+        private StompClient client;
+        private EventManagement.EventManager eventManager;
 
         public decimal CurrentOrderTotal
         {
@@ -744,24 +676,25 @@ namespace FastPosFrontend.ViewModels
 
         public ICommand ActionKeyboardCommand { get; set; }
 
-
-
         #region Order Commands
 
         public bool SaveOrder(ref Order order)
         {
-            return StateManager.Save(order); 
+            return StateManager.Save(order);
         }
 
-        private void SaveCurrentOrder()
+        private void SaveCurrentOrder(Action<Order> onOrderSaved = null)
         {
             var resp = SaveOrder(ref _currentOrder);
             CurrentOrder = _currentOrder;
-            OrderState[] removalStates = { OrderState.Payed,OrderState.Canceled ,  OrderState.Removed , OrderState.Delivered, OrderState.Credit };
+
+            OrderState[] removalStates = { OrderState.Payed, OrderState.Canceled, OrderState.Removed, OrderState.Delivered, OrderState.Credit };
 
             if (resp)
             {
+                onOrderSaved?.Invoke(CurrentOrder);
                 if (removalStates.Any(s => s == CurrentOrder.State)) RemoveCurrentOrderForOrdersList();
+
             }else
             {
                 ToastNotification.Notify("Unable to save order");
@@ -853,7 +786,10 @@ namespace FastPosFrontend.ViewModels
         public void LockOrder()
         {
             if (CurrentOrder== null) return;
-            SyncManager.Lock(CurrentOrder);
+            CurrentOrder.IsLocked = true;
+            CurrentOrder.LockedBy = Thread.CurrentPrincipal.Identity.Name;
+            eventManager.Publish(EventType.LOCK_ORDER, CurrentOrder);
+            //SyncManager.Lock(CurrentOrder);
         }
 
         public void LockOrder(object obj)
@@ -979,7 +915,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            var main = this.Parent as MainViewModel;
+            var main = Parent as MainViewModel;
             main?.OpenDialog(
                 DefaultDialog
                     .New("Are you sure you want perform this action?")
@@ -1015,7 +951,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             checkoutViewModel.SaveCurrentOrder();
-            IsDialogOpen = false;
+            CanSplitOrder = false;
         }
 
         #endregion
@@ -1156,26 +1092,7 @@ namespace FastPosFrontend.ViewModels
                     break;
 
                 case ActionButton.Qty:
-                    float qty;
-                    try
-                    {
-                        qty = (float) Convert.ToDouble(NumericZone);
-                    }
-                    catch (Exception)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
-
-                    if (qty <= 0)
-                    {
-                        NumericZone = "";
-                        return;
-                    }
-
-                    if (CurrentOrder?.SelectedOrderItem != null)
-                        CurrentOrder.SelectedOrderItem.Quantity = qty;
-                    NumericZone = "";
+                    ChangeQtyAction();
                     break;
 
                 case ActionButton.Price:
@@ -1203,187 +1120,206 @@ namespace FastPosFrontend.ViewModels
                 }
                 case ActionButton.Payment:
 
-                    
-                    
                     PayementAction();
                     break;
 
                 case ActionButton.Cmd:
-                    if (CurrentOrder?.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
-                    {
-                        ToastNotification.Notify("Add products before...", NotificationType.Warning);
-                        return;
-                    }
-
-                    var stamp = DateTime.Now;
-
-                    _printOrder = null;
-
-                    //OrdersCollectionObserver.Commit();
-                    var currentOrderObserver = OrdersCollectionObserver[CurrentOrder] as ObjectGraphMutationObserver<Order>;
-                    currentOrderObserver.Commit();
-                    var orderitemsCollectionObserver = currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
-                    var removedItems = orderitemsCollectionObserver?.GetRemovedItems(CurrentOrder.OrderItems).ToList();
-                    removedItems.ForEach(i => i.State = OrderItemState.Removed);
-                    ChangesMade = currentOrderObserver.IsMutated();
-
-                    if (ChangesMade)
-                    {
-                        _printOrder = OrdersCollectionObserver[CurrentOrder].GetDifference(OrderHelper.GetOrderChanges);
-                        //OrdersCollectionObserver.Push();
-                        currentOrderObserver.Push();
-                    }
-
-                    CurrentOrder.OrderItems.AddRange(removedItems);
-                    orderitemsCollectionObserver.CommitAndPushAddedItems((i) => i.State != OrderItemState.Removed);
-                    CurrentOrder.State = OrderState.Ordered;
-                    SaveCurrentOrder();
-
-                    if (ChangesMade)
-                    {
-                        PrintDocument(PrintSource.Kitchen); 
-                    }
+                    PassOrderToKitchenAction();
                     break;
 
                 case ActionButton.Table:
-                    int tableNumber;
-                    if (string.IsNullOrEmpty(NumericZone))
-                    {
-                        if (TablesViewModel != null)
-                        {
-                            TablesViewModel.IsFullView = true;
-                        }
-                        else
-                        {
-                            TablesViewModel = new TablesViewModel(this);
-                            TablesViewModel.IsFullView = true;
-                        }
 
-                        DialogViewModel = TablesViewModel;
+                    if (string.IsNullOrEmpty(NumericZone)) return;
 
-                        return;
-                    }
 
-                    try
-                    {
-                        tableNumber = Convert.ToInt32(NumericZone);
-                    }
-                    catch (Exception)
+
+                    if (!int.TryParse(NumericZone, out var tableNumber))
                     {
                         ToastNotification.Notify("Table Number should be integer", NotificationType.Warning);
                         NumericZone = "";
                         return;
                     }
-
                     TableAction(tableNumber);
+
                     break;
 
                 case ActionButton.Split:
-                    IsDialogOpen = CurrentOrder?.OrderItems != null && (CurrentOrder.OrderItems.Count > 1 ||
+                    CanSplitOrder = CurrentOrder?.OrderItems != null && (CurrentOrder.OrderItems.Count > 1 ||
                                                                         (CurrentOrder.OrderItems.Count == 1 && CurrentOrder.OrderItems[0].Quantity > 1));
-                    if (IsDialogOpen == true)
-                    {
+                    if (!CanSplitOrder) ToastNotification.Notify("Non products to split", NotificationType.Warning); return;
 
-                        SplitViewModel = new SplitViewModel(this);
-                        (this.Parent as MainViewModel)?.OpenDialog(SplitViewModel).OnClose(() =>
-                        {
-                            SplitViewModel = null;
-                        });
-
-                    }
-                    else
+                    SplitViewModel = new SplitViewModel(this);
+                    (Parent as MainViewModel)?.OpenDialog(SplitViewModel).OnClose(() =>
                     {
-                        ToastNotification.Notify("Non products to split", NotificationType.Warning);
-                    }
+                        SplitViewModel = null;
+                    });
 
                     break;
                 case ActionButton.Deliverey:
-                    if (CurrentOrder == null)
-                    {
-                        NewOrder();
-                    }
-
+                    if (CurrentOrder == null) NewOrder();
                     SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
                     break;
 
                 case ActionButton.Takeaway:
-                    if (CurrentOrder == null)
-                    {
-                        NewOrder();
-                    }
-
+                    if (CurrentOrder == null) NewOrder();
                     SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.TakeAway);
                     break;
-                case ActionButton.Served:
-                    if (CurrentOrder == null)
-                    {
-                        return;
-                    }
-
-                    CurrentOrder.State = OrderState.Served;
-                    break;
+               
                 case ActionButton.DElIVERED:
-                    if (CurrentOrder == null)
-                    {
-                        return;
-                    }
-
-                    if (CurrentOrder.Type != OrderType.Delivery&& CurrentOrder.Type!=OrderType.InWaiting)
-                    {
-                        ToastNotification.Notify("Order type must be Delivery", NotificationType.Warning);
-                        return;
-                    }
-
-                    if (CurrentOrder.Type == OrderType.InWaiting)
-                    {
-                        SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
-                    }
-                            
-
-                    if (CurrentOrder.Deliveryman == null)
-                    {
-                      
-                        var result = ModalDialogBox.OkCancel(this, "CheckoutDeliverymanDialogContent", "Deliveryman", (o) => {
-                            return CurrentOrder.Deliveryman != null;
-                        }).Show();
-
-                        if (!result)
-                        {
-                            return;
-                        }
-                        
-                    }
-
-                    CurrentOrder.State = OrderState.Delivered;
-                    SaveCurrentOrder();
+                    DeliveredAction();
                     break;
-
 
                 case ActionButton.Credit:
-                    if (CurrentOrder == null)
-                    {
-                        return;
-                    }
-
-                    if (CurrentOrder.Customer == null)
-                    {
-
-                        var result = ModalDialogBox.OkCancel(this, "CheckoutCustomerDialogContent", "Customer",
-                            (o)=> {
-                                return CurrentOrder.Customer != null;
-                            }).Show();
-
-                        if (!result) return;
-                        
-
-                    }
-
-                    CurrentOrder.State = OrderState.Credit;
-                    SaveCurrentOrder();
+                    CreditAction();
                     break;
             }
         }
 
+        private void ShowTables()
+        {
+            if (TablesViewModel != null)
+            {
+                TablesViewModel.IsFullView = true;
+            }
+            else
+            {
+                TablesViewModel = new TablesViewModel(this);
+                TablesViewModel.IsFullView = true;
+            }
+
+            DialogViewModel = TablesViewModel;
+
+            return;
+        }
+
+        private void ChangeQtyAction()
+        {
+            float qty;
+            try
+            {
+                qty = (float)Convert.ToDouble(NumericZone);
+            }
+            catch (Exception)
+            {
+                NumericZone = "";
+                return;
+            }
+
+            if (qty <= 0)
+            {
+                NumericZone = "";
+                return;
+            }
+
+            if (CurrentOrder?.SelectedOrderItem != null)
+                CurrentOrder.SelectedOrderItem.Quantity = qty;
+            NumericZone = "";
+        }
+
+        private void PassOrderToKitchenAction()
+        {
+            if (CurrentOrder?.OrderItems == null || CurrentOrder.OrderItems.Count == 0)
+            {
+                ToastNotification.Notify("Add products before...", NotificationType.Warning);
+                return;
+            }
+
+            var stamp = DateTime.Now;
+
+            HandleOrderChanges();
+            CurrentOrder.State = OrderState.Ordered;
+            var isNew = !CurrentOrder.Id.HasValue;
+            // o => {
+            //    var eventType = isNew ? EventType.CREATE_ORDER : EventType.UPDATE_ORDER;
+            //    eventManager.Publish(eventType, o);
+            //};
+            SaveCurrentOrder();
+
+            if (ChangesMade)
+            {
+                PrintDocument(PrintSource.Kitchen);
+            }
+        }
+
+        private void HandleOrderChanges()
+        {
+            _printOrder = null;
+
+
+            var currentOrderObserver = OrdersCollectionObserver[CurrentOrder] as DeepMutationObserver<Order>;
+            currentOrderObserver.Commit();
+            var orderitemsCollectionObserver = currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
+            var removedItems = orderitemsCollectionObserver?.GetRemovedItems(CurrentOrder.OrderItems).ToList();
+            removedItems.ForEach(i => i.State = OrderItemState.Removed);
+            ChangesMade = currentOrderObserver.IsMutated();
+
+            if (ChangesMade)
+            {
+                _printOrder = OrdersCollectionObserver[CurrentOrder].GetDifference(OrderHelper.GetOrderChanges);
+                currentOrderObserver.Push();
+            }
+
+            CurrentOrder.OrderItems.AddRange(removedItems);
+            orderitemsCollectionObserver.CommitAndPushAddedItems((i) => i.State != OrderItemState.Removed);
+        }
+
+        private void CreditAction()
+        {
+            if (CurrentOrder == null)
+            {
+                return;
+            }
+
+            if (CurrentOrder.Customer == null)
+            {
+
+                var result = ModalDialogBox.OkCancel(this, "CheckoutCustomerDialogContent", "Customer",
+                    (o) =>
+                    {
+                        return CurrentOrder.Customer != null;
+                    }).Show();
+
+                if (!result) return;
+
+
+            }
+
+            CurrentOrder.State = OrderState.Credit;
+            //SaveCurrentOrder(o=>RaiseOrderEvent(EventType.PAY_ORDER,o));
+            SaveCurrentOrder();
+        }
+
+        private void DeliveredAction()
+        {
+            if (CurrentOrder == null) return;
+
+            if (CurrentOrder.Type != OrderType.Delivery && CurrentOrder.Type != OrderType.InWaiting)
+            {
+                ToastNotification.Notify("Order type must be Delivery", NotificationType.Warning);
+                return;
+            }
+
+            if (CurrentOrder.Type == OrderType.InWaiting)
+            {
+                SetCurrentOrderTypeAndRefreshOrdersLists(OrderType.Delivery);
+            }
+
+
+            if (CurrentOrder.Deliveryman == null)
+            {
+
+                var result = ModalDialogBox.OkCancel(this, "CheckoutDeliverymanDialogContent", "Deliveryman", (o) =>
+                {
+                    return CurrentOrder.Deliveryman != null;
+                }).Show();
+
+                if (!result) return;
+            }
+
+            CurrentOrder.State = OrderState.Delivered;
+            //SaveCurrentOrder(o=>RaiseOrderEvent(EventType.PAY_ORDER,o));
+            SaveCurrentOrder();
+        }
 
         private void PayementAction()
         {
@@ -1415,6 +1351,7 @@ namespace FastPosFrontend.ViewModels
 
             ReturnedAmount = CurrentOrder.ReturnedAmount;
             _printOrder = _currentOrder;
+            //SaveCurrentOrder(o=>RaiseOrderEvent(EventType.PAY_ORDER,o));
             SaveCurrentOrder();
             GivenAmount = 0;
             
@@ -1422,6 +1359,11 @@ namespace FastPosFrontend.ViewModels
             PrintDocument(PrintSource.CheckoutPay);
 
 
+        }
+
+        private void RaiseOrderEvent(string eventType ,Order order)
+        {
+            eventManager.Publish(eventType, order);
         }
 
         private void TableAction(int tableNumber)
@@ -1653,10 +1595,7 @@ namespace FastPosFrontend.ViewModels
 
         public void AddAditive(Additive additive)
         {
-            if (additive == null)
-            {
-                return;
-            }
+            if (additive == null) return;
 
             if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
             {
@@ -1675,10 +1614,7 @@ namespace FastPosFrontend.ViewModels
 
         public void RemoveAdditive(Additive additive)
         {
-            if (additive is null || additive.ParentOrderItem is null)
-            {
-                return;
-            }
+            if (additive is null || additive.ParentOrderItem is null) return;
 
             if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
             {
@@ -1689,14 +1625,9 @@ namespace FastPosFrontend.ViewModels
 
         public void RemoveOrerItem()
         {
-            if (CurrentOrder?.SelectedOrderItem == null)
-            {
-                return;
-            }
-
+            if (CurrentOrder?.SelectedOrderItem == null) return;
 
             CurrentOrder.RemoveOrderItem(CurrentOrder.SelectedOrderItem);
-
 
             OrderItemsCollectionViewSource.View.Refresh();
 
@@ -1706,39 +1637,27 @@ namespace FastPosFrontend.ViewModels
 
         public void AddOneToQuantity()
         {
-            if (CurrentOrder?.SelectedOrderItem == null)
-            {
-                return;
-            }
+            if (CurrentOrder?.SelectedOrderItem == null) return;
 
-           
             CurrentOrder.SelectedOrderItem.Quantity += 1;
         }
 
         public void SubtractOneFromQuantity()
         {
-            if (CurrentOrder?.SelectedOrderItem == null)
-            {
-                return;
-            }
+            if (CurrentOrder?.SelectedOrderItem == null) return;
 
             var orderItem = CurrentOrder.SelectedOrderItem;
-            if (orderItem.Quantity <= 1)
-                return;
-           
+            if (orderItem.Quantity <= 1) return;
+
             orderItem.Quantity -= 1;
         }
 
 
         public void DiscountOnOrderItem(int param)
         {
-            if (String.IsNullOrEmpty(NumericZone) && param != 0)
-                return;
+            if (string.IsNullOrEmpty(NumericZone) && param != 0) return;
 
-            if (CurrentOrder?.SelectedOrderItem == null)
-            {
-                return;
-            }
+            if (CurrentOrder?.SelectedOrderItem == null) return;
 
             if (CurrentOrder.DiscountAmount > 0)
             {
@@ -1761,10 +1680,8 @@ namespace FastPosFrontend.ViewModels
             var discount = 0m;
             if (NumericZone.Contains("%"))
             {
-                if (NumericZone.Length == 1)
-                {
-                    return;
-                }
+                if (NumericZone.Length == 1) return;
+
 
                 try
                 {
@@ -1788,8 +1705,8 @@ namespace FastPosFrontend.ViewModels
                 catch (Exception)
                 {
                     NumericZone = string.Empty;
-                    if (IsRunningFromXUnit)
-                        throw;
+                    if (IsRunningFromXUnit) throw;
+
                 }
             }
 
@@ -1840,13 +1757,11 @@ namespace FastPosFrontend.ViewModels
 
         public void AddOrderItem(Product selectedproduct)
         {
-            if (selectedproduct == null)
-                return;
+            if (selectedproduct == null) return;
 
-            if (CurrentOrder == null)
-            {
-                NewOrder();
-            }
+
+            if (CurrentOrder == null) NewOrder();
+
 
             var item = new OrderItem(selectedproduct, 1, CurrentOrder);
 
@@ -1871,10 +1786,7 @@ namespace FastPosFrontend.ViewModels
 
         public void GoToAdditiveButtonsPage()
         {
-            if (CurrentOrder?.SelectedOrderItem == null)
-            {
-                return;
-            }
+            if (CurrentOrder?.SelectedOrderItem == null) return;
 
             var currentOrderSelectedOrderItem = CurrentOrder.SelectedOrderItem;
             
@@ -1897,10 +1809,8 @@ namespace FastPosFrontend.ViewModels
             get => _selectedDeliveryman;
             set
             {
-                if (CurrentOrder == null && value != null)
-                {
-                    NewOrder();
-                }
+                if (CurrentOrder == null && value != null) NewOrder();
+
 
                 Set(ref _selectedDeliveryman, value);
 
@@ -1922,10 +1832,7 @@ namespace FastPosFrontend.ViewModels
             get => _selectedWaiter;
             set
             {
-                if (CurrentOrder == null && value != null)
-                {
-                    NewOrder();
-                }
+                if (CurrentOrder == null && value != null) NewOrder();
 
                 Set(ref _selectedWaiter, value);
 
@@ -2035,10 +1942,6 @@ namespace FastPosFrontend.ViewModels
             document.Pages.Add(pageContent);
             return document;
         }
-
-       
-
-      
 
         public void PrintDocument(PrintSource source)
         {
@@ -2364,10 +2267,6 @@ namespace FastPosFrontend.ViewModels
                 });
         }
 
-        public void Close()
-        {
-
-        }
     }
 
     public enum OrderProp

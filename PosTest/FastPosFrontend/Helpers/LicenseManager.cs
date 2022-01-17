@@ -26,7 +26,7 @@ namespace FastPosFrontend.Helpers
         }
        
 
-        public void Check()
+        public void CheckLicenseState()
         {
             var res = Client.Execute(_getLicenseState);
             if ((int)res.StatusCode != 200)
@@ -61,11 +61,6 @@ namespace FastPosFrontend.Helpers
                 Password = "sfghkbfj,mwerjsd"
             };
 
-            //var credentials = new LicensingCredentials()
-            //{
-            //    Email = "example@mail.com",
-            //    Password = ""
-            //};
             List<string> errors = new List<string>();
             var result = ModalDialogBox.Submit(credentials, "LicenseManagerCredentialsDialogContent", "License Manager", o =>
             {
@@ -73,7 +68,7 @@ namespace FastPosFrontend.Helpers
             }, onSubmit: () =>
               {
                 var content = JsonConvert.SerializeObject(credentials);
-                  //_doServerActivation.AddHeader("Licensing-Credentials", content);
+
                   _doServerActivation.AddJsonBody(content);
                 var res = Client.Execute(_doServerActivation);
 

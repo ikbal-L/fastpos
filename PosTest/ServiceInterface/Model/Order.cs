@@ -341,7 +341,9 @@ namespace ServiceInterface.Model
         public bool ProductsVisibility
         {
             get { return _ProductsVisibility; }
-            set { _ProductsVisibility = value;
+            set
+            {
+                _ProductsVisibility = value;
                 NotifyOfPropertyChange(nameof(ProductsVisibility));
             }
         }
@@ -357,7 +359,7 @@ namespace ServiceInterface.Model
                     new[] { nameof(Deliveryman) });
             }
 
-            if (Type==OrderType.OnTable && Table == null)
+            if (Type == OrderType.OnTable && Table == null)
             {
                 yield return new ValidationResult(
                     $"Table must not be null if Order Type is {OrderType.OnTable} ",
@@ -482,14 +484,14 @@ namespace ServiceInterface.Model
         public string LockedBy
         {
             get { return _lockedBy; }
-            set 
-            { 
+            set
+            {
                 Set(ref _lockedBy, value);
                 NotifyOfPropertyChange(nameof(IsModifiable));
             }
         }
 
-        public bool IsModifiable => !IsLocked  || (IsLocked && LockedBy == Thread.CurrentPrincipal.Identity.Name);
+        public bool IsModifiable => !IsLocked || (IsLocked && LockedBy == Thread.CurrentPrincipal.Identity.Name);
 
 
 
@@ -497,11 +499,11 @@ namespace ServiceInterface.Model
 
     public interface ISyncData
     {
-        public string Type { get;}
+        public string Type { get; }
 
-        public long Id { get;}
+        public long Id { get; }
 
-        public bool IsLocked { get;}
+        public bool IsLocked { get; }
 
         public string LockedBy { get; }
     }
@@ -516,6 +518,56 @@ namespace ServiceInterface.Model
         public bool IsLocked { get; set; }
         [DataMember]
         public string LockedBy { get; set; }
+    }
+
+    public abstract class AbstractEvent<T, ID> where ID : struct
+    {
+        [DataMember]
+        public string Type { get; set; }
+
+        [DataMember]
+        public T Content { get; set; }
+
+        [DataMember]
+        public string Source { get; set; }
+
+    }
+
+    public class Event<T> : AbstractEvent<T, long>
+    {
+        public Event(string type, T data)
+        {
+            Type = type;
+            Content = data;
+
+        }
+
+        public Event()
+        {
+
+        }
+    }
+
+
+
+    public class OrderEvent : Event<Order>
+    {
+        [DataMember]
+        public long? Id { get; set; }
+        [DataMember]
+        public bool? IsLocked { get; set; }
+        [DataMember]
+        public string? LockedBy { get; set; }
+
+
+
+        public OrderEvent(string type, Order data) : base(type, data)
+        {
+
+        }
+
+
+
     }
 
     [DataContract]
@@ -533,6 +585,6 @@ namespace ServiceInterface.Model
         public DateTime OrerTime { get; set; }
 
         [DataMember]
-        public string CanceledBy { get; set; } 
+        public string CanceledBy { get; set; }
     }
 }

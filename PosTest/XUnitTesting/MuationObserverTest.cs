@@ -17,7 +17,7 @@ namespace XUnitTesting
         {
             var ex = Assert.Throws<ArgumentException>(() => {
 
-                var o = new ObjectGraphMutationObserver<Additive>(new Additive());
+                var o = new DeepMutationObserver<Additive>(new Additive());
             });
             Assert.Contains($"contains no properties decorated by {nameof(ObserveMutationsAttribute)}", ex.Message);
         }
@@ -26,7 +26,7 @@ namespace XUnitTesting
         public void MutationObservers_CallCommitWhenObserverIsNotInitialized_ThrowsInvalidOperationException()
         {
             
-            var orderItemObserver = new ObjectMutationObserver<OrderItem>(null,nameof(OrderItem.Quantity));
+            var orderItemObserver = new ShallowMutationObserver<OrderItem>(null,nameof(OrderItem.Quantity));
             var collectionObserver =new CollectionMutationObserver<OrderItem>(null);
             var graphObserver =new CollectionMutationObserver<OrderItem>(null);
             Assert.Throws<InvalidOperationException>(orderItemObserver.Commit);
@@ -39,7 +39,7 @@ namespace XUnitTesting
         public void MutationObservers_CallPushWhenObserverIsNotInitialized_ThrowsInvalidOperationException()
         {
 
-            var orderItemObserver = new ObjectMutationObserver<OrderItem>(null, nameof(OrderItem.Quantity));
+            var orderItemObserver = new ShallowMutationObserver<OrderItem>(null, nameof(OrderItem.Quantity));
             var collectionObserver = new CollectionMutationObserver<OrderItem>(null);
             var graphObserver = new CollectionMutationObserver<OrderItem>(null);
             Assert.Throws<InvalidOperationException>(orderItemObserver.Push);
@@ -129,10 +129,10 @@ namespace XUnitTesting
             
             var prop = nameof(OrderItem.Quantity);
             var prop2 = nameof(Product.Name);
-            var observer = new ObjectMutationObserver<OrderItem>(orderItem1,prop);
+            var observer = new ShallowMutationObserver<OrderItem>(orderItem1,prop);
             orderItem1.Additives = new System.Collections.ObjectModel.ObservableCollection<Additive>();
             
-            var observer2 = new ObjectMutationObserver<Product>(orderItem1.Product,prop2);
+            var observer2 = new ShallowMutationObserver<Product>(orderItem1.Product,prop2);
             orderItem1.Quantity = 15;
             orderItem1.Product.Name = "p14";
             observer.Commit();
@@ -155,7 +155,7 @@ namespace XUnitTesting
             orderItem.Additives.Add(new Additive() { Description="d1"});
             orderItem.Additives.Add(new Additive() { Description="d2"});
 
-            var graphObserver = new ObjectGraphMutationObserver<OrderItem>(orderItem);
+            var graphObserver = new DeepMutationObserver<OrderItem>(orderItem);
             orderItem.Product = new Product() { Name = "P1" };
             orderItem.Additives.RemoveAt(0);
             var productPropertyName = nameof(OrderItem.Product);

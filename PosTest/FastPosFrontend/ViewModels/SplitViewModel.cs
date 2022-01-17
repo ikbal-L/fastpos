@@ -458,7 +458,7 @@ namespace FastPosFrontend.ViewModels
         {
 
             
-            _parent.IsDialogOpen = false;
+            _parent.CanSplitOrder = false;
             _parent.DialogViewModel = null;
             CurrentOrder = null;
             if (_parent.CurrentOrder?.OrderItems!= null)

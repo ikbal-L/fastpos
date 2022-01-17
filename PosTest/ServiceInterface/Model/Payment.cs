@@ -22,6 +22,7 @@ namespace ServiceInterface.Model
 
             }
         }
+
         private decimal? _discountAmount;
         [DataMember]
         public decimal? DiscountAmount
