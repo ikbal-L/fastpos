@@ -64,14 +64,8 @@ namespace FastPosFrontend.Helpers
         private void PaginationCollectionViewSource_Filter(object sender, FilterEventArgs e)
         {
             var itemIndex = ObservableSourceCollection.IndexOf(e.Item as T);
-            if (PageContainsItem(itemIndex))
-            {
-                e.Accepted = true;
-            }
-            else
-            {
-                e.Accepted = false;
-            }
+
+            e.Accepted = PageContainsItem(itemIndex);
         }
 
         private void PaginationCollectionViewSource_FilterWithPredicate(object sender, FilterEventArgs e)
@@ -150,9 +144,9 @@ namespace FastPosFrontend.Helpers
         private RetrieverAsync<T> _retrieverAsync;
 
         public bool IsAsync { get; set; } = false;
-        public PageRetriever(Func<(int pageIndex, int pageSize), IEnumerable<T>> retriverDelegate)
+        public PageRetriever(Retriever<T> retriverDelegate)
         {
-            _delegate = retriverDelegate;
+            _retriever = retriverDelegate;
         }
 
         public PageRetriever(RetrieverAsync<T> retriever)
@@ -163,7 +157,7 @@ namespace FastPosFrontend.Helpers
 
         public IEnumerable<T> Retrieve(int pageIndex, int pageSize)
         {
-            return _delegate?.Invoke((pageIndex, pageSize));
+            return _retriever?.Invoke(pageIndex, pageSize);
         }
 
         public Task<List<T>> RetrieveAsync(int pageIndex, int pageSize)

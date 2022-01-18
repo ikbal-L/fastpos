@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace ServiceInterface.Model
 {
-    public class Order : SyncModel, IValidatableObject, ILockableState<long>
+    public class Order : SyncModel, IValidatableObject, IState<long>,ILockable
     {
 
         private OrderItem _selectedOrderItem;
@@ -497,78 +497,34 @@ namespace ServiceInterface.Model
 
     }
 
-    public interface ISyncData
+    public interface IMessage<  T>:IMessage
     {
-        public string Type { get; }
-
-        public long Id { get; }
-
-        public bool IsLocked { get; }
-
-        public string LockedBy { get; }
+        new T Content {  set; get;}
     }
 
-    public class SyncData : ISyncData
+    public interface IMessage 
+    {
+        object Content { get;  }
+        string Source { get;  }
+        string Type { get;  }
+    }
+
+    public class Message<T> : IMessage<T>
     {
         [DataMember]
         public string Type { get; set; }
-        [DataMember]
-        public long Id { get; set; }
-        [DataMember]
-        public bool IsLocked { get; set; }
-        [DataMember]
-        public string LockedBy { get; set; }
-    }
-
-    public abstract class AbstractEvent<T, ID> where ID : struct
-    {
-        [DataMember]
-        public string Type { get; set; }
-
-        [DataMember]
-        public T Content { get; set; }
 
         [DataMember]
         public string Source { get; set; }
 
+        [DataMember]
+        public T Content { get; set; }
+        object IMessage.Content => Content;
     }
 
-    public class Event<T> : AbstractEvent<T, long>
-    {
-        public Event(string type, T data)
-        {
-            Type = type;
-            Content = data;
-
-        }
-
-        public Event()
-        {
-
-        }
-    }
+    
 
 
-
-    public class OrderEvent : Event<Order>
-    {
-        [DataMember]
-        public long? Id { get; set; }
-        [DataMember]
-        public bool? IsLocked { get; set; }
-        [DataMember]
-        public string? LockedBy { get; set; }
-
-
-
-        public OrderEvent(string type, Order data) : base(type, data)
-        {
-
-        }
-
-
-
-    }
 
     [DataContract]
     public class OrderData

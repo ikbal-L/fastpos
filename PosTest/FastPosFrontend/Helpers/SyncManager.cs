@@ -17,9 +17,9 @@ namespace FastPosFrontend.Helpers
         {
 
         }
-        public static bool Lock<T>(T obj) where T : ILockableState<long> => Lock<T, long>(obj);
+        public static bool Lock<T>(T obj) where T : IState<long> ,ILockable=> Lock<T, long>(obj);
 
-        public static bool Lock<T,Id>(T obj) where T: ILockableState<Id> where Id : struct
+        public static bool Lock<T,Id>(T obj) where T: IState<long>, ILockable where Id : struct
         {
             var payload = !obj.IsLocked;
             var url = api.Resource<Order>(EndPoint.LOCK, obj.Id);
@@ -27,7 +27,7 @@ namespace FastPosFrontend.Helpers
         }
 
         private static bool SetLock<T, Id>(T obj, bool payload, string url)
-            where T : ILockableState<Id>
+            where T : IState<long>, ILockable
             where Id : struct
         {
             var res = GenericRest.RestPut(payload, url);

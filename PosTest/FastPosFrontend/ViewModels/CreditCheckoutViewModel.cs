@@ -387,7 +387,7 @@ namespace FastPosFrontend.ViewModels
 
         private bool CanGoToNextPage()=> SelectedCustomer != null;
 
-        public IEnumerable<Order> RetriveOrderPage((int pageIndex, int pageSize) p)
+        public List<Order> RetriveOrderPage(int pageIndex, int pageSize )
         {
             if (SelectedCustomer == null)
             {
@@ -398,8 +398,8 @@ namespace FastPosFrontend.ViewModels
 
             var orderFilter = new OrderFilter()
             {
-                PageIndex = p.pageIndex,
-                PageSize = p.pageSize,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
                 CustomerId = SelectedCustomer?.Id,
                 //DescendingOrder = true,
                 OrderBy = "orderTime",
@@ -409,7 +409,7 @@ namespace FastPosFrontend.ViewModels
             return result;
         }
 
-        public IEnumerable<Payment> RetrivePaymentPage((int pageIndex, int pageSize) p)
+        public List<Payment> RetrivePaymentPage(int pageIndex, int pageSize)
         {
             if (SelectedCustomer == null)
             {
@@ -419,8 +419,8 @@ namespace FastPosFrontend.ViewModels
             
             var orderFilter = new PaymentFilter()
             {
-                PageIndex = p.pageIndex,
-                PageSize = p.pageSize,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
                 //TODO NPE
                 CustomerId = SelectedCustomer?.Id,
                 OrderBy = "date",

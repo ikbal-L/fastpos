@@ -26,13 +26,14 @@ namespace FastPosFrontend.EventManagement
         public EventManager()
         {
             _eventHandlers = new Dictionary<string, Action<object>>();
-            _client = new StompClient("ws://192.168.1.106:8080/websocket", reconnectTimeOut: TimeSpan.FromSeconds(60*60));
+            _client = new StompClient("ws://localhost:8080/websocket", reconnectTimeOut: TimeSpan.FromSeconds(60*60));
             _headers = new Dictionary<string, string>() {
                 {"Authorization",AuthProvider.Instance.AuthorizationToken },
                 {"SessionId",RestAuthentification.SessionId },
             };
             _client.OnError += _client_OnError;
             _client.OnClose += _client_OnClose;
+
 
         }
 
@@ -53,14 +54,19 @@ namespace FastPosFrontend.EventManagement
             await _client.ConnectAsync(_headers);
         }
 
-        public async Task ListenAsync<E,T>(string channel) where E:Event<T>
+        public async Task ListenAsync<E>(string channel,bool receiveFullMessage = false)  where E:IMessage
         {
-            await _client.SubscribeAsync<E>(channel, new Dictionary<string,string>(_headers), ((s, e) =>
+            await _client.SubscribeAsync<E>(channel, new Dictionary<string,string>(_headers), ((s, message) =>
             {
-                if (_eventHandlers.ContainsKey(e.Type)&& e.Source != Thread.CurrentPrincipal.Identity.Name)
+                if (_eventHandlers.ContainsKey(message.Type)&& message.Source != Thread.CurrentPrincipal.Identity.Name)
                 {
-                    var onEvent = _eventHandlers[e.Type];
-                    onEvent(e.Content);
+                    var onEvent = _eventHandlers[message.Type];
+                    if (receiveFullMessage)
+                    {
+                        onEvent(message);
+                        return;
+                    }
+                    onEvent(message.Content);
                 }
             }));
         }
@@ -70,7 +76,12 @@ namespace FastPosFrontend.EventManagement
 
         public async Task PublishAsync<T>(string eventType, T data)
         {
-            var _event = new Event<T>(eventType, data) { Source = Thread.CurrentPrincipal.Identity.Name };
+            var _event = new Message<T>()
+            {
+                Source = Thread.CurrentPrincipal.Identity.Name,
+                Type = eventType,
+                Content = data
+            };
             await _client.SendAsync(JsonConvert.SerializeObject(_event), "/app/chat", new Dictionary<string, string>(_headers));
         }
 
@@ -86,10 +97,10 @@ namespace FastPosFrontend.EventManagement
             });
         }
 
-        public void OnEvent<T,D>(string name, Action<D> action)
+        public void OnEvent<T>(string name, Action<IMessage<T>> action)
         {
             _eventHandlers.Add(name, (o) => {
-                if (o is D d) action(d);
+                if (o is IMessage<T> d) action(d);
             });
         }
 

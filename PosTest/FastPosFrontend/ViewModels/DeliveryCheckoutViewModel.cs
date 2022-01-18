@@ -395,7 +395,7 @@ namespace FastPosFrontend.ViewModels
 
         private bool CanGoToNextPage() => SelectedDeliveryman != null;
 
-        public IEnumerable<Order> RetriveOrderPage((int pageIndex, int pageSize) p)
+        public List<Order> RetriveOrderPage(int pageIndex, int pageSize)
         {
             if (SelectedDeliveryman == null)
             {
@@ -406,8 +406,8 @@ namespace FastPosFrontend.ViewModels
 
             var orderFilter = new OrderFilter()
             {
-                PageIndex = p.pageIndex,
-                PageSize = p.pageSize,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
                 DeliverymanId = SelectedDeliveryman?.Id,
                 //DescendingOrder = true,
                 OrderBy = "orderTime",
@@ -417,7 +417,7 @@ namespace FastPosFrontend.ViewModels
             return result;
         }
 
-        public IEnumerable<Payment> RetrivePaymentPage((int pageIndex, int pageSize) p)
+        public List<Payment> RetrivePaymentPage(int pageIndex, int pageSize )
         {
             if (SelectedDeliveryman == null)
             {
@@ -427,8 +427,8 @@ namespace FastPosFrontend.ViewModels
 
             var orderFilter = new PaymentFilter()
             {
-                PageIndex = p.pageIndex,
-                PageSize = p.pageSize,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
                 DeliverymanId = SelectedDeliveryman?.Id,
                 OrderBy = "date",
                 DescendingOrder = true

@@ -210,11 +210,12 @@ namespace FastPosFrontend.ViewModels
             eventManager.OnEvent<Order>(EventType.UPDATE_ORDER,OnOrderUpdated);
             eventManager.OnEvent<Order>(EventType.CANCEL_ORDER,OnOrderCanceled);
             eventManager.OnEvent<Order>(EventType.PAY_ORDER,OnOrderPayed);
-            eventManager.OnEvent<Order>(EventType.LOCK_ORDER,OnOrderLocked);
+            eventManager.OnEvent<long>(EventType.LOCK_ORDER,OnOrderLocked);
             //eventManager.OnEvent<Order, List<long>>(EventType.LOCK_ORDER, OnOrdersUnlocked);
 
             await eventManager.ConnectAsync();
-            await eventManager.ListenAsync<OrderEvent,Order>("/topic/messages");
+            await eventManager.ListenAsync<Message<Order>>("/topic/messages");
+            await eventManager.ListenAsync<Message<long>>("/topic/messages/locks",receiveFullMessage:true);
             //await eventManager.ListenAsync<UnlockMessage>("/topic/unlock");
 
         }
@@ -229,40 +230,45 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        private void OnOrderLocked(Order incoming)
+        private void OnOrderLocked(IMessage<long> message)
         {
-            var orderToLock = Orders.FirstOrDefault(o => o.Id == incoming.Id);
-
-            if (orderToLock != null)
+            RunOnTheMainThread(() =>
             {
-                orderToLock.IsLocked = incoming.IsLocked;
-                orderToLock.LockedBy = incoming.LockedBy;
-            }
+                var orderToLock = Orders.FirstOrDefault(o => o.Id == message.Content);
+
+                if (orderToLock != null)
+                {
+                    orderToLock.IsLocked = true;
+                    orderToLock.LockedBy = message.Source;
+                }
+            });
         }
 
         private void OnOrderPayed(Order incoming)
         {
 
             var orderToRemove = Orders.FirstOrDefault(o => o.Id == incoming?.Id);
-            Orders.Remove(orderToRemove);
-            if (CurrentOrder == orderToRemove)
+            RunOnTheMainThread(() =>
             {
-                CurrentOrder = null;
-            }
-            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                Orders.Remove(orderToRemove);
+
+                if (CurrentOrder == orderToRemove) CurrentOrder = null;
+                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            });
         }
 
         private void OnOrderCanceled(Order incoming)
         {
 
             var orderToRemove = Orders.FirstOrDefault(o => o.Id == incoming?.Id);
-            Orders.Remove(orderToRemove);
-
-            if (CurrentOrder == orderToRemove)
+            RunOnTheMainThread(() =>
             {
-                CurrentOrder = null;
-            }
-            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                Orders.Remove(orderToRemove);
+
+                if (CurrentOrder == orderToRemove) CurrentOrder = null;
+                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            });
+
         }
 
         private void OnOrderUpdated(Order incoming)
@@ -279,15 +285,20 @@ namespace FastPosFrontend.ViewModels
 
         private void OnOrderCreated(Order incoming)
         {
-            Orders.Add(incoming);
+            RunOnTheMainThread( () => 
+            {
+                Orders.Add(incoming);
+                WaitingViewModel?.Orders.Refresh();
+                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+            });
             OrdersCollectionObserver.ObserveItem(incoming);
-
-            WaitingViewModel?.Orders.Refresh();
-            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
             return;
         }
 
-       
+        private static void RunOnTheMainThread(System.Action action)
+        {
+            Application.Current.Dispatcher.BeginInvoke(action);
+        }
 
         public CollectionMutationObserver<Order> OrdersCollectionObserver { get; set; }
 
