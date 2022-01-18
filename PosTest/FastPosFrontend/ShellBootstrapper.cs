@@ -82,9 +82,17 @@ namespace FastPosFrontend
         public static bool StartBackendServer()
         {
             ServiceController service = new ServiceController("FrutaPOS Server");
-            if (service.Status == ServiceControllerStatus.Stopped|| service.Status == ServiceControllerStatus.StopPending)
+            try
             {
-                service.Start();
+                if (service.Status == ServiceControllerStatus.Stopped || service.Status == ServiceControllerStatus.StopPending)
+                {
+                    service.Start();
+                }
+            }
+            catch (Exception)
+            {
+
+                ToastNotification.Notify("Unable to start server!");
             }
 
             return service.Status == ServiceControllerStatus.Running;

@@ -17,7 +17,6 @@ namespace FastPosFrontend.EventManagement
 
     public class EventManager
     {
-        private readonly StompClient _client;
         private readonly Dictionary<string, string> _headers;
         private readonly Dictionary<string,Action<object>> _eventHandlers;
 
@@ -26,23 +25,28 @@ namespace FastPosFrontend.EventManagement
         public EventManager()
         {
             _eventHandlers = new Dictionary<string, Action<object>>();
-            _client = new StompClient("ws://localhost:8080/websocket", reconnectTimeOut: TimeSpan.FromSeconds(60*60));
+            Client = new StompClient("ws://localhost:8080/websocket", reconnectTimeOut: TimeSpan.FromSeconds(60*60));
             _headers = new Dictionary<string, string>() {
                 {"Authorization",AuthProvider.Instance.AuthorizationToken },
                 {"SessionId",RestAuthentification.SessionId },
             };
-            _client.OnError += _client_OnError;
-            _client.OnClose += _client_OnClose;
+
+
+
+
 
 
         }
 
-        public StompClient Client => _client;
+        public StompClient Client { get; }
 
-        private void _client_OnClose(object sender, Websocket.Client.DisconnectionInfo e)
+        public void OnConnectionClosed(Action action)
         {
-     
+            Client.OnClose += (s,e)=> { action?.Invoke(); };
         }
+
+      
+
 
         private void _client_OnError(object sender, string e)
         {
@@ -51,12 +55,12 @@ namespace FastPosFrontend.EventManagement
 
         public async Task ConnectAsync()
         {
-            await _client.ConnectAsync(_headers);
+            await Client.ConnectAsync(new Dictionary<string,string>(_headers));
         }
 
         public async Task ListenAsync<E>(string channel,bool receiveFullMessage = false)  where E:IMessage
         {
-            await _client.SubscribeAsync<E>(channel, new Dictionary<string,string>(_headers), ((s, message) =>
+            await Client.SubscribeAsync<E>(channel, new Dictionary<string,string>(_headers), ((s, message) =>
             {
                 if (_eventHandlers.ContainsKey(message.Type)&& message.Source != Thread.CurrentPrincipal.Identity.Name)
                 {
@@ -82,7 +86,7 @@ namespace FastPosFrontend.EventManagement
                 Type = eventType,
                 Content = data
             };
-            await _client.SendAsync(JsonConvert.SerializeObject(_event), "/app/chat", new Dictionary<string, string>(_headers));
+            await Client.SendAsync(JsonConvert.SerializeObject(_event), "/app/chat", new Dictionary<string, string>(_headers));
         }
 
         public void Publish<T>(string eventType, T data)

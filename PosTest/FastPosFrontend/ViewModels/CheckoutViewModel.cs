@@ -29,6 +29,7 @@ using FastPosFrontend.ViewModels.Settings.Customer;
 using FastPosFrontend.ViewModels.SubViewModel;
 using LaunchDarkly.EventSource;
 using Netina.Stomp.Client;
+using Newtonsoft.Json;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
@@ -210,13 +211,13 @@ namespace FastPosFrontend.ViewModels
             eventManager.OnEvent<Order>(EventType.UPDATE_ORDER,OnOrderUpdated);
             eventManager.OnEvent<Order>(EventType.CANCEL_ORDER,OnOrderCanceled);
             eventManager.OnEvent<Order>(EventType.PAY_ORDER,OnOrderPayed);
-            eventManager.OnEvent<long>(EventType.LOCK_ORDER,OnOrderLocked);
-            //eventManager.OnEvent<Order, List<long>>(EventType.LOCK_ORDER, OnOrdersUnlocked);
-
+            eventManager.OnEvent<List<long>>(EventType.LOCK_ORDER,OnOrderLocked);
+            eventManager.OnEvent<List<long>>(EventType.UNLOCK_ORDER,OnOrderLocked);
+            eventManager.OnConnectionClosed(ConnectionClosedHandler);
             await eventManager.ConnectAsync();
             await eventManager.ListenAsync<Message<Order>>("/topic/messages");
-            await eventManager.ListenAsync<Message<long>>("/topic/messages/locks",receiveFullMessage:true);
-            //await eventManager.ListenAsync<UnlockMessage>("/topic/unlock");
+            await eventManager.ListenAsync<Message<List<long>>>("/topic/messages/locks",receiveFullMessage:true);
+            //await eventManager.ListenAsync<>("/topic/unlock");
 
         }
 
@@ -230,16 +231,28 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        private void OnOrderLocked(IMessage<long> message)
-        {
+        private void OnOrderLocked(IMessage<List<long>> message)
+        {            
             RunOnTheMainThread(() =>
             {
-                var orderToLock = Orders.FirstOrDefault(o => o.Id == message.Content);
 
-                if (orderToLock != null)
+                foreach (var order in Orders)
                 {
-                    orderToLock.IsLocked = true;
-                    orderToLock.LockedBy = message.Source;
+                    if (order.Id.HasValue && message.Content.Contains(order.Id.Value))
+                    {
+                        if (order != null && message.Type == "Lock.Order")
+                        {
+                            order.IsLocked = true;
+                            order.LockedBy = message.Source;
+                            return;
+                        }
+                        if (order != null && message.Type == "Unlock.Order")
+                        {
+                            order.IsLocked = false;
+                            order.LockedBy = null;
+                            return;
+                        }
+                    }
                 }
             });
         }
@@ -289,7 +302,11 @@ namespace FastPosFrontend.ViewModels
             {
                 Orders.Add(incoming);
                 WaitingViewModel?.Orders.Refresh();
+                DeliveryViewModel?.Orders.Refresh();
+                TakeAwayViewModel?.Orders.Refresh();
                 WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                WaitingViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
+                WaitingViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
             });
             OrdersCollectionObserver.ObserveItem(incoming);
             return;
@@ -796,11 +813,56 @@ namespace FastPosFrontend.ViewModels
 
         public void LockOrder()
         {
+            //eventManager.Publish(EventType.LOCK_ORDER, CurrentOrder);
+
             if (CurrentOrder== null) return;
-            CurrentOrder.IsLocked = true;
-            CurrentOrder.LockedBy = Thread.CurrentPrincipal.Identity.Name;
-            eventManager.Publish(EventType.LOCK_ORDER, CurrentOrder);
-            //SyncManager.Lock(CurrentOrder);
+
+            var action = CurrentOrder.IsLocked ? "unlock" : "lock";
+            var baseUrl = ConfigurationManager.Get<PosConfig>().Url;
+            RestApi api = new RestApi(baseUrl);
+            var url = api.Resource("locks", $"{action}/order", CurrentOrder.Id);
+            var res = GenericRest.RestPost("",url);
+            if (res.IsSuccessful&& !CurrentOrder.IsLocked)
+            {
+                CurrentOrder.IsLocked = true;
+                CurrentOrder.LockedBy = Thread.CurrentPrincipal.Identity.Name;
+                return;
+            }
+
+            if (res.IsSuccessful&& CurrentOrder.IsLocked)
+            {
+                CurrentOrder.IsLocked = false;
+                CurrentOrder.LockedBy = null;
+                return;
+            }
+
+            ToastNotification.Notify("Something happened!");
+        }
+
+        public void ConnectionClosedHandler()
+        {
+            //if (!Orders.Any(o => o.IsLocked)) return;
+            var baseUrl = ConfigurationManager.Get<PosConfig>().Url;
+            RestApi api = new RestApi(baseUrl);
+            var url = api.Resource("locks", "unlockAll/order");
+            var res = GenericRest.RestPost("", url);
+            if (res.IsSuccessful)
+            {
+                var ids = JsonConvert.DeserializeObject<List<long>>(res.Content);
+                RunOnTheMainThread(() =>
+                {
+                    foreach (var order in Orders)
+                    {
+                        if (order.Id.HasValue&& ids.Contains(order.Id.Value))
+                        {
+                            order.IsLocked = false;
+                            order.LockedBy = null;
+                        }
+                    }
+                });
+                return;
+            }
+            RunOnTheMainThread(()=> ToastNotification.Notify("Something happened!"));
         }
 
         public void LockOrder(object obj)
@@ -2104,6 +2166,7 @@ namespace FastPosFrontend.ViewModels
         {
             if (navigationTargetType == typeof(LoginViewModel))
             {
+                ConnectionClosedHandler();
                 if (Orders != null && Orders.Any(o => o.Id == null))
                 {
                 
