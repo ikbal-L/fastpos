@@ -143,7 +143,6 @@ namespace FastPosFrontend.ViewModels
             _data = new NotifyAllTasksCompletion(categories, unprocessedOrders);
         }
 
-       
         public async override void Initialize()
         {
             var deliveryMen = StateManager.GetAll<Deliveryman>();
@@ -164,7 +163,9 @@ namespace FastPosFrontend.ViewModels
             Tables = new BindableCollection<Table>(tables);
             Customers = new BindableCollection<Customer>(customers);
             OrderItemsCollectionViewSource = new CollectionViewSource();
-            OrderItemsCollectionViewSource.Filter += OrderItemsCollectionViewSourceOnFilter;
+            OrderItemsCollectionViewSource.Filter += (_,e)=> e.Accepted = 
+            e.Item is OrderItem orderItem 
+            && orderItem.State != OrderItemState.Removed; ;
 
             Task.Run(CalculateOrderElapsedTime);
             if (IsRunningFromXUnit)
@@ -217,41 +218,28 @@ namespace FastPosFrontend.ViewModels
             await eventManager.ConnectAsync();
             await eventManager.ListenAsync<Message<Order>>("/topic/messages");
             await eventManager.ListenAsync<Message<List<long>>>("/topic/messages/locks",receiveFullMessage:true);
-            //await eventManager.ListenAsync<>("/topic/unlock");
-
         }
 
-        private void OnOrdersUnlocked(List<long> ids)
-        {
-            foreach (var id in ids)
-            {
-                var orderToUnlock = Orders.FirstOrDefault(o => o.Id == id);
-                orderToUnlock.IsLocked = false;
-                orderToUnlock.LockedBy = null;
-            }
-        }
+
 
         private void OnOrderLocked(IMessage<List<long>> message)
         {            
             RunOnTheMainThread(() =>
             {
-
-                foreach (var order in Orders)
+                var orders = Orders.Where(o => o.Id != null && message.Content.Contains(o.Id.Value)).ToList();
+                foreach (var order in orders)
                 {
-                    if (order.Id.HasValue && message.Content.Contains(order.Id.Value))
+                    if (order != null && message.Type == "Lock.Order")
                     {
-                        if (order != null && message.Type == "Lock.Order")
-                        {
-                            order.IsLocked = true;
-                            order.LockedBy = message.Source;
-                            return;
-                        }
-                        if (order != null && message.Type == "Unlock.Order")
-                        {
-                            order.IsLocked = false;
-                            order.LockedBy = null;
-                            return;
-                        }
+                        order.IsLocked = true;
+                        order.LockedBy = message.Source;
+                    
+                    }
+                    if (order != null && message.Type == "Unlock.Order")
+                    {
+                        order.IsLocked = false;
+                        order.LockedBy = null;
+                   
                     }
                 }
             });
@@ -259,55 +247,79 @@ namespace FastPosFrontend.ViewModels
 
         private void OnOrderPayed(Order incoming)
         {
-
             var orderToRemove = Orders.FirstOrDefault(o => o.Id == incoming?.Id);
-            RunOnTheMainThread(() =>
-            {
-                Orders.Remove(orderToRemove);
-
-                if (CurrentOrder == orderToRemove) CurrentOrder = null;
-                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-            });
+            Orders.Remove(orderToRemove);
+            OrdersCollectionObserver.UnObserve(orderToRemove);
+            if (CurrentOrder == orderToRemove) CurrentOrder = null;
+            UpdateOrderTabination();
         }
 
         private void OnOrderCanceled(Order incoming)
         {
-
             var orderToRemove = Orders.FirstOrDefault(o => o.Id == incoming?.Id);
-            RunOnTheMainThread(() =>
-            {
-                Orders.Remove(orderToRemove);
-
-                if (CurrentOrder == orderToRemove) CurrentOrder = null;
-                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-            });
-
+            Orders.Remove(orderToRemove);
+            OrdersCollectionObserver.UnObserve(orderToRemove);
+            if (CurrentOrder == orderToRemove) CurrentOrder = null;
+            UpdateOrderTabination();
         }
 
         private void OnOrderUpdated(Order incoming)
         {
             var updatedOrder = Orders.FirstOrDefault(o => o.Id == incoming.Id);
-            updatedOrder?.UpdateOrderFrom(incoming);
+
+            RunOnTheMainThread(() => updatedOrder?.UpdateOrderFrom(incoming));
+
             if (updatedOrder != null)
             {
                 var updatedOrderObserver = OrdersCollectionObserver[updatedOrder] as DeepMutationObserver<Order>;
                 updatedOrderObserver?.Commit();
                 updatedOrderObserver?.Push();
             }
+            UpdateOrderTabination();
+        }
+
+        private void UpdateOrderTabination()
+        {
+            RunOnTheMainThread(() =>
+            {
+                WaitingViewModel.Orders.Refresh();
+                TakeAwayViewModel.Orders.Refresh();
+                DeliveryViewModel.Orders.Refresh();
+
+                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
+                DeliveryViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
+                TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
+            });
         }
 
         private void OnOrderCreated(Order incoming)
         {
-            RunOnTheMainThread( () => 
+            if (incoming.TableId.HasValue)
             {
-                Orders.Add(incoming);
-                WaitingViewModel?.Orders.Refresh();
-                DeliveryViewModel?.Orders.Refresh();
-                TakeAwayViewModel?.Orders.Refresh();
-                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-                WaitingViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
-                WaitingViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
-            });
+                RunOnTheMainThread(() => incoming.Table = StateManager.GetById<Table>(incoming.TableId.Value));   
+            }
+
+            if (incoming.DeliverymanId.HasValue)
+            {
+                incoming.Deliveryman = StateManager.GetById<Deliveryman>(incoming.DeliverymanId.Value);
+                 
+            }
+
+            if (incoming.WaiterId.HasValue)
+            {
+                incoming.Waiter = StateManager.GetById<Waiter>(incoming.WaiterId.Value);
+                
+            }
+
+            if (incoming.CustomerId.HasValue)
+            {
+                incoming.Customer = StateManager.GetById<Customer>(incoming.CustomerId.Value);
+            }
+
+            Orders.Add(incoming);
+            UpdateOrderTabination();
+
             OrdersCollectionObserver.ObserveItem(incoming);
             return;
         }
@@ -360,7 +372,6 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        TaskEventHandler CurrentTask = new TaskEventHandler();
         public ProductLayoutConfiguration ProductLayout
         {
             get => _productLayout;
@@ -369,15 +380,9 @@ namespace FastPosFrontend.ViewModels
 
         private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
         {
-            var orderItem = e.Item as OrderItem;
-            if (orderItem.State == OrderItemState.Removed)
-            {
-                e.Accepted = false;
-            }
-            else
-            {
-                e.Accepted = true;
-            }
+
+            
+           
         }
 
         

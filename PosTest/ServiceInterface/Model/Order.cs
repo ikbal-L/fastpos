@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using ServiceInterface.jsonConverters;
 using Utilities.Attributes;
 using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace ServiceInterface.Model
 {
@@ -308,24 +309,19 @@ namespace ServiceInterface.Model
             get => _table;
             set
             {
-                //if (value == null)
-                //{
-                //    (_table?.OrderViewSource?.Source as ICollection<Order>)?.Remove(this);
-                //    _table?.OrderViewSource?.View?.Refresh();
-                //}
-
+             
                 _table = value;
                 TableId = _table?.Id;
                 if (value != null)
                 {
-                    var orders = (_table?.OrderViewSource?.Source as ICollection<Order>);
-                    if (orders != null && !orders.Any(o => o.OrderNumber == this.OrderNumber))
+                    if (_table.OrderViewSource.Source is ObservableCollection<Order> orders && orders!= null)
                     {
-                        orders.Add(this);
+                        // fixed duplication issue 
+                        if (!orders.Any(o=> o.OrderNumber == OrderNumber)) orders.Add(this);
                     }
-
-                    _table?.OrderViewSource?.View?.Refresh();
                 }
+                
+                _table?.OrderViewSource?.View?.Refresh();
 
                 NotifyOfPropertyChange(() => Table);
             }
@@ -457,6 +453,7 @@ namespace ServiceInterface.Model
     public interface ILockable
     {
         bool IsLocked { get; set; }
+        public bool IsLockedByCurrentClient { get; }
         bool IsModifiable { get; }
         string LockedBy { get; set; }
     }
@@ -474,6 +471,7 @@ namespace ServiceInterface.Model
             {
                 Set(ref _isLocked, value);
                 NotifyOfPropertyChange(nameof(IsModifiable));
+                NotifyOfPropertyChange(nameof(IsLockedByCurrentClient));
             }
         }
 
@@ -488,13 +486,13 @@ namespace ServiceInterface.Model
             {
                 Set(ref _lockedBy, value);
                 NotifyOfPropertyChange(nameof(IsModifiable));
+                NotifyOfPropertyChange(nameof(IsLockedByCurrentClient));
             }
         }
 
-        public bool IsModifiable => !IsLocked || (IsLocked && LockedBy == Thread.CurrentPrincipal.Identity.Name);
+        public bool IsModifiable => !IsLocked || IsLockedByCurrentClient;
 
-
-
+        public bool IsLockedByCurrentClient => IsLocked && LockedBy == Thread.CurrentPrincipal.Identity.Name;
     }
 
     public interface IMessage<  T>:IMessage

@@ -139,12 +139,34 @@
                                 </DockPanel>
                             </Button>
 
-                            <TextBlock Text="{Binding ReturnedAmount,StringFormat='{}{0:#,0.00}'}" 
+                            <Grid>
+                                <TextBlock Text="{Binding ReturnedAmount,StringFormat='{}{0:#,0.00}'}" 
                                        Foreground="#26ff26" DockPanel.Dock="Right"
                                            TextAlignment="Right"
                                            FontFamily="{StaticResource DigitalFontFamily}"
                                        FontSize="32" Padding="0 5 0 0"
                                        />
+                                <Label 
+                                       Foreground="#26ff26" DockPanel.Dock="Right"
+                                           HorizontalAlignment="Right"
+                                          Content="{md:PackIcon Kind=Lock,Size=30}"
+                                       FontSize="32" Padding="0 5 0 0"
+                                       >
+                                    <Label.Style>
+                                        <Style TargetType="Label" >
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentOrder}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding CurrentOrder.IsLockedByCurrentClient}" Value="false">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+
+                                </Label>
+                            </Grid>
                             <DockPanel Grid.Row="1" >
                                 <md:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
                                                          Height="30" Padding="0" Foreground="#26ff26" />

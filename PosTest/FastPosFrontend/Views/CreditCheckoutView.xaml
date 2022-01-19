@@ -70,7 +70,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="auto"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding ProductName}" Width="*"/>
-                    <DataGridTextColumn Header="U/P" Binding="{Binding UnitPrice}" Width="auto"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding UnitPrice}" Width="auto"/>
                     <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="auto"/>
 
 
@@ -188,8 +188,7 @@
                              IsReadOnly="True"
                              Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                         
-                        materialDesign:TextFieldAssist.HasLeadingIcon="True"
-                        materialDesign:TextFieldAssist.LeadingIcon="Dollar"
+
                         materialDesign:TextFieldAssist.LeadingIconSize="30"
                         materialDesign:HintAssist.Background="Black"
                         materialDesign:HintAssist.Foreground="#26ff26"

@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,34 +17,17 @@ namespace ServiceInterface.Model
         private int _number;
         private IEnumerable<Order> _allOrders;
         private Order _selectedOrder;
-        
+        private ObservableCollection<Order> _orders;
 
-        public Table()
+
+        
+        public Table(IEnumerable<Order> orders = null)
         {
-            
-            
-        }
-        public Table(IEnumerable<Order> orders)
-        {
-            OrderViewSource = new CollectionViewSource();
-            OrderViewSource.Source = orders;
-            OrderViewSource.Filter += TableOrderFilter;
-            Orders = OrderViewSource.View;// CollectionViewSource.GetDefaultView(Parent.Orders);
-            OrderViewSource.Filter += (s, e) =>
-            {
-                Order order = e.Item as Order;
-                if (order != null)
-                {
-                    if (order.Table == this)
-                    {
-                        e.Accepted = true;
-                    }
-                    else
-                    {
-                        e.Accepted = false;
-                    }
-                }
-            };
+            _orders = new ObservableCollection<Order>(orders??Array.Empty<Order>() );
+            OrderViewSource = new CollectionViewSource() { Source = _orders };
+            OrderViewSource.Filter += (_, e) => 
+            e.Accepted = e.Item is Order order && order.Table == this;
+            Orders = OrderViewSource.View;
         }
 
         [DataMember]
@@ -104,26 +89,10 @@ namespace ServiceInterface.Model
             set
             {
                 _allOrders = value;
-                OrderViewSource = new CollectionViewSource();
-                OrderViewSource.Source = _allOrders;
-                OrderViewSource.Filter += TableOrderFilter;
-                Orders = OrderViewSource.View;// CollectionViewSource.GetDefaultView(Parent.Orders);
-            }
-        }
-        public void TableOrderFilter(object sender, FilterEventArgs e)
-        {
-            Order order = e.Item as Order;
-            if (order != null)
-            {
-                // Filter out products with price 25 or above
-                if (order.Table == this)
-                {
-                    e.Accepted = true;
-                }
-                else
-                {
-                    e.Accepted = false;
-                }
+                _orders = new ObservableCollection<Order>(_allOrders);
+                OrderViewSource.Source = _orders;
+                Orders = OrderViewSource.View;
+                Orders.Refresh();
             }
         }
 
@@ -134,16 +103,6 @@ namespace ServiceInterface.Model
                 TableOrders = new BindableCollection<Order>();
             }
             TableOrders.Add(order);
-        }
-
-        public int RemoveOrder(Order order, ref bool isRemoved)
-        {
-            if (TableOrders == null)
-            {
-                return 0;
-            }
-            isRemoved = TableOrders.Remove(order);
-            return TableOrders.Count;
         }
     }
 }

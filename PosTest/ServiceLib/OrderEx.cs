@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ServiceInterface.Model;
+using ServiceLib.Service.StateManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,8 +75,75 @@ namespace FastPosFrontend.Helpers
 
         public static void UpdateOrderFrom(this Order order,Order updateSource)
         {
+            order.State = updateSource.State;
+            order.Type = updateSource.Type;
+            if (order.WaiterId!= updateSource.WaiterId) UpdateWaiter();
+            if (order.CustomerId != updateSource.CustomerId) UpdateCustomer();
+            if (order.DeliverymanId != updateSource.DeliverymanId) UpdateDeliveryman();
+            if (order.TableId != updateSource.TableId) UpdateTable();
+
             order?.OrderItems?.Clear();
             order?.OrderItems?.AddRange(updateSource.OrderItems);
+
+            void UpdateWaiter()
+            {
+                if (updateSource.WaiterId == null)
+                {
+                    order.Waiter = null;
+                    order.WaiterId = null;
+                    return;
+                }
+                var waiter = StateManager.GetById<Waiter>(updateSource.WaiterId.Value);
+                order.WaiterId = updateSource.WaiterId;
+                order.Waiter = waiter;
+            }
+
+            void UpdateCustomer()
+            {
+                if (updateSource.CustomerId == null)
+                {
+                    order.CustomerId = null;
+                    order.Customer = null;
+                    return;
+                }
+
+                var customer = StateManager.GetById<Customer>(updateSource.CustomerId.Value);
+                order.CustomerId = updateSource.CustomerId;
+                order.Customer = customer;
+            }
+
+            void UpdateDeliveryman()
+            {
+                if (updateSource.DeliverymanId == null)
+                {
+                    order.DeliverymanId = null;
+                    order.Deliveryman = null;
+                    return;
+                }
+
+                var deliveryman = StateManager.GetById<Deliveryman>(updateSource.DeliverymanId.Value);
+                order.DeliverymanId = updateSource.DeliverymanId;
+                order.Deliveryman = deliveryman;
+            }
+            void UpdateTable()
+            {
+                var oldTableValue = order.Table;
+                if (updateSource.TableId == null)
+                { 
+                    order.TableId = null;
+                    order.Table = null;                    
+                }
+                else
+                {
+                    var table = StateManager.GetById<Table>(updateSource.TableId.Value);
+                    order.TableId = updateSource.TableId;
+                    order.Table = table;
+                }
+                oldTableValue?.OrderViewSource?.View.Refresh();
+                order.Table?.OrderViewSource?.View.Refresh();
+            }
+
+
         }
 
         public static void MappingBeforeSending(this Order order)

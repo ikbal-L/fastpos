@@ -73,13 +73,18 @@
                             <Setter Property="Kind" Value="Lock"/>
                             <Style.Triggers>
                                 
-                                <MultiDataTrigger>
+                                <!--<MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding CurrentOrder.IsLocked}" Value="true"/>
                                         <Condition Binding="{Binding CurrentOrder.IsModifiable}" Value="true"/>
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Kind" Value="LockOpenVariant"/>
-                                </MultiDataTrigger>
+                                </MultiDataTrigger>-->
+                                <DataTrigger Binding="{Binding CurrentOrder.IsLockedByCurrentClient}" Value="true">
+                                    <Setter Property="Kind" Value="LockOpenVariant"/>
+                                </DataTrigger>
+
+                               
                             </Style.Triggers>
                         </Style>
                     </md:PackIcon.Style>
@@ -91,8 +96,11 @@
                     <MultiBinding Converter="{StaticResource BooleanAllConverter}">
                         <Binding Path="CurrentOrder.IsModifiable" />
                         <Binding Path="SelectedItem" ElementName="OrderItemsList" Converter="{StaticResource ObjectToBooleanConverter}"/>
+                        <Binding Path="CurrentOrder.Id" Converter="{StaticResource ObjectToBooleanConverter}"/>
                     </MultiBinding>
                 </Button.IsEnabled>
+
+               
                 
                 
             </Button>

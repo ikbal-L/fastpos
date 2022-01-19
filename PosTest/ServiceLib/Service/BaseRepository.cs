@@ -233,6 +233,8 @@ namespace ServiceLib.Service
         {
             state.OrderNumber = result.OrderNumber;
             state.OrderCode = result.OrderCode;
+            state.State = result.State;
+            state.Type = result.Type;
             state.NotifyOfPropertyChange(nameof(Order.OrderNumber));
             state.NotifyOfPropertyChange(nameof(Order.OrderCode));
             foreach (var newOrderItem in result.OrderItems.ToList())
