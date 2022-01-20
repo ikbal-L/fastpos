@@ -11,23 +11,19 @@ namespace FastPosFrontend.ViewModels
     {
         [DataMember]
         public DateTime? OrderTime { get; set; }
+
         [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public OrderState? State { get; set; }
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public List<OrderState> States { get; set; } = new();
+
         [DataMember]
-        [JsonProperty( ItemConverterType = typeof(StringEnumConverter))]
-        public IEnumerable<OrderState> States { get; set; }
+        public List<long>? DeliverymanIds { get; set; } = new();
+
         [DataMember]
-        public long? DeliverymanId { get; set; }
-        [DataMember]
-        public IEnumerable<long>? DeliverymanIds { get; set; }
-        [DataMember]
-        public long? CustomerId { get; set; }
-        [DataMember]
-        public IEnumerable<long>? CustomerIds { get; set; }
+        public List<long>? CustomerIds { get; set; } = new();
     }
 
-    public abstract class Filter
+    public class Filter
     {
         [DataMember]
         public int? PageSize { get; set; }
@@ -36,9 +32,18 @@ namespace FastPosFrontend.ViewModels
         [DataMember]
         public string? OrderBy { get; set; }
         [DataMember]
-        public bool? AscendingOrder { get; set; }
+        public SortOrder? SortOrder { get; set; }
         [DataMember]
-        public bool? DescendingOrder { get; set; }
+        public Dictionary<string, List<object>> In { get; set; }
 
+
+
+    }
+
+    
+
+    public enum SortOrder
+    {
+        Asc,Desc,None
     }
 }

@@ -52,6 +52,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         public List<Order> Orders { get; set; }
+
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
         public PaymentSource PaymentSource { get; set; }

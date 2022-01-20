@@ -115,6 +115,7 @@
     <Compile Include="ServiceLibTests\DailyExpenseReportServiceTest.cs" />
     <Compile Include="ServiceLibTests\GenericRestAsyncTest.cs" />
     <Compile Include="ServiceLibTests\StateManagerTest.cs" />
+    <Compile Include="SimpleTest.cs" />
     <Compile Include="ViewModelTesting\CheckoutSettingsTest.cs" />
     <Compile Include="MockingHelpers.cs" />
   </ItemGroup>

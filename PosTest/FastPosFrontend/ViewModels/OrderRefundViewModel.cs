@@ -176,7 +176,7 @@ namespace FastPosFrontend.ViewModels
         protected override void Setup()
         {
             var repo = StateManager.GetService<Order, IOrderRepository>();
-            var criteria = new OrderFilter() { OrderTime = DateTime.Today, State = OrderState.Payed };
+            var criteria = new OrderFilter() { OrderTime = DateTime.Today, States = { OrderState.Payed } };
             var paid = repo.GetByCriteriasAsync(criteria);
 
             _data = new NotifyAllTasksCompletion(paid);

@@ -103,7 +103,7 @@ namespace FastPosFrontend.ViewModels
 
         private void DeleteDeliveryman()
         {
-            if (StateManager.Delete<Deliveryman>(SelectedDeliveryMan))
+            if (StateManager.Delete(SelectedDeliveryMan))
             {
 
                 Deliverymans.Remove(SelectedDeliveryMan);

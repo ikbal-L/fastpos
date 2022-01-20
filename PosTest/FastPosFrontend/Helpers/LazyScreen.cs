@@ -54,7 +54,7 @@ namespace FastPosFrontend.Helpers
         protected LazyScreen(string loadingMessage, LoadingScreenType loadingScreenType = LoadingScreenType.Spinner)
         {
             _loadingScreen = new LoadingScreenViewModel(loadingMessage) {LoadingScreenType = loadingScreenType};
-            //ActivateLoadingScreen();
+
         }
 
         public void ActivateLoadingScreen()

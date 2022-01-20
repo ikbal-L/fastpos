@@ -18,28 +18,13 @@ namespace FastPosFrontend.ViewModels
     public class DeliveryCheckoutViewModel : LazyScreen
     {
         private ObservableCollection<Deliveryman> _deliverymanCollection;
-        private ObservableCollection<Order> _ordersCollection;
+
 
         public DeliveryCheckoutViewModel() : base()
         {
 
         }
 
-        private void DeliveryOrders_Filter(object sender, FilterEventArgs e)
-        {
-            if (SelectedDeliveryman == null)
-            {
-                e.Accepted = false;
-                return;
-            }
-
-            if (e.Item is Order order && order.DeliverymanId == SelectedDeliveryman.Id && (order.State == OrderState.Delivered || order.State == OrderState.DeliveredPartiallyPaid))
-            {
-                e.Accepted = true;
-                return;
-            }
-            e.Accepted = false;
-        }
 
         private decimal CalculateDiscount()
         {
@@ -77,12 +62,13 @@ namespace FastPosFrontend.ViewModels
                 Set(ref _selectedDeliveryman, value);
                 NotifyOfPropertyChange(nameof(SelectedDeliveryman));
                 UpdateHistory();
-                DeliveryOrders.View.Refresh();
+
                 NumericZone = string.Empty;
             }
         }
 
-        public CollectionViewSource DeliveryOrders { get; set; }
+
+        public Paginator<Order> UnpaidDeliveryOrders { get; set; }
         public Paginator<Order> PaidDeliveryOrders { get; set; }
         public Paginator<Payment> DeliveryPayments { get; set; }
 
@@ -163,6 +149,11 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedDeliveryman != null)
             {
+                if (SelectedTab == CreditViewTabs.UNPAID_ORDERS_TAB)
+                {
+                    UnpaidDeliveryOrders.Reload();
+                }
+                
                 if (SelectedTab == CreditViewTabs.PAID_ORDERS_TAB)
                 {
                     PaidDeliveryOrders.Reload();
@@ -187,11 +178,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void AddDeliveredOrder(Order order)
-        {
-            _ordersCollection.Add(order);
-            DeliveryOrders.View.Refresh();
-        }
+      
 
         public void CopyTotalPaymentField()
         {
@@ -233,7 +220,7 @@ namespace FastPosFrontend.ViewModels
 
         public void NumericKeyboard(string number)
         {
-            if (String.IsNullOrEmpty(number))
+            if (string.IsNullOrEmpty(number))
                 return;
             if (number.Length > 1)
                 return;
@@ -278,7 +265,6 @@ namespace FastPosFrontend.ViewModels
         private void PayementAction()
         {
 
-
             decimal? retunedAmount = null;
             if (!decimal.TryParse(NumericZone, out var payedAmount)) return;
 
@@ -305,99 +291,59 @@ namespace FastPosFrontend.ViewModels
 
             if (result.status == 201)
             {
+
+                NumericZone = retunedAmount?.ToString() ?? "";
                 
-                
-                if (retunedAmount.HasValue)
-                {
-                    NumericZone = $"{retunedAmount}";
-                }
-                else
-                {
-                    NumericZone = "";
-                }
                 IsDiscountEnabled = false;
                 var savedPayment = result.Item2;
 
-                UpdateOrdersFromPayment(savedPayment);
+
                 var url = api.Resource<Deliveryman>("getwithbalance", SelectedDeliveryman.Id);
 
                 var result2 = GenericRest.GetThing<Deliveryman>(url);
                 if (result2.status == 200)
                 {
                     SelectedDeliveryman.Balance = result2.Item2.Balance;
+                    UnpaidDeliveryOrders.Reload();
                 }
-                DeliveryOrders?.View?.Refresh();
+
                 NotifyOfPropertyChange(nameof(Discount));
             }
-
-
         }
 
-        private void UpdateOrdersFromPayment(Payment savedPayment)
-        {
-            foreach (var paymentOrder in savedPayment.Orders)
-            {
-                var order = _ordersCollection.FirstOrDefault(o => o.Id == paymentOrder.Id);
-                if (order != null)
-                {
-                    order.State = paymentOrder.State;
-                    order.GivenAmount = paymentOrder.GivenAmount;
-                }
-            }
-        }
+     
 
         protected override void Setup()
         {
-            var api = new RestApi();
-            var url = api.Resource<Deliveryman>("getallwithbalance");
-            var result = GenericRest.GetThing<List<Deliveryman>>(url);
-            List<Deliveryman> data = new List<Deliveryman>();
-            if (result.status == 200)
-            {
-                data.AddRange(result.Item2);
-            }
-
-            _deliverymanCollection = new ObservableCollection<Deliveryman>(data);
-            DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
-
             _orderRepo = StateManager.GetService<Order, IOrderRepository>();
             _paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
 
-            OrderState[] states = { OrderState.Delivered, OrderState.DeliveredPartiallyPaid };
-
-            var deliverymanIds = data.Select(d => d.Id.Value);
-
-            var criterias = new OrderFilter() { States = states, DeliverymanIds = deliverymanIds };
-            var orders = _orderRepo.GetByCriteriasAsync(criterias);
-
-
-            _data = new NotifyAllTasksCompletion(orders);
+            _data = new NotifyAllTasksCompletion(StateManager.GetAsync<Deliveryman>());
         }
+
 
         public override void Initialize()
         {
-            var orders = _data.GetResult<List<Order>>();
 
+            var deliverymen = StateManager.GetAll<Deliveryman>();
+            _deliverymanCollection = new ObservableCollection<Deliveryman>(deliverymen);
+            DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
 
-            _ordersCollection = new ObservableCollection<Order>(orders);
+            var unpaidOrdersPageRetreiver = new PageRetriever<Order>(RetriveUnpaidOrdersPage);
+            UnpaidDeliveryOrders = new Paginator<Order>(unpaidOrdersPageRetreiver, canGoNext: CanGoToNextPage);
 
-
-            DeliveryOrders = new CollectionViewSource() { Source = _ordersCollection };
-
-            var orderPageRetreiver = new PageRetriever<Order>(RetriveOrderPage);
-            PaidDeliveryOrders = new Paginator<Order>(orderPageRetreiver, canGoNext:CanGoToNextPage);
+            var paidOrdersPageRetreiver = new PageRetriever<Order>(RetrivePaidOrdersPage);
+            PaidDeliveryOrders = new Paginator<Order>(paidOrdersPageRetreiver, canGoNext:CanGoToNextPage);
 
             var paymentPageRetreiver = new PageRetriever<Payment>(RetrivePaymentPage);
             DeliveryPayments = new Paginator<Payment>(paymentPageRetreiver, canGoNext: CanGoToNextPage);
 
-            DeliveryOrders.Filter += DeliveryOrders_Filter;
+
         }
 
-        private bool CanGoToNextPage() => SelectedDeliveryman != null;
-
-        public List<Order> RetriveOrderPage(int pageIndex, int pageSize)
+        private List<Order> RetriveUnpaidOrdersPage(int pageIndex, int pageSize)
         {
-            if (SelectedDeliveryman == null)
+            if (SelectedDeliveryman?.Id == null)
             {
                 ToastNotification.Notify("Select Deliveryman First");
                 return new List<Order>();
@@ -408,10 +354,32 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                DeliverymanId = SelectedDeliveryman?.Id,
-                //DescendingOrder = true,
+                DeliverymanIds = { SelectedDeliveryman.Id.Value },
                 OrderBy = "orderTime",
-                State = OrderState.DeliveredPaid
+                States = { OrderState.Delivered,OrderState.DeliveredPartiallyPaid }
+            };
+            var result = _orderRepo.GetByCriterias(orderFilter);
+            return result;
+        }
+
+        private bool CanGoToNextPage() => SelectedDeliveryman != null;
+
+        public List<Order> RetrivePaidOrdersPage(int pageIndex, int pageSize)
+        {
+            if (SelectedDeliveryman?.Id == null)
+            {
+                ToastNotification.Notify("Select Deliveryman First");
+                return new List<Order>();
+            }
+
+
+            var orderFilter = new OrderFilter()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                DeliverymanIds = { SelectedDeliveryman.Id.Value },
+                OrderBy = "orderTime",
+                States = { OrderState.DeliveredPaid }
             };
             var result = _orderRepo.GetByCriterias(orderFilter);
             return result;
@@ -431,7 +399,7 @@ namespace FastPosFrontend.ViewModels
                 PageSize = pageSize,
                 DeliverymanId = SelectedDeliveryman?.Id,
                 OrderBy = "date",
-                DescendingOrder = true
+                SortOrder = SortOrder.Desc
             };
             var result = _paymentRepo.GetByCriterias(orderFilter);
             return result;

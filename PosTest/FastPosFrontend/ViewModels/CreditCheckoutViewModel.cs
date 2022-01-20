@@ -355,11 +355,15 @@ namespace FastPosFrontend.ViewModels
             _orderRepo = StateManager.GetService<Order, IOrderRepository>();
             _paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
 
-            OrderState[] states = { OrderState.Credit, OrderState.CreditPartiallyRePaid };
+            
 
-            var customerIds = data.Select(d => d.Id.Value);
-
-            var criterias = new OrderFilter() { States = states, CustomerIds = customerIds };
+            var customerIds = data.Select(d => d.Id.Value).ToList();
+            
+            var criterias = new OrderFilter() 
+            { 
+                States = { OrderState.Credit, OrderState.CreditPartiallyRePaid }, 
+                CustomerIds = customerIds 
+            };
             var orders = _orderRepo.GetByCriteriasAsync(criterias);
 
 
@@ -400,10 +404,10 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                CustomerId = SelectedCustomer?.Id,
+                CustomerIds = { SelectedCustomer.Id.Value },
                 //DescendingOrder = true,
                 OrderBy = "orderTime",
-                State = OrderState.CreditRePaid
+                States = { OrderState.CreditRePaid }
             };
             var result = _orderRepo.GetByCriterias(orderFilter);
             return result;
@@ -424,7 +428,7 @@ namespace FastPosFrontend.ViewModels
                 //TODO NPE
                 CustomerId = SelectedCustomer?.Id,
                 OrderBy = "date",
-                DescendingOrder = true
+                SortOrder = SortOrder.Desc
             };
             var result = _paymentRepo.GetByCriterias(orderFilter);
             return result;
