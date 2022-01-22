@@ -26,7 +26,7 @@ namespace ServiceInterface.Interface
 
         Task<(int status, IEnumerable<T>)> GetAsync(string subPath);
 
-        List<T> GetByCriterias(object criterias);
+        Page<T> GetByCriterias(object criterias);
 
         Task<List<T>> GetByCriteriasAsync(object criterias);
 
