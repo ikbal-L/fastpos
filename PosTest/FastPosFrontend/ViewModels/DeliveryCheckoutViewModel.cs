@@ -128,6 +128,7 @@ namespace FastPosFrontend.ViewModels
         private string _numericZone;
         private int _selectedTab;
         private bool isDiscountEnabled;
+        private RestApi api   = new RestApi();
 
         public string NumericZone
         {
@@ -149,6 +150,20 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedDeliveryman != null)
             {
+
+                if (SelectedDeliveryman.Balance== 0)
+                {
+                    var url = api.Resource<Deliveryman>("getwithbalance", SelectedDeliveryman.Id);
+
+                    var result2 = GenericRest.GetThing<Deliveryman>(url);
+                    if (result2.status == 200)
+                    {
+                        SelectedDeliveryman.Balance = result2.Item2.Balance;
+
+                    }
+                }
+                
+                
                 if (SelectedTab == CreditViewTabs.UNPAID_ORDERS_TAB)
                 {
                     UnpaidDeliveryOrders.Reload();
@@ -281,7 +296,6 @@ namespace FastPosFrontend.ViewModels
                 payedAmount = SelectedDeliveryman.Balance;
             }
 
-            var api = new RestApi();
             var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, DeliveryManId = SelectedDeliveryman.Id.Value,PaymentSource =PaymentSource.Delivery };
             if (IsDiscountEnabled)
             {
@@ -341,12 +355,12 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-        private List<Order> RetriveUnpaidOrdersPage(int pageIndex, int pageSize)
+        private Page<Order> RetriveUnpaidOrdersPage(int pageIndex, int pageSize)
         {
             if (SelectedDeliveryman?.Id == null)
             {
                 ToastNotification.Notify("Select Deliveryman First");
-                return new List<Order>();
+                return new Page<Order>();
             }
 
 
@@ -364,12 +378,12 @@ namespace FastPosFrontend.ViewModels
 
         private bool CanGoToNextPage() => SelectedDeliveryman != null;
 
-        public List<Order> RetrivePaidOrdersPage(int pageIndex, int pageSize)
+        public Page<Order> RetrivePaidOrdersPage(int pageIndex, int pageSize)
         {
             if (SelectedDeliveryman?.Id == null)
             {
                 ToastNotification.Notify("Select Deliveryman First");
-                return new List<Order>();
+                return new Page<Order>();
             }
 
 
@@ -385,12 +399,12 @@ namespace FastPosFrontend.ViewModels
             return result;
         }
 
-        public List<Payment> RetrivePaymentPage(int pageIndex, int pageSize )
+        public Page<Payment> RetrivePaymentPage(int pageIndex, int pageSize )
         {
             if (SelectedDeliveryman == null)
             {
                 ToastNotification.Notify("Select Deliveryman First");
-                return new List<Payment>();
+                return new Page<Payment>();
             }
 
             var orderFilter = new PaymentFilter()

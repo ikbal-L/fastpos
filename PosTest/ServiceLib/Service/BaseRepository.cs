@@ -127,15 +127,15 @@ namespace ServiceLib.Service
             return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(EndPoint.GET_ALL, subPath: subPath));
         }
 
-        public List<T> GetByCriterias(object criterias)
+        public Page<T> GetByCriterias(object criterias)
         {
 
             var result = GenericRest.RestPost(criterias, Api.Resource<T>(EndPoint.GET_ALL_BY_CRITERIAS));
             if (result.IsSuccessful)
             {
-                return JsonConvert.DeserializeObject<List<T>>(result.Content);
+                return JsonConvert.DeserializeObject<Page<T>>(result.Content);
             };
-            return new List<T>();
+            return new Page<T>();
         }
 
         public async Task<List<T>> GetByCriteriasAsync(object criterias)

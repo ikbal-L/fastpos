@@ -18,7 +18,7 @@ namespace FastPosFrontend.ViewModels
     public class CreditCheckoutViewModel : LazyScreen
     {
         private ObservableCollection<Customer> _customerCollection;
-        private ObservableCollection<Order> _ordersCollection;
+
 
         public CreditCheckoutViewModel() : base()
         {
@@ -310,7 +310,7 @@ namespace FastPosFrontend.ViewModels
                 IsDiscountEnabled = false;
                 var savedPayment = result.Item2;
 
-                UpdateOrdersFromPayment(savedPayment);
+
                 var url = api.Resource<Customer>("getwithbalance", SelectedCustomer.Id);
 
                 var result2 = GenericRest.GetThing<Customer>(url);
@@ -325,18 +325,7 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-        private void UpdateOrdersFromPayment(Payment savedPayment)
-        {
-            foreach (var paymentOrder in savedPayment.Orders)
-            {
-                var order = _ordersCollection.FirstOrDefault(o => o.Id == paymentOrder.Id);
-                if (order != null)
-                {
-                    order.State = paymentOrder.State;
-                    order.GivenAmount = paymentOrder.GivenAmount;
-                }
-            }
-        }
+      
 
         protected override void Setup()
         {
@@ -375,10 +364,9 @@ namespace FastPosFrontend.ViewModels
             var orders = _data.GetResult<List<Order>>();
 
 
-            _ordersCollection = new ObservableCollection<Order>(orders);
 
 
-            UnpaidOrders = new CollectionViewSource() { Source = _ordersCollection };
+
 
             var orderPageRetreiver = new PageRetriever<Order>(RetriveOrderPage);
             PaidOrders = new Paginator<Order>(orderPageRetreiver, canGoNext:CanGoToNextPage);
@@ -391,12 +379,12 @@ namespace FastPosFrontend.ViewModels
 
         private bool CanGoToNextPage()=> SelectedCustomer != null;
 
-        public List<Order> RetriveOrderPage(int pageIndex, int pageSize )
+        public Page<Order> RetriveOrderPage(int pageIndex, int pageSize )
         {
             if (SelectedCustomer == null)
             {
                 ToastNotification.Notify("Select Customer First");
-                return new List<Order>();
+                return new Page<Order>();
             }
 
 
@@ -413,12 +401,12 @@ namespace FastPosFrontend.ViewModels
             return result;
         }
 
-        public List<Payment> RetrivePaymentPage(int pageIndex, int pageSize)
+        public Page<Payment> RetrivePaymentPage(int pageIndex, int pageSize)
         {
             if (SelectedCustomer == null)
             {
                 ToastNotification.Notify("Select Customer First");
-                return new List<Payment>();
+                return new Page<Payment>();
             }
             
             var orderFilter = new PaymentFilter()
