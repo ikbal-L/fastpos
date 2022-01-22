@@ -425,8 +425,11 @@
                     Style="{StaticResource MaterialDesignTabControl}"
                     SelectedIndex="{Binding SelectedTab}">
                     <TabItem Header="Orders" TabIndex="{x:Static vm:CreditViewTabs.UNPAID_ORDERS_TAB}" Style="{StaticResource MaterialDesignTabItemCompact}">
-                        <DataGrid Grid.Column="0" 
-                          ItemsSource="{Binding UnpaidOrders.View}" 
+                       
+
+                        <controls:PaginatedContent Paginator="{Binding UnpaidOrders}">
+                            <DataGrid Grid.Column="0" 
+                          ItemsSource="{Binding UnpaidOrders.PaginationView}" 
                           AutoGenerateColumns="False" 
                           CanUserAddRows="False" 
                           CanUserReorderColumns="False" 
@@ -437,30 +440,31 @@
                           CanUserResizeColumns="False"
                           Padding="0">
 
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
-                                            <Setter Property="FontWeight" Value="Bold"></Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>
-                            
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}" Width="50"/>
-                                <DataGridTextColumn Header="Date" Binding="{Binding OrderTime,StringFormat='d'}" Width="*"/>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"></Setter>
+                                                <Setter Property="FontWeight" Value="Bold"></Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
 
-                                <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}" Width="*"/>
-                                
-                                <DataGridTextColumn Header="Remaining" Binding="{Binding Remaining}" Width="*"/>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding OrderNumber}" Width="50"/>
+                                    <DataGridTextColumn Header="Date" Binding="{Binding OrderTime,StringFormat='d'}" Width="*"/>
 
-                                <!--<DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}" Width="auto" />-->
+                                    <DataGridTextColumn Header="Price" Binding="{Binding NewTotal}" Width="*"/>
+
+                                    <DataGridTextColumn Header="Remaining" Binding="{Binding Remaining}" Width="*"/>
+
+                                    <!--<DataGridTextColumn Header="Item Count" Binding="{Binding OrderItems.Count}" Width="auto" />-->
 
 
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </controls:PaginatedContent>
                     </TabItem>
                     <TabItem Header="Paid Orders" TabIndex="{x:Static vm:CreditViewTabs.PAID_ORDERS_TAB}">
                         <controls:PaginatedContent Paginator="{Binding PaidOrders}">

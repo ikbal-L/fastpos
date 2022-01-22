@@ -222,12 +222,10 @@ namespace FastPosFrontend.ViewModels
                     {
                         ToastNotification.Notify("قم باختيار مندوب التوصيل من أجل الدفع");
                     }
-                    //RelaodDeliveryMan();
+
 
                     break;
 
-                    //EditPayment();
-                    //RelaodDeliveryMan();
 
 
             }
@@ -411,7 +409,7 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                DeliverymanId = SelectedDeliveryman?.Id,
+                DeliverymanIds = { SelectedDeliveryman.Id.Value },
                 OrderBy = "date",
                 SortOrder = SortOrder.Desc
             };

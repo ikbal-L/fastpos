@@ -15,9 +15,9 @@ namespace FastPosFrontend.ViewModels
         public long? CustomerId { get; set; }
 
         [DataMember]
-        public IEnumerable<long>? DeliverymanIds { get; set; }
+        public List<long>? DeliverymanIds { get; set; } = new();
 
         [DataMember]
-        public IEnumerable<long>? CustomerIds { get; set; }
+        public List<long>? CustomerIds { get; set; } = new();
     }
 }

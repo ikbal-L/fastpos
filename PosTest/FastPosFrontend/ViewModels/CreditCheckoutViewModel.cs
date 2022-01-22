@@ -77,12 +77,12 @@ namespace FastPosFrontend.ViewModels
                 Set(ref _selectedCustomer, value);
                 NotifyOfPropertyChange(nameof(SelectedCustomer));
                 UpdateHistory();
-                UnpaidOrders.View.Refresh();
+
                 NumericZone = string.Empty;
             }
         }
 
-        public CollectionViewSource UnpaidOrders { get; set; }
+        public Paginator<Order> UnpaidOrders { get; set; }
         public Paginator<Order> PaidOrders { get; set; }
         public Paginator<Payment> Payments { get; set; }
 
@@ -142,6 +142,7 @@ namespace FastPosFrontend.ViewModels
         private string _numericZone;
         private int _selectedTab;
         private bool isDiscountEnabled;
+        private readonly RestApi api = new RestApi();
 
         public string NumericZone
         {
@@ -163,6 +164,25 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedCustomer != null)
             {
+
+                if (SelectedCustomer.Balance == 0)
+                {
+                    var url = api.Resource<Customer>("getwithbalance", SelectedCustomer.Id);
+
+                    var result2 = GenericRest.GetThing<Customer>(url);
+                    if (result2.status == 200)
+                    {
+                        SelectedCustomer.Balance = result2.Item2.Balance;
+
+                    }
+                }
+
+
+                if (SelectedTab == CreditViewTabs.UNPAID_ORDERS_TAB)
+                {
+                    UnpaidOrders.Reload();
+                }
+
                 if (SelectedTab == CreditViewTabs.PAID_ORDERS_TAB)
                 {
                     PaidOrders.Reload();
@@ -174,6 +194,7 @@ namespace FastPosFrontend.ViewModels
                 }
             }
         }
+
 
         public decimal Discount => CalculateDiscount();
 
@@ -318,68 +339,73 @@ namespace FastPosFrontend.ViewModels
                 {
                     SelectedCustomer.Balance = result2.Item2.Balance;
                 }
-                UnpaidOrders?.View?.Refresh();
+
+                UnpaidOrders.Reload();
+
                 NotifyOfPropertyChange(nameof(Discount));
             }
 
 
         }
 
-      
+
 
         protected override void Setup()
         {
-            var api = new RestApi();
-            var url = api.Resource<Customer>("getallwithbalance");
-            var result = GenericRest.GetThing<List<Customer>>(url);
-            List<Customer> data = new List<Customer>();
-            if (result.status == 200)
-            {
-                data.AddRange(result.Item2);
-            }
-
-            _customerCollection = new ObservableCollection<Customer>(data);
-            CustomerCollection = new CollectionViewSource() { Source = _customerCollection };
-
             _orderRepo = StateManager.GetService<Order, IOrderRepository>();
             _paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
 
-            
-
-            var customerIds = data.Select(d => d.Id.Value).ToList();
-            
-            var criterias = new OrderFilter() 
-            { 
-                States = { OrderState.Credit, OrderState.CreditPartiallyRePaid }, 
-                CustomerIds = customerIds 
-            };
-            var orders = _orderRepo.GetByCriteriasAsync(criterias);
-
-
-            _data = new NotifyAllTasksCompletion(orders);
+            _data = new NotifyAllTasksCompletion(StateManager.GetAsync<Deliveryman>());
         }
+
 
         public override void Initialize()
         {
-            var orders = _data.GetResult<List<Order>>();
 
+            var customers = StateManager.GetAll<Customer>();
+            _customerCollection = new ObservableCollection<Customer>(customers);
+            CustomerCollection = new CollectionViewSource() { Source = _customerCollection };
 
+            var unpaidOrdersPageRetreiver = new PageRetriever<Order>(RetriveUnpaidOrdersPage);
+            UnpaidOrders = new Paginator<Order>(unpaidOrdersPageRetreiver, canGoNext: CanGoToNextPage);
 
-
-
-
-            var orderPageRetreiver = new PageRetriever<Order>(RetriveOrderPage);
-            PaidOrders = new Paginator<Order>(orderPageRetreiver, canGoNext:CanGoToNextPage);
+            var paidOrdersPageRetreiver = new PageRetriever<Order>(RetrivePaidOrdersPage);
+            PaidOrders = new Paginator<Order>(paidOrdersPageRetreiver, canGoNext: CanGoToNextPage);
 
             var paymentPageRetreiver = new PageRetriever<Payment>(RetrivePaymentPage);
             Payments = new Paginator<Payment>(paymentPageRetreiver, canGoNext: CanGoToNextPage);
 
-            UnpaidOrders.Filter += CreditOrders_Filter;
+
         }
+
+
+
+
 
         private bool CanGoToNextPage()=> SelectedCustomer != null;
 
-        public Page<Order> RetriveOrderPage(int pageIndex, int pageSize )
+        private Page<Order> RetriveUnpaidOrdersPage(int pageIndex, int pageSize)
+        {
+            if (SelectedCustomer?.Id == null)
+            {
+                ToastNotification.Notify("Select a Customer First");
+                return new Page<Order>();
+            }
+
+
+            var orderFilter = new OrderFilter()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                CustomerIds = { SelectedCustomer.Id.Value },
+                OrderBy = "orderTime",
+                States = { OrderState.Credit, OrderState.CreditPartiallyRePaid }
+            };
+            var result = _orderRepo.GetByCriterias(orderFilter);
+            return result;
+        }
+
+        public Page<Order> RetrivePaidOrdersPage(int pageIndex, int pageSize )
         {
             if (SelectedCustomer == null)
             {
@@ -393,7 +419,6 @@ namespace FastPosFrontend.ViewModels
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 CustomerIds = { SelectedCustomer.Id.Value },
-                //DescendingOrder = true,
                 OrderBy = "orderTime",
                 States = { OrderState.CreditRePaid }
             };
@@ -413,8 +438,7 @@ namespace FastPosFrontend.ViewModels
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                //TODO NPE
-                CustomerId = SelectedCustomer?.Id,
+                CustomerIds = { SelectedCustomer.Id.Value },
                 OrderBy = "date",
                 SortOrder = SortOrder.Desc
             };

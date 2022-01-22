@@ -141,7 +141,7 @@ namespace FastPosFrontend.Helpers
 
     public class PageRetriever<T>
     {
-        private Func<(int pageIndex, int pageSize), IEnumerable<T>> _delegate;
+ 
 
         private Retriever<T> _retriever;
         private RetrieverAsync<T> _retrieverAsync;
