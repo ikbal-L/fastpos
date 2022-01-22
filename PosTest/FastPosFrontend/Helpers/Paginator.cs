@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro;
+using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -107,7 +108,8 @@ namespace FastPosFrontend.Helpers
             if (((CurrentPage + 1) * PageSize) >= ObservableSourceCollection.Count)
             {
                 var page = _pageRetriever.Retrieve(CurrentPage, PageSize);
-                ObservableSourceCollection.AddRange(page);
+                PageCount = page.TotalPages;
+                ObservableSourceCollection.AddRange(page.Elements);
             }
         }
 
@@ -121,7 +123,8 @@ namespace FastPosFrontend.Helpers
             CurrentPage = 0;
             ObservableSourceCollection.Clear();
             var page = _pageRetriever.Retrieve(CurrentPage, PageSize);
-            ObservableSourceCollection.AddRange(page);
+            PageCount = page.TotalPages;
+            ObservableSourceCollection.AddRange(page.Elements);
             PaginationView?.Refresh();
         }
 
@@ -129,7 +132,7 @@ namespace FastPosFrontend.Helpers
         {
             var predicate = _canGoNext?.Invoke() ?? true;
             if (!PageCount.HasValue && predicate) return true;
-            return _currentPage < PageCount;
+            return _currentPage+1 < PageCount;
         }
 
         public bool CanGoToPreviousPage() => _currentPage > 0;
@@ -155,12 +158,12 @@ namespace FastPosFrontend.Helpers
             IsAsync = true;
         }
 
-        public IEnumerable<T> Retrieve(int pageIndex, int pageSize)
+        public Page<T> Retrieve(int pageIndex, int pageSize)
         {
             return _retriever?.Invoke(pageIndex, pageSize);
         }
 
-        public Task<List<T>> RetrieveAsync(int pageIndex, int pageSize)
+        public Task<Page<T>> RetrieveAsync(int pageIndex, int pageSize)
         {
             if (!IsAsync) throw new InvalidOperationException($"Can not Call {nameof(RetrieveAsync)} if initialized by Syncronious Retriever");
             
@@ -169,8 +172,8 @@ namespace FastPosFrontend.Helpers
 
     }
 
-    public delegate List<T> Retriever<T>(int pageIndex, int pageSize);
-    public delegate Task<List<T>> RetrieverAsync<T>(int pageIndex, int pageSize);
+    public delegate Page<T> Retriever<T>(int pageIndex, int pageSize);
+    public delegate Task<Page<T>> RetrieverAsync<T>(int pageIndex, int pageSize);
 
     
 
