@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingViewModel;
 
@@ -67,6 +68,7 @@ namespace FastPosFrontend.ViewModels
 
         private IOrderRepository _orderRepo;
         private IPaymentRepository _paymentRepo;
+        private IRepository<Customer, long> _customerRepo;
         private Customer _selectedCustomer;
 
         public Customer SelectedCustomer
@@ -164,18 +166,6 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedCustomer != null)
             {
-
-                if (SelectedCustomer.Balance == 0)
-                {
-                    var url = api.Resource<Customer>("getwithbalance", SelectedCustomer.Id);
-
-                    var result2 = GenericRest.GetThing<Customer>(url);
-                    if (result2.status == 200)
-                    {
-                        SelectedCustomer.Balance = result2.Item2.Balance;
-
-                    }
-                }
 
 
                 if (SelectedTab == CreditViewTabs.UNPAID_ORDERS_TAB)
@@ -348,21 +338,29 @@ namespace FastPosFrontend.ViewModels
 
         }
 
+        public async Task<List<Customer>> GetCustomersWithBalance()
+        {
+            var result = await _customerRepo.GetAllAsync("getallwithbalance");
+            if (result.status != 200) return new List<Customer>();
+            return result.Item2.ToList();
+        }
 
 
         protected override void Setup()
         {
             _orderRepo = StateManager.GetService<Order, IOrderRepository>();
             _paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
+            _customerRepo = StateManager.Instance.GetRepository<Customer>();
 
-            _data = new NotifyAllTasksCompletion(StateManager.GetAsync<Deliveryman>());
+            _data = new NotifyAllTasksCompletion(GetCustomersWithBalance());
         }
 
 
         public override void Initialize()
         {
 
-            var customers = StateManager.GetAll<Customer>();
+            //var customers = StateManager.GetAll<Customer>();
+            var customers = _data.GetResult<List<Customer>>();
             _customerCollection = new ObservableCollection<Customer>(customers);
             CustomerCollection = new CollectionViewSource() { Source = _customerCollection };
 

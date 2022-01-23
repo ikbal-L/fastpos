@@ -117,14 +117,14 @@ namespace ServiceLib.Service
             return GenericRest.DeleteThing(Api.Resource<T>(EndPoint.DELETE_MANY),ids);
         }
 
-        public async Task<(int, IEnumerable<T>)> GetAsync()
+        public async Task<(int, IEnumerable<T>)> GetAllAsync()
         {
              return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(EndPoint.GET_ALL,resource:Resource));
         }
 
-        public async Task<(int status, IEnumerable<T>)> GetAsync(string subPath)
+        public async Task<(int status, IEnumerable<T>)> GetAllAsync(string endpoint,string? subpath = null)
         {
-            return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(EndPoint.GET_ALL, subPath: subPath));
+            return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(endpoint));
         }
 
         public Page<T> GetByCriterias(object criterias)

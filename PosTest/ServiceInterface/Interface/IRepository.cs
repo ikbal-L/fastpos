@@ -22,9 +22,9 @@ namespace ServiceInterface.Interface
         (bool ,TReturn) Save<TReturn>(T state);
         int Delete(IEnumerable<Id> ids);
 
-        Task<(int,IEnumerable<T>)> GetAsync();
+        Task<(int,IEnumerable<T>)> GetAllAsync();
 
-        Task<(int status, IEnumerable<T>)> GetAsync(string subPath);
+        Task<(int status, IEnumerable<T>)> GetAllAsync(string endpoint,string? subpath = null);
 
         Page<T> GetByCriterias(object criterias);
 

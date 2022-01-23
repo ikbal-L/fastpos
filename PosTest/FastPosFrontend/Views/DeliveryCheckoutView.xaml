@@ -13,7 +13,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:DeliveryCheckoutViewModel}"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             Background="{StaticResource MaterialDesignPaper}">
+             Background="{StaticResource MaterialDesignPaper}" Language="fr-Fr">
 
     <UserControl.Resources>
         <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
@@ -466,7 +466,7 @@
                             </DataGrid>
                         </controls:PaginatedContent>
                     </TabItem>
-                    <TabItem Header="Payments" TabIndex="{x:Static vm:CreditViewTabs.PAYMENT_HISTORY_TAB}">
+                    <TabItem Header="Payments" TabIndex="{x:Static vm:CreditViewTabs.PAYMENT_HISTORY_TAB}" >
                         <controls:PaginatedContent Paginator="{Binding DeliveryPayments}">
                             <DataGrid 
                           ItemsSource="{Binding DeliveryPayments.PaginationView}" 

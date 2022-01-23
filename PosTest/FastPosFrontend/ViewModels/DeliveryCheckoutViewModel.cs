@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using static FastPosFrontend.ViewModels.DeliveryAccounting.DeliveryAccountingViewModel;
 
@@ -52,6 +53,7 @@ namespace FastPosFrontend.ViewModels
 
         private IOrderRepository _orderRepo;
         private IPaymentRepository _paymentRepo;
+        private IRepository<Deliveryman, long> _deliverymanRepo;
         private Deliveryman _selectedDeliveryman;
 
         public Deliveryman SelectedDeliveryman
@@ -323,21 +325,27 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-     
+        public async Task<List<Deliveryman>> GetDeliverymenWithBalance()
+        {
+            var result =  await _deliverymanRepo.GetAllAsync("getallwithbalance");
+            if (result.status != 200) return new List<Deliveryman>();
+            return result.Item2.ToList();
+        }
 
         protected override void Setup()
         {
             _orderRepo = StateManager.GetService<Order, IOrderRepository>();
             _paymentRepo = StateManager.GetService<Payment, IPaymentRepository>();
-
-            _data = new NotifyAllTasksCompletion(StateManager.GetAsync<Deliveryman>());
+            _deliverymanRepo = StateManager.Instance.GetRepository<Deliveryman>();
+            _data = new NotifyAllTasksCompletion(GetDeliverymenWithBalance());
         }
 
 
         public override void Initialize()
         {
 
-            var deliverymen = StateManager.GetAll<Deliveryman>();
+            //var deliverymen = StateManager.GetAll<Deliveryman>();
+            var deliverymen = _data.GetResult<List<Deliveryman>>();
             _deliverymanCollection = new ObservableCollection<Deliveryman>(deliverymen);
             DeliverymanCollection = new CollectionViewSource() { Source = _deliverymanCollection };
 

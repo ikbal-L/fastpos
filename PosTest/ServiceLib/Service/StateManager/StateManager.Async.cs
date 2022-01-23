@@ -32,7 +32,7 @@ namespace ServiceLib.Service.StateManager
             if (State[key] != null && !_refreshRequested) return;
             if (Service[key] is IRepository<T, Id> service)
             {
-                var (status, data) = string.IsNullOrEmpty(predicate) ?await service.GetAsync() :await service.GetAsync(predicate);
+                var (status, data) = string.IsNullOrEmpty(predicate) ?await service.GetAllAsync() :await service.GetAllAsync(predicate);
                 //var (status, data) = await service.GetAsync();
                 //ServiceHelper.HandleStatusCodeErrors();
                 FetchLock.Remove(key);
