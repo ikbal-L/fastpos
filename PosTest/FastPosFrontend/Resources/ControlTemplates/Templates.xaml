@@ -16,7 +16,20 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <controls:AppBar Grid.Row="0" IsEnabled="{Binding  MainDialog.IsDialogOpen,Converter={StaticResource InvertBooleanConverter}}"/>
+                <controls:AppBar Grid.Row="0" >
+
+      
+                    <controls:AppBar.Style>
+                        <Style TargetType="{x:Type controls:AppBar}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MainDialog.IsDialogOpen}" Value="true">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                          
+                            </Style.Triggers>
+                        </Style>
+                    </controls:AppBar.Style>
+                </controls:AppBar>
                 <md:DrawerHost Grid.Row="1"
                                                IsLeftDrawerOpen="{Binding Drawer.IsLeftDrawerOpen}"
                                                LeftDrawerContentTemplate="{Binding Drawer.Left.Template}"                

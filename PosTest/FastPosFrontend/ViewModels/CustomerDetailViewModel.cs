@@ -30,7 +30,8 @@ namespace FastPosFrontend.ViewModels
          
             Name = Customer.Name;
             ValidateModelProperty(Customer, Name, nameof(Name));
-            ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
+            ValidateModelProperty(Customer, Mobile, nameof(Mobile));
+            //ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
         }
 
         private void Customer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -68,19 +69,21 @@ namespace FastPosFrontend.ViewModels
             set
             {
                 Set(ref _mobile, value);
-                if (!string.IsNullOrEmpty(Mobile))
-                {
-                    ValidateModelProperty(Customer, Mobile, nameof(Mobile));
-                    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
-                }
-                else
-                {
-                    if (_validationErrors.ContainsKey(nameof(Mobile)))
-                    {
-                        _validationErrors[nameof(Mobile)]?.Clear(); 
-                    }
-                    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
-                }
+                //if (!string.IsNullOrEmpty(Mobile))
+                //{
+                //    ValidateModelProperty(Customer, Mobile, nameof(Mobile));
+                //    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
+                //}
+                //else
+                //{
+                //    if (_validationErrors.ContainsKey(nameof(Mobile)))
+                //    {
+                //        _validationErrors[nameof(Mobile)]?.Clear(); 
+                //    }
+                //    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
+                //}
+
+                ValidateModelProperty(Customer, Mobile, nameof(Mobile));
             }
         }
 
@@ -200,8 +203,9 @@ namespace FastPosFrontend.ViewModels
         }
         public void Save()
         {
-            Customer.Mobile = "+213" + Mobile;
-            Customer.PhoneNumbers.ToList().ForEach(phone=> phone = "+213"+phone);
+            Customer.Mobile = Mobile;
+            Customer.Name = Name;
+            Customer.PhoneNumbers.Add(Customer.Mobile);
             if (StateManager.Save(Customer))
             {
                 ToastNotification.Notify("Customer saved successfully",NotificationType.Success);

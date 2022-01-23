@@ -4,7 +4,10 @@
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
                     xmlns:cal="http://www.caliburnproject.org"
-                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions" xmlns:converters="clr-namespace:FastPosFrontend.Converters">
+                    xmlns:ex="clr-namespace:FastPosFrontend.Extensions" 
+                    xmlns:converters="clr-namespace:FastPosFrontend.Converters">
+
+    <converters:OrderTypeToPackIconKindConverter x:Key="OrderTypeToPackIconKindConverter"/>
 
     <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}" x:Key="AppBarButton">
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -39,32 +42,99 @@
                 </Style>
             </StackPanel.Resources>
 
+           
 
-            <md:Chip
-               
+            <StackPanel Orientation="Horizontal">
+                <!--<Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                        Content="{md:PackIcon Kind=ChevronLeft}"/>-->
+                <md:PopupBox StaysOpen="True"  PlacementMode="BottomAndAlignCentres" >
+                    <md:PopupBox.ToggleContent>
+                        <md:Chip
+                Margin="3 0"
                 ToolTip="رقم الطلب"
                 Icon="{md:PackIcon Kind=HashtagBox}"
-               >
-                <md:Chip.Content>
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{} {0:#} ( {1:#} )" >
-                                <Binding Path="CurrentOrder.OrderNumber" />
-                                <Binding Path="CurrentOrder.OrderCode"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
-                    <!--<Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>-->
-                </md:Chip.Content>
-            </md:Chip>
+               IsHitTestVisible="False"
+                            MinWidth="130">
+                            <md:Chip.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{} {0:#} ( {1:#} )" FallbackValue="SELECT">
+                                            <Binding Path="CurrentOrder.OrderNumber" />
+                                            <Binding Path="CurrentOrder.OrderCode"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <!--<Binding Path="CurrentOrder.OrderNumber" Converter="{StaticResource OrderNumerationMaskConverter}"/>-->
+                            </md:Chip.Content>
+                        </md:Chip>
+                    </md:PopupBox.ToggleContent>
+                    <StackPanel>
+                        <ListBox 
+                            ItemsSource="{Binding OrdersCollectionViewSource.View}" 
+                            SelectedItem="{Binding CurrentOrder}"
+                            Width="300"
+                            Height="410"
+                            ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}">
+                                    <Setter Property="Margin" Value="10 4"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="FontWeight" Value="DemiBold"/>
+                                    <Setter Property="Foreground" Value="#DF000000"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueDarkBrush}"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type model:Order}">
+                                    <Grid Margin="10" >
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                <Setter Property="FontSize" Value="15"/>
+                                                
+                                                <!--<Setter Property="Margin" Value="4 0 0 0"/>-->
+                                            </Style>
+                                        </Grid.Resources>
+                                        <md:PackIcon Grid.Column="0" Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}" Width="40" Height="40"  />
+                                        <TextBlock Grid.Column="1" Text="{Binding OrderCode,FallbackValue=NEW}" />
+                                        <TextBlock Grid.Column="2" Text="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding NewTotal,StringFormat='C',ConverterCulture='en-DZ'}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </md:PopupBox>
+
+                <!--<Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                        Content="{md:PackIcon Kind=ChevronRight}"
+                        cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]"/>-->
+            </StackPanel>
+         
+
+
+
             <md:Chip
                 Content="{Binding CurrentOrder.Customer.Name}"
                 ToolTip="الزبون"
                 Icon="{md:PackIcon User}"
-                
-                
-                cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]"/>
-            <!--cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Customer')]">-->
+
+
+            cal:Message.Attach="[Event Click] = [Action SetOrderPropToNull('Customer')]"/>
+
            
             <md:Chip
                 Content="{Binding CurrentOrder.Table.Number}"

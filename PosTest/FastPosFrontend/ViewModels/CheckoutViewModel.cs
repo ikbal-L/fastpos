@@ -97,8 +97,8 @@ namespace FastPosFrontend.ViewModels
 
         #region Constructors
 
-     
 
+        public CollectionViewSource OrdersCollectionViewSource { get; set; }
         public CheckoutViewModel() : base()
         {
             LockOrderCommand = new DelegateCommandBase(LockOrder);
@@ -155,7 +155,10 @@ namespace FastPosFrontend.ViewModels
 
             Orders = new BindableCollection<Order>(unprocessedOrders);
             OrdersCollectionObserver = new CollectionMutationObserver<Order>(Orders,true,true);
+            OrdersCollectionViewSource = new CollectionViewSource() { Source  = Orders };
 
+
+            OrdersCollectionViewSource.SortDescriptions.Add(new SortDescription() { PropertyName = nameof(Order.OrderTime),Direction = ListSortDirection.Descending});
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);

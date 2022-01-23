@@ -524,7 +524,8 @@
                           SelectionMode="Single" 
                           SelectionUnit="FullRow"
                           SelectedItem="{Binding SelectedCustomer}"
-                          Margin="5 48 10 0">
+                          Margin="5 48 10 0"
+                          FontSize="17">
                     <DataGrid.Resources>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <!--<Setter Property="VerticalAlignment" Value="Center"/>-->
@@ -536,9 +537,9 @@
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn Header="Client Name" Binding="{Binding Name}" Width="2*"/>
+                        <DataGridTextColumn Header="Client Name" Binding="{Binding Name}" Width="3*"/>
 
-                        <DataGridTextColumn Header="Mobile" Binding="{Binding PhoneNumbers[0]}" Width="*" />
+                        <DataGridTextColumn Header="Mobile" Binding="{Binding PhoneNumbers[0]}" Width="2*" />
 
 
                     </DataGrid.Columns>

@@ -20,6 +20,8 @@ namespace ServiceInterface.Model
         }
 
         [DataMember]
+        [Required(AllowEmptyStrings = false)]
+        [MinLength(3)]
         [RegularExpression(@"^[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z-0-9_\s]*$", ErrorMessage = "Use Latin, Arabic or Numeric Characters only ")]
         public string Name
         {
@@ -27,7 +29,7 @@ namespace ServiceInterface.Model
             set => Set(ref _name, value);
         }
 
-        //[Phone(ErrorMessage = "Enter a valid phone number ")]
+
 
 
         [DataMember]
@@ -57,8 +59,8 @@ namespace ServiceInterface.Model
         [DataMember]
         //[Phone(ErrorMessage = "Enter a valid phone number ")]
         [Required(AllowEmptyStrings = false)]
-        [MinLength(09, ErrorMessage = "Phone number length must be at least 9 digits ")]
-        [MaxLength(12, ErrorMessage = "Phone number length must not exceed 12 digits ")]
+        [MinLength(10, ErrorMessage = "Phone number length must be at least 10 digits ")]
+        [MaxLength(10, ErrorMessage = "Phone number length must not exceed 10 digits ")]
         public string Mobile
         {
             get => _mobile;

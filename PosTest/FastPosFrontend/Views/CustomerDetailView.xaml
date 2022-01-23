@@ -14,63 +14,9 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:CustomerDetailViewModel}"
              >
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary
-                                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary
-                                    Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary
-                                    Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-                <ResourceDictionary
-                                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <converters:NegateBooleanValueConverter x:Key="NegateBooleanValueConverter" />
-            <converters:MultiValueEqualityWithConditionConverter x:Key="MultiValueEqualityWithConditionConverter"></converters:MultiValueEqualityWithConditionConverter>
-            <DataTemplate x:Key="GroupBoxHeaderDataTemplate">
-                <StackPanel
-                    Orientation="Horizontal">
-                    <materialDesign:PackIcon
-                        Kind="Cellphone"
-                        Height="32"
-                        Width="32"
-                        VerticalAlignment="Center" />
-                    <TextBlock
-                        Margin="8,0,0,0"
-                        VerticalAlignment="Center"
-                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                        Text="Phone Numbers" />
-                </StackPanel>
-            </DataTemplate>
-            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <Setter Property="Foreground" Value="#333333" />
-                <Setter Property="MaxLength" Value="40" />
-                <Setter Property="Width" Value="392" />
 
-                <Style.Triggers>
-                    <Trigger Property="Validation.HasError" Value="True">
-                        <Setter Property="ToolTip"
-                                Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
-                    </Trigger>
-                </Style.Triggers>
-
-
-            </Style>
-
-            
-            <converters:BooleanToBinaryEnumValueConverter x:Key="BinaryEnumValueConverter"></converters:BooleanToBinaryEnumValueConverter>
-            <x:Array Type="materialDesign:PackIconKind" x:Key="EditBinaryValue">
-                <materialDesign:PackIconKind>Edit</materialDesign:PackIconKind>
-                <materialDesign:PackIconKind>EditOff</materialDesign:PackIconKind>
-            </x:Array>
-        </ResourceDictionary>
-
-    </UserControl.Resources>
     <Grid >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+       
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
@@ -81,7 +27,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
+                <!--<RowDefinition Height="*" />-->
 
             </Grid.RowDefinitions>
             <!--<Border Grid.Row="0"  Margin="2">
@@ -103,7 +49,7 @@
                          Text="{Binding Mobile,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,ValidatesOnNotifyDataErrors=True}" />
             </Border>
 
-            <Border Grid.Row="2" Margin="2 10">
+            <!--<Border Grid.Row="2" Margin="2 10">
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -127,7 +73,7 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock FontSize="22" Text="{Binding }" Style="{StaticResource MaterialDesignTextBlock}" HorizontalAlignment="Stretch"></TextBlock>
 
-                                        <!--<materialDesign:Card Grid.Column="1" Background="#FFB71C1C"
+                                        --><!--<materialDesign:Card Grid.Column="1" Background="#FFB71C1C"
                                                              Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                                              HorizontalAlignment="Right"
                                                              >
@@ -141,13 +87,13 @@
                                             <TextBlock FontSize="16" FontWeight="Bold" Padding="5">
                                                 EDITING...
                                             </TextBlock>
-                                        </materialDesign:Card>-->
+                                        </materialDesign:Card>--><!--
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
 
                         </ListBox>
-                        <!--<DataGrid ItemsSource="{Binding Customer.PhoneNumbers}" Style="{StaticResource MaterialDesignDataGrid}" AutoGenerateColumns="False" HeadersVisibility="None">
+                        --><!--<DataGrid ItemsSource="{Binding Customer.PhoneNumbers}" Style="{StaticResource MaterialDesignDataGrid}" AutoGenerateColumns="False" HeadersVisibility="None">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="*" >
                                     <DataGridTemplateColumn.CellTemplate>
@@ -163,9 +109,9 @@
                                 </DataGridTemplateColumn>
 
                             </DataGrid.Columns>
-                        </DataGrid>-->
+                        </DataGrid>--><!--
                     </GroupBox>
-                    <!--COMMANDS-->
+                    --><!--COMMANDS--><!--
                     <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10 5 0 0 " HorizontalAlignment="Center" VerticalAlignment="Stretch">
                         <Button Margin="0 5"
                                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
@@ -175,7 +121,7 @@
                                 Content="{materialDesign:PackIcon Kind= Delete}"
                                 cal:Message.Attach="[Event Click] = [Action RemovePhone()]" />
 
-                        <!--<Button Margin="0 5" Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                        --><!--<Button Margin="0 5" Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 cal:Message.Attach="[Event Click] = [Action EditPhone()]">
                             <Button.Content>
                                 <materialDesign:PackIcon>
@@ -185,32 +131,26 @@
                                     </materialDesign:PackIcon.Kind>
                                 </materialDesign:PackIcon>
                             </Button.Content>
-                        </Button>-->
+                        </Button>--><!--
                     </StackPanel>
                 </Grid>
-            </Border>
+            </Border>-->
         </Grid>
 
-        <materialDesign:ColorZone Grid.Row="1" Background="#FFAEEA00" Padding="6" >
-            <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                        cal:Message.Attach="[Event Click] = [Action Save()]"
-                        IsEnabled="{Binding IsSaveEnabled}">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="ContentSave"
-                                                 HorizontalAlignment="Right" Width="25" Height="25" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                        cal:Message.Attach="[Event Click] = [Action Cancel()]" Margin="10">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="CloseBox"
-                                                 HorizontalAlignment="Right" Width="25" Height="25" />
-                    </StackPanel>
-                </Button>
-                <TextBlock Text="Customer Details" FontSize="24" Margin="10" />
-            </StackPanel>
-        </materialDesign:ColorZone>
+
+
+
+        <UniformGrid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Rows="1"  Margin="10 0 10 10">
+            <Button Content="{materialDesign:PackIcon Kind=ContentSave,Size=30}" 
+                    Margin="5" FontSize="16" Width="100" Height="40"
+                     cal:Message.Attach="[Event Click] = [Action Save()]" IsDefault="True"
+                     IsEnabled="{Binding IsSaveEnabled}"/>
+            <Button Content="{materialDesign:PackIcon Kind=Cancel,Size=30}" 
+                    FontSize="16" 
+                    Style="{StaticResource MaterialDesignFlatButton}" 
+                    Margin="5" Width="100" Height="40"
+                    cal:Message.Attach="[Event Click] = [Action Cancel()]" IsCancel="True"/>
+        </UniformGrid>
 
 
     </Grid>

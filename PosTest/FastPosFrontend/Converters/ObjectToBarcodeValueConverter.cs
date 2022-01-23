@@ -20,7 +20,7 @@ namespace FastPosFrontend.Converters
             {
                 BarcodeLib.Barcode b = new BarcodeLib.Barcode();
                 var order = value as Order;
-                var orderNumberString = (order.OrderNumber).ToString("D8", CultureInfo.InvariantCulture);
+                var orderNumberString = order.OrderNumber?.ToString("D8", CultureInfo.InvariantCulture);
                 var stringToEncode =$"BON-{orderNumberString}" ;
                 var conv = new Int32Converter();
                 //int barcodeWidth = (int) conv.ConvertFromString("4cm");

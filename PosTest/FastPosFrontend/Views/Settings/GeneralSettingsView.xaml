@@ -20,6 +20,8 @@
                       Text="{Binding Settings.RestaurantName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                       VerticalScrollBarVisibility="Auto"
                       md:TextFieldAssist.TextFieldCornerRadius="0"
+                      MinLines="3"
+                      MaxLines="3"
                       
             ></TextBox>
         </StackPanel>
