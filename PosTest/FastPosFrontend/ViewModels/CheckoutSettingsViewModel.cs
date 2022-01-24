@@ -45,7 +45,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isFlipped;
         private CategoryDetailViewModel _categoryDetailViewModel;
         private bool _isCategory;
-        private ProductDetailViewModel _productDetailViewModel;
+        private ProductFormViewModel _productDetailViewModel;
         private Type _activeTab;
         private ProductLayoutViewModel _productLayoutViewModel;
         private bool _isDialogOpen;
@@ -153,7 +153,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _categoryDetailViewModel, value);
         }
 
-        public ProductDetailViewModel ProductDetailViewModel
+        public ProductFormViewModel ProductDetailViewModel
         {
             get => _productDetailViewModel;
             set => Set(ref _productDetailViewModel, value);
@@ -577,6 +577,7 @@ namespace FastPosFrontend.ViewModels
             else
             {
                 ProductDetailViewModel.SaveProduct();
+                
                 //ProductDetailViewModel = null;
             }
 
@@ -1448,7 +1449,7 @@ namespace FastPosFrontend.ViewModels
 
 
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
-            ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
+            ProductDetailViewModel = new ProductFormViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
                 var parent = Parent as MainViewModel;
             parent?.OpenDialog(ProductDetailViewModel)
@@ -1475,7 +1476,7 @@ namespace FastPosFrontend.ViewModels
 
             if (SelectedCategory?.Id == null) return;
             
-            ProductDetailViewModel = new ProductDetailViewModel(ref _selectedProduct);
+            ProductDetailViewModel = new ProductFormViewModel(ref _selectedProduct,OnProductSaved);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             var parent = Parent as MainViewModel;
             parent?.OpenDialog(ProductDetailViewModel)
@@ -1487,6 +1488,14 @@ namespace FastPosFrontend.ViewModels
                         ProductDetailViewModel = null;
                     }
                 });
+        }
+
+        private void OnProductSaved(bool isSuccessful)
+        {
+            if (isSuccessful)
+            {
+                _allProducts.Add(SelectedProduct);
+            }
         }
 
         public void EditCategory(object obj)
@@ -1509,7 +1518,7 @@ namespace FastPosFrontend.ViewModels
                 SelectedCategory = null;
                 ShowCategoryProducts(category);
             });
-            //CategoryDetailViewModel.ErrorsChanged += EditCategoryViewModel_ErrorsChanged;
+
 
 
         }

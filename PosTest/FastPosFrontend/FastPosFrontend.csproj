@@ -284,7 +284,7 @@
     <Compile Include="ViewModels\PaymentFilter.cs" />
     <Compile Include="ViewModels\PinLoginViewModel.cs" />
     <Compile Include="ViewModels\PrintViewModel.cs" />
-    <Compile Include="ViewModels\ProductDetailViewModel.cs" />
+    <Compile Include="ViewModels\ProductFormViewModel.cs" />
     <Compile Include="ViewModels\ProductEditViewModel.cs" />
     <Compile Include="ViewModels\ProductLayoutViewModel.cs" />
     <Compile Include="ViewModels\RoleDetailViewModel.cs" />
@@ -455,8 +455,8 @@
     <Compile Include="Views\SubViews\DelivereyView.xaml.cs">
       <DependentUpon>DelivereyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProductDetailView.xaml.cs">
-      <DependentUpon>ProductDetailView.xaml</DependentUpon>
+    <Compile Include="Views\ProductFormView.xaml.cs">
+      <DependentUpon>ProductFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\ProductNavigation.xaml.cs">
       <DependentUpon>ProductNavigation.xaml</DependentUpon>
@@ -866,7 +866,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ProductDetailView.xaml">
+    <Page Include="Views\ProductFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -15,7 +15,7 @@ namespace FastPosFrontend.Configurations
 
         private int _tableNumber;
         private string _serverHost;
-        private bool _initialized = false;
+
         private int _categoryPageSize = 4;
         private string _restaurantName;
         private bool _isRefundEnabled;
@@ -25,11 +25,7 @@ namespace FastPosFrontend.Configurations
 
         public event EventHandler<SaveRequestedEventArgs> SaveRequested;
 
-        public bool Initialized
-        {
-            get => _initialized;
-            set => Set(ref _initialized, value);
-        }
+      
 
         [JsonProperty]
         public int TableCount
@@ -37,41 +33,7 @@ namespace FastPosFrontend.Configurations
             get => _tableNumber;
             set
             {
-
-                if (value >= 0)
-                {
-                    var oldValue = _tableNumber;
-                    var changesCommitted = false;
-                    if (Initialized)
-                    {
-                        var d = value - oldValue;
-
-                        if (d < 0)
-                        {
-                            changesCommitted = DeleteTables(Math.Abs(d));
-                        }
-                        else if (d > 0)
-                        {
-                            changesCommitted = CreateTables(Math.Abs(d));
-                        }
-
-                        if (changesCommitted)
-                        {
-                            Set(ref _tableNumber, value);
-                        }
-                    }
-                    else
-                    {
-                        Set(ref _tableNumber, value);
-                    }
-                }
-                else
-                {
-                    ToastNotification.Notify("Enter a valid number");
-                }
-
-
-
+                Set(ref _tableNumber, value);
             }
         }
 
@@ -142,31 +104,12 @@ namespace FastPosFrontend.Configurations
 
 
 
-        public bool DeleteTables(int limit)
-        {
-            var ids = StateManager.GetAll<Table>().Where(t => t.Id != null).OrderByDescending(table => table.Number).Take(limit).Select((table, i) => table.Id.Value);
-            return StateManager.Delete<Table, long>(ids);
-        }
-
-        public bool CreateTables(int limit)
-        {
-            var tables = StateManager.GetAll<Table>();
-            var baseNumber = tables.Any() ? tables.Max(table => table.Number) : 0;
-            IList<Table> newTables = new List<Table>(limit);
-            for (int i = 1; i <= limit; i++)
-            {
-
-                newTables.Add(new Table() { Number = baseNumber + i });
-            }
-
-            var result = StateManager.SaveAll(newTables);
-            return result;
-        }
-
         public void RequestSave()
         {
             SaveRequested?.Invoke(this,new SaveRequestedEventArgs());
         }
+
+
 
 
     }

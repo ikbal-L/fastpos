@@ -82,6 +82,18 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(nameof(Balance));
             }
         }
+        public string _address;
+
+        [DataMember]
+        public string Address 
+        { 
+            get => _address; 
+            set
+            {
+                Set(ref _address, value);
+            } 
+        }
+
         public override string ToString()
         {
             return $"{Name}";

@@ -100,7 +100,7 @@
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                        <UniformGrid Columns="4"  />
+                        <UniformGrid Columns="4" Height="350" />
                     </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
@@ -108,7 +108,9 @@
                                 <Button 
                                 Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" 
                                 CommandParameter="{Binding}" HorizontalAlignment="Stretch"
-                                Style="{StaticResource ContainerButtonStyle}" VerticalContentAlignment="Center" Cursor="Hand">
+                                
+                                    Style="{StaticResource ContainerButtonStyle}" 
+                                    VerticalContentAlignment="Center" Cursor="Hand">
                                     <StackPanel       Orientation="Vertical"  VerticalAlignment="Center" TextBlock.FontWeight="Bold">
                                         <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                                         <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />

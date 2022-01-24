@@ -5,9 +5,9 @@ namespace FastPosFrontend.Views
     /// <summary>
     /// Interaction logic for ProductDetailView.xaml
     /// </summary>
-    public partial class ProductDetailView : UserControl
+    public partial class ProductFormView : UserControl
     {
-        public ProductDetailView()
+        public ProductFormView()
         {
             InitializeComponent();
         }

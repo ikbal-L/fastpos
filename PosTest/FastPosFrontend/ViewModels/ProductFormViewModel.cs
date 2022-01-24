@@ -17,8 +17,8 @@ using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace FastPosFrontend.ViewModels
 {
-    
-    public class ProductDetailViewModel : DialogContent, INotifyDataErrorInfo
+    public delegate void SaveHandler(bool isSuccessful);
+    public class ProductFormViewModel : DialogContent, INotifyDataErrorInfo
     {
         private Product _product;
         private Product _source;
@@ -32,8 +32,9 @@ namespace FastPosFrontend.ViewModels
         private string _unit;
         private int _additivesPageSize;
         private bool _isPlatter;
+        private SaveHandler? _saveHandler;
 
-        public ProductDetailViewModel(ref Product sourceProduct,
+        public ProductFormViewModel(ref Product sourceProduct,SaveHandler saveHandler = null,
             int additivesPageSize = 30)
         {
             
@@ -50,7 +51,7 @@ namespace FastPosFrontend.ViewModels
             
             CheckAdditiveCommand = new DelegateCommandBase(CheckAdditive, CanCheckAdditive);
             IsSaveEnabled = !HasErrors;
-
+            _saveHandler = saveHandler;
         }
         public void CloneFromSource()
         {
@@ -114,6 +115,7 @@ namespace FastPosFrontend.ViewModels
         }
 
         [Decimal]
+        [Min("1")]
         public string Price
         {
             get => _price;
@@ -195,9 +197,16 @@ namespace FastPosFrontend.ViewModels
             if (!_source.Category.Products.Contains(_source))
             {
                 _source.Category.Products.Add(_source);
+                
             }
-            StateManager.Save<Product>(_source);
+
+           
+            var isSaveSuccessFul = StateManager.Save(_source);
+            if (isSaveSuccessFul) _source.Category.ProductIds.Add(_source.Id.Value);
+            _saveHandler?.Invoke(isSaveSuccessFul);
             Host.Close(this);
+            return ;
+
         }
 
         private bool CanCheckAdditive(object arg)

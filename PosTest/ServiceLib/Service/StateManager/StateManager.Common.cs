@@ -14,7 +14,7 @@ namespace ServiceLib.Service.StateManager
 
         public static ICollection<T> GetAll<T>() where T : IState<long>
         {
-            return Get<T, long>();
+            return GetAll<T, long>();
         }
 
         public static T GetById<T>(long id) where T : IState<long>
@@ -24,7 +24,7 @@ namespace ServiceLib.Service.StateManager
 
         public static bool SaveAll<T>(IEnumerable<T> state) where T : IState<long>
         {
-            return Save<T, long>(state);
+            return SaveAll<T, long>(state);
         }
 
         public static bool Save<T>(T state) where T : class, IState<long>
@@ -51,6 +51,8 @@ namespace ServiceLib.Service.StateManager
         {
             return GetRepository<T, long>();
         }
+
+
     }
  
 }

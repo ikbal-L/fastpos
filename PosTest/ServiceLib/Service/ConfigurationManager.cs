@@ -72,11 +72,7 @@ namespace ServiceLib.Service
             return Path.Combine(appData, fileName);
         }
 
-        private static void WriteToFile()
-        {
-            var configurationString = JsonConvert.SerializeObject(Configurations, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-            File.WriteAllText(GetLocalFilePath(FileName),configurationString);
-        }
+        
     }
     public interface IConfiguration: INotifySaveRequested, IForwardRequest
     {

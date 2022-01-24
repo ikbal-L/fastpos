@@ -26,11 +26,14 @@ namespace FastPosFrontend.ViewModels
 
         public CustomerDetailViewModel(Customer customer)
         {
-            Customer = new Customer(){Id = customer.Id,Name = customer.Name,PhoneNumbers = customer.PhoneNumbers };
+            Customer = new Customer(){Id = customer.Id,Name = customer.Name,PhoneNumbers = customer.PhoneNumbers,Address = customer.Address };
          
             Name = Customer.Name;
+            Mobile = Customer.Mobile;
+            Address = Customer.Address;
             ValidateModelProperty(Customer, Name, nameof(Name));
             ValidateModelProperty(Customer, Mobile, nameof(Mobile));
+            ValidateModelProperty(Customer, Address, nameof(Address));
             //ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
         }
 
@@ -69,23 +72,23 @@ namespace FastPosFrontend.ViewModels
             set
             {
                 Set(ref _mobile, value);
-                //if (!string.IsNullOrEmpty(Mobile))
-                //{
-                //    ValidateModelProperty(Customer, Mobile, nameof(Mobile));
-                //    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
-                //}
-                //else
-                //{
-                //    if (_validationErrors.ContainsKey(nameof(Mobile)))
-                //    {
-                //        _validationErrors[nameof(Mobile)]?.Clear(); 
-                //    }
-                //    ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
-                //}
 
                 ValidateModelProperty(Customer, Mobile, nameof(Mobile));
             }
         }
+
+        private string _address;
+
+        public string Address
+        {
+            get { return _address; }
+            set 
+            { 
+                Set(ref _address , value);
+                ValidateModelProperty(Customer, Address, nameof(Address));
+            }
+        }
+
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -205,6 +208,7 @@ namespace FastPosFrontend.ViewModels
         {
             Customer.Mobile = Mobile;
             Customer.Name = Name;
+            Customer.Address = Address;
             Customer.PhoneNumbers.Add(Customer.Mobile);
             if (StateManager.Save(Customer))
             {

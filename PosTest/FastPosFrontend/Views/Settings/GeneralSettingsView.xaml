@@ -5,15 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vms ="clr-namespace:FastPosFrontend.ViewModels.Settings"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vms:GeneralSettingsViewModel}">
-    <UniformGrid Columns="1" VerticalAlignment="Top">
-        <TextBlock Text="General Settings" FontSize="18" FontWeight="Bold" Margin="40 30 0 0"/>
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Restaurant Name" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer>
+            <UniformGrid Columns="1" VerticalAlignment="Top">
+                <TextBlock Text="General Settings" FontSize="18" FontWeight="Bold" Margin="40 30 0 0"/>
+                <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
+                    <TextBlock Text="Restaurant Name" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                       VerticalAlignment="Center"
                       AcceptsReturn="True"
                       Width="300"
@@ -24,65 +32,73 @@
                       MaxLines="3"
                       
             ></TextBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Table Count" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
+                    <TextBlock Text="Table Count" FontSize="16" Padding="15 10 0 15"  Width="400" Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                     VerticalAlignment="Center"
                     AcceptsReturn="True"
                     Width="300"
-                    Text="{Binding Settings.TableNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Settings.TableCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     VerticalScrollBarVisibility="Auto"
                     md:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Category Page Size" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
+                    <TextBlock Text="Category Page Size" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"
                        VerticalAlignment="Center"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                     VerticalAlignment="Center"
                     AcceptsReturn="True"
-                     Text="{Binding Settings.NumberOfCategories,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding Settings.CategoryPageSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     Width="300"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"
                     md:TextFieldAssist.TextFieldCornerRadius="0"
 
                   />
-        </StackPanel>
-        
-        <!--<StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <TextBlock Text="Server Host" FontSize="16" Padding="15 10 0 15"  Width="400"  Margin="0 0 20 0"
-                       VerticalAlignment="Center"/>
-            <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                    VerticalAlignment="Center"
-                    AcceptsReturn="True"
-                    Width="300"
-                    Text="{Binding Settings.ServerHost,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    TextWrapping="Wrap"
-                    VerticalScrollBarVisibility="Auto"
-                    md:TextFieldAssist.TextFieldCornerRadius="0"
-                  ></TextBox>
-        </StackPanel>-->
+                </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsMultiCashRegisterEnabled}" />
-            <TextBlock Text="Multi-Caise"  FontSize="14" VerticalAlignment="Center"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsRefundEnabled}" />
-            <TextBlock Text="Refund"  FontSize="14" VerticalAlignment="Center"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0" >
-            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsDeliveryEnabled}" />
-            <TextBlock Text="Delivery"  FontSize="14" VerticalAlignment="Center"/>
-        </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Margin="40 10 0 0" >
-            <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsBarcodeEnabled}" />
-            <TextBlock Text="Barcode"  FontSize="14" VerticalAlignment="Center"/>
-        </StackPanel>
 
-    </UniformGrid>
+                <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
+                    <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsMultiCashRegisterEnabled}" />
+                    <TextBlock Text="Multi-Caise"  FontSize="14" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
+                    <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsRefundEnabled}" />
+                    <TextBlock Text="Refund"  FontSize="14" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="40 10 0 0" >
+                    <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsDeliveryEnabled}" />
+                    <TextBlock Text="Delivery"  FontSize="14" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="40 10 0 0" >
+                    <ToggleButton Margin="15 0 15 0" VerticalAlignment="Center" IsChecked="{Binding Settings.IsBarcodeEnabled}" />
+                    <TextBlock Text="Barcode"  FontSize="14" VerticalAlignment="Center"/>
+                </StackPanel>
+
+            </UniformGrid>
+        </ScrollViewer>
+
+        <Border Grid.Row="1" BorderThickness="0 1 0 0" BorderBrush="#3F000000">
+            <UniformGrid HorizontalAlignment="Left" VerticalAlignment="Center" 
+                     Grid.Row="1" Rows="1"  Margin="10 5 10 10"
+                     md:ShadowAssist.ShadowEdges="Top"
+                    
+                     >
+                <Button Content="{md:PackIcon Kind=ContentSave,Size=30}" 
+                    Margin="5" FontSize="16" Width="100" Height="40"
+                    cal:Message.Attach="[Event Click] = [Action Save]"
+                        IsDefault="True"/>
+                <Button Content="{md:PackIcon Kind=Cancel,Size=30}" 
+                    FontSize="16" 
+                    Style="{StaticResource MaterialDesignFlatButton}" 
+                    Margin="5" Width="100" Height="40"
+                    cal:Message.Attach="[Event Click] = [Action Cancel]" IsCancel="True"/>
+            </UniformGrid>
+        </Border>
+    </Grid>
 </UserControl>

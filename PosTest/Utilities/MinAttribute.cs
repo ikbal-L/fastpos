@@ -91,9 +91,10 @@ namespace Attributes
 
                 var message = $"Property {validationContext.DisplayName} on Type {validationContext.ObjectType.FullName} must be of type that implements ${nameof(IEnumerable)}";
 #if DEBUG
-                throw new InvalidOperationException(message); 
-#endif
+                throw new InvalidOperationException(message);
+#else
                 return new ValidationResult(message);
+#endif
             }
 
             public override string FormatErrorMessage(string name)

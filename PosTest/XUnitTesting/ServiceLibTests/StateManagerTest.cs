@@ -35,7 +35,7 @@ namespace XUnitTesting.ServiceLibTests
 
             //Act 
             Action act1 = () => StateManager.GetAll<Table>();
-            Action act2 = () => StateManager.Get<Table,long>();
+            Action act2 = () => StateManager.GetAll<Table,long>();
             Action act3 = () => StateManager.GetById<Table>(1);
             Action act4 = () => StateManager.GetById<Table,long>(1);
 

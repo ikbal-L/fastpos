@@ -1227,7 +1227,10 @@ namespace FastPosFrontend.ViewModels
                 case ActionButton.Split:
                     CanSplitOrder = CurrentOrder?.OrderItems != null && (CurrentOrder.OrderItems.Count > 1 ||
                                                                         (CurrentOrder.OrderItems.Count == 1 && CurrentOrder.OrderItems[0].Quantity > 1));
-                    if (!CanSplitOrder) ToastNotification.Notify("Non products to split", NotificationType.Warning); return;
+                    if (!CanSplitOrder)
+                    {
+                        ToastNotification.Notify("Non products to split", NotificationType.Warning); return;
+                    }
 
                     SplitViewModel = new SplitViewModel(this);
                     (Parent as MainViewModel)?.OpenDialog(SplitViewModel).OnClose(() =>
@@ -2269,6 +2272,7 @@ namespace FastPosFrontend.ViewModels
         {
             var waiters = e.Settings.FirstOrDefault(o => o is IEnumerable<Waiter>) as IEnumerable<Waiter>;
             Waiters = new BindableCollection<Waiter>(waiters);
+            NotifyOfPropertyChange(nameof(Waiters));
 
         }
 
@@ -2276,6 +2280,7 @@ namespace FastPosFrontend.ViewModels
         {
             var deliverymen = e.Settings.FirstOrDefault(o => o is IEnumerable<Deliveryman>) as IEnumerable<Deliveryman>;
             Delivereymen = new BindableCollection<Deliveryman>(deliverymen);
+            NotifyOfPropertyChange(nameof(Delivereymen));
 
         }
 

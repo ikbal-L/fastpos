@@ -82,7 +82,7 @@ namespace ServiceLib.Service.StateManager
 
         public static StateManager Instance => _instance ??= new StateManager();
 
-        public static ICollection<T> Get<T, Id>() where T : IState<Id> where Id : struct 
+        public static ICollection<T> GetAll<T, Id>() where T : IState<Id> where Id : struct 
         {
             var key = typeof(T);
             IsStateManaged<T, Id>(key);
@@ -95,7 +95,7 @@ namespace ServiceLib.Service.StateManager
 
         public static TState GetById<TState, Id>(Id id) where TState : IState<Id> where Id : struct
         {
-            return Get<TState, Id>().FirstOrDefault(state=> state.Id.Equals(id));
+            return GetAll<TState, Id>().FirstOrDefault(state=> state.Id.Equals(id));
         }
 
         public static bool Save<T, Id>(T state) where T : class, IState<Id> where Id : struct
@@ -117,7 +117,7 @@ namespace ServiceLib.Service.StateManager
                         if (!tState.Contains(state)) tState.Add(state);
                     }
 
-                    //TODO TRACK NULL POINTER EXCEPTION WHEN CREATING A NEW USER
+                 
                     if (Association.ContainsKey(key))
                     {
                         Association[key]();
@@ -125,10 +125,7 @@ namespace ServiceLib.Service.StateManager
                     return true;
                 }
 
-                if (status == 422)
-                {
-                    
-                }
+                
 
 
             }
@@ -137,7 +134,7 @@ namespace ServiceLib.Service.StateManager
         }
 
 
-        public static bool Save<T, Id>(IEnumerable<T> state) where T : IState<Id> where Id : struct
+        public static bool SaveAll<T, Id>(IEnumerable<T> state) where T : IState<Id> where Id : struct
         {
             var key = typeof(T);
 

@@ -11,13 +11,22 @@ using System.Threading.Tasks;
 
 namespace FastPosFrontend.Configurations
 {
-    public class PosConfig:PropertyChangedBase, IConfiguration
+    public class PosConfig : PropertyChangedBase, IConfiguration
     {
         public const string FILE_NAME = "pos.appconfig";
-        
-        [DataMember]
-        public GeneralSettings General { get; set; } = new GeneralSettings();
+        private GeneralSettings _general = new GeneralSettings();
 
+        [DataMember]
+        public GeneralSettings General
+        {
+            get => _general; 
+            set
+            {
+                _general.SaveRequested-= General_SaveRequested;
+                _general = value;
+                _general.SaveRequested += General_SaveRequested;
+            }
+        }
         [DataMember]
         public Printing Printing { get; set; } = new Printing();
         [DataMember]
@@ -31,7 +40,7 @@ namespace FastPosFrontend.Configurations
 
         public PosConfig()
         {
-            General.SaveRequested += General_SaveRequested;
+            
             LoginHistory.SaveRequested += LoginHistory_SaveRequested;
             ProductLayout.SaveRequested += ProductLayout_SaveRequested;
             Printing.SaveRequested += Printing_SaveRequested;
@@ -60,9 +69,9 @@ namespace FastPosFrontend.Configurations
 
         public void ForwardRequest(object source)
         {
-            SaveRequested?.Invoke(this, new SaveRequestedEventArgs() { OriginalSource = source});
+            SaveRequested?.Invoke(this, new SaveRequestedEventArgs() { OriginalSource = source });
         }
 
-        
+
     }
 }
