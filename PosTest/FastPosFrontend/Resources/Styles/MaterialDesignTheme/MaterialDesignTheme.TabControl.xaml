@@ -108,7 +108,7 @@
                                                 <SineEase EasingMode="EaseOut" />
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_BackgroundSelection" To="0.12" BeginTime="0:0:0.3" Duration="0" />
+                                        <!--<DoubleAnimation Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_BackgroundSelection" To="0.12" BeginTime="0:0:0.3" Duration="0" />-->
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Unselected">

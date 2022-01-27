@@ -30,9 +30,11 @@ using FastPosFrontend.ViewModels.SubViewModel;
 using LaunchDarkly.EventSource;
 using Netina.Stomp.Client;
 using Newtonsoft.Json;
+using ServiceInterface.Interface;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
+using Utilities.Extensions;
 using Utilities.Mutation.Observers;
 using Table = ServiceInterface.Model.Table;
 
@@ -138,6 +140,7 @@ namespace FastPosFrontend.ViewModels
 
         protected override void Setup()
         {
+            _orderRepo  = StateManager.GetService<Order, IOrderRepository>();
             var categories = StateManager.GetAsync<Category>();
             var unprocessedOrders = StateManager.GetAsync<Order>(predicate: "unprocessed");
             _data = new NotifyAllTasksCompletion(categories, unprocessedOrders);
@@ -158,6 +161,9 @@ namespace FastPosFrontend.ViewModels
             OrdersCollectionObserver = new CollectionMutationObserver<Order>(Orders,true,true);
             OrdersCollectionViewSource = new CollectionViewSource() { Source  = Orders };
 
+            var recentOrdersPageRetreiver = new PageRetriever<Order>(RetriveRecentOrdersPage);
+            RecentOrders = new Paginator<Order>(recentOrdersPageRetreiver);
+            RecentOrders.GoToPage(0);
 
             OrdersCollectionViewSource.SortDescriptions.Add(new SortDescription() { PropertyName = nameof(Order.OrderTime),Direction = ListSortDirection.Descending});
             ProductsPage = new BindableCollection<Product>();
@@ -172,11 +178,7 @@ namespace FastPosFrontend.ViewModels
             && orderItem.State != OrderItemState.Removed; ;
 
             Task.Run(CalculateOrderElapsedTime);
-            if (IsRunningFromXUnit)
-            {
-                CurrentOrder = new Order();
-                Orders.Add(CurrentOrder);
-            }
+          
 
             AllProducts = products.ToList();
             AllCategories = categories.ToList();
@@ -224,7 +226,21 @@ namespace FastPosFrontend.ViewModels
             await eventManager.ListenAsync<Message<List<long>>>("/topic/messages/locks",receiveFullMessage:true);
         }
 
-
+        private Page<Order> RetriveRecentOrdersPage(int pageIndex, int pageSize)
+        {
+            var orderFilter = new OrderFilter()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                OrderBy = "orderTime",
+                SortOrder = SortOrder.Desc,
+                States = { OrderState.Delivered, OrderState.Credit, OrderState.Payed }
+            };
+            var result = _orderRepo.GetByCriterias(orderFilter);
+            result.Elements.ForEach(e => e.PropertyChanged += CurrentOrder_PropertyChanged);
+            
+            return result;
+        }
 
         private void OnOrderLocked(IMessage<List<long>> message)
         {            
@@ -383,8 +399,14 @@ namespace FastPosFrontend.ViewModels
                 }
             }
 
-            if (e.PropertyName == nameof(Order.IsModifiable)|| e.PropertyName == nameof(Order.State))
+            if (e.PropertyName == nameof(Order.IsModifiable))
             {
+                NotifyOfPropertyChange(nameof(CanModifyCurrentOrder));
+                
+            }
+            if (e.PropertyName == nameof(Order.State))
+            {
+                NotifyOfPropertyChange(nameof(IsCurrentOrderPayed));
                 NotifyOfPropertyChange(nameof(CanModifyCurrentOrder));
             }
         }
@@ -565,11 +587,13 @@ namespace FastPosFrontend.ViewModels
                 {
                     _currentOrder = value;
                 }
+                IsEditingPayedOrderEnabled = false;
 
                 SetSelectedInListedOrdersDisplayedOrder();
                 OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
                 NotifyOfPropertyChange(() => CurrentOrder);
                 NotifyOfPropertyChange(() => CanModifyCurrentOrder);
+                NotifyOfPropertyChange(() => IsCurrentOrderPayed);
             }
         }
 
@@ -709,6 +733,7 @@ namespace FastPosFrontend.ViewModels
         private decimal _currentOrderTotal;
         private StompClient client;
         private EventManagement.EventManager eventManager;
+        private IOrderRepository _orderRepo;
 
         public decimal CurrentOrderTotal
         {
@@ -826,9 +851,9 @@ namespace FastPosFrontend.ViewModels
             
 
             OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
-            //OrderItemsCollectionViewSource.View.Refresh();
+
             CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
-            //DisplayedOrder = CurrentOrder;
+
             Orders.Add(CurrentOrder);
 
             OrdersCollectionObserver.ObserveItem(CurrentOrder);
@@ -841,6 +866,7 @@ namespace FastPosFrontend.ViewModels
             SelectedDeliveryman = null;
             SelectedWaiter = null;
             CustomerViewModel.SelectedCustomer = null;
+            
         }
 
         public void LockOrder()
@@ -971,8 +997,7 @@ namespace FastPosFrontend.ViewModels
             {
                 return;
             }
-
-            NumericZone = CurrentOrder.NewTotal.ToString();
+            NumericZone = CurrentOrderTotal.ToString();
         }
 
         public void SetNullCurrentOrder()
@@ -1017,12 +1042,17 @@ namespace FastPosFrontend.ViewModels
             }
 
             
-            if (CurrentOrder?.Id == null)
+            if (CurrentOrder?.OrderNumber == null)
             {
-                Orders.Remove(CurrentOrder);
-                WaitingViewModel?.Orders.Refresh();
-                WaitingViewModel?.NotifyOfPropertyChange(nameof(WaitingViewModel.OrderCount));
-                CurrentOrder = null;
+
+                if (StateManager.Delete(CurrentOrder)) 
+                {
+                    Orders.Remove(CurrentOrder);
+                    WaitingViewModel?.Orders.Refresh();
+                    WaitingViewModel?.NotifyOfPropertyChange(nameof(WaitingViewModel.OrderCount));
+                    CurrentOrder = null;
+                }
+                
                 return;
             }
 
@@ -1175,7 +1205,7 @@ namespace FastPosFrontend.ViewModels
         {
             if (cmd == ActionButton.CopyToNumericZone)
             {
-                if (CurrentOrder != null) NumericZone = CurrentOrder.NewTotal + "";
+                if (CurrentOrder != null) NumericZone = CurrentOrderTotal + "";
                 return;
             }
 
@@ -1452,7 +1482,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (payedAmount < CurrentOrder.NewTotal)
+            if (payedAmount < CurrentOrderTotal)
             {
                 ToastNotification.Notify("Payed amount lower than total", NotificationType.Warning);
                 return;
@@ -1460,12 +1490,14 @@ namespace FastPosFrontend.ViewModels
 
 
             CurrentOrder.GivenAmount = payedAmount;
-            CurrentOrder.ReturnedAmount = CurrentOrder.NewTotal - payedAmount;
+            CurrentOrder.ReturnedAmount = CurrentOrderTotal - payedAmount;
             CurrentOrder.State = OrderState.Payed;
+            CurrentOrder.PreEditTotal = CurrentOrder.NewTotal;
+            IsEditingPayedOrderEnabled = false;
 
             ReturnedAmount = CurrentOrder.ReturnedAmount;
             _printOrder = _currentOrder;
-            //SaveCurrentOrder(o=>RaiseOrderEvent(EventType.PAY_ORDER,o));
+
             SaveCurrentOrder();
             GivenAmount = 0;
             
@@ -2415,8 +2447,14 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-     
+        public bool IsCurrentOrderPayed => CurrentOrder?.State == OrderState.Payed;
 
+        public Paginator<Order> RecentOrders { get; private set; }
+
+        public void OnRecentOrdersPopupOpened()
+        {
+            RecentOrders.Reload();
+        }
     }
 
     public enum OrderProp

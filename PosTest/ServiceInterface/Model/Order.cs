@@ -24,7 +24,7 @@ namespace ServiceInterface.Model
         private ObservableCollection<OrderItem> _orderItems;
         private Table _table;
         private Order _splittedFrom;
-        private OrderState? _state;
+        private OrderState? _state = OrderState.Temporary;
         private OrderType? _type;
         private TimeSpan _elapsedTime;
         private BindableCollection<Order> _orders;
@@ -441,7 +441,8 @@ namespace ServiceInterface.Model
         DeliveredPartiallyPaid,
         Credit,
         CreditRePaid,
-        CreditPartiallyRePaid
+        CreditPartiallyRePaid,
+        Temporary
     }
 
     public enum OrderType

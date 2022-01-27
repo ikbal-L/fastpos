@@ -108,6 +108,7 @@
                                 <Button 
                                 Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" 
                                 CommandParameter="{Binding}" HorizontalAlignment="Stretch"
+                                    
                                 
                                     Style="{StaticResource ContainerButtonStyle}" 
                                     VerticalContentAlignment="Center" Cursor="Hand">

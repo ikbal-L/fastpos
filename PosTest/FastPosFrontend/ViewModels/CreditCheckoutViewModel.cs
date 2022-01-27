@@ -403,7 +403,7 @@ namespace FastPosFrontend.ViewModels
             return result;
         }
 
-        public Page<Order> RetrivePaidOrdersPage(int pageIndex, int pageSize )
+        public Page<Order> RetrivePaidOrdersPage(int pageIndex, int pageSize)
         {
             if (SelectedCustomer == null)
             {

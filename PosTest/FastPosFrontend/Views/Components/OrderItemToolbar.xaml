@@ -63,7 +63,10 @@
 
         </ToolBar>
         <ToolBar>
-            <Button Foreground="{StaticResource Button.Static.Border}"  cal:Message.Attach="[Event Click] = [Action EditPayedOrder()]" >
+            <Button 
+                Foreground="{StaticResource Button.Static.Border}"  
+                cal:Message.Attach="[Event Click] = [Action EditPayedOrder()]"
+                IsEnabled="{Binding IsCurrentOrderPayed}">
                 <md:PackIcon Width="30" Height="30"  >
                     <md:PackIcon.Style>
                         <Style TargetType="md:PackIcon">

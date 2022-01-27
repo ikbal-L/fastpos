@@ -405,7 +405,7 @@ namespace FastPosFrontend.ViewModels
             return result;
         }
 
-        public Page<Payment> RetrivePaymentPage(int pageIndex, int pageSize )
+        public Page<Payment> RetrivePaymentPage(int pageIndex, int pageSize)
         {
             if (SelectedDeliveryman == null)
             {

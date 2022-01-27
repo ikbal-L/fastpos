@@ -5,7 +5,8 @@
                     xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:ex="clr-namespace:FastPosFrontend.Extensions" 
-                    xmlns:converters="clr-namespace:FastPosFrontend.Converters">
+                    xmlns:converters="clr-namespace:FastPosFrontend.Converters"
+                    xmlns:controles="clr-namespace:FastPosFrontend.SL.Controls">
 
     <converters:OrderTypeToPackIconKindConverter x:Key="OrderTypeToPackIconKindConverter"/>
 
@@ -27,7 +28,7 @@
                     <Setter Property="Height" Value="50"></Setter>
                     <Setter Property="FontWeight" Value="Bold"></Setter>
                     <Setter Property="Foreground" Value="White"></Setter>
-                    <Setter Property="Margin" Value="0 0 5 0"></Setter>
+                    <Setter Property="Margin" Value="0 0 0 0"></Setter>
                     <Setter Property="IconBackground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
                     <Setter Property="IconForeground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
 
@@ -47,7 +48,8 @@
             <StackPanel Orientation="Horizontal">
                 <!--<Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                         Content="{md:PackIcon Kind=ChevronLeft}"/>-->
-                <md:PopupBox StaysOpen="True"  PlacementMode="BottomAndAlignCentres" >
+                <md:PopupBox StaysOpen="True"  PlacementMode="BottomAndAlignCentres" 
+                             cal:Message.Attach="[Event Opened] = [Action OnRecentOrdersPopupOpened()]" >
                     <md:PopupBox.ToggleContent>
                         <md:Chip
                 Margin="3 0"
@@ -69,70 +71,123 @@
                         </md:Chip>
                     </md:PopupBox.ToggleContent>
                     <StackPanel>
-                        <ListBox 
-                            ItemsSource="{Binding OrdersCollectionViewSource.View}" 
+                        <TabControl Style="{StaticResource MaterialDesignTabControl}">
+
+                            <TabControl.Resources>
+                                <Style TargetType="TabItem" BasedOn="{StaticResource MaterialDesignTabItemCompact}" />
+                            </TabControl.Resources>
+
+                            <TabItem Background="{DynamicResource SuccessColorBrush}" BorderBrush="{DynamicResource SuccessColorBrush}">
+
+                                <TabItem.Header>
+                                    <Label Foreground="{DynamicResource SuccessColorBrush}"
+                           Content="{md:PackIcon Kind=Dollar,Size=25}" Padding="0"
+                           />
+                                </TabItem.Header>
+                                <controles:PaginatedContent Paginator="{Binding RecentOrders}" Margin="0 10 0 0">
+                                    <ListBox 
+                            ItemsSource="{Binding RecentOrders.PaginationView}" 
                             SelectedItem="{Binding CurrentOrder}"
                             Width="310"
-                            Height="410"
+                            
                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}">
-                                    <Setter Property="Margin" Value="10 4"/>
-                                    <Setter Property="Padding" Value="0"/>
-                                    <Setter Property="FontWeight" Value="DemiBold"/>
-                                    <Setter Property="Foreground" Value="#DF000000"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueDarkBrush}"/>
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type model:Order}">
-                                    <Grid Margin="10" >
-                                        <Grid.ColumnDefinitions>
-
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="auto" />
-                                            <ColumnDefinition Width="auto" />
-                                        </Grid.ColumnDefinitions>
-                                 
-                                        <Grid.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                                <Setter Property="FontSize" Value="15"/>
-                                                
-                                                <!--<Setter Property="Margin" Value="4 0 0 0"/>-->
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}">
+                                                <Setter Property="Margin" Value="10 4"/>
+                                                <Setter Property="Padding" Value="0"/>
+                                                <Setter Property="FontWeight" Value="DemiBold"/>
+                                                <Setter Property="Foreground" Value="#DF000000"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource SecondaryHueDarkBrush}"/>
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
                                             </Style>
-                                        </Grid.Resources>
-                                        <md:PackIcon Grid.Column="0" Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}" Width="40" Height="40"  />
-                                        <TextBlock Grid.Column="1" Text="{Binding OrderCode,FallbackValue=NEW}" />
-                                        <TextBlock Grid.Column="2" Text="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding NewTotal,StringFormat='C',ConverterCulture='en-DZ'}"/>
-                                        <md:PackIcon Grid.Column="4" Width="25" Height="25" VerticalAlignment="Center" Margin="3">
-                                            <md:PackIcon.Style>
-                                                <Style TargetType="md:PackIcon">
-                                                    <Setter Property="Kind" Value="DollarOff"/>
-                                                    <Setter Property="Foreground" Value="{DynamicResource WarningColorBrush}"/>
-                                                    <Style.Triggers>
-                                                        
-                                                        <DataTrigger Binding="{Binding State}" Value="{x:Static model:OrderState.Payed}">
-                                                            <Setter Property="Kind" Value="Dollar"/>
-                                                            <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </md:PackIcon.Style>
-                                        </md:PackIcon>
-                                        
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type model:Order}">
+                                                <Grid Margin="10" >
+                                                    <Grid.ColumnDefinitions>
+
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Grid.Resources>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                                            <Setter Property="FontSize" Value="15"/>
+
+                                                            <!--<Setter Property="Margin" Value="4 0 0 0"/>-->
+                                                        </Style>
+                                                    </Grid.Resources>
+                                                    <md:PackIcon Grid.Column="0" Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}" Width="40" Height="40"  />
+                                                    <TextBlock Grid.Column="1" Text="{Binding OrderCode,FallbackValue=NEW}" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
+                                                    <TextBlock Grid.Column="3" Text="{Binding NewTotal,StringFormat='C',ConverterCulture='en-DZ'}"/>
+                                                    <md:PackIcon Grid.Column="4" Width="25" Height="25" VerticalAlignment="Center" Margin="3">
+                                                        <md:PackIcon.Style>
+                                                            <Style TargetType="md:PackIcon">
+                                                                <Setter Property="Kind" Value="DollarOff"/>
+                                                                <Setter Property="Foreground" Value="{DynamicResource WarningColorBrush}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding State}" Value="{x:Static model:OrderState.Delivered}">
+                                                                        <Setter Property="Kind" Value="PaymentOnDelivery"/>
+                                                                    </DataTrigger>
+
+                                                                    <DataTrigger Binding="{Binding State}" Value="{x:Static model:OrderState.Credit}">
+                                                                        <Setter Property="Kind" Value="CreditCard"/>
+                                                                    </DataTrigger>
+                                                                    
+                                                                    <DataTrigger Binding="{Binding State}" Value="{x:Static model:OrderState.Payed}">
+                                                                        <Setter Property="Kind" Value="Dollar"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </md:PackIcon.Style>
+                                                    </md:PackIcon>
+                                                    
+                                                    <!--<md:PackIcon Grid.Column="4" Width="25" Height="25" VerticalAlignment="Center" Margin="3">
+                                                        <md:PackIcon.Style>
+                                                            <Style TargetType="md:PackIcon">
+                                                                <Setter Property="Kind" Value="DollarOff"/>
+                                                                <Setter Property="Foreground" Value="{DynamicResource WarningColorBrush}"/>
+                                                                <Style.Triggers>
+
+                                                                    <DataTrigger Binding="{Binding State}" Value="{x:Static model:OrderState.Payed}">
+                                                                        <Setter Property="Kind" Value="Dollar"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </md:PackIcon.Style>
+                                                    </md:PackIcon>-->
+
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </controles:PaginatedContent>
+                            </TabItem>
+
+                            <TabItem Background="{DynamicResource WarningColorBrush}" BorderBrush="{DynamicResource WarningColorBrush}">
+
+                                <TabItem.Header>
+                                    <Label Foreground="{DynamicResource WarningColorBrush}"
+                           Content="{md:PackIcon Kind=DollarOff,Size=25}" Padding="0"
+                           />
+                                </TabItem.Header>
+
+                               
+
+
+                            </TabItem>
+                        </TabControl>
                     </StackPanel>
                 </md:PopupBox>
 

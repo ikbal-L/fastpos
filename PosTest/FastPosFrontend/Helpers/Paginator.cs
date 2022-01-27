@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -19,6 +20,7 @@ namespace FastPosFrontend.Helpers
         Func<T, bool> _filterPredicate;
         Func<bool> _canGoNext;
         Func<bool> _canGoPrevious;
+        Action<T> _beforePaginate;
 
         public int? PageCount { get; set; }
         public int PageSize { get; set; } = 10;
@@ -41,11 +43,11 @@ namespace FastPosFrontend.Helpers
 
         public ObservableCollection<T> ObservableSourceCollection { get; private set; }
 
-        public Paginator(PageRetriever<T> pageRetriever, IEnumerable<T> data = null, Func<T, bool> filterPredicate = null, Func<bool> canGoNext = null, Func<bool> canGoPrevious = null)
+        public Paginator(PageRetriever<T> pageRetriever, IEnumerable<T> data = null, Func<T, bool> filterPredicate = null, Func<bool> canGoNext = null, Func<bool> canGoPrevious = null,Action<T> beforePaginate = null)
         {
             _pageRetriever = pageRetriever;
             _filterPredicate = filterPredicate;
-
+            _beforePaginate = beforePaginate;
             ObservableSourceCollection = ObservableCollectionEx.FromNullable(data);
 
             PaginationCollectionViewSource = new CollectionViewSource() { Source = ObservableSourceCollection };
@@ -89,6 +91,13 @@ namespace FastPosFrontend.Helpers
             if (CanGoToNextPage())
             {
                 CurrentPage++;
+                if (_beforePaginate!= null)
+                {
+                    foreach (var item in ObservableSourceCollection)
+                    {
+                        _beforePaginate(item);
+                    }
+                }
                 BeforePaginatingToNextPage();
                 PaginationCollectionViewSource?.View?.Refresh();
             }
@@ -128,6 +137,16 @@ namespace FastPosFrontend.Helpers
             PaginationView?.Refresh();
         }
 
+        public void GoToPage(int pageIndex)
+        {
+            CurrentPage = pageIndex;
+            ObservableSourceCollection.Clear();
+            var page = _pageRetriever.Retrieve(CurrentPage, PageSize);
+            PageCount = page.TotalPages;
+            ObservableSourceCollection.AddRange(page.Elements);
+            PaginationView?.Refresh();
+        }
+
         public bool CanGoToNextPage()
         {
             var predicate = _canGoNext?.Invoke() ?? true;
@@ -136,6 +155,10 @@ namespace FastPosFrontend.Helpers
         }
 
         public bool CanGoToPreviousPage() => _currentPage > 0;
+
+       
+
+        
 
     }
 
@@ -169,6 +192,8 @@ namespace FastPosFrontend.Helpers
             
             return _retrieverAsync?.Invoke(pageIndex, pageSize);
         }
+
+        
 
     }
 
