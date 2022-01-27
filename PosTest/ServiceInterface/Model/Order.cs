@@ -21,7 +21,7 @@ namespace ServiceInterface.Model
         private decimal _givenAmount;
         private decimal _returnedAmount;
         private decimal _discountPercentage;
-        private BindableCollection<OrderItem> _orderItems;
+        private ObservableCollection<OrderItem> _orderItems;
         private Table _table;
         private Order _splittedFrom;
         private OrderState? _state;
@@ -33,7 +33,7 @@ namespace ServiceInterface.Model
 
         public Order()
         {
-            OrderItems = new BindableCollection<OrderItem>();
+            OrderItems = new ObservableCollection<OrderItem>();
 
             OrderItems.CollectionChanged +=
                 (s, e) =>
@@ -51,14 +51,14 @@ namespace ServiceInterface.Model
             BuyerId = buyerId;
         }
 
-        public Order(BindableCollection<Order> orders) : this()
+        public Order(ObservableCollection<Order> orders) : this()
         {
             Orders = orders;
             ProductsVisibility = true;
             ShownAdditivesPage = new BindableCollection<Additive>();
         }
 
-        public BindableCollection<Order> Orders { get; set; }
+        public ObservableCollection<Order> Orders { get; set; }
 
         [DataMember(IsRequired = true)]
         public long? Id { get; set; }
@@ -275,7 +275,7 @@ namespace ServiceInterface.Model
 
         [DataMember]
         [ObserveMutations(MutationObserverFlags.CollectionObservingItems)]
-        public BindableCollection<OrderItem> OrderItems
+        public ObservableCollection<OrderItem> OrderItems
         {
             get => _orderItems;
             set
@@ -345,6 +345,8 @@ namespace ServiceInterface.Model
         }
 
         public bool AdditivesVisibility { get; set; }
+
+        public decimal? PreEditTotal { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

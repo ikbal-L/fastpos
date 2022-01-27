@@ -4,6 +4,7 @@ using ServiceLib.Service.StateManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utilities.Extensions.Collections;
 
 namespace FastPosFrontend.Helpers
 {
@@ -175,6 +176,7 @@ namespace FastPosFrontend.Helpers
             {
                 var additives = new List<Additive>();
                 var product = products.FirstOrDefault(p => p.Id == oit.ProductId);
+                oit.Order = order;
                 if (product != null)
                 {
                     if (product.IsPlatter)
@@ -187,7 +189,7 @@ namespace FastPosFrontend.Helpers
                             additives.Add(newAdditive);
                         }
 
-                        oit.Order = order;
+                        
                     }
 
                     if (product == null)

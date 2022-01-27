@@ -124,7 +124,7 @@ namespace ServiceLib.Service
 
         public async Task<(int status, IEnumerable<T>)> GetAllAsync(string endpoint,string? subpath = null)
         {
-            return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(endpoint));
+            return await GenericRest.GetThingAsync<IEnumerable<T>>(Api.Resource<T>(endpoint,subpath));
         }
 
         public Page<T> GetByCriterias(object criterias)

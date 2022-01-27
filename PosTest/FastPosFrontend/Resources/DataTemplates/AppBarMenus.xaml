@@ -72,7 +72,7 @@
                         <ListBox 
                             ItemsSource="{Binding OrdersCollectionViewSource.View}" 
                             SelectedItem="{Binding CurrentOrder}"
-                            Width="300"
+                            Width="310"
                             Height="410"
                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
                             <ListBox.ItemContainerStyle>
@@ -98,6 +98,7 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
                                         </Grid.ColumnDefinitions>
                                  
                                         <Grid.Resources>
@@ -112,7 +113,21 @@
                                         <TextBlock Grid.Column="1" Text="{Binding OrderCode,FallbackValue=NEW}" />
                                         <TextBlock Grid.Column="2" Text="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
                                         <TextBlock Grid.Column="3" Text="{Binding NewTotal,StringFormat='C',ConverterCulture='en-DZ'}"/>
-                                     
+                                        <md:PackIcon Grid.Column="4" Width="25" Height="25" VerticalAlignment="Center" Margin="3">
+                                            <md:PackIcon.Style>
+                                                <Style TargetType="md:PackIcon">
+                                                    <Setter Property="Kind" Value="DollarOff"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource WarningColorBrush}"/>
+                                                    <Style.Triggers>
+                                                        
+                                                        <DataTrigger Binding="{Binding State}" Value="{x:Static model:OrderState.Payed}">
+                                                            <Setter Property="Kind" Value="Dollar"/>
+                                                            <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </md:PackIcon.Style>
+                                        </md:PackIcon>
                                         
                                     </Grid>
                                 </DataTemplate>

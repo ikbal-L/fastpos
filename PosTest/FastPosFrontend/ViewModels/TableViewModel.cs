@@ -32,9 +32,10 @@ namespace FastPosFrontend.ViewModels
 
         private void OrdersViewSource_Filter(object sender, FilterEventArgs e)
         {
+            OrderState?[] filteredStates = { OrderState.Canceled, OrderState.Payed, OrderState.Removed };
             if (e.Item is Order order)
             {
-                e.Accepted = order.Table == Table;
+                e.Accepted = order.Table == Table && !filteredStates.Contains((order.State));
             }
         }
         public ObservableCollection<Order> Orders { get; set; }

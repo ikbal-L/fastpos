@@ -149,11 +149,12 @@ namespace FastPosFrontend.ViewModels
             var waiter = StateManager.GetAll<Waiter>();
             var tables = StateManager.GetAll<Table>();
             var customers = StateManager.GetAll<Customer>();
-            var unprocessedOrders = StateManager.GetAll<Order>();
+            var unprocessedOrders = StateManager.GetAll<Order>().ToList();
             var categories = StateManager.GetAll<Category>();
             var products = StateManager.GetAll<Product>();
-
+            unprocessedOrders.ForEach(o => o.PropertyChanged += CurrentOrder_PropertyChanged);
             Orders = new BindableCollection<Order>(unprocessedOrders);
+            
             OrdersCollectionObserver = new CollectionMutationObserver<Order>(Orders,true,true);
             OrdersCollectionViewSource = new CollectionViewSource() { Source  = Orders };
 
@@ -370,8 +371,21 @@ namespace FastPosFrontend.ViewModels
             {
                 if (CurrentOrder!= null)
                 {
-                    CurrentOrderTotal = CurrentOrder.NewTotal;
+                    if (CurrentOrder.State == OrderState.Payed)
+                    {
+                        CurrentOrderTotal = CurrentOrder.NewTotal - (CurrentOrder.PreEditTotal?? CurrentOrder.NewTotal);
+                    }
+                    else
+                    {
+                        CurrentOrderTotal = CurrentOrder.NewTotal;
+
+                    }
                 }
+            }
+
+            if (e.PropertyName == nameof(Order.IsModifiable)|| e.PropertyName == nameof(Order.State))
+            {
+                NotifyOfPropertyChange(nameof(CanModifyCurrentOrder));
             }
         }
 
@@ -392,6 +406,15 @@ namespace FastPosFrontend.ViewModels
         public List<Category> AllCategories { get; set; }
 
         #endregion
+
+        private bool _isEditingPayedOrderEnabled;
+
+        public bool IsEditingPayedOrderEnabled
+        {
+            get { return _isEditingPayedOrderEnabled; }
+            set { Set(ref _isEditingPayedOrderEnabled, value); }
+        }
+
         public bool CanSplitOrder
         {
             get => _IsDialogOpen;
@@ -526,7 +549,7 @@ namespace FastPosFrontend.ViewModels
         public BindableCollection<Category> Categories { get; set; }
 
         public CollectionViewSource PaginatedCategories { get; set; }
-        public BindableCollection<Order> Orders { get; set; }
+        public ObservableCollection<Order> Orders { get; set; }
         public BindableCollection<Customer> Customers { get; set; }
 
         public Order CurrentOrder
@@ -546,6 +569,7 @@ namespace FastPosFrontend.ViewModels
                 SetSelectedInListedOrdersDisplayedOrder();
                 OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
                 NotifyOfPropertyChange(() => CurrentOrder);
+                NotifyOfPropertyChange(() => CanModifyCurrentOrder);
             }
         }
 
@@ -954,7 +978,7 @@ namespace FastPosFrontend.ViewModels
         public void SetNullCurrentOrder()
         {
             CurrentOrder?.SaveScreenState(CurrentCategory, AdditivesPage, ProductsVisibility, AdditivesVisibility);
-
+            
             _currentOrder = null;
             SelectedDeliveryman = null;
             SelectedWaiter = null;
@@ -968,14 +992,20 @@ namespace FastPosFrontend.ViewModels
             {
                 return;
             }
-
-            Orders.Remove(CurrentOrder);
+            WaitingViewModel?.Orders?.Refresh();
+            TakeAwayViewModel?.Orders?.Refresh();
+            DeliveryViewModel?.Orders?.Refresh();
+            TablesViewModel?.Tables?.ToList()?.ForEach(t => t?.Orders?.Refresh());
+            //Orders.Remove(CurrentOrder);
 
             var result = OrdersCollectionObserver?.UnObserve(CurrentOrder);
 
-            CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
+            if (CurrentOrder.State != OrderState.Payed)
+            {
+                CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged; 
+            }
             CurrentOrder = null;
-            SetCurrentOrderTypeAndRefreshOrdersLists(null);
+            //SetCurrentOrderTypeAndRefreshOrdersLists(null);
         }
 
         public void CancelOrder()
@@ -2353,6 +2383,39 @@ namespace FastPosFrontend.ViewModels
                     }
                 });
         }
+
+        public void EditPayedOrder()
+        {
+            
+            IsEditingPayedOrderEnabled = !IsEditingPayedOrderEnabled;
+            
+            if (CurrentOrder!= null)
+            {
+                if (!CurrentOrder.PreEditTotal.HasValue)
+                {
+                    CurrentOrder.PreEditTotal = CurrentOrder.NewTotal; 
+                }
+            }
+            NotifyOfPropertyChange(nameof(CanModifyCurrentOrder));
+
+        }
+
+        public bool CanModifyCurrentOrder { 
+            get
+            {
+                if (CurrentOrder != null)
+                {
+                    if (CurrentOrder.State == OrderState.Payed)
+                    {
+                        return CurrentOrder.IsModifiable && IsEditingPayedOrderEnabled;
+                    }
+                    return CurrentOrder.IsModifiable;
+                }
+                return true;
+            }
+        }
+
+     
 
     }
 

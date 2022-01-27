@@ -128,6 +128,13 @@ namespace Utilities.Extensions.Collections
         {
             return new ObservableCollection<T>(source);
         }
+        public static void AddRange<T>(this ICollection<T> collection,IEnumerable<T> items)
+        {
+            foreach (var item in items)
+            {
+                collection.Add(item);
+            }
+        }
     }
 
     public static class KeyValuePairEx

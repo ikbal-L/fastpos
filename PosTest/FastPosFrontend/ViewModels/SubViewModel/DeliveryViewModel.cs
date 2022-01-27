@@ -25,8 +25,8 @@ namespace FastPosFrontend.ViewModels.SubViewModel
             Order order = e.Item as Order;
             if (order != null)
             {
-                // Filter out products with price 25 or above
-                if (order.Type == OrderType.Delivery)
+                OrderState?[] filteredStates = { OrderState.Canceled, OrderState.Payed, OrderState.Removed };
+                if (order.Type == OrderType.Delivery&& !filteredStates.Contains((order.State)))
                 {
                     e.Accepted = true;
                 }

@@ -24,7 +24,8 @@ namespace ServiceInterface.Interface
 
         Task<(int,IEnumerable<T>)> GetAllAsync();
 
-        Task<(int status, IEnumerable<T>)> GetAllAsync(string endpoint,string? subpath = null);
+        Task<(int status, IEnumerable<T>)> GetAllAsync(string endpoint, string? subpath = null);
+        
 
         Page<T> GetByCriterias(object criterias);
 
