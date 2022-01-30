@@ -19,11 +19,9 @@
         
         >
     <Window.Resources>
-        <x:Array x:Key="Test" Type="{x:Type models:Order}">
-        <models:Order >
-          
-        </models:Order>
-        </x:Array>
+        <!--<x:Array x:Key="Test" Type="{x:Type models:Order}">
+        
+        </x:Array>-->
     </Window.Resources>
     <Grid>
         <ListBox ItemsSource="{StaticResource Test}" ItemTemplate="{StaticResource CustomerTicketDataTemplate}">

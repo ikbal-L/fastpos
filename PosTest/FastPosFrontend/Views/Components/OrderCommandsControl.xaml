@@ -6,10 +6,24 @@
              xmlns:local="clr-namespace:FastPosFrontend.Views.Components" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:mdl ="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              xmlns:enums="clr-namespace:FastPosFrontend.Enums"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:CheckoutViewModel}">
+    <UserControl.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}" x:Key="MDNumpadButton">
+            
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="2.5"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="materialdesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
+        </Style>
+    </UserControl.Resources>
     <Grid   >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -20,16 +34,10 @@
            
 
             <Panel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+               
+
+                <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}">
                     <Setter Property="Width" Value="45"/>
-                    <Setter Property="Height" Value="45"/>
-                    <Setter Property="Margin" Value="2.5"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="FontSize" Value="18"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-                    <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
-                    <Setter Property="materialdesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
                 </Style>
             </Panel.Resources>
 
@@ -177,15 +185,38 @@
 
             <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
                                 Content="{materialdesign:PackIcon Kind=AccountCash, Size=30}"
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Credit}"/>
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Credit}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}">
+                      
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.Payed}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
                                 Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.DElIVERED}"/>
-            
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.DElIVERED}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}">
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.Payed}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
+            </Button>
 
 
-         
+
+
 
             <Button Grid.Row="1" Grid.Column="1"
                                 Content="{materialdesign:PackIcon ChefHat, 30 }"
@@ -208,7 +239,18 @@
 
             <Button Grid.Row="3" Grid.Column="2" 
                                 Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Split}"/>
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Split}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}">
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.Payed}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
 
 

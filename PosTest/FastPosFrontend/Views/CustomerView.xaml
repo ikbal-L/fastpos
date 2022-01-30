@@ -105,7 +105,7 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate  DataType="model:Customer">
-                                <Button 
+                                <Button Height="170"
                                 Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" 
                                 CommandParameter="{Binding}" HorizontalAlignment="Stretch"
                                     

@@ -17,8 +17,7 @@ namespace FastPosFrontend.ViewModels.SubViewModel
             OrderViewSource = new CollectionViewSource();
             OrderViewSource.Source = Parent.Orders;
             OrderViewSource.Filter += OrderTypeFilter;
-            Orders = OrderViewSource.View;// CollectionViewSource.GetDefaultView(Parent.Orders);
-            //Orders.Filter = o => (o as Order).Type == OrderType.InWaiting;
+            Orders = OrderViewSource.View;
         }
         public CollectionViewSource OrderViewSource { get; set; }
         public CheckoutViewModel Parent { get; set; }

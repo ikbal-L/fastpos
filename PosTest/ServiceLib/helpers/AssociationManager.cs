@@ -41,6 +41,21 @@ namespace ServiceLib.helpers
             }
         }
 
+        public void Map<TOne>(ICollection<TOne> collectionOfTOne, IDictionary<Type, object> state)
+        {
+            var keyOfTOne = typeof(TOne);
+            if (!_associations.ContainsKey(keyOfTOne) || _associations[keyOfTOne] == null ||
+                !_associations[keyOfTOne].Any()) return;
+
+            foreach (var keyOfTMany in _associations[keyOfTOne].Keys)
+            {
+                var collectionOfTMany = state[keyOfTMany];
+                var map = _associations[keyOfTOne][keyOfTMany];
+                map((IEnumerable<object>)collectionOfTOne, (IEnumerable<object>)collectionOfTMany);
+
+            }
+        }
+
         public List<Type> GetAssociationsOf<T>()
         {
             var key = typeof(T);

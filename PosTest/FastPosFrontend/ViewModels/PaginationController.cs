@@ -17,6 +17,16 @@ namespace FastPosFrontend.ViewModels
             NextPageCommand = new DelegateCommandBase(NextPage, CanGoToNextPage);
             PreviousPageCommand = new DelegateCommandBase(PreviousPage, CanGoToPreviousPage);
             _paginator.PageChanged += OnPageChanged;
+            _paginator.PropertyChanged += _paginator_PropertyChanged;
+        }
+
+        private void _paginator_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IPaginator.PageCount))
+            {
+                (NextPageCommand as DelegateCommandBase)?.RaiseCanExecuteChanged();
+                (PreviousPageCommand as DelegateCommandBase)?.RaiseCanExecuteChanged();
+            }
         }
 
         private void OnPageChanged(object sender, PageChangedEventArgs e)

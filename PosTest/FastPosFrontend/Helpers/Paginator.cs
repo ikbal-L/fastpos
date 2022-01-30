@@ -1,10 +1,6 @@
-﻿using Caliburn.Micro;
-using Caliburn.Micro;
-using ServiceInterface.Model;
+﻿using ServiceInterface.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,37 +9,16 @@ using System.Windows.Data;
 
 namespace FastPosFrontend.Helpers
 {
-    public class Paginator<T> : PropertyChangedBase, IPaginator<T> where T : class
+    public class Paginator<T> : PaginatorBase<T> where T : class
     {
-        private int _currentPage = 0;
+
         private readonly PageRetriever<T> _pageRetriever;
         Func<T, bool> _filterPredicate;
         Func<bool> _canGoNext;
         Func<bool> _canGoPrevious;
         Action<T> _beforePaginate;
 
-        public int? PageCount { get; set; }
-        public int PageSize { get; set; } = 10;
-
-        public int CurrentPage
-        {
-            get => _currentPage;
-            set
-            {
-                Set(ref _currentPage, value);
-                RaisePageChanged();
-            }
-        }
-
-        public CollectionViewSource PaginationCollectionViewSource { get; private set; }
-
-        public ICollectionView PaginationView => PaginationCollectionViewSource.View;
-
-        public event EventHandler<PageChangedEventArgs> PageChanged;
-
-        public ObservableCollection<T> ObservableSourceCollection { get; private set; }
-
-        public Paginator(PageRetriever<T> pageRetriever, IEnumerable<T> data = null, Func<T, bool> filterPredicate = null, Func<bool> canGoNext = null, Func<bool> canGoPrevious = null,Action<T> beforePaginate = null)
+        public Paginator(PageRetriever<T> pageRetriever , IEnumerable<T> data = null, Func<T, bool> filterPredicate = null, Func<bool> canGoNext = null, Func<bool> canGoPrevious = null,Action<T> beforePaginate = null)
         {
             _pageRetriever = pageRetriever;
             _filterPredicate = filterPredicate;
@@ -84,9 +59,9 @@ namespace FastPosFrontend.Helpers
             }
         }
 
-        private bool PageContainsItem(int itemIndex) => itemIndex >= PageSize * CurrentPage && itemIndex < PageSize * (CurrentPage + 1);
+        
 
-        public void NextPage()
+        public override void NextPage()
         {
             if (CanGoToNextPage())
             {
@@ -103,7 +78,7 @@ namespace FastPosFrontend.Helpers
             }
         }
 
-        public void PreviousPage()
+        public override void PreviousPage()
         {
             if (CanGoToPreviousPage())
             {
@@ -116,18 +91,20 @@ namespace FastPosFrontend.Helpers
         {
             if (((CurrentPage + 1) * PageSize) >= ObservableSourceCollection.Count)
             {
-                var page = _pageRetriever.Retrieve(CurrentPage, PageSize);
-                PageCount = page.TotalPages;
-                ObservableSourceCollection.AddRange(page.Elements);
+                RetrievePage();
             }
         }
 
-        public void RaisePageChanged()
+        private void RetrievePage()
         {
-            PageChanged?.Invoke(this, new PageChangedEventArgs(_currentPage));
+            var page = _pageRetriever.Retrieve(CurrentPage, PageSize);
+            PageCount = page.TotalPages;
+            ObservableSourceCollection.AddRange(page.Elements);
         }
 
-        public void Reload()
+        
+
+        public override void Reload()
         {
             CurrentPage = 0;
             ObservableSourceCollection.Clear();
@@ -147,51 +124,18 @@ namespace FastPosFrontend.Helpers
             PaginationView?.Refresh();
         }
 
-        public bool CanGoToNextPage()
+       
+
+        public override bool CanGoToNextPage()
         {
             var predicate = _canGoNext?.Invoke() ?? true;
             if (!PageCount.HasValue && predicate) return true;
             return _currentPage+1 < PageCount;
         }
 
-        public bool CanGoToPreviousPage() => _currentPage > 0;
+        public override bool CanGoToPreviousPage() => _currentPage > 0;
 
        
-
-        
-
-    }
-
-    public class PageRetriever<T>
-    {
- 
-
-        private Retriever<T> _retriever;
-        private RetrieverAsync<T> _retrieverAsync;
-
-        public bool IsAsync { get; set; } = false;
-        public PageRetriever(Retriever<T> retriverDelegate)
-        {
-            _retriever = retriverDelegate;
-        }
-
-        public PageRetriever(RetrieverAsync<T> retriever)
-        {
-            _retrieverAsync = retriever;
-            IsAsync = true;
-        }
-
-        public Page<T> Retrieve(int pageIndex, int pageSize)
-        {
-            return _retriever?.Invoke(pageIndex, pageSize);
-        }
-
-        public Task<Page<T>> RetrieveAsync(int pageIndex, int pageSize)
-        {
-            if (!IsAsync) throw new InvalidOperationException($"Can not Call {nameof(RetrieveAsync)} if initialized by Syncronious Retriever");
-            
-            return _retrieverAsync?.Invoke(pageIndex, pageSize);
-        }
 
         
 

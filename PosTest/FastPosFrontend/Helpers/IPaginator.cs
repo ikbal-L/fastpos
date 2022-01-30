@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace FastPosFrontend.Helpers
 {
-    public interface IPaginator
+    public interface IPaginator:INotifyPropertyChanged
     {
         int CurrentPage { get; }
         int? PageCount { get;  }

@@ -11,7 +11,8 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:caliburn="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:tk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel">
     <UserControl.Resources>
         <convert:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter"/>
     </UserControl.Resources>
@@ -22,7 +23,9 @@
                  Background="#FFDDDDDD"   
                  HorizontalContentAlignment="Left"
                  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                 >
+                 VirtualizingPanel.IsVirtualizing="True"
+                 VirtualizingPanel.VirtualizationMode="Recycling"
+                     >
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:Order}">
                     <Grid caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]">
@@ -99,14 +102,14 @@
                                     <Setter Property="Padding" Value="6"/>
                                     <Setter Property="Margin" Value="0"/>
                                     <Style.Triggers>
-                                        <DataTrigger Value="True">
-                                            <DataTrigger.Binding>
+                                        <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}">
+                                            <!--<DataTrigger.Binding>
                                                 <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
                                                     <Binding RelativeSource="{RelativeSource self}" Path="DataContext"/>
                                                     <Binding ElementName="OrdersList" Path="SelectedItem"/>
                                                 </MultiBinding>
-                                            </DataTrigger.Binding>
-                                            <!--Binding="{Binding ElementName=ordersList, Path=SelectedItem}" Value="{Binding}">-->
+                                            </DataTrigger.Binding>-->
+                                         
                                             <Setter Property="BorderThickness" Value="3"></Setter>
                                             <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}"/>
                                         </DataTrigger>
@@ -174,7 +177,7 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel/>
+                        <tk:VirtualizingWrapPanel/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

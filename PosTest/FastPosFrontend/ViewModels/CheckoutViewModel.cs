@@ -105,12 +105,7 @@ namespace FastPosFrontend.ViewModels
         {
             LockOrderCommand = new DelegateCommandBase(LockOrder);
             ActionKeyboardCommand = new DelegateCommandBase(ActionKeyboard);
-            _orderInfoCloseTimer = new DispatcherTimer(){Interval = new TimeSpan(0, 0, 3)};
-            _orderInfoCloseTimer.Tick += (sender, args) =>
-            {
-                IsOrderInfoShown = false;
-                _orderInfoCloseTimer.Stop();
-            };
+         
            
             SetupEmbeddedCommandBar();
             SetupEmbeddedStatusBar();
@@ -155,7 +150,7 @@ namespace FastPosFrontend.ViewModels
             var unprocessedOrders = StateManager.GetAll<Order>().ToList();
             var categories = StateManager.GetAll<Category>();
             var products = StateManager.GetAll<Product>();
-            unprocessedOrders.ForEach(o => o.PropertyChanged += CurrentOrder_PropertyChanged);
+            //unprocessedOrders.ForEach(o => o.PropertyChanged += CurrentOrder_PropertyChanged);
             Orders = new BindableCollection<Order>(unprocessedOrders);
             
             OrdersCollectionObserver = new CollectionMutationObserver<Order>(Orders,true,true);
@@ -163,9 +158,12 @@ namespace FastPosFrontend.ViewModels
 
             var recentOrdersPageRetreiver = new PageRetriever<Order>(RetriveRecentOrdersPage);
             RecentOrders = new Paginator<Order>(recentOrdersPageRetreiver);
-            RecentOrders.GoToPage(0);
 
-            OrdersCollectionViewSource.SortDescriptions.Add(new SortDescription() { PropertyName = nameof(Order.OrderTime),Direction = ListSortDirection.Descending});
+            RecentUnpaidOrders = new CollectionPaginator<Order>(Orders);
+
+            RecentUnpaidOrders.PaginationCollectionViewSource.SortDescriptions.Add(new SortDescription() { PropertyName = nameof(Order.OrderTime),Direction = ListSortDirection.Descending});
+            
+            
             ProductsPage = new BindableCollection<Product>();
             AdditivesPage = new BindableCollection<Additive>();
             Waiters = new BindableCollection<Waiter>(waiter);
@@ -237,7 +235,8 @@ namespace FastPosFrontend.ViewModels
                 States = { OrderState.Delivered, OrderState.Credit, OrderState.Payed }
             };
             var result = _orderRepo.GetByCriterias(orderFilter);
-            result.Elements.ForEach(e => e.PropertyChanged += CurrentOrder_PropertyChanged);
+            StateManager.Instance.Map(result.Elements);
+            //result.Elements.ForEach(e => e.PropertyChanged += CurrentOrder_PropertyChanged);
             
             return result;
         }
@@ -271,7 +270,7 @@ namespace FastPosFrontend.ViewModels
             Orders.Remove(orderToRemove);
             OrdersCollectionObserver.UnObserve(orderToRemove);
             if (CurrentOrder == orderToRemove) CurrentOrder = null;
-            UpdateOrderTabination();
+            UpdateOrderTabinationOnMainThread(incoming.Type.Value);
         }
 
         private void OnOrderCanceled(Order incoming)
@@ -280,13 +279,13 @@ namespace FastPosFrontend.ViewModels
             Orders.Remove(orderToRemove);
             OrdersCollectionObserver.UnObserve(orderToRemove);
             if (CurrentOrder == orderToRemove) CurrentOrder = null;
-            UpdateOrderTabination();
+            UpdateOrderTabinationOnMainThread(incoming.Type.Value);
         }
 
         private void OnOrderUpdated(Order incoming)
         {
             var updatedOrder = Orders.FirstOrDefault(o => o.Id == incoming.Id);
-
+            var previousOrderType = updatedOrder.Type;
             RunOnTheMainThread(() => updatedOrder?.UpdateOrderFrom(incoming));
 
             if (updatedOrder != null)
@@ -295,22 +294,78 @@ namespace FastPosFrontend.ViewModels
                 updatedOrderObserver?.Commit();
                 updatedOrderObserver?.Push();
             }
-            UpdateOrderTabination();
+            UpdateOrderTabinationOnMainThread((OrderType)incoming.Type, previousOrderType);
         }
 
-        private void UpdateOrderTabination()
+        private void UpdateOrderTabination(OrderType currentOrderType,OrderType? previousOrderType = null,int? currentTableNumber = null, int? perviousTableNumber = null)
+        {
+            UpdateOrdersTab(currentOrderType, currentTableNumber, perviousTableNumber);
+            if (previousOrderType.HasValue)
+            {
+                UpdateOrdersTab(previousOrderType.Value, currentTableNumber, perviousTableNumber);
+            }
+
+        }
+
+        private void UpdateOrderTabination(Order currentOrderState,Order? previousOrderState = null)
+        {
+            UpdateOrderTabination(currentOrderState.Type.Value, previousOrderState?.Type.Value,currentTableNumber:currentOrderState?.Table?.Number);
+        }
+
+        public void UpdateOrderTabinationOnMainThread(OrderType currentOrderType, OrderType? previousOrderType = null, int? currentTableNumber = null, int? perviousTableNumber = null)
         {
             RunOnTheMainThread(() =>
             {
-                WaitingViewModel.Orders.Refresh();
-                TakeAwayViewModel.Orders.Refresh();
-                DeliveryViewModel.Orders.Refresh();
 
-                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-                TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
-                DeliveryViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
-                TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
+                UpdateOrderTabination(currentOrderType,previousOrderType,currentTableNumber,perviousTableNumber);
+
             });
+
+
+        }
+
+        private void UpdateOrdersTab(OrderType orderType, int? currentTableNumber, int? perviousTableNumber)
+        {
+            if (orderType == OrderType.InWaiting)
+            {
+                WaitingViewModel.Orders.Refresh();
+                WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
+                return;
+            }
+
+            if (orderType == OrderType.TakeAway)
+            {
+                TakeAwayViewModel.Orders.Refresh();
+                TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
+                return;
+            }
+
+            if (orderType == OrderType.Delivery)
+            {
+                DeliveryViewModel.Orders.Refresh();
+                DeliveryViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
+                return;
+            }
+
+            if (orderType == OrderType.OnTable)
+            {
+                if (currentTableNumber.HasValue)
+                {
+                    UpdateTableOrdersView(currentTableNumber.Value);
+                }
+
+                if (perviousTableNumber.HasValue)
+                {
+                    UpdateTableOrdersView(perviousTableNumber.Value);
+                }
+            }
+        }
+
+        public void UpdateTableOrdersView(int tableNumber)
+        {
+            var table = TablesViewModel.Tables.First(t => t.Number == tableNumber);
+            table?.Orders?.Refresh();
+            TablesViewModel.NotifyOfPropertyChange(nameof(TablesViewModel.OrderCount));
         }
 
         private void OnOrderCreated(Order incoming)
@@ -338,7 +393,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             Orders.Add(incoming);
-            UpdateOrderTabination();
+            UpdateOrderTabination(incoming.Type.Value);
 
             OrdersCollectionObserver.ObserveItem(incoming);
             return;
@@ -351,11 +406,7 @@ namespace FastPosFrontend.ViewModels
 
         public CollectionMutationObserver<Order> OrdersCollectionObserver { get; set; }
 
-        private void ShowOrderInfo()
-        {
-            IsOrderInfoShown = true;
-            _orderInfoCloseTimer.Start(); 
-        }
+       
         private void CurrentOrder_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
       
@@ -366,7 +417,7 @@ namespace FastPosFrontend.ViewModels
             if (e.PropertyName == nameof(Order.Customer)||e.PropertyName == nameof(Order.Type)
             ||e.PropertyName == nameof(Order.Waiter)||e.PropertyName == nameof(Order.Table)|| e.PropertyName == nameof(Order.Deliveryman))
             {
-                ShowOrderInfo();
+      
                 LastModifiedOrderPropertyName = e.PropertyName;
             }
             if (e.PropertyName == nameof(Order.SelectedOrderItem))
@@ -581,14 +632,29 @@ namespace FastPosFrontend.ViewModels
             {
                 if (value == null)
                 {
+                    if (_currentOrder!= null)
+                    {
+                        _currentOrder.PropertyChanged -= CurrentOrder_PropertyChanged; 
+                    }
                     SetNullCurrentOrder();
                 }
                 else
                 {
-                    _currentOrder = value;
+                    if (_currentOrder!= value)
+                    {
+                        if (_currentOrder!= null)
+                        {
+                            _currentOrder.PropertyChanged -= CurrentOrder_PropertyChanged; 
+                        }
+                        _currentOrder = value;
+
+                        if (_currentOrder != null)
+                        {
+                            _currentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
+                        }
+                    }
                 }
                 IsEditingPayedOrderEnabled = false;
-
                 SetSelectedInListedOrdersDisplayedOrder();
                 OrderItemsCollectionViewSource.Source = CurrentOrder?.OrderItems;
                 NotifyOfPropertyChange(() => CurrentOrder);
@@ -777,8 +843,11 @@ namespace FastPosFrontend.ViewModels
 
             if (resp)
             {
-                onOrderSaved?.Invoke(CurrentOrder);
-                if (removalStates.Any(s => s == CurrentOrder.State)) RemoveCurrentOrderForOrdersList();
+
+                if (removalStates.Any(s => s == CurrentOrder.State))
+                {
+                    RemoveCurrentOrderForOrdersList();
+                };
 
             }else
             {
@@ -871,7 +940,7 @@ namespace FastPosFrontend.ViewModels
 
         public void LockOrder()
         {
-            //eventManager.Publish(EventType.LOCK_ORDER, CurrentOrder);
+
 
             if (CurrentOrder== null) return;
 
@@ -930,12 +999,17 @@ namespace FastPosFrontend.ViewModels
 
         private void SetCurrentOrderTypeAndRefreshOrdersLists(OrderType? orderType, Table table = null)
         {
+            var previousOrderType = CurrentOrder?.Type;
+            int? currentTableNumber = null;
+            int? previousTableNumber = CurrentOrder.Table?.Number;
             if (CurrentOrder != null)
             {
+                
                 CurrentOrder.Type = orderType;
                 if (orderType == OrderType.OnTable)
                 {
                     CurrentOrder.Table = table;
+                    currentTableNumber = CurrentOrder.Table?.Number;
                     SelectedDeliveryman = null;
                     IsTableViewActive = true;
                     IsTakeawayViewActive = false;
@@ -974,21 +1048,9 @@ namespace FastPosFrontend.ViewModels
                 }
             }
 
-            DeliveryViewModel.OrderViewSource.View.Refresh();
-            WaitingViewModel.OrderViewSource.View.Refresh();
-            TakeAwayViewModel.OrderViewSource.View.Refresh();
-            TablesViewModel.TablesViewSource.View.Refresh();
-            DeliveryViewModel.NotifyOfPropertyChange(() => DeliveryViewModel.OrderCount);
-            WaitingViewModel.NotifyOfPropertyChange(() => WaitingViewModel.OrderCount);
-            TakeAwayViewModel.NotifyOfPropertyChange(() => TakeAwayViewModel.OrderCount);
-
-            foreach (var t in Tables)
-            {
-                t.OrderViewSource.View.Refresh();
-            }
+            UpdateOrderTabination(orderType.Value, previousOrderType, currentTableNumber, previousTableNumber);
 
             SetSelectedInListedOrdersDisplayedOrder();
-            TablesViewModel.NotifyOfPropertyChange(() => TablesViewModel.OrderCount);
         }
 
         public void NewTotalToNumericZone()
@@ -1011,27 +1073,40 @@ namespace FastPosFrontend.ViewModels
             SetSelectedInListedOrdersDisplayedOrder();
         }
 
+        public void PreviousOrder()
+        {
+            var index = Orders.IndexOf(CurrentOrder)-1;
+            if (index>=0)
+            {
+                CurrentOrder = Orders[index]; 
+            }
+        }
+        public void NextOrder()
+        {
+            var index = Orders.IndexOf(CurrentOrder) + 1;
+            if (index<Orders.Count)
+            {
+                CurrentOrder = Orders[index];
+            }
+        }
+
         public void RemoveCurrentOrderForOrdersList()
         {
-            if (CurrentOrder == null || Orders == null)
-            {
+            if (CurrentOrder == null || Orders == null) {
                 return;
-            }
-            WaitingViewModel?.Orders?.Refresh();
-            TakeAwayViewModel?.Orders?.Refresh();
-            DeliveryViewModel?.Orders?.Refresh();
-            TablesViewModel?.Tables?.ToList()?.ForEach(t => t?.Orders?.Refresh());
-            //Orders.Remove(CurrentOrder);
+            };
+            var orderToRemove = CurrentOrder;
+            Orders.Remove(orderToRemove);
 
-            var result = OrdersCollectionObserver?.UnObserve(CurrentOrder);
+            var result = OrdersCollectionObserver?.UnObserve(orderToRemove);
 
-            if (CurrentOrder.State != OrderState.Payed)
-            {
-                CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged; 
-            }
+            orderToRemove.PropertyChanged -= CurrentOrder_PropertyChanged;
+            UpdateOrderTabination(orderToRemove);
             CurrentOrder = null;
-            //SetCurrentOrderTypeAndRefreshOrdersLists(null);
+          
         }
+
+        
 
         public void CancelOrder()
         {
@@ -1044,15 +1119,7 @@ namespace FastPosFrontend.ViewModels
             
             if (CurrentOrder?.OrderNumber == null)
             {
-
-                if (StateManager.Delete(CurrentOrder)) 
-                {
-                    Orders.Remove(CurrentOrder);
-                    WaitingViewModel?.Orders.Refresh();
-                    WaitingViewModel?.NotifyOfPropertyChange(nameof(WaitingViewModel.OrderCount));
-                    CurrentOrder = null;
-                }
-                
+                RemoveCurrentOrderForOrdersList();   
                 return;
             }
 
@@ -1070,13 +1137,6 @@ namespace FastPosFrontend.ViewModels
                     {
                         main.CloseDialog();
                     }));
-
-
-            //var response = ModalDialogBox.YesNo("Are you sure you want to Cancel this Order?", "Cancel Order").Show();
-            //if (response)
-            //{
-            //    CancelOrderAction(this);
-            //}
         }
 
         public void CancelOrderAction(object param)
@@ -1467,8 +1527,12 @@ namespace FastPosFrontend.ViewModels
 
         private void PayementAction()
         {
-            var payedAmount = Convert.ToDecimal(NumericZone);
-            if (payedAmount < 0)
+
+            if (!decimal.TryParse(NumericZone,out var payedAmount))
+            {
+                return;
+            }
+            if (payedAmount < 0 && CurrentOrderTotal>=0)
             {
                 NumericZone = "";
                 return;
@@ -1489,7 +1553,7 @@ namespace FastPosFrontend.ViewModels
             }
 
 
-            CurrentOrder.GivenAmount = payedAmount;
+            CurrentOrder.GivenAmount = payedAmount>0?payedAmount:0;
             CurrentOrder.ReturnedAmount = CurrentOrderTotal - payedAmount;
             CurrentOrder.State = OrderState.Payed;
             CurrentOrder.PreEditTotal = CurrentOrder.NewTotal;
@@ -2420,7 +2484,7 @@ namespace FastPosFrontend.ViewModels
         {
             
             IsEditingPayedOrderEnabled = !IsEditingPayedOrderEnabled;
-            
+            NumericZone = string.Empty;
             if (CurrentOrder!= null)
             {
                 if (!CurrentOrder.PreEditTotal.HasValue)
@@ -2450,6 +2514,7 @@ namespace FastPosFrontend.ViewModels
         public bool IsCurrentOrderPayed => CurrentOrder?.State == OrderState.Payed;
 
         public Paginator<Order> RecentOrders { get; private set; }
+        public CollectionPaginator<Order> RecentUnpaidOrders { get; private set; }
 
         public void OnRecentOrdersPopupOpened()
         {
