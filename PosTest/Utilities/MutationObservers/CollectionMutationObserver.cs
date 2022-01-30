@@ -219,6 +219,12 @@ namespace Utilities.Mutation.Observers
             _itemsMutationObservers.RemoveAll(o=> predicate.Invoke(o.Source));
         }
 
+        public bool IsObserving(T item)
+        {
+            if (!IsObservingItems) return false;
+            return this[item] != null;
+        }
+
         public void ObserveItem(T item)
         {
             if (!IsObservingItems)

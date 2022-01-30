@@ -1130,7 +1130,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\External\logo.svg">
+    <None Include="Resources\External\_logo.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

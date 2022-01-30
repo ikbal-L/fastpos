@@ -173,6 +173,14 @@
                                 <Setter Property="BorderBrush" Value="DarkRed"/>
                                 <Setter Property="Foreground" Value="Red"/>
                             </Trigger>
+
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.PaidModified}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.Payed}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
@@ -193,6 +201,10 @@
                             <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.Payed}">
                                 <Setter Property="IsEnabled" Value="False"/>
                             </DataTrigger>
+
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.PaidModified}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
@@ -208,6 +220,11 @@
                             <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.Payed}">
                                 <Setter Property="IsEnabled" Value="False"/>
                             </DataTrigger>
+
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.PaidModified}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
@@ -245,6 +262,10 @@
 
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.Payed}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding CurrentOrder.State}" Value="{x:Static mdl:OrderState.PaidModified}">
                                 <Setter Property="IsEnabled" Value="False"/>
                             </DataTrigger>
                         </Style.Triggers>

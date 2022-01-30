@@ -6,5 +6,6 @@
         Kitchen,
         CheckoutSplit,
         CheckoutPay,
+        KitchenCancel
     }
 }

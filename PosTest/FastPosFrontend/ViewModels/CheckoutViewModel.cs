@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 using System.Printing;
 using System.Reactive.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -438,9 +440,9 @@ namespace FastPosFrontend.ViewModels
             {
                 if (CurrentOrder!= null)
                 {
-                    if (CurrentOrder.State == OrderState.Payed)
+                    if (CurrentOrder.State == OrderState.Payed|| CurrentOrder.State == OrderState.PaidModified)
                     {
-                        CurrentOrderTotal = CurrentOrder.NewTotal - (CurrentOrder.PreEditTotal?? CurrentOrder.NewTotal);
+                        CurrentOrderTotal = CurrentOrder.NewTotal - (CurrentOrder.PreModifyNewTotal?? CurrentOrder.NewTotal);
                     }
                     else
                     {
@@ -834,25 +836,26 @@ namespace FastPosFrontend.ViewModels
             return StateManager.Save(order);
         }
 
+     
+
         private void SaveCurrentOrder(Action<Order> onOrderSaved = null)
         {
-            var resp = SaveOrder(ref _currentOrder);
-            CurrentOrder = _currentOrder;
 
-            OrderState[] removalStates = { OrderState.Payed, OrderState.Canceled, OrderState.Removed, OrderState.Delivered, OrderState.Credit };
-
-            if (resp)
+            if (StateManager.Save(CurrentOrder))
             {
 
+                onOrderSaved?.Invoke(CurrentOrder);
+                OrderState[] removalStates = { OrderState.Payed, OrderState.Canceled, OrderState.Removed, OrderState.Delivered, OrderState.Credit };
                 if (removalStates.Any(s => s == CurrentOrder.State))
                 {
                     RemoveCurrentOrderForOrdersList();
                 };
-
-            }else
+            }
+            else
             {
                 ToastNotification.Notify("Unable to save order");
             }
+          
             CurrentOrder = null;
             AdditivesVisibility = false;
             ProductsVisibility = true;
@@ -1098,7 +1101,7 @@ namespace FastPosFrontend.ViewModels
             var orderToRemove = CurrentOrder;
             Orders.Remove(orderToRemove);
 
-            var result = OrdersCollectionObserver?.UnObserve(orderToRemove);
+            _ = OrdersCollectionObserver?.UnObserve(orderToRemove);
 
             orderToRemove.PropertyChanged -= CurrentOrder_PropertyChanged;
             UpdateOrderTabination(orderToRemove);
@@ -1141,17 +1144,13 @@ namespace FastPosFrontend.ViewModels
 
         public void CancelOrderAction(object param)
         {
-            var checkoutViewModel = param as CheckoutViewModel;
-            if (checkoutViewModel?.CurrentOrder.State == null)
+            CurrentOrder.State = OrderState.Canceled;
+            if (StateManager.Save(CurrentOrder))
             {
-                checkoutViewModel.CurrentOrder.State = OrderState.Removed;
+              
+                PrintKitchenCancelReciept();
+                RemoveCurrentOrderForOrdersList();
             }
-            else
-            {
-                checkoutViewModel.CurrentOrder.State = OrderState.Canceled;
-            }
-
-            checkoutViewModel.SaveCurrentOrder();
             CanSplitOrder = false;
         }
 
@@ -1428,21 +1427,44 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            var stamp = DateTime.Now;
-
             HandleOrderChanges();
-            CurrentOrder.State = OrderState.Ordered;
-            var isNew = !CurrentOrder.Id.HasValue;
-            // o => {
-            //    var eventType = isNew ? EventType.CREATE_ORDER : EventType.UPDATE_ORDER;
-            //    eventManager.Publish(eventType, o);
-            //};
-            SaveCurrentOrder();
 
+
+
+            if (CurrentOrder.State == OrderState.Payed|| CurrentOrder.State == OrderState.PaidModified)
+            {
+                CurrentOrder.State = OrderState.PaidModified;
+            }
+            else
+            {
+                CurrentOrder.State = OrderState.Ordered;
+            }
+
+            if (!Orders.Contains(CurrentOrder))
+            {
+                Orders.Add(CurrentOrder);
+            }
+
+
+
+            SaveCurrentOrder(PrintKitchenReciept);
+        }
+
+        public void PrintKitchenReciept(Order order)
+        {
             if (ChangesMade)
             {
+                _printOrder.Id = order.Id;
+                _printOrder.OrderNumber = order.OrderNumber;
+                _printOrder.OrderCode = order.OrderCode;
                 PrintDocument(PrintSource.Kitchen);
             }
+        }
+
+        public void PrintKitchenCancelReciept()
+        {
+            _printOrder = CurrentOrder;
+            PrintDocument(PrintSource.KitchenCancel);
         }
 
         private void HandleOrderChanges()
@@ -1450,21 +1472,27 @@ namespace FastPosFrontend.ViewModels
             _printOrder = null;
 
 
-            var currentOrderObserver = OrdersCollectionObserver[CurrentOrder] as DeepMutationObserver<Order>;
-            currentOrderObserver.Commit();
-            var orderitemsCollectionObserver = currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
-            var removedItems = orderitemsCollectionObserver?.GetRemovedItems(CurrentOrder.OrderItems).ToList();
-            removedItems.ForEach(i => i.State = OrderItemState.Removed);
-            ChangesMade = currentOrderObserver.IsMutated();
-
-            if (ChangesMade)
+            if (OrdersCollectionObserver.IsObserving(CurrentOrder))
             {
-                _printOrder = OrdersCollectionObserver[CurrentOrder].GetDifference(OrderHelper.GetOrderChanges);
-                currentOrderObserver.Push();
-            }
+                var currentOrderObserver = OrdersCollectionObserver[CurrentOrder] as DeepMutationObserver<Order>;
+                currentOrderObserver.Commit();
+                var orderitemsCollectionObserver = currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
+                var removedItems = orderitemsCollectionObserver?.GetRemovedItems(CurrentOrder.OrderItems).ToList();
+                removedItems.ForEach(i => i.State = OrderItemState.Removed);
+                ChangesMade = currentOrderObserver.IsMutated();
 
-            CurrentOrder.OrderItems.AddRange(removedItems);
-            orderitemsCollectionObserver.CommitAndPushAddedItems((i) => i.State != OrderItemState.Removed);
+                if (ChangesMade)
+                {
+                    _printOrder = OrdersCollectionObserver[CurrentOrder].GetDifference(OrderHelper.GetOrderChanges);
+                    currentOrderObserver.Push();
+                }
+
+                CurrentOrder.OrderItems.AddRange(removedItems);
+                orderitemsCollectionObserver.CommitAndPushAddedItems((i) => i.State != OrderItemState.Removed);
+                return;
+            }
+            ChangesMade = true;
+            _printOrder = CurrentOrder;
         }
 
         private void CreditAction()
@@ -1556,7 +1584,7 @@ namespace FastPosFrontend.ViewModels
             CurrentOrder.GivenAmount = payedAmount>0?payedAmount:0;
             CurrentOrder.ReturnedAmount = CurrentOrderTotal - payedAmount;
             CurrentOrder.State = OrderState.Payed;
-            CurrentOrder.PreEditTotal = CurrentOrder.NewTotal;
+            CurrentOrder.PreModifyNewTotal = CurrentOrder.NewTotal;
             IsEditingPayedOrderEnabled = false;
 
             ReturnedAmount = CurrentOrder.ReturnedAmount;
@@ -2127,6 +2155,10 @@ namespace FastPosFrontend.ViewModels
                 case PrintSource.Kitchen:
                     dt = Application.Current.FindResource("KitchenReceiptDataTemplate") as DataTemplate;
                     break;
+
+                case PrintSource.KitchenCancel:
+                    dt = Application.Current.FindResource("KitchenCancelReceiptDataTemplate") as DataTemplate;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(source), source, null);
             }
@@ -2192,7 +2224,7 @@ namespace FastPosFrontend.ViewModels
             IList<PrinterItem> printerItems = null;
 
             var printerItemSetting = ConfigurationManager.Get<PosConfig>().Printing.Printers;
-            if (source == PrintSource.Kitchen)
+            if (source == PrintSource.Kitchen|| source == PrintSource.KitchenCancel)
             {
                 printerItems = printerItemSetting?.Where(item => item.SelectedKitchen).ToList();
             }
@@ -2485,12 +2517,24 @@ namespace FastPosFrontend.ViewModels
             
             IsEditingPayedOrderEnabled = !IsEditingPayedOrderEnabled;
             NumericZone = string.Empty;
-            if (CurrentOrder!= null)
+
+            if (IsEditingPayedOrderEnabled)
             {
-                if (!CurrentOrder.PreEditTotal.HasValue)
+                if (!OrdersCollectionObserver.IsObserving(CurrentOrder))
                 {
-                    CurrentOrder.PreEditTotal = CurrentOrder.NewTotal; 
+                    OrdersCollectionObserver.ObserveItem(CurrentOrder);
                 }
+
+
+                if (CurrentOrder?.PreModifyNewTotal== null)
+                {
+                    CurrentOrder.PreModifyNewTotal = CurrentOrder.NewTotal;
+                }
+            }
+            else
+            {
+                OrdersCollectionObserver?.UnObserve(CurrentOrder);
+                CurrentOrder = null;
             }
             NotifyOfPropertyChange(nameof(CanModifyCurrentOrder));
 

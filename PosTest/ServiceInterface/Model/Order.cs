@@ -13,7 +13,7 @@ using System.Collections.ObjectModel;
 
 namespace ServiceInterface.Model
 {
-    public class Order : SyncModel, IValidatableObject, IState<long>,ILockable
+    public class Order : SyncModel, IValidatableObject, IState<long>, ILockable
     {
 
         private OrderItem _selectedOrderItem;
@@ -309,18 +309,18 @@ namespace ServiceInterface.Model
             get => _table;
             set
             {
-             
+
                 _table = value;
                 TableId = _table?.Id;
                 if (value != null)
                 {
-                    if (_table.OrderViewSource.Source is ObservableCollection<Order> orders && orders!= null)
+                    if (_table.OrderViewSource.Source is ObservableCollection<Order> orders && orders != null)
                     {
                         // fixed duplication issue 
-                        if (!orders.Any(o=> o.OrderNumber == OrderNumber)) orders.Add(this);
+                        if (!orders.Any(o => o.OrderNumber == OrderNumber)) orders.Add(this);
                     }
                 }
-                
+
                 _table?.OrderViewSource?.View?.Refresh();
 
                 NotifyOfPropertyChange(() => Table);
@@ -333,6 +333,7 @@ namespace ServiceInterface.Model
         public BindableCollection<Additive> ShownAdditivesPage { get; set; } = new BindableCollection<Additive>();
 
         private bool _ProductsVisibility;
+        private decimal? _preModifyNewTotal;
 
         public bool ProductsVisibility
         {
@@ -346,7 +347,8 @@ namespace ServiceInterface.Model
 
         public bool AdditivesVisibility { get; set; }
 
-        public decimal? PreEditTotal { get; set; }
+        [DataMember]
+        public decimal? PreModifyNewTotal { get => _preModifyNewTotal; set => Set(ref _preModifyNewTotal, value); }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -442,7 +444,8 @@ namespace ServiceInterface.Model
         Credit,
         CreditRePaid,
         CreditPartiallyRePaid,
-        Temporary
+        Temporary,
+        PaidModified
     }
 
     public enum OrderType
