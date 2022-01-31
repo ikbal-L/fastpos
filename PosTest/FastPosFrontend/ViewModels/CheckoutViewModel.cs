@@ -287,16 +287,26 @@ namespace FastPosFrontend.ViewModels
         private void OnOrderUpdated(Order incoming)
         {
             var updatedOrder = Orders.FirstOrDefault(o => o.Id == incoming.Id);
-            var previousOrderType = updatedOrder.Type;
-            RunOnTheMainThread(() => updatedOrder?.UpdateOrderFrom(incoming));
+            var previousOrderType = updatedOrder?.Type;
+            
+            RunOnTheMainThread(() => 
+            { 
+                updatedOrder?.UpdateOrderFrom(incoming);
+                if (updatedOrder is not null)
+                {
+                    HandleOrderChanges(updatedOrder);
+                    if (incoming.State == OrderState.Ordered || incoming.State == OrderState.PaidModified)
+                    {
+                        PrintKitchenReciept(updatedOrder);
+                    }
+                }
+            });
 
-            if (updatedOrder != null)
-            {
-                var updatedOrderObserver = OrdersCollectionObserver[updatedOrder] as DeepMutationObserver<Order>;
-                updatedOrderObserver?.Commit();
-                updatedOrderObserver?.Push();
-            }
-            UpdateOrderTabinationOnMainThread((OrderType)incoming.Type, previousOrderType);
+
+           
+
+
+            UpdateOrderTabinationOnMainThread(incoming.Type.Value, previousOrderType);
         }
 
         private void UpdateOrderTabination(OrderType currentOrderType,OrderType? previousOrderType = null,int? currentTableNumber = null, int? perviousTableNumber = null)
@@ -394,9 +404,19 @@ namespace FastPosFrontend.ViewModels
                 incoming.Customer = StateManager.GetById<Customer>(incoming.CustomerId.Value);
             }
 
-            Orders.Add(incoming);
-            UpdateOrderTabination(incoming.Type.Value);
+            StateManager.Instance.MapItem(incoming);
 
+            Orders.Add(incoming);
+            UpdateOrderTabinationOnMainThread(incoming.Type.Value);
+            
+            if (incoming.State == OrderState.Ordered)
+            {
+                HandleOrderChanges(incoming);
+                RunOnTheMainThread(() =>
+                {
+                    PrintKitchenReciept(incoming);
+                });
+            }
             OrdersCollectionObserver.ObserveItem(incoming);
             return;
         }
@@ -879,7 +899,16 @@ namespace FastPosFrontend.ViewModels
                
                 CurrentOrder.PropertyChanged -= CurrentOrder_PropertyChanged;
                 CurrentOrder.PropertyChanged += CurrentOrder_PropertyChanged;
-                CurrentOrderTotal = CurrentOrder.NewTotal;
+
+                if (CurrentOrder.State == OrderState.Payed || CurrentOrder.State == OrderState.PaidModified)
+                {
+                    CurrentOrderTotal = CurrentOrder.NewTotal - (CurrentOrder.PreModifyNewTotal ?? CurrentOrder.NewTotal);
+                }
+                else
+                {
+                    CurrentOrderTotal = CurrentOrder.NewTotal;
+
+                }
             }
 
 
@@ -1344,8 +1373,10 @@ namespace FastPosFrontend.ViewModels
                     break;
 
                 case ActionButton.Split:
-                    CanSplitOrder = CurrentOrder?.OrderItems != null && (CurrentOrder.OrderItems.Count > 1 ||
-                                                                        (CurrentOrder.OrderItems.Count == 1 && CurrentOrder.OrderItems[0].Quantity > 1));
+                    var nonRemovedOrderItemCount = CurrentOrder?.OrderItems.Count(oi => oi.State != OrderItemState.Removed);
+
+                    CanSplitOrder = CurrentOrder?.OrderItems != null && nonRemovedOrderItemCount > 1 ||
+                                                                        (nonRemovedOrderItemCount == 1 && CurrentOrder.OrderItems.FirstOrDefault(oi=>oi.State!= OrderItemState.Removed)?.Quantity > 1);
                     if (!CanSplitOrder)
                     {
                         ToastNotification.Notify("Non products to split", NotificationType.Warning); return;
@@ -1427,7 +1458,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            HandleOrderChanges();
+            HandleCurrentOrderChanges();
 
 
 
@@ -1467,32 +1498,37 @@ namespace FastPosFrontend.ViewModels
             PrintDocument(PrintSource.KitchenCancel);
         }
 
-        private void HandleOrderChanges()
+        private void HandleOrderChanges(Order order)
         {
             _printOrder = null;
 
 
-            if (OrdersCollectionObserver.IsObserving(CurrentOrder))
+            if (OrdersCollectionObserver.IsObserving(order))
             {
-                var currentOrderObserver = OrdersCollectionObserver[CurrentOrder] as DeepMutationObserver<Order>;
+                var currentOrderObserver = OrdersCollectionObserver[order] as DeepMutationObserver<Order>;
                 currentOrderObserver.Commit();
                 var orderitemsCollectionObserver = currentOrderObserver[nameof(Order.OrderItems)] as CollectionMutationObserver<OrderItem>;
-                var removedItems = orderitemsCollectionObserver?.GetRemovedItems(CurrentOrder.OrderItems).ToList();
+                var removedItems = orderitemsCollectionObserver?.GetRemovedItems(order.OrderItems).ToList();
                 removedItems.ForEach(i => i.State = OrderItemState.Removed);
                 ChangesMade = currentOrderObserver.IsMutated();
 
                 if (ChangesMade)
                 {
-                    _printOrder = OrdersCollectionObserver[CurrentOrder].GetDifference(OrderHelper.GetOrderChanges);
+                    _printOrder = OrdersCollectionObserver[order].GetDifference(OrderHelper.GetOrderChanges);
                     currentOrderObserver.Push();
                 }
 
-                CurrentOrder.OrderItems.AddRange(removedItems);
+                order.OrderItems.AddRange(removedItems);
                 orderitemsCollectionObserver.CommitAndPushAddedItems((i) => i.State != OrderItemState.Removed);
                 return;
             }
             ChangesMade = true;
-            _printOrder = CurrentOrder;
+            _printOrder = order;
+        }
+
+        private void HandleCurrentOrderChanges()
+        {
+            HandleOrderChanges(CurrentOrder);
         }
 
         private void CreditAction()

@@ -144,7 +144,7 @@ namespace ServiceLib.Service
             var result =await GenericRest.RestPostAsync(criterias, Api.Resource<T>(EndPoint.GET_ALL_BY_CRITERIAS));
             if (result.IsSuccessful)
             {
-                return JsonConvert.DeserializeObject<List<T>>(result.Content);
+                return JsonConvert.DeserializeObject<Page<T>>(result.Content).Elements;
             };
             return new List<T>();
         }

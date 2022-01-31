@@ -141,7 +141,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Grid.RowSpan="2" Width="200" BorderThickness="0" BorderBrush="Black"
+                <Border Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Center" BorderThickness="0" BorderBrush="Black"
                         CornerRadius="4" Padding="4 1">
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
@@ -152,15 +152,16 @@
                         <Grid Grid.Row="0">
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                   
+
                                     <!--<svgc:SvgViewbox Source="./logo.svg" Width="60" Height="60"/>-->
+                                    <Image Source="./logo.jpg" Width="150" Height="150"/>
 
                                     <TextBlock  
                                        FontSize="14"
                                        FontWeight="Bold"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                       Text="{Binding Source={ex:Config PropertyName=General.RestaurantName}, StringFormat='Restaurant {0:#}'}" />
+                                       Text="{Binding Source={ex:Config PropertyName=General.RestaurantName}}" />
                                 </StackPanel>
                                 <!--<Image Source=""/>-->
 
@@ -188,13 +189,32 @@
 
                         <TextBlock DockPanel.Dock="Right" 
                                    VerticalAlignment="Center" 
-                                   Text="{Binding OrderNumber,Converter={StaticResource OrderNumerationMaskConverter}}" />
+                                   Text="{Binding OrderCode}" />
 
                     </StackPanel>
-                    <TextBlock Text="{Binding Table.Number,StringFormat='Table # {0:#}',FallbackValue='Table: /'}" Visibility="{Binding Table,Converter={StaticResource NullToVisibilityConverter}}" />
-                    <TextBlock Text="{Binding Waiter.Name,StringFormat='Waiter: {0:#}',FallbackValue='Waiter: /'}" Visibility="{Binding Waiter,Converter={StaticResource NullToVisibilityConverter}}"/>
-                    <TextBlock Text="{Binding Deliveryman.Name,StringFormat='Deliveryman: {0:#}',FallbackValue='Deliveryman: /'}" Visibility="{Binding Deliveryman,Converter={StaticResource NullToVisibilityConverter}}"/>
-                    <TextBlock Grid.Row="2" Text="Caisse N:1" />
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  />
+                            <ColumnDefinition  />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Table.Number,StringFormat='Table # {0:#}',FallbackValue='Table: /'}" Visibility="{Binding Table,Converter={StaticResource NullToVisibilityConverter}}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Waiter.Name,StringFormat='Waiter: {0:#}',FallbackValue='Waiter: /'}" Visibility="{Binding Waiter,Converter={StaticResource NullToVisibilityConverter}}"/>
+                        
+                        <TextBlock Grid.Row="1" Text="{Binding Deliveryman.Name,StringFormat='Livreur: {0:#}',FallbackValue='Deliveryman: /'}" Visibility="{Binding Deliveryman,Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Deliveryman.PhoneNumbers[0],FallbackValue=''}" Visibility="{Binding Deliveryman,Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                        <TextBlock Grid.Row="2" Text="{Binding Customer.Name,StringFormat='Client: {0:#}',FallbackValue='Client: /'}" Visibility="{Binding Customer,Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Customer.PhoneNumbers[0],FallbackValue=''}" Visibility="{Binding Customer,Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Customer.Address,FallbackValue='Adresse: /'}" Visibility="{Binding Customer,Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                    </Grid>
+                    <!--<TextBlock Grid.Row="2" Text="Caisse N:1" />-->
                 </StackPanel>
             </Grid>
 

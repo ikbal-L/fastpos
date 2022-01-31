@@ -604,6 +604,9 @@
     <None Include="Fonts\Digital-Dismay.otf" />
     <None Include="Properties\app.manifest" />
     <Resource Include="product.xml" />
+    <None Include="Resources\External\logo.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\External\Reports.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

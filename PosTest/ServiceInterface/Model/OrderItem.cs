@@ -28,7 +28,7 @@ namespace ServiceInterface.Model
 
         public OrderItem()
         {
-            
+
         }
 
         public OrderItem(OrderItem orderItem)
@@ -53,13 +53,9 @@ namespace ServiceInterface.Model
             if (product?.Id != null)
             {
 
-                ProductId = (long)product.Id ;
+                ProductId = (long)product.Id;
                 UnitPrice = product.Price;
             }
-
-
-
-          
 
             Quantity = quantity;
             OrderItemAdditives = new List<OrderItemAdditive>();
@@ -102,16 +98,16 @@ namespace ServiceInterface.Model
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 Order?.NotifyOfPropertyChange(nameof(TotalDiscountAmount));
 
-               
-            } 
- 
+
+            }
+
 
         }
 
         [DataMember]
         [Range(0, double.MaxValue)]
         public decimal Total => (decimal)Quantity * UnitPrice;
-       
+
 
         [DataMember]
         public decimal TotalDiscountAmount
@@ -129,7 +125,7 @@ namespace ServiceInterface.Model
         {
 
 
-            var totalDiscount = _discountAmount * (decimal) Quantity;
+            var totalDiscount = _discountAmount * (decimal)Quantity;
 
             return totalDiscount;
         }
@@ -207,7 +203,6 @@ namespace ServiceInterface.Model
 
         [DataMember] public List<OrderItemAdditive> OrderItemAdditives { get; set; }
 
-        private decimal _totalDiscountAmount;
         private DateTime? _timeStamp;
         private OrderItemState _state;
         private string _productName;
@@ -232,6 +227,7 @@ namespace ServiceInterface.Model
 
 
 
+
         [ObserveMutations(MutationObserverFlags.Object)]
         public Product Product { get; set; }
 
@@ -241,53 +237,53 @@ namespace ServiceInterface.Model
             {
                 yield return new ValidationResult(
                     "Unit price must be a positive number.",
-                    new[] {nameof(UnitPrice)});
+                    new[] { nameof(UnitPrice) });
             }
 
             if (Quantity < 1)
             {
                 yield return new ValidationResult(
                     "Quantity must be greater than or equal to 1.",
-                    new[] {nameof(Quantity)});
+                    new[] { nameof(Quantity) });
             }
 
             if (Total < 0)
             {
                 yield return new ValidationResult(
                     "Total must be a positive number.",
-                    new[] {nameof(Total)});
+                    new[] { nameof(Total) });
             }
 
             if (TotalDiscountAmount > UnitPrice)
             {
                 yield return new ValidationResult(
                     "Total discount amount must not exceed the value of Unit price ",
-                    new[] {nameof(TotalDiscountAmount)});
+                    new[] { nameof(TotalDiscountAmount) });
             }
 
             if (TotalDiscountAmount < 0)
             {
                 yield return new ValidationResult(
                     "Total discount amount must be a positive number.",
-                    new[] {nameof(TotalDiscountAmount)});
+                    new[] { nameof(TotalDiscountAmount) });
             }
 
             if (DiscountPercentage > 100)
             {
                 yield return new ValidationResult(
                     "Discount Percentage must not exceed 100%",
-                    new[] {nameof(DiscountPercentage)});
+                    new[] { nameof(DiscountPercentage) });
             }
 
             if (DiscountPercentage < 0)
             {
                 yield return new ValidationResult(
                     "Discount Percentage must be a positive value",
-                    new[] {nameof(DiscountPercentage)});
+                    new[] { nameof(DiscountPercentage) });
             }
         }
 
-       
+        
     }
 
     public enum OrderItemState
@@ -297,6 +293,8 @@ namespace ServiceInterface.Model
         IncreasedQuantity,
         DecreasedQuantity
     }
+
+    
 
 
     

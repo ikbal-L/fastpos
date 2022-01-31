@@ -4,6 +4,7 @@ using FastPosFrontend.Enums;
 using FastPosFrontend.Helpers;
 using ServiceInterface.Model;
 using ServiceInterface.StaticValues;
+using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
@@ -59,25 +60,22 @@ namespace FastPosFrontend.ViewModels
         private void CopyCurrentOrderWithSeparationOfQuantities()
         {
             
-            _parent.CurrentOrder.OrderItems.ToList().ForEach(
+            _parent.CurrentOrder.OrderItems.Where(oi=>oi.State!= OrderItemState.Removed).ToList().ForEach(
                         oitem =>
                         {
-                            if (oitem.Quantity <= 1)
+                            if (oitem.Quantity == 1)
                             {
                                 CurrentOrder.AddOrderItem(oitem);
                             }
                             else
                             {
                                 float qty = oitem.Quantity;
-                                while (qty >= 1)
+                                while (qty > 0)
                                 {
                                     CurrentOrder.AddOrderItem(oitem.Product, false, 1, false);
                                     qty--;
                                 }
-                                if (qty > 0)
-                                {
-                                    CurrentOrder.AddOrderItem(oitem.Product, false, qty, false);
-                                }
+                                
                             }
                         }
                     );
@@ -94,7 +92,7 @@ namespace FastPosFrontend.ViewModels
                     );
         }
 
-        #region Properties
+    
         public Order CurrentOrder
         {
             get { return _currentOrder; }
@@ -122,10 +120,6 @@ namespace FastPosFrontend.ViewModels
             set
             {
                 _numericZone = value;
-                //if (!CommandSwitched)
-                //{
-                //    KeypadEnteredValueChanged(ref _numericZone);
-                //}
                 NotifyOfPropertyChange();
             }
         }
@@ -191,7 +185,7 @@ namespace FastPosFrontend.ViewModels
                 NotifyOfPropertyChange();
             }
         }
-        #endregion
+
         public void KeypadEnteredValueChanged(ref string numericZone)
         {
             if (IsItemPriceChecked)
@@ -311,17 +305,15 @@ namespace FastPosFrontend.ViewModels
 
         public void PayementAction()
         {
-            decimal payedAmount;
-            try
-            {
-                payedAmount = Convert.ToDecimal(NumericZone);
 
-            }
-            catch (Exception)
+            if (!decimal.TryParse(NumericZone,out var payedAmount))
             {
                 ToastNotification.Notify("Payed Amount non valid", NotificationType.Warning);
+                NumericZone = "";
                 return;
             }
+  
+        
             if (payedAmount < 0)
             {
                 NumericZone = "";
@@ -335,10 +327,9 @@ namespace FastPosFrontend.ViewModels
 
             if (payedAmount < SplittedOrder.NewTotal)
             {
-                //NumericZone = "";
-                //Use Local to select message according to UI language
+
                 ToastNotification.Notify("Payed amount lower than total", NotificationType.Warning);
-                //CurrentOrder.DiscountAmount = 0;
+
                 return;
             }
 
@@ -453,7 +444,7 @@ namespace FastPosFrontend.ViewModels
 
 
 
-       #region Split Commands
+
         public void BackFromSplitCommand()
         {
 
@@ -510,80 +501,40 @@ namespace FastPosFrontend.ViewModels
         }
         private void SaveSplittedOrder()
         {
-            bool resp1=false;
-            if (_parent.CurrentOrder.Id == null)
+
+            var canSave = _parent.CurrentOrder.Id.HasValue || StateManager.Save(_parent.CurrentOrder);
+
+            if (canSave)
             {
-                 _parent.CurrentOrder.State = OrderState.Splitted;
-                 var parentCurrentOrder = _parent.CurrentOrder;
+                _parent.CurrentOrder.State = OrderState.Splitted;
 
-                //TODO Revise Handling Order items of Split order
-                resp1 = _parent.SaveOrder( ref parentCurrentOrder);
-                 _parent.CurrentOrder = parentCurrentOrder;
-                 _parent.NotifyOfPropertyChange(() => _parent.CurrentOrder);
-            }
-            switch (resp1|| _parent.CurrentOrder.Id != null)
-            {
-                case true:
-                    _parent.CurrentOrder.State = OrderState.Splitted;
-                    //Parent.CurrentOrder.OrderItems.RemoveRange(Parent.CurrentOrder.OrderItems
-                    //    .Where(x => SplittedOrder.OrderItems.Any(i => i.ProductId == x.ProductId))
-                    //    .ToList());
-                    RemoveOrderItems();
-                    
-                    var parentCurrentOrder = _parent.CurrentOrder;
-                    var resp = _parent.SaveOrder(ref parentCurrentOrder);
-                    
-                    if (resp)
-
-                        SplittedOrder.SplittedFrom = _parent.CurrentOrder;
-                   _parent?.SetSplitOrderNumber();
+                RemoveOrderItems();
 
 
-                        var resp2 = _parent.SaveOrder(ref _splitedOrder);
-                        SplittedOrder = _splitedOrder;
-                        NotifyOfPropertyChange(() => SplittedOrder);
 
-                        switch (resp2)
-                        {
-                            case true:
-
-                                _parent?.PrintDocument(PrintSource.CheckoutSplit);
-                                GivenAmount = SplittedOrder.GivenAmount;
-                                ReturnedAmount = SplittedOrder.ReturnedAmount;
-                                RemoveOrderItemsFromSplitViewOrder();
-                                //TODO Fix Issue! Remove range not removing SplittedOrder.OrderItems from Parent.CurrentOrder.OrderItems
-
-                                //SplittedOrder.OrderItems.Clear();
-                                //SplittedOrder.NotifyOfPropertyChange(() => SplittedOrder.NewTotal);
-                                //SplittedOrder.Id = null;
-                                SplittedOrder = new Order();
-                                NotifyOfPropertyChange(() => SplittedOrder);
-                                SplittedOrder.NotifyOfPropertyChange(() => SplittedOrder.NewTotal);
-
-                                break;
+                if (StateManager.Save(_parent.CurrentOrder))
+                {
+                    SplittedOrder.SplittedFrom = _parent.CurrentOrder;
 
 
-                            default:
-                                //false
-                                ToastNotification.ErrorNotification(0);
-                                break;
-                        
+
+                    if (StateManager.Save(SplittedOrder))
+                    {
+                        _parent?.PrintDocument(PrintSource.CheckoutSplit);
+                        GivenAmount = SplittedOrder.GivenAmount;
+                        ReturnedAmount = SplittedOrder.ReturnedAmount;
+                        RemoveOrderItemsFromSplitViewOrder();
+                        SplittedOrder = new Order();
+                        SplittedOrder.NotifyOfPropertyChange(() => SplittedOrder.NewTotal);
                     }
 
-                    break;
+                }
 
-
-                default:
-                    // false or null
-                    ToastNotification.ErrorNotification(0);
-                    break;
             }
-            
+
+
+
         }
-        #endregion
-
-
-        
 
     }
 }

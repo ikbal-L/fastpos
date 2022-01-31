@@ -14,7 +14,7 @@ namespace FastPosFrontend.Helpers
            bool groupByProduct = true)
         {
             OrderItem item;
-            if (product.IsPlatter && (product.Additives != null) || order.OrderItems.All(p => p.ProductId != product.Id) ||
+            if (product.IsPlatter && (product?.Additives != null) || order.OrderItems.All(p => p.ProductId != product.Id) ||
                 !groupByProduct ||
                order. OrderItems.Where(oi =>
                     oi.ProductId == product.Id
@@ -78,13 +78,18 @@ namespace FastPosFrontend.Helpers
         {
             order.State = updateSource.State;
             order.Type = updateSource.Type;
-            if (order.WaiterId!= updateSource.WaiterId) UpdateWaiter();
+            if (order.WaiterId != updateSource.WaiterId) UpdateWaiter();
             if (order.CustomerId != updateSource.CustomerId) UpdateCustomer();
             if (order.DeliverymanId != updateSource.DeliverymanId) UpdateDeliveryman();
             if (order.TableId != updateSource.TableId) UpdateTable();
 
-            order?.OrderItems?.Clear();
-            order?.OrderItems?.AddRange(updateSource.OrderItems);
+            //TODO Fix update observation issue 
+
+            HandleAddedItems(order, updateSource);
+
+            HandleRemovedOrModifiedItems(order, updateSource);
+
+
 
             void UpdateWaiter()
             {
@@ -130,9 +135,9 @@ namespace FastPosFrontend.Helpers
             {
                 var oldTableValue = order.Table;
                 if (updateSource.TableId == null)
-                { 
+                {
                     order.TableId = null;
-                    order.Table = null;                    
+                    order.Table = null;
                 }
                 else
                 {
@@ -145,6 +150,35 @@ namespace FastPosFrontend.Helpers
             }
 
 
+        }
+
+        private static void HandleAddedItems(Order order, Order updateSource)
+        {
+            foreach (var item in updateSource?.OrderItems?.ToList())
+            {
+                if (!order.OrderItems.Any(oi => oi.Id == item.Id))
+                {
+                    order.OrderItems.Add(item);
+                }
+            }
+        }
+
+        private static void HandleRemovedOrModifiedItems(Order order, Order updateSource)
+        {
+            foreach (var item in order.OrderItems.ToList())
+            {
+                var other = updateSource.OrderItems.FirstOrDefault(oi => item.Id == oi.Id);
+                if (other != null&& other.State != OrderItemState.Removed)
+                {
+                    item.Quantity = other.Quantity;
+                }
+
+                if (item.State is not  OrderItemState.Removed &&  other.State is OrderItemState.Removed)
+                {
+                    order.OrderItems.Remove(item);
+                }
+
+            }
         }
 
         public static void MappingBeforeSending(this Order order)

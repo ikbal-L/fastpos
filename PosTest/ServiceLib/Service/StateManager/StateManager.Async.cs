@@ -56,6 +56,13 @@ namespace ServiceLib.Service.StateManager
             associationManager.Map(collectionOfTOne, State);
         }
 
+        public void MapItem<TOne>(TOne item)
+        {
+            List<TOne> temp = new List<TOne>() { item};
+            associationManager.Map(temp, State);
+            temp = null;
+        }
+
         public static async Task<ICollection<TState>> GetAsync<TState, TIdentifier>(string predicate = "") where TState : IState<TIdentifier> where TIdentifier : struct
         {
             var key = typeof(TState);

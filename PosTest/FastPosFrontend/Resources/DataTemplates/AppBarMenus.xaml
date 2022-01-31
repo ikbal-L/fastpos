@@ -46,9 +46,9 @@
            
 
             <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                <!--<Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                         Content="{md:PackIcon Kind=ChevronLeft}"
-                        cal:Message.Attach="[Event Click ] = [Action PreviousOrder()]" />
+                        cal:Message.Attach="[Event Click ] = [Action PreviousOrder()]" />-->
                 <md:PopupBox StaysOpen="True"  PlacementMode="BottomAndAlignCentres" 
                              cal:Message.Attach="[Event Opened] = [Action OnRecentOrdersPopupOpened()]" >
                     <md:PopupBox.ToggleContent>
@@ -280,9 +280,9 @@
                     </StackPanel>
                 </md:PopupBox>
 
-                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                <!--<Button Style="{StaticResource MaterialDesignIconForegroundButton}"
                         Content="{md:PackIcon Kind=ChevronRight}"
-                        cal:Message.Attach="[Event Click ] = [Action NextOrder()]" />
+                        cal:Message.Attach="[Event Click ] = [Action NextOrder()]" />-->
             </StackPanel>
          
 
