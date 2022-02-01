@@ -49,7 +49,7 @@ namespace FastPosFrontend.Helpers
         public static void AssociateProductsWithAdditives(IEnumerable<Product> products,IEnumerable<Additive> additives)
         {
             if (additives == null || products == null) return;
-            foreach (Product product in products as IEnumerable<Product>)
+            foreach (Product product in products)
             {
                 if (product.IsPlatter)
                 {

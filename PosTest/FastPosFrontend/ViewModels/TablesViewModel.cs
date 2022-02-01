@@ -19,18 +19,15 @@ namespace FastPosFrontend.ViewModels
             TablesViewSource = new CollectionViewSource();
             TablesViewSource.Source = Parent.Tables;
             TablesViewSource.Filter += TablesFilter;
-            //TablesView = TablesViewSource.View;
+
             TablesView = CollectionViewSource.GetDefaultView(Parent.Tables);
             TablesView.SortDescriptions.Add(new SortDescription("Number",ListSortDirection.Ascending));
             TablesView.CollectionChanged += TablesViewChanged;
-            //TablesView.CurrentChanged += TablesViewCurrentChanged;
+
             Tables = new BindableCollection<Table>(TablesView.Cast<Table>());
         }
 
-        //private void TablesViewCurrentChanged(object sender, EventArgs e)
-        //{
 
-        //}
 
         private void TablesViewChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -62,7 +59,6 @@ namespace FastPosFrontend.ViewModels
             Table table = e.Item as Table;
             if (table != null)
             {
-                // Filter out products with price 25 or above
                 if (table.Orders!= null&& !table.Orders.IsEmpty)
                 {
                     e.Accepted = true;
@@ -74,28 +70,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void RefreshTables()
-        {
-            //foreach (Table table in TablesView)
-            //{
-            //    if (!Tables.Contains(table))
-            //    {
-            //        Tables.Add(table);
-            //    }
-            //}
-            //if (TablesView.Cast<Table>().Count() != Tables.Count)
-            //{
-            //    List<Table> toRemove = new List<Table>();
-            //    foreach (var table in Tables)
-            //    {
-            //        if (!TablesView.Contains(table))
-            //        {
-            //            toRemove.Add(table);
-            //        }
-            //    }
-            //    Tables.RemoveRange(toRemove);
-            //}
-        }
+
         public CollectionViewSource TablesViewSource { get; set; }
 
         public ICollectionView TablesView { get; set; }
@@ -135,9 +110,9 @@ namespace FastPosFrontend.ViewModels
             Parent.DialogViewModel = null;
         }
 
-        public void OrderSelectionChanged(Order order)
+        public void ShowOrder(Order order)
         {
-
+            Parent?.ShowOrder(order);
         }
     }
 }

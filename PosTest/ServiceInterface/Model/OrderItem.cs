@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.ObjectModel;
 using Utilities.Attributes;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace ServiceInterface.Model
 {
@@ -19,7 +21,7 @@ namespace ServiceInterface.Model
                 a => a.FullName.StartsWith("XUnitTesting"));
 
         private float _quantity;
-        private ObservableCollection<Additive> _additives;
+
         private Additive __selectedAdditive;
         private bool _canAddAdditives;
         private decimal _discountAmount;
@@ -28,7 +30,9 @@ namespace ServiceInterface.Model
 
         public OrderItem()
         {
-
+            OrderItemAdditives = new();
+            _OrderItemAdditivesViewSource = new CollectionViewSource() { Source = OrderItemAdditives, };
+            _OrderItemAdditivesViewSource.Filter += (_, e) => { e.Accepted = e.Item is OrderItemAdditive a && a.State is not AdditiveState.Removed; };
         }
 
         public OrderItem(OrderItem orderItem)
@@ -41,8 +45,10 @@ namespace ServiceInterface.Model
             UnitPrice = orderItem.UnitPrice;
             DiscountAmount = orderItem.DiscountAmount;
             DiscountPercentage = orderItem.DiscountPercentage;
-            Additives = orderItem.Additives;
 
+            OrderItemAdditives = new();
+            _OrderItemAdditivesViewSource = new CollectionViewSource() { Source = OrderItemAdditives, };
+            _OrderItemAdditivesViewSource.Filter += (_, e) => { e.Accepted = e.Item is OrderItemAdditive a && a.State is not AdditiveState.Removed; };
         }
 
         public OrderItem(Product product, float quantity, Order order) : this()
@@ -58,8 +64,9 @@ namespace ServiceInterface.Model
             }
 
             Quantity = quantity;
-            OrderItemAdditives = new List<OrderItemAdditive>();
-            Additives = new ObservableCollection<Additive>();
+            OrderItemAdditives = new();
+            _OrderItemAdditivesViewSource = new CollectionViewSource() { Source = OrderItemAdditives , };
+            _OrderItemAdditivesViewSource.Filter += (_, e) => { e.Accepted = e.Item is OrderItemAdditive a && a.State is not AdditiveState.Removed; };
         }
 
         [DataMember] public long? Id { set; get; }
@@ -201,23 +208,18 @@ namespace ServiceInterface.Model
             NotifyOfPropertyChange(() => SelectedAdditive);
         }
 
-        [DataMember] public List<OrderItemAdditive> OrderItemAdditives { get; set; }
+        [DataMember] public ObservableCollection<OrderItemAdditive> OrderItemAdditives { get; set; }
+
+        private CollectionViewSource _OrderItemAdditivesViewSource;
+
+        public ICollectionView OrderItemAdditivesView => _OrderItemAdditivesViewSource?.View;
 
         private DateTime? _timeStamp;
         private OrderItemState _state;
         private string _productName;
 
-        [ObserveMutations(MutationObserverFlags.Collection)]
-        public ObservableCollection<Additive> Additives
-        {
-
-            get => _additives;
-            set
-            {
-                _additives = value;
-                NotifyOfPropertyChange(nameof(Additives));
-            }
-        }
+       
+   
 
         public bool CanAddAdditives
         {

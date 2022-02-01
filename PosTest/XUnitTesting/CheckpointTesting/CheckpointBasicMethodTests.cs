@@ -229,13 +229,13 @@ namespace XUnitTesting.CheckpointTesting
 
             //Act
             checkoutVM.AddOrderItem(p);
-            checkoutVM.AddAditive(additives[0]);
-            checkoutVM.AddAditive(additives[1]);
-            checkoutVM.AddAditive(additives[2]);
+            checkoutVM.AddAditive(additives[0],"+");
+            checkoutVM.AddAditive(additives[1], "+");
+            checkoutVM.AddAditive(additives[2],"+");
             checkoutVM.CurrentOrder.SelectedOrderItem.SelectedAdditive = additives[1];
 
             //Assert
-            Assert.Equal(3, checkoutVM.CurrentOrder.SelectedOrderItem.Additives.Count);
+            Assert.Equal(3, checkoutVM.CurrentOrder.SelectedOrderItem.OrderItemAdditives.Count);
 
             //Act
             var addtv = checkoutVM.CurrentOrder.SelectedOrderItem.Additives[1];

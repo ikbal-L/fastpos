@@ -215,22 +215,24 @@ namespace FastPosFrontend.Helpers
                 {
                     if (product.IsPlatter)
                     {
-                        var additivesOfProduct = product?.Additives.Where(a =>
-                                  oit.OrderItemAdditives.Any(orderItemAdditive => orderItemAdditive.AdditiveId == a.Id)).ToList();
-                        foreach (var additive in additivesOfProduct)
-                        {
-                            var newAdditive = new Additive(additive) { ParentOrderItem = oit };
-                            additives.Add(newAdditive);
-                        }
-
+                      product?.Additives.ToList().ForEach(a =>
+                      {
+                          var oia = oit.OrderItemAdditives.FirstOrDefault(orderItemAdditive => orderItemAdditive.AdditiveId == a.Id);
+                          if (oia!= null)
+                          {
+                              oia.Additive = a;
+                              oia.OrderItem = oit;
+                          }
+                      } );
                         
+
                     }
 
                     if (product == null)
                     {
                         throw new Exception("Order mapping product is null");
                     }
-                    oit.Additives = new BindableCollection<Additive>(additives);
+
 
                     oit.Product = product;
                 }

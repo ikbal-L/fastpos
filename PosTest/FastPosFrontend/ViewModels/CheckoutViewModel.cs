@@ -211,6 +211,7 @@ namespace FastPosFrontend.ViewModels
             DrawerManager.Instance.InitTop(this, "CheckoutDeliverymanDrawer", this, tag: ListKind.Delivery);
             DrawerManager.Instance.InitTop(this, "CheckoutTableDrawer", this, tag: ListKind.Table);
             DrawerManager.Instance.InitTop(this, "CheckoutCustomerDrawer", this, tag: ListKind.Customer);
+            DrawerManager.Instance.InitBottom(this, "CheckoutOrderTabinationDrawer", this);
 
             var baseUrl = ConfigurationManager.Get<PosConfig>()?.Url;
             eventManager = new EventManagement.EventManager();
@@ -234,7 +235,7 @@ namespace FastPosFrontend.ViewModels
                 PageSize = pageSize,
                 OrderBy = "orderTime",
                 SortOrder = SortOrder.Desc,
-                States = { OrderState.Delivered, OrderState.Credit, OrderState.Payed }
+                States = {  OrderState.Payed }
             };
             var result = _orderRepo.GetByCriterias(orderFilter);
             StateManager.Instance.Map(result.Elements);
@@ -1867,7 +1868,7 @@ namespace FastPosFrontend.ViewModels
 
         #region Order Item commands
 
-        public void AddAditive(Additive additive)
+        public void AddAditive(Additive additive,string modifier)
         {
             if (additive == null) return;
 
@@ -1878,23 +1879,16 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            if (!CurrentOrder.SelectedOrderItem.AddAdditive(additive))
+            if (!CurrentOrder.SelectedOrderItem.AddAdditive(additive,modifier))
             {
-                CurrentOrder.SelectedOrderItem.SelectedAdditive = null;
-                CurrentOrder.SelectedOrderItem.SelectedAdditive =
-                    CurrentOrder.SelectedOrderItem.Additives.Where(addv => addv.Equals(additive)).FirstOrDefault();
+                CurrentOrder.SelectedOrderItem.SelectedAdditive = additive;
             }
         }
 
-        public void RemoveAdditive(Additive additive)
+        public void RemoveAdditive(OrderItemAdditive orderItemAdditive)
         {
-            if (additive is null || additive.ParentOrderItem is null) return;
-
-            if (additive.ParentOrderItem.Additives.Any(addtv => addtv.Equals(additive)))
-            {
-                CurrentOrder.SelectedOrderItem = additive.ParentOrderItem;
-                additive.ParentOrderItem.RemoveAdditive(additive);
-            }
+            orderItemAdditive.OrderItem.RemoveAdditive(orderItemAdditive);
+           
         }
 
         public void RemoveOrerItem()
@@ -2525,13 +2519,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public void SetSplitOrderNumber()
-        {
-            //if (SplitViewModel?.SplittedOrder == null) return;
-            
-            //SplitViewModel.SplittedOrder.OrderNumber = orderCount;
-            //orderCount++;
-        }
+
 
         public void AddExpense()
         {
@@ -2599,6 +2587,38 @@ namespace FastPosFrontend.ViewModels
         public void OnRecentOrdersPopupOpened()
         {
             RecentOrders.Reload();
+        }
+
+        public void ViewOrderTabs()
+        {
+            DrawerManager.Instance.OpenBottom(this);
+        }
+
+        public void NavigateToDeliveryCheckout()
+        {
+            var nav = (Parent as MainViewModel)?.Navigator;
+            var navItem = nav?.QuickNavigationItems.FirstOrDefault(i => i.Target == typeof(DeliveryCheckoutViewModel));
+            if (nav!= null)
+            {
+                nav.SelectedNavigationItem = navItem; 
+            }
+
+        }
+
+        public void NavigateToCreditCheckout()
+        {
+            var nav = (Parent as MainViewModel)?.Navigator;
+            var navItem = nav?.QuickNavigationItems.FirstOrDefault(i => i.Target == typeof(CreditCheckoutViewModel));
+            if (nav != null)
+            {
+                nav.SelectedNavigationItem = navItem;
+            }
+        }
+
+        public void RefundOrder()
+        {
+            CurrentOrder.State = OrderState.Refunded;
+            StateManager.Save(CurrentOrder);
         }
     }
 

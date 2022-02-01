@@ -6,7 +6,8 @@
                     xmlns:cal="http://www.caliburnproject.org"
                     xmlns:ex="clr-namespace:FastPosFrontend.Extensions" 
                     xmlns:converters="clr-namespace:FastPosFrontend.Converters"
-                    xmlns:controles="clr-namespace:FastPosFrontend.SL.Controls">
+                    xmlns:controles="clr-namespace:FastPosFrontend.SL.Controls"
+                    xmlns:enums="clr-namespace:FastPosFrontend.Enums">
 
     <converters:OrderTypeToPackIconKindConverter x:Key="OrderTypeToPackIconKindConverter"/>
 
@@ -383,6 +384,8 @@
                        
                     </Style>
                 </Panel.Resources>
+                <Button Content="{md:PackIcon Kind=Basket,Size=40}"
+                        Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Takeaway}"/>
                 <Button Content="{md:PackIcon Kind=TableFurniture,Size=40}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Table')]" />
                 <Button Content="{md:PackIcon Kind=RoomService,Size=40}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Waiter')]" />
                 <Button Content="{md:PackIcon Kind=TruckFast,Size=40}" cal:Message.Attach="[Event Click] = [ Action ShowDrawer('Delivery')]" />

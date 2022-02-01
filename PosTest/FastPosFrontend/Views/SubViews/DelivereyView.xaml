@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FastPosFrontend.Views.SubViews"
+             xmlns:sview="clr-namespace:FastPosFrontend.Views.SubViews"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              xmlns:convert="clr-namespace:FastPosFrontend.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -25,7 +25,8 @@
                  >
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:Order}">
-                    <Border  caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]">
+                    <Border  caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]"
+                             caliburn:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=sview:DelivereyView},Path=DataContext}" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="50"/>

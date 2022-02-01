@@ -56,7 +56,7 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid />
+                    <UniformGrid Rows="4" Columns="4" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>

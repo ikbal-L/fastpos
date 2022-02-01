@@ -65,29 +65,35 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="65" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="58*" />
-            <RowDefinition Height="42*" />
-        </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="65" />
+                <ColumnDefinition Width="auto" />
+               
+            </Grid.ColumnDefinitions>
 
-        <comp:OrderItemToolbar Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" Grid.RowSpan="2"
-                              />
-
-        <Grid Grid.Column="1" Grid.RowSpan="2"  IsEnabled="{Binding CanModifyCurrentOrder}">
-
-  
-            
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="58*" />
+                <RowDefinition Height="42*" />
             </Grid.RowDefinitions>
 
-            <ListBox
+            <comp:OrderItemToolbar Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Top" Grid.RowSpan="2"
+                              />
+
+            <Grid Grid.Column="1" Grid.RowSpan="2"  IsEnabled="{Binding CanModifyCurrentOrder}">
+
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <ListBox
                         Width="365"
                     Name="OrderItemsList" Grid.Column="1" Grid.Row="0"
                  ItemsSource="{Binding OrderItemsCollectionViewSource.View}"
@@ -98,91 +104,91 @@
                 SelectionMode="Single"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <ListBox.Style>
-                    <Style TargetType="ListBox" BasedOn="{StaticResource MaterialDesignListBox}">
-                        <Setter Property="Background" Value="#bfdbf7" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=OrderItemsList, Path=ItemsSource}"
+                    <ListBox.Style>
+                        <Style TargetType="ListBox" BasedOn="{StaticResource MaterialDesignListBox}">
+                            <Setter Property="Background" Value="#bfdbf7" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=OrderItemsList, Path=ItemsSource}"
                                      Value="{x:Null}">
-                                <Setter Property="Background" Value="White" />
-                            </DataTrigger>
-
-                            
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.Style>
-            </ListBox>
-            <Grid Grid.Row="1" >
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="2*" />
-                </Grid.RowDefinitions>
+                                    <Setter Property="Background" Value="White" />
+                                </DataTrigger>
 
 
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+                </ListBox>
+                <Grid Grid.Row="1" >
 
-                <Border Grid.Column="1" Grid.Row="0" Margin="0 2" x:Name="NumericZoneGrid" BorderBrush="Black" BorderThickness="1">
-                    <Border BorderBrush="White" BorderThickness="2" Background="Black">
-                        <UniformGrid>
-                            <Button
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="2*" />
+                    </Grid.RowDefinitions>
+
+
+
+                    <Border Grid.Column="1" Grid.Row="0" Margin="0 2" x:Name="NumericZoneGrid" BorderBrush="Black" BorderThickness="1">
+                        <Border BorderBrush="White" BorderThickness="2" Background="Black">
+                            <UniformGrid>
+                                <Button
                                 HorizontalContentAlignment="Stretch"
                                 caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('CopyToNumericZone')]"
                                 Style="{StaticResource ContainerButtonStyle}">
 
-                                <DockPanel>
-                                    <md:PackIcon Kind="Dollar" Width="30" Height="30" Padding="0"
+                                    <DockPanel>
+                                        <md:PackIcon Kind="Dollar" Width="30" Height="30" Padding="0"
                                                              Foreground="#26ff26" />
-                                    <TextBlock Foreground="#26ff26" TextAlignment="Right"
+                                        <TextBlock Foreground="#26ff26" TextAlignment="Right"
                                                FontFamily="{StaticResource DigitalFontFamily}"
                                                FontSize="32" Padding="0 5 0 0"
                                                Text="{Binding CurrentOrderTotal, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
                                                caliburn:Message.Attach="[Event MouseLeftButtonDown] = [Action NewTotalToNumericZone()]"
                                                x:Name="NewTotalTextBlock" />
-                                </DockPanel>
-                            </Button>
+                                    </DockPanel>
+                                </Button>
 
-                            <Grid>
-                                <TextBlock Text="{Binding ReturnedAmount,StringFormat='{}{0:#,0.00}'}" 
+                                <Grid>
+                                    <TextBlock Text="{Binding ReturnedAmount,StringFormat='{}{0:#,0.00}'}" 
                                        Foreground="#26ff26" DockPanel.Dock="Right"
                                            TextAlignment="Right"
                                            FontFamily="{StaticResource DigitalFontFamily}"
                                        FontSize="32" Padding="0 5 0 0"
                                        />
-                                <Label 
+                                    <Label 
                                        Foreground="#26ff26" DockPanel.Dock="Right"
                                            HorizontalAlignment="Right"
                                           Content="{md:PackIcon Kind=Lock,Size=30}"
                                        FontSize="32" Padding="0 5 0 0"
                                        >
-                                    <Label.Style>
-                                        <Style TargetType="Label" >
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding CurrentOrder}" Value="{x:Null}">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding CurrentOrder.IsLockedByCurrentClient}" Value="false">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Label.Style>
+                                        <Label.Style>
+                                            <Style TargetType="Label" >
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CurrentOrder}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding CurrentOrder.IsLockedByCurrentClient}" Value="false">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
 
-                                </Label>
-                            </Grid>
-                            <DockPanel Grid.Row="1" >
-                                <md:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
+                                    </Label>
+                                </Grid>
+                                <DockPanel Grid.Row="1" >
+                                    <md:PackIcon Kind="TagMinus" DockPanel.Dock="Left" Width="30"
                                                          Height="30" Padding="0" Foreground="#26ff26" />
-                                <TextBlock Foreground="#26ff26" FontSize="28" DockPanel.Dock="Right"
+                                    <TextBlock Foreground="#26ff26" FontSize="28" DockPanel.Dock="Right"
                                            TextAlignment="Right"
                                            FontFamily="{StaticResource DigitalFontFamily}"
                                            Text="{Binding CurrentOrder.TotalDiscountAmount, StringFormat='{}{0:#,0.00}', Mode=OneWay}"
                                            x:Name="TotalDiscountAmountTextBlock" />
-                            </DockPanel>
-                            <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
+                                </DockPanel>
+                                <Border Grid.Row="1" Grid.Column="1" BorderThickness="0 0 0 0"
                                 BorderBrush="CornflowerBlue">
 
 
-                                <TextBlock Foreground="#26ff26"
+                                    <TextBlock Foreground="#26ff26"
                                        Text="{Binding NumericZone, StringFormat='{}{0:0,0.00}'}"
                                        FontSize="45" FontFamily="{StaticResource DigitalFontFamily}"
                                        HorizontalAlignment="Stretch"
@@ -191,37 +197,39 @@
                                          IsEnabled="False"
                                          >
 
-                                </TextBlock>
-                            </Border>
+                                    </TextBlock>
+                                </Border>
 
 
 
-                        </UniformGrid>
+                            </UniformGrid>
 
 
+                        </Border>
                     </Border>
-                </Border>
-                <comp:OrderCommandsControl   Grid.Row="1" Margin="0 0 0 5"  />
+                    <comp:OrderCommandsControl   Grid.Row="1" Margin="0 0 0 5"  />
 
 
+                </Grid>
             </Grid>
+
+
+           
+
+
         </Grid>
 
-
-        <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" IsEnabled="{Binding CanModifyCurrentOrder}" />
-
-        <Grid Grid.Column="2" Grid.Row="1">
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
+          
+            <subViews:ProductNavigation Grid.Column="2" Grid.Row="0" IsEnabled="{Binding CanModifyCurrentOrder}" />
+            <comp:CategoryPaginationControl Grid.Row="1" />
 
-
-            <comp:CategoryPaginationControl Grid.Row="0" />
-            <comp:OrderTabinationView  Grid.Column="2" Grid.Row="1" />
         </Grid>
-
-
     </Grid>
 
 </UserControl>

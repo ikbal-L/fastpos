@@ -18,21 +18,55 @@
 
 
 
-    <DataTemplate x:Key="PlatterAdditives">
+    <DataTemplate x:Key="PlatterAdditives" DataType="{x:Type src:OrderItemAdditive}">
         <StackPanel Orientation="Horizontal">
-            <TextBlock x:Name="text" Text="{Binding Description}" >
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Foreground" Value="Black"></Setter>
+           
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="text"  Text="{Binding Additive.Description}" VerticalAlignment="Center" Margin="5 3 3 3">
 
-                        <Style.Triggers>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="LightGray"></Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                  
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="Black"></Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="LightGray"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <md:PackIcon>
+                    <md:PackIcon.Style>
+                        <Style TargetType="md:PackIcon">
+                            <Setter Property="Width" Value="30"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Modifier}" Value="+">
+                                    <Setter Property="Kind" Value="PlusThick"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Modifier}" Value="-">
+                                    <Setter Property="Kind" Value="MinusThick"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Modifier}" Value="x">
+                                    <Setter Property="Kind" Value="CancelThick"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding Modifier}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Modifier}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </md:PackIcon.Style>
+                </md:PackIcon>
+            </StackPanel>
+          
             <Button   Padding="0"
                      BorderBrush="{Binding ElementName=text, Path=Background}"
                      Background="{Binding ElementName=text, Path=Background}"
@@ -40,7 +74,7 @@
                      Height="{Binding ElementName=text, Path=Height}" 
                      
                      cal:Message.Attach="[Event Click] = [Action RemoveAdditive($this)]">
-                <md:PackIcon Kind="CloseBoxOutline" Width="25" Height="25" Padding="0"/>
+                <md:PackIcon Kind="Delete" Width="25" Height="25" Padding="0" Margin="2"/>
             </Button>
         </StackPanel>
     </DataTemplate>
@@ -102,11 +136,11 @@
                 </md:PackIcon.Style>
             </md:PackIcon>
             <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="16" />
-            
-            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"  FontSize="16"
-                     SelectedItem="{Binding SelectedAdditive}"
+
+            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding OrderItemAdditivesView}"  FontSize="16"
+                     
                      ItemTemplate="{StaticResource PlatterAdditives}"
-                     Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
+                     Visibility="{Binding OrderItemAdditives, Converter={StaticResource ObjectToVisibility}}"
                      Style="{StaticResource kidslist}"
                      ItemContainerStyle="{StaticResource AdditiveItem}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -117,71 +151,7 @@
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <!--<ToolBarTray  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" IsLocked="True" >
-                <ToolBar  
-                       Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5"
-                       Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected,Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Button Grid.Row="0" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action RemoveOrerItem()]"
-                    Content="{md:PackIcon Delete, Size=30}" />
-                    <Button Grid.Row="1" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage()]"
-                    Content="{md:PackIcon ShapePlus, Size=30}" />
-                    <Button Grid.Row="2" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action AddOneToQuantity()]"
-                    Content="{md:PackIcon AddBox, Size=30}" />
-                    <Button Grid.Row="3" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity()]"
-                    Content="{md:PackIcon MinusBox, Size=30}" />
-                    <Button Content="{md:PackIcon Kind=ShoppingCart, Size=30}" Foreground="{DynamicResource PrimaryHueMidBrush}"
-                    cal:Message.Attach="[Event Click] = [Action ActionKeyboard('QTY')]"/>
-                    <Button Grid.Row="4" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-
-                    cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    Content="{md:PackIcon TagMinus, Size=30}" />
-                    <Button Grid.Row="5" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(0)]"
-                    Content="{md:PackIcon TagFaces, Size=30}" />
-                </ToolBar>
-            </ToolBarTray>-->
-
-            <!--<md:PopupBox  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" PopupMode="Click" >
-                <ToolBar>
-                    <Button Grid.Row="0" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action RemoveOrerItem()]"
-                    Content="{md:PackIcon Delete, Size=30}" />
-                    <Button Grid.Row="1" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action GoToAdditiveButtonsPage()]"
-                    Content="{md:PackIcon ShapePlus, Size=30}" />
-                    <Button Grid.Row="2" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action AddOneToQuantity()]"
-                    Content="{md:PackIcon AddBox, Size=30}" />
-                    <Button Grid.Row="3" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action SubtractOneFromQuantity()]"
-                    Content="{md:PackIcon MinusBox, Size=30}" />
-                    <Button Content="{md:PackIcon Kind=ShoppingCart, Size=30}" Foreground="{DynamicResource PrimaryHueMidBrush}"
-                    cal:Message.Attach="[Event Click] = [Action ActionKeyboard('QTY')]"/>
-                    <Button Grid.Row="4" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-
-                    cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    Content="{md:PackIcon TagMinus, Size=30}" />
-                    <Button Grid.Row="5" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
-                    IsEnabled="{Binding SelectedItem, Converter={StaticResource ObjectToBoolConverter}, ElementName=OrderItemsList}"
-                    cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(0)]"
-                    Content="{md:PackIcon TagFaces, Size=30}" />
-                </ToolBar>
-            </md:PopupBox>-->
+           
 
         </Grid>
     </DataTemplate>

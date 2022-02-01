@@ -96,16 +96,16 @@
                 Grid.Row="1"  
                 ItemsSource="{Binding CustomerCollectionViewSource.View}" 
                 Style="{StaticResource MaterialDesignCardsListBox}"
-                Margin="5">
+                Margin="5" Height="350" >
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                        <UniformGrid Columns="4" Height="350" />
+                        <UniformGrid Columns="4" Rows="2" />
                     </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate  DataType="model:Customer">
-                                <Button Height="170"
+                                <Button Height="150" 
                                 Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" 
                                 CommandParameter="{Binding}" HorizontalAlignment="Stretch"
                                     

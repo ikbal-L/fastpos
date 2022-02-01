@@ -8,37 +8,52 @@ namespace FastPosFrontend.Helpers
 {
     public static class OrderItemEx
     {
-        public static bool AddAdditive(this OrderItem orderItem, Additive additive)
+        public static bool AddAdditive(this OrderItem orderItem, Additive additive,string? modifier= null)
         {
-            if (orderItem.Additives == null)
+
+            if (orderItem.OrderItemAdditives == null) return false;
+
+
+            var oia = orderItem.OrderItemAdditives.FirstOrDefault(e =>e.Additive.Equals(additive));
+            if (oia != null)
             {
-                orderItem.Additives = new BindableCollection<Additive>();
+                if (oia.Modifier != modifier)
+                {
+                    oia.Modifier = modifier;
+                }
             }
-            if (orderItem.Additives.Any() && orderItem.Additives.Any(a => a.Equals(additive))) return false;
+            else
+            {
+                orderItem.OrderItemAdditives.Add(new OrderItemAdditive()
+                {
+                    AdditiveId = (long)additive.Id,
+                    OrderItemId = orderItem.Id,
+                    State = AdditiveState.Added,
+                    Modifier = modifier,
+                    Additive = additive,
+                    OrderItem = orderItem
+                });
+            }
 
 
-            var additiveToAdd = additive.Clone();
-            additiveToAdd.ParentOrderItem = orderItem;
-            orderItem.Additives.Add(additiveToAdd);
-            if (additiveToAdd.Id != null) orderItem.OrderItemAdditives.Add(new OrderItemAdditive() { AdditiveId = (long)additiveToAdd.Id, OrderItemId = orderItem.Id, State = AdditiveState.Added });
+        
             return true;
         }
 
-        public static void RemoveAdditive(this OrderItem orderItem, Additive additive)
+        public static void RemoveAdditive(this OrderItem orderItem, OrderItemAdditive orderiItemAdditive)
         {
 
 
             if (orderItem.Order.Id == null)
             {
-
-                orderItem.OrderItemAdditives.RemoveAll(orderItemAdditive => orderItemAdditive.AdditiveId == additive.Id);
-
+                orderItem.OrderItemAdditives.Remove(orderiItemAdditive);
             }
             else
             {
-                orderItem.OrderItemAdditives.Find(oia => oia.AdditiveId == additive.Id).State = AdditiveState.Removed;
+                orderiItemAdditive.State = AdditiveState.Removed;
+                orderiItemAdditive.OrderItem.OrderItemAdditivesView.Refresh();
             }
-            orderItem.Additives.Remove(additive);
+
         }
 
         

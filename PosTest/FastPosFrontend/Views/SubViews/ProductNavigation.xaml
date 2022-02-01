@@ -73,7 +73,7 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="6" Rows="5" />
+                        <UniformGrid Columns="4" Rows="4" />
                     </ItemsPanelTemplate>
 
                 </ListBox.ItemsPanel>

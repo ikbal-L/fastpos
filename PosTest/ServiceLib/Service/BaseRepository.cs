@@ -243,7 +243,11 @@ namespace ServiceLib.Service
                 if (oldOrderItem!= null)
                 {
                     oldOrderItem.Id = newOrderItem.Id;
-                    oldOrderItem.OrderItemAdditives = newOrderItem.OrderItemAdditives; 
+                   
+                    oldOrderItem.OrderItemAdditives.ToList().ForEach(e => {
+
+                        e.OrderItemId = oldOrderItem.Id;
+                    });
                 }
 
             }

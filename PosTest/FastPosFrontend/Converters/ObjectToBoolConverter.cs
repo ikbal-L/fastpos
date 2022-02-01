@@ -12,7 +12,7 @@ namespace FastPosFrontend.Converters
         {
             if (value is OrderItem item && item.Product!=null)
             {
-                if (item.Product.IsPlatter && item.Additives != null&& item.Product.Additives.Any())
+                if (item.Product.IsPlatter && item.OrderItemAdditives != null&& item.Product.Additives.Any())
                 {
                     return true;
                 }

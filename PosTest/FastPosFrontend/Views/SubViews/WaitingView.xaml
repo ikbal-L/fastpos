@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:subvm="clr-namespace:FastPosFrontend.ViewModels.SubViewModel"
+             xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
              xmlns:sview="clr-namespace:FastPosFrontend.Views.SubViews"
              xmlns:view="clr-namespace:FastPosFrontend.Views"
@@ -12,7 +13,8 @@
              xmlns:caliburn="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:tk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel">
+             xmlns:tk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+             d:DataContext="{d:DesignInstance Type=subvm:WaitingViewModel}">
     <UserControl.Resources>
         <convert:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter"/>
     </UserControl.Resources>
@@ -28,7 +30,8 @@
                      >
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:Order}">
-                    <Grid caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]">
+                    <Grid caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action ShowOrder($this)]"
+                          caliburn:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=sview:WaitingView},Path=DataContext}">
 
                         <Grid.ContextMenu>
                             <ContextMenu Padding="0" >
