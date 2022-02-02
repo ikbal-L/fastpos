@@ -17,6 +17,7 @@
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -27,15 +28,22 @@
                                          Text="{Binding Additive.Description}" />
             </Border>
 
-            <!--<controls:ColorPalette  Grid.Row="1" CPColorBrush="{Binding Additive.Background,Converter={StaticResource scbtobrush}}"></controls:ColorPalette>-->
-            <materialDesign:ColorPicker Grid.Row="1" MinHeight="200"  Margin="20 10">
+            <Border Grid.Row="1" Margin="0 10">
+                <UniformGrid Columns="2" Rows="1" HorizontalAlignment="Left">
+                    <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding Additive.IsFavorite}"/>
+                    <TextBlock Text="Is Favorite" FontSize="18" FontWeight="DemiBold"/>
+                </UniformGrid>
+            </Border>
+
+
+            <materialDesign:ColorPicker Grid.Row="2" MinHeight="200"  Margin="20 10">
                 <materialDesign:ColorPicker.Color>
                     <Binding 
                         Path="Additive.Background" 
                         Converter="{StaticResource SolidColorBrushToColorConverter}" />
                 </materialDesign:ColorPicker.Color>
             </materialDesign:ColorPicker>
-            <materialDesign:ColorZone Background="#FFAEEA00" Padding="6" Grid.Row="2" Margin="1">
+            <materialDesign:ColorZone Background="#FFAEEA00" Padding="6" Grid.Row="3" Margin="1">
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                             cal:Message.Attach="[Event Click] = [Action SaveAdditive()]">

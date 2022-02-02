@@ -595,9 +595,8 @@
                         >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="{Binding ProductLayout.CategoryCols}" />
-                                <!--[Event TouchMove] = [Action CategoriesList_TouchDown($source, $eventArgs)];-->
-                                <!--<UniformGrid Columns="6" />-->
+                                <UniformGrid Columns="5" Rows="3" />
+                         
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>

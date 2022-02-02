@@ -28,6 +28,7 @@ namespace FastPosFrontend.ViewModels
         {
             _source.Description = Additive.Description;
             _source.Background = Additive.Background;
+            _source.IsFavorite = Additive.IsFavorite;
             if (StateManager.Save(_source))
             {
 

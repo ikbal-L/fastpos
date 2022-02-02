@@ -15,6 +15,8 @@ namespace ServiceInterface.Model
         private SolidColorBrush _background;
         private AdditiveState _state;
         private DateTime? _timeStamp;
+        private bool _isFavorite;
+        private long? _id;
 
         public Additive()
         {
@@ -28,7 +30,7 @@ namespace ServiceInterface.Model
             Rank = additive.Rank;
         }
 
-        [DataMember] public long? Id { get; set; }
+        [DataMember] public long? Id { get => _id; set =>Set(ref  _id , value); }
 
         [DataMember]
         [Required(ErrorMessage = "Name must not be Null or Empty")]
@@ -54,11 +56,11 @@ namespace ServiceInterface.Model
 
         public Brush Background
         {
-            get => new SolidColorBrush((Color) ColorConverter.ConvertFromString(BackgroundString));
+            get => new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundString));
 
             set
             {
-                Set(ref _background, (SolidColorBrush) value);
+                Set(ref _background, (SolidColorBrush)value);
                 if (value != null)
                 {
                     Set(ref _backgroundString, _background.Color.ToString(), nameof(BackgroundString));
@@ -72,6 +74,9 @@ namespace ServiceInterface.Model
                 NotifyOfPropertyChange(nameof(Background));
             }
         }
+        [DataMember]
+        public bool IsFavorite { get => _isFavorite; set => Set(ref _isFavorite, value); }
+
 
         /*bool IEquatable<Additive>.Equals(Additive additive)
         {
@@ -126,7 +131,7 @@ namespace ServiceInterface.Model
             return $"{Description}";
         }
 
-        
+
     }
 
 

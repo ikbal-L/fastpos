@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
                     xmlns:vm="clr-namespace:FastPosFrontend.ViewModels;assembly=FastPosFrontend"
-                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:converters="clr-namespace:FastPosFrontend.Converters;assembly=FastPosFrontend"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:ex="clr-namespace:FastPosFrontend.Extensions;assembly=FastPosFrontend"
@@ -61,6 +61,61 @@
     <converters:OrderItemAdditiveStateToIconValueConverter x:Key="OrderItemAdditiveStateToIconValueConverter" />
     <converters:OrderItemStateToCharConverter x:Key="OrderItemStateToCharConverter" />
 
+
+    <DataTemplate x:Key="AdditiveKitchenTemplate" DataType="{x:Type models:OrderItemAdditive}">
+        <StackPanel Orientation="Horizontal">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="text"  Text="{Binding Additive.Description}" VerticalAlignment="Center" Margin="5 3 3 3">
+
+
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="Black"></Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="LightGray"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <md:PackIcon>
+                    <md:PackIcon.Style>
+                        <Style TargetType="md:PackIcon">
+                            <Setter Property="Width" Value="30"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Modifier}" Value="+">
+                                    <Setter Property="Kind" Value="PlusThick"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Modifier}" Value="-">
+                                    <Setter Property="Kind" Value="MinusThick"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Modifier}" Value="x">
+                                    <Setter Property="Kind" Value="CancelThick"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding Modifier}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Modifier}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </md:PackIcon.Style>
+                </md:PackIcon>
+            </StackPanel>
+
+           
+        </StackPanel>
+    </DataTemplate>
+
+
     <DataTemplate DataType="{x:Type models:OrderItem}" x:Key="OrderItemKitchenReceiptDataTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -76,54 +131,48 @@
 
             <TextBlock Grid.Column="0" Text="{Binding Path=Product.Name}" FontSize="14" Margin="2 5 "
                        VerticalAlignment="Center" TextWrapping="Wrap" />
-            <materialDesign:PackIcon Grid.Column="1"
+            <md:PackIcon Grid.Column="1"
                                      Kind="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}"
                                      HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center" />
-            <!--<Label Grid.Column="1"
-                                     Content="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}"
-                                     HorizontalAlignment="Left" FontSize="16" VerticalAlignment="Center" FontWeight="Bold" />-->
+
             
             
-            <TextBlock Grid.Column="2" Text="{Binding Quantity, StringFormat=' {0}'}" HorizontalAlignment="Left"
+            <TextBlock Grid.Column="2" Text="{Binding Quantity}" HorizontalAlignment="Left"
                        FontSize="16" VerticalAlignment="Center" FontWeight="Bold" />
 
 
-            <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding Additives}"
-                          FontSize="8" Margin="10 -4 0 0"
-                          Visibility="{Binding Additives, Converter={StaticResource ObjectToVisibility}}"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding OrderItemAdditivesView}"
+                      
+                          Visibility="{Binding OrderItemAdditives, Converter={StaticResource ObjectToVisibility}}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ItemTemplate="{StaticResource AdditiveKitchenTemplate }">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <StackPanel />
                     </ItemsPanelTemplate>
 
                 </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1" Margin="5" CornerRadius="5">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Description}" Margin="3" VerticalAlignment="Center" />
-                                <materialDesign:PackIcon Width="10" Height="10" VerticalAlignment="Center" Margin="3">
-
-                                    <materialDesign:PackIcon.Kind>
-                                        <MultiBinding
-                                            Converter="{StaticResource OrderItemAdditiveStateToIconValueConverter}">
-                                            <Binding />
-                                            <Binding RelativeSource="{RelativeSource AncestorType=ItemsControl}"
-                                                     Path="DataContext.OrderItemAdditives" />
-                                        </MultiBinding>
-                                    </materialDesign:PackIcon.Kind>
-                                </materialDesign:PackIcon>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+           
             </ItemsControl>
 
 
         </Grid>
     </DataTemplate>
 
+    <Style TargetType="Border" x:Key="DashedLineBorderStyle">
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Rectangle StrokeDashArray="4 6" Stroke="Black" StrokeThickness="1"
+                                                        />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
         <Grid Margin="3"  >
@@ -150,21 +199,17 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                                    <!--<svgc:SvgViewbox Source="./logo.svg" Width="60" Height="60"/>-->
-                                    <Image Source="./logo.jpg" Width="150" Height="150"/>
+                                <!--<svgc:SvgViewbox Source="./logo.svg" Width="60" Height="60"/>-->
+                                <Image Source="./logo.jpg" Width="150" Height="150"/>
 
-                                    <TextBlock  
+                                <TextBlock  
                                        FontSize="14"
                                        FontWeight="Bold"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                        Text="{Binding Source={ex:Config PropertyName=General.RestaurantName}}" />
-                                </StackPanel>
-                                <!--<Image Source=""/>-->
-
                             </StackPanel>
 
                         </Grid>
@@ -181,15 +226,18 @@
                 <StackPanel Grid.Row="2" >
                     <StackPanel Orientation="Horizontal">
 
-                        <Label VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        <!--<Label VerticalAlignment="Center" VerticalContentAlignment="Center">
                             <Label.Content>
-                                <materialDesign:PackIcon Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}"/>
+                                <md:PackIcon Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}" />
                             </Label.Content>
-                        </Label>
+                        </Label>-->
 
-                        <TextBlock DockPanel.Dock="Right" 
-                                   VerticalAlignment="Center" 
-                                   Text="{Binding OrderCode}" />
+                        <TextBlock 
+                       
+                        Text="{Binding OrderNumber,StringFormat='Commande # : {0:D3}'}"
+                         Width="200"
+                         FontWeight="Bold" FontSize="17" Margin="0 0 0 10 "/>
+                        <TextBlock />
 
                     </StackPanel>
                     <Grid >
@@ -214,7 +262,7 @@
                         <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Customer.Address,FallbackValue='Adresse: /'}" Visibility="{Binding Customer,Converter={StaticResource NullToVisibilityConverter}}"/>
 
                     </Grid>
-                    <!--<TextBlock Grid.Row="2" Text="Caisse N:1" />-->
+
                 </StackPanel>
             </Grid>
 
@@ -235,18 +283,11 @@
                         <ControlTemplate TargetType="ItemsControl">
                             <Border Background="{TemplateBinding Background}" >
                                 <StackPanel>
-                                    <Border BorderThickness="0 0 0 1"  HorizontalAlignment="Stretch" >
+                                    <Border  Style="{StaticResource DashedLineBorderStyle}" >
 
-                                        <Border.BorderBrush>
-                                            <VisualBrush>
-                                                <VisualBrush.Visual>
-                                                    <Rectangle StrokeDashArray="4 6" Stroke="Black" StrokeThickness="1"
-                                                        Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
-                                                         Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
-                                                </VisualBrush.Visual>
-                                            </VisualBrush>
-                                        </Border.BorderBrush>
+                                       
 
+                                   
                                         <Grid x:Name="HeadListLabels" Margin="0 0 0 3">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="5*" />

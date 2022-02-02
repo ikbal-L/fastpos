@@ -475,6 +475,17 @@ namespace FastPosFrontend.ViewModels
             }
             e.Accepted = false;
         }
+
+        public void NavigateToCheckout()
+        {
+            var nav = (Parent as MainViewModel)?.Navigator;
+            var navItem = nav?.QuickNavigationItems.FirstOrDefault(i => i.Target == typeof(CheckoutViewModel));
+            if (nav != null)
+            {
+                nav.SelectedNavigationItem = navItem;
+            }
+
+        }
     }
 
    

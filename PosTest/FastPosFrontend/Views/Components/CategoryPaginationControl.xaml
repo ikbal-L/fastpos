@@ -13,42 +13,42 @@
     <UserControl.Resources>
         <converters:CategoryTemplateWidthConverter x:Key="CategoryTemplateWidthConverter" />
     </UserControl.Resources>
-    <Grid  Margin="2 2 2 2">
+    <Grid  Margin="2">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
 
-        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="2 0 0 0" Height="60">
+        <Grid Grid.Column="1"  Margin="2 0 0 0"  >
             <ItemsControl x:Name="CategoryPagination" ItemsSource="{Binding PaginatedCategories.View}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                      
+                        <!--<StackPanel Orientation="Horizontal" />-->
+                        <UniformGrid Rows="3" Columns="5"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
 
                     <DataTemplate DataType="{x:Type models:Category}">
                         <Button
-                                        Height="60" Background="{Binding Background}"
+                                        Height="50" Background="{Binding Background}"
                                         Content="{Binding Name}"
                                         cal:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
                                         FontWeight="Bold"
                                         FontSize="16"
                                         Padding="3 0 0 5"
-                                        Margin="3 0 0 0"
+                                        Margin="3"
                                         BorderBrush="#2f2f2f"
                                       
                             materialDesign:ButtonAssist.CornerRadius="8">
-                            <Button.MinWidth>
+                            <!--<Button.MinWidth>
                                 <Binding RelativeSource="{RelativeSource AncestorType=Window}"
                                                      Path="ActualWidth"
                                                      Converter="{StaticResource CategoryTemplateWidthConverter}"
                                                      ConverterParameter="417,60,60" />
-                            </Button.MinWidth>
+                            </Button.MinWidth>-->
                             <Button.Style >
                                 <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}" >
                                     <Style.Triggers>
@@ -66,25 +66,25 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </StackPanel>
+        </Grid>
 
-        <UniformGrid Grid.Column="0"  Columns="2" Rows="1">
+        <UniformGrid Grid.Column="0"  Columns="1" Rows="2" x:Name="CategoryPaginationControls" >
 
 
             <Button DockPanel.Dock="Right" Height="60"  VerticalAlignment="Center"
                                 x:Name="PreviousPqge" Style="{StaticResource MaterialDesignFlatButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('PREVIOUS')]"
-                                Content="{materialDesign:PackIcon ChevronLeft,30}"
+                                Content="{materialDesign:PackIcon Kind=ChevronUp,Size=50}"
                                 Padding="4"
-                                materialDesign:ButtonAssist.CornerRadius="10 0 0 10"
+                                
                                 Margin="2"/>
 
             <Button DockPanel.Dock="Right" Height="60"  x:Name="NextPage"
                                 Style="{StaticResource MaterialDesignFlatButton}"
                                 cal:Message.Attach="[Event Click] = [Action PaginateCategories('NEXT')]"
-                                Content="{materialDesign:PackIcon ChevronRight,30}" 
+                                Content="{materialDesign:PackIcon ChevronDown,50}" 
                                 Padding="4"
-                                materialDesign:ButtonAssist.CornerRadius="0 10 10 0"
+                                
                                 Margin="2"/>
         </UniformGrid>
     </Grid>

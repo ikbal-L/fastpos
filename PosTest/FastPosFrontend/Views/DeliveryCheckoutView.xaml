@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FastPosFrontend.Views"
-             xmlns:caliburn="http://www.caliburnproject.org"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"          
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels" 
              xmlns:controls="clr-namespace:FastPosFrontend.SL.Controls" 
@@ -13,7 +13,8 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:DeliveryCheckoutViewModel}"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             Background="{StaticResource MaterialDesignPaper}" Language="fr-Fr">
+             Background="{StaticResource MaterialDesignPaper}" Language="fr-Fr"
+             >
 
     <UserControl.Resources>
         <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
@@ -44,6 +45,7 @@
         <Grid Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <DataGrid
@@ -118,7 +120,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Style="{StaticResource ContainerButtonStyle}" caliburn:Message.Attach="[Event Click] = [Action CopyTotalPaymentField()]" >
+                    <Button Style="{StaticResource ContainerButtonStyle}" cal:Message.Attach="[Event Click] = [Action CopyTotalPaymentField()]" >
                         <TextBox 
                              materialDesign:HintAssist.Hint="Total" Margin="10 10 10 15"
                              materialDesign:HintAssist.IsFloating="True"
@@ -229,18 +231,18 @@
 
                     <UniformGrid Grid.Column="0" Columns="3" Rows="4"  VerticalAlignment="Top">
 
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('1')]"  Margin="1" Content="1" Grid.Column="0" Grid.Row="0"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('2')]"  Margin="2" Content="2" Grid.Column="1" Grid.Row="0"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('3')]"  Margin="2" Content="3" Grid.Column="2" Grid.Row="0"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('4')]"  Margin="2" Content="4" Grid.Column="0" Grid.Row="1"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('5')]"  Margin="2" Content="5" Grid.Column="1" Grid.Row="1"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]"  Margin="2" Content="6" Grid.Column="2" Grid.Row="1"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('7')]"  Margin="2" Content="7" Grid.Column="0" Grid.Row="2"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('8')]"  Margin="2" Content="8" Grid.Column="1" Grid.Row="2"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('9')]"  Margin="2" Content="9" Grid.Column="2" Grid.Row="2"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('%')]"  Margin="2" Content="%" Grid.Column="0" Grid.Row="3"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('0')]"  Margin="2" Content="0" Grid.Column="1" Grid.Row="3"/>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]"  Margin="2" Content="." Grid.Column="2" Grid.Row="3"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('1')]"  Margin="1" Content="1" Grid.Column="0" Grid.Row="0"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('2')]"  Margin="2" Content="2" Grid.Column="1" Grid.Row="0"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('3')]"  Margin="2" Content="3" Grid.Column="2" Grid.Row="0"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('4')]"  Margin="2" Content="4" Grid.Column="0" Grid.Row="1"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('5')]"  Margin="2" Content="5" Grid.Column="1" Grid.Row="1"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]"  Margin="2" Content="6" Grid.Column="2" Grid.Row="1"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('7')]"  Margin="2" Content="7" Grid.Column="0" Grid.Row="2"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('8')]"  Margin="2" Content="8" Grid.Column="1" Grid.Row="2"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('9')]"  Margin="2" Content="9" Grid.Column="2" Grid.Row="2"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('%')]"  Margin="2" Content="%" Grid.Column="0" Grid.Row="3"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('0')]"  Margin="2" Content="0" Grid.Column="1" Grid.Row="3"/>
+                        <Button  cal:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]"  Margin="2" Content="." Grid.Column="2" Grid.Row="3"/>
                     </UniformGrid>
                     <Grid Grid.Column="1"  VerticalAlignment="Top">
                         <Grid.RowDefinitions>
@@ -248,13 +250,25 @@
                             <RowDefinition Height="3*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Button  caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Enter')]"  Grid.Row="1" Content="{materialDesign:PackIcon Kind=CashRegister,Size=40}" HorizontalAlignment="Stretch" Height="104" Width="150" />
+                        <Button  cal:Message.Attach="[Event Click] = [Action ActionKeyboard('Enter')]"  Grid.Row="1" Content="{materialDesign:PackIcon Kind=CashRegister,Size=40}" HorizontalAlignment="Stretch" Height="104" Width="150" />
                         <ToggleButton IsChecked="{Binding IsDiscountEnabled}"  Grid.Row="0"  Content="{materialDesign:PackIcon Kind=TagMinus,Size=30}" HorizontalAlignment="Stretch" Height="50" Width="150"/>
-                        <Button caliburn:Message.Attach="[Event Click] = [Action ActionKeyboard('Backspase')]"   Grid.Row="2"  Content="{materialDesign:PackIcon BackspaceOutline,30}" HorizontalAlignment="Stretch" Height="50" Width="150"/>
+                        <Button cal:Message.Attach="[Event Click] = [Action ActionKeyboard('Backspase')]"   Grid.Row="2"  Content="{materialDesign:PackIcon BackspaceOutline,30}" HorizontalAlignment="Stretch" Height="50" Width="150"/>
 
                     </Grid>
                 </UniformGrid>
             </Grid>
+
+            <Button Grid.Row="2" Content="{materialDesign:PackIcon Kind=ArrowLeftBold, Size=30}"
+                    cal:Message.Attach="[Event Click] = [Action NavigateToCheckout() ]" >
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Stretch"/>
+                        <Setter Property="Height" Value="50"/>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
 
         <Grid Grid.Column="0" Margin=" 10 5" >

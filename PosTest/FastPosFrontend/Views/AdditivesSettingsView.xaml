@@ -102,6 +102,38 @@
                         ex:AbilityEx.Autority="Delete_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                 </Button>
+
+                <!--<ToggleButton
+                          
+                              Background="Transparent"
+                             
+                              Visibility="{Binding Description,Mode=OneWay,Converter={StaticResource ObjectToVisibility},UpdateSourceTrigger=PropertyChanged}"
+                               IsChecked="{Binding SelectedAdditive.IsFavorite}">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Content" Value="{materialdesign:PackIcon Kind=StarOutline,Size=30}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource WarningColorBrush}"/>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="{materialdesign:PackIcon Kind=Star,Size=30}"/>
+                                </Trigger>
+
+
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>-->
+
             </ToolBar>
         </ToolBarTray>
 

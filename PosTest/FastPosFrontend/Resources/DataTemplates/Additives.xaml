@@ -130,5 +130,124 @@
         </UniformGrid>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type src:Additive}" x:Key="FavAdditiveDataTemplate">
+        <Border  Background="{Binding Background,FallbackValue=#FFDDDDDD}" CornerRadius="8" Padding="5">
+            <UniformGrid   x:Name="AddivieTemplate" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                
+                       Rows="2" Columns="1" >
+                <TextBlock Text="{Binding Path=Description}"   FontSize="16"  
+                                   TextAlignment="Center" VerticalAlignment="Center" 
+                                   TextWrapping="WrapWithOverflow" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style  TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger  Binding="{Binding IsDark}" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <UniformGrid Columns="3" Rows="1" Visibility="{Binding ElementName=AddivieTemplate,Path=DataContext, Converter={StaticResource ObjectToVisibility}}">
+                    <Button 
+                    Padding="0"
+                    
+                    VerticalAlignment="Stretch" 
+                    HorizontalAlignment="Center" 
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Content="{md:PackIcon Kind=PlusThick,Size=30}">
+                        <Button.Style>
+                            <Style  TargetType="Button" BasedOn="{StaticResource ContainerButtonStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger  Binding="{Binding IsDark}" Value="True">
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <cal:ActionMessage MethodName="AddAditive">
+                                    <cal:Parameter Value="{Binding ElementName=AddivieTemplate, Path=DataContext}" />
+                                    <cal:Parameter Value="+" />
+                                </cal:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                    </Button>
+
+                    <Button 
+                   
+                   
+                    Padding="0"
+                    
+                    VerticalAlignment="Stretch" 
+                    HorizontalAlignment="Center" 
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Content="{md:PackIcon Kind=MinusThick,Size=30}"
+                    >
+
+                        <Button.Style>
+                            <Style  TargetType="Button" BasedOn="{StaticResource ContainerButtonStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger  Binding="{Binding IsDark}" Value="True">
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <cal:ActionMessage MethodName="AddAditive">
+                                    <cal:Parameter Value="{Binding ElementName=AddivieTemplate, Path=DataContext}" />
+                                    <cal:Parameter Value="-" />
+                                </cal:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                    </Button>
+
+                    <Button 
+                   
+                    
+                    Padding="0"
+                    
+                    VerticalAlignment="Stretch" 
+                    HorizontalAlignment="Center" 
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Content="{md:PackIcon Kind=CancelThick,Size=30}"
+                    >
+
+                        <Button.Style>
+                            <Style  TargetType="Button" BasedOn="{StaticResource ContainerButtonStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger  Binding="{Binding IsDark}" Value="True">
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <cal:ActionMessage MethodName="AddAditive">
+                                    <cal:Parameter Value="{Binding ElementName=AddivieTemplate, Path=DataContext}" />
+                                    <cal:Parameter Value="x" />
+                                </cal:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                    </Button>
+                </UniformGrid>
+            </UniformGrid>
+        </Border>
+    </DataTemplate>
+
 
 </ResourceDictionary>

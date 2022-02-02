@@ -186,6 +186,7 @@ namespace FastPosFrontend.ViewModels
             LoadCategoryPages();
 
             PaginatedCategories = new CollectionViewSource {Source = Categories};
+            LoadAdditivePages();
 
             PaginatedCategories.Filter += PaginatedCategoriesOnFilter;
 
@@ -443,19 +444,20 @@ namespace FastPosFrontend.ViewModels
       
                 LastModifiedOrderPropertyName = e.PropertyName;
             }
-            if (e.PropertyName == nameof(Order.SelectedOrderItem))
-            {
-                if (CurrentOrder?.SelectedOrderItem != null)
-                {
-                    if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
-                    {
-                        AdditivesVisibility = false;
-                        ProductsVisibility = true;
-                    }
+            //Changed due to request of 
+            //if (e.PropertyName == nameof(Order.SelectedOrderItem))
+            //{
+            //    if (CurrentOrder?.SelectedOrderItem != null)
+            //    {
+            //        if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
+            //        {
+            //            AdditivesVisibility = false;
+            //            ProductsVisibility = true;
+            //        }
 
-                    ShowProductAdditives(CurrentOrder?.SelectedOrderItem?.Product);
-                }
-            }
+            //        ShowProductAdditives(CurrentOrder?.SelectedOrderItem?.Product);
+            //    }
+            //}
 
             if (e.PropertyName == nameof(Order.NewTotal))
             {
@@ -645,6 +647,7 @@ namespace FastPosFrontend.ViewModels
         public BindableCollection<Category> Categories { get; set; }
 
         public CollectionViewSource PaginatedCategories { get; set; }
+        public CollectionViewSource PaginatedAdditives { get; set; }
         public ObservableCollection<Order> Orders { get; set; }
         public BindableCollection<Customer> Customers { get; set; }
 
@@ -1231,6 +1234,18 @@ namespace FastPosFrontend.ViewModels
             var size = nbpage * _categpryPageSize;
 
             RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: Categories, size: size);
+        }
+
+
+        void LoadAdditivePages()
+        {
+            var comparer = new Comparer<Additive>();
+            var additives = StateManager.GetAll<Additive>().Where(a => a.IsFavorite).ToList();
+            additives.Sort(comparer);
+            var favAdditives  = new ObservableCollection<Additive>();
+            RankedItemsCollectionHelper.LoadPagesNotFilled(source: additives, target: favAdditives, size: 5);
+
+            PaginatedAdditives = new CollectionViewSource() { Source = favAdditives };
         }
 
         public void ShowCategoryProducts(Category category)
@@ -1870,7 +1885,7 @@ namespace FastPosFrontend.ViewModels
 
         public void AddAditive(Additive additive,string modifier)
         {
-            if (additive == null) return;
+            if (additive == null|| CurrentOrder?.SelectedOrderItem == null) return;
 
             if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
             {
@@ -2038,12 +2053,12 @@ namespace FastPosFrontend.ViewModels
 
             OrderItemsCollectionViewSource.View.Refresh();
 
-            if (selectedproduct.IsPlatter && selectedproduct.IdAdditives?.Count > 0)
-            {
-                ShowProductAdditives(selectedproduct);
-                ProductsVisibility = false;
-                AdditivesVisibility = true;
-            }
+            //if (selectedproduct.IsPlatter && selectedproduct.IdAdditives?.Count > 0)
+            //{
+            //    ShowProductAdditives(selectedproduct);
+            //    ProductsVisibility = false;
+            //    AdditivesVisibility = true;
+            //}
         }
 
         public void ReturnFromAdditives()
