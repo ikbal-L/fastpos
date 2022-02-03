@@ -63,10 +63,11 @@
 
 
     <DataTemplate x:Key="AdditiveKitchenTemplate" DataType="{x:Type models:OrderItemAdditive}">
-        <StackPanel Orientation="Horizontal">
-
+        <StackPanel Orientation="Horizontal" Margin="10 0 5 0">
+           
             <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="text"  Text="{Binding Additive.Description}" VerticalAlignment="Center" Margin="5 3 3 3">
+                <Label Content="{md:PackIcon Kind=SquareMedium}" VerticalAlignment="Center"/>
+                <TextBlock x:Name="text"  Text="{Binding Additive.Description}" VerticalAlignment="Center" Margin="5 3 3 3" FontSize="16">
 
 
                     <TextBlock.Style>
@@ -135,8 +136,8 @@
                                      Kind="{Binding State,Converter={StaticResource OrderItemStateToIconConverter}}"
                                      HorizontalAlignment="Left" FontSize="12" VerticalAlignment="Center" />
 
-            
-            
+
+
             <TextBlock Grid.Column="2" Text="{Binding Quantity}" HorizontalAlignment="Left"
                        FontSize="16" VerticalAlignment="Center" FontWeight="Bold" />
 
@@ -152,27 +153,15 @@
                     </ItemsPanelTemplate>
 
                 </ItemsControl.ItemsPanel>
-           
+
             </ItemsControl>
 
 
         </Grid>
+
     </DataTemplate>
 
-    <Style TargetType="Border" x:Key="DashedLineBorderStyle">
-        <Setter Property="BorderThickness" Value="0 0 0 1"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="BorderBrush">
-            <Setter.Value>
-                <VisualBrush>
-                    <VisualBrush.Visual>
-                        <Rectangle StrokeDashArray="4 6" Stroke="Black" StrokeThickness="1"
-                                                        />
-                    </VisualBrush.Visual>
-                </VisualBrush>
-            </Setter.Value>
-        </Setter>
-    </Style>
+   
 
     <DataTemplate x:Key="CustomerTicketDataTemplate" DataType="{x:Type models:Order}">
         <Grid Margin="3"  >
@@ -224,22 +213,13 @@
                     </Grid>
                 </Border>
                 <StackPanel Grid.Row="2" >
-                    <StackPanel Orientation="Horizontal">
-
-                        <!--<Label VerticalAlignment="Center" VerticalContentAlignment="Center">
-                            <Label.Content>
-                                <md:PackIcon Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}" />
-                            </Label.Content>
-                        </Label>-->
-
-                        <TextBlock 
+                    <TextBlock 
                        
                         Text="{Binding OrderNumber,StringFormat='Commande # : {0:D3}'}"
                          Width="200"
-                         FontWeight="Bold" FontSize="17" Margin="0 0 0 10 "/>
-                        <TextBlock />
-
-                    </StackPanel>
+                         FontWeight="Bold" FontSize="17" Margin="0 0 0 10 "
+                            HorizontalAlignment="Center"/>
+                    <TextBlock />
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition  />
@@ -283,11 +263,20 @@
                         <ControlTemplate TargetType="ItemsControl">
                             <Border Background="{TemplateBinding Background}" >
                                 <StackPanel>
-                                    <Border  Style="{StaticResource DashedLineBorderStyle}" >
 
-                                       
+                                    <Border BorderThickness="0 0 0 1"  HorizontalAlignment="Stretch" >
 
-                                   
+                                        <Border.BorderBrush>
+                                            <VisualBrush>
+                                                <VisualBrush.Visual>
+                                                    <Rectangle StrokeDashArray="4 6" Stroke="Black" StrokeThickness="1"
+                                                        Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                                         Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Border.BorderBrush>
+
+
                                         <Grid x:Name="HeadListLabels" Margin="0 0 0 3">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="5*" />
@@ -296,13 +285,14 @@
                                                 <ColumnDefinition Width="2*" />
                                             </Grid.ColumnDefinitions>
 
-                                            <TextBlock Grid.Column="0" Text="Product" />
-                                            <TextBlock Grid.Column="1" Text="Qty" />
-                                            <TextBlock Grid.Column="2" Text="Price"  />
-                                            <TextBlock Grid.Column="3" Text="Total"  />
+                                            <TextBlock Grid.Column="0" Text="Produit" />
+                                            <TextBlock Grid.Column="1" Text="Qté" />
+                                            <TextBlock Grid.Column="2" Text="Prix"  />
+                                            <TextBlock Grid.Column="3" Text="Totale"  />
 
                                         </Grid>
                                     </Border>
+                                    
                                     <ItemsPresenter />
                                 </StackPanel>
                             </Border>
@@ -331,13 +321,13 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Column="0" Text="Total" FontWeight="Bold" HorizontalAlignment="Right" Margin="0 0 5 0"/>
+                    <TextBlock Grid.Column="0" Text="Totale" FontWeight="Bold" HorizontalAlignment="Right" Margin="0 0 5 0"/>
                     <TextBlock Grid.Column="1" Text="{Binding NewTotal}" FontWeight="Bold" HorizontalAlignment="Left"/>
 
-                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Given" FontWeight="Bold" HorizontalAlignment="Right"  Margin="0 0 5 0"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Montant payé" FontWeight="Bold" HorizontalAlignment="Right"  Margin="0 0 5 0"/>
                     <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding GivenAmount}" FontWeight="Bold" HorizontalAlignment="Left"/>
 
-                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Returned" FontWeight="Bold" HorizontalAlignment="Right"  Margin="0 0 5 0"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Rendu monnaie" FontWeight="Bold" HorizontalAlignment="Right"  Margin="0 0 5 0"/>
                     <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding ReturnedAmount}" FontWeight="Bold" HorizontalAlignment="Left"/>
                 </Grid>
 
@@ -347,14 +337,12 @@
             <StackPanel Grid.Row="2" Name="Footer">
 
 
-                <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Height="2cm"
-                        Background="{Binding  Converter={StaticResource ObjectToBarcodeValueConverter}}" 
+                <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Width="6cm" Height="2cm"
+                        Background="{Binding Converter={StaticResource ObjectToBarcodeValueConverter}}"
                         />
-                <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
-                    <TextBlock.Text>
-                        <Binding Path="OrderTime" />
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Text="{Binding OrderTime}"/>
+
+
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="" />
             </StackPanel>
         </Grid>
@@ -381,19 +369,61 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <TextBlock 
-                        DockPanel.Dock="Right" 
+             
+                <StackPanel Grid.Row="2" >
+                    <TextBlock 
+                       
                         Text="{Binding OrderNumber,StringFormat='Commande # : {0:D3}'}"
-                        Grid.Row="0"  Grid.RowSpan="2" Width="200"
-                    FontWeight="Bold" FontSize="17" Margin="0 0 0 10 "/>
-                <TextBlock />
+                         Width="200"
+                         FontWeight="Bold" FontSize="17" Margin="0 0 0 10 "
+                            HorizontalAlignment="Center"/>
+                    <TextBlock />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Type:" FontSize="17" FontWeight="Bold" Margin="0 0 5 0"  VerticalAlignment="Center"/>
+                        <md:PackIcon Width="30" Height="30" VerticalAlignment="Center">
+                            <md:PackIcon.Style>
+                                <Style TargetType="md:PackIcon">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:OrderType.Delivery}">
+                                            <Setter Property="Kind" Value="TruckDelivery"/>
+                                        </DataTrigger>
 
-                <UniformGrid Grid.Row="2" Columns="2">
-                    <TextBlock Text="Cash Register N:1" />
-                    <TextBlock Text="{Binding Customer.Name,StringFormat='Customer: {0:#}',FallbackValue='Customer: /'}" />
-                    <TextBlock  Text="{Binding Table.Number,StringFormat='Table : {0:#}',FallbackValue='Table #: /'}" />
-                    <TextBlock  Text="{Binding Waiter.Name,StringFormat='Waiter : {0:#}',FallbackValue='Waiter: /'}" />
-                </UniformGrid>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:OrderType.TakeAway}">
+                                            <Setter Property="Kind" Value="Basket"/>
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:OrderType.OnTable}">
+                                            <Setter Property="Kind" Value="TableFurniture"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </md:PackIcon.Style>
+                        </md:PackIcon>
+                    </StackPanel>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  />
+                            <ColumnDefinition  />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Table.Number,StringFormat='Table # {0:#}',FallbackValue='Table: /'}" Visibility="{Binding Table,Converter={StaticResource NullToVisibilityConverter}}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Waiter.Name,StringFormat='Waiter: {0:#}',FallbackValue='Waiter: /'}" Visibility="{Binding Waiter,Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                        <TextBlock Grid.Row="1" Text="{Binding Deliveryman.Name,StringFormat='Livreur: {0:#}',FallbackValue='Deliveryman: /'}" Visibility="{Binding Deliveryman,Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Deliveryman.PhoneNumbers[0],FallbackValue=''}" Visibility="{Binding Deliveryman,Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                        <TextBlock Grid.Row="2" Text="{Binding Customer.Name,StringFormat='Client: {0:#}',FallbackValue='Client: /'}" Visibility="{Binding Customer,Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Customer.PhoneNumbers[0],FallbackValue=''}" Visibility="{Binding Customer,Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Customer.Address,FallbackValue='Adresse: /'}" Visibility="{Binding Customer,Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                    </Grid>
+
+                </StackPanel>
             </Grid>
 
             <Grid Grid.Row="1" Name="Body">
@@ -432,7 +462,7 @@
             <StackPanel Grid.Row="2" Name="Footer">
 
 
-                <!--<TextBlock x:Uid="TextBlock_20" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Barecode" HorizontalAlignment="Center"/>-->
+         
                 <Border Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Width="6cm" Height="2cm"
                         Background="{Binding Converter={StaticResource ObjectToBarcodeValueConverter}}"
                         />
