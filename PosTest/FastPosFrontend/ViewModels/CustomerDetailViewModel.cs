@@ -26,7 +26,14 @@ namespace FastPosFrontend.ViewModels
 
         public CustomerDetailViewModel(Customer customer)
         {
-            Customer = new Customer(){Id = customer.Id,Name = customer.Name,PhoneNumbers = customer.PhoneNumbers,Address = customer.Address };
+            Customer = new Customer()
+            {
+                Id = customer.Id,
+                Name = customer.Name,
+                Mobile = customer.Mobile,
+                PhoneNumbers = customer.PhoneNumbers,
+                Address = customer.Address 
+            };
          
             Name = Customer.Name;
             Mobile = Customer.Mobile;
@@ -215,6 +222,11 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("Customer saved successfully",NotificationType.Success);
                 RaiseCommandExecuted();
                 return;
+            }
+            else
+            {
+                Customer.PhoneNumbers.Clear();
+                Customer.Mobile = null;
             }
 
             ToastNotification.Notify("Something happened", NotificationType.Error);

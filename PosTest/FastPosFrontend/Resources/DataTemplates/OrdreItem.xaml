@@ -19,64 +19,85 @@
 
 
     <DataTemplate x:Key="PlatterAdditives" DataType="{x:Type src:OrderItemAdditive}">
-        <StackPanel Orientation="Horizontal">
-           
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="text"  Text="{Binding Additive.Description}" VerticalAlignment="Center" Margin="5 3 3 3">
+        <Border>
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid >
 
-                  
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="Black"></Setter>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
 
-                            <Style.Triggers>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Foreground" Value="LightGray"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <md:PackIcon>
-                    <md:PackIcon.Style>
-                        <Style TargetType="md:PackIcon">
-                            <Setter Property="Width" Value="30"/>
-                            <Setter Property="Height" Value="30"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Margin" Value="3"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Modifier}" Value="+">
-                                    <Setter Property="Kind" Value="PlusThick"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Modifier}" Value="-">
-                                    <Setter Property="Kind" Value="MinusThick"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Modifier}" Value="x">
-                                    <Setter Property="Kind" Value="CancelThick"/>
-                                </DataTrigger>
+                    <TextBlock x:Name="text"  Text="{Binding Additive.Description}" VerticalAlignment="Center" Margin="5 3 3 3">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
 
-                                <DataTrigger Binding="{Binding Modifier}" Value="{x:Null}">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Modifier}" Value="">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </md:PackIcon.Style>
-                </md:PackIcon>
-            </StackPanel>
-          
-            <Button   Padding="0"
+
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Foreground" Value="LightGray"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <md:PackIcon  Grid.Column="1">
+                        <md:PackIcon.Style>
+                            <Style TargetType="md:PackIcon">
+                                <Setter Property="Width" Value="30"/>
+                                <Setter Property="Height" Value="30"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="3"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Modifier}" Value="+">
+                                        <Setter Property="Kind" Value="PlusThick"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Modifier}" Value="-">
+                                        <Setter Property="Kind" Value="MinusThick"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Modifier}" Value="x">
+                                        <Setter Property="Kind" Value="CancelThick"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding Modifier}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Modifier}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:PackIcon.Style>
+                    </md:PackIcon>
+                </Grid>
+
+                <Button
+                    Grid.Column="1" 
+                    Padding="0"
                      BorderBrush="{Binding ElementName=text, Path=Background}"
                      Background="{Binding ElementName=text, Path=Background}"
                      Foreground="{Binding ElementName=text, Path=Foreground}"
                      Height="{Binding ElementName=text, Path=Height}" 
                      
                      cal:Message.Attach="[Event Click] = [Action RemoveAdditive($this)]">
-                <md:PackIcon Kind="Delete" Width="25" Height="25" Padding="0" Margin="2"/>
-            </Button>
-        </StackPanel>
+                    <md:PackIcon Kind="Delete" Width="25" Height="25" Padding="0" Margin="2" >
+                        <md:PackIcon.Style>
+                            <Style TargetType="md:PackIcon">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:PackIcon.Style>
+                    </md:PackIcon>
+                </Button>
+            </Grid>
+        </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type src:OrderItem}">
@@ -137,7 +158,7 @@
             </md:PackIcon>
             <TextBlock  Grid.Column="4" Text="{Binding Path=Total, Mode=OneWay}" HorizontalAlignment="Right"  FontSize="16" />
 
-            <ListBox Background="Blue" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding OrderItemAdditivesView}"  FontSize="16"
+            <ListBox  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding OrderItemAdditivesView}"  FontSize="16"
                      
                      ItemTemplate="{StaticResource PlatterAdditives}"
                      Visibility="{Binding OrderItemAdditives, Converter={StaticResource ObjectToVisibility}}"
@@ -146,7 +167,7 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel/>
+                        <UniformGrid Columns="2"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

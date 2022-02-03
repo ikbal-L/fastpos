@@ -95,39 +95,51 @@
             <ListBox    
                 Grid.Row="1"  
                 ItemsSource="{Binding CustomerCollectionViewSource.View}" 
+                SelectedItem="{Binding SelectedCustomer,Mode=TwoWay}"
                 Style="{StaticResource MaterialDesignCardsListBox}"
-                Margin="5" Height="350" >
+                Margin="5"  >
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                        <UniformGrid Columns="4" Rows="2" />
+                        <UniformGrid Columns="4"  />
                     </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate  DataType="model:Customer">
-                                <Button Height="150" 
+                                <Button Height="100" 
                                 Command="{Binding ElementName=CustomerViewUc,Path=DataContext.SelectCustomerCommand}" 
-                                CommandParameter="{Binding}" HorizontalAlignment="Stretch"
-                                    
-                                
-                                    Style="{StaticResource ContainerButtonStyle}" 
-                                    VerticalContentAlignment="Center" Cursor="Hand">
-                                    <StackPanel       Orientation="Vertical"  VerticalAlignment="Center" TextBlock.FontWeight="Bold">
-                                        <TextBlock  FontSize="14" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                                        <TextBlock  FontSize="14" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
-                                    </StackPanel>
+                                CommandParameter="{Binding}" 
+                                    Padding="0"
+                                   
+                                    VerticalContentAlignment="Center" Cursor="Hand" >
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource ContainerButtonStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                                    <Grid        VerticalAlignment="Center" TextBlock.FontWeight="Bold" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                        <TextBlock  FontSize="18" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Row="1" FontSize="16" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                            </Grid>
                                 </Button>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}">
-                            
+
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="materialdesign:ShadowAssist.ShadowDepth" Value="Depth4"/>
-                            </Trigger>
-                        </Style.Triggers>
+                       
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+                        <Setter Property="Height" Value="100"/>
                     </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>

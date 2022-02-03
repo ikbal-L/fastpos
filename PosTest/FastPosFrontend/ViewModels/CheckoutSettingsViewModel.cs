@@ -318,6 +318,7 @@ namespace FastPosFrontend.ViewModels
                     CategoryDetailViewModel.Source = SelectedCategory;
                     NotifyOfPropertyChange(() => CategoryDetailViewModel);
                 }
+                NotifyOfPropertyChange(nameof(SelectedCategory));
             }
         }
 
@@ -1054,7 +1055,7 @@ namespace FastPosFrontend.ViewModels
 
         public void CategoryList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count>0)
+            if (e.AddedItems.Count > 0)
             {
                 var category = e.AddedItems[0] as Category;
                 ShowCategoryProducts(category);

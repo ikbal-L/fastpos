@@ -22,7 +22,8 @@
 
 
         <Grid Grid.Column="1"  Margin="2 0 0 0"  >
-            <ItemsControl x:Name="CategoryPagination" ItemsSource="{Binding PaginatedCategories.View}">
+            <ListBox x:Name="CategoryPagination" ItemsSource="{Binding PaginatedCategories.View}"
+                     SelectedItem="{Binding CurrentCategory}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <!--<StackPanel Orientation="Horizontal" />-->
@@ -40,32 +41,55 @@
                                         FontSize="16"
                                         Padding="3 0 0 5"
                                         Margin="3"
-                                        BorderBrush="#2f2f2f"
+                                       
                                       
                             materialDesign:ButtonAssist.CornerRadius="8">
-                            <!--<Button.MinWidth>
-                                <Binding RelativeSource="{RelativeSource AncestorType=Window}"
-                                                     Path="ActualWidth"
-                                                     Converter="{StaticResource CategoryTemplateWidthConverter}"
-                                                     ConverterParameter="417,60,60" />
-                            </Button.MinWidth>-->
+
                             <Button.Style >
                                 <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}" >
+
+                                    <Setter Property="BorderBrush" Value="Transparent" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsDark}" Value="True">
                                             <Setter Property="Foreground" Value="White" />
                                         </DataTrigger>
 
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="True">
-                                            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                            <Setter Property="BorderBrush" Value="#2f2f2f" />
+                                            <Setter Property="BorderThickness" Value="2" />
                                         </DataTrigger>
+
+
+
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-            </ItemsControl>
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+
+
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="5" />
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Background="Transparent">
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
         </Grid>
 
         <UniformGrid Grid.Column="0"  Columns="1" Rows="2" x:Name="CategoryPaginationControls" >

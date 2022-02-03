@@ -169,6 +169,7 @@
     <Compile Include="Extensions\ScreenResolution.cs" />
     <Compile Include="Extensions\TreeHelpers.cs" />
     <Compile Include="Helpers\CollectionPaginator.cs" />
+    <Compile Include="Helpers\Feature.cs" />
     <Compile Include="Helpers\LicenseManager.cs" />
     <Compile Include="Helpers\PageRetriever.cs" />
     <Compile Include="Helpers\PaginatorBase.cs" />
@@ -1153,4 +1154,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rename "$(TargetPath)" "FrutaPos.exe"
+rename "$(TargetPath).config" "FrutaPos.exe.config"
+rename "$(TargetDir)$(TargetName).pdb" "FrutaPos.pdb"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

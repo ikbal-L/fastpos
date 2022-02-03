@@ -41,35 +41,57 @@
             x:Name="lwaiterT" 
             ItemsSource="{Binding Content.Waiters}" 
             SelectedItem="{Binding Content.SelectedWaiter, Mode=TwoWay}"
-            >
+            Style="{StaticResource MaterialDesignCardsListBox}"
+                    Margin="10 20">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:Waiter}">
-                            <Button Width="120" Height="70"
+                            <Button Height="100"
                                 cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext.Content}"            
                                 cal:Message.Attach="[Event Click] = [Action SelectWaiter($this)]"
-                                            Style="{StaticResource ButtonTopOrderDelivereyman}"
-                                            Background="{Binding Background}">
-                                <DockPanel>
-                                    <!--<materialdesign:PackIcon DockPanel.Dock="Left" Kind="TruckFast" Width="20" Height="20"/>-->
-                                    <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
-                                                       TextWrapping="WrapWithOverflow" FontWeight="DemiBold" />
-                                    <materialDesign:PackIcon DockPanel.Dock="Left" Kind="Phone" />
-                                    <TextBlock DockPanel.Dock="Left" Text="{Binding PhoneNumbers[0]}" />
-                                </DockPanel>
+                                          VerticalContentAlignment="Center" Cursor="Hand"
+                                            >
+
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ContainerButtonStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+
+                                <Grid        VerticalAlignment="Center" TextBlock.FontWeight="Bold" >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock  FontSize="18" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Row="1" FontSize="16" Text="{Binding FirstNumber}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                </Grid>
+
                             </Button>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+
                     <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="Margin" Value="0" />
-                            <Setter Property="Padding" Value="2" />
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}">
+
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="Height" Value="100"/>
+
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+
                         </Style>
                     </ListBox.ItemContainerStyle>
+
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel />
+                            <UniformGrid Columns="4" VerticalAlignment="Top" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
+
                 </ListBox>
             </ctrl:ItemsControlPlaceHolder.ItemsControl>
         </ctrl:ItemsControlPlaceHolder>
@@ -113,35 +135,59 @@
             <ListBox  x:Name="ldelivery"
                                  ItemsSource="{Binding Content.Delivereymen}"
                                  SelectedItem="{Binding Content.SelectedDeliveryman, Mode=TwoWay}"
-                  Grid.Column="1">
+                  Grid.Column="1"
+                      Margin="10 20"
+                      Style="{StaticResource MaterialDesignCardsListBox}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:Deliveryman}">
-                        <Button Width="120" Height="70"
+                        <Button Height="100"
                                     cal:Action.TargetWithoutContext="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext.Content}"      
                                     cal:Message.Attach="[Event Click] = [Action SelectDeliveryMan($this)]"
-                                            Style="{StaticResource ButtonTopOrderDelivereyman}"
-                                            Background="{Binding Background}">
-                            <DockPanel>
-                                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}"
-                                                       TextWrapping="WrapWithOverflow" FontWeight="DemiBold" />
-                                <materialDesign:PackIcon DockPanel.Dock="Left" Kind="Phone" Width="20"
-                                                                     Height="20" VerticalAlignment="Center" />
-                                <TextBlock DockPanel.Dock="Bottom" Text="{Binding PhoneNumbers[0]}" />
-                            </DockPanel>
+                                                 Padding="0"
+                                   
+                                    VerticalContentAlignment="Center" Cursor="Hand" >
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource ContainerButtonStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Grid        VerticalAlignment="Center" TextBlock.FontWeight="Bold" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock  FontSize="18" Text="{Binding Name}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                                <TextBlock Grid.Row="1" FontSize="16" Text="{Binding PhoneNumbers[0]}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
+                            </Grid>
                         </Button>
+
+                       
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+
                 <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Margin" Value="0" />
-                        <Setter Property="Padding" Value="2" />
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}">
+
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Height" Value="100"/>
+
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+
                     </Style>
                 </ListBox.ItemContainerStyle>
+
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <UniformGrid Columns="4" VerticalAlignment="Top" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
+
+
             </ListBox>
         </Grid>
     </DataTemplate>

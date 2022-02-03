@@ -586,61 +586,57 @@
                         ScrollViewer.PanningMode="None"
                         VerticalAlignment="Top"
                         ItemsSource="{Binding CurrentCategories}"
+                        SelectedItem="{Binding SelectedCategory}"
                         Margin="5"
                         caliburn:Message.Attach="
                                          [Event MouseMove] = [Action CategoriesList_MouseMove($source, $eventArgs)];
-                                         [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];
-                                                 
-                                                 [Event SelectionChanged] = [Action CategoryList_OnSelectionChanged($source, $eventArgs)];"
+                                         [Event Drop] = [Action CategoriesList_Drop($source, $eventArgs)];"
                         >
+
+                        <!--[Event SelectionChanged] = [Action CategoryList_OnSelectionChanged($source, $eventArgs)];-->
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="5" Rows="3" />
+                                <UniformGrid Columns="5" Rows="6" />
                          
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:Category}">
-                                <Border x:Name="catBtn"
-                                        Height="60" Padding="0"
-                                        Cursor="Hand"
-                                        Background="{Binding Background,UpdateSourceTrigger=PropertyChanged}">
-                                    <!--[Event TouchUp] = [Action ShowCategoryProducts($this)]-->
+                                <Button
+                                        Height="50" Background="{Binding Background}"
+                                        
+                                        cal:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
+                                        FontWeight="Bold"
+                                        FontSize="16"
+                                        Padding="8 0"
+                                        Margin="3"
+                                       
+                                        HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                            materialdesign:ButtonAssist.CornerRadius="5"  >
 
-                              
+                                    <Button.Style >
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}" >
 
-                                    <Border.Style>
-                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="Transparent" />
                                             <Style.Triggers>
-                                                <DataTrigger
-                                                    Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}"
-                                                    Value="true">
-
-                                                    <Setter Property="CornerRadius" Value="8" />
-                                                    <Setter Property="Background" Value="GhostWhite" />
+                                                <DataTrigger Binding="{Binding IsDark}" Value="True">
+                                                    <Setter Property="Foreground" Value="White" />
                                                 </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#2f2f2f" />
+                                                    <Setter Property="BorderThickness" Value="2" />
+                                                </DataTrigger>
+
+
+
                                             </Style.Triggers>
                                         </Style>
-                                    </Border.Style>
+                                    </Button.Style>
 
-                                    <Border
-                                        BorderBrush="#66000000"
-                                        BorderThickness="2.5"
-                                        Padding="2">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="OpacityMask" Value="#66FFFFFF" />
-                                                <Style.Triggers>
-                                                    <DataTrigger
-                                                        Binding="{Binding RelativeSource={RelativeSource   AncestorType=ListBoxItem},Path=IsSelected}"
-                                                        Value="true">
-                                                        <Setter Property="OpacityMask" Value="{x:Null}" />
-                                                        <Setter Property="CornerRadius" Value="8" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                        <DockPanel>
+                                    <Grid>
+                                        <DockPanel  HorizontalAlignment="Stretch"  LastChildFill="False">
 
                                             <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
                                                 <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
@@ -691,34 +687,34 @@
                                                 </Border.Style>
                                             </Border>
 
-
-                                            <TextBlock FontWeight="Bold" FontSize="16"
+                                        </DockPanel>
+                                        <TextBlock FontWeight="Bold" FontSize="16"
                                                        Text="{Binding Name}"
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        ToolTip="{Binding Description}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsDark}"
+                                            <!--<TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDark}"
                                                                          Value="True">
-                                                                <Setter Property="Foreground" Value="White" />
-                                                            </DataTrigger>
+                                                            <Setter Property="Foreground" Value="White" />
+                                                        </DataTrigger>
 
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>-->
+                                        </TextBlock>
+                                    </Grid>
 
-                                        </DockPanel>
-                                    </Border>
-                                </Border>
+
+                                </Button>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
 
-                                <!--<Setter Property="Background" Value="AliceBlue" />-->
+                     
                                 <Setter Property="VerticalContentAlignment" Value="Center" />
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="VerticalAlignment" Value="Center" />

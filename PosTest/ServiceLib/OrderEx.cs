@@ -14,7 +14,10 @@ namespace FastPosFrontend.Helpers
            bool groupByProduct = true)
         {
             OrderItem item;
-            if (product.IsPlatter && (product?.Additives != null) || order.OrderItems.All(p => p.ProductId != product.Id) ||
+            if (product.IsPlatter && (product?.Additives != null) || 
+                order.OrderItems.All(p => p.ProductId != product.Id) ||
+                order.OrderItems.Where(p=> p.ProductId == product.Id).All(p=> p.OrderItemAdditives.Count >= 1)
+                ||
                 !groupByProduct ||
                order. OrderItems.Where(oi =>
                     oi.ProductId == product.Id
@@ -26,7 +29,8 @@ namespace FastPosFrontend.Helpers
             }
             else
             {
-                item = order.OrderItems.FirstOrDefault(orderItem => orderItem.ProductId == product.Id && orderItem.State != OrderItemState.Removed);
+                item = order.OrderItems.FirstOrDefault(orderItem => orderItem.ProductId == product.Id && 
+                orderItem.State != OrderItemState.Removed&& orderItem.OrderItemAdditives.Count==0);
                 item.Quantity += quantity;
             }
 

@@ -499,6 +499,8 @@ namespace ServiceInterface.Model
         public bool IsModifiable => !IsLocked || IsLockedByCurrentClient;
 
         public bool IsLockedByCurrentClient => IsLocked && LockedBy == Thread.CurrentPrincipal.Identity.Name;
+
+        public bool IsModified { get; set; }
     }
 
     public interface IMessage<  T>:IMessage

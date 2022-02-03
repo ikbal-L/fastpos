@@ -22,16 +22,15 @@ namespace FastPosFrontend.ViewModels
         private CustomerDetailView _detailView;
         public CheckoutViewModel ParentChechoutVM { get; set; }
       
-        public CustomerViewModel(CheckoutViewModel checkoutViewModel/*,ICustomerService customerService*/)
+        public CustomerViewModel(CheckoutViewModel checkoutViewModel)
         {
-            //_customerService = customerService;
+
             ParentChechoutVM = checkoutViewModel;
 
-            //_CustomerView = CollectionViewSource.GetDefaultView(ParentChechoutVM.Customers);
+
             CustomerCollectionViewSource = new CollectionViewSource {Source = ParentChechoutVM.Customers};
             CustomerCollectionViewSource.Filter += CustomerCollectionViewSource_Filter;
-            
-            //_CustomerView.Filter = CustomerFilter;
+
             SelectCustomerCommand = new DelegateCommandBase(SelectCustomer);
             IsEditing = false;
 
@@ -40,18 +39,21 @@ namespace FastPosFrontend.ViewModels
         private void CustomerCollectionViewSource_Filter(object sender, FilterEventArgs e)
         {
             var customer = (Customer) e.Item;
-            string name = Regex.Replace(FilterString, @"\d", "").ToLowerInvariant();
-            string mobile = Regex.Replace(FilterString, @"\D", "");
+            var (name, mobile) = GetNameAndMobile();
 
-            
+
             if (customer.Name.ToLowerInvariant().Contains(name))
             {
-                if (customer.Mobile!= null && !customer.Mobile.Contains(mobile))
+                if (customer.Mobile!= null && !customer.PhoneNumbers.Any(m=>m.Contains(mobile)))
                 {
                     e.Accepted = false;
                 }
+                else
+                {
+                    e.Accepted = true;
+                }
 
-                e.Accepted = true;
+               
             }
             else
             {
@@ -78,14 +80,14 @@ namespace FastPosFrontend.ViewModels
                 }
 
                 Set(ref _selectedCustomer, value);
-                _selectedCustomer = value;
 
                 if (ParentChechoutVM.CurrentOrder!=null)
                 {
                     ParentChechoutVM.CurrentOrder.Customer = value; 
                 }
                 
-                ParentChechoutVM.IsTopDrawerOpen = false;
+                //ParentChechoutVM.IsTopDrawerOpen = false;
+                NotifyOfPropertyChange(nameof(SelectedCustomer));
             }
         }
         
@@ -94,7 +96,7 @@ namespace FastPosFrontend.ViewModels
             get => _FilterString;
             set {
                 Set(ref _FilterString, value);
-                //_CustomerView.Refresh(); 
+
                 CustomerCollectionViewSource.View.Refresh();
             }
         }
@@ -176,17 +178,21 @@ namespace FastPosFrontend.ViewModels
         }
 
         
-
-        public void CreateAndEdit()
+        public (string name ,string mobile) GetNameAndMobile()
         {
             string name = Regex.Match(FilterString, @"([^\d\W][1-9]*\s*)+").Value.Trim();
             string mobile = Regex.Match(FilterString, @"\s?[0-9]+").Value.Trim();
+            return (name, mobile);
+        }
+        public void CreateAndEdit()
+        {
 
+            var (name, mobile) = GetNameAndMobile();
             Customer customer = new Customer { Name = name };
             if (!string.IsNullOrWhiteSpace(mobile))
             {
-            customer?.PhoneNumbers?.Add(mobile);
-
+                //customer?.PhoneNumbers?.Add(mobile);
+                customer.Mobile = mobile;
             }
             CustomerDetailVm = new CustomerDetailViewModel(customer);
             CustomerDetailVm.CommandExecuted += CustomerDetailViewModel_CommandExecuted;
