@@ -1887,7 +1887,7 @@ namespace FastPosFrontend.ViewModels
         {
             if (additive == null|| CurrentOrder?.SelectedOrderItem == null) return;
 
-            if (!CurrentOrder.SelectedOrderItem.CanAddAdditives)
+            if (!CurrentOrder.SelectedOrderItem.CanAddAdditives&& !additive.IsFavorite)
             {
                 AdditivesVisibility = false;
                 ProductsVisibility = true;
