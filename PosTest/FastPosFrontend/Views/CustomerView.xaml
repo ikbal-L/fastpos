@@ -21,10 +21,10 @@
 
    <Grid>
 
-        <views:CustomerDetailView 
+        <views:CustomerFormView 
             caliburn:View.Model="{Binding CustomerDetailVm}" 
             Visibility="{Binding IsEditing,Converter={StaticResource BooleanToVisibilityConverter}}">
-        </views:CustomerDetailView>
+        </views:CustomerFormView>
 
 
             <Grid VerticalAlignment="Stretch">

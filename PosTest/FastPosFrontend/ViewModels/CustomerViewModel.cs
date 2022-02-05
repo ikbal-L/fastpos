@@ -18,8 +18,8 @@ namespace FastPosFrontend.ViewModels
         private string _FilterString ="";
         private Customer _selectedCustomer;
         private bool _isEditing;
-        private CustomerDetailViewModel _customerDetailVm;
-        private CustomerDetailView _detailView;
+        private CustomerFormViewModel _customerDetailVm;
+        private CustomerFormView _detailView;
         public CheckoutViewModel ParentChechoutVM { get; set; }
       
         public CustomerViewModel(CheckoutViewModel checkoutViewModel)
@@ -194,7 +194,7 @@ namespace FastPosFrontend.ViewModels
                 //customer?.PhoneNumbers?.Add(mobile);
                 customer.Mobile = mobile;
             }
-            CustomerDetailVm = new CustomerDetailViewModel(customer);
+            CustomerDetailVm = new CustomerFormViewModel(customer);
             CustomerDetailVm.CommandExecuted += CustomerDetailViewModel_CommandExecuted;
             IsEditing = true;
 
@@ -221,7 +221,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public CustomerDetailViewModel CustomerDetailVm
+        public CustomerFormViewModel CustomerDetailVm
         {
             get => _customerDetailVm;
             set => Set(ref _customerDetailVm, value);

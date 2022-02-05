@@ -12,7 +12,7 @@ using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class CustomerDetailViewModel : PropertyChangedBase, INotifyDataErrorInfo
+    public class CustomerFormViewModel : PropertyChangedBase, INotifyDataErrorInfo
     {
         private Customer _customer;
         private readonly Dictionary<string, ICollection<string>> _validationErrors =
@@ -24,7 +24,7 @@ namespace FastPosFrontend.ViewModels
         private string _selectedPhoneNumber;
         private bool _isEditingPhone = false;
 
-        public CustomerDetailViewModel(Customer customer)
+        public CustomerFormViewModel(Customer customer)
         {
             Customer = new Customer()
             {

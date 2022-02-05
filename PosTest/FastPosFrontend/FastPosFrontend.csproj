@@ -257,7 +257,7 @@
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\CreditCheckoutViewModel.cs" />
-    <Compile Include="ViewModels\CustomerDetailViewModel.cs" />
+    <Compile Include="ViewModels\CustomerFormViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputData.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
@@ -394,12 +394,6 @@
     <Compile Include="Views\OrderRefundView.xaml.cs">
       <DependentUpon>OrderRefundView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PinCodeView.xaml.cs">
-      <DependentUpon>PinCodeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PinLoginView.xaml.cs">
-      <DependentUpon>PinLoginView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\PrintView.xaml.cs">
       <DependentUpon>PrintView.xaml</DependentUpon>
     </Compile>
@@ -454,8 +448,8 @@
     <Compile Include="Views\CategoryDetailView.xaml.cs">
       <DependentUpon>CategoryDetailView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomerDetailView.xaml.cs">
-      <DependentUpon>CustomerDetailView.xaml</DependentUpon>
+    <Compile Include="Views\CustomerFormView.xaml.cs">
+      <DependentUpon>CustomerFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\DelivereyView.xaml.cs">
       <DependentUpon>DelivereyView.xaml</DependentUpon>
@@ -787,14 +781,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PinCodeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\PinLoginView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\PrintView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -867,7 +853,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CustomerDetailView.xaml">
+    <Page Include="Views\CustomerFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
