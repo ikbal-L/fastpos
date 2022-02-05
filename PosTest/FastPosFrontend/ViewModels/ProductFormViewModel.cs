@@ -175,7 +175,7 @@ namespace FastPosFrontend.ViewModels
         public ICommand CheckAdditiveCommand { get; set; }
         private void PopulateAdditivesPage()
         {
-            var comparer = new Comparer<Additive>();
+            var comparer = new RankedComparer<Additive>();
             int StatusCode = 0;
             // var allAdditives = _additiveService.GetAllAdditives(ref StatusCode).ToList();
             var allAdditives = StateManager.GetAll<Additive>().ToList();

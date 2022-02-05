@@ -133,14 +133,14 @@ namespace FastPosFrontend.ViewModels.Settings.Customer
 
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
 
-        public void RaiseSettingsUpdated()
+        public void RaiseSettingsUpdated(params object [] args)
         {
-            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(Customers));
+            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(args));
         }
 
         public override void BeforeNavigateAway()
         {
-            RaiseSettingsUpdated();
+            RaiseSettingsUpdated(Customers);
         }
     }
 }

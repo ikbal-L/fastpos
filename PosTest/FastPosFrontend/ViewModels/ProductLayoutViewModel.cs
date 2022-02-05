@@ -5,18 +5,17 @@ using Action = System.Action;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class ProductLayoutViewModel : DialogContent 
+    public class LayoutViewModel<T> : DialogContent  where T:LayoutConfiguration
     {
         private int _columns;
         private int _rows;
-        private readonly ProductLayoutConfiguration _configuration;
+        private readonly T _configuration;
         private Action _layoutChangedHandler;
 
 
-        public ProductLayoutViewModel()
+        public LayoutViewModel(T configuration)
         {
-            _configuration = ConfigurationManager.Get<PosConfig>().ProductLayout;
-
+            _configuration =  configuration;
             Columns = _configuration.Columns;
             Rows = _configuration.Rows;
         }
@@ -35,7 +34,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _rows, value);
         }
 
-        public ProductLayoutConfiguration Configuration => _configuration;
+        public T Configuration => _configuration;
 
         public void Apply()
         {
@@ -57,5 +56,20 @@ namespace FastPosFrontend.ViewModels
         }
 
         
+    }
+
+
+    public class ProductLayoutViewModel: LayoutViewModel<ProductLayoutConfiguration>
+    {
+        public ProductLayoutViewModel() :base(ConfigurationManager.Get<PosConfig>().ProductLayout)
+        {
+        }
+    }
+
+    public class CategoryLayoutViewModel : LayoutViewModel<CategoryLayoutConfiguration>
+    {
+        public CategoryLayoutViewModel() : base(ConfigurationManager.Get<PosConfig>().CategoryLayout)
+        {
+        }
     }
 }

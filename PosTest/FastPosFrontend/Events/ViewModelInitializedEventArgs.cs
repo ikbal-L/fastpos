@@ -28,6 +28,8 @@ namespace FastPosFrontend.Events
     public interface ISettingsController
     {
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
+
+
     }
 
     public interface ISettingsListener

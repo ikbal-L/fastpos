@@ -100,8 +100,8 @@ namespace FastPosFrontend.ViewModels.Settings
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
         public override void BeforeNavigateAway()
         {
-            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(Settings.CategoryPageSize));
-            ProductLayout.Instance.OnSettingsUpdated(this, new SettingsUpdatedEventArgs());
+            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs());
+
         }
     }
 }

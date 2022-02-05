@@ -23,9 +23,9 @@ using Utilities.Extensions;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("Checkout settings",target:typeof(CheckoutSettingsViewModel),groupName:"Settings",isQuickNavigationEnabled:true)]
+    [NavigationItem("Checkout settings", target: typeof(CheckoutSettingsViewModel), groupName: "Settings", isQuickNavigationEnabled: true)]
     [PreAuthorize("Create_Product|Update_Product", "Create_Category|Update_Category")]
-    public class CheckoutSettingsViewModel : LazyScreen,ISettingsController
+    public class CheckoutSettingsViewModel : LazyScreen, ISettingsController
     {
         private bool _IsProductDetailsDrawerOpen;
         private bool _IsDeleteCategoryDialogOpen;
@@ -48,9 +48,10 @@ namespace FastPosFrontend.ViewModels
         private ProductFormViewModel _productDetailViewModel;
         private Type _activeTab;
         private ProductLayoutViewModel _productLayoutViewModel;
+        private CategoryLayoutViewModel _categoryLayoutViewModel;
         private bool _isDialogOpen;
 
-        
+
 
         public CheckoutSettingsViewModel() : base()
         {
@@ -61,20 +62,28 @@ namespace FastPosFrontend.ViewModels
             var categories = StateManager.GetAsync<Category>();
             var products = StateManager.GetAsync<Product>();
 
-            _data = new NotifyAllTasksCompletion(categories,products);
+            _data = new NotifyAllTasksCompletion(categories, products);
 
             IsDialogOpen = false;
             ProductLayoutViewModel = new ProductLayoutViewModel();
+            
             ProductLayoutViewModel.OnLayoutChanged(() =>
             {
-                _productPageSize = ProductLayoutViewModel.Configuration.NumberOfProducts;
+                ProductPageSize = ProductLayoutViewModel.Configuration.TotalElements;
                 var category = SelectedCategory;
                 SelectedCategory = null;
                 ShowCategoryProducts(category);
             });
+            CategoryLayoutViewModel = new CategoryLayoutViewModel();
 
-            ProductPageSize = ProductLayoutViewModel.Configuration.NumberOfProducts; 
-            CategoryPageSize = ConfigurationManager.Get<PosConfig>().General.CategoryPageSize;
+            CategoryLayoutViewModel.OnLayoutChanged(() =>
+            {
+                CategoryPageSize = CategoryLayoutViewModel.Configuration.TotalElements;
+            });
+
+
+            ProductPageSize = ProductLayoutViewModel.Configuration.TotalElements;
+            CategoryPageSize = CategoryLayoutViewModel.Configuration.TotalElements;
 
             CreateProductCommand = new DelegateCommandBase(CreateProduct);
             EditProductCommand = new DelegateCommandBase(EditProduct);
@@ -93,19 +102,20 @@ namespace FastPosFrontend.ViewModels
             DeleteCategoryCommand = new DelegateCommandBase(DeleteCategory);
 
             ConfigureProductLayoutCommand = new DelegateCommandBase(ConfigureProductDisplayLayout);
+            ConfigureCategoryLayoutCommand = new DelegateCommandBase(ConfigureConfigureCategoryLayout);
             AddCategoryRowCommand = new DelegateCommandBase(AddCategoryRow);
         }
 
         public override void Initialize()
         {
 
-       
+
             _allProducts = StateManager.GetAll<Product>().ToList();
-  
-           
+
+
             _allCategories = StateManager.GetAll<Category>().ToList();
-            _allCategories.Where(c=>c.Rank!= null&& c.Products!= null).ToList().ForEach(c=>c.Products = c.Products.OrderBy(p => p.Rank).ToList());
-           
+            _allCategories.Where(c => c.Rank != null && c.Products != null).ToList().ForEach(c => c.Products = c.Products.OrderBy(p => p.Rank).ToList());
+
 
             LoadCategoryPages();
             CurrentProducts = new BindableCollection<Product>();
@@ -118,7 +128,7 @@ namespace FastPosFrontend.ViewModels
             ToSaveUpdate = new BindableCollection<object>();
             ToSaveUpdate.CollectionChanged += ToSaveUpdateChanged;
             SelectedProduct = new Product();
-         
+
             IsFlipped = false;
             IsCategory = false;
 
@@ -177,7 +187,8 @@ namespace FastPosFrontend.ViewModels
                 else
                 {
                     if (ProductDetailViewModel != null)
-                    { return !ProductDetailViewModel.HasErrors;
+                    {
+                        return !ProductDetailViewModel.HasErrors;
                     }
                     else
                     {
@@ -192,6 +203,7 @@ namespace FastPosFrontend.ViewModels
         private List<Category> _allCategories;
         private int _numberOfCategoryRows;
         private Category _clipboardCategory;
+
 
         public int ProductPageSize
         {
@@ -223,7 +235,12 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _productLayoutViewModel, value);
         }
 
-        public ProductLayout ProductLayout => ProductLayout.Instance;    
+        public CategoryLayoutViewModel CategoryLayoutViewModel 
+        { 
+            get => _categoryLayoutViewModel; 
+            set => Set(ref _categoryLayoutViewModel , value); 
+        }
+
 
         public bool IsDialogOpen
         {
@@ -372,13 +389,13 @@ namespace FastPosFrontend.ViewModels
 
         void LoadCategoryPages()
         {
-            var comparer = new Comparer<Category>();
+            var comparer = new RankedComparer<Category>();
             var categories = new List<Category>(_allCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
             CurrentCategories = new BindableCollection<Category>();
-            var maxRank = categories.Max(c => c.Rank)??1;
+            var maxRank = categories.Max(c => c.Rank) ?? 1;
             _numberOfCategoryRows = (maxRank / _categpryPageSize) + (maxRank % _categpryPageSize == 0 ? 0 : 1);
-            
+
             var size = _numberOfCategoryRows * _categpryPageSize;
 
             RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: CurrentCategories, size: size);
@@ -387,9 +404,9 @@ namespace FastPosFrontend.ViewModels
         public void ShowCategoryProducts(Category category)
         {
 
-            if (CategoryToMove!= null)
+            if (CategoryToMove != null)
             {
-              
+
                 if (category == CategoryToMove)
                 {
                     CategoryToMove = null;
@@ -439,7 +456,7 @@ namespace FastPosFrontend.ViewModels
                 CurrentProducts?.Clear();
                 return;
             }
-            else if(SelectedFreeCategory!= null)
+            else if (SelectedFreeCategory != null)
             {
                 SelectedCategory = category;
                 AttachCategoryToList();
@@ -452,11 +469,11 @@ namespace FastPosFrontend.ViewModels
                 CurrentProducts?.Clear();
                 return;
             }
-            if (CurrentProducts?.Count> ProductPageSize)
+            if (CurrentProducts?.Count > ProductPageSize)
             {
                 foreach (var product in CurrentProducts.ToList())
                 {
-                    if (product.Rank> ProductPageSize)
+                    if (product.Rank > ProductPageSize)
                     {
                         CurrentProducts.Remove(product);
                     }
@@ -468,7 +485,7 @@ namespace FastPosFrontend.ViewModels
 
             var filteredProducts = category.Products;
 
-            var comparer = new Comparer<Product>();
+            var comparer = new RankedComparer<Product>();
 
             filteredProducts.Sort(comparer);
             RankedItemsCollectionHelper.LoadPagesFilled(source: filteredProducts, target: CurrentProducts,
@@ -477,7 +494,7 @@ namespace FastPosFrontend.ViewModels
 
         public void SelectProduct(Product product)
         {
-            
+
             if (ProductToMove != null)
             {
                 SelectedFreeCategory = null;
@@ -494,7 +511,7 @@ namespace FastPosFrontend.ViewModels
                 var incomingProduct = ProductToMove;
                 var targetProduct = SelectedProduct;
                 IList<Product> products = CurrentProducts;
-                RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingProduct,ref targetProduct,  products);
+                RankedItemsCollectionHelper.InsertTElementInPositionOf(ref incomingProduct, ref targetProduct, products);
 
 
                 if (targetProduct?.Id != null)
@@ -511,7 +528,7 @@ namespace FastPosFrontend.ViewModels
             }
             SelectedProduct = product;
 
-            if (SelectedFreeProduct != null&& SelectedProduct?.Id == null)
+            if (SelectedFreeProduct != null && SelectedProduct?.Id == null)
             {
                 AttachProductToCategory();
             }
@@ -552,9 +569,9 @@ namespace FastPosFrontend.ViewModels
 
             if (SelectedCategory.Products != null && SelectedCategory.Products.Any())
             {
-                 result = ModalDialogBox.YesNo("Do you want to remove this category and all of it associated products",
-                    "Remove Category").Show();
-                
+                result = ModalDialogBox.YesNo("Do you want to remove this category and all of it associated products",
+                   "Remove Category").Show();
+
             }
 
             if (!result) return;
@@ -578,7 +595,7 @@ namespace FastPosFrontend.ViewModels
             else
             {
                 ProductDetailViewModel.SaveProduct();
-                
+
                 //ProductDetailViewModel = null;
             }
 
@@ -668,7 +685,7 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-        private bool ManageCategoryProductsForDeletion(Category selectedCategory) 
+        private bool ManageCategoryProductsForDeletion(Category selectedCategory)
         {
             //TODO SELECTED CATEGORY NULL
             if (selectedCategory.Products == null || !selectedCategory.Products.Any()) return true;
@@ -685,7 +702,7 @@ namespace FastPosFrontend.ViewModels
             });
 
             if (!StateManager.SaveAll(selectedCategory.Products)) return false;
-            selectedCategory.Products= null;
+            selectedCategory.Products = null;
             selectedCategory.ProductIds = null;
             return true;
 
@@ -716,7 +733,7 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedFreeProduct == null || SelectedProduct == null)
             {
-                ToastNotification.Notify("Select Both free product and category product",NotificationType.Warning);
+                ToastNotification.Notify("Select Both free product and category product", NotificationType.Warning);
                 return;
             }
 
@@ -729,7 +746,7 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedProduct?.Category == null || SelectedProduct.Id == null)
             {
-                ToastNotification.Notify("Select a non empty product to copy",NotificationType.Warning);
+                ToastNotification.Notify("Select a non empty product to copy", NotificationType.Warning);
                 return;
             }
 
@@ -750,7 +767,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            ClipboardCategory = ClipboardCategory!= null ? null : SelectedCategory;
+            ClipboardCategory = ClipboardCategory != null ? null : SelectedCategory;
         }
 
 
@@ -781,7 +798,7 @@ namespace FastPosFrontend.ViewModels
             StateManager.Save(sourceProduct);
 
             SelectedCategory.ProductIds.Add((long)sourceProduct.Id);
-            
+
             //var insertIndex = SelectedCategory.Products.FindIndex(p=> p.Rank-1 == sourceProduct.Rank);
             //SelectedCategory.Products.Insert(insertIndex,sourceProduct);
             SelectedCategory.Products.Add(sourceProduct);
@@ -818,17 +835,17 @@ namespace FastPosFrontend.ViewModels
         {
             if (ClipboardProduct == null)
             {
-                ToastNotification.Notify("Copy a product before",NotificationType.Warning);
+                ToastNotification.Notify("Copy a product before", NotificationType.Warning);
                 return;
             }
 
             if (SelectedProduct == null)
             {
-                ToastNotification.Notify("Select a zone to copy in",NotificationType.Warning);
+                ToastNotification.Notify("Select a zone to copy in", NotificationType.Warning);
                 return;
             }
 
-            if (SelectedProduct.Id!=null)
+            if (SelectedProduct.Id != null)
             {
                 Notify("Select an empty cell to paste product in!");
                 SelectedProduct = null;
@@ -845,7 +862,7 @@ namespace FastPosFrontend.ViewModels
             product.Id = null;
             product.Rank = null;
             SelectedCategory?.Products?.Add(product);
-            
+
             var name = Regex.Replace(ClipboardProduct.Name, @"\([0-9]{1,2}\)", "");
             var count = _allProducts?.Where(a => a.Name != null).Count(a => a.Name.Contains(name));
             product.Name = $"{name}({count})";
@@ -856,11 +873,11 @@ namespace FastPosFrontend.ViewModels
             product.Rank = targetRank;
             CurrentProducts[targetRank - 1] = product;
 
-            StateManager.Save(product).IfTrue(()=> 
+            StateManager.Save(product).IfTrue(() =>
             {
-              ToastNotification.Notify("Saved", NotificationType.Success);
+                ToastNotification.Notify("Saved", NotificationType.Success);
                 _allProducts.Add(product);
-               
+
             });
             ClipboardProduct = null;
         }
@@ -909,8 +926,9 @@ namespace FastPosFrontend.ViewModels
             CurrentCategories[targetRank - 1] = category;
 
 
-            StateManager.Save(category).IfTrue(()=> {
-                ToastNotification.Notify("Saved",NotificationType.Success);
+            StateManager.Save(category).IfTrue(() =>
+            {
+                ToastNotification.Notify("Saved", NotificationType.Success);
                 _allCategories.Add(category);
             });
             ClipboardCategory = null;
@@ -929,19 +947,19 @@ namespace FastPosFrontend.ViewModels
 
         public void MoveCategoryTo(object obj)
         {
-            if (SelectedCategory?.Name == null )
+            if (SelectedCategory?.Name == null)
             {
                 ToastNotification.Notify("Selcect a category to move");
                 return;
             }
 
-            CategoryToMove = CategoryToMove==null? SelectedCategory:null;
+            CategoryToMove = CategoryToMove == null ? SelectedCategory : null;
         }
 
 
         public void DeleteCategory(object obj)
         {
-            if (SelectedCategory!=null && SelectedFreeCategory == null)
+            if (SelectedCategory != null && SelectedFreeCategory == null)
             {
                 Notify("Category must be unassigned to be deleted");
             }
@@ -955,15 +973,15 @@ namespace FastPosFrontend.ViewModels
 
                     if (StateManager.Delete(SelectedFreeCategory))
                     {
-                        
+
                     }
-                    
+
                 }
                 catch (AggregateException)
                 {
                     ToastNotification.Notify("Problem connecting to server");
                 }
-                
+
                 _allCategories.Remove(SelectedFreeCategory);
                 FreeCategories.Remove(SelectedFreeCategory);
                 SelectedFreeCategory = null;
@@ -997,7 +1015,7 @@ namespace FastPosFrontend.ViewModels
             //(this.Parent as Conductor<object>).ActivateItem(loginvm);
         }
 
-     
+
         public void FreeProductsList_MouseMove(object sender, MouseEventArgs e)
         {
             var key = "FreeProduct";
@@ -1069,7 +1087,7 @@ namespace FastPosFrontend.ViewModels
                 Border border = (sender as Border);
                 if (border?.DataContext is Category t)
                 {
-                    
+
                     if (t == null || t.GetType().GetProperty("Name").GetValue(t) == null)
                     {
                         return;
@@ -1196,7 +1214,7 @@ namespace FastPosFrontend.ViewModels
 
                 // Find the data behind the ListViewItem
                 Product targetProduct = (Product)listView.ItemContainerGenerator.ItemFromContainer(listBoxItem);
-           
+
                 Product receivedProduct;
 
                 if (e.Data.GetDataPresent("FreeProduct"))
@@ -1220,23 +1238,23 @@ namespace FastPosFrontend.ViewModels
                 {
                     //SelectedProduct = targetProduct;
                     if (targetProduct == receivedProduct) return;
-                    
+
                     var targetRank = targetProduct.Rank;
                     var receivedRank = receivedProduct.Rank;
                     targetProduct.Rank = receivedProduct.Rank;
                     receivedProduct.Rank = targetRank;
                     CurrentProducts[(int)targetRank - 1] = receivedProduct;
                     CurrentProducts[(int)receivedRank - 1] = targetProduct;
-                    
+
                     try
                     {
                         StateManager.Save(receivedProduct);
-                        if (targetProduct.Id!=null)
+                        if (targetProduct.Id != null)
                         {
-                            StateManager.Save(targetProduct); 
+                            StateManager.Save(targetProduct);
                         }
 
-                       
+
                     }
                     catch (AggregateException)
                     {
@@ -1320,7 +1338,7 @@ namespace FastPosFrontend.ViewModels
                         CategoryToMove = null;
                         return;
                     }
-                   
+
                     var index = CurrentCategories.IndexOf(CategoryToMove);
                     var cat = new Category() { Rank = CategoryToMove.Rank };
                     if (SelectedCategory.Equals(CategoryToMove))
@@ -1359,7 +1377,7 @@ namespace FastPosFrontend.ViewModels
                         ToastNotification.Notify("Problem connecting to server");
                     }
                     CategoryToMove = null;
-                    
+
                     ShowCategoryProducts(null);
                     //CurrentCategories[index] = cat;
                     //CategoryToMove = null;
@@ -1371,7 +1389,7 @@ namespace FastPosFrontend.ViewModels
         {
             if (SelectedFreeCategory == null || SelectedCategory == null)
             {
-                ToastNotification.Notify("Select Both free product and category product",NotificationType.Warning);
+                ToastNotification.Notify("Select Both free product and category product", NotificationType.Warning);
                 return;
             }
 
@@ -1399,7 +1417,7 @@ namespace FastPosFrontend.ViewModels
                 incomingCategory.ProductIds = new List<long>();
                 incomingCategory.Products = new List<Product>();
                 StateManager.Save(incomingCategory);
-       
+
             }
             catch (AggregateException)
             {
@@ -1452,38 +1470,38 @@ namespace FastPosFrontend.ViewModels
             if (SelectedCategory.Id == null || SelectedProduct == null) return;
             ProductDetailViewModel = new ProductFormViewModel(ref _selectedProduct);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
-                var parent = Parent as MainViewModel;
+            var parent = Parent as MainViewModel;
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {
                     if (ProductDetailViewModel != null)
                     {
                         ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
-                        ProductDetailViewModel = null; 
+                        ProductDetailViewModel = null;
                     }
                 });
             NotifyOfPropertyChange(nameof(IsCategory));
-           
+
         }
 
         public void CreateProduct(object obj)
         {
 
-            if (SelectedProduct== null|| SelectedProduct?.Id!= null)
+            if (SelectedProduct == null || SelectedProduct?.Id != null)
             {
                 ToastNotification.Notify("Select an empty cell to create a new Product");
                 return;
             }
 
             if (SelectedCategory?.Id == null) return;
-            
-            ProductDetailViewModel = new ProductFormViewModel(ref _selectedProduct,OnProductSaved);
+
+            ProductDetailViewModel = new ProductFormViewModel(ref _selectedProduct, OnProductSaved);
             ProductDetailViewModel.ErrorsChanged += EditProductViewModel_ErrorsChanged;
             var parent = Parent as MainViewModel;
             parent?.OpenDialog(ProductDetailViewModel)
                 .OnClose(() =>
                 {
-                    if (ProductDetailViewModel!= null)
+                    if (ProductDetailViewModel != null)
                     {
                         ProductDetailViewModel.ErrorsChanged -= EditProductViewModel_ErrorsChanged;
                         ProductDetailViewModel = null;
@@ -1506,13 +1524,13 @@ namespace FastPosFrontend.ViewModels
 
         public void EditCategory(bool callFromCreate = false)
         {
-            if (!callFromCreate&& SelectedCategory?.Id == null)
+            if (!callFromCreate && SelectedCategory?.Id == null)
             {
                 ToastNotification.Notify("There is no category to edit, select a valid cell!");
                 return;
             }
             IsCategory = true;
-            CategoryDetailViewModel = new CategoryDetailViewModel(ref _selectedCategory,_allCategories);
+            CategoryDetailViewModel = new CategoryDetailViewModel(ref _selectedCategory, _allCategories);
             (Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel).OnClose(() =>
             {
                 var category = SelectedCategory;
@@ -1524,7 +1542,7 @@ namespace FastPosFrontend.ViewModels
 
         }
 
-        public void CreateCategory(object obj) 
+        public void CreateCategory(object obj)
         {
             CreateCategory();
         }
@@ -1532,7 +1550,7 @@ namespace FastPosFrontend.ViewModels
 
         public void CreateCategory()
         {
-            if (SelectedCategory== null)
+            if (SelectedCategory == null)
             {
                 return;
             }
@@ -1552,7 +1570,7 @@ namespace FastPosFrontend.ViewModels
             var maxRank = CategoryPageSize * _numberOfCategoryRows;
             for (var i = baseRank; i <= maxRank; i++)
             {
-                CurrentCategories.Add(new Category(){Rank = i});
+                CurrentCategories.Add(new Category() { Rank = i });
             }
         }
 
@@ -1568,40 +1586,25 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        //public void AdditiveChecked()
-        //{
-        //    ToastNotification.Notify("hi.cos");
-        //}
-
+ 
         public void ConfigureProductDisplayLayout(object obj)
         {
-            
+
             (Parent as MainViewModel)?.OpenDialog(ProductLayoutViewModel);
         }
 
-        public void ApplyLayoutConfig()
+        public void ConfigureConfigureCategoryLayout(object obj)
         {
-            ProductLayoutViewModel.Apply();
-        }
 
-        private void Configuration_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ProductLayoutConfiguration.NumberOfProducts))
-            {
-                if (ProductLayoutViewModel.Configuration.NumberOfProducts>0)
-                {
-                    _productPageSize = ProductLayoutViewModel.Configuration.NumberOfProducts; 
-                    ShowCategoryProducts(SelectedCategory);
-                }
-            }
+            (Parent as MainViewModel)?.OpenDialog(CategoryLayoutViewModel);
         }
 
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
 
         public void RaiseSettingsUpdated()
         {
-            
-            SettingsUpdated?.Invoke(this,new SettingsUpdatedEventArgs(_allProducts,_allCategories,ProductLayoutViewModel?.Configuration));
+
+            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(_allProducts, _allCategories, ProductLayoutViewModel?.Configuration, CategoryLayoutViewModel?.Configuration));
         }
 
         public override void BeforeNavigateAway()
@@ -1626,10 +1629,12 @@ namespace FastPosFrontend.ViewModels
         public ICommand DeleteCategoryCommand { get; set; }
 
         public ICommand ConfigureProductLayoutCommand { get; set; }
+
+        public ICommand ConfigureCategoryLayoutCommand { get; set; }
         public ICommand AddCategoryRowCommand { get; set; }
     }
 
-    public class Comparer<T> : IComparer<T> where T : Ranked
+    public class RankedComparer<T> : IComparer<T> where T : Ranked
     {
         public int Compare(T x, T y)
         {

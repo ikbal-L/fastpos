@@ -171,6 +171,7 @@
     <Compile Include="Helpers\CollectionPaginator.cs" />
     <Compile Include="Helpers\Feature.cs" />
     <Compile Include="Helpers\LicenseManager.cs" />
+    <Compile Include="Helpers\CheckoutObserveMutationsFeatureContext.cs" />
     <Compile Include="Helpers\PageRetriever.cs" />
     <Compile Include="Helpers\PaginatorBase.cs" />
     <Compile Include="Helpers\TaskEventHandler.cs" />
@@ -402,8 +403,8 @@
     <Compile Include="Views\PrintView.xaml.cs">
       <DependentUpon>PrintView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProductLayoutView.xaml.cs">
-      <DependentUpon>ProductLayoutView.xaml</DependentUpon>
+    <Compile Include="Views\LayoutConfigurationView.xaml.cs">
+      <DependentUpon>LayoutConfigurationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
@@ -608,6 +609,7 @@
     <None Include="Resources\External\logo.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Resource Include="PostBuildEvent_Release.txt" />
     <Content Include="Resources\External\Reports.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -797,7 +799,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ProductLayoutView.xaml">
+    <Page Include="Views\LayoutConfigurationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1155,8 +1157,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rename "$(TargetPath)" "FrutaPos.exe"
-rename "$(TargetPath).config" "FrutaPos.exe.config"
-rename "$(TargetDir)$(TargetName).pdb" "FrutaPos.pdb"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

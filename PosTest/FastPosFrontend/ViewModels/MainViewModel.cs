@@ -40,6 +40,8 @@ namespace FastPosFrontend.ViewModels
             StateManager.Instance.HandleErrorsUsing(ResponseHandler.Handler);
 
             
+
+
         }
 
         public void SetSettingsListeners()

@@ -1,0 +1,5 @@
+﻿if  "$(ConfigurationName)" == "Release" (
+rename "$(TargetPath)" "FrutaPos.exe"
+rename "$(TargetPath).config" "FrutaPos.exe.config"
+rename "$(TargetDir)$(TargetName).pdb" "FrutaPos.pdb"
+)

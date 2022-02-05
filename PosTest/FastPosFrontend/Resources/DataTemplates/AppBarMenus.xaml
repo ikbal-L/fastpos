@@ -130,7 +130,7 @@
                                                     <md:PackIcon Grid.Column="0" Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}" Width="40" Height="40"  />
                                                     <TextBlock Grid.Column="1" Text="{Binding OrderCode,FallbackValue=NEW}" />
                                                     <TextBlock Grid.Column="2" Text="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
-                                                    <TextBlock Grid.Column="3" Text="{Binding NewTotal,StringFormat='C',ConverterCulture='en-DZ'}"/>
+                                                    <TextBlock Grid.Column="3" Text="{Binding NewTotal}"/>
                                                     <md:PackIcon Grid.Column="4" Width="25" Height="25" VerticalAlignment="Center" Margin="3">
                                                         <md:PackIcon.Style>
                                                             <Style TargetType="md:PackIcon">
@@ -229,7 +229,7 @@
                                                     <md:PackIcon Grid.Column="0" Kind="{Binding Type,Converter={StaticResource OrderTypeToPackIconKindConverter}}" Width="40" Height="40"  />
                                                     <TextBlock Grid.Column="1" Text="{Binding OrderCode,FallbackValue=NEW}" />
                                                     <TextBlock Grid.Column="2" Text="{Binding OrderTime,StringFormat='H:mm:ss'}"/>
-                                                    <TextBlock Grid.Column="3" Text="{Binding NewTotal,StringFormat='C',ConverterCulture='en-DZ'}"/>
+                                                    <TextBlock Grid.Column="3" Text="{Binding NewTotal}"/>
                                                     <md:PackIcon Grid.Column="4" Width="25" Height="25" VerticalAlignment="Center" Margin="3">
                                                         <md:PackIcon.Style>
                                                             <Style TargetType="md:PackIcon">

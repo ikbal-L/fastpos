@@ -45,21 +45,7 @@
                     md:TextFieldAssist.TextFieldCornerRadius="0"
                   ></TextBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="40 10 0 0">
-                    <TextBlock Text="Category Page Size" FontSize="16" Width="400" Padding="15 10 0 15"  Margin="0 0 20 0"
-                       VerticalAlignment="Center"/>
-                    <TextBox  Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                    VerticalAlignment="Center"
-                    AcceptsReturn="True"
-                     Text="{Binding Settings.CategoryPageSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    Width="300"
-                    TextWrapping="Wrap"
-                    VerticalScrollBarVisibility="Auto"
-                    md:TextFieldAssist.TextFieldCornerRadius="0"
-
-                  />
-                </StackPanel>
-
+         
 
 
                 <StackPanel Orientation="Horizontal" Margin="40 10 0 0">

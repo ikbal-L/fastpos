@@ -3,13 +3,22 @@ using Caliburn.Micro;
 using Newtonsoft.Json;
 using ServiceLib.Service;
 using System;
+using System.Diagnostics;
 
 namespace FastPosFrontend.Configurations
 {
-    public class ProductLayoutConfiguration : PropertyChangedBase,IConfigurationProperty
+    public class LayoutConfiguration : PropertyChangedBase,IConfigurationProperty
     {
-        private int _columns = 5;
-        private int _rows = 4;
+        protected int _columns ;
+        protected int _rows ;
+
+        public LayoutConfiguration(int columns, int rows)
+        {
+            Debug.WriteLine($"from base LayoutConfiguration {_columns} {_rows}");
+            _columns = columns;
+            _rows = rows;
+        }
+
 
         [JsonProperty]
         public int Columns
@@ -18,7 +27,7 @@ namespace FastPosFrontend.Configurations
             set
             {
                 Set(ref _columns, value);
-                NotifyOfPropertyChange(nameof(NumberOfProducts));
+                NotifyOfPropertyChange(nameof(TotalElements));
             }
         }
 
@@ -29,17 +38,38 @@ namespace FastPosFrontend.Configurations
             set
             {
                 Set(ref _rows, value);
-                NotifyOfPropertyChange(nameof(NumberOfProducts));
+                NotifyOfPropertyChange(nameof(TotalElements));
             }
         }
 
-        public int NumberOfProducts => Rows * Columns;
+        public int TotalElements => Rows * Columns;
+
 
         public event EventHandler<SaveRequestedEventArgs> SaveRequested;
 
         public void RequestSave()
         {
             SaveRequested?.Invoke(this, new SaveRequestedEventArgs());
+        }
+    }
+
+    public class ProductLayoutConfiguration: LayoutConfiguration
+    {
+
+
+        public ProductLayoutConfiguration():base(5,4)
+        {
+            Debug.WriteLine($"from ProductLayoutConfiguration {_columns} {_rows}");
+        }
+    }
+
+    public class CategoryLayoutConfiguration : LayoutConfiguration
+    {
+
+
+        public CategoryLayoutConfiguration():base(5,3)
+        {
+            Debug.WriteLine($"from CategoryLayoutConfiguration {_columns} {_rows}");
         }
     }
 }

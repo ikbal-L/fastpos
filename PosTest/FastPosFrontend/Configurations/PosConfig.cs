@@ -32,7 +32,11 @@ namespace FastPosFrontend.Configurations
         [DataMember]
         public LoginHistory LoginHistory { get; set; } = new LoginHistory();
         [DataMember]
-        public ProductLayoutConfiguration ProductLayout { get; set; } = new ProductLayoutConfiguration();
+        public ProductLayoutConfiguration ProductLayout { get; set; } = new ();
+
+        [DataMember]
+        public CategoryLayoutConfiguration CategoryLayout { get; set; } = new();
+
         [DataMember]
         public string Url { get; set; } = "http://localhost:8080";
 
@@ -43,8 +47,14 @@ namespace FastPosFrontend.Configurations
             
             LoginHistory.SaveRequested += LoginHistory_SaveRequested;
             ProductLayout.SaveRequested += ProductLayout_SaveRequested;
+            CategoryLayout.SaveRequested += CategoryLayout_SaveRequested;
             Printing.SaveRequested += Printing_SaveRequested;
 
+        }
+
+        private void CategoryLayout_SaveRequested(object sender, SaveRequestedEventArgs e)
+        {
+            ForwardRequest(sender);
         }
 
         private void Printing_SaveRequested(object sender, SaveRequestedEventArgs e)

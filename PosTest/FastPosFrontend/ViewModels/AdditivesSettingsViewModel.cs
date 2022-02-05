@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Caliburn.Micro;
+using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
 using FastPosFrontend.ViewModels.SubViewModel;
@@ -18,7 +19,7 @@ namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Additive settings", typeof(AdditivesSettingsViewModel),"", parentNavigationItem:typeof(CheckoutSettingsViewModel),isQuickNavigationEnabled:true)]
     [PreAuthorize("Create_Additive|Update_Additive|Delete_Additive")]
-    public class AdditivesSettingsViewModel : LazyScreen
+    public class AdditivesSettingsViewModel : LazyScreen,ISettingsController
     {
         private BindableCollection<Additive> _additives;
         private Additive _selectedAdditive;
@@ -31,7 +32,8 @@ namespace FastPosFrontend.ViewModels
         private bool _isDialogOpen;
         private INotifyPropertyChanged _dialogViewModel;
         private WarningViewModel _warningViewModel;
-       
+
+        public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
 
         public AdditivesSettingsViewModel() : base()
         {
@@ -39,16 +41,7 @@ namespace FastPosFrontend.ViewModels
             _isEditing = false;
         }
 
-        //public AdditivesSettingsViewModel(int additivePageSize):base()
-        //{
-        //    IsDialogOpen = false;
-          
-        //    _additivePageSize = additivePageSize;
-
-        //    _isEditing = false;
-     
-        //}
-
+        
         public BindableCollection<Additive> Additives
         {
             get => _additives;
@@ -60,7 +53,7 @@ namespace FastPosFrontend.ViewModels
             get => _selectedAdditive;
             set
             {
-                //CopySelectedAdditive = value?.Clone();
+
                 Set(ref _selectedAdditive, value);
             }
         }
@@ -123,7 +116,7 @@ namespace FastPosFrontend.ViewModels
 
         private void PopulateAdditivesPage()
         {
-            var comparer = new Comparer<Additive>();
+            var comparer = new RankedComparer<Additive>();
             var additives = new List<Additive>(_allAdditives.Where(a => a.Rank != null));
             additives.Sort(comparer);
             Additives = new BindableCollection<Additive>();
@@ -425,5 +418,15 @@ namespace FastPosFrontend.ViewModels
         public ICommand PasteAdditiveCommand { get; set; }
         public ICommand MoveAdditiveCommand { get; set; }
         public ICommand DeleteAdditiveCommand { get; set; }
+
+        public override void BeforeNavigateAway()
+        {
+            RaiseSettingsUpdated();
+        }
+
+        public void RaiseSettingsUpdated(params object[] args)
+        {
+            SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(args));
+        }
     }
 }

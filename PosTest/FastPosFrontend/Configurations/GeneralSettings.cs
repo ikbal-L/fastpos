@@ -10,22 +10,24 @@ using ServiceLib.Service;
 
 namespace FastPosFrontend.Configurations
 {
-    public class GeneralSettings : PropertyChangedBase,IConfigurationProperty
+  
+    public class GeneralSettings : PropertyChangedBase, IConfigurationProperty
     {
 
         private int _tableNumber;
         private string _serverHost;
 
-        private int _categoryPageSize = 4;
+
         private string _restaurantName;
         private bool _isRefundEnabled;
         private bool isDeliveryEnabled;
         private bool isMultiCashRegisterEnabled;
         private bool _isBarcodeEnabled;
+        private bool _trackOrderChanges = true;
 
         public event EventHandler<SaveRequestedEventArgs> SaveRequested;
 
-      
+
 
         [JsonProperty]
         public int TableCount
@@ -37,18 +39,7 @@ namespace FastPosFrontend.Configurations
             }
         }
 
-        [JsonProperty]
-
-        public int CategoryPageSize
-        {
-            get { return _categoryPageSize; }
-            set
-            {
-                _categoryPageSize = value;
-                NotifyOfPropertyChange(nameof(CategoryPageSize));
-            }
-
-        }
+       
         [JsonProperty]
 
         public string ServerHost
@@ -102,11 +93,14 @@ namespace FastPosFrontend.Configurations
             set => Set(ref _isBarcodeEnabled, value);
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool TrackOrderChanges { get => _trackOrderChanges; set => Set(ref _trackOrderChanges , value); }
+
 
 
         public void RequestSave()
         {
-            SaveRequested?.Invoke(this,new SaveRequestedEventArgs());
+            SaveRequested?.Invoke(this, new SaveRequestedEventArgs());
         }
 
 

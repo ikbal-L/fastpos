@@ -123,7 +123,8 @@ namespace ServiceInterface.Model
                 Ingrediants = Ingrediants,
                 IsNotifying = IsNotifying,
                 ParentOrderItem = ParentOrderItem,
-                Rank = Rank
+                Rank = Rank,
+                IsFavorite = IsFavorite
             };
         }
         public override string ToString()
