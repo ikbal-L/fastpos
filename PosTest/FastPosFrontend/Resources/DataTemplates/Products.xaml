@@ -21,7 +21,7 @@
 
     <converters:IsStringNullOrEmptyValueConverter x:Key="IsStringNullOrEmptyValueConverter" />
     <converters:BrushOpacityConverter x:Key="BrushOpacityConverter"/>
-
+    <converters:ColorContrastConverter x:Key="ColorContrastConverter"/>
     <!--<Style TargetType="ToggleButton"  x:Key="ContainerToggleButton">
 
         <Setter Property="Template" >
@@ -119,49 +119,40 @@
                 caliburn:Message.Attach="[Event MouseLeftButtonUp] = [Action SelectProduct($this)]">
             <Grid   Background="{Binding Background,FallbackValue=WhiteSmoke}"
                        
-                        >
+                       TextBlock.Foreground="{Binding Background,Converter={StaticResource ColorContrastConverter}}" >
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                  
                 </Grid.RowDefinitions>
-                <StackPanel VerticalAlignment="Center" IsEnabled="False">
+                <StackPanel VerticalAlignment="Center" IsEnabled="False" >
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Id}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
                     <TextBlock Text="{Binding Path=Name}" FontSize="12" TextWrapping="Wrap"
                                    TextAlignment="Center"
-                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                        <Setter Property="Foreground" Value="White" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
+                                   VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold"
+                               >
+                       
                     </TextBlock>
                     <TextBlock Text="{Binding Path=Price,StringFormat='C2',ConverterCulture='fr-DZ'}" FontSize="12" TextWrapping="Wrap"
                                    TextAlignment="Center"
                                    VerticalAlignment="Center" TextTrimming="WordEllipsis" FontWeight="Bold">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDark}" Value="True">
-                                        <Setter Property="Foreground" Value="White" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Price}" Value="0">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
+                       
                     </TextBlock>
                 </StackPanel>
                 <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom" x:Name="ProductIndicators">
-                    <Border DockPanel.Dock="Left" Background="{DynamicResource PrimaryHueLightBrush}"
+                    <Border DockPanel.Dock="Left" Background="Black" 
                             CornerRadius="30" Width="20" Height="20" 
                             x:Name="ProductSelectionIndicator">
-                        <materialdesign:PackIcon Kind="Done" Height="20" Width="20" />
+                        <materialdesign:PackIcon Kind="Done" Height="20" Width="20" Foreground="White" />
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Visibility" Value="Collapsed" />

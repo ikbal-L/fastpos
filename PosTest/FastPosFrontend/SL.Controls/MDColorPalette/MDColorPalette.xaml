@@ -25,6 +25,8 @@
             <converters:BrushToHexConverter x:Key="BrushToHexConverter" />
             <converters:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter" />
             <converters:CollectionContainsAnyEqualConverter x:Key="CollectionContainsAnyEqualConverter"/>
+            <converters:SelectedColorOrDefaultConverter x:Key="SelectedColorOrDefaultConverter"/>
+            <converters:ColorContrastConverter x:Key="ColorContrastConverter"/>
 
             <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
                 <Setter Property="BorderBrush" Value="Transparent" />
@@ -134,9 +136,15 @@
                             PlacementMode="BottomAndAlignCentres" 
                             HorizontalAlignment="Center" >
                             <materialDesign:PopupBox.ToggleContent>
-                                <Border ToolTip="{Binding Name}" CornerRadius="50" Width="50" Height="50" Background="{Binding Hues[5],Converter={StaticResource ColorToBrushConverter}}"
-                                            >
-                                    <materialDesign:PackIcon Kind="Check" Foreground="White" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <Border ToolTip="{Binding Name}" CornerRadius="50" Width="50" Height="50" >
+
+                                    <Border.Background>
+                                        <MultiBinding Converter="{StaticResource SelectedColorOrDefaultConverter}" ConverterParameter="5">
+                                            <Binding RelativeSource="{RelativeSource AncestorType=mdcp:MDColorPalette}" Path="MDColor"/>
+                                            <Binding Path="Hues"/>
+                                        </MultiBinding>
+                                    </Border.Background>
+                                    <materialDesign:PackIcon Kind="Check" Foreground="{Binding RelativeSource={RelativeSource AncestorType=mdcp:MDColorPalette},Path=MDColor,Converter={StaticResource ColorContrastConverter}}" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" >
                                         <materialDesign:PackIcon.Style>
                                             <Style TargetType="materialDesign:PackIcon">
                                                 <Setter Property="Visibility" Value="Collapsed"/>

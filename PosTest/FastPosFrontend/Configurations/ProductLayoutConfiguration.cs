@@ -59,7 +59,7 @@ namespace FastPosFrontend.Configurations
 
         public ProductLayoutConfiguration():base(5,4)
         {
-            Debug.WriteLine($"from ProductLayoutConfiguration {_columns} {_rows}");
+           
         }
     }
 
@@ -69,7 +69,14 @@ namespace FastPosFrontend.Configurations
 
         public CategoryLayoutConfiguration():base(5,3)
         {
-            Debug.WriteLine($"from CategoryLayoutConfiguration {_columns} {_rows}");
+          
+        }
+    }
+
+    public class AdditiveLayoutConfiguration : LayoutConfiguration
+    {
+        public AdditiveLayoutConfiguration() : base(4, 4)
+        {
         }
     }
 }

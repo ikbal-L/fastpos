@@ -20,4 +20,9 @@ namespace FastPosFrontend.Views
     {
 
     }
+
+    public class AdditiveLayoutView: LayoutConfigurationView
+    {
+
+    }
 }

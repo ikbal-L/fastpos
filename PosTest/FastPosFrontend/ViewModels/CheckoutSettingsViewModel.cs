@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Caliburn.Micro;
 using FastPosFrontend.Configurations;
 using FastPosFrontend.Events;
@@ -103,7 +106,7 @@ namespace FastPosFrontend.ViewModels
             DeleteCategoryCommand = new DelegateCommandBase(DeleteCategory);
 
             ConfigureProductLayoutCommand = new DelegateCommandBase(ConfigureProductDisplayLayout);
-            ConfigureCategoryLayoutCommand = new DelegateCommandBase(ConfigureConfigureCategoryLayout);
+            ConfigureCategoryLayoutCommand = new DelegateCommandBase(ConfigureCategoryLayout);
             AddCategoryRowCommand = new DelegateCommandBase(AddCategoryRow);
         }
 
@@ -404,7 +407,7 @@ namespace FastPosFrontend.ViewModels
 
         public void ShowCategoryProducts(Category category)
         {
-
+          
             if (CategoryToMove != null)
             {
 
@@ -1125,6 +1128,32 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
+
+        TimeSpan? previous;
+        public void MoveCategory(Category category, FrameworkElement source, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                previous = null;
+                return;
+            }
+            
+            if (!previous.HasValue)
+            {
+                previous = DateTime.Now.TimeOfDay;
+                return;
+            }
+            var elapsed = DateTime.Now.TimeOfDay - previous;
+            if (elapsed.Value.TotalMilliseconds >=250)
+            {
+                previous = null;
+                DataObject dragData = new DataObject("Category", category);
+                DragDrop.DoDragDrop(source, dragData, DragDropEffects.Move);
+            }
+        }
+
+       
+
         public static void ListTouchDownEventHandler<T>(object sender, TouchEventArgs e, string key)
         {
             ListBox listBox = sender as ListBox;
@@ -1594,7 +1623,7 @@ namespace FastPosFrontend.ViewModels
             (Parent as MainViewModel)?.OpenDialog(ProductLayoutViewModel);
         }
 
-        public void ConfigureConfigureCategoryLayout(object obj)
+        public void ConfigureCategoryLayout(object obj)
         {
 
             (Parent as MainViewModel)?.OpenDialog(CategoryLayoutViewModel);

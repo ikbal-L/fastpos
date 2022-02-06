@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Caliburn.Micro;
+using FastPosFrontend.Configurations;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
@@ -14,36 +16,38 @@ using FastPosFrontend.ViewModels.Forms;
 using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
+using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
 
 namespace FastPosFrontend.ViewModels
 {
-    [NavigationItem("Additive settings", typeof(AdditivesSettingsViewModel),"", parentNavigationItem:typeof(CheckoutSettingsViewModel),isQuickNavigationEnabled:true)]
+    [NavigationItem("Additive settings", typeof(AdditivesSettingsViewModel), "", parentNavigationItem: typeof(CheckoutSettingsViewModel), isQuickNavigationEnabled: true)]
     [PreAuthorize("Create_Additive|Update_Additive|Delete_Additive")]
-    public class AdditivesSettingsViewModel : LazyScreen,ISettingsController
+    public class AdditivesSettingsViewModel : LazyScreen, ISettingsController
     {
-        private BindableCollection<Additive> _additives;
+        private ObservableCollection<Additive> _additives;
         private Additive _selectedAdditive;
         private Additive _copySelectedAdditive;
         private List<Additive> _allAdditives;
-        private int _additivePageSize = 30;
+
         private bool _isEditing;
         private Additive _clipBoardAdditive;
         private Additive _additiveToMove;
         private bool _isDialogOpen;
-        private INotifyPropertyChanged _dialogViewModel;
-        private WarningViewModel _warningViewModel;
+
+        private AdditiveLayoutViewModel additiveLayoutViewModel;
+        private int _additivePageSize;
 
         public event EventHandler<SettingsUpdatedEventArgs> SettingsUpdated;
 
         public AdditivesSettingsViewModel() : base()
         {
-           IsDialogOpen = false;
+            IsDialogOpen = false;
             _isEditing = false;
         }
 
-        
-        public BindableCollection<Additive> Additives
+
+        public ObservableCollection<Additive> Additives
         {
             get => _additives;
             set { Set(ref _additives, value); }
@@ -82,7 +86,7 @@ namespace FastPosFrontend.ViewModels
             get => _isEditing;
             set
             {
-                Set(ref _isEditing, value); 
+                Set(ref _isEditing, value);
                 NotifyOfPropertyChange(nameof(IsEditing));
             }
         }
@@ -95,25 +99,9 @@ namespace FastPosFrontend.ViewModels
 
         public AdditiveFormViewModel AdditiveDetailViewMode { get; set; }
 
-        public INotifyPropertyChanged DialogViewModel
-        {
-            get => _dialogViewModel;
-            set
-            {
-                _dialogViewModel = value;
-                NotifyOfPropertyChange();
-            }
-        }
 
-        public WarningViewModel WarningViewModel
-        {
-            get => _warningViewModel;
-            set
-            {
-                _warningViewModel = value;
-                NotifyOfPropertyChange();
-            }
-        }
+
+
 
         private void PopulateAdditivesPage()
         {
@@ -121,15 +109,15 @@ namespace FastPosFrontend.ViewModels
             var additives = new List<Additive>(_allAdditives.Where(a => a.Rank != null));
             additives.Sort(comparer);
             Additives = new BindableCollection<Additive>();
-            var maxRank = 30;
+            var maxRank = AdditivePageSize;
             if (additives.Count > 0)
             {
-                maxRank = (int) additives.Max(a => a.Rank);
+                maxRank = (int)additives.Max(a => a.Rank);
             }
 
-            int numberOfPages = (maxRank / _additivePageSize) + (maxRank % _additivePageSize == 0 ? 0 : 1);
+            int numberOfPages = (maxRank / AdditivePageSize) + (maxRank % AdditivePageSize == 0 ? 0 : 1);
             numberOfPages = numberOfPages == 0 ? 1 : numberOfPages;
-            var size = numberOfPages * _additivePageSize;
+            var size = numberOfPages * AdditivePageSize;
 
             RankedItemsCollectionHelper.LoadPagesFilled(source: additives, target: Additives, size: size);
         }
@@ -156,15 +144,15 @@ namespace FastPosFrontend.ViewModels
             {
                 ListBox listView = sender as ListBox;
                 ListBoxItem target =
-                    CheckoutSettingsViewModel.FindAncestor<ListBoxItem>((DependencyObject) e.OriginalSource);
+                    CheckoutSettingsViewModel.FindAncestor<ListBoxItem>((DependencyObject)e.OriginalSource);
 
                 if (target == null)
                 {
                     return;
                 }
 
-                // Find the data behind the ListViewItem
-                Additive targetAdditive = (Additive) listView.ItemContainerGenerator.ItemFromContainer(target);
+
+                Additive targetAdditive = (Additive)listView.ItemContainerGenerator.ItemFromContainer(target);
 
                 Additive receivedAdditive = e.Data.GetData("Additive") as Additive;
 
@@ -174,7 +162,7 @@ namespace FastPosFrontend.ViewModels
                 Console.WriteLine(receivedAdditive.GetHashCode());
 
                 SelectedAdditive = targetAdditive;
-                //TODO Fix locating the index of empty additive
+
                 var indexOfReceived = Additives.IndexOf(receivedAdditive);
                 var indexOfTarget = Additives.IndexOf(targetAdditive);
                 if (SelectedAdditive.Equals(receivedAdditive))
@@ -225,11 +213,11 @@ namespace FastPosFrontend.ViewModels
                 mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
                 {
                     AdditiveDetailViewMode = null;
-                }); 
+                });
             }
         }
 
-        
+
 
         public void Close()
         {
@@ -245,12 +233,12 @@ namespace FastPosFrontend.ViewModels
             }
 
             CopySelectedAdditive = SelectedAdditive.Clone();
-            //IsEditing = true;
+
             var mVm = (Parent as MainViewModel);
-            AdditiveDetailViewMode = new AdditiveFormViewModel(SelectedAdditive,this);
+            AdditiveDetailViewMode = new AdditiveFormViewModel(SelectedAdditive, this);
             mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
             {
-                
+
                 AdditiveDetailViewMode = null;
             });
         }
@@ -286,8 +274,8 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            var rank = (int) SelectedAdditive.Rank;
-            var additive = new Additive(ClipBoardAdditive) {Rank = rank, Id = null};
+            var rank = (int)SelectedAdditive.Rank;
+            var additive = new Additive(ClipBoardAdditive) { Rank = rank, Id = null };
             var description = Regex.Replace(additive.Description, @"\([0-9]{1,2}\)", "");
             var count = Additives.Where(a => a.Description != null).Count(a => a.Description.Contains(description));
 
@@ -336,7 +324,7 @@ namespace FastPosFrontend.ViewModels
                     .Cancel(o =>
                     {
                         mVm.CloseDialog();
-                    } ));
+                    }));
         }
 
         public void DeleteAdditiveAction()
@@ -347,22 +335,22 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
 
-            var selectedAdditiveId = (long) SelectedAdditive.Id;
+            var selectedAdditiveId = (long)SelectedAdditive.Id;
 
             var additiveToDelete = SelectedAdditive;
 
 
-            //additiveToDelete.Rank = null;
+
 
 
             if (StateManager.Delete(additiveToDelete))
             {
-                //Additives.Remove(SelectedAdditive);
+
                 var index = Additives.IndexOf(additiveToDelete);
-                Additives[index] = new Additive() {Rank = additiveToDelete.Rank};
+                Additives[index] = new Additive() { Rank = additiveToDelete.Rank };
                 additiveToDelete = null;
                 SelectedAdditive = null;
-                
+
             }
             else
             {
@@ -395,8 +383,16 @@ namespace FastPosFrontend.ViewModels
 
         protected override void Setup()
         {
-            var additivesTask= StateManager.GetAsync<Additive>();
+            var additivesTask = StateManager.GetAsync<Additive>();
             _data = new NotifyAllTasksCompletion(additivesTask);
+
+            AdditiveLayoutViewModel = new AdditiveLayoutViewModel();
+
+            AdditiveLayoutViewModel.OnLayoutChanged(() =>
+            {
+                AdditivePageSize = AdditiveLayoutViewModel.Configuration.TotalElements;
+                PopulateAdditivesPage();
+            });
 
             CreateAdditiveCommand = new DelegateCommandBase(CreateAdditive);
             EditAdditiveCommand = new DelegateCommandBase(EditAdditive);
@@ -404,12 +400,15 @@ namespace FastPosFrontend.ViewModels
             CopyAdditiveCommand = new DelegateCommandBase(CopyAdditive);
             PasteAdditiveCommand = new DelegateCommandBase(PasteAdditive);
             DeleteAdditiveCommand = new DelegateCommandBase(DeleteAdditive);
+            ConfigureAdditiveLayoutCommand = new DelegateCommandBase(ConfigureAdditiveLayout);
         }
 
         public override void Initialize()
         {
 
             _allAdditives = StateManager.GetAll<Additive>().ToList();
+            AdditiveLayout = ConfigurationManager.Get<PosConfig>().AdditiveLayout;
+            AdditivePageSize = AdditiveLayout.TotalElements;
             PopulateAdditivesPage();
         }
 
@@ -419,6 +418,7 @@ namespace FastPosFrontend.ViewModels
         public ICommand PasteAdditiveCommand { get; set; }
         public ICommand MoveAdditiveCommand { get; set; }
         public ICommand DeleteAdditiveCommand { get; set; }
+        public ICommand ConfigureAdditiveLayoutCommand { get; set; }
 
         public override void BeforeNavigateAway()
         {
@@ -428,6 +428,27 @@ namespace FastPosFrontend.ViewModels
         public void RaiseSettingsUpdated(params object[] args)
         {
             SettingsUpdated?.Invoke(this, new SettingsUpdatedEventArgs(args));
+        }
+
+
+        public AdditiveLayoutViewModel AdditiveLayoutViewModel
+        {
+            get => additiveLayoutViewModel;
+            set => Set(ref additiveLayoutViewModel, value);
+        }
+
+        public AdditiveLayoutConfiguration AdditiveLayout { get; set; }
+
+        public int AdditivePageSize 
+        { 
+            get => _additivePageSize; 
+            set => Set(ref _additivePageSize , value); 
+        }
+
+        public void ConfigureAdditiveLayout(object obj)
+        {
+
+            (Parent as MainViewModel)?.OpenDialog(AdditiveLayoutViewModel);
         }
     }
 }

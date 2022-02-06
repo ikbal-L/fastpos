@@ -56,7 +56,7 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Rows="4" Columns="4" />
+                    <UniformGrid Rows="{Binding AdditiveLayoutViewModel.Rows}" Columns="{Binding AdditiveLayoutViewModel.Columns}" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
@@ -102,6 +102,11 @@
                         ex:AbilityEx.Autority="Delete_Additive" ex:AbilityEx.AppliedBy="Hide">
                     <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
                 </Button>
+
+                <Button
+                                     Command="{Binding ConfigureAdditiveLayoutCommand}"
+                                        Content="{materialdesign:PackIcon Kind=Grid}"
+                                        />
 
                 <!--<ToggleButton
                           

@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:FastPosFrontend.Views"
              xmlns:conv="clr-namespace:FastPosFrontend.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:cal="http://www.caliburnproject.org" xmlns:mdcp="clr-namespace:FastPosFrontend.SL.Controls.MDColorPalette"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <conv:SolidColorBrushToColorConverter x:Key="SolidColorBrushToColorConverter"></conv:SolidColorBrushToColorConverter>
     </UserControl.Resources>
-    <Border Width="450" Height="Auto" BorderThickness="1" 
+    <Border  Height="Auto" BorderThickness="1" 
             BorderBrush="{DynamicResource PrimaryHueMidBrush}" ClipToBounds="True">
         <Grid >
             <Grid.RowDefinitions>
@@ -36,33 +36,31 @@
             </Border>
 
 
-            <materialDesign:ColorPicker Grid.Row="2" MinHeight="200"  Margin="20 10">
+            <!--<materialDesign:ColorPicker Grid.Row="2" MinHeight="200"  Margin="20 10">
                 <materialDesign:ColorPicker.Color>
                     <Binding 
                         Path="Additive.Background" 
                         Converter="{StaticResource SolidColorBrushToColorConverter}" />
                 </materialDesign:ColorPicker.Color>
-            </materialDesign:ColorPicker>
-            <materialDesign:ColorZone Background="#FFAEEA00" Padding="6" Grid.Row="3" Margin="1">
-                <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                            cal:Message.Attach="[Event Click] = [Action SaveAdditive()]">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ContentSave" HorizontalAlignment="Right"
-                                                                     Width="25" Height="25" />
-                        </StackPanel>
-                    </Button>
+            </materialDesign:ColorPicker>-->
 
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                            cal:Message.Attach="[Event Click] = [Action Cancel()]" Margin="10">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="CloseBox" HorizontalAlignment="Right"
-                                                                     Width="25" Height="25" />
-                        </StackPanel>
-                    </Button>
-                    <TextBlock Text="Edit Aditives" FontSize="16" Margin="10" />
-                </StackPanel>
-            </materialDesign:ColorZone>
+
+            <mdcp:MDColorPalette MDColor="{Binding Additive.Background,Converter={StaticResource SolidColorBrushToColorConverter},Mode=TwoWay}" Grid.Row="2" Margin="20 10"/>
+
+
+
+            <UniformGrid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Rows="1"  Margin="10 0 10 10">
+                <Button Content="{materialDesign:PackIcon Kind=ContentSave,Size=30}" 
+                    Margin="5" FontSize="16" Width="100" Height="40"
+                       cal:Message.Attach="[Event Click] = [Action SaveAdditive()]" IsDefault="True"/>
+                <Button Content="{materialDesign:PackIcon Kind=Cancel,Size=30}" 
+                    FontSize="16" 
+                    Style="{StaticResource MaterialDesignFlatButton}" 
+                    Margin="5" Width="100" Height="40"
+                     cal:Message.Attach="[Event Click] = [Action Cancel()]" IsCancel="True"/>
+            </UniformGrid>
+
+
         </Grid>
     </Border>
 </UserControl>

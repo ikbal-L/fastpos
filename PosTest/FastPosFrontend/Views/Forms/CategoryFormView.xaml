@@ -66,45 +66,22 @@
                      Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}" />
             </Border>
 
-          
 
-            <!--<materialDesign:ColorPicker Grid.Row="2" MinHeight="150" Margin="2 5">
-                <materialDesign:ColorPicker.Color>
-                    <Binding
-                    Path="Category.Background"
-                    Converter="{StaticResource SolidColorBrushToColorConverter}" />
-                </materialDesign:ColorPicker.Color>
-            </materialDesign:ColorPicker>-->
 
-            <mdcp:MDColorPalette MDColor="{Binding Category.Background.Color}" Grid.Row="2"  Margin="2 5"></mdcp:MDColorPalette>
+            <mdcp:MDColorPalette MDColor="{Binding Category.Background.Color}" Grid.Row="2"  Margin="2 5"/>
         </Grid>
-        <materialDesign:ColorZone Grid.Row="1" Padding="6"
-                                  Mode="PrimaryDark"
-                                 >
-            <StackPanel Orientation="Horizontal"
-                        Margin="20 10">
-                <Button
-                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                    cal:Message.Attach="SaveCategory"
-                    IsEnabled="{Binding IsSaveEnabled}">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="ContentSave"
-                                                 HorizontalAlignment="Right" Width="25"
-                                                 Height="25" />
-                    </StackPanel>
-                </Button>
-                <Button
-                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                    cal:Message.Attach="Cancel]" Margin="10">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="CloseBox"
-                                                 HorizontalAlignment="Right" Width="25"
-                                                 Height="25" />
-                    </StackPanel>
-                </Button>
-                <TextBlock Text="Category Details" FontSize="24" Margin="10"
-                           FontWeight="DemiBold" />
-            </StackPanel>
-        </materialDesign:ColorZone>
+       
+
+
+        <UniformGrid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Rows="1"  Margin="20 0 20 10">
+            <Button Content="{materialDesign:PackIcon Kind=ContentSave,Size=30}" 
+                    Margin="5" FontSize="16" Width="100" Height="40"
+                    cal:Message.Attach="SaveCategory" IsDefault="True"/>
+            <Button Content="{materialDesign:PackIcon Kind=Cancel,Size=30}" 
+                    FontSize="16" 
+                    Style="{StaticResource MaterialDesignFlatButton}" 
+                    Margin="5" Width="100" Height="40"
+                    cal:Message.Attach="Cancel]" IsCancel="True"/>
+        </UniformGrid>
     </Grid>
 </UserControl>

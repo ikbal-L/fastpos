@@ -142,6 +142,7 @@
     <Compile Include="Converters\BrushToHexConverter.cs" />
     <Compile Include="Converters\CollectionContainsAnyEqualConverter.cs" />
     <Compile Include="Converters\CollectionContainsItemConverter.cs" />
+    <Compile Include="Converters\ColorContrastConverter.cs" />
     <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\DisplayNameConverter.cs" />
     <Compile Include="Converters\ExpanderRotateAngleConverter.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\OrderNumerationMaskConverter.cs" />
     <Compile Include="Converters\OrderTypeToPackIconKindConverter.cs" />
+    <Compile Include="Converters\SelectedColorOrDefaultConverter.cs" />
     <Compile Include="Converters\SLConverter.cs" />
     <Compile Include="Converters\SolidColorBrushToColorConverter.cs" />
     <Compile Include="Converters\StaticResourceConverter.cs" />

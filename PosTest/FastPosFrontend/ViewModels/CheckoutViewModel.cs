@@ -113,8 +113,9 @@ namespace FastPosFrontend.ViewModels
             SetupEmbeddedCommandBar();
             SetupEmbeddedStatusBar();
 
-            _productLayout = ConfigurationManager.Get<PosConfig>().ProductLayout;
-            _categoryLayout = ConfigurationManager.Get<PosConfig>().CategoryLayout;
+            ProductLayout = ConfigurationManager.Get<PosConfig>().ProductLayout;
+            CategoryLayout = ConfigurationManager.Get<PosConfig>().CategoryLayout;
+            AdditiveLayout = ConfigurationManager.Get<PosConfig>().AdditiveLayout;
 
             CurrentCategoryPageIndex = 0;
             var configuration = ConfigurationManager.Get<PosConfig>().General;
@@ -501,9 +502,17 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _productLayout, value);
         }
 
-        public CategoryLayoutConfiguration CategoryLayout 
-        { get => _categoryLayout; 
-            set => Set(ref _categoryLayout, value); 
+        public CategoryLayoutConfiguration CategoryLayout
+        {
+            get => _categoryLayout;
+            set => Set(ref _categoryLayout, value);
+        }
+
+
+        public AdditiveLayoutConfiguration AdditiveLayout 
+        { 
+            get => _additiveLayout; 
+            set => Set(ref _additiveLayout , value); 
         }
 
         private void OrderItemsCollectionViewSourceOnFilter(object sender, FilterEventArgs e)
@@ -595,8 +604,9 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _currentCategory, value);
         }
 
-        public int MaxProductPageSize => _productLayout.TotalElements;
-        public int MaxCategoryPageSize => _categoryLayout.TotalElements;
+        public int ProductPageSize => ProductLayout.TotalElements;
+        public int CategoryPageSize => CategoryLayout.TotalElements;
+        public int AdditivesPageSize => AdditiveLayout.TotalElements;
 
         public bool AdditivesVisibility
         {
@@ -842,7 +852,7 @@ namespace FastPosFrontend.ViewModels
         private EventManagement.EventManager eventManager;
         private IOrderRepository _orderRepo;
         private ObservableCollection<Additive> _favAdditives;
-
+        private AdditiveLayoutConfiguration _additiveLayout;
 
         public decimal CurrentOrderTotal
         {
@@ -1246,13 +1256,14 @@ namespace FastPosFrontend.ViewModels
             var retrieveCategories = AllCategories;
             var categories = new List<Category>(retrieveCategories.Where(c => c.Rank != null));
             categories.Sort(comparer);
-            Categories = new BindableCollection<Category>();
+            Categories=  new BindableCollection<Category>();
+
             var maxRank = categories.Max(c => c.Rank) ?? 0;
 
-            int nbpage = (maxRank / MaxCategoryPageSize) + (maxRank % MaxCategoryPageSize == 0 ? 0 : 1);
+            int nbpage = (maxRank / CategoryPageSize) + (maxRank % CategoryPageSize == 0 ? 0 : 1);
             nbpage = nbpage == 0 ? 1 : nbpage;
             CategoryPageCount = nbpage;
-            var size = nbpage * MaxCategoryPageSize;
+            var size = nbpage * CategoryPageSize;
 
             RankedItemsCollectionHelper.LoadPagesFilled(source: categories, target: Categories, size: size);
         }
@@ -1294,7 +1305,7 @@ namespace FastPosFrontend.ViewModels
             listOfFliteredProducts.Sort(comparer);
             CurrentCategory = category;
             RankedItemsCollectionHelper.LoadPagesNotFilled(source: listOfFliteredProducts, target: ProductsPage,
-                size: MaxProductPageSize, parameter: category);
+                size: ProductPageSize, parameter: category);
         }
 
         public void ShowProductAdditives(Product product)
@@ -2384,13 +2395,13 @@ namespace FastPosFrontend.ViewModels
 
         private void CalculateTotalPages(int itemcount)
         {
-            if (itemcount % MaxCategoryPageSize == 0)
+            if (itemcount % CategoryPageSize == 0)
             {
-                CategoryPageCount = (itemcount / MaxCategoryPageSize);
+                CategoryPageCount = (itemcount / CategoryPageSize);
             }
             else
             {
-                CategoryPageCount = (itemcount / MaxCategoryPageSize) + 1;
+                CategoryPageCount = (itemcount / CategoryPageSize) + 1;
             }
         }
 
@@ -2406,8 +2417,8 @@ namespace FastPosFrontend.ViewModels
 
             int indexOfCategory = (int)category?.Rank - 1;
 
-            if (indexOfCategory >= MaxCategoryPageSize * CurrentCategoryPageIndex &&
-                indexOfCategory < MaxCategoryPageSize * (CurrentCategoryPageIndex + 1))
+            if (indexOfCategory >= CategoryPageSize * CurrentCategoryPageIndex &&
+                indexOfCategory < CategoryPageSize * (CurrentCategoryPageIndex + 1))
             {
                 e.Accepted = true;
             }

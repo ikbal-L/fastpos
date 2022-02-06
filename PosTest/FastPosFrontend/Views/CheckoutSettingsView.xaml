@@ -605,7 +605,8 @@
                                 <Button
                                         Height="50" Background="{Binding Background}"
                                         
-                                        cal:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)]"
+                                        cal:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)];
+                                        [Event PreviewMouseMove ] = [Action MoveCategory($this,$source,$eventArgs)]"
                                         FontWeight="Bold"
                                         FontSize="16"
                                         Padding="8 0"
@@ -635,7 +636,8 @@
                                         </Style>
                                     </Button.Style>
 
-                                    <Grid>
+                                    <Grid 
+                                          >
                                         <DockPanel  HorizontalAlignment="Stretch"  LastChildFill="False">
 
                                             <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">

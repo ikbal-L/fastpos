@@ -38,6 +38,9 @@ namespace FastPosFrontend.Configurations
         public CategoryLayoutConfiguration CategoryLayout { get; set; } = new();
 
         [DataMember]
+        public AdditiveLayoutConfiguration AdditiveLayout { get; set; } = new();
+
+        [DataMember]
         public string Url { get; set; } = "http://localhost:8080";
 
         public event EventHandler<SaveRequestedEventArgs> SaveRequested;
@@ -48,8 +51,14 @@ namespace FastPosFrontend.Configurations
             LoginHistory.SaveRequested += LoginHistory_SaveRequested;
             ProductLayout.SaveRequested += ProductLayout_SaveRequested;
             CategoryLayout.SaveRequested += CategoryLayout_SaveRequested;
+            AdditiveLayout.SaveRequested += AdditiveLayout_SaveRequested;
             Printing.SaveRequested += Printing_SaveRequested;
 
+        }
+
+        private void AdditiveLayout_SaveRequested(object sender, SaveRequestedEventArgs e)
+        {
+            ForwardRequest(sender);
         }
 
         private void CategoryLayout_SaveRequested(object sender, SaveRequestedEventArgs e)

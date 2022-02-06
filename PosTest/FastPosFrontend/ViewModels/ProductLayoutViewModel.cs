@@ -5,7 +5,7 @@ using Action = System.Action;
 
 namespace FastPosFrontend.ViewModels
 {
-    public class LayoutViewModel<T> : DialogContent  where T:LayoutConfiguration
+    public class LayoutConfigurationViewModel<T> : DialogContent  where T:LayoutConfiguration
     {
         private int _columns;
         private int _rows;
@@ -13,7 +13,7 @@ namespace FastPosFrontend.ViewModels
         private Action _layoutChangedHandler;
 
 
-        public LayoutViewModel(T configuration)
+        public LayoutConfigurationViewModel(T configuration)
         {
             _configuration =  configuration;
             Columns = _configuration.Columns;
@@ -59,16 +59,23 @@ namespace FastPosFrontend.ViewModels
     }
 
 
-    public class ProductLayoutViewModel: LayoutViewModel<ProductLayoutConfiguration>
+    public class ProductLayoutViewModel: LayoutConfigurationViewModel<ProductLayoutConfiguration>
     {
         public ProductLayoutViewModel() :base(ConfigurationManager.Get<PosConfig>().ProductLayout)
         {
         }
     }
 
-    public class CategoryLayoutViewModel : LayoutViewModel<CategoryLayoutConfiguration>
+    public class CategoryLayoutViewModel : LayoutConfigurationViewModel<CategoryLayoutConfiguration>
     {
         public CategoryLayoutViewModel() : base(ConfigurationManager.Get<PosConfig>().CategoryLayout)
+        {
+        }
+    }
+
+    public class AdditiveLayoutViewModel : LayoutConfigurationViewModel<AdditiveLayoutConfiguration>
+    {
+        public AdditiveLayoutViewModel() : base(ConfigurationManager.Get<PosConfig>().AdditiveLayout)
         {
         }
     }

@@ -44,13 +44,10 @@
                                         FontSize="16"
                                         Padding="3 0 0 5"
                                         Margin="3"
-                                       
-                                      
                             materialDesign:ButtonAssist.CornerRadius="8">
 
                             <Button.Style >
                                 <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}" >
-
                                     <Setter Property="BorderBrush" Value="Transparent" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsDark}" Value="True">
@@ -61,9 +58,6 @@
                                             <Setter Property="BorderBrush" Value="#2f2f2f" />
                                             <Setter Property="BorderThickness" Value="2" />
                                         </DataTrigger>
-
-
-
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
