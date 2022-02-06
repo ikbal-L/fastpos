@@ -4,9 +4,9 @@ using Caliburn.Micro;
 using ServiceInterface.ExtentionsMethod;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
-    public class AddEditWaiterViewModel: PropertyChangedBase
+    public class WaiterFormViewModel: PropertyChangedBase
     {
         private bool _IsOpenDailog ;
 
@@ -35,7 +35,7 @@ namespace FastPosFrontend.ViewModels
         }
 
         private WaiterSettingsViewModel Parent { get; set; }
-        public AddEditWaiterViewModel(WaiterSettingsViewModel parent)
+        public WaiterFormViewModel(WaiterSettingsViewModel parent)
         {
             Parent = parent;
         }

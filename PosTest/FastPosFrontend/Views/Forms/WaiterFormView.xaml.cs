@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace FastPosFrontend.Views
+namespace FastPosFrontend.Views.Forms
 {
     /// <summary>
     /// Interaction logic for AddEditWaiterView.xaml
     /// </summary>
-    public partial class AddEditWaiterView : UserControl
+    public partial class WaiterFormView : UserControl
     {
-        public AddEditWaiterView()
+        public WaiterFormView()
         {
             InitializeComponent();
         }

@@ -15,7 +15,7 @@ using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
     public delegate void SaveHandler(bool isSuccessful);
     public class ProductFormViewModel : DialogContent, INotifyDataErrorInfo

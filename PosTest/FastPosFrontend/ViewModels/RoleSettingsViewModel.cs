@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using FastPosFrontend.ViewModels.Forms;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 using Utilities.Extensions;
@@ -13,7 +14,7 @@ namespace FastPosFrontend.ViewModels
     {
         private BindableCollection<Role> _roles;
         private Role _selectedRole;
-        private RoleDetailViewModel _roleDetailViewModel;
+        private RoleFormViewModel _roleDetailViewModel;
         private bool _isEditing;
 
         public RoleSettingsViewModel() : base()
@@ -33,7 +34,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _selectedRole, value);
         }
 
-        public RoleDetailViewModel RoleDetailViewModel
+        public RoleFormViewModel RoleDetailViewModel
         {
             get => _roleDetailViewModel;
             set => Set(ref _roleDetailViewModel, value);
@@ -58,7 +59,7 @@ namespace FastPosFrontend.ViewModels
 
         public void CreateRole()
         {
-            RoleDetailViewModel = new RoleDetailViewModel(this);
+            RoleDetailViewModel = new RoleFormViewModel(this);
             RoleDetailViewModel.Create();
             IsEditing = true;
         }
@@ -74,7 +75,7 @@ namespace FastPosFrontend.ViewModels
                     return;
                 }
 
-                RoleDetailViewModel = new RoleDetailViewModel(this);
+                RoleDetailViewModel = new RoleFormViewModel(this);
                 RoleDetailViewModel.Edit(SelectedRole);
                 IsEditing = true;
             }

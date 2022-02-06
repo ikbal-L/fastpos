@@ -8,7 +8,7 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:local="clr-namespace:FastPosFrontend.Views.Forms"
              xmlns:subviews="clr-namespace:FastPosFrontend.Views.SubViews"
              xmlns:subViews="clr-namespace:FastPosFrontend.Views.SubViews"
              mc:Ignorable="d" 
@@ -26,7 +26,7 @@
     </FrameworkElement.Resources>
     <materialDesign:DialogHost  IsOpen="{Binding IsDialogOpen}">
         <materialDesign:DialogHost.DialogContent>
-            <local:CategoryDetailView/>
+            <local:CategoryFormView/>
         </materialDesign:DialogHost.DialogContent>
 
         <Grid Background="GhostWhite" >

@@ -12,7 +12,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400" x:Name="CustomerViewUc"
              xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-             xmlns:views="clr-namespace:FastPosFrontend.Views"
+             xmlns:views="clr-namespace:FastPosFrontend.Views.Forms"
              d:DataContext="{d:DesignInstance vm:CustomerViewModel}">
 
     <UserControl.Resources>

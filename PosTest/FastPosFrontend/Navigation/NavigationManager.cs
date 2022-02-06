@@ -6,12 +6,12 @@ using System.Threading;
 using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
-using FastPosFrontend.Navigation;
 using Caliburn.Micro;
+using FastPosFrontend.ViewModels;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.Navigation
 {
-    public class NavigationManager<T> : PropertyChangedBase  ,IAppNavigationConductor where T : class
+    public class NavigationManager<T> : PropertyChangedBase, IAppNavigationConductor where T : class
     {
         private BindableCollection<NavigationLookupItem> _appNavigationItems;
         private BindableCollection<NavigationLookupItem> _quickNavigationItems;
@@ -26,7 +26,7 @@ namespace FastPosFrontend.ViewModels
 
         private static NavigationManager<T> _instance;
 
-        public static NavigationManager<T> Instance => _instance?? throw new ArgumentNullException($"{nameof(NavigationManager<T>)} must be initialized by passing conductor object of type {typeof(IConductor)}");
+        public static NavigationManager<T> Instance => _instance ?? throw new ArgumentNullException($"{nameof(NavigationManager<T>)} must be initialized by passing conductor object of type {typeof(IConductor)}");
 
 
         public static NavigationManager<T> Init(IConductor<T> conductor)
@@ -85,11 +85,11 @@ namespace FastPosFrontend.ViewModels
         protected virtual List<NavigationLookupItem> LoadSingleItems()
         {
             var items = GetAppliedAttributes<NavigationItemAttribute>(
-                    type => ! IsParentItem(type))
+                    type => !IsParentItem(type))
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
                                     string.IsNullOrEmpty(attribute.GroupName)
-                                    && attribute.ParentNavigationItem == null&& attribute.Isvisible)
-                .Select(attribute => (NavigationLookupItem) attribute).ToList();
+                                    && attribute.ParentNavigationItem == null && attribute.Isvisible)
+                .Select(attribute => (NavigationLookupItem)attribute).ToList();
             return items;
         }
 
@@ -99,11 +99,11 @@ namespace FastPosFrontend.ViewModels
         /// <returns><see cref="List{NavigationLookupItem}"/> </returns>
         private protected virtual List<NavigationLookupItem> LoadGroupItems()
         {
-            var groupItems = 
-                GetAppliedAttributes<NavigationItemAttribute>( )
+            var groupItems =
+                GetAppliedAttributes<NavigationItemAttribute>()
                 .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
                                     !string.IsNullOrEmpty(attribute.GroupName
-                                    )&& attribute.Isvisible)
+                                    ) && attribute.Isvisible)
                 .GroupBy(attribute => attribute.GroupName).Select((grouping) =>
                     new NavigationLookupItem(grouping.Key, isGroupingItem: true)
                     {
@@ -116,8 +116,8 @@ namespace FastPosFrontend.ViewModels
         protected virtual List<NavigationLookupItem> LoadQuickNavigationItems()
         {
             var items = GetAppliedAttributes<NavigationItemAttribute>()
-                .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy 
-                                    
+                .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy
+
                                     && attribute.IsQuickNavigationEnabled)
                 .Select(attribute => (NavigationLookupItem)attribute).ToList();
             return items;
@@ -125,7 +125,7 @@ namespace FastPosFrontend.ViewModels
 
         private NavigationLookupItem Selector(NavigationItemAttribute attribute)
         {
-            var lookupItem = (NavigationLookupItem) attribute;
+            var lookupItem = (NavigationLookupItem)attribute;
             if (IsParentItem(attribute.Target))
             {
                 lookupItem
@@ -135,17 +135,17 @@ namespace FastPosFrontend.ViewModels
         }
 
 
-        private IEnumerable<TAttribute> GetAppliedAttributes<TAttribute>(Func<Type,bool> filter = null) where TAttribute : Attribute
+        private IEnumerable<TAttribute> GetAppliedAttributes<TAttribute>(Func<Type, bool> filter = null) where TAttribute : Attribute
         {
             var types = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(x => Attribute.IsDefined(x, typeof(NavigationItemAttribute)));
-            if (filter!= null)
+            if (filter != null)
             {
                 types = types.Where(filter).ToArray();
             }
             //var principal =Thread.CurrentPrincipal;
-           types =  types.Where(t =>
+            types = types.Where(t =>
             {
                 var attr = t.GetCustomAttribute(typeof(PreAuthorizeAttribute));
                 if (attr is PreAuthorizeAttribute preAuth)
@@ -159,7 +159,7 @@ namespace FastPosFrontend.ViewModels
 
             return types
                 .Select(type =>
-                    (TAttribute) type.GetCustomAttribute(
+                    (TAttribute)type.GetCustomAttribute(
                         typeof(TAttribute)));
         }
 
@@ -168,7 +168,7 @@ namespace FastPosFrontend.ViewModels
             var result = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => Attribute.IsDefined(x, typeof(NavigationItemAttribute)))
                 .Select(type =>
-                    (NavigationItemAttribute) type.GetCustomAttribute(
+                    (NavigationItemAttribute)type.GetCustomAttribute(
                         typeof(NavigationItemAttribute)))
                 .Any(attribute => attribute.ParentNavigationItem == target);
             return result;
@@ -176,18 +176,18 @@ namespace FastPosFrontend.ViewModels
 
         private IEnumerable<NavigationLookupItem> GetChildren(Type type)
         {
-             return GetAppliedAttributes<NavigationItemAttribute>()
-                .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
-                                    string.IsNullOrEmpty(attribute.GroupName)
-                                    && attribute.ParentNavigationItem == type).Select(attribute =>(NavigationLookupItem)attribute );
+            return GetAppliedAttributes<NavigationItemAttribute>()
+               .Where(attribute => attribute.LoadingStrategy == NavigationItemLoadingStrategy.Lazy &&
+                                   string.IsNullOrEmpty(attribute.GroupName)
+                                   && attribute.ParentNavigationItem == type).Select(attribute => (NavigationLookupItem)attribute);
         }
 
         private protected virtual NavigationLookupItem LoadDefaultItem()
         {
-            var item = (NavigationLookupItem) Assembly.GetExecutingAssembly().GetTypes()
+            var item = (NavigationLookupItem)Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => Attribute.IsDefined(x, typeof(NavigationItemAttribute)))
                 .Select(type =>
-                    (NavigationItemAttribute) type.GetCustomAttribute(
+                    (NavigationItemAttribute)type.GetCustomAttribute(
                         typeof(NavigationItemAttribute)))
                 .FirstOrDefault(attribute => attribute.IsDefault);
             return item;
@@ -196,7 +196,7 @@ namespace FastPosFrontend.ViewModels
         public virtual bool NavigateToItem(NavigationLookupItem navigationItem)
         {
             if (navigationItem == null) return false;
-            
+
             if (navigationItem.Target == null || !navigationItem.Target.IsSubclassOf(typeof(Screen))) return false;
             if (navigationItem.KeepAlive)
             {
@@ -206,13 +206,13 @@ namespace FastPosFrontend.ViewModels
                     return ActivateScreenByType(screen);
                 }
 
-                var keepAliveScreenInstance = (T) Activator.CreateInstance(navigationItem.Target);
+                var keepAliveScreenInstance = (T)Activator.CreateInstance(navigationItem.Target);
                 KeepAliveScreens.Add(navigationItem.Target, keepAliveScreenInstance);
                 ActivateScreenByType(keepAliveScreenInstance);
                 return ActivateScreenByType(keepAliveScreenInstance);
             }
 
-            var screenInstance = (T) Activator.CreateInstance(navigationItem.Target);
+            var screenInstance = (T)Activator.CreateInstance(navigationItem.Target);
             SetSettingsListener(screenInstance);
             return ActivateScreenByType(screenInstance);
         }
@@ -223,8 +223,7 @@ namespace FastPosFrontend.ViewModels
             {
                 screen.Parent = _conductor;
                 if (ActiveScreen != null && !ActiveScreen.CanNavigate(screen.GetType())) return false;
-                
-                ActiveScreen?.BeforeNavigateAway();
+
                 ActiveScreen = screen;
 
                 if (screenInstance is LazyScreen lazyScreen)
@@ -249,13 +248,13 @@ namespace FastPosFrontend.ViewModels
             //NavigateToItem(defaultItem);
         }
 
-        public void  SetSettingsListener(object obj)
+        public void SetSettingsListener(object obj)
         {
             if (obj is ISettingsController settingsController)
             {
-                foreach (var (_,instance) in KeepAliveScreens.Select(x => (x.Key, x.Value)))
+                foreach (var (_, instance) in KeepAliveScreens.Select(x => (x.Key, x.Value)))
                 {
-                    if (instance is ISettingsListener listener && listener.SettingsControllers.Contains(settingsController.GetType()) )
+                    if (instance is ISettingsListener listener && listener.SettingsControllers.Contains(settingsController.GetType()))
                     {
                         settingsController.SettingsUpdated += listener.OnSettingsUpdated;
                     }
@@ -263,7 +262,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        
+
     }
 
     public interface IConductor<T> where T : class

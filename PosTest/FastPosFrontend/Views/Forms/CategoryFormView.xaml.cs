@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace FastPosFrontend.Views
+namespace FastPosFrontend.Views.Forms
 {
     /// <summary>
     /// Interaction logic for CategoryDetailView.xaml
     /// </summary>
-    public partial class CategoryDetailView : UserControl
+    public partial class CategoryFormView : UserControl
     {
-        public CategoryDetailView()
+        public CategoryFormView()
         {
             InitializeComponent();
         }

@@ -7,9 +7,9 @@ using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
-    public class AddEditDeliveryManViewModel : PropertyChangedBase
+    public class DeliverymanFormViewModel : PropertyChangedBase
     {
         private bool _IsOpenDailog ;
 
@@ -52,7 +52,7 @@ namespace FastPosFrontend.ViewModels
         }
 
         private DeliveryManSettingsViewModel Parent { get; set; }
-        public AddEditDeliveryManViewModel(DeliveryManSettingsViewModel parent)
+        public DeliverymanFormViewModel(DeliveryManSettingsViewModel parent)
         {
             Parent = parent;
             Numbers = new BindableCollection<string>();

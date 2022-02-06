@@ -10,7 +10,7 @@ using Caliburn.Micro;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
     public class CustomerFormViewModel : PropertyChangedBase, INotifyDataErrorInfo
     {

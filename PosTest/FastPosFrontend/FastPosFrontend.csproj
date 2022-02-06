@@ -246,18 +246,18 @@
     <Compile Include="Configurations\ProductLayoutConfiguration.cs" />
     <Compile Include="Configurations\GeneralSettings.cs" />
     <Compile Include="Events\ViewModelInitializedEventArgs.cs" />
-    <Compile Include="ViewModels\AddEditDeliveryManViewModel.cs" />
-    <Compile Include="ViewModels\AddEditWaiterViewModel.cs" />
-    <Compile Include="ViewModels\AdditiveDetailViewModel.cs" />
+    <Compile Include="ViewModels\Forms\DeliverymanFormViewModel.cs" />
+    <Compile Include="ViewModels\Forms\WaiterFormViewModel.cs" />
+    <Compile Include="ViewModels\Forms\AdditiveFormViewModel.cs" />
     <Compile Include="ViewModels\AdditivesOfProductViewModel.cs" />
     <Compile Include="ViewModels\AdditivesSettingsViewModel.cs" />
     <Compile Include="ViewModels\AppDialogConductor.cs" />
     <Compile Include="ViewModels\CashOutViewModel.cs" />
-    <Compile Include="ViewModels\CategoryDetailViewModel.cs" />
+    <Compile Include="ViewModels\Forms\CategoryFormViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSettingsViewModel.cs" />
     <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\CreditCheckoutViewModel.cs" />
-    <Compile Include="ViewModels\CustomerFormViewModel.cs" />
+    <Compile Include="ViewModels\Forms\CustomerFormViewModel.cs" />
     <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputData.cs" />
     <Compile Include="ViewModels\DailyExpenseReportInputDataViewModel.cs" />
@@ -279,7 +279,7 @@
     <Compile Include="ViewModels\LoadingViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\NavigationManager.cs" />
+    <Compile Include="Navigation\NavigationManager.cs" />
     <Compile Include="ViewModels\OpenTableViewModel.cs" />
     <Compile Include="ViewModels\OrderFilter.cs" />
     <Compile Include="ViewModels\OrderFilterCriteria.cs" />
@@ -287,12 +287,10 @@
     <Compile Include="ViewModels\OrderTabinationViewModel.cs" />
     <Compile Include="ViewModels\PaginationController.cs" />
     <Compile Include="ViewModels\PaymentFilter.cs" />
-    <Compile Include="ViewModels\PinLoginViewModel.cs" />
     <Compile Include="ViewModels\PrintViewModel.cs" />
-    <Compile Include="ViewModels\ProductFormViewModel.cs" />
-    <Compile Include="ViewModels\ProductEditViewModel.cs" />
+    <Compile Include="ViewModels\Forms\ProductFormViewModel.cs" />
     <Compile Include="ViewModels\ProductLayoutViewModel.cs" />
-    <Compile Include="ViewModels\RoleDetailViewModel.cs" />
+    <Compile Include="ViewModels\Forms\RoleFormViewModel.cs" />
     <Compile Include="ViewModels\RoleSettingsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\Customer\AddEditCustomerViewModel.cs" />
@@ -307,11 +305,11 @@
     <Compile Include="ViewModels\SubViewModel\WarningViewModel.cs" />
     <Compile Include="ViewModels\TablesViewModel.cs" />
     <Compile Include="ViewModels\TableViewModel.cs" />
-    <Compile Include="ViewModels\UserDetailViewModel.cs" />
+    <Compile Include="ViewModels\Forms\UserFormViewModel.cs" />
     <Compile Include="ViewModels\UserSettingsViewModel.cs" />
     <Compile Include="ViewModels\WaiterSettingsViewModel.cs" />
-    <Compile Include="Views\AdditiveDetailView.xaml.cs">
-      <DependentUpon>AdditiveDetailView.xaml</DependentUpon>
+    <Compile Include="Views\Forms\AdditiveFormView.xaml.cs">
+      <DependentUpon>AdditiveFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AdditivesOfProductView.xaml.cs">
       <DependentUpon>AdditivesOfProductView.xaml</DependentUpon>
@@ -403,8 +401,8 @@
     <Compile Include="Views\ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RoleDetailView.xaml.cs">
-      <DependentUpon>RoleDetailView.xaml</DependentUpon>
+    <Compile Include="Views\Forms\RoleFormView.xaml.cs">
+      <DependentUpon>RoleFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RoleSettingsView.xaml.cs">
       <DependentUpon>RoleSettingsView.xaml</DependentUpon>
@@ -415,8 +413,8 @@
     <Compile Include="Views\Settings\Customer\CustomerSettingsView.xaml.cs">
       <DependentUpon>CustomerSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\AddEditDeliveryManView.xaml.cs">
-      <DependentUpon>AddEditDeliveryManView.xaml</DependentUpon>
+    <Compile Include="Views\Forms\DeliverymanFormView.xaml.cs">
+      <DependentUpon>DeliverymanFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeliveryManSettingsView.xaml.cs">
       <DependentUpon>DeliveryManSettingsView.xaml</DependentUpon>
@@ -433,8 +431,8 @@
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\AddEditWaiterView.xaml.cs">
-      <DependentUpon>AddEditWaiterView.xaml</DependentUpon>
+    <Compile Include="Views\Forms\WaiterFormView.xaml.cs">
+      <DependentUpon>WaiterFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WaiterSettingsView.xaml.cs">
       <DependentUpon>WaiterSettingsView.xaml</DependentUpon>
@@ -445,16 +443,16 @@
     <Compile Include="Views\SplitView.xaml.cs">
       <DependentUpon>SplitView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CategoryDetailView.xaml.cs">
-      <DependentUpon>CategoryDetailView.xaml</DependentUpon>
+    <Compile Include="Views\Forms\CategoryFormView.xaml.cs">
+      <DependentUpon>CategoryFormView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomerFormView.xaml.cs">
+    <Compile Include="Views\Forms\CustomerFormView.xaml.cs">
       <DependentUpon>CustomerFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\DelivereyView.xaml.cs">
       <DependentUpon>DelivereyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProductFormView.xaml.cs">
+    <Compile Include="Views\Forms\ProductFormView.xaml.cs">
       <DependentUpon>ProductFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\ProductNavigation.xaml.cs">
@@ -481,8 +479,8 @@
     <Compile Include="Views\TestRepTemp.xaml.cs">
       <DependentUpon>TestRepTemp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserDetailView.xaml.cs">
-      <DependentUpon>UserDetailView.xaml</DependentUpon>
+    <Compile Include="Views\Forms\UserFormView.xaml.cs">
+      <DependentUpon>UserFormView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserSettingsView.xaml.cs">
       <DependentUpon>UserSettingsView.xaml</DependentUpon>
@@ -669,7 +667,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AdditiveDetailView.xaml">
+    <Page Include="Views\Forms\AdditiveFormView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -793,7 +791,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\RoleDetailView.xaml">
+    <Page Include="Views\Forms\RoleFormView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -809,7 +807,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AddEditDeliveryManView.xaml">
+    <Page Include="Views\Forms\DeliverymanFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -833,7 +831,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AddEditWaiterView.xaml">
+    <Page Include="Views\Forms\WaiterFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -849,11 +847,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CategoryDetailView.xaml">
+    <Page Include="Views\Forms\CategoryFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CustomerFormView.xaml">
+    <Page Include="Views\Forms\CustomerFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -861,7 +859,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ProductFormView.xaml">
+    <Page Include="Views\Forms\ProductFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -897,7 +895,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\UserDetailView.xaml">
+    <Page Include="Views\Forms\UserFormView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

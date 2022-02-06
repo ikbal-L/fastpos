@@ -1,13 +1,13 @@
 ﻿using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
-    public class AdditiveDetailViewModel:DialogContent
+    public class AdditiveFormViewModel:DialogContent
     {
         
 
-        public AdditiveDetailViewModel(Additive source,AdditivesSettingsViewModel host)
+        public AdditiveFormViewModel(Additive source,AdditivesSettingsViewModel host)
         {
             _source = source;
             _host = host;

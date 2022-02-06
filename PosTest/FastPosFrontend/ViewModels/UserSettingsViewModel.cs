@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using FastPosFrontend.ViewModels.Forms;
 using ServiceInterface.Model;
 using ServiceLib.Service;
 using ServiceLib.Service.StateManager;
@@ -14,7 +15,7 @@ namespace FastPosFrontend.ViewModels
     public class UserSettingsViewModel : LazyScreen
     {
         private User _selectedUser = null;
-        private UserDetailViewModel _userDetailViewModel = null;
+        private UserFormViewModel _userDetailViewModel = null;
         private bool _isEditing = false;
     
 
@@ -46,7 +47,7 @@ namespace FastPosFrontend.ViewModels
             }
         }
 
-        public UserDetailViewModel UserDetailViewModel
+        public UserFormViewModel UserDetailViewModel
         {
             get => _userDetailViewModel;
             set => Set(ref _userDetailViewModel, value);
@@ -65,7 +66,7 @@ namespace FastPosFrontend.ViewModels
         {
 
             IsEditing = true;
-            UserDetailViewModel = new UserDetailViewModel(this);
+            UserDetailViewModel = new UserFormViewModel(this);
           
         }
 
@@ -76,7 +77,7 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("Select a user to edit");
                 return;
             }
-            UserDetailViewModel = new UserDetailViewModel( this, SelectedUser);
+            UserDetailViewModel = new UserFormViewModel( this, SelectedUser);
             IsEditing = true;
             
         }

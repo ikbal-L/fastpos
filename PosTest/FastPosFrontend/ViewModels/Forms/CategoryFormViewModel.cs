@@ -7,9 +7,9 @@ using System.Windows.Media;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
-    public class CategoryDetailViewModel : DialogContent, INotifyDataErrorInfo
+    public class CategoryFormViewModel : DialogContent, INotifyDataErrorInfo
     {
         private Category _category;
         private Category _source;
@@ -22,7 +22,7 @@ namespace FastPosFrontend.ViewModels
         private bool _isSaveEnabled;
         private List<Category> _categories;
 
-        public CategoryDetailViewModel(ref Category sourceCategory, List<Category> categories)
+        public CategoryFormViewModel(ref Category sourceCategory, List<Category> categories)
         {
             
             

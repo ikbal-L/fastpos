@@ -4,8 +4,10 @@ using System.Windows.Controls;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using FastPosFrontend.ViewModels.Forms;
 using FastPosFrontend.ViewModels.Settings;
 using FastPosFrontend.Views;
+using FastPosFrontend.Views.Forms;
 using FastPosFrontend.Views.Settings;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
@@ -47,8 +49,8 @@ namespace FastPosFrontend.ViewModels
                 NotifyOfPropertyChange(nameof(DailogContent));
             }
         }
-        private AddEditWaiterViewModel _AddEditWaiterViewModel;
-        private AddEditWaiterView _addEditWaiterView;
+        private WaiterFormViewModel _AddEditWaiterViewModel;
+        private WaiterFormView _addEditWaiterView;
         public WaiterSettingsViewModel() : base()
         {
         }
@@ -118,8 +120,8 @@ namespace FastPosFrontend.ViewModels
         public override void Initialize()
         {
             Waiters = new ObservableCollection<ServiceInterface.Model.Waiter>(StateManager.GetAll<ServiceInterface.Model.Waiter>());
-            _AddEditWaiterViewModel = new AddEditWaiterViewModel(this);
-            _addEditWaiterView = new AddEditWaiterView() { DataContext = _AddEditWaiterViewModel };
+            _AddEditWaiterViewModel = new WaiterFormViewModel(this);
+            _addEditWaiterView = new WaiterFormView() { DataContext = _AddEditWaiterViewModel };
             DailogContent = _addEditWaiterView;
         }
 

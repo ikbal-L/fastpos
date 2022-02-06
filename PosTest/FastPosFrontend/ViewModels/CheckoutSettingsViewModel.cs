@@ -14,6 +14,7 @@ using FastPosFrontend.Configurations;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using FastPosFrontend.ViewModels.Forms;
 using MaterialDesignThemes.Wpf;
 using ServiceInterface.ExtentionsMethod;
 using ServiceInterface.Model;
@@ -43,7 +44,7 @@ namespace FastPosFrontend.ViewModels
         private Category _selectedFreeCategory;
         private Category _categoryToMove;
         private bool _isFlipped;
-        private CategoryDetailViewModel _categoryDetailViewModel;
+        private CategoryFormViewModel _categoryDetailViewModel;
         private bool _isCategory;
         private ProductFormViewModel _productDetailViewModel;
         private Type _activeTab;
@@ -157,7 +158,7 @@ namespace FastPosFrontend.ViewModels
         public BindableCollection<object> ToSaveUpdate { get; set; }
         public BindableCollection<Product> ToDeletge { get; set; }
 
-        public CategoryDetailViewModel CategoryDetailViewModel
+        public CategoryFormViewModel CategoryDetailViewModel
         {
             get => _categoryDetailViewModel;
             set => Set(ref _categoryDetailViewModel, value);
@@ -1530,7 +1531,7 @@ namespace FastPosFrontend.ViewModels
                 return;
             }
             IsCategory = true;
-            CategoryDetailViewModel = new CategoryDetailViewModel(ref _selectedCategory, _allCategories);
+            CategoryDetailViewModel = new CategoryFormViewModel(ref _selectedCategory, _allCategories);
             (Parent as MainViewModel)?.OpenDialog(CategoryDetailViewModel).OnClose(() =>
             {
                 var category = SelectedCategory;

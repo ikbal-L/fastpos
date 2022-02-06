@@ -10,6 +10,7 @@ using Caliburn.Micro;
 using FastPosFrontend.Events;
 using FastPosFrontend.Helpers;
 using FastPosFrontend.Navigation;
+using FastPosFrontend.ViewModels.Forms;
 using FastPosFrontend.ViewModels.SubViewModel;
 using ServiceInterface.Interface;
 using ServiceInterface.Model;
@@ -92,7 +93,7 @@ namespace FastPosFrontend.ViewModels
             set => Set(ref _isDialogOpen, value);
         }
 
-        public AdditiveDetailViewModel AdditiveDetailViewMode { get; set; }
+        public AdditiveFormViewModel AdditiveDetailViewMode { get; set; }
 
         public INotifyPropertyChanged DialogViewModel
         {
@@ -220,7 +221,7 @@ namespace FastPosFrontend.ViewModels
 
                 var mVm = Parent as MainViewModel;
 
-                AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive, this);
+                AdditiveDetailViewMode = new AdditiveFormViewModel(SelectedAdditive, this);
                 mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
                 {
                     AdditiveDetailViewMode = null;
@@ -246,7 +247,7 @@ namespace FastPosFrontend.ViewModels
             CopySelectedAdditive = SelectedAdditive.Clone();
             //IsEditing = true;
             var mVm = (Parent as MainViewModel);
-            AdditiveDetailViewMode = new AdditiveDetailViewModel(SelectedAdditive,this);
+            AdditiveDetailViewMode = new AdditiveFormViewModel(SelectedAdditive,this);
             mVm?.OpenDialog(AdditiveDetailViewMode).OnClose(() =>
             {
                 

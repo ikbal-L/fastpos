@@ -4,15 +4,15 @@ using Caliburn.Micro;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
-    public class RoleDetailViewModel: PropertyChangedBase
+    public class RoleFormViewModel: PropertyChangedBase
     {
         private readonly RoleSettingsViewModel _parent;
         private string _name;
         private Role _model;
 
-        public RoleDetailViewModel(RoleSettingsViewModel parent)
+        public RoleFormViewModel(RoleSettingsViewModel parent)
         {
             _parent = parent;
             Privileges = new BindableCollection<Privilege>(StateManager.GetAll<Privilege>());

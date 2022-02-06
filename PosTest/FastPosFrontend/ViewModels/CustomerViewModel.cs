@@ -5,7 +5,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Caliburn.Micro;
 using FastPosFrontend.Helpers;
+using FastPosFrontend.ViewModels.Forms;
 using FastPosFrontend.Views;
+using FastPosFrontend.Views.Forms;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 

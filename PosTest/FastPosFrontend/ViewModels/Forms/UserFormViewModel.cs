@@ -12,9 +12,9 @@ using PasswordGenerator;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 
-namespace FastPosFrontend.ViewModels
+namespace FastPosFrontend.ViewModels.Forms
 {
-    public class UserDetailViewModel: PropertyChangedBase,INotifyDataErrorInfo
+    public class UserFormViewModel: PropertyChangedBase,INotifyDataErrorInfo
     {
         private string _username;
         private string _password;
@@ -38,7 +38,7 @@ namespace FastPosFrontend.ViewModels
 
         private bool _isSaveEnabled;
 
-        public UserDetailViewModel(UserSettingsViewModel parent, User model = null )
+        public UserFormViewModel(UserSettingsViewModel parent, User model = null )
         {
             _parent = parent;
 

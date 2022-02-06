@@ -9,6 +9,9 @@ using FastPosFrontend.Views.Settings;
 using ServiceInterface.Model;
 using ServiceLib.Service.StateManager;
 using FastPosFrontend.Navigation;
+using FastPosFrontend.Views.Forms;
+using FastPosFrontend.ViewModels.Forms;
+
 namespace FastPosFrontend.ViewModels
 {
     [NavigationItem("Deliveryman Settings", typeof(DeliveryManSettingsViewModel), "", groupName: "Settings", isQuickNavigationEnabled: true)]
@@ -46,8 +49,8 @@ namespace FastPosFrontend.ViewModels
                 NotifyOfPropertyChange(nameof(DailogContent));
             }
         }
-        private AddEditDeliveryManViewModel _AddEditDeliveryManViewModel;
-        private AddEditDeliveryManView _addEditDeliveryManView;
+        private DeliverymanFormViewModel _AddEditDeliveryManViewModel;
+        private DeliverymanFormView _addEditDeliveryManView;
         public DeliveryManSettingsViewModel() : base()
         {
 
@@ -125,8 +128,8 @@ namespace FastPosFrontend.ViewModels
         public override void Initialize()
         {
             Deliverymans = new ObservableCollection<Deliveryman>(StateManager.GetAll<Deliveryman>());
-            _AddEditDeliveryManViewModel = new AddEditDeliveryManViewModel(this);
-            _addEditDeliveryManView = new AddEditDeliveryManView() { DataContext = _AddEditDeliveryManViewModel };
+            _AddEditDeliveryManViewModel = new DeliverymanFormViewModel(this);
+            _addEditDeliveryManView = new DeliverymanFormView() { DataContext = _AddEditDeliveryManViewModel };
             DailogContent = _addEditDeliveryManView;
         }
 

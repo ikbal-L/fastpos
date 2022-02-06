@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FastPosFrontend.Views"
+             xmlns:local="clr-namespace:FastPosFrontend.Views.Forms"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:model="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
@@ -16,8 +16,8 @@
         <materialDesign:DialogHost IsOpen="{Binding IsEditing}">
             <materialDesign:DialogHost.DialogContent>
 
-                <local:RoleDetailView cal:View.Model="{Binding RoleDetailViewModel}"
-                ></local:RoleDetailView>
+                <local:RoleFormView cal:View.Model="{Binding RoleDetailViewModel}"
+                ></local:RoleFormView>
 
             </materialDesign:DialogHost.DialogContent>
             <Grid>

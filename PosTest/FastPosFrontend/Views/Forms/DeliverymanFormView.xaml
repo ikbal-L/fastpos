@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FastPosFrontend.Views.AddEditWaiterView"
+﻿<UserControl x:Class="FastPosFrontend.Views.Forms.DeliverymanFormView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,6 +15,7 @@
           VerticalAlignment="Center"
           IsOpen="{Binding IsOpenDailog}"
           CloseOnClickAway="True"
+      
           OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
           DialogTheme="Inherit">
         <md:DialogHost.DialogContent>
@@ -26,14 +27,13 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="Gray" BorderThickness="0 0 0 1" Grid.Row="0">
-                    <TextBlock Text="Waiter" Padding="10" FontWeight="Bold" FontSize="16" />
+                    <TextBlock Text="Deliveryman" Padding="10" FontWeight="Bold" FontSize="16" />
                 </Border>
                 <StackPanel Grid.Row="1" Margin="0 20 0 50">
-                    <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
-                        <TextBlock Text="Name" Margin="0 5 0 5"/>
-                            <TextBox Width="300"  Text="{Binding Waiter.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-                    </StackPanel>
-
+                        <StackPanel HorizontalAlignment="Center" Margin="0 0 0 10">
+                            <TextBlock Text="Name" Margin="0 5 0 5"/>
+                            <TextBox Width="300"  Text="{Binding Deliveryman.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                        </StackPanel>
                         <GroupBox Grid.Row="6"
                               Header="Phone"
                               Style="{DynamicResource MaterialDesignGroupBox}"
@@ -68,7 +68,7 @@
                                   Margin="16">
                                         <TextBlock Text="Add a new Phone Number."/>
 
-                                        <TextBox Width="250" md:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Width="250" md:HintAssist.Hint="Phone Number" Text="{Binding NewPhoneNumner,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
                                         <StackPanel
                                             Orientation="Horizontal"
@@ -78,21 +78,22 @@
                                               IsDefault="True"
                                               Margin="0 8 8 0"
                                                 caliburn:Message.Attach="[Event Click] = [Action AddPhoneNumber()]"
-                                                Command="md:DialogHost.CloseDialogCommand">
+                                                Command="md:DialogHost.CloseDialogCommand"
+                                                Content="ACCEPT"/>
 
-                                                ACCEPT
-                                            </Button>
+
                                             <Button
                                               Style="{StaticResource MaterialDesignFlatButton}"
                                               IsCancel="True"
                                               Margin="0 8 8 0"
-                                              Command="md:DialogHost.CloseDialogCommand">
+                                              Command="md:DialogHost.CloseDialogCommand"
+                                                Content="CANCEL">
                                                 <Button.CommandParameter>
                                                     <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
                                                         False
                                                     </system:Boolean>
                                                 </Button.CommandParameter>
-                                                CANCEL
+                                               
                                             </Button>
                                         </StackPanel>
                                     </StackPanel>
@@ -149,13 +150,12 @@
                             </md:DialogHost>
 
                         </GroupBox>
-
                     </StackPanel>
                 <md:ColorZone Mode="PrimaryMid" Padding="1" Grid.Row="2" Effect="{DynamicResource MaterialDesignShadowDepth5}">
                     <StackPanel  Orientation="Horizontal" >
                         <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  
                                          Margin="4 1 0 1"   
-                                caliburn:Message.Attach="[Event Click] = [Action Save()]"
+                                           caliburn:Message.Attach="[Event Click] = [Action Save()]"
                                             IsEnabled="{Binding IsSaveEnabled}">
                            
                                 <md:PackIcon Kind="ContentSave" HorizontalAlignment="Right" Width="25" Height="25" />

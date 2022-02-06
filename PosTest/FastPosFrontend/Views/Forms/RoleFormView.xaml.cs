@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace FastPosFrontend.Views
+namespace FastPosFrontend.Views.Forms
 {
     /// <summary>
     /// Interaction logic for RoleDetailView.xaml
     /// </summary>
-    public partial class RoleDetailView : UserControl
+    public partial class RoleFormView : UserControl
     {
-        public RoleDetailView()
+        public RoleFormView()
         {
             InitializeComponent();
         }

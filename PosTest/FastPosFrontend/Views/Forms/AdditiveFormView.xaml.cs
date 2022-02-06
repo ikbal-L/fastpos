@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace FastPosFrontend.Views
+namespace FastPosFrontend.Views.Forms
 {
     /// <summary>
     /// Interaction logic for AdditiveDetailView.xaml
     /// </summary>
-    public partial class AdditiveDetailView : UserControl
+    public partial class AdditiveFormView : UserControl
     {
-        public AdditiveDetailView()
+        public AdditiveFormView()
         {
             InitializeComponent();
         }
