@@ -60,7 +60,7 @@ namespace ServiceInterface.Model
             {
 
                 ProductId = (long)product.Id;
-                UnitPrice = product.Price;
+                UnitPrice = product?.Price??0;
             }
 
             Quantity = quantity;
@@ -104,8 +104,6 @@ namespace ServiceInterface.Model
                 Order?.NotifyOfPropertyChange(nameof(Order.Total));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 Order?.NotifyOfPropertyChange(nameof(TotalDiscountAmount));
-
-
             }
 
 
@@ -121,7 +119,6 @@ namespace ServiceInterface.Model
         {
             get
             {
-
                 Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
                 return CalcTotalDiscount();
@@ -130,10 +127,7 @@ namespace ServiceInterface.Model
 
         public decimal CalcTotalDiscount()
         {
-
-
             var totalDiscount = _discountAmount * (decimal)Quantity;
-
             return totalDiscount;
         }
 
@@ -163,7 +157,6 @@ namespace ServiceInterface.Model
                 _discountAmount = (Total * _discountPercentage / 100);
                 NotifyOfPropertyChange(() => DiscountPercentage);
                 NotifyOfPropertyChange(() => TotalDiscountAmount);
-
                 Order?.NotifyOfPropertyChange(nameof(Order.TotalDiscountAmount));
                 Order?.NotifyOfPropertyChange(nameof(Order.NewTotal));
             }

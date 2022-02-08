@@ -23,7 +23,12 @@ namespace FastPosFrontend.ViewModels
 
         public CreditCheckoutViewModel() : base()
         {
+            SetupEmbeddedRightCommandBar();
+        }
 
+        private void SetupEmbeddedRightCommandBar()
+        {
+            EmbeddedRightCommandBar = EmbeddedCommandBarViewModel.Right(this);
         }
 
         private void CreditOrders_Filter(object sender, FilterEventArgs e)
@@ -81,6 +86,15 @@ namespace FastPosFrontend.ViewModels
                 UpdateHistory();
 
                 NumericZone = string.Empty;
+            }
+        }
+
+        public string SearchQuery
+        {
+            get => _searchQuery; set
+            {
+                Set(ref _searchQuery, value);
+                CustomerCollection.View.Refresh();
             }
         }
 
@@ -144,6 +158,7 @@ namespace FastPosFrontend.ViewModels
         private string _numericZone;
         private int _selectedTab;
         private bool isDiscountEnabled;
+        private string _searchQuery = string.Empty;
         private readonly RestApi api = new RestApi();
 
         public string NumericZone
@@ -190,15 +205,15 @@ namespace FastPosFrontend.ViewModels
 
         public bool IsDiscountEnabled
         {
-            get => isDiscountEnabled; 
+            get => isDiscountEnabled;
             set
             {
-                Set(ref isDiscountEnabled , value);
+                Set(ref isDiscountEnabled, value);
                 NotifyOfPropertyChange(nameof(Discount));
             }
         }
 
-       
+
 
         public void CopyTotalPaymentField()
         {
@@ -227,7 +242,7 @@ namespace FastPosFrontend.ViewModels
                     {
                         ToastNotification.Notify("قم باختيار زبون من أجل الدفع");
                     }
-    
+
 
                     break;
 
@@ -288,7 +303,7 @@ namespace FastPosFrontend.ViewModels
             if (!decimal.TryParse(NumericZone, out var payedAmount)) return;
 
 
-            if (payedAmount <= 0 || SelectedCustomer?.Balance ==0)
+            if (payedAmount <= 0 || SelectedCustomer?.Balance == 0)
             {
                 NumericZone = "";
                 return;
@@ -301,7 +316,7 @@ namespace FastPosFrontend.ViewModels
             }
 
             var api = new RestApi();
-            var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, CustomerId = SelectedCustomer.Id.Value ,PaymentSource =PaymentSource.Customer };
+            var payment = new Payment() { Amount = payedAmount, Date = DateTime.Now, CustomerId = SelectedCustomer.Id.Value, PaymentSource = PaymentSource.Customer };
             if (IsDiscountEnabled)
             {
                 payment.DiscountAmount = Discount;
@@ -312,7 +327,7 @@ namespace FastPosFrontend.ViewModels
             {
                 if (retunedAmount.HasValue)
                 {
-                    NumericZone = retunedAmount+"";
+                    NumericZone = retunedAmount + "";
                 }
                 else
                 {
@@ -363,7 +378,7 @@ namespace FastPosFrontend.ViewModels
             var customers = _data.GetResult<List<Customer>>();
             _customerCollection = new ObservableCollection<Customer>(customers);
             CustomerCollection = new CollectionViewSource() { Source = _customerCollection };
-
+            CustomerCollection.Filter += CustomerCollection_Filter;
             var unpaidOrdersPageRetreiver = new PageRetriever<Order>(RetriveUnpaidOrdersPage);
             UnpaidOrders = new Paginator<Order>(unpaidOrdersPageRetreiver, canGoNext: CanGoToNextPage);
 
@@ -376,11 +391,18 @@ namespace FastPosFrontend.ViewModels
 
         }
 
+        private void CustomerCollection_Filter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is Customer customer)
+            {
+                var (name, mobile) = CustomerViewModel.GetNameAndMobile(SearchQuery);
+                e.Accepted = customer.Name.Contains(name) && (customer.PhoneNumbers?.Any(m => m.Contains(mobile))??false);
+            }
+        }
 
+       
 
-
-
-        private bool CanGoToNextPage()=> SelectedCustomer != null;
+        private bool CanGoToNextPage() => SelectedCustomer != null;
 
         private Page<Order> RetriveUnpaidOrdersPage(int pageIndex, int pageSize)
         {
@@ -431,7 +453,7 @@ namespace FastPosFrontend.ViewModels
                 ToastNotification.Notify("Select Customer First");
                 return new Page<Payment>();
             }
-            
+
             var orderFilter = new PaymentFilter()
             {
                 PageIndex = pageIndex,
@@ -488,5 +510,5 @@ namespace FastPosFrontend.ViewModels
         }
     }
 
-   
+
 }

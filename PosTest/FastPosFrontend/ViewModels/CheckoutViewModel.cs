@@ -2203,6 +2203,7 @@ namespace FastPosFrontend.ViewModels
             {
                 SelectedDeliveryman = null;
             }
+            DrawerManager.Instance.CloseTop();
         }
 
         public void SelectWaiter(Waiter waiter)
@@ -2215,6 +2216,7 @@ namespace FastPosFrontend.ViewModels
             {
                 SelectedWaiter = null;
             }
+            DrawerManager.Instance.CloseTop();
         }
 
         public void SelectTable(Table table)
@@ -2227,6 +2229,7 @@ namespace FastPosFrontend.ViewModels
             {
                 SelectedTable = null;
             }
+            DrawerManager.Instance.CloseTop();
         }
 
         public ListKind ListKind

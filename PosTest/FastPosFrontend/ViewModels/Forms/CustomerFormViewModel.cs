@@ -19,7 +19,7 @@ namespace FastPosFrontend.ViewModels.Forms
             new Dictionary<string, ICollection<string>>();
 
         private bool _isSaveEnabled;
-        private string _name;
+        private string _name = string.Empty;
         private string _mobile;
         private string _selectedPhoneNumber;
         private bool _isEditingPhone = false;
@@ -38,10 +38,10 @@ namespace FastPosFrontend.ViewModels.Forms
             Name = Customer.Name;
             Mobile = Customer.Mobile;
             Address = Customer.Address;
-            ValidateModelProperty(Customer, Name, nameof(Name));
+            ValidateModelProperty(this, Name, nameof(Name));
             ValidateModelProperty(Customer, Mobile, nameof(Mobile));
             ValidateModelProperty(Customer, Address, nameof(Address));
-            //ValidateModelProperty(Customer, Customer?.PhoneNumbers, nameof(Customer.PhoneNumbers));
+
         }
 
         private void Customer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -69,7 +69,7 @@ namespace FastPosFrontend.ViewModels.Forms
             set
             {
                 Set(ref _name, value);
-                ValidateModelProperty(Customer, Name, nameof(Name));
+                ValidateModelProperty(this, Name, nameof(Name));
             }
         }
 

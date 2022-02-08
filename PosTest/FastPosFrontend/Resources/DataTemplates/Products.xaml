@@ -92,7 +92,7 @@
                         </TextBlock>
                     </Border>
                     <Border DockPanel.Dock="Bottom">
-                        <TextBlock Text="{Binding Path=Price, StringFormat=' {0}'}" FontSize="18" FontWeight="Bold"
+                        <TextBlock Text="{Binding Path=Price, StringFormat='{}{0:#,0.00}'}" FontSize="18" FontWeight="Bold"
                                    TextAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -149,10 +149,10 @@
                     </TextBlock>
                 </StackPanel>
                 <DockPanel LastChildFill="False" Grid.Row="2" Margin="5"  VerticalAlignment="Bottom" x:Name="ProductIndicators">
-                    <Border DockPanel.Dock="Left" Background="Black" 
+                    <Border DockPanel.Dock="Left" Background="{Binding Background,Converter={StaticResource ColorContrastConverter}}" 
                             CornerRadius="30" Width="20" Height="20" 
                             x:Name="ProductSelectionIndicator">
-                        <materialdesign:PackIcon Kind="Done" Height="20" Width="20" Foreground="White" />
+                        <materialdesign:PackIcon Kind="CheckBold" Height="20" Width="20" Foreground="{Binding ElementName=ProductSelectionIndicator,Path=Background,Converter={StaticResource ColorContrastConverter}}" />
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Visibility" Value="Collapsed" />

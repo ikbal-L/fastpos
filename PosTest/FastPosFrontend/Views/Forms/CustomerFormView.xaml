@@ -8,11 +8,12 @@
              xmlns:controls="clr-namespace:FastPosFrontend.SL.Controls"
              xmlns:views="clr-namespace:FastPosFrontend.Views"
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
+             xmlns:fvm="clr-namespace:FastPosFrontend.ViewModels.Forms"
              xmlns:converters="clr-namespace:FastPosFrontend.Converters"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance vm:CustomerFormViewModel}"
+             d:DataContext="{d:DesignInstance fvm:CustomerFormViewModel}"
              >
 
     <Grid >

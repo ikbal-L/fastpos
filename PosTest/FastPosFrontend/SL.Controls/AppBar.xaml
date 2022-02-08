@@ -384,30 +384,7 @@
                         </md:Chip.Style>
 
                     </md:Chip>
-                    <!--<md:Chip
-                                                Content="Database"
-                                                IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                                                Margin="5 0">
-                        <md:Chip.Style>
-                            <Style TargetType="md:Chip">
-                                <Setter Property="IconBackground"
-                                                                Value="{StaticResource WarningColorBrush}" />
-                                <Setter Property="Icon" Value="{md:PackIcon Database}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDbServerOn}" Value="True">
-                                        <Setter Property="IconBackground"
-                                                                        Value="{StaticResource SuccessColorBrush}" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsDbServerOn}" Value="False">
-                                        <Setter Property="IconBackground"
-                                                                        Value="{StaticResource ErrorColorBrush}" />
-                                        <Setter Property="Icon"
-                                                                        Value="{md:PackIcon DatabaseRemove}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </md:Chip.Style>
-                    </md:Chip>-->
+                   
                 </StackPanel>
 
 

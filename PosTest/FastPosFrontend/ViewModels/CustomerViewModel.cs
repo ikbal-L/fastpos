@@ -119,6 +119,7 @@ namespace FastPosFrontend.ViewModels
             {
                 SelectedCustomer = c;
             }
+            DrawerManager.Instance.CloseTop();
         }
 
 
@@ -184,6 +185,13 @@ namespace FastPosFrontend.ViewModels
         {
             string name = Regex.Match(FilterString, @"([^\d\W][1-9]*\s*)+").Value.Trim();
             string mobile = Regex.Match(FilterString, @"\s?[0-9]+").Value.Trim();
+            return (name, mobile);
+        }
+
+        public static (string name, string mobile) GetNameAndMobile(string @string)
+        {
+            string name = Regex.Match(@string, @"([^\d\W][1-9]*\s*)+").Value.Trim();
+            string mobile = Regex.Match(@string, @"\s?[0-9]+").Value.Trim();
             return (name, mobile);
         }
         public void CreateAndEdit()

@@ -14,4 +14,11 @@
         public static readonly string PAYMENT = "Payment";
         public static readonly string[] OPTIONS = { DELIVERY_MAN, ORDER,PAYMENT };
     }
+    public class CustomerCheckoutFilter
+    {
+        public static readonly string CUSTOMER = "Customer";
+        public static readonly string ORDER = "Order";
+        public static readonly string PAYMENT = "Payment";
+        public static readonly string[] OPTIONS = { CUSTOMER, ORDER, PAYMENT };
+    }
 }

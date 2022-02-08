@@ -48,7 +48,7 @@
                     Content="{md:PackIcon MinusBox,Size=30}" />
             <Button Content="{md:PackIcon Kind=ShoppingCart,Size=30}" Foreground="{DynamicResource PrimaryHueMidBrush}"
                     cal:Message.Attach="[Event Click] = [Action ActionKeyboard('QTY')]"/>
-            <Button Grid.Row="4" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
+            <!--<Button Grid.Row="4" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
 
                     cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(1)]"
                     IsEnabled="{Binding ElementName=OrderItemsList,Path=SelectedItem ,Converter={StaticResource ObjectToBoolConverter}}"
@@ -56,7 +56,7 @@
             <Button Grid.Row="5" Foreground="{DynamicResource PrimaryHueMidBrush}" Background="WhiteSmoke"
                     IsEnabled="{Binding ElementName=OrderItemsList, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}"
                     cal:Message.Attach="[Event Click] = [Action DiscountOnOrderItem(0)]"
-                    Content="{md:PackIcon TagFaces,Size=30}" />
+                    Content="{md:PackIcon TagFaces,Size=30}" />-->
 
            
 

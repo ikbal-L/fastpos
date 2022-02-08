@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:caliburn="http://www.caliburnproject.org"
              xmlns:models="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
-             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:ex="clr-namespace:FastPosFrontend.Extensions"
              xmlns:subviews="clr-namespace:FastPosFrontend.Views.SubViews"
@@ -89,7 +89,7 @@
                              caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
                              Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
                              Margin="4 2 0 0" />
-                    <ComboBox Grid.Column="2" Text="{Binding Category.Name}" materialdesign:HintAssist.Hint="Category"
+                    <ComboBox Grid.Column="2" Text="{Binding Category.Name}" md:HintAssist.Hint="Category"
                               FontWeight="Bold"
                               caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
                               Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -108,11 +108,11 @@
                 <Button DockPanel.Dock="Right" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"
                         caliburn:Message.Attach="[Event Click] = [Action ProductChanged($this)]"
                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialdesign:PackIcon Kind=Disc, Size=30}" />
+                        Content="{md:PackIcon Kind=Disc, Size=30}" />
                 <Button DockPanel.Dock="Right" Grid.Column="2" Grid.Row="1"
                         Height="35"
                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}" />
+                        Content="{md:PackIcon Kind=ContentSave, Size=30}" />
             </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type models:Category}" x:Key="freeCategoryListItemTemplate">
@@ -183,7 +183,7 @@
                              Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
                              Margin="4 2 0 0" />
 
-                    <ComboBox Grid.Column="2" Text="{Binding Category.Name}" materialdesign:HintAssist.Hint="Category"
+                    <ComboBox Grid.Column="2" Text="{Binding Category.Name}" md:HintAssist.Hint="Category"
                               FontWeight="Bold"
                               caliburn:Message.Attach="[Event TextChanged] = [Action ProductChanged($this)]"
                               Visibility="{Binding ElementName=checkToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -202,11 +202,11 @@
                 <Button DockPanel.Dock="Right" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"
                         caliburn:Message.Attach="[Event Click] = [Action ProductChanged($this)]"
                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialdesign:PackIcon Kind=Disc, Size=30}" />
+                        Content="{md:PackIcon Kind=Disc, Size=30}" />
                 <Button DockPanel.Dock="Right" Grid.Column="2" Grid.Row="1"
                         Height="35"
                         Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="{materialdesign:PackIcon Kind=ContentSave, Size=30}" />
+                        Content="{md:PackIcon Kind=ContentSave, Size=30}" />
             </DockPanel>
         </DataTemplate>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -214,9 +214,9 @@
         <converters:LessThanValueConverter x:Key="LessThanValueConverter" />
         <DataTemplate x:Key="ProductDisplayLayoutTemplate" />
         <DataTemplate x:Key="CategoryTabItemHeaderTemplate">
-            <materialdesign:Badged BadgePlacementMode="Right">
+            <md:Badged BadgePlacementMode="Right">
 
-                <materialdesign:Badged.Style>
+                <md:Badged.Style>
                     <Style>
                         <Style.Triggers>
                             <DataTrigger Value="true">
@@ -226,10 +226,10 @@
                                              Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeCategories).Count"
                                              Converter="{StaticResource NotZeroConverter}" />
                                 </DataTrigger.Binding>
-                                <Setter Property="materialdesign:Badged.BadgeBackground"
+                                <Setter Property="md:Badged.BadgeBackground"
                                         Value="{StaticResource ErrorColorBrush}" />
-                                <Setter Property="materialdesign:Badged.BadgeForeground" Value="White" />
-                                <Setter Property="materialdesign:Badged.Badge">
+                                <Setter Property="md:Badged.BadgeForeground" Value="White" />
+                                <Setter Property="md:Badged.Badge">
                                     <Setter.Value>
                                         <Binding RelativeSource="{RelativeSource AncestorType=TabItem}"
                                                  Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeCategories).Count" />
@@ -238,14 +238,14 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </materialdesign:Badged.Style>
+                </md:Badged.Style>
                 <TextBlock Text="Categories" Margin=" 5 5 20 5" />
 
-            </materialdesign:Badged>
+            </md:Badged>
         </DataTemplate>
         <DataTemplate x:Key="ProductTabItemHeaderTemplate">
-            <materialdesign:Badged BadgePlacementMode="Right">
-                <materialdesign:Badged.Style>
+            <md:Badged BadgePlacementMode="Right">
+                <md:Badged.Style>
                     <Style>
                         <Style.Triggers>
                             <DataTrigger Value="true">
@@ -255,10 +255,10 @@
                                              Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeProducts).Count"
                                              Converter="{StaticResource NotZeroConverter}" />
                                 </DataTrigger.Binding>
-                                <Setter Property="materialdesign:Badged.BadgeBackground"
+                                <Setter Property="md:Badged.BadgeBackground"
                                         Value="{StaticResource ErrorColorBrush}" />
-                                <Setter Property="materialdesign:Badged.BadgeForeground" Value="White" />
-                                <Setter Property="materialdesign:Badged.Badge">
+                                <Setter Property="md:Badged.BadgeForeground" Value="White" />
+                                <Setter Property="md:Badged.Badge">
                                     <Setter.Value>
                                         <Binding RelativeSource="{RelativeSource AncestorType=TabItem}"
                                                  Path="DataContext.(viewModels:CheckoutSettingsViewModel.FreeProducts).Count" />
@@ -267,12 +267,12 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </materialdesign:Badged.Style>
+                </md:Badged.Style>
 
 
                 <TextBlock Text="Products" Margin=" 5 5 20 5" />
 
-            </materialdesign:Badged>
+            </md:Badged>
         </DataTemplate>
     </UserControl.Resources>
 
@@ -284,7 +284,7 @@
 
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <materialdesign:Snackbar Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"
+            <md:Snackbar Grid.ColumnSpan="2" MessageQueue="{Binding MessageQueue}" Panel.ZIndex="1"
                                      HorizontalAlignment="Center" VerticalAlignment="Top" />
 
             <Expander Grid.Column="1" ExpandDirection="Right" Style="{StaticResource MaterialDesignExpander}"
@@ -351,14 +351,14 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-                                <materialdesign:ColorZone Grid.Row="1"  Mode="PrimaryMid">
+                                <md:ColorZone Grid.Row="1"  Mode="PrimaryMid">
                                     <TextBlock Margin="16">Gestion Des Categories</TextBlock>
-                                </materialdesign:ColorZone>
+                                </md:ColorZone>
                                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="0"
                                     Margin="0 0 10 -20"
                                     Command="{Binding DeleteCategoryCommand}">
-                                    <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                                    <md:PackIcon Kind="Delete" Height="22" Width="22" />
                                 </Button>
                             </Grid>
 
@@ -395,16 +395,16 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-                                <materialdesign:ColorZone Mode="PrimaryMid" Grid.Row="1">
+                                <md:ColorZone Mode="PrimaryMid" Grid.Row="1">
                                     <TextBlock Margin="16">Gestion Des Produits</TextBlock>
-                                </materialdesign:ColorZone>
+                                </md:ColorZone>
 
 
                                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                     Grid.Row="0" Margin="0 0 10 -20"
                                     Command="{Binding DeleteProductCommand}">
-                                    <materialdesign:PackIcon Kind="Delete" Height="22" Width="22" />
+                                    <md:PackIcon Kind="Delete" Height="22" Width="22" />
                                 </Button>
                             </Grid>
 
@@ -450,39 +450,39 @@
                                     <Button
 
                                         Command="{Binding CreateProductCommand}">
-                                        <materialdesign:PackIcon Kind="PlusThick" />
+                                        <md:PackIcon Kind="PlusThick" />
                                     </Button>
 
                                     <Button
                                     
                                         Command="{Binding EditProductCommand}">
-                                        <materialdesign:PackIcon Kind="Edit" />
+                                        <md:PackIcon Kind="Edit" />
                                     </Button>
 
                                     <Button 
                                         Command="{Binding RemoveProductCommand}"
-                                        Content="{materialdesign:PackIcon Kind=Delete}"/>
+                                        Content="{md:PackIcon Kind=Delete}"/>
 
 
                                     <Button x:Name="MoveButton"
                                         Command="{Binding MoveProductCommand}"
                                         Tag="{Binding ProductToMove}">
-                                        <materialdesign:PackIcon Kind="ArrowExpandAll" />
+                                        <md:PackIcon Kind="ArrowExpandAll" />
                                     </Button>
                                     
                                     <Button
                                     Command="{Binding CopyProductCommand}"
                                     >
-                                        <materialdesign:PackIcon Kind="ContentCopy" />
+                                        <md:PackIcon Kind="ContentCopy" />
                                     </Button>
 
                                     <Button
                                         Command="{Binding PasteProductCommand}"
-                                        Content="{materialdesign:PackIcon ContentPaste}"
+                                        Content="{md:PackIcon ContentPaste}"
                                         />
                                     <Button
                                      Command="{Binding ConfigureProductLayoutCommand}"
-                                        Content="{materialdesign:PackIcon Kind=Grid}"
+                                        Content="{md:PackIcon Kind=Grid}"
                                         />
 
 
@@ -536,36 +536,36 @@
                                     <Button
                                     
                                         Command="{Binding CreateCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="PlusThick" />
+                                        <md:PackIcon Kind="PlusThick" />
                                     </Button>
 
                                     <Button
                                     Command="{Binding EditCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="Edit" />
+                                        <md:PackIcon Kind="Edit" />
                                     </Button>
 
                                     <Button
 
                                     Command="{Binding RemoveCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="Delete" />
+                                        <md:PackIcon Kind="Delete" />
                                     </Button>
 
                                     <Button x:Name="CategoryMoveButton"
 
                                         Command="{Binding MoveCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="ArrowExpandAll" />
+                                        <md:PackIcon Kind="ArrowExpandAll" />
                                     </Button>
 
                                     <Button
                                     Command="{Binding CopyCategoryCommand}">
-                                        <materialdesign:PackIcon Kind="ContentCopy" />
+                                        <md:PackIcon Kind="ContentCopy" />
                                     </Button>
 
 
                                     <Button
                                     Command="{Binding PasteCategoryCommand}"
                                     >
-                                        <materialdesign:PackIcon Kind="ContentPaste"  />
+                                        <md:PackIcon Kind="ContentPaste"  />
                                     </Button>
 
 
@@ -573,7 +573,7 @@
 
                                     <Button
                                      Command="{Binding ConfigureCategoryLayoutCommand}"
-                                        Content="{materialdesign:PackIcon Kind=Grid}"
+                                        Content="{md:PackIcon Kind=Grid}"
                                         />
                                 </ToolBar>
 
@@ -604,17 +604,15 @@
                             <DataTemplate DataType="{x:Type models:Category}">
                                 <Button
                                         Height="50" Background="{Binding Background}"
-                                        
                                         cal:Message.Attach="[Event Click] = [Action ShowCategoryProducts($this)];
                                         [Event PreviewMouseMove ] = [Action MoveCategory($this,$source,$eventArgs)]"
                                         FontWeight="Bold"
                                         FontSize="16"
                                         Padding="8 0"
                                         Margin="3"
-                                       
                                         HorizontalContentAlignment="Stretch"
                                     VerticalContentAlignment="Stretch"
-                            materialdesign:ButtonAssist.CornerRadius="5"  >
+                            md:ButtonAssist.CornerRadius="5"  >
 
                                     <Button.Style >
                                         <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}" >
@@ -641,7 +639,7 @@
                                         <DockPanel  HorizontalAlignment="Stretch"  LastChildFill="False">
 
                                             <Border CornerRadius="30" Width="20" Height="20" DockPanel.Dock="Right">
-                                                <materialdesign:PackIcon Kind="ContentCopy" Height="20" Width="20" />
+                                                <md:PackIcon Kind="ContentCopy" Height="20" Width="20" />
                                                 <Border.Style>
                                                     <Style TargetType="Border">
                                                         <Setter Property="Visibility" Value="Collapsed" />
@@ -665,7 +663,7 @@
                                             </Border>
 
                                             <Border Width="20" Height="20" DockPanel.Dock="Right">
-                                                <materialdesign:PackIcon Height="20" Width="20" Kind="ArrowExpandAll"
+                                                <md:PackIcon Height="20" Width="20" Kind="ArrowExpandAll"
                                                                          Padding="0" />
                                                 <Border.Style>
                                                     <Style TargetType="Border">
@@ -694,19 +692,23 @@
                                                        Text="{Binding Name}"
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
-                                                       ToolTip="{Binding Description}">
-                                            <!--<TextBlock.Style>
-                                                <Style TargetType="TextBlock">
+                                                       ToolTip="{Binding Description}"/>
+                                        <Button Content="{md:PackIcon Kind=PlusThick,Size=30}" Foreground="Black">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignIconForegroundButton}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsDark}"
-                                                                         Value="True">
-                                                            <Setter Property="Foreground" Value="White" />
-                                                        </DataTrigger>
-
+                                                        <!--<MultiTrigger >
+                                                            <MultiTrigger.Conditions>
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}" Value="true"/>
+                                                                --><!--<Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=Dat}"/>--><!--
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=DataContext.(viewModels:CheckoutSettingsViewModel.ClipboardCategory)}" Value="{x:Null}"/>
+                                                            </MultiTrigger.Conditions>
+                                                        </MultiTrigger>-->
                                                     </Style.Triggers>
                                                 </Style>
-                                            </TextBlock.Style>-->
-                                        </TextBlock>
+                                            </Button.Style>
+                                        </Button>
+
                                     </Grid>
 
 

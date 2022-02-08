@@ -281,6 +281,11 @@ namespace FastPosFrontend.ViewModels
             IsRightDrawerOpen = false;
             IsLeftDrawerOpen = false;
         }
+
+        public void CloseTop()
+        {
+            IsTopDrawerOpen = false;
+        }
     }
 
     public class Drawer : PropertyChangedBase

@@ -136,7 +136,7 @@ namespace FastPosFrontend.ViewModels
 
         public CollectionView Reports { get; private set; }
 
-        private string _userSearchQuery;
+        private string _userSearchQuery = string.Empty;
 
         public string UserSearchQuery
         {

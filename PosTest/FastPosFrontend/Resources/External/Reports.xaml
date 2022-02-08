@@ -38,8 +38,8 @@
             <TextBlock Grid.Column="0" Text="{Binding Product.Name}" FontSize="10" TextWrapping="Wrap" />
             <TextBlock Grid.Column="1" Text="{Binding Quantity, StringFormat=' {0}'}" 
                        FontSize="12" Margin="0 0 5 0"/>
-            <TextBlock Grid.Column="2" Text="{Binding UnitPrice}"  FontSize="12" HorizontalAlignment="Left" TextAlignment="Right"  Margin="0 0 3 0" />
-            <TextBlock Grid.Column="3" Text="{Binding Path=Total, Mode=OneWay}" FontSize="12" HorizontalAlignment="Stretch" TextAlignment="Left" />
+            <TextBlock Grid.Column="2" Text="{Binding UnitPrice,StringFormat='{}{0:#,0.00}'}"  FontSize="12" HorizontalAlignment="Left" TextAlignment="Right"  Margin="0 0 3 0" />
+            <TextBlock Grid.Column="3" Text="{Binding Path=Total, Mode=OneWay,StringFormat='{}{0:#,0.00}'}" FontSize="12" HorizontalAlignment="Stretch" TextAlignment="Left" />
 
             <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Additives}"
                           FontSize="7" Margin="10 -4 0 0"
@@ -322,13 +322,13 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Text="Totale" FontWeight="Bold" HorizontalAlignment="Right" Margin="0 0 5 0"/>
-                    <TextBlock Grid.Column="1" Text="{Binding NewTotal}" FontWeight="Bold" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Column="1" Text="{Binding NewTotal,StringFormat='{}{0:#,0.00}'}" FontWeight="Bold" HorizontalAlignment="Left"/>
 
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Montant payé" FontWeight="Bold" HorizontalAlignment="Right"  Margin="0 0 5 0"/>
-                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding GivenAmount}" FontWeight="Bold" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding GivenAmount,StringFormat='{}{0:#,0.00}'}" FontWeight="Bold" HorizontalAlignment="Left"/>
 
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="Rendu monnaie" FontWeight="Bold" HorizontalAlignment="Right"  Margin="0 0 5 0"/>
-                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding ReturnedAmount}" FontWeight="Bold" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding ReturnedAmount,StringFormat='{}{0:#,0.00}'}" FontWeight="Bold" HorizontalAlignment="Left"/>
                 </Grid>
 
             </Grid>

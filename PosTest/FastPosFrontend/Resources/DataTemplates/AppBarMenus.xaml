@@ -173,6 +173,7 @@
                                                 </Grid>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
+                                        
                                     </ListBox>
                                 </controles:PaginatedContent>
                             </TabItem>
@@ -467,7 +468,9 @@
                               VerticalAlignment="Stretch"
                               VerticalContentAlignment="Center"
                               Padding="10"
-                          Visibility="Collapsed">
+                          Visibility="Collapsed"
+                          md:TextFieldAssist.HasClearButton="True"
+                         >
                    
 
                 </TextBox>
@@ -506,6 +509,105 @@
                     </Button.Style>
                 </Button>
             </UniformGrid>
+        </StackPanel>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="CreditCheckoutRightCommandBar">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+            <Panel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource AppBarButton}" />
+            </Panel.Resources>
+            <StackPanel Orientation="Horizontal">
+
+                <StackPanel.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click" SourceName="SearchButton">
+                        <!--<BeginStoryboard>
+                            <Storyboard >
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SearchBoxContainer" Storyboard.TargetProperty="Visibility">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
+                                </ObjectAnimationUsingKeyFrames>
+                               
+                            </Storyboard>
+                        </BeginStoryboard>-->
+                        <BeginStoryboard>
+                            <Storyboard >
+                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SearchBox" Storyboard.TargetProperty="Visibility">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
+                                </ObjectAnimationUsingKeyFrames>-->
+                                <DoubleAnimation Duration="0:0:0.5" From="0" To="150" Storyboard.TargetName="SearchBox" Storyboard.TargetProperty="Width" >
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase Power="3" EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+
+                    <EventTrigger RoutedEvent="TextBox.LostFocus" SourceName="SearchBox">
+                        <BeginStoryboard>
+
+                            <Storyboard  >
+                                <DoubleAnimation Duration="0:0:0.5" From="150" To="0" Storyboard.TargetName="SearchBox" Storyboard.TargetProperty="Width" >
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase Power="3" EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+
+                                </DoubleAnimation>
+                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SearchBox" Storyboard.TargetProperty="Visibility">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Collapsed}" />
+                                </ObjectAnimationUsingKeyFrames>-->
+                            </Storyboard>
+
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </StackPanel.Triggers>
+
+                <Button  Content="{md:PackIcon Kind=Magnify,Size=30}" x:Name="SearchButton"
+                         ex:EventFocusAttachment.ElementToFocus="{Binding ElementName=SearchBox}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource AppBarButton}" TargetType="Button">
+
+                        </Style>
+                    </Button.Style>
+                </Button>
+               
+
+                <TextBox  
+                    x:Name="SearchBox" 
+                Background="WhiteSmoke"  MaxWidth="200" Opacity="0.7" 
+                              md:TextFieldAssist.TextFieldCornerRadius="7"
+                              Text="{Binding SearchQuery,UpdateSourceTrigger=PropertyChanged}"
+                              md:HintAssist.Hint="Name / Mobile"
+                              md:TextFieldAssist.DecorationVisibility="Hidden"
+                              VerticalAlignment="Stretch"
+                                VerticalContentAlignment="Center"
+                              Padding="10"
+                          Width="0"
+                          md:TextFieldAssist.HasClearButton="True"
+                          BorderThickness="0"
+                          >
+
+
+                </TextBox>
+
+                <!--<TextBox
+                    x:Name="SearchBox" 
+            Grid.Column="1"
+            Margin="8 0 0 0"
+            md:HintAssist.Hint="{Binding SelectedCriteria,StringFormat=' Search By {0}',FallbackValue='Search...',UpdateSourceTrigger=PropertyChanged}"
+            md:TextFieldAssist.DecorationVisibility="Hidden"
+            BorderThickness="0"
+            MaxWidth="200"
+            VerticalAlignment="Center"
+                    Text="{Binding FilterText}"
+                       md:TextFieldAssist.HasClearButton="True" />-->
+
+
+
+            </StackPanel>
+         
         </StackPanel>
     </DataTemplate>
 

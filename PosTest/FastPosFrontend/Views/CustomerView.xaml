@@ -97,11 +97,11 @@
                 ItemsSource="{Binding CustomerCollectionViewSource.View}" 
                 SelectedItem="{Binding SelectedCustomer,Mode=TwoWay}"
                 Style="{StaticResource MaterialDesignCardsListBox}"
-                Margin="5"  >
+                Margin="10 5"  >
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                        <UniformGrid Columns="4"  />
+                        <UniformGrid Columns="4" VerticalAlignment="Top"  />
                     </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>

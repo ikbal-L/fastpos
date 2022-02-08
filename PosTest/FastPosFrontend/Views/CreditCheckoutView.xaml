@@ -337,7 +337,7 @@
             MinWidth="200"
             VerticalAlignment="Center"
                     Text="{Binding FilterText}"
-                        />
+                       materialDesign:TextFieldAssist.HasClearButton="True" />
                     <Button Grid.Column="5" Padding="0">
 
                         <Button.Style>
@@ -417,7 +417,7 @@
         materialDesign:ColorZoneAssist.Mode="Standard"
         materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
         BorderBrush="{DynamicResource MaterialDesignPaper}"
-                    ItemsSource="{x:Static vm:DeliveryCheckoutFilter.OPTIONS}"
+                    ItemsSource="{x:Static vm:CustomerCheckoutFilter.OPTIONS}"
                     TextBlock.FontWeight="Bold"
                     SelectedItem="{Binding SelectedFilterOption}">
 
@@ -536,7 +536,7 @@
                           SelectionMode="Single" 
                           SelectionUnit="FullRow"
                           SelectedItem="{Binding SelectedCustomer}"
-                          Margin="5 48 10 0"
+                          Margin="10 0"
                           FontSize="17">
                     <DataGrid.Resources>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">

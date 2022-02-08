@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FastPosFrontend.Views.Components" xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:FastPosFrontend.Views.Components" xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:vm="clr-namespace:FastPosFrontend.ViewModels"
              xmlns:mdl ="clr-namespace:ServiceInterface.Model;assembly=ServiceInterface"
@@ -21,7 +21,7 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
             <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="materialdesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="md:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
         </Style>
     </UserControl.Resources>
     <Grid   >
@@ -53,7 +53,7 @@
                                 cal:Message.Attach="[Event Click] = [Action ActionKeyboard('QTY')]" />-->
 
             <Button Grid.Row="0" Grid.Column="3" 
-                                Content="{materialdesign:PackIcon  Kind=Backspace, Size=30}"
+                                Content="{md:PackIcon  Kind=Backspace, Size=30}"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Del}"/>
 
             <Button Grid.Row="1" Grid.Column="0" Content="4" 
@@ -62,11 +62,22 @@
                                 cal:Message.Attach="[Event Click] = [Action NumericKeyboard('5')]" />
             <Button Grid.Row="1" Grid.Column="2" Content="6" 
                                 cal:Message.Attach="[Event Click] = [Action NumericKeyboard('6')]" />
-            <!--IsEnabled="{Binding CurrentOrder.OrderItems,Converter={StaticResource NotCollectionItemAnyGreaterThanZeroValueConverter}}"-->
+
             <Button Grid.Row="1" Grid.Column="3"
-                                Content="{materialdesign:PackIcon  Kind=TagMinus, Size=30}"
+                              
                                 
-                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Disc}" />
+                                Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Disc}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}" >
+                        <Setter Property="Content" Value="{md:PackIcon Kind=TagOff, Size=30}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentOrder.TotalDiscountAmount }" Value="0">
+                                <Setter Property="Content" Value="{md:PackIcon Kind=TagMinus, Size=30}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
 
             <Button Grid.Row="2" Grid.Column="0" Content="7" 
@@ -76,7 +87,7 @@
             <Button Grid.Row="2" Grid.Column="2" Content="9" 
                                 cal:Message.Attach="[Event Click] = [Action NumericKeyboard('9')]" />
             <Button Grid.Row="2" Grid.Column="3"
-                                Content="{materialdesign:PackIcon  Kind=Dollar, Size=40}"
+                                Content="{md:PackIcon  Kind=Dollar, Size=40}"
                                 
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Price}" />
 
@@ -88,7 +99,7 @@
                                 cal:Message.Attach="[Event Click] = [Action NumericKeyboard('.')]" />
 
             <Button Grid.Row="0" Grid.Column="3" 
-                                Content="{materialdesign:PackIcon  Kind=ViewList, Size=30}"
+                                Content="{md:PackIcon  Kind=ViewList, Size=30}"
                                 cal:Message.Attach="[Event Click] = [Action ViewOrderTabs() ]" />
 
         </UniformGrid>
@@ -120,12 +131,12 @@
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
                     <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
-                    <Setter Property="materialdesign:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
+                    <Setter Property="md:RippleAssist.Feedback" Value="{StaticResource Button.Static.Border}"/>
                 </Style>
             </Panel.Resources>
 
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
-                                Content="{materialdesign:PackIcon CashRegister, 30 }"
+                                Content="{md:PackIcon CashRegister, 30 }"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Payment}"
                     >
                 <Button.Style>
@@ -136,7 +147,7 @@
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="FontSize" Value="18"/>
                         <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="materialdesign:RippleAssist.Feedback" Value="Green"/>
+                        <Setter Property="md:RippleAssist.Feedback" Value="Green"/>
 
                         <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
                         <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
@@ -155,7 +166,7 @@
             </Button>
 
 
-            <Button Grid.Row="1" Grid.Column="0" Content="{materialdesign:PackIcon DeleteOutline,30}"
+            <Button Grid.Row="1" Grid.Column="0" Content="{md:PackIcon DeleteOutline,30}"
                             
                                 cal:Message.Attach="[Event Click] = [Action CancelOrder()]">
 
@@ -167,7 +178,7 @@
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="FontSize" Value="18"/>
                         <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="materialdesign:RippleAssist.Feedback" Value="Red"/>
+                        <Setter Property="md:RippleAssist.Feedback" Value="Red"/>
                         <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
                         <Setter Property="Foreground" Value="{StaticResource Button.Static.Border}"/>
                         
@@ -197,7 +208,7 @@
                                 cal:Message.Attach="[Event Click] = [Action PrintDocument(Checkout)]" />-->
 
             <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
-                                Content="{materialdesign:PackIcon Kind=AccountCash, Size=30}"
+                                Content="{md:PackIcon Kind=AccountCash, Size=30}"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Credit}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}">
@@ -218,12 +229,12 @@
             </Button>
 
             <Button Grid.Row="2" Grid.Column="2" 
-                                Content="{materialdesign:PackIcon  Kind=ArrowRightBold, Size=30}"
+                                Content="{md:PackIcon  Kind=ArrowRightBold, Size=30}"
                                 cal:Message.Attach="[Event Click] = [Action NavigateToCreditCheckout() ]" 
                     Style="{StaticResource MDNumpadButton}"/>
 
             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
-                                Content="{materialdesign:PackIcon TruckDeliveryOutline, 30}"
+                                Content="{md:PackIcon TruckDeliveryOutline, 30}"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.DElIVERED}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}">
@@ -244,14 +255,14 @@
             </Button>
 
             <Button Grid.Row="3" Grid.Column="2" 
-                                Content="{materialdesign:PackIcon  Kind=ArrowRightBold, Size=30}"
+                                Content="{md:PackIcon  Kind=ArrowRightBold, Size=30}"
                                 cal:Message.Attach="[Event Click] = [Action NavigateToDeliveryCheckout() ]" 
                     Style="{StaticResource MDNumpadButton}"/>
 
 
 
             <Button Grid.Row="1" Grid.Column="2"
-                                Content="{materialdesign:PackIcon ChefHat, 30 }"
+                                Content="{md:PackIcon ChefHat, 30 }"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Cmd}"/>
 
             
@@ -259,7 +270,7 @@
 
       
             <Button Grid.Row="1" Grid.Column="1" 
-                                Content="{materialdesign:PackIcon ViewSplitHorizontal, 30}"
+                                Content="{md:PackIcon ViewSplitHorizontal, 30}"
                                 Command="{Binding ActionKeyboardCommand }" CommandParameter="{x:Static enums:ActionButton.Split}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource MDNumpadButton}">
@@ -279,7 +290,7 @@
 
 
             <Button Grid.Row="0" Grid.Column="2" 
-                                Content="{materialdesign:PackIcon  Kind=CashRefund, Size=30}"
+                                Content="{md:PackIcon  Kind=CashRefund, Size=30}"
                                 cal:Message.Attach="[Event Click] = [Action RefundOrder() ]" 
                     >
                 
